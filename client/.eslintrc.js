@@ -15,6 +15,7 @@ module.exports = {
     jest: true
   },
   rules: {
+    "import/no-extraneous-dependencies": 0,
     "arrow-body-style": ["error", "as-needed"],
     "react/state-in-constructor": 0,
     "react/jsx-props-no-spreading": 0,
