@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StripeProvider } from 'react-stripe-elements';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeProvider } from 'styled-components';
 
 // Antd style
 import 'antd/lib/layout/style/index.css';
@@ -26,7 +27,7 @@ import 'antd/lib/alert/style/index.css';
 import { API_USER_URL } from '../constants/apiRoutes';
 
 import Navbar from './Common/Navbar';
-
+import theme from '../theme';
 import Pages from './Pages';
 
 export const initialState = {
@@ -94,16 +95,18 @@ class App extends Component {
       <StripeProvider stripe={stripe}>
         <Router>
           <div className="App">
-            <Navbar
-              isLoggedIn={isLoggedIn}
-              userType={role}
-              resetState={this.resetState}
-            />
-            <Pages
-              handleChangeState={this.handleChangeState}
-              isLoggedIn={isLoggedIn}
-              {...this.state}
-            />
+            <ThemeProvider theme={theme}>
+              <Navbar
+                isLoggedIn={isLoggedIn}
+                userType={role}
+                resetState={this.resetState}
+              />
+              <Pages
+                handleChangeState={this.handleChangeState}
+                isLoggedIn={isLoggedIn}
+                {...this.state}
+              />
+            </ThemeProvider>
           </div>
         </Router>
       </StripeProvider>

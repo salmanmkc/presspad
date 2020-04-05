@@ -33,6 +33,22 @@ export const breakpoints = {
   desktopL: `(min-width: ${size.desktop})`,
 };
 
+const newColors = {
+  darkerGray: '#2F2F2F',
+  darkGray: '#464646',
+  gray: '#2F2F2F',
+  lightGray: '#B5B3B3',
+  lighterGray: '#DCDCDC',
+  lightestGray: '#FDFDFD',
+  white: '#FFFFFF',
+  darkBlue: '#08294A',
+  blue: '#0A3159',
+  lightBlue: '#09C7E7',
+  yellow: '#FFDF59',
+  pink: '#CF3475',
+  lightPink: '#DE5991',
+};
+
 const colorCodes = {
   // primary (darkblue)
   primary: '#08294A',
@@ -72,6 +88,9 @@ const colorCodes = {
 
   // transparent
   transGray: 'rgba(84, 84, 85, 0.4)',
+
+  // keep them at the end to overwrite others
+  ...newColors,
 };
 
 // general colors
@@ -113,4 +132,14 @@ export const bookingStatus = {
   confirmed: colors.green,
   canceled: colors.red,
   completed: colors.gray,
+};
+
+export default {
+  size,
+  breakpoints,
+  colors,
+  shadows,
+  borders,
+  tagColors,
+  bookingStatus,
 };
