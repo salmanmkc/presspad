@@ -11,7 +11,7 @@ export default {
 export const LoggedIn = () => (
   <MemoryRouter>
     <BookingFlowLayout onClick={action('clicked')} isLoggedIn>
-      <div style={{ width: '100%', height: '2000px', background: '#a6c8ea87' }}>
+      <div style={{ height: '2000px', background: '#a6c8ea87' }}>
         Content goes here and will take full width
       </div>
     </BookingFlowLayout>
@@ -21,17 +21,9 @@ export const LoggedIn = () => (
 export const Loggedout = () => (
   <MemoryRouter>
     <BookingFlowLayout onClick={action('clicked')}>
-      <div style={{ width: '100%', height: '2000px', background: '#a6c8ea87' }}>
+      <div style={{ height: '2000px', background: '#a6c8ea87' }}>
         Content goes here and will take full width
       </div>
     </BookingFlowLayout>
   </MemoryRouter>
 );
-
-// export const Emoji = () => (
-//   <BookingFlowLayout onClick={action('clicked')}>
-//     <span role="img" aria-label="so cool">
-//       😀 😎 👍 💯
-//     </span>
-//   </BookingFlowLayout>
-// );

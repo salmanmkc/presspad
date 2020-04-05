@@ -1,29 +1,29 @@
 import React from 'react';
 
-import { Wrapper, ContentWrapper } from './style';
 import SideMenu from '../../Common/SideMenu';
 import Navbar from '../../Common/Navbar';
 import Footer from '../../Common/Footer';
 import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
+import { Wrapper, ContentWrapper, Content } from './style';
+
 const BookingFlow = ({ windowWidth, children, isLoggedIn }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
+  const topHeaderRendered = !largerThanTablet || !isLoggedIn;
+  const sideMenuRendered = !topHeaderRendered && isLoggedIn;
 
   return (
-    <Wrapper isLoggedIn={isLoggedIn}>
-      <div style={{ display: 'flex' }}>
-        {(!isLoggedIn || !largerThanTablet) && <Navbar />}
-        {isLoggedIn && largerThanTablet && <SideMenu />}
-        <ContentWrapper
-          largerThanTablet={largerThanTablet}
-          isLoggedIn={isLoggedIn}
-        >
-          {children}
+    <>
+      <Wrapper topHeaderRendered={topHeaderRendered}>
+        {topHeaderRendered && <Navbar />}
+        {!topHeaderRendered && <SideMenu />}
+        <ContentWrapper sideMenuRendered={sideMenuRendered}>
+          <Content>{children}</Content>
         </ContentWrapper>
-      </div>
+      </Wrapper>
       {!isLoggedIn && <Footer />}
-    </Wrapper>
+    </>
   );
 };
 

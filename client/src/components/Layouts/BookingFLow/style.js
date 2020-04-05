@@ -2,14 +2,14 @@ import styled from 'styled-components';
 import { breakpoints } from '../../../theme';
 
 export const Wrapper = styled.div`
-  /* display: flex; */
-  padding-top: ${({ isLoggedIn }) => (isLoggedIn ? 0 : '80px')};
+  display: flex;
+  padding-top: ${({ topHeaderRendered }) => (topHeaderRendered ? '80px' : 0)};
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
-  width: ${({ isLoggedIn, largerThanTablet }) =>
-    isLoggedIn && largerThanTablet ? 'calc(100% - 245px)' : '100%'};
+  width: ${({ sideMenuRendered }) =>
+    sideMenuRendered ? 'calc(100% - 245px)' : '100%'};
   padding: 120px 3%;
 
   @media ${breakpoints.mobileM} {
@@ -27,4 +27,8 @@ export const ContentWrapper = styled.div`
   @media ${breakpoints.laptopL} {
     padding: 120px 7%; /** 7% equal 100px on 1440px screens */
   }
+`;
+
+export const Content = styled.div`
+  width: 100%;
 `;
