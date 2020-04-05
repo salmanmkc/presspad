@@ -3,13 +3,14 @@ import { breakpoints } from '../../../theme';
 
 export const Wrapper = styled.div`
   display: flex;
-  padding-top: ${({ topHeaderRendered }) => (topHeaderRendered ? '80px' : 0)};
+  padding-top: ${({ topHeaderRendered, theme }) =>
+    topHeaderRendered ? theme.spacings.headerHeight : 0};
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
-  width: ${({ sideMenuRendered }) =>
-    sideMenuRendered ? 'calc(100% - 245px)' : '100%'};
+  width: ${({ sideMenuRendered, theme }) =>
+    sideMenuRendered ? `calc(100% - ${theme.spacings.sideMenuWidth})` : '100%'};
   padding: 120px 3%;
 
   @media ${breakpoints.mobileM} {

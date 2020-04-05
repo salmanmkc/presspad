@@ -134,6 +134,11 @@ export const bookingStatus = {
   completed: colors.gray,
 };
 
+const spacings = {
+  sideMenuWidth: '245px',
+  headerHeight: '80px',
+};
+
 export default {
   size,
   breakpoints,
@@ -142,4 +147,5 @@ export default {
   borders,
   tagColors,
   bookingStatus,
+  spacings,
 };
