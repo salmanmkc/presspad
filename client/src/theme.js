@@ -34,6 +34,7 @@ export const breakpoints = {
 };
 
 const newColors = {
+  black: '#181818',
   darkerGray: '#2F2F2F',
   darkGray: '#464646',
   gray: '#2F2F2F',
