@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["airbnb", "prettier", "prettier/react"],
+  extends: ["airbnb", "prettier", "prettier/react", 'airbnb/hooks'],
   // babel-eslint parser is used to support experimental features not supported in ESLint itself yet
   parser: "babel-eslint",
   parserOptions: {
@@ -15,6 +15,8 @@ module.exports = {
     jest: true
   },
   rules: {
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
     "import/no-extraneous-dependencies": 0,
     "arrow-body-style": ["error", "as-needed"],
     "react/state-in-constructor": 0,
