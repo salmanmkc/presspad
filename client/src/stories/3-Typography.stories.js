@@ -8,6 +8,9 @@ import {
   H2C,
   H3C,
   H4C,
+  H5C,
+  H6C,
+  H7C,
 } from '../components/Common/Typography';
 
 export default {
@@ -22,3 +25,6 @@ export const Heading1Caps = () => <H1C>Heading 1 Caps (H1C)</H1C>;
 export const Heading2Caps = () => <H2C>Heading 2 Caps (H2C)</H2C>;
 export const Heading3Caps = () => <H3C>Heading 3 Caps (H3C)</H3C>;
 export const Heading4Caps = () => <H4C>Heading 4 Caps (H4C)</H4C>;
+export const Heading5Caps = () => <H5C>Heading 5 Caps (H5C)</H5C>;
+export const Heading6Caps = () => <H6C>Heading 6 Caps (H6C)</H6C>;
+export const Heading7Caps = () => <H7C>Heading 7 Caps (H7C)</H7C>;
