@@ -18,7 +18,7 @@ import BookingView from './BookingView';
 import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
-
+import { withWindowWidth } from '../../HOCs';
 import {
   HOME_URL,
   SIGNIN_URL,
@@ -37,7 +37,7 @@ import {
   INTERN_PROFILE,
 } from '../../constants/navRoutes';
 
-export default function Pages(props) {
+function Pages(props) {
   const { handleChangeState, isLoggedIn, role, windowWidth } = props;
 
   return (
@@ -190,3 +190,5 @@ export default function Pages(props) {
     </>
   );
 }
+
+export default withWindowWidth(Pages, true);

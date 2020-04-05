@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NavLink, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { message, Icon } from 'antd';
+import { withWindowWidth } from '../../../HOCs';
 
 import whiteLogo from '../../../assets/white-presspad-logo.png';
 
@@ -24,13 +25,10 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100vw;
   background-color: ${colors.primary};
-  height: 60px;
+  height: 80px;
   z-index: 10;
   top: 0;
-
-  & + * {
-    padding-top: 60px;
-  }
+  box-sizing: border-box;
 `;
 
 const Logo = styled.img`
@@ -52,7 +50,6 @@ class Navbar extends Component {
   menuButtonClick = async e => {
     const signOutResult = await axios.get(API_SIGNOUT_URL);
     if (signOutResult.data.success) {
-      console.log('reached');
       this.setState({ menuOpen: false });
       this.props.resetState();
       this.props.history.push(HOME_URL);
@@ -64,7 +61,6 @@ class Navbar extends Component {
   render() {
     const { isLoggedIn, userType, windowWidth } = this.props;
     const { menuOpen } = this.state;
-
     return (
       <Wrapper isMobile={windowWidth < TABLET_WIDTH}>
         {windowWidth < TABLET_WIDTH ? (
@@ -105,4 +101,4 @@ class Navbar extends Component {
   }
 }
 
-export default withRouter(Navbar);
+export default withRouter(withWindowWidth(Navbar));

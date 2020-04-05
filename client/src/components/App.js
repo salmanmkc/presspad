@@ -42,13 +42,10 @@ export const initialState = {
 class App extends Component {
   state = {
     ...initialState,
-    windowWidth: window.innerWidth,
   };
 
   componentDidMount() {
     this.getUserInfo();
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
     if (window.Stripe) {
       this.setState({
         stripe: window.Stripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY),
@@ -66,18 +63,8 @@ class App extends Component {
     window.scrollTo(0, 0);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
   handleChangeState = data => {
     this.setState({ ...data, isMounted: true });
-  };
-
-  updateWindowDimensions = () => {
-    this.setState({
-      windowWidth: window.innerWidth,
-    });
   };
 
   resetState = () => {
@@ -101,7 +88,7 @@ class App extends Component {
   };
 
   render() {
-    const { isLoggedIn, role, stripe, windowWidth } = this.state;
+    const { isLoggedIn, role, stripe } = this.state;
 
     return (
       <StripeProvider stripe={stripe}>
@@ -111,7 +98,6 @@ class App extends Component {
               isLoggedIn={isLoggedIn}
               userType={role}
               resetState={this.resetState}
-              windowWidth={windowWidth}
             />
             <Pages
               handleChangeState={this.handleChangeState}
