@@ -163,6 +163,7 @@ export default class InternView extends Component {
           gender,
           school,
           workingArea,
+          areasOfInterest,
         },
         name,
       },
@@ -174,6 +175,7 @@ export default class InternView extends Component {
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
 
+    console.log('profile', this.state.profileData);
     return (
       <Wrapper>
         <LinkDiv>
@@ -193,26 +195,25 @@ export default class InternView extends Component {
               onError={this.handleImageFail}
               blur={!showFullData}
             />
+            {/* HEADLINE */}
             <HeaderDiv>
               {role === 'admin' ? (
                 <Headline>{name || 'Anonymous'}</Headline>
               ) : (
                 <Headline>
-                  {name
-                    ? `${name} (${jobTitle &&
-                        `A ${titleCase(jobTitle)} ${organisation &&
-                          `at ${titleCase(organisation)}`}`})`
-                    : jobTitle &&
-                      `A ${titleCase(jobTitle)} ${
-                        organisation ? `at ${titleCase(organisation)}` : ''
-                      }`}
+                  {jobTitle &&
+                    `A ${titleCase(jobTitle)} ${
+                      organisation ? `at ${titleCase(organisation)}` : ''
+                    }`}
                 </Headline>
               )}
+              {/* ADDRESS */}
               <Address>
                 {city} {showFullData ? postcode : truncatePostcode(postcode)}
               </Address>
             </HeaderDiv>
           </TopDiv>
+          {/* BADGE */}
           <TopDiv>
             {badge && <Symbol src={starSign} />}
 
@@ -223,7 +224,7 @@ export default class InternView extends Component {
             )}
           </TopDiv>
         </Header>
-
+        {/* GALLERY */}
         <ListingGallery
           img1={photos[0] && photos[0].url}
           img2={photos[1] && photos[1].url}
@@ -231,6 +232,53 @@ export default class InternView extends Component {
         />
         <MainSection>
           <TextContentDiv>
+            {/* Basic Infos */}
+            <InfoCard>
+              <Paragraph style={{ display: 'flex', flexDirection: 'column' }}>
+                {gender && (
+                  <span style={{ marginTop: '0.5rem' }}>
+                    <Strong>Gender:</Strong> {titleCase(gender)}
+                  </span>
+                )}
+                {school && (
+                  <span style={{ marginTop: '0.5rem' }}>
+                    <Strong>University / School:</Strong> {titleCase(school)}
+                  </span>
+                )}
+
+                {hometown && (
+                  <span style={{ marginTop: '0.5rem' }}>
+                    <Strong>Hometown:</Strong> {titleCase(hometown)}
+                  </span>
+                )}
+                {/* {showFullData && (
+                  <div style={{ display: 'flex', marginTop: '0.5rem' }}>
+                    <Strong>Address:</Strong>{' '}
+                    <div
+                      style={{ display: 'inline-block', paddingLeft: '1rem' }}
+                    >
+                      <div>{titleCase(addressline1)}</div>
+                      {addressline2 && <div>{titleCase(addressline2)}</div>}
+                      <div>{titleCase(city)}</div>
+                      <div>{postcode}</div>
+                    </div>
+                  </div>
+                )} */}
+
+                {workingArea && (
+                  <span style={{ marginTop: '0.5rem' }}>
+                    <Strong>Media I work in:</Strong> {titleCase(workingArea)}
+                  </span>
+                )}
+                {areasOfInterest && (
+                  <span style={{ marginTop: '0.5rem' }}>
+                    <Strong>Areas of interest:</Strong>{' '}
+                    {titleCase(areasOfInterest)}
+                  </span>
+                )}
+              </Paragraph>
+            </InfoCard>
+            {/* About me */}
             <Card>
               <InfoCard>
                 <SubHeadline>About Me</SubHeadline>
@@ -238,43 +286,6 @@ export default class InternView extends Component {
                   {titleCase(jobTitle)} - {titleCase(organisation)}
                 </ParagraphHeadline>
                 <Paragraph>{bio}</Paragraph>
-                <Paragraph style={{ display: 'flex', flexDirection: 'column' }}>
-                  {hometown && (
-                    <span style={{ marginTop: '0.5rem' }}>
-                      <Strong>Hometown:</Strong> {titleCase(hometown)}
-                    </span>
-                  )}
-
-                  {showFullData && (
-                    <div style={{ display: 'flex', marginTop: '0.5rem' }}>
-                      <Strong>Address:</Strong>{' '}
-                      <div
-                        style={{ display: 'inline-block', paddingLeft: '1rem' }}
-                      >
-                        <div>{titleCase(addressline1)}</div>
-                        {addressline2 && <div>{titleCase(addressline2)}</div>}
-                        <div>{titleCase(city)}</div>
-                        <div>{postcode}</div>
-                      </div>
-                    </div>
-                  )}
-
-                  {school && (
-                    <span style={{ marginTop: '0.5rem' }}>
-                      <Strong>University / School:</Strong> {titleCase(school)}
-                    </span>
-                  )}
-                  {gender && (
-                    <span style={{ marginTop: '0.5rem' }}>
-                      <Strong>Gender:</Strong> {titleCase(gender)}
-                    </span>
-                  )}
-                  {workingArea && (
-                    <span style={{ marginTop: '0.5rem' }}>
-                      <Strong>Working Area:</Strong> {titleCase(workingArea)}
-                    </span>
-                  )}
-                </Paragraph>
               </InfoCard>
             </Card>
             <Card>

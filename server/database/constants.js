@@ -86,6 +86,7 @@ module.exports = {
       'PR',
       'Other',
     ],
+    areasOfInterest: ['Foreign Affairs'],
     accommodationChecklist: [
       'Lock on the bathroom door',
       'Lock on the bedroom door',

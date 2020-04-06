@@ -3,7 +3,7 @@ const boom = require('boom');
 const {
   hostProfileData,
   getConfirmedBooking,
-} = require('./../../database/queries/profile/hostProfile');
+} = require('../../database/queries/profile/hostProfile');
 
 const generateUrl = require('../../helpers/generateFileURL');
 const { isValidMongoObjectId } = require('../../helpers/isValidMongoObjectId');
