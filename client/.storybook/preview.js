@@ -8,7 +8,9 @@ import 'antd/dist/antd.css';
 addDecorator(storyFn => (
   <ThemeProvider theme={theme}>
     <MemoryRouter>
-      {storyFn()}
+      <div style={{margin: "0 auto"}}>
+        {storyFn()}
+      </div>
     </MemoryRouter>
   </ThemeProvider>
 ));
