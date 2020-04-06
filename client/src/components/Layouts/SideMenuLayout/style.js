@@ -11,22 +11,27 @@ export const ContentWrapper = styled.div`
   display: flex;
   width: ${({ sideMenuRendered, theme }) =>
     sideMenuRendered ? `calc(100% - ${theme.spacings.sideMenuWidth})` : '100%'};
-  padding: 120px 3%;
+  padding: ${({ theme }) =>
+    `${theme.spacings.sideMenuLayout.top} 3% ${theme.spacings.sideMenuLayout.bottom}`};
 
   @media ${breakpoints.mobileM} {
-    padding: 120px 7%;
+    padding: ${({ theme }) =>
+      `${theme.spacings.sideMenuLayout.top} 7% ${theme.spacings.sideMenuLayout.bottom}`};
   }
 
   @media ${breakpoints.tablet} {
-    padding: 120px 4%;
+    padding: ${({ theme }) =>
+      `${theme.spacings.sideMenuLayout.top} 4% ${theme.spacings.sideMenuLayout.bottom}`};
   }
 
   @media ${breakpoints.laptop} {
-    padding: 120px 5%;
+    padding: ${({ theme }) =>
+      `${theme.spacings.sideMenuLayout.top} 5% ${theme.spacings.sideMenuLayout.bottom}`};
   }
 
   @media ${breakpoints.laptopL} {
-    padding: 120px 7%; /** 7% equal 100px on 1440px screens */
+    padding: ${({ theme }) =>
+      `${theme.spacings.sideMenuLayout.top} 7% ${theme.spacings.sideMenuLayout.bottom}`}; /** 7% equal 100px on 1440px screens */
   }
 `;
 
