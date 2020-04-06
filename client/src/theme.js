@@ -136,8 +136,21 @@ export const bookingStatus = {
 };
 
 const spacings = {
+  1: '5px',
+  2: '10px',
+  3: '15px',
+  4: '20px',
+  5: '25px',
+  6: '30px',
+  7: '40px',
+  8: '50px',
+  9: '70px',
+  10: '120px',
+  11: '240px',
+
   sideMenuWidth: '245px',
   headerHeight: '80px',
+  FooterHeight: '400px',
   sideMenuLayout: {
     top: '80px',
     bottom: '80px',

@@ -7,6 +7,13 @@ import {
   Heading5,
   Heading6,
   Heading7,
+  BodyXL,
+  BodyL,
+  Body,
+  BodyB,
+  BodyS,
+  BodyXS,
+  StyledLink,
 } from './style';
 
 const H1 = ({ children, ...props }) => (
@@ -57,4 +64,57 @@ const H7C = ({ children, ...props }) => (
   </Heading7>
 );
 
-export { H1, H2, H3, H4, H1C, H2C, H3C, H4C, H5C, H6C, H7C };
+const PXL = ({ children, ...props }) => <BodyXL {...props}>{children}</BodyXL>;
+const PL = ({ children, ...props }) => <BodyL {...props}>{children}</BodyL>;
+const P = ({ children, ...props }) => <Body {...props}>{children}</Body>;
+const PBold = ({ children, ...props }) => <BodyB {...props}>{children}</BodyB>;
+const PS = ({ children, ...props }) => <BodyS {...props}>{children}</BodyS>;
+const PSBold = ({ children, ...props }) => (
+  <BodyS bold {...props}>
+    {children}
+  </BodyS>
+);
+const PXS = ({ children, ...props }) => <BodyXS {...props}>{children}</BodyXS>;
+const PXSBold = ({ children, ...props }) => (
+  <BodyXS bold {...props}>
+    {children}
+  </BodyXS>
+);
+
+const Link = ({ children, to, isExternal, ...props }) => (
+  <StyledLink
+    to={isExternal ? undefined : to}
+    href={!isExternal ? undefined : to}
+    as={!isExternal ? undefined : 'a'}
+    rel={!isExternal ? undefined : 'noopener noreferrer'}
+    target={!isExternal ? undefined : '_blank'}
+    {...props}
+    caps
+  >
+    {children}
+  </StyledLink>
+);
+export {
+  // Heading
+  H1,
+  H2,
+  H3,
+  H4,
+  H1C,
+  H2C,
+  H3C,
+  H4C,
+  H5C,
+  H6C,
+  H7C,
+  // Body
+  PXL,
+  PL,
+  P,
+  PBold,
+  PS,
+  PSBold,
+  PXS,
+  PXSBold,
+  Link,
+};

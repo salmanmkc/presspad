@@ -26,7 +26,6 @@ import 'antd/lib/alert/style/index.css';
 
 import { API_USER_URL } from '../constants/apiRoutes';
 
-import Navbar from './Common/Navbar';
 import theme from '../theme';
 import Pages from './Pages';
 
@@ -35,15 +34,11 @@ export const initialState = {
   id: null,
   name: null,
   email: null,
-  isMounted: false,
   role: null,
-  stripe: null,
 };
 
 class App extends Component {
-  state = {
-    ...initialState,
-  };
+  state = { isMounted: false, stripe: null, ...initialState };
 
   componentDidMount() {
     this.getUserInfo();
@@ -69,7 +64,7 @@ class App extends Component {
   };
 
   resetState = () => {
-    this.setState(initialState);
+    this.setState({ ...initialState, isMounted: true });
   };
 
   getUserInfo = () => {
@@ -89,22 +84,18 @@ class App extends Component {
   };
 
   render() {
-    const { isLoggedIn, role, stripe } = this.state;
+    const { isLoggedIn, stripe } = this.state;
 
     return (
       <StripeProvider stripe={stripe}>
         <Router>
           <div className="App">
             <ThemeProvider theme={theme}>
-              <Navbar
-                isLoggedIn={isLoggedIn}
-                userType={role}
-                resetState={this.resetState}
-              />
               <Pages
                 handleChangeState={this.handleChangeState}
                 isLoggedIn={isLoggedIn}
                 {...this.state}
+                resetState={this.resetState}
               />
             </ThemeProvider>
           </div>

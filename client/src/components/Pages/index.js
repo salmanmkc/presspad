@@ -1,8 +1,8 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 
 //  COMMON COMPONENTS
-import PrivateRoute from '../Common/PrivateRoute';
+import Route from '../Common/Route';
 import NotFound from '../Common/NotFound';
 
 import LandingPage from './LandingPage';
@@ -43,8 +43,9 @@ function Pages(props) {
   return (
     <>
       <Switch>
-        <Route path={HOME_URL} exact component={LandingPage} />
-        <PrivateRoute
+        <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        <Route
+          isPrivate
           exact
           path={HOST_PROFILE}
           Component={HostProfile}
@@ -52,7 +53,8 @@ function Pages(props) {
           isLoggedIn={isLoggedIn}
           {...props}
         />
-        <PrivateRoute
+        <Route
+          isPrivate
           path={BOOKING_VIEW_URL}
           Component={BookingView}
           {...props}
@@ -61,10 +63,17 @@ function Pages(props) {
           exact
           path={HOSTS_URL}
           render={() => (
-            <SearchHosts isLoggedIn={isLoggedIn} windowWidth={windowWidth} />
+            <SearchHosts
+              isLoggedIn={isLoggedIn}
+              windowWidth={windowWidth}
+              {...props}
+            />
           )}
+          layout="sideMenu"
+          {...props}
         />
-        <PrivateRoute
+        <Route
+          isPrivate
           exact
           path={DASHBOARD_URL}
           Component={Dashboard}
@@ -73,7 +82,8 @@ function Pages(props) {
           {...props}
         />
         {['host', 'superhost'].includes(role) && (
-          <PrivateRoute
+          <Route
+            isPrivate
             exact
             path={HOST_COMPLETE_PROFILE_URL}
             Component={HostCreateProfile}
@@ -83,7 +93,8 @@ function Pages(props) {
           />
         )}
         {role === 'admin' && (
-          <PrivateRoute
+          <Route
+            isPrivate
             exact
             path={ADMIN_DASHBOARD_URL}
             Component={AdminDashboard}
@@ -93,7 +104,8 @@ function Pages(props) {
           />
         )}
         {role === 'intern' && (
-          <PrivateRoute
+          <Route
+            isPrivate
             exact
             path={INTERN_COMPLETE_PROFILE_URL}
             Component={InternCreateProfile}
@@ -102,14 +114,16 @@ function Pages(props) {
             {...props}
           />
         )}
-        <PrivateRoute
+        <Route
+          isPrivate
           exact
           path={MYPROFILE_URL}
           Component={MyProfile}
           isLoggedIn={isLoggedIn}
           {...props}
         />
-        <PrivateRoute
+        <Route
+          isPrivate
           exact
           path={INTERN_PROFILE}
           Component={InternProfile}
@@ -117,7 +131,8 @@ function Pages(props) {
           {...props}
         />
         {['intern', 'host', 'superhost'].includes(role) && (
-          <PrivateRoute
+          <Route
+            isPrivate
             exact
             path={ADD_REVIWE_URL}
             Component={AddReview}
@@ -135,11 +150,13 @@ function Pages(props) {
                 handleChangeState={handleChangeState}
                 userType="intern"
                 {...linkProps}
+                {...props}
               />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          {...props}
         />
         <Route
           path={SIGNUP_HOST}
@@ -150,11 +167,13 @@ function Pages(props) {
                 handleChangeState={handleChangeState}
                 userType="host"
                 {...linkProps}
+                {...props}
               />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          {...props}
         />
         <Route
           path={SIGNUP_ORG}
@@ -165,11 +184,13 @@ function Pages(props) {
                 handleChangeState={handleChangeState}
                 userType="organisation"
                 {...linkProps}
+                {...props}
               />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          {...props}
         />
         <Route
           path={SIGNIN_URL}
@@ -179,13 +200,15 @@ function Pages(props) {
               <SignInPage
                 handleChangeState={handleChangeState}
                 {...linkProps}
+                {...props}
               />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          {...props}
         />
-        {props.isMounted && <Route component={NotFound} />}
+        {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>
     </>
   );

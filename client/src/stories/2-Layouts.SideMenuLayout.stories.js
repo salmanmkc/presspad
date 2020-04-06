@@ -1,5 +1,4 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
 
 import SideMenuLayout from '../components/Layouts/SideMenuLayout';
 
@@ -9,7 +8,7 @@ export default {
 };
 
 export const LoggedIn = () => (
-  <SideMenuLayout onClick={action('clicked')} isLoggedIn>
+  <SideMenuLayout isLoggedIn>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
     </div>
@@ -17,7 +16,7 @@ export const LoggedIn = () => (
 );
 
 export const LoggedInWithBack = () => (
-  <SideMenuLayout onClick={action('clicked')} isLoggedIn goBack>
+  <SideMenuLayout isLoggedIn goBack>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
       <br />
@@ -27,7 +26,7 @@ export const LoggedInWithBack = () => (
 );
 
 export const LoggedOut = () => (
-  <SideMenuLayout onClick={action('clicked')}>
+  <SideMenuLayout>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
     </div>
@@ -35,7 +34,7 @@ export const LoggedOut = () => (
 );
 
 export const LoggedOutWithBack = () => (
-  <SideMenuLayout onClick={action('clicked')} goBack>
+  <SideMenuLayout goBack>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
       <br />

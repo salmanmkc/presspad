@@ -11,6 +11,16 @@ import {
   H5C,
   H6C,
   H7C,
+  // Body
+  PXL,
+  PL,
+  P,
+  PBold,
+  PS,
+  PSBold,
+  PXS,
+  PXSBold,
+  Link,
 } from '../components/Common/Typography';
 
 export default {
@@ -28,3 +38,66 @@ export const Heading4Caps = () => <H4C>Heading 4 Caps (H4C)</H4C>;
 export const Heading5Caps = () => <H5C>Heading 5 Caps (H5C)</H5C>;
 export const Heading6Caps = () => <H6C>Heading 6 Caps (H6C)</H6C>;
 export const Heading7Caps = () => <H7C>Heading 7 Caps (H7C)</H7C>;
+
+const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna`;
+
+export const PExtraLarge = () => (
+  <PXL>
+    Extra Large body text (PXL) <br />
+    {loremIpsum}
+  </PXL>
+);
+
+export const PLarge = () => (
+  <PL>
+    Large body text (PL) <br />
+    {loremIpsum}
+  </PL>
+);
+
+export const PNormal = () => (
+  <P>
+    normal body text (P) <br />
+    {loremIpsum}
+  </P>
+);
+
+export const PNormalBold = () => (
+  <PBold>
+    Bold body text (PBold) <br />
+    {loremIpsum}
+  </PBold>
+);
+
+export const PSmall = () => (
+  <PS>
+    Small body text (PS) <br />
+    {loremIpsum}
+  </PS>
+);
+
+export const PSmallBold = () => (
+  <PSBold>
+    Small Bold body text (PSBold) <br />
+    {loremIpsum}
+  </PSBold>
+);
+export const PExtraSmall = () => (
+  <PXS>
+    Extra Small body text (PXS) <br />
+    {loremIpsum}
+  </PXS>
+);
+export const PExtraSmallBold = () => (
+  <PXSBold>
+    Extra Small body text (PXSBold) <br />
+    {loremIpsum}
+  </PXSBold>
+);
+
+export const DefaultLink = () => <Link to="/#">Default link</Link>;
+export const ExternalLink = () => (
+  <Link to="https://www.google.com/" isExternal>
+    External link
+  </Link>
+);
