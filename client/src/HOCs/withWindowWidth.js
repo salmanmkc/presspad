@@ -17,7 +17,7 @@ const withWindowWidth = (WrappedComponent, isHook) =>
 
         updateWindowDimensions = () => {
           const { windowWidth } = this.state;
-          if (Math.abs(windowWidth - window.innerWidth) >= 20) return;
+          if (windowWidth === window.innerWidth) return;
 
           this.setState({
             windowWidth: window.innerWidth,
@@ -38,7 +38,7 @@ const withWindowWidth = (WrappedComponent, isHook) =>
 
         useEffect(() => {
           const updateWindowDimensions = () => {
-            if (Math.abs(windowWidth - window.innerWidth) >= 20) return;
+            if (windowWidth === window.innerWidth) return;
 
             setWindowWidth(window.innerWidth);
           };
