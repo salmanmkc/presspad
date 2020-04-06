@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 
-const withSubscription = (WrappedComponent, isHook) =>
-  isHook
+const withWindowWidth = (WrappedComponent, isHook) =>
+  !isHook
     ? class extends Component {
         state = {
           windowWidth: window.innerWidth,
@@ -16,6 +16,9 @@ const withSubscription = (WrappedComponent, isHook) =>
         }
 
         updateWindowDimensions = () => {
+          const { windowWidth } = this.state;
+          if (windowWidth === window.innerWidth) return;
+
           this.setState({
             windowWidth: window.innerWidth,
           });
@@ -46,4 +49,4 @@ const withSubscription = (WrappedComponent, isHook) =>
         return <WrappedComponent {...props} windowWidth={windowWidth} />;
       };
 
-export default withSubscription;
+export default withWindowWidth;
