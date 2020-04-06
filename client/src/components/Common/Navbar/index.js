@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100vw;
   background-color: ${colors.primary};
-  height: 80px;
+  height: ${({ theme }) => theme.spacings.headerHeight};
   z-index: 10;
   top: 0;
   box-sizing: border-box;

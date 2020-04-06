@@ -8,7 +8,7 @@ import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
 import { Wrapper, ContentWrapper, Content } from './style';
 
-const BookingFlow = ({ windowWidth, children, isLoggedIn }) => {
+const SideMenuLayout = ({ windowWidth, children, isLoggedIn }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet || !isLoggedIn;
   const sideMenuRendered = !topHeaderRendered && isLoggedIn;
@@ -27,4 +27,4 @@ const BookingFlow = ({ windowWidth, children, isLoggedIn }) => {
   );
 };
 
-export default withWindowWidth(BookingFlow, true);
+export default withWindowWidth(SideMenuLayout, true);

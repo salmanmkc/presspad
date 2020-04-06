@@ -1,29 +1,29 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { MemoryRouter } from 'react-router-dom';
-import BookingFlowLayout from '../components/Layouts/BookingFLow';
+import SideMenuLayout from '../components/Layouts/SideMenuLayout';
 
 export default {
-  title: 'Layouts - BookingFlow',
-  component: BookingFlowLayout,
+  title: 'Layouts - SideMenuLayout',
+  component: SideMenuLayout,
 };
 
 export const LoggedIn = () => (
   <MemoryRouter>
-    <BookingFlowLayout onClick={action('clicked')} isLoggedIn>
+    <SideMenuLayout onClick={action('clicked')} isLoggedIn>
       <div style={{ height: '2000px', background: '#a6c8ea87' }}>
         Content goes here and will take full width
       </div>
-    </BookingFlowLayout>
+    </SideMenuLayout>
   </MemoryRouter>
 );
 
 export const Loggedout = () => (
   <MemoryRouter>
-    <BookingFlowLayout onClick={action('clicked')}>
+    <SideMenuLayout onClick={action('clicked')}>
       <div style={{ height: '2000px', background: '#a6c8ea87' }}>
         Content goes here and will take full width
       </div>
-    </BookingFlowLayout>
+    </SideMenuLayout>
   </MemoryRouter>
 );
