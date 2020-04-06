@@ -12,6 +12,7 @@ export const Wrapper = styled.button`
   width: 150px;
   border: none;
   background: none;
+  justify-content: flex-start;
 `;
 
 export const IconWrapper = styled.div`

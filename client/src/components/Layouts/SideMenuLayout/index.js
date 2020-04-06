@@ -5,10 +5,10 @@ import Navbar from '../../Common/Navbar';
 import Footer from '../../Common/Footer';
 import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
+import GoBackComponent from '../../Common/GoBack';
+import { Wrapper, ContentWrapper, Content, GoBackWrapper } from './style';
 
-import { Wrapper, ContentWrapper, Content } from './style';
-
-const SideMenuLayout = ({ windowWidth, children, isLoggedIn }) => {
+const SideMenuLayout = ({ goBack, windowWidth, children, isLoggedIn }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet || !isLoggedIn;
   const sideMenuRendered = !topHeaderRendered && isLoggedIn;
@@ -19,6 +19,11 @@ const SideMenuLayout = ({ windowWidth, children, isLoggedIn }) => {
         {topHeaderRendered && <Navbar />}
         {!topHeaderRendered && <SideMenu />}
         <ContentWrapper sideMenuRendered={sideMenuRendered}>
+          {goBack && (
+            <GoBackWrapper>
+              <GoBackComponent onClick={goBack} />
+            </GoBackWrapper>
+          )}
           <Content>{children}</Content>
         </ContentWrapper>
       </Wrapper>

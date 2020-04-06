@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
+  position: relative;
   display: flex;
   width: ${({ sideMenuRendered, theme }) =>
     sideMenuRendered ? `calc(100% - ${theme.spacings.sideMenuWidth})` : '100%'};
@@ -37,4 +38,9 @@ export const ContentWrapper = styled.div`
 
 export const Content = styled.div`
   width: 100%;
+`;
+
+export const GoBackWrapper = styled.div`
+  position: absolute;
+  top: 2rem;
 `;
