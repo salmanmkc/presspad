@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StripeProvider } from 'react-stripe-elements';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeProvider } from 'styled-components';
 
 // Antd style
 import 'antd/lib/layout/style/index.css';
@@ -26,7 +27,7 @@ import 'antd/lib/alert/style/index.css';
 import { API_USER_URL } from '../constants/apiRoutes';
 
 import Navbar from './Common/Navbar';
-
+import theme from '../theme';
 import Pages from './Pages';
 
 export const initialState = {
@@ -42,13 +43,10 @@ export const initialState = {
 class App extends Component {
   state = {
     ...initialState,
-    windowWidth: window.innerWidth,
   };
 
   componentDidMount() {
     this.getUserInfo();
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
     if (window.Stripe) {
       this.setState({
         stripe: window.Stripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY),
@@ -66,18 +64,8 @@ class App extends Component {
     window.scrollTo(0, 0);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
   handleChangeState = data => {
     this.setState({ ...data, isMounted: true });
-  };
-
-  updateWindowDimensions = () => {
-    this.setState({
-      windowWidth: window.innerWidth,
-    });
   };
 
   resetState = () => {
@@ -101,23 +89,24 @@ class App extends Component {
   };
 
   render() {
-    const { isLoggedIn, role, stripe, windowWidth } = this.state;
+    const { isLoggedIn, role, stripe } = this.state;
 
     return (
       <StripeProvider stripe={stripe}>
         <Router>
           <div className="App">
-            <Navbar
-              isLoggedIn={isLoggedIn}
-              userType={role}
-              resetState={this.resetState}
-              windowWidth={windowWidth}
-            />
-            <Pages
-              handleChangeState={this.handleChangeState}
-              isLoggedIn={isLoggedIn}
-              {...this.state}
-            />
+            <ThemeProvider theme={theme}>
+              <Navbar
+                isLoggedIn={isLoggedIn}
+                userType={role}
+                resetState={this.resetState}
+              />
+              <Pages
+                handleChangeState={this.handleChangeState}
+                isLoggedIn={isLoggedIn}
+                {...this.state}
+              />
+            </ThemeProvider>
           </div>
         </Router>
       </StripeProvider>
