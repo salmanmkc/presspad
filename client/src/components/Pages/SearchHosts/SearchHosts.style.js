@@ -4,14 +4,9 @@ import { Link } from 'react-router-dom';
 import { colors, shadows, size } from '../../../theme';
 
 export const Wrapper = styled.div`
-  padding: 7rem 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @media (max-width: ${size.laptopL}) {
-    padding: 7rem 2rem;
-  }
 `;
 
 export const Header = styled.div`
