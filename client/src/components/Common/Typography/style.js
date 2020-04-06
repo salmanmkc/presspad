@@ -44,7 +44,7 @@ export const Heading6 = styled.h6`
   ${CommonStyle};
   font-size: 18px;
   line-height: 23px;
-  color: ${({ theme }) => theme.colors.gray};
+  color: ${({ theme }) => theme.colors.lightGray};
 `;
 
 export const Heading7 = styled.h6`

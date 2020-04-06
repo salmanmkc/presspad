@@ -386,3 +386,22 @@ export const Strong = styled.span`
   font-size: 1em;
   font-weight: 700;
 `;
+
+export const KeyInfoRow = styled.span`
+  margin-top: '0.5rem';
+  display: flex;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  padding-bottom: 0.5rem;
+`;
+
+export const Col = styled.div`
+  flex: 1;
+  margin-left: ${({ value }) => value && '-14rem'};
+
+  @media (max-width: ${size.mobileM}) {
+    margin-left: ${({ value }) => value && '0'};
+  }
+`;

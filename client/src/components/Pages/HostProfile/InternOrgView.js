@@ -16,12 +16,7 @@ import Button from '../../Common/Button';
 import ListingGallery from '../../Common/Profile/ListingGallery';
 
 import {
-  Wrapper,
-  LinkDiv,
-  BackLinkDiv,
   TopDiv,
-  Arrow,
-  BackLink,
   Header,
   HeaderDiv,
   Headline,
@@ -30,6 +25,13 @@ import {
   Paragraph,
 } from '../../Common/Profile/Profiles.style';
 
+// Layouts
+import SideMenuLayout from '../../Layouts/SideMenuLayout';
+
+// Typography
+import * as T from '../../Common/Typography';
+
+// Styles
 import {
   MainSection,
   Card,
@@ -45,7 +47,11 @@ import {
   EditButton,
   Strong,
   MobileSubHeadline,
+  Row,
+  Col,
 } from './Profile.style';
+
+//  helpers
 import { titleCase, truncatePostcode } from '../../../helpers';
 import 'antd/dist/antd.css';
 
@@ -175,17 +181,19 @@ export default class InternView extends Component {
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
 
+    // infos to be rendered in top section
+    const keyInfoTable = {
+      Gender: gender && gender,
+      'University / School': school && school,
+      Hometown: hometown && hometown,
+      'Media I work in': workingArea && workingArea,
+      'Areas of Interest': areasOfInterest && areasOfInterest,
+    };
+
+    const keyDetailsArr = Object.entries(keyInfoTable);
+
     return (
-      <Wrapper>
-        <LinkDiv>
-          <BackLinkDiv
-            onClick={() => this.props.history.goBack()}
-            role="button"
-          >
-            <Arrow />
-            <BackLink>Go Back</BackLink>
-          </BackLinkDiv>
-        </LinkDiv>
+      <SideMenuLayout goBack>
         <Header>
           <TopDiv>
             <ProfilePic
@@ -197,19 +205,19 @@ export default class InternView extends Component {
             {/* HEADLINE */}
             <HeaderDiv>
               {role === 'admin' ? (
-                <Headline>{name || 'Anonymous'}</Headline>
+                <T.H2>{name || 'Anonymous'}</T.H2>
               ) : (
-                <Headline>
+                <T.H2>
                   {jobTitle &&
                     `A ${titleCase(jobTitle)} ${
                       organisation ? `at ${titleCase(organisation)}` : ''
                     }`}
-                </Headline>
+                </T.H2>
               )}
               {/* ADDRESS */}
-              <Address>
+              <T.P>
                 {city} {showFullData ? postcode : truncatePostcode(postcode)}
-              </Address>
+              </T.P>
             </HeaderDiv>
           </TopDiv>
           {/* BADGE */}
@@ -233,48 +241,21 @@ export default class InternView extends Component {
           <TextContentDiv>
             {/* Basic Infos */}
             <InfoCard>
-              <Paragraph style={{ display: 'flex', flexDirection: 'column' }}>
-                {gender && (
-                  <span style={{ marginTop: '0.5rem' }}>
-                    <Strong>Gender:</Strong> {titleCase(gender)}
-                  </span>
-                )}
-                {school && (
-                  <span style={{ marginTop: '0.5rem' }}>
-                    <Strong>University / School:</Strong> {titleCase(school)}
-                  </span>
-                )}
-
-                {hometown && (
-                  <span style={{ marginTop: '0.5rem' }}>
-                    <Strong>Hometown:</Strong> {titleCase(hometown)}
-                  </span>
-                )}
-                {/* {showFullData && (
-                  <div style={{ display: 'flex', marginTop: '0.5rem' }}>
-                    <Strong>Address:</Strong>{' '}
-                    <div
-                      style={{ display: 'inline-block', paddingLeft: '1rem' }}
-                    >
-                      <div>{titleCase(addressline1)}</div>
-                      {addressline2 && <div>{titleCase(addressline2)}</div>}
-                      <div>{titleCase(city)}</div>
-                      <div>{postcode}</div>
-                    </div>
-                  </div>
-                )} */}
-
-                {workingArea && (
-                  <span style={{ marginTop: '0.5rem' }}>
-                    <Strong>Media I work in:</Strong> {titleCase(workingArea)}
-                  </span>
-                )}
-                {areasOfInterest && (
-                  <span style={{ marginTop: '0.5rem' }}>
-                    <Strong>Areas of interest:</Strong>{' '}
-                    {titleCase(areasOfInterest)}
-                  </span>
-                )}
+              <Paragraph>
+                {keyDetailsArr.map(details => (
+                  <Row>
+                    <Col key>
+                      <T.H6C style={{ fontSize: '18px', lineHeight: '26px' }}>
+                        {details[0]}
+                      </T.H6C>
+                    </Col>
+                    <Col value>
+                      <T.PBold style={{ fontSize: '18px', lineHeight: '26px' }}>
+                        {titleCase(details[1])}
+                      </T.PBold>
+                    </Col>
+                  </Row>
+                ))}
               </Paragraph>
             </InfoCard>
             {/* About me */}
@@ -439,7 +420,7 @@ export default class InternView extends Component {
             </AvailableHosting>
           )}
         </MainSection>
-      </Wrapper>
+      </SideMenuLayout>
     );
   }
 }
