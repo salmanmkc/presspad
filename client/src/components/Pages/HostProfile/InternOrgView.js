@@ -175,7 +175,6 @@ export default class InternView extends Component {
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
 
-    console.log('profile', this.state.profileData);
     return (
       <Wrapper>
         <LinkDiv>
