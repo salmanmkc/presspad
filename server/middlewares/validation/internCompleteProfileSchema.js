@@ -45,7 +45,11 @@ const internCompleteProfileSchema = Joi.object({
     fileName: Joi.string().required(),
     isPrivate: Joi.boolean().default(true),
   }),
-  internshipOfficeAddress: Joi.string().required(),
+  internshipOfficeAddress: {
+    addressline1: Joi.string().required(),
+    city: Joi.string().required(),
+    postcode: Joi.string().required(),
+  },
   emergencyContact: Joi.object({
     name: Joi.string().required(),
     email: Joi.string()

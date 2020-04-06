@@ -44,7 +44,12 @@ const INITIAL_STATE = {
     fileName: '',
     isPrivate: true,
   },
-  internshipOfficeAddress: '',
+  internshipOfficeAddress: {
+    addressline1: '',
+    addressline2: '',
+    city: '',
+    postcode: '',
+  },
   emergencyContact: {
     name: '',
     phoneNumber: '',

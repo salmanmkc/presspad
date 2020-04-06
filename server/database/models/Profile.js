@@ -155,9 +155,26 @@ const profileSchema = new Schema(
       required: false,
     },
     internshipOfficeAddress: {
-      type: String,
-      validate: wordLengthValidator(50, 'internshipOfficeAddress'),
-      required: false,
+      addressline1: {
+        type: String,
+        validate: wordLengthValidator(10, 'addressline1'),
+        required: false, // required for intern
+      },
+      addressline2: {
+        type: String,
+        validate: wordLengthValidator(10, 'addressline2'),
+        required: false,
+      },
+      city: {
+        type: String,
+        validate: wordLengthValidator(10, 'city'),
+        required: false, // required for intern
+      },
+      postcode: {
+        type: String,
+        validate: wordLengthValidator(10, 'postcode'),
+        required: false, // required for intern
+      },
     },
     interests: {
       type: String,
@@ -251,6 +268,28 @@ const profileSchema = new Schema(
       type: Boolean,
       default: false,
       required: true,
+    },
+    internshipStartDate: {
+      type: Date,
+      required: false,
+    },
+    internshipEndDate: {
+      type: Date,
+      required: false,
+    },
+    internshipContact: {
+      name: {
+        type: String,
+        required: false,
+      },
+      email: {
+        type: String,
+        required: false,
+      },
+      phoneNumber: {
+        type: String,
+        required: false,
+      },
     },
   },
   {

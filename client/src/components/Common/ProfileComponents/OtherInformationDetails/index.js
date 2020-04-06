@@ -76,7 +76,31 @@ const OtherInformationDetails = ({
         <Row gutter={25}>
           <Col xs={24} sm={12}>
             <Field
-              {...fields['internshipOfficeAddress']}
+              {...fields['internshipOfficeAddressAddress1']}
+              value={data['internshipOfficeAddress']}
+              error={errors['internshipOfficeAddress']}
+              {...props}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipOfficeAddressAddress2']}
+              value={data['internshipOfficeAddress']}
+              error={errors['internshipOfficeAddress']}
+              {...props}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipOfficeAddressCity']}
+              value={data['internshipOfficeAddress']}
+              error={errors['internshipOfficeAddress']}
+              {...props}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipOfficeAddressPostcode']}
               value={data['internshipOfficeAddress']}
               error={errors['internshipOfficeAddress']}
               {...props}

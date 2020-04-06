@@ -182,11 +182,29 @@ export default {
       'Please upload an offer letter or something similar that can be used as proof of your internship',
     isPrivate: true,
   },
-  internshipOfficeAddress: {
-    name: 'internshipOfficeAddress',
-    label: `Internship office address`,
-    type: 'textArea',
-    fullHeight: true,
+  internshipOfficeAddressAddress1: {
+    name: 'addressline1',
+    parent: 'internshipOfficeAddress',
+    label: `Address line 1`,
+    type: 'text',
+  },
+  internshipOfficeAddressAddress2: {
+    name: 'addressline2',
+    parent: 'internshipOfficeAddress',
+    label: `Address line 2`,
+    type: 'text',
+  },
+  internshipOfficeAddressCity: {
+    name: 'city',
+    parent: 'internshipOfficeAddress',
+    label: `city`,
+    type: 'text',
+  },
+  internshipOfficeAddressPostcode: {
+    name: 'postcode',
+    parent: 'internshipOfficeAddress',
+    label: `postcode`,
+    type: 'text',
   },
   emergencyContactName: {
     parent: 'emergencyContact',

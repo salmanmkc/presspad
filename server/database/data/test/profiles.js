@@ -86,7 +86,11 @@ const internProfileData = {
   offerLetter: {
     fileName: 'fake-offerletter.pdf',
   },
-  internshipOfficeAddress: 'Portland PlaceLondonW1A 1AA',
+  internshipOfficeAddress: {
+    addressline1: 'Kings Place, 90 York Way',
+    city: 'London',
+    postcode: 'E50 000',
+  },
   emergencyContact: {
     name: 'Simon Dupree',
     email: 'simon@yalla.com',
@@ -106,6 +110,13 @@ const internProfileData = {
   backgroundAnswer:
     "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
   consentedOnPressPadTerms: true,
+  internshipStartDate: Date.now() - 10 * 24 * 60 * 60 * 1000, // before 10 days
+  internshipEndDate: Date.now() + 100 * 24 * 60 * 60 * 1000, // after 100 days
+  internshipContact: {
+    name: 'contact name',
+    email: 'contact@email.com',
+    phoneNumber: '004400011001100',
+  },
 };
 
 const reset = () => Profile.deleteMany();

@@ -33,8 +33,14 @@ const bookingSchema = new Schema(
     // bookings need to be confirmed or canceled by [host,intern,admin]
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'canceled', 'completed'],
-      default: 'pending',
+      enum: [
+        'awaitingAdmin',
+        'pending' /** ="awaiting host" */,
+        'confirmed',
+        'canceled',
+        'completed',
+      ],
+      default: 'awaitingAdmin',
       required: true,
     },
     price: {

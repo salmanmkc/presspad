@@ -41,6 +41,21 @@ const userSchema = new Schema({
     ref: 'accounts',
     required: true,
   },
+
+  // for hosts
+  acceptAutomatically: {
+    type: Boolean,
+  },
+
+  // for hosts - the total time taken to response to the requests (in milliseconds)
+  respondingTime: {
+    type: Number,
+  },
+
+  // for hosts - the total requests that been respond to
+  respondedRequests: {
+    type: Number,
+  },
 });
 
 userSchema.pre('save', async function hashPassword() {

@@ -64,9 +64,21 @@ const internProfileSchema = Joi.object({
     fileName: Joi.string().allow(''),
     isPrivate: Joi.boolean().default(true),
   }),
-  internshipOfficeAddress: Joi.string()
-    .custom(wordLengthValidator(50, 'internshipOfficeAddress'))
-    .allow(''),
+  internshipOfficeAddress: {
+    addressline1: Joi.string()
+      .custom(wordLengthValidator(50, 'internshipOfficeAddress.addressline1'))
+      .required(),
+    addressline2: Joi.string()
+      .custom(wordLengthValidator(50, 'internshipOfficeAddress.addressline2'))
+      .allow(''),
+    city: Joi.string()
+      .custom(wordLengthValidator(50, 'internshipOfficeAddress.city'))
+      .required(),
+    postcode: Joi.string()
+      .custom(wordLengthValidator(50, 'internshipOfficeAddress.postcode'))
+      .required(),
+  },
+
   emergencyContact: Joi.object({
     name: Joi.string().allow(''),
     email: Joi.allow(''),
@@ -92,6 +104,19 @@ const internProfileSchema = Joi.object({
   consentedOnPressPadTerms: Joi.boolean()
     .only()
     .allow(true),
+  internshipStartDate: Joi.date().required(),
+  internshipEndDate: Joi.date().required(),
+  internshipContact: {
+    name: Joi.string()
+      .email()
+      .allow(''),
+    email: Joi.string()
+      .email()
+      .allow(''),
+    phoneNumber: Joi.string()
+      .email()
+      .allow(''),
+  },
 });
 
 module.exports = internProfileSchema;

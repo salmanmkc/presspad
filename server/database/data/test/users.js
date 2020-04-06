@@ -60,6 +60,9 @@ const createAll = async ({ accounts, organisations }) => {
     password: '123456',
     role: 'host',
     account: hostAccount._id,
+    acceptAutomatically: true,
+    respondingTime: 432000000, // 5 days in ms
+    respondedRequests: 3,
   };
 
   const intern = {

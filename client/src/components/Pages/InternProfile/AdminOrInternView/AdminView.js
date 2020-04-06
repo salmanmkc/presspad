@@ -55,7 +55,12 @@ export default class AdminView extends React.Component {
         fileName: null,
         isPrivate: true,
       },
-      internshipOfficeAddress: null,
+      internshipOfficeAddress: {
+        addressline1: null,
+        addressline2: null,
+        city: null,
+        postcode: null,
+      },
       emergencyContact: {
         name: null,
         phoneNumber: null,

@@ -71,7 +71,18 @@ export const detailsSchema = object({
     fileName: string().ensure(),
     isPrivate: boolean().default(true),
   }),
-  internshipOfficeAddress: lazy(optionalWordLengthValidator(50)),
+  internshipOfficeAddress: {
+    addressline1: string()
+      .ensure()
+      .required(),
+    addressline2: string().ensure(),
+    city: string()
+      .ensure()
+      .required(),
+    postcode: string()
+      .ensure()
+      .required(),
+  },
   emergencyContact: object({
     name: string().ensure(),
     email: string()
