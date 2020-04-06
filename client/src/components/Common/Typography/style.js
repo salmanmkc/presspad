@@ -6,6 +6,7 @@ const CommonHeading = css`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
   text-transform: ${({ caps }) => (caps ? 'uppercase' : 'none')};
+  margin: 0;
 `;
 
 export const Heading1 = styled.h1`
