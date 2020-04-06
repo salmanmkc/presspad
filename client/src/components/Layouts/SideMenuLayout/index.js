@@ -2,7 +2,7 @@ import React from 'react';
 
 import SideMenu from '../../Common/SideMenu';
 import Navbar from '../../Common/Navbar';
-import Footer from '../../Common/Footer';
+import Footer from '../../Common/FooterNew';
 import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import GoBackComponent from '../../Common/GoBack';
