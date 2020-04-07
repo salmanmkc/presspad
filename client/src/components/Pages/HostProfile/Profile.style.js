@@ -10,13 +10,10 @@ const classNames = {
 };
 
 export const MainSection = styled.section`
-  width: 100%;
-  margin-top: 7px;
   display: flex;
   position: relative;
 
   @media (max-width: 775.98px) {
-    margin-top: 0px;
     flex-direction: column;
   }
 `;
@@ -164,7 +161,6 @@ export const SubImage = styled.div`
 `;
 
 export const Card = styled.div`
-  width: 100%;
   box-shadow: ${shadows.hostProfileCard};
   background-color: ${colors.white};
   padding-top: 2rem;
@@ -188,13 +184,26 @@ const InnerCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 95%;
+  padding: 0 1.5rem 0 1.5rem;
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: 775.98px) {
+    padding: 0 0.5rem 0 0.5rem;
+  }
 `;
 
 export const InfoCard = styled(InnerCard)`
   margin-bottom: 1rem;
+
+  h3,
+  h4 {
+    padding-bottom: 0.5rem;
+  }
+
+  p {
+    padding-bottom: 1rem;
+  }
 
   @media (max-width: 775.98px) {
     height: auto;
@@ -401,4 +410,23 @@ export const Row = styled.div`
 export const Col = styled.div`
   padding-left: ${({ value }) => value && '1rem'};
   width: 170px;
+`;
+
+export const WhyHereDiv = styled.div`
+  width: 412px;
+  height: 50px;
+  margin: 5rem 0 2rem 0;
+  background: ${colors.darkBlue};
+  display: flex;
+  align-items: center;
+
+  h4 {
+    color: ${colors.white};
+    padding-left: 1.5rem;
+  }
+
+  @media (max-width: ${size.mobileM}) {
+    padding: 0rem;
+    width: 320px;
+  }
 `;

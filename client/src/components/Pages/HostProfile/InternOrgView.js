@@ -53,6 +53,7 @@ import {
   MobileSubHeadline,
   Row,
   Col,
+  WhyHereDiv,
 } from './Profile.style';
 
 // accommodation checklist
@@ -64,7 +65,10 @@ import 'antd/dist/antd.css';
 
 import starSign from '../../../assets/star-sign-symbol.svg';
 import profilePlaceholder from '../../../assets/random-profile.jpg';
-import { shadows } from '../../../theme';
+import { shadows, colors } from '../../../theme';
+
+//  individual styles to overwrite components
+const tableFonts = { fontSize: '18px', lineHeight: '27px' };
 
 export default class InternView extends Component {
   state = {
@@ -279,12 +283,10 @@ export default class InternView extends Component {
               {keyDetailsArr.map(details => (
                 <Row>
                   <Col>
-                    <T.H6C style={{ fontSize: '18px', lineHeight: '27px' }}>
-                      {details[0]}
-                    </T.H6C>
+                    <T.H6C style={tableFonts}>{details[0]}</T.H6C>
                   </Col>
                   <Col value>
-                    <T.PBold style={{ fontSize: '18px', lineHeight: '27px' }}>
+                    <T.PBold style={tableFonts}>
                       {titleCase(details[1])}
                     </T.PBold>
                   </Col>
@@ -294,14 +296,14 @@ export default class InternView extends Component {
             {/* About me */}
             <Card>
               <InfoCard>
-                <T.H3 style={{ paddingBottom: '0.5rem' }}>A bit about Me</T.H3>
-                <T.P style={{ paddingBottom: '1rem' }}>{bio}</T.P>
+                <T.H3>A bit about Me</T.H3>
+                <T.P>{bio}</T.P>
               </InfoCard>
             </Card>
             {/* About my Home */}
             <Card>
               <InfoCard>
-                <T.H3 style={{ paddingBottom: '0.5rem' }}>About my home</T.H3>
+                <T.H3>About my home</T.H3>
                 {accommodationChecklist &&
                   accommodationChecklist.length &&
                   renderAccommodationChecklist(
@@ -313,65 +315,64 @@ export default class InternView extends Component {
             {/* About my Neigbourhood */}
             <Card>
               <InfoCard>
-                <T.H3 style={{ paddingBottom: '0.5rem' }}>
-                  About my neighbourhood
-                </T.H3>
-                <T.P style={{ paddingBottom: '1rem' }}>
-                  {neighbourhoodDescription || 'N/A'}
-                </T.P>
+                <T.H3>About my neighbourhood</T.H3>
+                <T.P>{neighbourhoodDescription || 'N/A'}</T.P>
               </InfoCard>
             </Card>
             {/* Other Info */}
             <Card>
-              <InfoCard style={{ paddingBottom: '0.5rem' }}>
+              <InfoCard>
                 <T.H3>Other Info / House Rules</T.H3>
-                <T.P style={{ paddingBottom: '1rem' }}>
-                  {otherInfo || 'N/A'}
-                </T.P>
+                <T.P>{otherInfo || 'N/A'}</T.P>
               </InfoCard>
             </Card>
-
+            {/* Why I'm here section */}
+            <WhyHereDiv>
+              <T.H4C>Why I’m here</T.H4C>
+            </WhyHereDiv>
             {(hostingReasonAnswer ||
               mentoringExperienceAnswer ||
               industryExperienceAnswer) && (
-              <Card>
-                <InfoCard>
-                  <SubHeadline>More about me</SubHeadline>
-                  {hostingReasonAnswer && (
-                    <>
-                      <ParagraphHeadline>
-                        Why I want to be a PressPad host
-                      </ParagraphHeadline>
-                      <Paragraph>{hostingReasonAnswer}</Paragraph>
-                    </>
-                  )}
-                  {mentoringExperienceAnswer && (
-                    <>
-                      <ParagraphHeadline>
-                        My mentoring experience
-                      </ParagraphHeadline>
-                      <Paragraph>{mentoringExperienceAnswer}</Paragraph>
-                    </>
-                  )}
-                  {industryExperienceAnswer && (
-                    <>
-                      <ParagraphHeadline>
-                        My experience getting into the industry
-                      </ParagraphHeadline>
-                      <Paragraph>{industryExperienceAnswer}</Paragraph>
-                    </>
-                  )}
-                  {backgroundAnswer && (
-                    <>
-                      <ParagraphHeadline>
-                        Something you should know
-                      </ParagraphHeadline>
-                      <Paragraph>{backgroundAnswer}</Paragraph>
-                    </>
-                  )}
-                </InfoCard>
-              </Card>
+              <>
+                {/* Host reason  */}
+                {hostingReasonAnswer && (
+                  <Card>
+                    <InfoCard>
+                      <T.H4>Why I want to be a PressPad host</T.H4>
+                      <T.PS>{hostingReasonAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )}
+
+                {mentoringExperienceAnswer && (
+                  <Card>
+                    <InfoCard>
+                      <T.H4>What experience do I have of mentoring?</T.H4>
+                      <T.PS>{mentoringExperienceAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )}
+                {industryExperienceAnswer && (
+                  <Card>
+                    <InfoCard>
+                      <T.H4>
+                        How was my own experience getting into the industry?
+                      </T.H4>
+                      <T.PS>{industryExperienceAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )}
+                {backgroundAnswer && (
+                  <Card>
+                    <InfoCard>
+                      <T.H4>Something you should know</T.H4>
+                      <T.PS>{backgroundAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )}
+              </>
             )}
+
             <Card>
               <Reviews userId={userId} name={name} userRole="host" />
             </Card>
