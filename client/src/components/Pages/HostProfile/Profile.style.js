@@ -165,17 +165,13 @@ export const SubImage = styled.div`
 
 export const Card = styled.div`
   width: 100%;
-  box-shadow: ${shadows.card};
+  box-shadow: ${shadows.hostProfileCard};
   background-color: ${colors.white};
-
-  @media (max-width: ${size.mobileM}) {
-    padding: 1rem;
-  }
+  padding-top: 2rem;
 
   ${({ mobile }) =>
     mobile &&
     css`
-      padding: 1rem 2rem;
       position: relative;
     `}
 
@@ -185,7 +181,6 @@ export const Card = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem 2rem;
     `}
 `;
 
@@ -200,7 +195,7 @@ const InnerCard = styled.div`
 
 export const InfoCard = styled(InnerCard)`
   margin-bottom: 1rem;
-  padding: 1rem;
+
   @media (max-width: 775.98px) {
     height: auto;
   }
@@ -364,7 +359,7 @@ export const TextContentDiv = styled.div`
   width: 65%;
 
   @media (max-width: 775.98px) {
-    padding-top: 20px;
+    padding-top: 2rem;
     width: 100%;
   }
 `;

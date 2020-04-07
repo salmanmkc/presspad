@@ -64,6 +64,7 @@ import 'antd/dist/antd.css';
 
 import starSign from '../../../assets/star-sign-symbol.svg';
 import profilePlaceholder from '../../../assets/random-profile.jpg';
+import { shadows } from '../../../theme';
 
 export default class InternView extends Component {
   state = {
@@ -201,7 +202,7 @@ export default class InternView extends Component {
     // renders accommodation checklist with tick / cross icons
     const renderAccommodationChecklist = (totalList, actualList) => {
       // delete 'none of these' from total list
-      totalList.pop();
+      if (totalList[totalList.length - 1] === 'None of these') totalList.pop();
       // also take it out from actual list
       const filteredActualList = actualList.filter(
         item => item !== 'None of these',
@@ -274,7 +275,7 @@ export default class InternView extends Component {
         <MainSection>
           <TextContentDiv>
             {/* Basic Infos */}
-            <InfoCard style={{ paddingLeft: '1rem', paddingTop: '2rem' }}>
+            <InfoCard style={{ paddingTop: windowWidth > 776 && '2rem' }}>
               {keyDetailsArr.map(details => (
                 <Row>
                   <Col>
@@ -293,26 +294,40 @@ export default class InternView extends Component {
             {/* About me */}
             <Card>
               <InfoCard>
-                <T.H3>A bit about Me</T.H3>
-                <T.P>{bio}</T.P>
+                <T.H3 style={{ paddingBottom: '0.5rem' }}>A bit about Me</T.H3>
+                <T.P style={{ paddingBottom: '1rem' }}>{bio}</T.P>
               </InfoCard>
             </Card>
             {/* About my Home */}
             <Card>
               <InfoCard>
-                <T.H3>About my home</T.H3>
+                <T.H3 style={{ paddingBottom: '0.5rem' }}>About my home</T.H3>
                 {accommodationChecklist &&
                   accommodationChecklist.length &&
                   renderAccommodationChecklist(
                     types.accommodationChecklist,
                     accommodationChecklist,
                   )}
-
-                <SubHeadline>The Neighbourhood</SubHeadline>
-                <Paragraph>{neighbourhoodDescription || 'N/A'}</Paragraph>
-
-                <SubHeadline>Other Info / House Rules</SubHeadline>
-                <Paragraph>{otherInfo || 'N/A'}</Paragraph>
+              </InfoCard>
+            </Card>
+            {/* About my Neigbourhood */}
+            <Card>
+              <InfoCard>
+                <T.H3 style={{ paddingBottom: '0.5rem' }}>
+                  About my neighbourhood
+                </T.H3>
+                <T.P style={{ paddingBottom: '1rem' }}>
+                  {neighbourhoodDescription || 'N/A'}
+                </T.P>
+              </InfoCard>
+            </Card>
+            {/* Other Info */}
+            <Card>
+              <InfoCard style={{ paddingBottom: '0.5rem' }}>
+                <T.H3>Other Info / House Rules</T.H3>
+                <T.P style={{ paddingBottom: '1rem' }}>
+                  {otherInfo || 'N/A'}
+                </T.P>
               </InfoCard>
             </Card>
 

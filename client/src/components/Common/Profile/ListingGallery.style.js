@@ -5,7 +5,6 @@ export const ImageSection = styled.section`
   height: 400px;
   display: flex;
   align-items: center;
-
   .ant-carousel {
     width: 100%;
   }

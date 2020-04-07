@@ -47,7 +47,6 @@ export const Arrow = styled(BackArrowIcon)`
 
 // Header
 export const Header = styled.header`
-  padding-top: 2rem;
   display: flex;
   justify-content: ${({ justifyContent }) => justifyContent || 'space-between'};
   align-items: ${({ alignItems }) => alignItems || 'start'};
@@ -88,7 +87,6 @@ export const Headline = styled.h1`
 
 export const Card = styled.div`
   width: 100%;
-  padding: 0.8rem;
   box-shadow: ${shadows.card};
   margin-top: ${props => props.mt};
   min-height: ${props => props.mh};
