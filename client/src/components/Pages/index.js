@@ -18,6 +18,8 @@ import BookingView from './BookingView';
 import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
+import ThemeTest from './ThemeTest';
+
 import { withWindowWidth } from '../../HOCs';
 import {
   HOME_URL,
@@ -207,6 +209,15 @@ function Pages(props) {
             )
           }
           {...props}
+        />
+        {/* To be deleted */}
+        <Route
+          path="/test"
+          Component={ThemeTest}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          {...props}
+          layout="sideMenu"
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>

@@ -10,11 +10,11 @@ module.exports = override(
     javascriptEnabled: true,
     modifyVars: {
       '@primary-color': '#2F2F2F', // primary color for all components
+      '@link-color': '#09C7E7', // link color
     },
   }),
 );
 // '@primary-color': 'red', // primary color for all components
-// '@link-color': 'red', // link color
 // '@success-color': 'red', // success state color
 // '@warning-color': 'red', // warning state color
 // '@error-color': 'red', // error state color
