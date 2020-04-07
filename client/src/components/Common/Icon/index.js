@@ -2,6 +2,8 @@ import React from 'react';
 import styled, { css, withTheme } from 'styled-components';
 
 import Arrow from './Arrow';
+import Tick from './Tick';
+import Cross from './Cross';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -12,6 +14,8 @@ const iconStyles = props => css`
 
 const iconMap = {
   arrow: Arrow,
+  cross: Cross,
+  tick: Tick,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {

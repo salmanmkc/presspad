@@ -344,12 +344,17 @@ export const List = styled.div`
     flex-direction: column;
   }
 `;
+export const BulletPoint = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 export const ListItem = styled.li`
-  margin-top: 8px;
   font-weight: 300;
   width: 100%;
+  list-style-type: none;
 
+  margin: 0.5rem 0 0.5rem 0.5rem;
   @media (max-width: 775.98px) {
     width: 100%;
   }
@@ -394,14 +399,11 @@ export const KeyInfoRow = styled.span`
 
 export const Row = styled.div`
   display: flex;
+
   padding-bottom: 0.5rem;
 `;
 
 export const Col = styled.div`
-  flex: 1;
-  margin-left: ${({ value }) => value && '-14rem'};
-
-  @media (max-width: ${size.mobileM}) {
-    margin-left: ${({ value }) => value && '0'};
-  }
+  padding-left: ${({ value }) => value && '1rem'};
+  width: 170px;
 `;

@@ -31,6 +31,9 @@ import SideMenuLayout from '../../Layouts/SideMenuLayout';
 // Typography
 import * as T from '../../Common/Typography';
 
+// Icons
+import PageIcon from '../../Common/Icon';
+
 // Styles
 import {
   MainSection,
@@ -44,12 +47,16 @@ import {
   CalendarDiv,
   List,
   ListItem,
+  BulletPoint,
   EditButton,
   Strong,
   MobileSubHeadline,
   Row,
   Col,
 } from './Profile.style';
+
+// accommodation checklist
+import types from '../../../constants/types';
 
 //  helpers
 import { titleCase, truncatePostcode } from '../../../helpers';
@@ -181,7 +188,7 @@ export default class InternView extends Component {
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
 
-    // infos to be rendered in top section
+    // key infos to be rendered in top section as table
     const keyInfoTable = {
       Gender: gender && gender,
       'University / School': school && school,
@@ -189,8 +196,35 @@ export default class InternView extends Component {
       'Media I work in': workingArea && workingArea,
       'Areas of Interest': areasOfInterest && areasOfInterest,
     };
-
     const keyDetailsArr = Object.entries(keyInfoTable);
+
+    // renders accommodation checklist with tick / cross icons
+    const renderAccommodationChecklist = (totalList, actualList) => {
+      // delete 'none of these' from total list
+      totalList.pop();
+      // also take it out from actual list
+      const filteredActualList = actualList.filter(
+        item => item !== 'None of these',
+      );
+
+      return totalList.map(item =>
+        filteredActualList.includes(item) ? (
+          <BulletPoint>
+            <PageIcon icon="tick" width="24px" height="24px" />
+            <ListItem key={`accommodation-checklist-item-${Math.random()}`}>
+              {item}
+            </ListItem>
+          </BulletPoint>
+        ) : (
+          <BulletPoint>
+            <PageIcon icon="cross" width="24px" height="24px" />
+            <ListItem key={`accommodation-checklist-item-${Math.random()}`}>
+              {item}
+            </ListItem>
+          </BulletPoint>
+        ),
+      );
+    };
 
     return (
       <SideMenuLayout goBack>
@@ -207,7 +241,7 @@ export default class InternView extends Component {
               {role === 'admin' ? (
                 <T.H2>{name || 'Anonymous'}</T.H2>
               ) : (
-                <T.H2>
+                <T.H2 style={{ fontSize: '24px', lineHeight: '23px' }}>
                   {jobTitle &&
                     `A ${titleCase(jobTitle)} ${
                       organisation ? `at ${titleCase(organisation)}` : ''
@@ -240,44 +274,39 @@ export default class InternView extends Component {
         <MainSection>
           <TextContentDiv>
             {/* Basic Infos */}
-            <InfoCard>
-              <Paragraph>
-                {keyDetailsArr.map(details => (
-                  <Row>
-                    <Col key>
-                      <T.H6C style={{ fontSize: '18px', lineHeight: '26px' }}>
-                        {details[0]}
-                      </T.H6C>
-                    </Col>
-                    <Col value>
-                      <T.PBold style={{ fontSize: '18px', lineHeight: '26px' }}>
-                        {titleCase(details[1])}
-                      </T.PBold>
-                    </Col>
-                  </Row>
-                ))}
-              </Paragraph>
+            <InfoCard style={{ paddingLeft: '1rem', paddingTop: '2rem' }}>
+              {keyDetailsArr.map(details => (
+                <Row>
+                  <Col>
+                    <T.H6C style={{ fontSize: '18px', lineHeight: '27px' }}>
+                      {details[0]}
+                    </T.H6C>
+                  </Col>
+                  <Col value>
+                    <T.PBold style={{ fontSize: '18px', lineHeight: '27px' }}>
+                      {titleCase(details[1])}
+                    </T.PBold>
+                  </Col>
+                </Row>
+              ))}
             </InfoCard>
             {/* About me */}
             <Card>
               <InfoCard>
-                <SubHeadline>About Me</SubHeadline>
-                <ParagraphHeadline>
-                  {titleCase(jobTitle)} - {titleCase(organisation)}
-                </ParagraphHeadline>
-                <Paragraph>{bio}</Paragraph>
+                <T.H3>A bit about Me</T.H3>
+                <T.P>{bio}</T.P>
               </InfoCard>
             </Card>
+            {/* About my Home */}
             <Card>
               <InfoCard>
-                <SubHeadline>About my home</SubHeadline>
-                {accommodationChecklist && accommodationChecklist.length && (
-                  <List>
-                    {accommodationChecklist.map(li => (
-                      <ListItem key={li}>{li}</ListItem>
-                    ))}
-                  </List>
-                )}
+                <T.H3>About my home</T.H3>
+                {accommodationChecklist &&
+                  accommodationChecklist.length &&
+                  renderAccommodationChecklist(
+                    types.accommodationChecklist,
+                    accommodationChecklist,
+                  )}
 
                 <SubHeadline>The Neighbourhood</SubHeadline>
                 <Paragraph>{neighbourhoodDescription || 'N/A'}</Paragraph>
