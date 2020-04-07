@@ -147,6 +147,7 @@ const spacings = {
   9: '70px',
   10: '120px',
   11: '240px',
+  12: '300px',
 
   sideMenuWidth: '245px',
   headerHeight: '80px',
