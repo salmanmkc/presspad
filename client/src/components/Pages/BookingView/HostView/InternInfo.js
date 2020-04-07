@@ -32,8 +32,6 @@ import {
   AboutSectionDataCell,
 } from './HostView.style';
 
-import 'antd/dist/antd.css';
-
 import referIcon from '../../../../assets/refer.svg';
 import verifiedIcon from '../../../../assets/verified.svg';
 import RandomProfileImg from '../../../../assets/random-profile.jpg';

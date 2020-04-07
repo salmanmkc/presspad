@@ -48,8 +48,6 @@ import {
   mentorDescribeQuestion,
 } from './questions.json';
 
-import 'antd/dist/antd.css';
-
 import referIcon from '../../../../assets/refer.svg';
 import verifiedIcon from '../../../../assets/verified.svg';
 
@@ -79,7 +77,7 @@ class HostView extends Component {
   getProfilePic = img =>
     img && img.length > 0
       ? img
-      : require('./../../../../assets/random-profile.jpg');
+      : require('../../../../assets/random-profile.jpg');
 
   render() {
     if (this.state.isLoading) return <Spin tip="Loading Request" />;
