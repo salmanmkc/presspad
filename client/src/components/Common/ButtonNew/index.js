@@ -20,9 +20,14 @@ const sharedStyles = css`
   border-radius: 10px;
   text-transform: uppercase;
 
-  margin: ${props => props.margin || 0};
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   opacity: ${props => props.disabled && !props.loading && 0.3};
+
+  margin: ${props => props.margin || 0};
+  margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
+  margin-bottom: ${({ mb, theme }) => (mb ? theme.spacings[mb] : 0)};
+  margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
+  margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
 
   &:hover::after {
     content: '';
