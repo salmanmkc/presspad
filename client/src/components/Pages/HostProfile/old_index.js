@@ -59,7 +59,6 @@ import {
   // ReviewsSection,
 } from './Profile.style';
 import { titleCase } from '../../../helpers';
-import 'antd/dist/antd.css';
 
 // images
 import starSign from '../../../assets/star-sign-symbol.svg';
