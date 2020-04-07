@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Rate } from 'antd';
 
+// Typography
+import * as T from '../Typography';
 import {
   ReviewWrapper,
   ReviewHeader,
@@ -12,12 +14,12 @@ import {
 const Review = ({ rate, name, jobTitle, message }) => (
   <ReviewWrapper>
     <ReviewHeader>
-      <SubTitle>
+      <T.PBold style={{ paddingRight: '0.5rem' }}>
         {name}, {jobTitle}
-      </SubTitle>{' '}
+      </T.PBold>{' '}
       <Rate disabled defaultValue={rate} style={{ color: '#5EBFD0' }} />
     </ReviewHeader>
-    <ReviewBody>{message}</ReviewBody>
+    <T.P>{message}</T.P>
   </ReviewWrapper>
 );
 

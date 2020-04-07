@@ -334,7 +334,6 @@ export default class InternView extends Component {
               mentoringExperienceAnswer ||
               industryExperienceAnswer) && (
               <>
-                {/* Host reason  */}
                 {hostingReasonAnswer && (
                   <Card>
                     <InfoCard>
@@ -372,7 +371,7 @@ export default class InternView extends Component {
                 )}
               </>
             )}
-
+            {/* Reviews */}
             <Card>
               <Reviews userId={userId} name={name} userRole="host" />
             </Card>

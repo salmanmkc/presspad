@@ -6,6 +6,9 @@ import Review from './Review';
 import { API_REVIEWS } from '../../../constants/apiRoutes';
 import { Wrapper, MainTitle, SubTitle } from './Reviews.style';
 
+// Typography
+import * as T from '../Typography';
+
 export default class Reviews extends Component {
   state = {
     reviews: [],
@@ -30,7 +33,7 @@ export default class Reviews extends Component {
 
     return (
       <Wrapper>
-        <MainTitle>Reviews</MainTitle>
+        <T.H4C>Reviews</T.H4C>
         <Skeleton loading={loading} active avatar>
           {reviews && reviews.length ? (
             reviews.map(({ rate, name: reviewerName, jobTitle, message }) => (
@@ -42,7 +45,7 @@ export default class Reviews extends Component {
               />
             ))
           ) : (
-            <SubTitle>Currently no reviews</SubTitle>
+            <T.P>Currently no reviews</T.P>
           )}
         </Skeleton>
         {loading && <Skeleton loading={loading} active avatar />}
