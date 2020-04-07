@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import {
   H1,
@@ -100,4 +101,21 @@ export const ExternalLink = () => (
   <Link to="https://www.google.com/" isExternal>
     External link
   </Link>
+);
+
+export const PinkHeading = () => <H1 color="pink">Heading 1 (H1)</H1>;
+export const BlueBodt = () => <P color="lightBlue"> {loremIpsum}</P>;
+
+export const WithMargins = () => (
+  <P mt="8" ml="4">
+    mt => margin-top
+    <br />
+    mb => margin-bottom
+    <br />
+    ml => margin-left
+    <br />
+    mr => margin-right
+    <br />
+    {loremIpsum}
+  </P>
 );
