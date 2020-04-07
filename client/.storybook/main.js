@@ -1,4 +1,6 @@
 const path = require("path")
+const themePath = path.resolve(__dirname,"..", './theme-vars.less');
+
 const {
   override,
   fixBabelImports,
@@ -22,8 +24,7 @@ module.exports = {
     addLessLoader({
       javascriptEnabled: true,
       modifyVars: {
-        '@primary-color': '#2F2F2F', // primary color for all components
-
+        hack: `true; @import "${themePath}";`,
       },
     }),
   )
