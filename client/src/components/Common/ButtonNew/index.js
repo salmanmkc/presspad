@@ -49,6 +49,7 @@ const sharedStyles = css`
     left: 0px;
     box-shadow: none;
     border-radius: 10px;
+    background: ${({ theme }) => theme.colors.transGray};
   }
 `;
 

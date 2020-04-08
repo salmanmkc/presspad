@@ -57,6 +57,13 @@ export const Secondary = () => (
     </Button>
   </Wrapper>
 );
+export const SecondarySmall = () => (
+  <Wrapper>
+    <Button onClick={action('clicked')} small type="secondary">
+      Secondary
+    </Button>
+  </Wrapper>
+);
 
 export const SecondaryOutline = () => (
   <Wrapper>
