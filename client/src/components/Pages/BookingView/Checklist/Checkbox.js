@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { message, Spin, Icon } from 'antd';
+import { message, Spin } from 'antd';
+import Icon from '../../../Common/Icon';
 
 import {
   CheckboxContainer,
@@ -12,7 +13,7 @@ import {
 
 import { API_UPDATE_CHECKLIST_ANSWER } from '../../../../constants/apiRoutes';
 
-const antIcon = <Icon type="loading" style={{ fontSize: 12 }} spin />;
+const antIcon = <Icon icon="loading" />;
 
 /**
  * Custom checkbox

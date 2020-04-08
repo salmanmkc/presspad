@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon } from 'antd';
+import Icon from '../Icon';
 
 /**
  * ProgressRing from CSS-tricks website
@@ -24,7 +24,7 @@ class ProgressRing extends Component {
       <>
         {progress === 100 && (
           <Icon
-            type="check"
+            icon="circleTick"
             style={{
               color: 'green',
               fontSize: '18px',

@@ -9,11 +9,11 @@ import {
   Select,
   DatePicker,
   Empty,
-  Icon,
   Skeleton,
 } from 'antd';
 import moment from 'moment';
 import { Elements } from 'react-stripe-elements';
+import Icon from '../../Common/Icon';
 
 import Button from '../../Common/Button';
 import { calculatePrice } from '../../../helpers';
@@ -433,7 +433,7 @@ class Content extends Component {
                                 {item.name}
                                 {item._id !== 'removeIt' && (
                                   <Icon
-                                    type="user"
+                                    icon="user"
                                     style={{ color: colors.lightBlue }}
                                   />
                                 )}

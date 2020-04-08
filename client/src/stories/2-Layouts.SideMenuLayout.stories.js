@@ -4,11 +4,13 @@ import SideMenuLayout from '../components/Layouts/SideMenuLayout';
 
 export default {
   title: 'Layouts - SideMenuLayout',
-  component: SideMenuLayout,
 };
 
+const dummyLogOutFunction = () => {};
+const navbarProps = { userType: 'intern', resetState: dummyLogOutFunction() };
+
 export const LoggedIn = () => (
-  <SideMenuLayout isLoggedIn>
+  <SideMenuLayout isLoggedIn navbarProps={navbarProps}>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
     </div>
@@ -16,7 +18,7 @@ export const LoggedIn = () => (
 );
 
 export const LoggedInWithBack = () => (
-  <SideMenuLayout isLoggedIn goBack>
+  <SideMenuLayout isLoggedIn goBack navbarProps={navbarProps}>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
       <br />
@@ -26,7 +28,7 @@ export const LoggedInWithBack = () => (
 );
 
 export const LoggedOut = () => (
-  <SideMenuLayout>
+  <SideMenuLayout navbarProps={navbarProps}>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
     </div>
@@ -34,7 +36,7 @@ export const LoggedOut = () => (
 );
 
 export const LoggedOutWithBack = () => (
-  <SideMenuLayout goBack>
+  <SideMenuLayout goBack navbarProps={navbarProps}>
     <div style={{ height: '2000px', background: '#a6c8ea87' }}>
       Content goes here and will take full width
       <br />

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import SideMenu from '../../Common/SideMenu';
-import Navbar from '../../Common/Navbar';
+import SideMenu from '../../Common/Navigation/SideMenu';
+import Navbar from '../../Common/Navigation/TopMenu';
 import Footer from '../../Common/FooterNew';
 import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
@@ -13,7 +13,7 @@ const SideMenuLayout = ({
   windowWidth,
   children,
   isLoggedIn,
-  role,
+  navbarProps,
 }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet || !isLoggedIn;
@@ -21,10 +21,25 @@ const SideMenuLayout = ({
 
   return (
     <>
-      <Wrapper topHeaderRendered={topHeaderRendered}>
-        {topHeaderRendered && <Navbar isLoggedIn={isLoggedIn} role={role} />}
-        {!topHeaderRendered && <SideMenu />}
-        <ContentWrapper sideMenuRendered={sideMenuRendered}>
+      <Wrapper
+        topHeaderRendered={topHeaderRendered}
+        sideMenuRendered={sideMenuRendered}
+      >
+        {topHeaderRendered && (
+          <Navbar
+            isLoggedIn={isLoggedIn}
+            role={navbarProps.userType}
+            resetState={navbarProps.resetState}
+          />
+        )}
+        {!topHeaderRendered && (
+          <SideMenu
+            role={navbarProps.userType}
+            isLoggedIn={isLoggedIn}
+            resetState={navbarProps.resetState}
+          />
+        )}
+        <ContentWrapper>
           {goBack && (
             <GoBackWrapper>
               <GoBackComponent onClick={goBack} />

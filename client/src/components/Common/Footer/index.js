@@ -11,8 +11,8 @@ import {
   Title,
   IconWrapper,
   IconsWrapper,
-  Icon,
 } from './Footer.style';
+import Icon from '../Icon';
 
 const Footer = () => (
   <Wrapper>
@@ -43,27 +43,27 @@ const Footer = () => (
         <IconsWrapper>
           <IconWrapper>
             <a href="https://twitter.com">
-              <Icon type="twitter" />
+              <Icon icon="twitter" />
             </a>
           </IconWrapper>
           <IconWrapper>
             <a href="https://facebook.com">
-              <Icon type="facebook" />
+              <Icon icon="facebook" />
             </a>
           </IconWrapper>
           <IconWrapper>
             <a href="https://instagram.com">
-              <Icon type="instagram" />
+              <Icon icon="instagram" />
             </a>
           </IconWrapper>
           <IconWrapper>
             <a href="https://linkedin.com">
-              <Icon type="linkedin" />
+              <Icon icon="linkedin" />
             </a>
           </IconWrapper>
           <IconWrapper>
             <a href="https://youtube.com">
-              <Icon type="youtube" />
+              <Icon icon="youtube" />
             </a>
           </IconWrapper>
         </IconsWrapper>

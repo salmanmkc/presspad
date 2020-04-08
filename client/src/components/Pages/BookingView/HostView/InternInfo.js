@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Skeleton, Icon, message, Alert } from 'antd';
+import { Skeleton, message, Alert } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
+import Icon from '../../../Common/Icon';
 
 import { API_INTERN_PROFILE_URL } from '../../../../constants/apiRoutes';
 
@@ -137,7 +138,7 @@ class InternInfo extends Component {
                 <Symbol src={referIcon} />
                 <SymbolHeadline>{referencesNum} References</SymbolHeadline>
                 <IconDiv>
-                  <Icon type="info-circle" />
+                  <Icon icon="info" />
                 </IconDiv>
               </SymbolContainer>
             </SymbolDiv>

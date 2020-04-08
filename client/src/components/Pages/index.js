@@ -71,7 +71,6 @@ function Pages(props) {
               {...props}
             />
           )}
-          layout="sideMenu"
           {...props}
         />
         <Route
@@ -82,6 +81,7 @@ function Pages(props) {
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}
+          layout="sideMenu"
         />
         {['host', 'superhost'].includes(role) && (
           <Route
