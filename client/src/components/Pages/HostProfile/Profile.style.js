@@ -34,29 +34,6 @@ export const SideWrapper = styled.div`
   }
 `;
 
-// export const AvailableHosting = styled.div`
-//   width: 45%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   margin-left: 20px;
-
-//   @media (max-width: 775.99px) {
-//     width: 100%;
-//     margin-left: 0;
-//     padding-top: 20px;
-
-//     bottom: 0;
-//     left: 0;
-//   }
-
-//   @media (max-width: ${size.mobileM}) {
-//     overflow-y: scrollable;
-//     z-index: 99;
-//     width: 100%;
-//   }
-// `;
-
 export const Card = styled.div`
   box-shadow: ${({ noShadow }) =>
     noShadow ? 'none' : shadows.hostProfileCard};
@@ -254,6 +231,17 @@ export const SubImage = styled.div`
 export const CalendarCard = styled(Card)`
   box-shadow: none;
   border: 1px solid blue;
+`;
+
+export const MobileCalendarCard = styled(Card)`
+  width: 100%;
+  margin-left: 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: ${colors.white};
+  overflow-y: scrollable;
+  z-index: 99;
 
   // ON MOBILE WHEN EXPANDING
   ${({ expanded }) =>
@@ -262,22 +250,9 @@ export const CalendarCard = styled(Card)`
       display: flex;
       align-items: center;
       justify-content: center;
+      padding-top: 200px;
+      margin-top: 200px;
     `}
-
-  @media (max-width: 775.99px) {
-    width: 100%;
-    margin-left: 0;
-    padding-top: 20px;
-
-    bottom: 0;
-    left: 0;
-  }
-
-  @media (max-width: ${size.mobileM}) {
-    overflow-y: scrollable;
-    z-index: 99;
-    width: 100%;
-  }
 `;
 
 const InnerCard = styled.div`

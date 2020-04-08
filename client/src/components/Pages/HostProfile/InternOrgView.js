@@ -58,6 +58,7 @@ import {
   ReviewsSection,
   ReviewsPart,
   GalleryContainer,
+  MobileCalendarCard,
 } from './Profile.style';
 
 // accommodation checklist
@@ -430,9 +431,9 @@ export default class InternView extends Component {
         </ReviewsPart>
         {/* Calendar on Mobile */}
         {windowWidth < 776 && (
-          <SideWrapper right mobile expanded={expandDateSection}>
+          <>
             {expandDateSection ? (
-              <CalendarCard expanded={expandDateSection} mobile>
+              <MobileCalendarCard expanded={expandDateSection} mobile>
                 <Icon
                   type="close"
                   style={{
@@ -464,9 +465,9 @@ export default class InternView extends Component {
                     getHostProfile={this.getHostProfile}
                   />
                 </CalendarDiv>
-              </CalendarCard>
+              </MobileCalendarCard>
             ) : (
-              <CalendarCard expanded={expandDateSection} mobileSmall>
+              <MobileCalendarCard expanded={expandDateSection} mobileSmall>
                 <T.H3>Availability & Price</T.H3>
                 <Button
                   type="secondary"
@@ -474,9 +475,9 @@ export default class InternView extends Component {
                   width="180px"
                   onClick={this.toggleDateSection}
                 />
-              </CalendarCard>
+              </MobileCalendarCard>
             )}
-          </SideWrapper>
+          </>
         )}
       </SideMenuLayout>
     );
