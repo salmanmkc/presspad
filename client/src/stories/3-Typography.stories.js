@@ -104,7 +104,7 @@ export const ExternalLink = () => (
 );
 
 export const PinkHeading = () => <H1 color="pink">Heading 1 (H1)</H1>;
-export const BlueBodt = () => <P color="lightBlue"> {loremIpsum}</P>;
+export const BlueBody = () => <P color="lightBlue"> {loremIpsum}</P>;
 
 export const WithMargins = () => (
   <P mt="8" ml="4">
@@ -119,3 +119,6 @@ export const WithMargins = () => (
     {loremIpsum}
   </P>
 );
+
+export const RightBody = () => <P align="right"> {loremIpsum}</P>;
+export const CenteredBody = () => <P align="center"> {loremIpsum}</P>;
