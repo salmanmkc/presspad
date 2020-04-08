@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Input, DatePicker, Icon, Select } from 'antd';
+import { Input, DatePicker, Select } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
+
+import Icon from '../../Common/Icon';
 
 // import API routes
 import {
@@ -280,7 +282,7 @@ export default class index extends Component {
               />
             ) : (
               <SearchButton onClick={this.onSearchSubmit}>
-                <Icon type="search" style={{ fontSize: 24 }} />
+                <Icon icon="search" width="20px" />
               </SearchButton>
             )}
           </SearchButtonDiv>

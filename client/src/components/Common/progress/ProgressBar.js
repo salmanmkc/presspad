@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import Icon from '../Icon';
 
 import { Bar, Wrapper } from './ProgressBar.style';
 /**
@@ -12,7 +12,7 @@ const ProgressBar = ({ children, progress = 0, height, style, showCheck }) => (
   <Wrapper height={height} style={style}>
     {progress === 100 && showCheck && (
       <Icon
-        type="check"
+        icon="circleTick"
         style={{
           color: 'green',
           fontSize: '18px',

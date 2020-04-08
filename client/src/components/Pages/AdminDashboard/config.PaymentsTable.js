@@ -1,7 +1,9 @@
 // config file for the antd table "PaymentsTable"
 import React from 'react';
-import { Icon, Button, Popconfirm, Tooltip } from 'antd';
+import { Button, Popconfirm, Tooltip } from 'antd';
 import Highlighter from 'react-highlight-words';
+
+import Icon from '../../Common/Icon';
 
 import { colors } from '../../../theme';
 
@@ -9,26 +11,28 @@ const CheckBoxJsx = ({ paymentStatus }) => {
   switch (paymentStatus) {
     case 'transfered':
       return (
-        <Icon type="check-circle" theme="twoTone" twoToneColor={colors.green} />
+        <Icon
+          icon="circleTick"
+          width="20px"
+          height="20px"
+          color={colors.blue}
+        />
       );
     case 'canceled':
       return (
         <Icon
-          type="close-circle"
-          theme="twoTone"
-          twoToneColor={colors.orange}
+          icon="crossCircle"
+          width="20px"
+          height="20px"
+          color={colors.pink}
         />
       );
     case 'rejected':
-      return <Icon type="stop" theme="twoTone" twoToneColor={colors.red} />;
-    default:
       return (
-        <Icon
-          type="info-circle"
-          theme="twoTone"
-          twoToneColor={colors.lightBlue}
-        />
+        <Icon icon="stop" width="20px" height="20px" color={colors.pink} />
       );
+    default:
+      return <Icon icon="cross" width="20px" color="grey" height="20px" />;
   }
 };
 
@@ -134,7 +138,7 @@ const columns = (highlightVal, handleClick) => [
           >
             <Tooltip placement="top" title="Transfered">
               <Button type="primary" ghost style={{ marginRight: '0.6rem' }}>
-                <Icon type="check" />
+                <Icon icon="tick" width="20px" height="20px" />
               </Button>
             </Tooltip>
           </Popconfirm>
@@ -144,7 +148,7 @@ const columns = (highlightVal, handleClick) => [
           >
             <Tooltip placement="top" title="Cancel">
               <Button type="danger" ghost>
-                <Icon type="close" />
+                <Icon icon="cross" width="20px" height="20px" />
               </Button>
             </Tooltip>
           </Popconfirm>

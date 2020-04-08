@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Spin, message, Icon } from 'antd';
-
+import { Spin, message } from 'antd';
 import axios from 'axios';
+import Icon from '../../Common/Icon';
+
 import {
   API_VERIFY_PROFILE_URL,
   API_GET_USER_BOOKINGS_URL,
@@ -345,7 +346,7 @@ export default class InternView extends Component {
               {expandDateSection ? (
                 <Card mobile>
                   <Icon
-                    type="close"
+                    icon="close"
                     style={{
                       fontSize: '32px',
                       color: 'primary',
