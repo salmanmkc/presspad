@@ -47,7 +47,6 @@ import {
   MobileSubHeadline,
 } from './Profile.style';
 import { titleCase, truncatePostcode } from '../../../helpers';
-import 'antd/dist/antd.css';
 
 import starSign from '../../../assets/star-sign-symbol.svg';
 import profilePlaceholder from '../../../assets/random-profile.jpg';
