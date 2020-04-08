@@ -330,56 +330,8 @@ export default class InternView extends Component {
               </InfoCard>
             </Card>
           </SideWrapper>
-          {/* Calendar on mobile */}
-          {windowWidth < 776 ? (
-            <SideWrapper right mobile expanded={expandDateSection}>
-              {expandDateSection ? (
-                <CalendarCard expanded={expandDateSection} mobile>
-                  <Icon
-                    type="close"
-                    style={{
-                      fontSize: '32px',
-                      color: 'primary',
-                      cursor: 'pointer',
-                      position: 'absolute',
-                      top: '1rem',
-                      right: '1rem',
-                    }}
-                    onClick={this.toggleDateSection}
-                  />
-                  <CalendarDiv userRole={role}>
-                    {role === 'host' && <T.H3>Availability & Price</T.H3>}
-                    {role !== 'host' && (
-                      <>
-                        <T.H3>Availability & Price</T.H3>
-                      </>
-                    )}
-                    <Calendar
-                      currentUserId={currentUserId}
-                      hostId={hostId}
-                      role={role}
-                      listingId={_id}
-                      availableDates={availableDates}
-                      internBookings={internBookings}
-                      price={price}
-                      adminView={role === 'admin'}
-                      getHostProfile={this.getHostProfile}
-                    />
-                  </CalendarDiv>
-                </CalendarCard>
-              ) : (
-                <CalendarCard expanded={expandDateSection} mobileSmall>
-                  <T.H3>Availability & Price</T.H3>
-                  <Button
-                    type="secondary"
-                    label="View dates"
-                    width="180px"
-                    onClick={this.toggleDateSection}
-                  />
-                </CalendarCard>
-              )}
-            </SideWrapper>
-          ) : (
+          {/* Calendar on desktop */}
+          {windowWidth > 776 && (
             <SideWrapper right>
               {/* Calendar on desktop */}
               <CalendarCard>
@@ -476,6 +428,56 @@ export default class InternView extends Component {
             </Card>
           </SideWrapper>
         </ReviewsPart>
+        {/* Calendar on Mobile */}
+        {windowWidth < 776 && (
+          <SideWrapper right mobile expanded={expandDateSection}>
+            {expandDateSection ? (
+              <CalendarCard expanded={expandDateSection} mobile>
+                <Icon
+                  type="close"
+                  style={{
+                    fontSize: '32px',
+                    color: 'primary',
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
+                  }}
+                  onClick={this.toggleDateSection}
+                />
+                <CalendarDiv userRole={role}>
+                  {role === 'host' && <T.H3>Availability & Price</T.H3>}
+                  {role !== 'host' && (
+                    <>
+                      <T.H3>Availability & Price</T.H3>
+                    </>
+                  )}
+                  <Calendar
+                    currentUserId={currentUserId}
+                    hostId={hostId}
+                    role={role}
+                    listingId={_id}
+                    availableDates={availableDates}
+                    internBookings={internBookings}
+                    price={price}
+                    adminView={role === 'admin'}
+                    getHostProfile={this.getHostProfile}
+                  />
+                </CalendarDiv>
+              </CalendarCard>
+            ) : (
+              <CalendarCard expanded={expandDateSection} mobileSmall>
+                <T.H3>Availability & Price</T.H3>
+                <Button
+                  type="secondary"
+                  label="View dates"
+                  width="180px"
+                  onClick={this.toggleDateSection}
+                />
+              </CalendarCard>
+            )}
+          </SideWrapper>
+        )}
       </SideMenuLayout>
     );
   }

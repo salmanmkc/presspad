@@ -263,6 +263,21 @@ export const CalendarCard = styled(Card)`
       align-items: center;
       justify-content: center;
     `}
+
+  @media (max-width: 775.99px) {
+    width: 100%;
+    margin-left: 0;
+    padding-top: 20px;
+
+    bottom: 0;
+    left: 0;
+  }
+
+  @media (max-width: ${size.mobileM}) {
+    overflow-y: scrollable;
+    z-index: 99;
+    width: 100%;
+  }
 `;
 
 const InnerCard = styled.div`
