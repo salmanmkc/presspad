@@ -140,13 +140,14 @@ const spacings = {
   2: '10px',
   3: '15px',
   4: '20px',
-  5: '25px',
-  6: '30px',
-  7: '40px',
-  8: '50px',
-  9: '70px',
-  10: '120px',
+  5: '30px',
+  6: '40px',
+  7: '60px',
+  8: '80px',
+  9: '120px',
+  10: '160px',
   11: '240px',
+  12: '320px',
 
   sideMenuWidth: '245px',
   headerHeight: '80px',
@@ -155,6 +156,8 @@ const spacings = {
     top: '80px',
     bottom: '80px',
   },
+  outerMargin: '100px',
+  innerMargin: '140px',
 };
 
 export default {
