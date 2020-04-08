@@ -9,12 +9,103 @@ const classNames = {
   reactCalendarNavigation: '.react-calendar__navigation',
 };
 
-export const MainSection = styled.section`
+// used to split page into 2 main parts
+export const PageDivider = styled.section`
   display: flex;
   position: relative;
 
   @media (max-width: 775.98px) {
     flex-direction: column;
+  }
+`;
+
+export const ReviewsPart = styled(PageDivider)``;
+
+export const SideWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: ${({ left }) => (left ? '55%' : '45%')};
+  margin-left: ${({ left }) => (left ? '0' : '20px')};
+
+  @media (max-width: 775.98px) {
+    width: 100%;
+    margin-left: 0;
+  }
+`;
+
+// export const AvailableHosting = styled.div`
+//   width: 45%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   margin-left: 20px;
+
+//   @media (max-width: 775.99px) {
+//     width: 100%;
+//     margin-left: 0;
+//     padding-top: 20px;
+
+//     bottom: 0;
+//     left: 0;
+//   }
+
+//   @media (max-width: ${size.mobileM}) {
+//     overflow-y: scrollable;
+//     z-index: 99;
+//     width: 100%;
+//   }
+// `;
+
+export const Card = styled.div`
+  box-shadow: ${({ noShadow }) =>
+    noShadow ? 'none' : shadows.hostProfileCard};
+  padding-top: 2rem;
+  margin-top: 2rem;
+  width: ${({ left }) => (left ? '95%' : '85%')};
+
+  @media (max-width: 775.98px) {
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  ${({ mobile }) =>
+    mobile &&
+    css`
+      position: relative;
+    `}
+
+  ${({ mobileSmall }) =>
+    mobileSmall &&
+    css`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    `}
+`;
+
+export const WhyHereDiv = styled(Card)`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  margin-left: 2.5rem;
+  align-self: flex-start;
+  width: 60%;
+  background: ${colors.darkBlue};
+
+  h4 {
+    color: ${colors.white};
+    padding-left: 1.5rem;
+  }
+
+  @media (max-width: 775.98px) {
+    margin-left: 0;
+
+    h4 {
+      padding-left: 1rem;
+    }
   }
 `;
 
@@ -160,19 +251,13 @@ export const SubImage = styled.div`
   background-image: url(${({ src }) => src});
 `;
 
-export const Card = styled.div`
-  box-shadow: ${shadows.hostProfileCard};
-  background-color: ${colors.white};
-  padding-top: 2rem;
+export const CalendarCard = styled(Card)`
+  box-shadow: none;
+  border: 1px solid blue;
 
-  ${({ mobile }) =>
-    mobile &&
-    css`
-      position: relative;
-    `}
-
-  ${({ mobileSmall }) =>
-    mobileSmall &&
+  // ON MOBILE WHEN EXPANDING
+  ${({ expanded }) =>
+    expanded &&
     css`
       display: flex;
       align-items: center;
@@ -263,39 +348,10 @@ export const MoreReviewsLink = styled(Link)`
   text-decoration: none;
 `;
 
-export const AvailableHosting = styled.div`
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-left: 15px;
-  background-color: ${colors.white};
-  height: auto;
+export const CalendarDiv = styled.div.attrs(classNames)`
+  width: 100%;
 
-  @media (max-width: 775.99px) {
-    width: 100%;
-    margin-left: 0;
-    padding-top: 20px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-  }
-
-  @media (max-width: ${size.mobileM}) {
-    overflow-y: scrollable;
-    z-index: 99;
-  }
-`;
-
-const InnerSideCard = styled.div.attrs(classNames)`
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-
-  @media (max-width: 775.98px) {
-    width: 100%;
-  }
-
+  margin: -2rem auto 0 auto;
   ${classNames.reactCalendar} {
     pointer-events: ${props => (props.userRole === 'host' ? 'none' : 'all')};
   }
@@ -306,15 +362,6 @@ const InnerSideCard = styled.div.attrs(classNames)`
       pointer-events: all;
       background: none;
     }
-  }
-`;
-
-export const CalendarDiv = styled(InnerSideCard)`
-  height: 400px;
-  background-color: ${colors.white};
-
-  @media (max-width: 775.98px) {
-    height: auto;
   }
 `;
 
@@ -364,15 +411,6 @@ export const ListItem = styled.li`
   }
 `;
 
-export const TextContentDiv = styled.div`
-  width: 65%;
-
-  @media (max-width: 775.98px) {
-    padding-top: 2rem;
-    width: 100%;
-  }
-`;
-
 export const EditButton = styled(Link)`
   background: #ffffff;
   border: 1px solid #dbdbdb;
@@ -412,21 +450,8 @@ export const Col = styled.div`
   width: 170px;
 `;
 
-export const WhyHereDiv = styled.div`
-  width: 412px;
-  height: 50px;
-  margin: 5rem 0 2rem 0;
-  background: ${colors.darkBlue};
+export const GalleryContainer = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-
-  h4 {
-    color: ${colors.white};
-    padding-left: 1.5rem;
-  }
-
-  @media (max-width: ${size.mobileM}) {
-    padding: 0rem;
-    width: 320px;
-  }
 `;

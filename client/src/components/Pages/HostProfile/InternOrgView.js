@@ -36,14 +36,14 @@ import PageIcon from '../../Common/Icon';
 
 // Styles
 import {
-  MainSection,
+  SideWrapper,
   Card,
   ProfilePic,
-  TextContentDiv,
+  PageDivider,
   Address,
   Symbol,
   InfoCard,
-  AvailableHosting,
+  RightSideWrapper,
   CalendarDiv,
   List,
   ListItem,
@@ -54,6 +54,10 @@ import {
   Row,
   Col,
   WhyHereDiv,
+  CalendarCard,
+  ReviewsSection,
+  ReviewsPart,
+  GalleryContainer,
 } from './Profile.style';
 
 // accommodation checklist
@@ -232,7 +236,7 @@ export default class InternView extends Component {
     };
 
     return (
-      <SideMenuLayout goBack>
+      <SideMenuLayout style={{ flexDirection: 'column' }} goBack>
         <Header>
           <TopDiv>
             <ProfilePic
@@ -271,37 +275,43 @@ export default class InternView extends Component {
           </TopDiv>
         </Header>
         {/* GALLERY */}
-        <ListingGallery
-          img1={photos[0] && photos[0].url}
-          img2={photos[1] && photos[1].url}
-          img3={photos[2] && photos[2].url}
-        />
-        <MainSection>
-          <TextContentDiv>
+        <GalleryContainer>
+          <ListingGallery
+            img1={photos[0] && photos[0].url}
+            img2={photos[1] && photos[1].url}
+            img3={photos[2] && photos[2].url}
+          />
+        </GalleryContainer>
+
+        {/* MAIN SECTION */}
+        <PageDivider>
+          <SideWrapper left>
             {/* Basic Infos */}
-            <InfoCard style={{ paddingTop: windowWidth > 776 && '2rem' }}>
-              {keyDetailsArr.map(details => (
-                <Row>
-                  <Col>
-                    <T.H6C style={tableFonts}>{details[0]}</T.H6C>
-                  </Col>
-                  <Col value>
-                    <T.PBold style={tableFonts}>
-                      {titleCase(details[1])}
-                    </T.PBold>
-                  </Col>
-                </Row>
-              ))}
-            </InfoCard>
+            <Card left noShadow style={{ paddingTop: '0', marginTop: 0 }}>
+              <InfoCard style={{ paddingTop: windowWidth > 776 && '2rem' }}>
+                {keyDetailsArr.map(details => (
+                  <Row>
+                    <Col>
+                      <T.H6C style={tableFonts}>{details[0]}</T.H6C>
+                    </Col>
+                    <Col value>
+                      <T.PBold style={tableFonts}>
+                        {titleCase(details[1])}
+                      </T.PBold>
+                    </Col>
+                  </Row>
+                ))}
+              </InfoCard>
+            </Card>
             {/* About me */}
-            <Card>
+            <Card left>
               <InfoCard>
                 <T.H3>A bit about Me</T.H3>
                 <T.P>{bio}</T.P>
               </InfoCard>
             </Card>
             {/* About my Home */}
-            <Card>
+            <Card left>
               <InfoCard>
                 <T.H3>About my home</T.H3>
                 {accommodationChecklist &&
@@ -313,73 +323,18 @@ export default class InternView extends Component {
               </InfoCard>
             </Card>
             {/* About my Neigbourhood */}
-            <Card>
+            <Card left>
               <InfoCard>
                 <T.H3>About my neighbourhood</T.H3>
                 <T.P>{neighbourhoodDescription || 'N/A'}</T.P>
               </InfoCard>
             </Card>
-            {/* Other Info */}
-            <Card>
-              <InfoCard>
-                <T.H3>Other Info / House Rules</T.H3>
-                <T.P>{otherInfo || 'N/A'}</T.P>
-              </InfoCard>
-            </Card>
-            {/* Why I'm here section */}
-            <WhyHereDiv>
-              <T.H4C>Why I’m here</T.H4C>
-            </WhyHereDiv>
-            {(hostingReasonAnswer ||
-              mentoringExperienceAnswer ||
-              industryExperienceAnswer) && (
-              <>
-                {hostingReasonAnswer && (
-                  <Card>
-                    <InfoCard>
-                      <T.H4>Why I want to be a PressPad host</T.H4>
-                      <T.PS>{hostingReasonAnswer}</T.PS>
-                    </InfoCard>
-                  </Card>
-                )}
-
-                {mentoringExperienceAnswer && (
-                  <Card>
-                    <InfoCard>
-                      <T.H4>What experience do I have of mentoring?</T.H4>
-                      <T.PS>{mentoringExperienceAnswer}</T.PS>
-                    </InfoCard>
-                  </Card>
-                )}
-                {industryExperienceAnswer && (
-                  <Card>
-                    <InfoCard>
-                      <T.H4>
-                        How was my own experience getting into the industry?
-                      </T.H4>
-                      <T.PS>{industryExperienceAnswer}</T.PS>
-                    </InfoCard>
-                  </Card>
-                )}
-                {backgroundAnswer && (
-                  <Card>
-                    <InfoCard>
-                      <T.H4>Something you should know</T.H4>
-                      <T.PS>{backgroundAnswer}</T.PS>
-                    </InfoCard>
-                  </Card>
-                )}
-              </>
-            )}
-            {/* Reviews */}
-            <Card>
-              <Reviews userId={userId} name={name} userRole="host" />
-            </Card>
-          </TextContentDiv>
+          </SideWrapper>
+          {/* Calendar on mobile */}
           {windowWidth < 776 ? (
-            <AvailableHosting mobile expanded={expandDateSection}>
+            <SideWrapper right mobile expanded={expandDateSection}>
               {expandDateSection ? (
-                <Card mobile>
+                <CalendarCard expanded={expandDateSection} mobile>
                   <Icon
                     type="close"
                     style={{
@@ -393,16 +348,10 @@ export default class InternView extends Component {
                     onClick={this.toggleDateSection}
                   />
                   <CalendarDiv userRole={role}>
-                    {role === 'host' && (
-                      <SubHeadline>Your available Dates</SubHeadline>
-                    )}
+                    {role === 'host' && <T.H3>Availability & Price</T.H3>}
                     {role !== 'host' && (
                       <>
-                        <MobileSubHeadline>Available hosting</MobileSubHeadline>
-                        <ParagraphHeadline>
-                          Choose a slot to view price and request a stay with
-                          this host
-                        </ParagraphHeadline>
+                        <T.H3>Availability & Price</T.H3>
                       </>
                     )}
                     <Calendar
@@ -417,35 +366,28 @@ export default class InternView extends Component {
                       getHostProfile={this.getHostProfile}
                     />
                   </CalendarDiv>
-                </Card>
+                </CalendarCard>
               ) : (
-                <Card mobileSmall>
-                  <MobileSubHeadline>
-                    View available dates & price to stay
-                  </MobileSubHeadline>
+                <CalendarCard expanded={expandDateSection} mobileSmall>
+                  <T.H3>Availability & Price</T.H3>
                   <Button
                     type="secondary"
                     label="View dates"
                     width="180px"
                     onClick={this.toggleDateSection}
                   />
-                </Card>
+                </CalendarCard>
               )}
-            </AvailableHosting>
+            </SideWrapper>
           ) : (
-            <AvailableHosting>
-              <Card>
+            <SideWrapper right>
+              {/* Calendar on desktop */}
+              <CalendarCard>
                 <CalendarDiv userRole={role}>
-                  {role === 'host' && (
-                    <SubHeadline>Your available Dates</SubHeadline>
-                  )}
+                  {role === 'host' && <T.H3>Availability & Price</T.H3>}
                   {role !== 'host' && (
                     <>
-                      <SubHeadline>Available hosting</SubHeadline>
-                      <ParagraphHeadline>
-                        Choose a slot to view price and request a stay with this
-                        host
-                      </ParagraphHeadline>
+                      <T.H3>Availability & Price</T.H3>
                     </>
                   )}
                   <Calendar
@@ -460,10 +402,80 @@ export default class InternView extends Component {
                     getHostProfile={this.getHostProfile}
                   />
                 </CalendarDiv>
+              </CalendarCard>
+              {/* Other Info */}
+              <Card right>
+                <InfoCard>
+                  <T.H3>House Rules / Information</T.H3>
+                  <T.P>{otherInfo || 'N/A'}</T.P>
+                </InfoCard>
               </Card>
-            </AvailableHosting>
+            </SideWrapper>
           )}
-        </MainSection>
+        </PageDivider>
+
+        {/* Why I'm here section */}
+        <PageDivider>
+          <SideWrapper left>
+            <WhyHereDiv>
+              <T.H4C>Why I’m here</T.H4C>
+            </WhyHereDiv>
+            {(hostingReasonAnswer ||
+              mentoringExperienceAnswer ||
+              industryExperienceAnswer) && (
+              <>
+                {hostingReasonAnswer && (
+                  <Card left>
+                    <InfoCard>
+                      <T.H4>Why I want to be a PressPad host</T.H4>
+                      <T.PS>{hostingReasonAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )}
+
+                {mentoringExperienceAnswer && (
+                  <Card left>
+                    <InfoCard>
+                      <T.H4>What experience do I have of mentoring?</T.H4>
+                      <T.PS>{mentoringExperienceAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )}
+
+                {/* {backgroundAnswer && (
+                  <Card>
+                    <InfoCard>
+                      <T.H4>Something you should know</T.H4>
+                      <T.PS>{backgroundAnswer}</T.PS>
+                    </InfoCard>
+                  </Card>
+                )} */}
+              </>
+            )}
+          </SideWrapper>
+          <SideWrapper right>
+            {industryExperienceAnswer && (
+              <Card right style={{ marginTop: windowWidth > 776 && '7rem' }}>
+                <InfoCard>
+                  <T.H4>
+                    How was my own experience getting into the industry?
+                  </T.H4>
+                  <T.PS>{industryExperienceAnswer}</T.PS>
+                </InfoCard>
+              </Card>
+            )}
+          </SideWrapper>
+        </PageDivider>
+        <ReviewsPart>
+          <SideWrapper left>
+            {/* Reviews */}
+            <Card left noShadow>
+              <InfoCard>
+                <Reviews userId={userId} name={name} userRole="host" />
+              </InfoCard>
+            </Card>
+          </SideWrapper>
+        </ReviewsPart>
       </SideMenuLayout>
     );
   }

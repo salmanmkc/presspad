@@ -3,7 +3,6 @@ import { colors } from '../../../theme';
 
 export const Wrapper = styled.div`
   color: ${colors.fontLightBlack};
-  padding: 2rem;
 `;
 
 export const MainTitle = styled.h3`

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const ImageSection = styled.section`
-  margin-top: 15px;
   height: 400px;
+  width: 95%;
   display: flex;
   align-items: center;
   .ant-carousel {
@@ -11,6 +11,7 @@ export const ImageSection = styled.section`
 
   @media (max-width: 775.98px) {
     height: auto;
+    width: 100%;
     flex-direction: column;
     padding-top: 20px;
   }

@@ -239,7 +239,7 @@ class CalendarComponent extends Component {
     if (isLoading) return <Spin tip="Loading Profile" />;
 
     return (
-      <div>
+      <>
         <CalendarWrapper>
           <Calendar
             prev2Label={null}
@@ -293,7 +293,7 @@ class CalendarComponent extends Component {
             </RequestBtn>
           </PricingDiv>
         )}
-      </div>
+      </>
     );
   }
 }
