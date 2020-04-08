@@ -1,4 +1,4 @@
 import Select from './Select';
+import DatePicker from './DatePicker';
 
-// eslint-disable-next-line import/prefer-default-export
-export { Select };
+export { Select, DatePicker };
