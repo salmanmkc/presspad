@@ -20,8 +20,6 @@ import PaymentsTable from './PaymentsTable';
 
 import { SectionWrapperContent } from '../../../Common/general';
 
-import 'antd/dist/antd.css';
-
 class HostView extends Component {
   state = {
     bookingStatus: '',
