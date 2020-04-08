@@ -92,7 +92,7 @@ export const TertiaryOutlineSmall = () => (
 
 export const WithMargins = () => (
   <Wrapper>
-    <Button onClick={action('clicked')} type="tertiary" mt="8">
+    <Button onClick={action('clicked')} type="tertiary" mt="6">
       small
     </Button>
   </Wrapper>
