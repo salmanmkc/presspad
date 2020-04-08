@@ -14,11 +14,13 @@ export const MainTitle = styled.h3`
 
 export const ReviewWrapper = styled.div`
   margin-bottom: 2rem;
+  font-family: Glacial Indifference;
 `;
 
 export const ReviewHeader = styled.div`
   display: flex;
   align-items: center;
+  border: 1px solid;
   margin-bottom: 0.75rem;
 `;
 

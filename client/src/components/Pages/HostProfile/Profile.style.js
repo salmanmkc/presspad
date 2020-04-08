@@ -46,20 +46,6 @@ export const Card = styled.div`
     margin-top: 1rem;
     padding-top: 1rem;
   }
-
-  ${({ mobile }) =>
-    mobile &&
-    css`
-      position: relative;
-    `}
-
-  ${({ mobileSmall }) =>
-    mobileSmall &&
-    css`
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    `}
 `;
 
 export const WhyHereDiv = styled(Card)`
@@ -233,25 +219,38 @@ export const CalendarCard = styled(Card)`
   border: 1px solid blue;
 `;
 
-export const MobileCalendarCard = styled(Card)`
+export const AvailableHosting = styled.div`
+  background-color: ${colors.white};
+  height: auto;
   width: 100%;
-  margin-left: 0;
   position: fixed;
   bottom: 0;
   left: 0;
-  background-color: ${colors.white};
   overflow-y: scrollable;
   z-index: 99;
+`;
 
-  // ON MOBILE WHEN EXPANDING
-  ${({ expanded }) =>
-    expanded &&
+export const MobileCalendarCard = styled.div`
+  background-color: ${colors.white};
+  padding: 0.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h3 {
+    font-weight: 600;
+    font-size: 18px;
+    text-align: left;
+    padding-right: 2rem;
+    padding-top: 0.5rem;
+  }
+
+  // when user clicks open
+  ${({ open }) =>
+    open &&
     css`
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-top: 200px;
-      margin-top: 200px;
+      padding: 3rem 2rem;
+      position: relative;
     `}
 `;
 
@@ -340,8 +339,8 @@ export const MoreReviewsLink = styled(Link)`
 
 export const CalendarDiv = styled.div.attrs(classNames)`
   width: 100%;
-
   margin: -2rem auto 0 auto;
+
   ${classNames.reactCalendar} {
     pointer-events: ${props => (props.userRole === 'host' ? 'none' : 'all')};
   }
@@ -351,6 +350,9 @@ export const CalendarDiv = styled.div.attrs(classNames)`
       min-width: 50px;
       pointer-events: all;
       background: none;
+    }
+    @media (max-width: ${size.mobileM}) {
+      padding-right: 0.25rem;
     }
   }
 `;
@@ -396,6 +398,7 @@ export const ListItem = styled.li`
   list-style-type: none;
 
   margin: 0.5rem 0 0.5rem 0.5rem;
+
   @media (max-width: 775.98px) {
     width: 100%;
   }

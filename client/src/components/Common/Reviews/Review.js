@@ -14,10 +14,14 @@ import {
 const Review = ({ rate, name, jobTitle, message }) => (
   <ReviewWrapper>
     <ReviewHeader>
-      <T.PBold style={{ paddingRight: '0.5rem' }}>
+      <SubTitle>
         {name}, {jobTitle}
-      </T.PBold>{' '}
-      <Rate disabled defaultValue={rate} style={{ color: '#5EBFD0' }} />
+      </SubTitle>
+      <Rate
+        disabled
+        defaultValue={rate}
+        style={{ color: '#5EBFD0', lineHeight: '5' }}
+      />
     </ReviewHeader>
     <T.P>{message}</T.P>
   </ReviewWrapper>

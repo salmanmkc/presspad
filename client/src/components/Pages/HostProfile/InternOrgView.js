@@ -59,6 +59,7 @@ import {
   ReviewsPart,
   GalleryContainer,
   MobileCalendarCard,
+  AvailableHosting,
 } from './Profile.style';
 
 // accommodation checklist
@@ -198,6 +199,8 @@ export default class InternView extends Component {
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
 
+    const isMobile = windowWidth < 776;
+
     // key infos to be rendered in top section as table
     const keyInfoTable = {
       Gender: gender && gender,
@@ -236,6 +239,65 @@ export default class InternView extends Component {
       );
     };
 
+    const profileContents = {
+      aboutMe: {
+        title: 'A bit about me',
+        text: bio || 'NA',
+      },
+      neighbourhood: {
+        title: 'About my neighbourhood',
+        text: neighbourhoodDescription || 'NA',
+      },
+      houseRules: {
+        title: 'House Rules / Information',
+        text: otherInfo || 'N/A',
+      },
+      whyHost: {
+        title: 'Why I want to be a PressPad host',
+        text: hostingReasonAnswer,
+      },
+      mentoring: {
+        title: 'What experience do I have of mentoring?',
+        text: mentoringExperienceAnswer,
+      },
+    };
+
+    const renderAboutSection = (mobile, side, headline, description) => (
+      <Card left={side === 'left'} right={side === 'right'}>
+        <InfoCard>
+          {mobile ? (
+            <>
+              <T.PBold>{headline}</T.PBold>
+              <T.PS>{description}</T.PS>
+            </>
+          ) : (
+            <>
+              <T.H3>{headline}</T.H3>
+              <T.P>{description}</T.P>
+            </>
+          )}
+        </InfoCard>
+      </Card>
+    );
+
+    const renderMentoringSection = (mobile, side, headline, description) => (
+      <Card left={side === 'left'} right={side === 'right'}>
+        <InfoCard>
+          {mobile ? (
+            <>
+              <T.PBold>{headline}</T.PBold>
+              <T.PS>{description}</T.PS>
+            </>
+          ) : (
+            <>
+              <T.H4>{headline}</T.H4>
+              <T.PS>{description}</T.PS>
+            </>
+          )}
+        </InfoCard>
+      </Card>
+    );
+
     return (
       <SideMenuLayout style={{ flexDirection: 'column' }} goBack>
         <Header>
@@ -267,7 +329,6 @@ export default class InternView extends Component {
           {/* BADGE */}
           <TopDiv>
             {badge && <Symbol src={starSign} />}
-
             {userId === currentUserId && (
               <EditButton to={HOST_COMPLETE_PROFILE_URL}>
                 Edit Profile
@@ -288,8 +349,12 @@ export default class InternView extends Component {
         <PageDivider>
           <SideWrapper left>
             {/* Basic Infos */}
-            <Card left noShadow style={{ paddingTop: '0', marginTop: 0 }}>
-              <InfoCard style={{ paddingTop: windowWidth > 776 && '2rem' }}>
+            <Card
+              left
+              noShadow
+              style={{ paddingTop: isMobile ? '2rem' : '0', marginTop: 0 }}
+            >
+              <InfoCard style={{ paddingTop: !isMobile && '2rem' }}>
                 {keyDetailsArr.map(details => (
                   <Row>
                     <Col>
@@ -305,16 +370,21 @@ export default class InternView extends Component {
               </InfoCard>
             </Card>
             {/* About me */}
-            <Card left>
-              <InfoCard>
-                <T.H3>A bit about Me</T.H3>
-                <T.P>{bio}</T.P>
-              </InfoCard>
-            </Card>
+            {renderAboutSection(
+              isMobile,
+              'left',
+              profileContents.aboutMe.title,
+              profileContents.aboutMe.text,
+            )}
             {/* About my Home */}
             <Card left>
               <InfoCard>
-                <T.H3>About my home</T.H3>
+                {!isMobile ? (
+                  <T.H3>About my home</T.H3>
+                ) : (
+                  <T.PBold>About my home</T.PBold>
+                )}
+
                 {accommodationChecklist &&
                   accommodationChecklist.length &&
                   renderAccommodationChecklist(
@@ -324,15 +394,15 @@ export default class InternView extends Component {
               </InfoCard>
             </Card>
             {/* About my Neigbourhood */}
-            <Card left>
-              <InfoCard>
-                <T.H3>About my neighbourhood</T.H3>
-                <T.P>{neighbourhoodDescription || 'N/A'}</T.P>
-              </InfoCard>
-            </Card>
+            {renderAboutSection(
+              isMobile,
+              'left',
+              profileContents.neighbourhood.title,
+              profileContents.neighbourhood.text,
+            )}
           </SideWrapper>
           {/* Calendar on desktop */}
-          {windowWidth > 776 && (
+          {!isMobile && (
             <SideWrapper right>
               {/* Calendar on desktop */}
               <CalendarCard>
@@ -357,12 +427,12 @@ export default class InternView extends Component {
                 </CalendarDiv>
               </CalendarCard>
               {/* Other Info */}
-              <Card right>
-                <InfoCard>
-                  <T.H3>House Rules / Information</T.H3>
-                  <T.P>{otherInfo || 'N/A'}</T.P>
-                </InfoCard>
-              </Card>
+              {renderAboutSection(
+                isMobile,
+                'right',
+                profileContents.houseRules.title,
+                profileContents.houseRules.text,
+              )}
             </SideWrapper>
           )}
         </PageDivider>
@@ -377,23 +447,21 @@ export default class InternView extends Component {
               mentoringExperienceAnswer ||
               industryExperienceAnswer) && (
               <>
-                {hostingReasonAnswer && (
-                  <Card left>
-                    <InfoCard>
-                      <T.H4>Why I want to be a PressPad host</T.H4>
-                      <T.PS>{hostingReasonAnswer}</T.PS>
-                    </InfoCard>
-                  </Card>
-                )}
+                {hostingReasonAnswer &&
+                  renderMentoringSection(
+                    isMobile,
+                    'left',
+                    profileContents.whyHost.title,
+                    profileContents.whyHost.text,
+                  )}
 
-                {mentoringExperienceAnswer && (
-                  <Card left>
-                    <InfoCard>
-                      <T.H4>What experience do I have of mentoring?</T.H4>
-                      <T.PS>{mentoringExperienceAnswer}</T.PS>
-                    </InfoCard>
-                  </Card>
-                )}
+                {mentoringExperienceAnswer &&
+                  renderMentoringSection(
+                    isMobile,
+                    'left',
+                    'What experience do I have of mentoring?',
+                    mentoringExperienceAnswer,
+                  )}
 
                 {/* {backgroundAnswer && (
                   <Card>
@@ -407,16 +475,13 @@ export default class InternView extends Component {
             )}
           </SideWrapper>
           <SideWrapper right>
-            {industryExperienceAnswer && (
-              <Card right style={{ marginTop: windowWidth > 776 && '7rem' }}>
-                <InfoCard>
-                  <T.H4>
-                    How was my own experience getting into the industry?
-                  </T.H4>
-                  <T.PS>{industryExperienceAnswer}</T.PS>
-                </InfoCard>
-              </Card>
-            )}
+            {industryExperienceAnswer &&
+              renderMentoringSection(
+                isMobile,
+                'right',
+                profileContents.mentoring.title,
+                profileContents.mentoring.text,
+              )}
           </SideWrapper>
         </PageDivider>
         <ReviewsPart>
@@ -430,10 +495,10 @@ export default class InternView extends Component {
           </SideWrapper>
         </ReviewsPart>
         {/* Calendar on Mobile */}
-        {windowWidth < 776 && (
-          <>
+        {isMobile && (
+          <AvailableHosting expanded={expandDateSection}>
             {expandDateSection ? (
-              <MobileCalendarCard expanded={expandDateSection} mobile>
+              <MobileCalendarCard open>
                 <Icon
                   type="close"
                   style={{
@@ -467,7 +532,7 @@ export default class InternView extends Component {
                 </CalendarDiv>
               </MobileCalendarCard>
             ) : (
-              <MobileCalendarCard expanded={expandDateSection} mobileSmall>
+              <MobileCalendarCard>
                 <T.H3>Availability & Price</T.H3>
                 <Button
                   type="secondary"
@@ -477,7 +542,7 @@ export default class InternView extends Component {
                 />
               </MobileCalendarCard>
             )}
-          </>
+          </AvailableHosting>
         )}
       </SideMenuLayout>
     );
