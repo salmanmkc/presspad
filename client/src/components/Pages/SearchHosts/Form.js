@@ -2,18 +2,27 @@ import React from 'react';
 import { Form as StyledForm, Row, SubRow } from './style';
 import * as T from '../../Common/Typography';
 import { Select, DatePicker, Switch } from '../../Common/AntdWrappers';
+import Button from '../../Common/ButtonNew';
+
 import { newId } from '../../../helpers';
 
 const Form = () => (
   <StyledForm>
-    <T.H3C>FIND A PRESSPAD</T.H3C>
-    <T.PXL>
+    <T.H3C mt="2" mb="4">
+      {/* <T.H3C mt="2" mb="4"> */}
+      FIND A PRESSPAD
+    </T.H3C>
+    <T.PXL mt="1" mb="6">
       You can search for hosts by filling in the city and dates you&apos;re
       looking for. Need somewhere quickly? Then select automatic bookings.
     </T.PXL>
-    <Row>
-      <T.PL>I want a place to stay in</T.PL>
+    <Row mt="1">
+      <T.PL mb="1" mr="4">
+        I want a place to stay in
+      </T.PL>
       <Select
+        mt="1"
+        mb="1"
         showSearch
         placeholder="Enter your city"
         name="city"
@@ -30,36 +39,42 @@ const Form = () => (
         1111
       </Select>
     </Row>
-    <Row>
-      <SubRow>
-        <T.PL>between</T.PL>
+    <Row mt="1">
+      <SubRow mr="4">
+        <T.PL mb="1" mr="4">
+          between
+        </T.PL>
         <DatePicker
-          name="startDate"
+          size="large"
+          mt="1"
+          mb="1"
           // disabledDate={this.disabledStartDate}
-          id="startDate"
           type="date"
-          style={{ width: 150 }}
           // value={startDate}
           // onChange={this.onStartChange}
-          format="YYYY-MM-DD"
         />
       </SubRow>
       <SubRow>
-        <T.PL>and</T.PL>
+        <T.PL mt="1" mb="1" mr="4">
+          and
+        </T.PL>
         <DatePicker
-          name="startDate"
+          mt="1"
+          mb="1"
           // disabledDate={this.disabledStartDate}
-          id="startDate"
           type="date"
-          style={{ width: 150 }}
           // value={startDate}
           // onChange={this.onStartChange}
-          format="YYYY-MM-DD"
         />
       </SubRow>
     </Row>
-    <Row>
+    <Row mt="3">
       <Switch id={newId()}>Automatically accepts booking requests</Switch>
+    </Row>
+    <Row mt="6">
+      <Button type="secondary" small>
+        SEARCH
+      </Button>
     </Row>
   </StyledForm>
 );

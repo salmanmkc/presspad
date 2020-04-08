@@ -71,7 +71,6 @@ function Pages(props) {
               {...props}
             />
           )}
-          layout="sideMenu"
           {...props}
         />
         <Route

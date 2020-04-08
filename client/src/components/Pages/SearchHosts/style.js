@@ -2,10 +2,17 @@ import styled from 'styled-components';
 
 export const HeroWrapper = styled.section`
   text-align: right;
-  background: blue;
-  height: calc(70vw - 80px);
-  min-height: 608px;
-  max-height: calc(868px - 80px);
+  min-height: auto;
+  min-height: calc(88vw - 80px);
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
+    min-height: calc(88vw - 80px);
+    max-height: calc(868px - 80px);
+  }
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.laptop} {
+    min-height: calc(868px - 80px);
+  }
 `;
 
 export const HeroBackground = styled.img`
@@ -30,16 +37,30 @@ export const Form = styled.form`
   top: 120px;
   background: #fff;
   text-align: left;
-  height: 608.31px;
+  min-height: 608.31px;
   margin-right: auto;
 `;
+
 export const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
-`;
-export const SubRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: ${({ mt, theme }) => theme.spacings[mt] || 0};
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
-export const HostsWrapper = styled.section``;
+export const SubRow = styled(Row)`
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: ${({ theme }) => theme.spacings[4]};
+`;
+
+export const HostsWrapper = styled.section`
+  margin-top: ${({ theme }) => theme.spacings[7]};
+`;
