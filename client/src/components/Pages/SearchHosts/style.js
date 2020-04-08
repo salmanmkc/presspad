@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 export const HeroWrapper = styled.section`
   text-align: right;
+  background: blue;
+  height: calc(70vw - 80px);
+  min-height: 608px;
+  max-height: calc(868px - 80px);
 `;
 
 export const HeroBackground = styled.img`
