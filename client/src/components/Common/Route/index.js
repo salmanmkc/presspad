@@ -3,7 +3,6 @@ import { Route as RouterRoute, Redirect } from 'react-router-dom';
 import { Spin } from 'antd';
 import Layout from '../../Layouts';
 import { SIGNIN_URL } from '../../../constants/navRoutes';
-import Navbar from '../Navbar';
 
 const Route = ({
   isPrivate,
@@ -23,13 +22,6 @@ const Route = ({
     <Layout layout={layout} navbarProps={navbarProps} isLoggedIn={isLoggedIn}>
       {isMounted ? (
         <>
-          {!layout && (
-            <Navbar
-              isLoggedIn={isLoggedIn}
-              userType={rest.role}
-              resetState={resetState}
-            />
-          )}
           {isPrivate ? (
             <RouterRoute
               path={path}
