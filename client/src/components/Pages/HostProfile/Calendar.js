@@ -10,6 +10,8 @@ import {
   calculatePrice,
 } from '../../../helpers';
 
+// Typography
+import * as T from '../../Common/Typography';
 import {
   API_BOOKING_REQUEST_URL,
   API_GET_INTERN_STATUS,
@@ -17,12 +19,14 @@ import {
 
 import {
   CalendarWrapper,
-  PricingDiv,
+  BookingRequestDetails,
   PriceHeadline,
   PriceLabel,
   RequestBtn,
   ErrorDiv,
   PriceTopDiv,
+  Row,
+  Col,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -258,7 +262,32 @@ class CalendarComponent extends Component {
           />
         </CalendarWrapper>
         {role === 'intern' && (
-          <PricingDiv>
+          <BookingRequestDetails>
+            <Row>
+              <Col>
+                <T.PL>Selected Duration:</T.PL>
+              </Col>
+              <Col value>
+                <T.H4>21 Days</T.H4>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <T.PL>Full price for period:</T.PL>
+              </Col>
+              <Col value>
+                <T.H4>£140</T.H4>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <T.PL>Discount Code:</T.PL>
+              </Col>
+              <Col value>
+                <T.H4>Type code...</T.H4>
+              </Col>
+            </Row>
+
             <PriceTopDiv>
               <PriceHeadline>Full price for period</PriceHeadline>
               <PriceLabel>£{price}</PriceLabel>
@@ -291,7 +320,7 @@ class CalendarComponent extends Component {
               />
               Request Stay
             </RequestBtn>
-          </PricingDiv>
+          </BookingRequestDetails>
         )}
       </>
     );

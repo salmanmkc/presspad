@@ -20,13 +20,11 @@ export const ReviewWrapper = styled.div`
 export const ReviewHeader = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid;
-  margin-bottom: 0.75rem;
 `;
 
 export const SubTitle = styled.div`
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: bold;
+  font-size: 20px;
   line-height: 25px;
   margin-right: 1rem;
 `;

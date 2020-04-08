@@ -145,18 +145,29 @@ export const CalendarWrapper = styled.div.attrs(classNames)`
   }
 `;
 
-export const PricingDiv = styled.div`
-  width: 95%;
-  margin-top: 10px;
+export const BookingRequestDetails = styled.div`
+  padding-top: 1.5rem;
   margin-left: auto;
   margin-right: auto;
-  border-top: ${borders.lightDivider};
-  height: 185px;
+
+  border: 1px solid red;
 
   @media (max-width: ${size.mobileM}) {
     height: auto;
     padding-bottom: 1rem;
   }
+`;
+
+export const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  padding-bottom: 0.5rem;
+`;
+
+export const Col = styled.div`
+  // padding-left: ${({ value }) => value && '1rem'};
+
 `;
 
 export const PriceHeadline = styled.h4`

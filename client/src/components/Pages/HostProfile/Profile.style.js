@@ -55,7 +55,7 @@ export const WhyHereDiv = styled(Card)`
   padding-top: 0;
   margin-left: 2.5rem;
   align-self: flex-start;
-  width: 60%;
+  width: 70%;
   background: ${colors.darkBlue};
 
   h4 {

@@ -4,12 +4,7 @@ import { Rate } from 'antd';
 
 // Typography
 import * as T from '../Typography';
-import {
-  ReviewWrapper,
-  ReviewHeader,
-  SubTitle,
-  ReviewBody,
-} from './Reviews.style';
+import { ReviewWrapper, ReviewHeader, SubTitle } from './Reviews.style';
 
 const Review = ({ rate, name, jobTitle, message }) => (
   <ReviewWrapper>

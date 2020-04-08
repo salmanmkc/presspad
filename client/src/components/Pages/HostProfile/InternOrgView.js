@@ -474,7 +474,7 @@ export default class InternView extends Component {
               </>
             )}
           </SideWrapper>
-          <SideWrapper right>
+          <SideWrapper right style={{ marginTop: !isMobile && '5rem' }}>
             {industryExperienceAnswer &&
               renderMentoringSection(
                 isMobile,
