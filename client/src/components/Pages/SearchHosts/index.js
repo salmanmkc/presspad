@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input, DatePicker, Icon, Select } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-
+import Hero from './Hero';
 // import API routes
 import {
   API_SEARCH_PROFILES_URL,
@@ -10,7 +10,7 @@ import {
 } from '../../../constants/apiRoutes';
 import Button from '../../Common/Button';
 import { titleCase } from '../../../helpers';
-
+import Hosts from './Hosts';
 // import Nav routes
 import { HOSTS_URL, SIGNUP_INTERN } from '../../../constants/navRoutes';
 
@@ -29,7 +29,7 @@ import {
   ErrorMsg,
   ResultsWrapper,
   ResultsText,
-  Hosts,
+  // Hosts,
   HostResult,
   HostHeader,
   HostTitle,
@@ -206,8 +206,10 @@ export default class index extends Component {
     const { searchError } = errors;
 
     return (
-      <Wrapper>
-        <Header>
+      <>
+        <Hero />
+        <Hosts />
+        {/* <Header>
           <HeaderTitle>Hosts offering a PressPad</HeaderTitle>
           <HeaderText>
             You can search for hosts by filling in the city and dates
@@ -355,8 +357,8 @@ export default class index extends Component {
               </>
             )}
           </ResultsWrapper>
-        )}
-      </Wrapper>
+        )} */}
+      </>
     );
   }
 }

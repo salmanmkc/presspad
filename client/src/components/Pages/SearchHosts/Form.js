@@ -8,8 +8,8 @@ const Form = () => (
   <StyledForm>
     <T.H3C>FIND A PRESSPAD</T.H3C>
     <T.PXL>
-      You can search for hosts by filling in the city and dates you're looking
-      for. Need somewhere quickly? Then select automatic bookings.
+      You can search for hosts by filling in the city and dates you&apos;re
+      looking for. Need somewhere quickly? Then select automatic bookings.
     </T.PXL>
     <Row>
       <T.PL>I want a place to stay in</T.PL>
