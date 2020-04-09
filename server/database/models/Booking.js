@@ -56,6 +56,9 @@ const bookingSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'users',
     },
+    rejectReason: {
+      type: String,
+    },
     // when intern pay to booking, where should money go
     moneyGoTo: {
       type: String,
