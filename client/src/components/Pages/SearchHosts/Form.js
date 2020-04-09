@@ -17,12 +17,12 @@ const Form = ({
     onEndChange,
     onSearchSubmit,
     acceptAutomatically,
+    acceptAutomaticallyDisabled,
     switchToggle,
   },
 }) => (
   <StyledForm onSubmit={onSearchSubmit}>
     <T.H3C mt="2" mb="4">
-      {/* <T.H3C mt="2" mb="4"> */}
       FIND A PRESSPAD
     </T.H3C>
     <T.PXL mt="1" mb="6">
@@ -57,12 +57,41 @@ const Form = ({
           between
         </T.PL>
         <DatePicker
-          size="large"
           mt="1"
           mb="1"
           disabledDate={disabledStartDate}
           value={startDate}
           onChange={onStartChange}
+          dateRender={current => {
+            const style = {};
+
+            if (
+              endDate &&
+              startDate &&
+              current.isSameOrBefore(endDate, 'day') &&
+              current.isSameOrAfter(startDate, 'day')
+            ) {
+              return (
+                <div
+                  className="ant-picker-cell ant-picker-cell-in-view ant-picker-cell-in-range"
+                  style={style}
+                >
+                  {current.date()}
+                </div>
+              );
+            }
+
+            if (endDate && current.isSame(endDate, 'day')) {
+              style.borderRadius = '50%';
+              style.border = '1px solid';
+            }
+
+            return (
+              <div className="ant-picker-cell-inner" style={style}>
+                {current.date()}
+              </div>
+            );
+          }}
         />
       </SubRow>
       <SubRow>
@@ -70,12 +99,41 @@ const Form = ({
           and
         </T.PL>
         <DatePicker
-          id="endDate"
           disabledDate={disabledEndDate}
           mt="1"
           mb="1"
           value={endDate}
           onChange={onEndChange}
+          dateRender={current => {
+            const style = {};
+
+            if (
+              endDate &&
+              startDate &&
+              current.isSameOrBefore(endDate, 'day') &&
+              current.isSameOrAfter(startDate, 'day')
+            ) {
+              return (
+                <div
+                  className="ant-picker-cell ant-picker-cell-in-view ant-picker-cell-in-range"
+                  style={style}
+                >
+                  {current.date()}
+                </div>
+              );
+            }
+
+            if (endDate && current.isSame(endDate, 'day')) {
+              style.borderRadius = '50%';
+              style.border = '1px solid';
+            }
+
+            return (
+              <div className="ant-picker-cell-inner" style={style}>
+                {current.date()}
+              </div>
+            );
+          }}
         />
       </SubRow>
     </Row>
@@ -84,6 +142,7 @@ const Form = ({
         checked={acceptAutomatically}
         id={newId()}
         onChange={switchToggle}
+        disabled={acceptAutomaticallyDisabled}
       >
         Automatically accepts booking requests
       </Switch>

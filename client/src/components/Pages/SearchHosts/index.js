@@ -3,7 +3,7 @@ import { Input, DatePicker, Select } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import Hero from './Hero';
-
+import NoResults from './NoResults';
 import Icon from '../../Common/Icon';
 
 // import API routes
@@ -56,6 +56,7 @@ export default class SearchHosts extends Component {
       endDate: null,
       acceptAutomatically: null,
     },
+    acceptAutomaticallyDisabled: null,
     errors: {},
   };
 
@@ -117,7 +118,7 @@ export default class SearchHosts extends Component {
     const { searchFields } = this.state;
     const { endDate } = searchFields;
     if (!endDate || !startDate) {
-      return false;
+      return startDate && startDate < moment().subtract(1, 'day');
     }
     return startDate.valueOf() > endDate.valueOf();
   };
@@ -125,9 +126,10 @@ export default class SearchHosts extends Component {
   disabledEndDate = endDate => {
     const { searchFields } = this.state;
     const { startDate } = searchFields;
-    if (!endDate || !startDate) {
-      return false;
+    if (!startDate) {
+      return endDate && endDate < moment().endOf('day');
     }
+
     return endDate.valueOf() <= startDate.valueOf();
   };
 
@@ -138,6 +140,20 @@ export default class SearchHosts extends Component {
   };
 
   onStartChange = value => {
+    const within7Days = value && value.isBefore(moment().add(7, 'days'));
+    const within14Days = value && value.isBefore(moment().add(14, 'days'));
+    //  show the modal
+    this.setState(state => ({
+      acceptAutomaticallyDisabled: within14Days,
+      searchFields: {
+        ...state.searchFields,
+        acceptAutomatically: within14Days,
+      },
+    }));
+
+    if (within7Days) {
+      // show warning modal
+    }
     this.onDateInputChange('startDate', value);
   };
 
@@ -215,7 +231,13 @@ export default class SearchHosts extends Component {
   };
 
   render() {
-    const { searchFields, errors, listings, cities } = this.state;
+    const {
+      searchFields,
+      errors,
+      listings,
+      cities,
+      acceptAutomaticallyDisabled,
+    } = this.state;
     const { isLoggedIn } = this.props;
     const { startDate, endDate, acceptAutomatically } = searchFields;
     const { searchError } = errors;
@@ -225,17 +247,19 @@ export default class SearchHosts extends Component {
       startDate,
       endDate,
       acceptAutomatically,
+      acceptAutomaticallyDisabled,
       onInputChange: this.onInputChange,
       onStartChange: this.onStartChange,
       onEndChange: this.onEndChange,
       disabledStartDate: this.disabledStartDate,
       onSearchSubmit: this.onSearchSubmit,
       switchToggle: this.switchToggle,
+      disabledEndDate: this.disabledEndDate,
     };
     return (
       <ContentWrapper>
         <Hero formProps={formProps} />
-        <Hosts listings={listings} />
+        {listings.length > 0 ? <Hosts listings={listings} /> : <NoResults />}
         {/* <Header>
           <HeaderTitle>Hosts offering a PressPad</HeaderTitle>
           <HeaderText>

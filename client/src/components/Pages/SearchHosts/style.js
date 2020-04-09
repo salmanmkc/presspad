@@ -30,7 +30,7 @@ export const HeroBackground = styled.img`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 40px 50px;
+  padding: 30px 20px;
   box-shadow: 0px 4px 4px rgba(128, 109, 109, 0.1),
     0px -1px 4px rgba(128, 109, 109, 0.05);
   max-width: 760px;
@@ -40,6 +40,9 @@ export const Form = styled.form`
   text-align: left;
   min-height: 608.31px;
   margin-right: auto;
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileL} {
+    padding: 40px 50px;
+  }
 `;
 
 export const Row = styled.div`
@@ -78,10 +81,10 @@ export const HostCardWrapper = styled.div`
     0px -1px 4px rgba(128, 109, 109, 0.05);
   max-width: 480px;
   width: 100vw;
-  margin-left: -3%;
+  margin-left: -3%; /**equaul to the side padding for the layout */
 
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileM} {
-    margin-left: -7%;
+    margin-left: -7%; /**equaul to the side padding for the layout */
   }
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileL} {
     margin-left: auto;
@@ -130,4 +133,8 @@ export const MasonryItem = styled.div`
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
     margin-bottom: 50px;
   }
+`;
+
+export const NoResultsWrapper = styled.section`
+  max-width: 700px;
 `;
