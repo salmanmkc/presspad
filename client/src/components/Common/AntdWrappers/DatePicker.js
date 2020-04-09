@@ -7,6 +7,7 @@ const DatePicker = ({ children, ml, mr, mt, mb, size, format, ...props }) => (
     <AntdDatePicker
       size={size || 'large'}
       format={format || 'YYYY-MM-DD'}
+      type="date"
       {...props}
     >
       {children}

@@ -3,11 +3,22 @@ import { Form as StyledForm, Row, SubRow } from './style';
 import * as T from '../../Common/Typography';
 import { Select, DatePicker, Switch } from '../../Common/AntdWrappers';
 import Button from '../../Common/ButtonNew';
+import { titleCase, newId } from '../../../helpers';
 
-import { newId } from '../../../helpers';
-
-const Form = () => (
-  <StyledForm>
+const Form = ({
+  formProps: {
+    cities,
+    onInputChange,
+    startDate,
+    onStartChange,
+    disabledStartDate,
+    endDate,
+    disabledEndDate,
+    onEndChange,
+    onSearchSubmit,
+  },
+}) => (
+  <StyledForm onSubmit={onSearchSubmit}>
     <T.H3C mt="2" mb="4">
       {/* <T.H3C mt="2" mb="4"> */}
       FIND A PRESSPAD
@@ -29,14 +40,13 @@ const Form = () => (
         id="city"
         autoFocus
         style={{ width: 215 }}
-        // onSelect={this.onInputChange}
+        onSelect={onInputChange}
       >
-        {/* {cities.map(city => (
+        {cities.map(city => (
           <Select.Option value={city} key={city}>
             {titleCase(city)}
           </Select.Option>
-        ))} */}
-        1111
+        ))}
       </Select>
     </Row>
     <Row mt="3">
@@ -48,10 +58,9 @@ const Form = () => (
           size="large"
           mt="1"
           mb="1"
-          // disabledDate={this.disabledStartDate}
-          type="date"
-          // value={startDate}
-          // onChange={this.onStartChange}
+          disabledDate={disabledStartDate}
+          value={startDate}
+          onChange={onStartChange}
         />
       </SubRow>
       <SubRow>
@@ -59,12 +68,12 @@ const Form = () => (
           and
         </T.PL>
         <DatePicker
+          id="endDate"
+          disabledDate={disabledEndDate}
           mt="1"
           mb="1"
-          // disabledDate={this.disabledStartDate}
-          type="date"
-          // value={startDate}
-          // onChange={this.onStartChange}
+          value={endDate}
+          onChange={onEndChange}
         />
       </SubRow>
     </Row>

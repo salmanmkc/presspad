@@ -63,6 +63,8 @@ export default class index extends Component {
         acc.add(curr.address.city.toLowerCase());
         return acc;
       }, new Set());
+    this.fetchListings();
+
     this.setState({ cities: [...cities] });
   }
 
@@ -72,6 +74,7 @@ export default class index extends Component {
     axios
       .post(API_SEARCH_PROFILES_URL, searchFields)
       .then(({ data }) => {
+        console.log({ data });
         this.setState({ listings: data });
       })
       .catch(() => {
@@ -171,6 +174,8 @@ export default class index extends Component {
       }
     }
 
+    console.log({ errors });
+
     this.setState({
       errors,
     });
@@ -209,9 +214,17 @@ export default class index extends Component {
     const { startDate, endDate } = searchFields;
     const { searchError } = errors;
 
+    const formProps = {
+      cities,
+      startDate,
+      onInputChange: this.onInputChange,
+      onStartChange: this.onStartChange,
+      disabledStartDate: this.disabledStartDate,
+      onSearchSubmit: this.onSearchSubmit,
+    };
     return (
       <ContentWrapper>
-        <Hero />
+        <Hero formProps={formProps} />
         <Hosts />
         {/* <Header>
           <HeaderTitle>Hosts offering a PressPad</HeaderTitle>

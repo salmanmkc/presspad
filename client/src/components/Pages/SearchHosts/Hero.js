@@ -3,9 +3,9 @@ import { HeroWrapper, HeroBackground } from './style';
 import Form from './Form';
 import searchBackground from '../../../assets/search-background.png';
 
-const Hero = () => (
+const Hero = ({ formProps }) => (
   <HeroWrapper>
-    <Form />
+    <Form formProps={formProps} />
     <HeroBackground src={searchBackground} />
   </HeroWrapper>
 );

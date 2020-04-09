@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { H4C } from '../../Common/Typography';
 
 export const HeroWrapper = styled.section`
   text-align: right;
@@ -65,6 +66,32 @@ export const HostsWrapper = styled.section`
   margin-top: ${({ theme }) => theme.spacings[7]};
 `;
 
-export const HostsCardWrapper = styled.section`
-  margin-top: ${({ theme }) => theme.spacings[7]};
+export const HostCardWrapper = styled.section`
+  margin-bottom: 50px;
+  background-color: ${({ theme }) => theme.colors.white};
+  box-shadow: 0px 4px 4px rgba(128, 109, 109, 0.1),
+    0px -1px 4px rgba(128, 109, 109, 0.05);
+  max-width: 380px;
+`;
+
+export const CardImage = styled.img`
+  height: ${({ long }) => (long ? '344px' : '234px')};
+  object-fit: cover;
+  width: 100%;
+`;
+export const CardDetailsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
+  min-height: 75px;
+`;
+export const CardDetails = styled.div`
+  padding: 0 20px;
+`;
+
+export const CardCity = styled(H4C)`
+  color: ${({ theme }) => theme.colors.white};
+  padding: 5px;
+  background-color: ${({ theme }) => theme.colors.darkerGray};
 `;

@@ -9,5 +9,6 @@ const Select = ({ children, ml, mr, mt, mb, size, ...props }) => (
     </AntdSelect>
   </SelectWrapper>
 );
+Select.Option = AntdSelect.Option;
 
 export default Select;
