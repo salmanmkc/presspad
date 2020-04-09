@@ -330,7 +330,11 @@ export default class InternView extends Component {
           {!isMobile && (
             <SideWrapper right>
               {/* Calendar on desktop */}
-              <HostProfileCalendar type="desktop" calendarData={calendarData} />
+              <HostProfileCalendar
+                type="desktop"
+                calendarData={calendarData}
+                isMobile={isMobile}
+              />
 
               {/* Other Info */}
               <ProfileCard
@@ -408,7 +412,11 @@ export default class InternView extends Component {
 
         {/* Calendar on Mobile */}
         {isMobile && (
-          <HostProfileCalendar type="mobile" calendarData={calendarData} />
+          <HostProfileCalendar
+            type="mobile"
+            calendarData={calendarData}
+            isMobile={isMobile}
+          />
         )}
       </SideMenuLayout>
     );

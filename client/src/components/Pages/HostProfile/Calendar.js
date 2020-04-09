@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar/dist/entry.nostyle';
 import moment from 'moment';
 import axios from 'axios';
-import { Spin, Alert, Modal } from 'antd';
+import { Spin, Alert, Modal, Checkbox } from 'antd';
 import Icon from '../../Common/Icon';
 import {
   createDatesArray,
@@ -30,6 +30,7 @@ import {
   PriceTopDiv,
   Row,
   Col,
+  BursaryContainer,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -89,6 +90,7 @@ class CalendarComponent extends Component {
       price: calculatePrice(moment.range(dates[0], dates[1])),
       message: '',
       messageType: '',
+      bursary: false,
     });
     // check if booking exists and update state
     this.bookingFound(dates, internBookings);
@@ -232,6 +234,53 @@ class CalendarComponent extends Component {
       : this.setState({ bookingExists: false });
   };
 
+  // host checkbox function
+  onCheckboxChange = e =>
+    e.target.checked
+      ? this.setState({
+          bursary: true,
+        })
+      : this.setState({
+          bursary: false,
+        });
+
+  renderBookingDetails = isMobile => (
+    <>
+      <Row>
+        <Col>
+          {isMobile ? (
+            <T.PS>Selected Duration:</T.PS>
+          ) : (
+            <T.PL>Selected Duration:</T.PL>
+          )}
+        </Col>
+        <Col value>
+          {isMobile ? <T.PSBold>21 days</T.PSBold> : <T.H4>21 days</T.H4>}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {isMobile ? (
+            <T.PS>Full price for period:</T.PS>
+          ) : (
+            <T.PL>Full price for period:</T.PL>
+          )}
+        </Col>
+        <Col value>
+          {isMobile ? <T.PSBold>21£</T.PSBold> : <T.H4>21£</T.H4>}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {isMobile ? <T.PS>Discount Code:</T.PS> : <T.PL>Discount Code:</T.PL>}
+        </Col>
+        <Col value>
+          <input />
+        </Col>
+      </Row>{' '}
+    </>
+  );
+
   render() {
     const {
       price,
@@ -241,11 +290,13 @@ class CalendarComponent extends Component {
       messageType,
       isLoading,
       isBooking,
+      bursary,
     } = this.state;
 
-    const { currentUserId, adminView, role } = this.props;
-    if (isLoading) return <Spin tip="Loading Profile" />;
+    const { currentUserId, adminView, role, isMobile } = this.props;
 
+    if (isLoading) return <Spin tip="Loading Profile" />;
+    console.log('bbb', bursary);
     return (
       <>
         <CalendarWrapper>
@@ -267,35 +318,16 @@ class CalendarComponent extends Component {
         </CalendarWrapper>
         {role === 'intern' && (
           <BookingRequestDetails>
-            <Row>
-              <Col>
-                <T.PL>Selected Duration:</T.PL>
-              </Col>
-              <Col value>
-                <T.H4>21 Days</T.H4>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <T.PL>Full price for period:</T.PL>
-              </Col>
-              <Col value>
-                <T.H4>£140</T.H4>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <T.PL>Discount Code:</T.PL>
-              </Col>
-              <Col value>
-                <T.H4>Type code...</T.H4>
-              </Col>
-            </Row>
+            {this.renderBookingDetails(isMobile)}
 
-            <PriceTopDiv>
-              <PriceHeadline>Full price for period</PriceHeadline>
-              <PriceLabel>£{price}</PriceLabel>
-            </PriceTopDiv>
+            <BursaryContainer>
+              <Checkbox name="checkbox" onChange={this.onCheckboxChange} />
+              {isMobile ? (
+                <T.PS>I have a Presspad Bursary:</T.PS>
+              ) : (
+                <T.PL>I have a Presspad Bursary:</T.PL>
+              )}
+            </BursaryContainer>
             {message && (
               <ErrorDiv>
                 <Alert message={message} type={messageType} />

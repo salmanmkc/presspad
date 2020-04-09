@@ -27,7 +27,7 @@ export const CalendarWrapper = styled.div.attrs(classNames)`
   ${classNames.reactCalendar} {
     padding-top: 2rem;
     max-width: 100%;
-    font-family: Roboto;
+    font-family: Glacial Indifference;
     line-height: 1.125em;
     *,
     *:before,
@@ -147,10 +147,6 @@ export const CalendarWrapper = styled.div.attrs(classNames)`
 
 export const BookingRequestDetails = styled.div`
   padding-top: 1.5rem;
-  margin-left: auto;
-  margin-right: auto;
-
-  border: 1px solid red;
 
   @media (max-width: ${size.mobileM}) {
     height: auto;
@@ -158,16 +154,22 @@ export const BookingRequestDetails = styled.div`
   }
 `;
 
+export const BursaryContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const Row = styled.div`
   display: flex;
   justify-content: space-between;
-
+  border: 1px solid red;
   padding-bottom: 0.5rem;
 `;
 
 export const Col = styled.div`
-  // padding-left: ${({ value }) => value && '1rem'};
-
+  @media (max-width: ${size.mobileM}) {
+    margin-right: ${({ value }) => value && '-2rem'};
+  }
 `;
 
 export const PriceHeadline = styled.h4`

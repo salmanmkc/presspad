@@ -25,7 +25,7 @@ export const SideWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: ${({ left }) => (left ? '55%' : '45%')};
+  width: ${({ left }) => (left ? '58%' : '42%')};
   margin-left: ${({ left }) => (left ? '0' : '20px')};
 
   @media (max-width: 775.98px) {
@@ -231,7 +231,7 @@ export const AvailableHosting = styled.div`
 `;
 
 export const MobileCalendarCard = styled.div`
-  // padding: 0.75rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
   background-color: ${colors.darkBlue};
@@ -239,7 +239,7 @@ export const MobileCalendarCard = styled.div`
   p {
     color: ${colors.white};
     text-align: left;
-    // padding-right: 2rem;
+    padding-right: 2rem;
   }
 
   // when user clicks open
@@ -255,7 +255,23 @@ export const MobileCalendarCard = styled.div`
       position: fixed;
       top: 0;
       width: 100%;
+      overflow-y: auto;
+
+      p {
+        color: ${colors.black};
+      }
     `}
+`;
+
+export const MobileCalendarHeadline = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  align-items: flex-start;
+
+  p {
+    margin-top: 0.5rem;
+  }
 `;
 
 const InnerCard = styled.div`
@@ -344,6 +360,10 @@ export const MoreReviewsLink = styled(Link)`
 export const CalendarDiv = styled.div.attrs(classNames)`
   width: 100%;
   margin: -2rem auto 0 auto;
+
+  @media (max-width: 775.98px) {
+    margin-top: -1rem;
+  }
 
   ${classNames.reactCalendar} {
     pointer-events: ${props => (props.userRole === 'host' ? 'none' : 'all')};
@@ -436,7 +456,6 @@ export const KeyInfoRow = styled.span`
 
 export const Row = styled.div`
   display: flex;
-
   padding-bottom: 0.5rem;
 `;
 

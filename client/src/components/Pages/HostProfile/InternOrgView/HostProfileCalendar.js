@@ -5,6 +5,7 @@ import {
   CalendarCard,
   AvailableHosting,
   MobileCalendarCard,
+  MobileCalendarHeadline,
 } from '../Profile.style';
 
 import * as T from '../../../Common/Typography';
@@ -13,9 +14,9 @@ import Icon from '../../../Common/Icon';
 import Button from '../../../Common/ButtonNew';
 
 import Calendar from '../Calendar';
-import { colors } from '../../../../theme';
 
 export default ({
+  isMobile,
   type,
   calendarData: {
     calendarBookingDetails: {
@@ -50,6 +51,7 @@ export default ({
           price={price}
           adminView={role === 'admin'}
           getHostProfile={getHostProfile}
+          isMobile={isMobile}
         />
       </CalendarDiv>
     </CalendarCard>
@@ -60,8 +62,8 @@ export default ({
         <MobileCalendarCard open>
           <Icon
             icon="close"
-            height="33px"
-            width="33px"
+            height="40px"
+            width="40px"
             style={{
               color: 'primary',
               cursor: 'pointer',
@@ -72,13 +74,16 @@ export default ({
             onClick={toggleDateSection}
           />
 
+          {expandDateSection && (
+            <MobileCalendarHeadline>
+              <T.H6C>AVAILABLE HOSTING</T.H6C>
+              <T.PXS>
+                Choose a slot to view price and request a stay with this host
+              </T.PXS>
+            </MobileCalendarHeadline>
+          )}
+
           <CalendarDiv userRole={role}>
-            {role === 'host' && <T.H3>View dates & price to stay</T.H3>}
-            {role !== 'host' && (
-              <>
-                <T.PSBold>View dates & price to stay</T.PSBold>
-              </>
-            )}
             <Calendar
               currentUserId={currentUserId}
               hostId={hostId}
@@ -89,6 +94,7 @@ export default ({
               price={price}
               adminView={role === 'admin'}
               getHostProfile={getHostProfile}
+              isMobile={isMobile}
             />
           </CalendarDiv>
         </MobileCalendarCard>
