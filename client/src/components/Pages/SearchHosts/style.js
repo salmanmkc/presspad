@@ -62,11 +62,16 @@ export const SubRow = styled(Row)`
   margin-right: ${({ theme }) => theme.spacings[4]};
 `;
 
-export const HostsWrapper = styled.section`
+export const HostsSection = styled.section`
   margin-top: ${({ theme }) => theme.spacings[7]};
 `;
 
-export const HostCardWrapper = styled.section`
+export const HostCardsWrapper = styled.section`
+  margin-top: 50px;
+  display: flex;
+`;
+
+export const HostCardWrapper = styled.div`
   margin-bottom: 50px;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0px 4px 4px rgba(128, 109, 109, 0.1),

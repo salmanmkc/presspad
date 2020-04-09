@@ -48,7 +48,7 @@ import {
 
 export default class index extends Component {
   state = {
-    listings: null,
+    listings: [],
     cities: [],
     searchFields: { city: null, startDate: null, endDate: null },
     errors: {},
@@ -70,14 +70,18 @@ export default class index extends Component {
 
   fetchListings = () => {
     const { searchFields, errors } = this.state;
-
+    console.log('-----------');
     axios
       .post(API_SEARCH_PROFILES_URL, searchFields)
       .then(({ data }) => {
         console.log({ data });
+        console.log('---ظظظظظظظظظظظ--');
+
         this.setState({ listings: data });
       })
       .catch(() => {
+        console.log('-99999999999-');
+
         errors.searchError = 'Sorry, there was an error getting the listings';
         this.setState({
           errors,
@@ -140,9 +144,9 @@ export default class index extends Component {
   onSearchSubmit = e => {
     e.preventDefault();
     const isValid = this.validateSearch();
-    if (isValid) {
-      this.fetchListings();
-    }
+    // if (isValid) {
+    this.fetchListings();
+    // }
   };
 
   validateSearch = () => {
@@ -217,15 +221,17 @@ export default class index extends Component {
     const formProps = {
       cities,
       startDate,
+      endDate,
       onInputChange: this.onInputChange,
       onStartChange: this.onStartChange,
+      onEndChange: this.onEndChange,
       disabledStartDate: this.disabledStartDate,
       onSearchSubmit: this.onSearchSubmit,
     };
     return (
       <ContentWrapper>
         <Hero formProps={formProps} />
-        <Hosts />
+        <Hosts listings={listings} />
         {/* <Header>
           <HeaderTitle>Hosts offering a PressPad</HeaderTitle>
           <HeaderText>
