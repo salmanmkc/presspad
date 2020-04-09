@@ -50,7 +50,12 @@ export default class SearchHosts extends Component {
   state = {
     listings: [],
     cities: [],
-    searchFields: { city: null, startDate: null, endDate: null },
+    searchFields: {
+      city: null,
+      startDate: null,
+      endDate: null,
+      acceptAutomatically: null,
+    },
     errors: {},
   };
 
@@ -70,18 +75,12 @@ export default class SearchHosts extends Component {
 
   fetchListings = () => {
     const { searchFields, errors } = this.state;
-    console.log('-----------');
     axios
       .post(API_SEARCH_PROFILES_URL, searchFields)
       .then(({ data }) => {
-        console.log({ data });
-        console.log('---ظظظظظظظظظظظ--');
-
         this.setState({ listings: data });
       })
       .catch(() => {
-        console.log('-99999999999-');
-
         errors.searchError = 'Sorry, there was an error getting the listings';
         this.setState({
           errors,
@@ -92,7 +91,6 @@ export default class SearchHosts extends Component {
   onInputChange = e => {
     const { searchFields } = this.state;
     const newSearchFields = { ...searchFields };
-
     if (e.target) {
       newSearchFields[e.target.name] = e.target.value;
       this.setState({ searchFields: newSearchFields });
@@ -106,6 +104,12 @@ export default class SearchHosts extends Component {
         }
       });
     }
+  };
+
+  switchToggle = checked => {
+    this.setState(state => ({
+      searchFields: { ...state.searchFields, acceptAutomatically: checked },
+    }));
   };
 
   // HANDLING DATE INPUTS
@@ -178,8 +182,6 @@ export default class SearchHosts extends Component {
       }
     }
 
-    console.log({ errors });
-
     this.setState({
       errors,
     });
@@ -215,18 +217,20 @@ export default class SearchHosts extends Component {
   render() {
     const { searchFields, errors, listings, cities } = this.state;
     const { isLoggedIn, windowWidth } = this.props;
-    const { startDate, endDate } = searchFields;
+    const { startDate, endDate, acceptAutomatically } = searchFields;
     const { searchError } = errors;
 
     const formProps = {
       cities,
       startDate,
       endDate,
+      acceptAutomatically,
       onInputChange: this.onInputChange,
       onStartChange: this.onStartChange,
       onEndChange: this.onEndChange,
       disabledStartDate: this.disabledStartDate,
       onSearchSubmit: this.onSearchSubmit,
+      switchToggle: this.switchToggle,
     };
     return (
       <ContentWrapper>

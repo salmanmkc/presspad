@@ -58,9 +58,7 @@ export const Hosts = ({ listings }) => (
             city={listing.address.city}
             postcode={listing.address.postcode}
             long={i % 2}
-          >
-            {console.log(listing)}
-          </HostCard>
+          />
         ))}
       </MasonryLayout>
     </HostCardsWrapper>

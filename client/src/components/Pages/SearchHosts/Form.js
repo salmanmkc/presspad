@@ -16,6 +16,8 @@ const Form = ({
     disabledEndDate,
     onEndChange,
     onSearchSubmit,
+    acceptAutomatically,
+    switchToggle,
   },
 }) => (
   <StyledForm onSubmit={onSearchSubmit}>
@@ -78,7 +80,13 @@ const Form = ({
       </SubRow>
     </Row>
     <Row mt="4">
-      <Switch id={newId()}>Automatically accepts booking requests</Switch>
+      <Switch
+        checked={acceptAutomatically}
+        id={newId()}
+        onChange={switchToggle}
+      >
+        Automatically accepts booking requests
+      </Switch>
     </Row>
     <Row mt="6">
       <Button type="secondary" small>
