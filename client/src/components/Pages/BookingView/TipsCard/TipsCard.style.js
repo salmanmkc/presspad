@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.card};
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
     padding: ${({ theme: { spacings } }) => `${spacings[4]} ${spacings[5]}`};
+    margin: unset;
   }
 `;
 
