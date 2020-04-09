@@ -231,7 +231,7 @@ export const AvailableHosting = styled.div`
 `;
 
 export const MobileCalendarCard = styled.div`
-  padding: 0.75rem;
+  // padding: 0.75rem;
   display: flex;
   align-items: center;
   background-color: ${colors.darkBlue};
@@ -239,7 +239,7 @@ export const MobileCalendarCard = styled.div`
   p {
     color: ${colors.white};
     text-align: left;
-    padding-right: 2rem;
+    // padding-right: 2rem;
   }
 
   // when user clicks open
@@ -249,6 +249,12 @@ export const MobileCalendarCard = styled.div`
       background-color: ${colors.white};
       padding: auto;
       position: relative;
+      display: block;
+      height: 100%;
+      left: 0;
+      position: fixed;
+      top: 0;
+      width: 100%;
     `}
 `;
 

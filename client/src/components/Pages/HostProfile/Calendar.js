@@ -13,6 +13,8 @@ import {
 
 // Typography
 import * as T from '../../Common/Typography';
+import Button from '../../Common/ButtonNew';
+
 import {
   API_BOOKING_REQUEST_URL,
   API_GET_INTERN_STATUS,
@@ -240,7 +242,8 @@ class CalendarComponent extends Component {
       isLoading,
       isBooking,
     } = this.state;
-    const { adminView, role } = this.props;
+
+    const { currentUserId, adminView, role } = this.props;
     if (isLoading) return <Spin tip="Loading Profile" />;
 
     return (
@@ -299,7 +302,8 @@ class CalendarComponent extends Component {
               </ErrorDiv>
             )}
 
-            <RequestBtn
+            <Button
+              type="secondary"
               onClick={this.handleClick}
               disabled={
                 !isRangeSelected || bookingExists || adminView || isBooking
@@ -318,8 +322,8 @@ class CalendarComponent extends Component {
                   />
                 }
               />
-              Request Stay
-            </RequestBtn>
+              {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
+            </Button>
           </BookingRequestDetails>
         )}
       </>

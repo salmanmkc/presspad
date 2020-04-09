@@ -25,7 +25,7 @@ const classNames = {
 
 export const CalendarWrapper = styled.div.attrs(classNames)`
   ${classNames.reactCalendar} {
-    // padding-top: 2rem;
+    padding-top: 2rem;
     max-width: 100%;
     font-family: Roboto;
     line-height: 1.125em;

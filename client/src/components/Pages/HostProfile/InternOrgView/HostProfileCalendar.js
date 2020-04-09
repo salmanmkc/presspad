@@ -59,9 +59,10 @@ export default ({
       {expandDateSection ? (
         <MobileCalendarCard open>
           <Icon
-            type="close"
+            icon="close"
+            height="33px"
+            width="33px"
             style={{
-              fontSize: '32px',
               color: 'primary',
               cursor: 'pointer',
               position: 'absolute',
@@ -70,6 +71,7 @@ export default ({
             }}
             onClick={toggleDateSection}
           />
+
           <CalendarDiv userRole={role}>
             {role === 'host' && <T.H3>View dates & price to stay</T.H3>}
             {role !== 'host' && (
