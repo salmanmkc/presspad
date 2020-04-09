@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar/dist/entry.nostyle';
 import moment from 'moment';
 import axios from 'axios';
-import { Spin, Alert, Modal, Checkbox } from 'antd';
+import { Spin, Alert, Modal, Checkbox, Popover } from 'antd';
 import Icon from '../../Common/Icon';
 import {
   createDatesArray,
@@ -31,6 +31,8 @@ import {
   Row,
   Col,
   BursaryContainer,
+  PopoverContentContainer,
+  TextAndPopover,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -272,13 +274,55 @@ class CalendarComponent extends Component {
       </Row>
       <Row>
         <Col>
-          {isMobile ? <T.PS>Discount Code:</T.PS> : <T.PL>Discount Code:</T.PL>}
+          <Popover
+            content="Dummy content for now ..."
+            title="Discount Codes"
+            trigger="click"
+          >
+            <PopoverContentContainer>
+              {isMobile ? (
+                <T.PS>Discount Code:</T.PS>
+              ) : (
+                <T.PL>Discount Code:</T.PL>
+              )}
+              <Icon icon="questionCircle" width="24px" height="24px" />
+            </PopoverContentContainer>
+          </Popover>
         </Col>
         <Col value>
-          <input />
+          <input placeholder="type code ..." />
         </Col>
       </Row>{' '}
     </>
+  );
+
+  renderBursaryCheckbox = isMobile => (
+    <BursaryContainer>
+      <Checkbox
+        style={{ paddingRight: '1rem' }}
+        name="checkbox"
+        onChange={this.onCheckboxChange}
+      />
+
+      <Popover
+        content="Dummy content for now ..."
+        title="Presspad Bursary"
+        trigger="click"
+      >
+        <PopoverContentContainer>
+          {isMobile ? (
+            <T.PS>
+              Apply for a <strong> Presspad Bursary </strong>
+            </T.PS>
+          ) : (
+            <T.PL>
+              Apply for a <strong> Presspad Bursary </strong>
+            </T.PL>
+          )}
+          <Icon icon="questionCircle" width="24px" height="24px" />
+        </PopoverContentContainer>
+      </Popover>
+    </BursaryContainer>
   );
 
   render() {
@@ -296,7 +340,7 @@ class CalendarComponent extends Component {
     const { currentUserId, adminView, role, isMobile } = this.props;
 
     if (isLoading) return <Spin tip="Loading Profile" />;
-    console.log('bbb', bursary);
+
     return (
       <>
         <CalendarWrapper>
@@ -316,18 +360,13 @@ class CalendarComponent extends Component {
             }
           />
         </CalendarWrapper>
+        {/* Booking details */}
         {role === 'intern' && (
           <BookingRequestDetails>
             {this.renderBookingDetails(isMobile)}
+            {/* Bursary checkbox */}
+            {currentUserId && this.renderBursaryCheckbox(isMobile)}
 
-            <BursaryContainer>
-              <Checkbox name="checkbox" onChange={this.onCheckboxChange} />
-              {isMobile ? (
-                <T.PS>I have a Presspad Bursary:</T.PS>
-              ) : (
-                <T.PL>I have a Presspad Bursary:</T.PL>
-              )}
-            </BursaryContainer>
             {message && (
               <ErrorDiv>
                 <Alert message={message} type={messageType} />

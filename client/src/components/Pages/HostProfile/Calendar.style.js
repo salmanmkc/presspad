@@ -156,13 +156,24 @@ export const BookingRequestDetails = styled.div`
 
 export const BursaryContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 1rem;
+`;
+
+export const PopoverContentContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  p {
+    padding-right: 1rem;
+    line-height: 1.2;
+  }
 `;
 
 export const Row = styled.div`
   display: flex;
   justify-content: space-between;
-  border: 1px solid red;
   padding-bottom: 0.5rem;
 `;
 

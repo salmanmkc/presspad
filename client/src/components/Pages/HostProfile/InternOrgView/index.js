@@ -43,7 +43,7 @@ import types from '../../../../constants/types';
 import { titleCase, truncatePostcode } from '../../../../helpers';
 
 //  individual styles to overwrite components
-const tableFonts = { fontSize: '18px', lineHeight: '27px' };
+const tableFonts = { fontSize: '18px', lineHeight: '1.2' };
 
 export default class InternView extends Component {
   state = {

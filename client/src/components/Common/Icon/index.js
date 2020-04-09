@@ -24,6 +24,7 @@ import MapPin from './icons/MapPin';
 import Download from './icons/Download';
 import Tick from './icons/Tick';
 import Close from './icons/Close';
+import QuestionCircle from './icons/QuestionCircle';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -56,6 +57,7 @@ const iconMap = {
   mapPin: MapPin,
   download: Download,
   close: Close,
+  questionCircle: QuestionCircle,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {
