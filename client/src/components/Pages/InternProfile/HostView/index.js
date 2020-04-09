@@ -1,8 +1,9 @@
 /* eslint-disable global-require */
 import React, { Component } from 'react';
-import { Spin, Icon, message } from 'antd';
+import { Spin, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
+import Icon from '../../../Common/Icon';
 
 import { API_INTERN_PROFILE_URL } from '../../../../constants/apiRoutes';
 
@@ -136,7 +137,7 @@ class HostView extends Component {
                 <Symbol src={referIcon} />
                 <SymbolHeadline>{referencesNum} References</SymbolHeadline>
                 <IconDiv>
-                  <Icon type="info-circle" />
+                  <Icon icon="moreInfo" />
                 </IconDiv>
               </SymbolContainer>
             </SymbolDiv>

@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar/dist/entry.nostyle';
 import moment from 'moment';
 import axios from 'axios';
-import { Spin, Alert, Icon, Modal } from 'antd';
+import { Spin, Alert, Modal } from 'antd';
+import Icon from '../../Common/Icon';
 import {
   createDatesArray,
   getDateRangeFromArray,
@@ -279,13 +280,12 @@ class CalendarComponent extends Component {
                 spinning={isBooking}
                 indicator={
                   <Icon
-                    type="loading"
+                    icon="loading"
                     style={{
                       fontSize: 24,
                       marginRight: '8px',
                       color: 'white',
                     }}
-                    spin
                   />
                 }
               />

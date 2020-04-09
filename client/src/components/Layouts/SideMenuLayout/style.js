@@ -5,13 +5,15 @@ export const Wrapper = styled.div`
   display: flex;
   padding-top: ${({ topHeaderRendered, theme }) =>
     topHeaderRendered ? theme.spacings.headerHeight : 0};
+  padding-left: ${({ sideMenuRendered, theme }) =>
+    sideMenuRendered && `${theme.spacings.sideMenuWidth}`};
 `;
 
 export const ContentWrapper = styled.div`
   position: relative;
   display: flex;
-  width: ${({ sideMenuRendered, theme }) =>
-    sideMenuRendered ? `calc(100% - ${theme.spacings.sideMenuWidth})` : '100%'};
+  flex-direction: column;
+  width: 100%;
   padding: ${({ theme }) =>
     `${theme.spacings.sideMenuLayout.top} 3% ${theme.spacings.sideMenuLayout.bottom}`};
 

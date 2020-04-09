@@ -1,9 +1,9 @@
 import React from 'react';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col } from 'antd';
+import Icon from '../Icon';
 
 import Calendar from '../Calendar';
 import DisabledPopOver from '../DisabledPopOver';
-import { ReactComponent as MapPin } from '../../../assets/mapPin.svg';
 import randomProfile from '../../../assets/random-profile.jpg';
 
 import {
@@ -51,7 +51,7 @@ export default function BookingSection(props) {
                       }}
                     >
                       view on map&nbsp;
-                      <Icon component={MapPin} />
+                      <Icon icon="MapPin" />
                     </BlueLink>
                   </DisabledPopOver>
                 </Row>

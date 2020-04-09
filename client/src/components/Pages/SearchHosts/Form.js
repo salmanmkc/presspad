@@ -16,7 +16,7 @@ const Form = () => (
       You can search for hosts by filling in the city and dates you&apos;re
       looking for. Need somewhere quickly? Then select automatic bookings.
     </T.PXL>
-    <Row mt="1">
+    <Row>
       <T.PL mb="1" mr="4">
         I want a place to stay in
       </T.PL>
@@ -39,7 +39,7 @@ const Form = () => (
         1111
       </Select>
     </Row>
-    <Row mt="1">
+    <Row mt="3">
       <SubRow mr="4">
         <T.PL mb="1" mr="4">
           between
@@ -68,7 +68,7 @@ const Form = () => (
         />
       </SubRow>
     </Row>
-    <Row mt="3">
+    <Row mt="4">
       <Switch id={newId()}>Automatically accepts booking requests</Switch>
     </Row>
     <Row mt="6">

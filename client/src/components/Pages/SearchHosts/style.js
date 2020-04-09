@@ -64,3 +64,7 @@ export const SubRow = styled(Row)`
 export const HostsWrapper = styled.section`
   margin-top: ${({ theme }) => theme.spacings[7]};
 `;
+
+export const HostsCardWrapper = styled.section`
+  margin-top: ${({ theme }) => theme.spacings[7]};
+`;

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Input, DatePicker, Icon, Select } from 'antd';
+import { Input, DatePicker, Select } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import Hero from './Hero';
+
+import Icon from '../../Common/Icon';
+
 // import API routes
 import {
   API_SEARCH_PROFILES_URL,
@@ -15,7 +18,8 @@ import Hosts from './Hosts';
 import { HOSTS_URL, SIGNUP_INTERN } from '../../../constants/navRoutes';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
-
+// TODO remove it and this should be handled in the layout itself
+import { ContentWrapper } from '../../Layouts/SideMenuLayout/style';
 import placeholder from '../../../assets/listing-placeholder.jpg';
 // import styled components
 import {
@@ -206,7 +210,7 @@ export default class index extends Component {
     const { searchError } = errors;
 
     return (
-      <>
+      <ContentWrapper>
         <Hero />
         <Hosts />
         {/* <Header>
@@ -282,7 +286,7 @@ export default class index extends Component {
               />
             ) : (
               <SearchButton onClick={this.onSearchSubmit}>
-                <Icon type="search" style={{ fontSize: 24 }} />
+                <Icon icon="search" width="20px" />
               </SearchButton>
             )}
           </SearchButtonDiv>
@@ -358,7 +362,7 @@ export default class index extends Component {
             )}
           </ResultsWrapper>
         )} */}
-      </>
+      </ContentWrapper>
     );
   }
 }

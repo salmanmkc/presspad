@@ -1,18 +1,18 @@
 import React from 'react';
 
-import Navbar from '../../Common/Navbar';
+import TopMenu from '../../Common/Navigation/TopMenu';
+import * as S from './style';
 import { withWindowWidth } from '../../../HOCs';
-import { Wrapper, ContentWrapper } from './style';
 
 const GeneralLayout = ({ children, isLoggedIn, navbarProps }) => (
-  <Wrapper>
-    <Navbar
+  <S.Wrapper>
+    <TopMenu
       isLoggedIn={isLoggedIn}
-      userType={navbarProps.userType}
+      role={navbarProps.userType}
       resetState={navbarProps.resetState}
     />
-    <ContentWrapper>{children}</ContentWrapper>
-  </Wrapper>
+    <S.ContentWrapper>{children}</S.ContentWrapper>
+  </S.Wrapper>
 );
 
 export default withWindowWidth(GeneralLayout, true);
