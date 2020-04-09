@@ -216,7 +216,7 @@ export default class SearchHosts extends Component {
 
   render() {
     const { searchFields, errors, listings, cities } = this.state;
-    const { isLoggedIn, windowWidth } = this.props;
+    const { isLoggedIn } = this.props;
     const { startDate, endDate, acceptAutomatically } = searchFields;
     const { searchError } = errors;
 

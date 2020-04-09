@@ -1,12 +1,25 @@
 import React from 'react';
-import { HostsSection, HostCardsWrapper } from './style';
+import {
+  HostsSection,
+  HostCardsWrapper,
+  MasonryColumn,
+  MasonryItem,
+} from './style';
 import * as T from '../../Common/Typography';
 import HostCard from './HostCard';
+import { withWindowWidth } from '../../../HOCs';
+import { LAPTOP_WIDTH, TABLET_WIDTH } from '../../../constants/screenWidths';
 
+const countColumns = windowWidth => {
+  if (windowWidth >= LAPTOP_WIDTH) return 3;
+  if (windowWidth >= TABLET_WIDTH) return 2;
+  return 1;
+};
 // https://medium.com/the-andela-way/how-to-create-a-masonry-layout-component-using-react-f30ec9ca5e99
-const MasonryLayout = ({ columns, children, gap }) => {
+const MasonryLayout = withWindowWidth(({ children, windowWidth }) => {
   const columnWrapper = {};
   const result = [];
+  const columns = countColumns(windowWidth);
 
   // create columns
   for (let i = 0; i < columns; i += 1) {
@@ -16,30 +29,23 @@ const MasonryLayout = ({ columns, children, gap }) => {
   for (let i = 0; i < children.length; i += 1) {
     const columnIndex = i % columns;
     columnWrapper[`column${columnIndex}`].push(
-      <div style={{ marginBottom: `${gap}px` }}>{children[i]}</div>,
+      <MasonryItem>{children[i]}</MasonryItem>,
     );
   }
 
   for (let i = 0; i < columns; i += 1) {
     result.push(
-      <div
-        style={{
-          marginLeft: `${i > 0 ? gap : 0}px`,
-          flex: 1,
-        }}
-      >
-        {columnWrapper[`column${i}`]}
-      </div>,
+      <MasonryColumn ml={i > 0}>{columnWrapper[`column${i}`]}</MasonryColumn>,
     );
   }
   return result;
-};
+});
 
-export const Hosts = ({ listings }) => (
+export const Hosts = ({ listings, windowWidth }) => (
   <HostsSection>
     <T.H3C>available hosts </T.H3C>
     <HostCardsWrapper>
-      <MasonryLayout columns={3} gap={10}>
+      <MasonryLayout>
         {[
           ...listings,
           ...listings,

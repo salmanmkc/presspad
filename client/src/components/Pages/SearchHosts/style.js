@@ -72,17 +72,31 @@ export const HostCardsWrapper = styled.section`
 `;
 
 export const HostCardWrapper = styled.div`
-  margin-bottom: 50px;
+  margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0px 4px 4px rgba(128, 109, 109, 0.1),
     0px -1px 4px rgba(128, 109, 109, 0.05);
-  max-width: 380px;
+  max-width: 480px;
+  width: 100vw;
+  margin-left: -3%;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileM} {
+    margin-left: -7%;
+  }
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileL} {
+    margin-left: auto;
+    width: 100%;
+  }
 `;
 
 export const CardImage = styled.img`
-  height: ${({ long }) => (long ? '344px' : '234px')};
+  height: 234px;
   object-fit: cover;
   width: 100%;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    height: ${({ long }) => (long ? '344px' : '234px')};
+  }
 `;
 export const CardDetailsWrapper = styled.div`
   display: flex;
@@ -91,6 +105,7 @@ export const CardDetailsWrapper = styled.div`
   padding: 0 5px;
   min-height: 75px;
 `;
+
 export const CardDetails = styled.div`
   padding: 0 20px;
 `;
@@ -99,4 +114,20 @@ export const CardCity = styled(H4C)`
   color: ${({ theme }) => theme.colors.white};
   padding: 5px;
   background-color: ${({ theme }) => theme.colors.darkerGray};
+`;
+
+export const MasonryColumn = styled.div`
+  flex: 1;
+  margin-left: ${({ ml }) => (ml ? '25px' : 0)};
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
+    margin-left: ${({ ml }) => (ml ? '50px' : 0)};
+  }
+`;
+
+export const MasonryItem = styled.div`
+  margin-bottom: 25px;
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
+    margin-bottom: 50px;
+  }
 `;
