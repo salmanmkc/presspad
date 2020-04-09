@@ -21,7 +21,6 @@ const Switch = ({
 
   return (
     <SwitchWrapper mt={mt} mb={mb} ml={ml} mr={mr}>
-      {console.log(windowWidth > MOBILE_M_WIDTH)}
       <AntdSwitch
         {...props}
         id={id}

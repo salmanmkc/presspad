@@ -19,6 +19,7 @@ const Form = ({
     acceptAutomatically,
     acceptAutomaticallyDisabled,
     switchToggle,
+    within7Days,
   },
 }) => (
   <StyledForm onSubmit={onSearchSubmit}>
@@ -104,6 +105,7 @@ const Form = ({
           mb="1"
           value={endDate}
           onChange={onEndChange}
+          disabled={within7Days}
           dateRender={current => {
             const style = {};
 

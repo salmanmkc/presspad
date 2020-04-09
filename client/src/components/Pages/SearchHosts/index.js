@@ -5,7 +5,8 @@ import moment from 'moment';
 import Hero from './Hero';
 import NoResults from './NoResults';
 import Icon from '../../Common/Icon';
-
+import * as T from '../../Common/Typography';
+import { Modal } from '../../Common/AntdWrappers';
 // import API routes
 import {
   API_SEARCH_PROFILES_URL,
@@ -57,6 +58,7 @@ export default class SearchHosts extends Component {
       acceptAutomatically: null,
     },
     acceptAutomaticallyDisabled: null,
+    within7Days: false,
     errors: {},
   };
 
@@ -143,18 +145,35 @@ export default class SearchHosts extends Component {
     const within7Days = value && value.isBefore(moment().add(7, 'days'));
     const within14Days = value && value.isBefore(moment().add(14, 'days'));
     //  show the modal
-    this.setState(state => ({
-      acceptAutomaticallyDisabled: within14Days,
-      searchFields: {
-        ...state.searchFields,
-        acceptAutomatically: within14Days,
+    this.setState(
+      state => ({
+        within7Days,
+        acceptAutomaticallyDisabled: within7Days || within14Days,
+        searchFields: {
+          ...state.searchFields,
+          acceptAutomatically: within7Days || within14Days,
+        },
+      }),
+      () => {
+        this.onDateInputChange('startDate', value);
+        if (within7Days) {
+          // show warning modal
+          Modal.warning({
+            title: 'Sorry, it is too close to your requested stay ',
+            content: (
+              <>
+                Booking requests must be made at least 1 week before your
+                internship starts. If you do not have anywhere to stay for your
+                upcoming internship and it is urgent, please email PressPad at{' '}
+                <T.Link to="urgent@presspad.co.uk" color="lightBlue">
+                  urgent@presspad.co.uk
+                </T.Link>
+              </>
+            ),
+          });
+        }
       },
-    }));
-
-    if (within7Days) {
-      // show warning modal
-    }
-    this.onDateInputChange('startDate', value);
+    );
   };
 
   onEndChange = value => {
@@ -237,6 +256,7 @@ export default class SearchHosts extends Component {
       listings,
       cities,
       acceptAutomaticallyDisabled,
+      within7Days,
     } = this.state;
     const { isLoggedIn } = this.props;
     const { startDate, endDate, acceptAutomatically } = searchFields;
@@ -248,6 +268,7 @@ export default class SearchHosts extends Component {
       endDate,
       acceptAutomatically,
       acceptAutomaticallyDisabled,
+      within7Days,
       onInputChange: this.onInputChange,
       onStartChange: this.onStartChange,
       onEndChange: this.onEndChange,
@@ -256,10 +277,15 @@ export default class SearchHosts extends Component {
       switchToggle: this.switchToggle,
       disabledEndDate: this.disabledEndDate,
     };
+
     return (
       <ContentWrapper>
         <Hero formProps={formProps} />
-        {listings.length > 0 ? <Hosts listings={listings} /> : <NoResults />}
+        {listings.length > 0 && !within7Days ? (
+          <Hosts listings={listings} />
+        ) : (
+          <NoResults within7Days={within7Days} />
+        )}
         {/* <Header>
           <HeaderTitle>Hosts offering a PressPad</HeaderTitle>
           <HeaderText>
