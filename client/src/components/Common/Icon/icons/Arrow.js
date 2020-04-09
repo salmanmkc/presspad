@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Arrow = ({ width, height, color, direction }) => {
+const Arrow = ({ width, height, color, direction, ...props }) => {
   let degree = '';
 
   switch (direction) {
@@ -29,6 +29,7 @@ const Arrow = ({ width, height, color, direction }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       transform={`rotate(${degree})`}
+      {...props}
     >
       <path
         d="M18.75 15.375L12 8.625L5.25 15.375"

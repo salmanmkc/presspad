@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Spin, Icon } from 'antd';
+import { Spin } from 'antd';
+import Icon from '../Icon';
 
 import { colors } from '../../../theme';
 
@@ -95,7 +96,7 @@ export const ButtonSpinner = ({ color }) => {
   // antd spinner for the submit button
   const antIcon = (
     <Icon
-      type="loading"
+      icon="loading"
       style={{ fontSize: 24, color: color || 'white' }}
       spin
     />

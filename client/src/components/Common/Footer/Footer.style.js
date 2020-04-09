@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Icon as AntIcon } from 'antd';
 
 import { colors } from '../../../theme';
 
@@ -74,10 +73,4 @@ export const IconWrapper = styled.div`
   a {
     height: 20px;
   }
-`;
-
-export const Icon = styled(AntIcon)`
-  color: ${colors.white};
-  font-size: 20px;
-  height: 20px;
 `;

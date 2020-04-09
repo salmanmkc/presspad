@@ -1,8 +1,9 @@
 /* eslint-disable global-require */
 import React, { Component } from 'react';
-import { Spin, Icon, message } from 'antd';
+import { Spin, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
+import Icon from '../../../Common/Icon';
 
 import { API_INTERN_PROFILE_URL } from '../../../../constants/apiRoutes';
 
@@ -48,8 +49,6 @@ import {
   mentorDescribeQuestion,
 } from './questions.json';
 
-import 'antd/dist/antd.css';
-
 import referIcon from '../../../../assets/refer.svg';
 import verifiedIcon from '../../../../assets/verified.svg';
 
@@ -79,7 +78,7 @@ class HostView extends Component {
   getProfilePic = img =>
     img && img.length > 0
       ? img
-      : require('./../../../../assets/random-profile.jpg');
+      : require('../../../../assets/random-profile.jpg');
 
   render() {
     if (this.state.isLoading) return <Spin tip="Loading Request" />;
@@ -138,7 +137,7 @@ class HostView extends Component {
                 <Symbol src={referIcon} />
                 <SymbolHeadline>{referencesNum} References</SymbolHeadline>
                 <IconDiv>
-                  <Icon type="info-circle" />
+                  <Icon icon="moreInfo" />
                 </IconDiv>
               </SymbolContainer>
             </SymbolDiv>

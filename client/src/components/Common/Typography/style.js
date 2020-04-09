@@ -5,9 +5,14 @@ const CommonStyle = css`
   font-family: Glacial Indifference;
   font-style: normal;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme, color }) =>
+    color ? theme.colors[color] : theme.colors.black};
   text-transform: ${({ caps }) => (caps ? 'uppercase' : 'none')};
-  margin: 0;
+  margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
+  margin-bottom: ${({ mb, theme }) => (mb ? theme.spacings[mb] : 0)};
+  margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
+  margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
+  text-align: ${({ align }) => align || 'left'};
 `;
 
 export const Heading1 = styled.h1`
@@ -44,7 +49,9 @@ export const Heading6 = styled.h6`
   ${CommonStyle};
   font-size: 18px;
   line-height: 23px;
-  color: ${({ theme }) => theme.colors.lightGray};
+  color: ${({ theme, color }) =>
+    color ? theme.colors[color] : theme.colors.gray};
+  color: ${({ caps, theme }) => caps && theme.colors.gray};
 `;
 
 export const Heading7 = styled.h6`
@@ -57,7 +64,8 @@ export const Heading7 = styled.h6`
 const CommonParagraphStyle = css`
   ${CommonStyle};
   font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
-  color: ${({ theme }) => theme.colors.darkerGray};
+  color: ${({ theme, color }) =>
+    color ? theme.colors[color] : theme.colors.darkerGray};
 `;
 
 export const BodyXL = styled.p`

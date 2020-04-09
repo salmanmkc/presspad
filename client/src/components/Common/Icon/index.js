@@ -1,21 +1,59 @@
 import React from 'react';
 import styled, { css, withTheme } from 'styled-components';
 
-import Arrow from './Arrow';
+// social icons
+import Facebook from './icons/Facebook';
+import Instagram from './icons/Instagram';
+import Linkedin from './icons/Linkedin';
+import Twitter from './icons/Twitter';
+import Youtube from './icons/Youtube';
+
+// general icons
+import Arrow from './icons/Arrow';
+import Cross from './icons/Cross';
+import Menu from './icons/Menu';
+import Search from './icons/Search';
+import Loading from './icons/Loading';
+import Warning from './icons/Warning';
+import CircleTick from './icons/CircleTick';
+import MoreInfo from './icons/MoreInfo';
+import User from './icons/User';
+import CrossCircle from './icons/CrossCircle';
+import Info from './icons/Info';
+import MapPin from './icons/MapPin';
+import Download from './icons/Download';
 import Tick from './Tick';
-import Cross from './Cross';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
   height: ${props.height || '100%'};
   color: ${props.color};
   margin: ${props.margin || '0 0 0 0'};
+  ${props.customStyle};
 `;
 
 const iconMap = {
+  // social icons
+  facebook: Facebook,
+  instagram: Instagram,
+  linkedin: Linkedin,
+  twitter: Twitter,
+  youTube: Youtube,
+  // general icons
   arrow: Arrow,
   cross: Cross,
   tick: Tick,
+  circleTick: CircleTick,
+  crossCircle: CrossCircle,
+  loading: Loading,
+  menu: Menu,
+  search: Search,
+  waring: Warning,
+  moreInfo: MoreInfo,
+  user: User,
+  info: Info,
+  mapPin: MapPin,
+  download: Download,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {
@@ -30,18 +68,19 @@ const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {
   return accum;
 }, {});
 
-const Icon = ({ color, fill, theme, ...props }) => {
-  if (!iconMap[props.icon]) {
+const Icon = ({ icon, color, fill, theme, customStyle, ...props }) => {
+  if (!iconMap[icon]) {
     // eslint-disable-next-line no-console
-    console.warn(`<Icon /> called with invalid icon prop "${props.icon}"`);
+    console.warn(`<Icon /> called with invalid icon prop "${icon}"`);
     return null;
   }
-  const StyledIcon = styledIconMap[props.icon];
+  const StyledIcon = styledIconMap[icon];
 
   return (
     <StyledIcon
-      {...props}
       color={theme.colors[color] || color || fill || 'currentColor'}
+      customStyle={customStyle}
+      {...props}
     />
   );
 };

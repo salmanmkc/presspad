@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Row, Col, Divider, DatePicker, Icon } from 'antd';
+import { Row, Col, Divider, DatePicker } from 'antd';
 import moment from 'moment';
+import Icon from '../../Icon';
 
 import { Label, UploadText, Error } from '../ProfileComponents.style';
 
@@ -75,7 +76,7 @@ class DateRanges extends Component {
                       }}
                     >
                       <Icon
-                        type="close"
+                        icon="cross"
                         style={{ color: '#0ac7e7' }}
                         onClick={() => deleteDate(index)}
                       />

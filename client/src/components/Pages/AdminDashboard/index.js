@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Input, Button, Icon, message } from 'antd';
+import { Input, Button, message } from 'antd';
+
+import Icon from '../../Common/Icon';
 
 // SUB COMPONENTS
 import ClientTable from './ClientTable';
@@ -162,7 +164,21 @@ export default class AdminDashboard extends Component {
       </div>
     ),
     filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? 'red' : undefined }} />
+      <button
+        style={{
+          border: 'none',
+          background: 'none',
+          height: '100%',
+          width: '100%',
+        }}
+      >
+        <Icon
+          icon="search"
+          color={filtered ? 'red' : undefined}
+          width="15px"
+          height="15px"
+        />
+      </button>
     ),
     onFilter: (value, record) =>
       record[dataIndex]

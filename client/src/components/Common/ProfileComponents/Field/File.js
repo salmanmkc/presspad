@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { message, Icon, Tooltip } from 'antd';
+import { message, Tooltip } from 'antd';
 import { ProgressBar } from '../../progress';
+
+import Icon from '../../Icon';
 
 import { UploadText, Error } from '../ProfileComponents.style';
 
@@ -132,7 +134,7 @@ export default class File extends Component {
           >
             {fileName || value ? (
               <>
-                <Icon type="check" style={{ color: 'green' }} />
+                <Icon icon="circleTick" style={{ color: 'green' }} />
                 {fileName || value}
               </>
             ) : (
@@ -155,7 +157,7 @@ export default class File extends Component {
         {url && fileName !== value && (
           <Tooltip title="download" placement="bottomLeft">
             <UploadText as="a" href={url}>
-              <Icon type="download" />
+              <Icon icon="download" />
             </UploadText>
           </Tooltip>
         )}

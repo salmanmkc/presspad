@@ -1,8 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 
-import { Table, Tag, Icon } from 'antd';
+import { Table, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
+import Icon from '../../Common/Icon';
 
 import { tagColors, colors } from '../../../theme';
 
@@ -83,9 +84,9 @@ export default function InternTable({
           return nextInstallmentAmount ? (
             <>
               {record.nextInstallmentPaid ? (
-                <Icon type="check" style={{ color: 'green' }} />
+                <Icon icon="circleTick" color="green" />
               ) : (
-                <Icon type="exclamation" style={{ color: 'yellow' }} />
+                <Icon icon="warning" color="yellow" />
               )}{' '}
               <Highlighter
                 highlightStyle={{
