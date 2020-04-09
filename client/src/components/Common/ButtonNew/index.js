@@ -107,7 +107,7 @@ const StyledButton = styled.button`
   ${props => props.type === 'primary' && primaryStyles}
   ${props => props.type === 'secondary' && secondaryStyles}
   ${props => props.type === 'tertiary' && tertiaryStyles}
-  
+
 `;
 
 export const ButtonSpinner = withTheme(({ outline, theme }) => {

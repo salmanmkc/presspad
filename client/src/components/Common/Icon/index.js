@@ -22,7 +22,7 @@ import CrossCircle from './icons/CrossCircle';
 import Info from './icons/Info';
 import MapPin from './icons/MapPin';
 import Download from './icons/Download';
-import Tick from './Tick';
+import Tick from './icons/Tick';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};

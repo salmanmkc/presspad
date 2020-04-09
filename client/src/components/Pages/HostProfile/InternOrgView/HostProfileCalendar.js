@@ -10,9 +10,10 @@ import {
 import * as T from '../../../Common/Typography';
 
 import Icon from '../../../Common/Icon';
-import Button from '../../../Common/Button';
+import Button from '../../../Common/ButtonNew';
 
 import Calendar from '../Calendar';
+import { colors } from '../../../../theme';
 
 export default ({
   type,
@@ -53,6 +54,7 @@ export default ({
       </CalendarDiv>
     </CalendarCard>
   ) : (
+    // MOBILE VIEW
     <AvailableHosting expanded={expandDateSection}>
       {expandDateSection ? (
         <MobileCalendarCard open>
@@ -69,10 +71,10 @@ export default ({
             onClick={toggleDateSection}
           />
           <CalendarDiv userRole={role}>
-            {role === 'host' && <T.H3>Availability & Price</T.H3>}
+            {role === 'host' && <T.H3>View dates & price to stay</T.H3>}
             {role !== 'host' && (
               <>
-                <T.H3>Availability & Price</T.H3>
+                <T.PSBold>View dates & price to stay</T.PSBold>
               </>
             )}
             <Calendar
@@ -90,11 +92,13 @@ export default ({
         </MobileCalendarCard>
       ) : (
         <MobileCalendarCard>
-          <T.H3>Availability & Price</T.H3>
+          <T.PSBold>View dates & price to stay</T.PSBold>
           <Button
-            type="secondary"
-            label="View dates"
-            width="180px"
+            type="tertiary"
+            outline
+            small
+            style={{ padding: '0.5rem' }}
+            label="VIEW AVAILABILITY"
             onClick={toggleDateSection}
           />
         </MobileCalendarCard>

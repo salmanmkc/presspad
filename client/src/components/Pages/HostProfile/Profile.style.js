@@ -231,25 +231,23 @@ export const AvailableHosting = styled.div`
 `;
 
 export const MobileCalendarCard = styled.div`
-  background-color: ${colors.white};
-  padding: 0.5rem 2rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  background-color: ${colors.darkBlue};
 
-  h3 {
-    font-weight: 600;
-    font-size: 18px;
+  p {
+    color: ${colors.white};
     text-align: left;
     padding-right: 2rem;
-    padding-top: 0.5rem;
   }
 
   // when user clicks open
   ${({ open }) =>
     open &&
     css`
-      padding: 3rem 2rem;
+      background-color: ${colors.white};
+      padding: auto;
       position: relative;
     `}
 `;
@@ -389,15 +387,13 @@ export const List = styled.div`
 `;
 export const BulletPoint = styled.div`
   display: flex;
-  align-items: center;
 `;
 
 export const ListItem = styled.li`
   font-weight: 300;
   width: 100%;
   list-style-type: none;
-
-  margin: 0.5rem 0 0.5rem 0.5rem;
+  margin: 0 0 0.5rem 0.5rem;
 
   @media (max-width: 775.98px) {
     width: 100%;

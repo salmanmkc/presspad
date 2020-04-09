@@ -23,6 +23,7 @@ export const MainImageDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   @media (max-width: 775.98px) {
     width: 100%;
   }
@@ -34,6 +35,10 @@ export const MainImage = styled.img`
   height: 380px;
   object-fit: cover;
   object-position: center center;
+
+  @media (max-width: 775.98px) {
+    height: auto;
+  }
 `;
 
 export const SideImageDiv = styled.div`
