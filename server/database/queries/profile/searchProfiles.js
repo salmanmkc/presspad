@@ -1,7 +1,9 @@
 const Listing = require('../../models/Listing');
 
 module.exports.searchProfiles = ({ city, startDate, endDate }) => {
+  console.log({ city, startDate, endDate });
   const basicPipelines = [
+    //  get the user id so we can link to the right profile
     {
       $lookup: {
         from: 'users',
@@ -37,6 +39,7 @@ module.exports.searchProfiles = ({ city, startDate, endDate }) => {
   ];
 
   const project = awithAvailableDates => {
+    //  filter the availableDates so only availableDate objects within the time range remain
     const availableDates = {
       $filter: {
         input: '$availableDates',
@@ -57,7 +60,8 @@ module.exports.searchProfiles = ({ city, startDate, endDate }) => {
       },
     };
 
-    if (awithAvailableDates) basicProject.availableDates = availableDates;
+    if (awithAvailableDates)
+      basicProject['$project'].availableDates = availableDates;
     return basicProject;
   };
 
@@ -68,7 +72,6 @@ module.exports.searchProfiles = ({ city, startDate, endDate }) => {
       {
         $match: { 'address.city': new RegExp(city, 'i') },
       },
-      //  get the user id so we can link to the right profile
       ...basicPipelines,
       project(),
     ]);
@@ -76,11 +79,7 @@ module.exports.searchProfiles = ({ city, startDate, endDate }) => {
 
   if (!startDate && !endDate && !city) {
     console.log(2);
-    return Listing.aggregate([
-      //  get the user id so we can link to the right profile
-      ...basicPipelines,
-      project(),
-    ]);
+    return Listing.aggregate([...basicPipelines, project()]);
   }
   if (!city) {
     console.log(3);
@@ -91,9 +90,7 @@ module.exports.searchProfiles = ({ city, startDate, endDate }) => {
       {
         $match: { 'availableDates.endDate': { $gte: new Date() } },
       },
-      //  get the user id so we can link to the right profile
       ...basicPipelines,
-      //  filter the availableDates so only availableDate objects within the time range remain
       project(true),
       {
         $addFields: {
@@ -106,7 +103,7 @@ module.exports.searchProfiles = ({ city, startDate, endDate }) => {
       },
     ]);
   }
-
+  console.log(4);
   // otherwise find those that match city AND dates
   return Listing.aggregate([
     // get any listings that match the city

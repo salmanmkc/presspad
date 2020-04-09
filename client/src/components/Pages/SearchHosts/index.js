@@ -46,7 +46,7 @@ import {
   SearchButton,
 } from './SearchHosts.style';
 
-export default class index extends Component {
+export default class SearchHosts extends Component {
   state = {
     listings: [],
     cities: [],
