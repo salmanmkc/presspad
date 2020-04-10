@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { PXSBold, P, PS, PBold } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
@@ -10,7 +9,7 @@ import TipsCard from '../TipsCard';
 
 import MakePayment from './MakePayment';
 import ReportProblem from './ReportProblem';
-import { WarningWrapper, TipsWrapper } from './InternView.style';
+import { WarningWrapper, TipsWrapper, ProfileLink } from './InternView.style';
 
 import { HOST_PROFILE } from '../../../../constants/navRoutes';
 
@@ -146,8 +145,10 @@ const CompletedContent = ({ hostId, hostName }) => (
   <>
     <P mt="5" mb="1">
       Your stay with{' '}
-      <Link to={HOST_PROFILE.replace(':id', hostId)}>{hostName}</Link> is now
-      complete. We hope you enjoyed your stay.
+      <ProfileLink to={HOST_PROFILE.replace(':id', hostId)}>
+        {hostName}
+      </ProfileLink>{' '}
+      is now complete. We hope you enjoyed your stay.
     </P>
     <div>
       Leave a review component should go here. also if inter already given a

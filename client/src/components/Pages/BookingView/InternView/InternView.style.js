@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -54,4 +55,9 @@ export const TipsWrapper = styled.div`
       max-width: 507px;
     }
   }
+`;
+
+export const ProfileLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.blue};
+  font-weight: bold;
 `;
