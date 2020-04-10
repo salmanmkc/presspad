@@ -168,15 +168,20 @@ export const PopoverContentContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   cursor: pointer;
+
   p {
-    padding-right: 1rem;
-    line-height: 1.2;
+    padding-right: 0.5rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: ${size.mobileL}) {
   }
 `;
 
 export const RequestBtnContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-top: 1.5rem;
   padding-bottom: 2rem;
 
@@ -187,10 +192,13 @@ export const RequestBtnContainer = styled.div`
 
 export const CodeInput = styled.input`
   width: 200px;
-  height: 36px;
+
   border: ${borders.newInputBox};
-  box-sizing: border-box;
   border-radius: 10px;
+
+  @media (max-width: ${size.mobileL}) {
+    width: 160px;
+  }
 `;
 
 export const Row = styled.div`
@@ -249,7 +257,7 @@ export const RequestBtn = styled.button`
 `;
 
 export const ErrorDiv = styled.div`
-  margin-bottom: 25px;
+  margin-top: 1rem;
 `;
 
 export const PriceTopDiv = styled.div`
