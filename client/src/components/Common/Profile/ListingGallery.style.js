@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ImageSection = styled.section`
   height: 400px;
-  width: 95%;
+
   display: flex;
   align-items: center;
   .ant-carousel {

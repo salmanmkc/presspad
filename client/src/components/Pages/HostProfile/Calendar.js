@@ -292,7 +292,7 @@ class CalendarComponent extends Component {
         <Col value>
           <input placeholder="type code ..." />
         </Col>
-      </Row>{' '}
+      </Row>
     </>
   );
 

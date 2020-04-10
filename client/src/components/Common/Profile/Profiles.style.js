@@ -54,6 +54,7 @@ export const Header = styled.header`
 
 export const HeaderDiv = styled.div`
   margin-left: 1rem;
+
   text-align: left;
 
   @media (max-width: 600px) {

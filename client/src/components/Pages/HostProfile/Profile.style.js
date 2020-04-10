@@ -25,7 +25,7 @@ export const SideWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: ${({ left }) => (left ? '58%' : '42%')};
+  width: ${({ left }) => (left ? '55%' : '45%')};
   margin-left: ${({ left }) => (left ? '0' : '20px')};
 
   @media (max-width: 775.98px) {
@@ -39,8 +39,7 @@ export const Card = styled.div`
     noShadow ? 'none' : shadows.hostProfileCard};
   padding-top: 2rem;
   margin-top: 2rem;
-  width: ${({ left }) => (left ? '95%' : '85%')};
-
+  width: 100%;
   @media (max-width: 775.98px) {
     width: 100%;
     margin-top: 1rem;
@@ -53,7 +52,7 @@ export const WhyHereDiv = styled(Card)`
   display: flex;
   align-items: center;
   padding-top: 0;
-  margin-left: 2.5rem;
+  // margin-left: 2.5rem;
   align-self: flex-start;
   width: 70%;
   background: ${colors.darkBlue};

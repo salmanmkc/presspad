@@ -239,11 +239,7 @@ export default class InternView extends Component {
     };
 
     return (
-      <SideMenuLayout
-        style={{ flexDirection: 'column' }}
-        navbarProps={{ isLoggedIn: currentUserId, role }}
-        goBack
-      >
+      <SideMenuLayout navbarProps={{ isLoggedIn: currentUserId, role }} goBack>
         {/* Header */}
         <Header
           profileImage={profileImage}
