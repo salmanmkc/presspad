@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { PXSBold, P, PS, PBold } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
@@ -11,12 +12,28 @@ import MakePayment from './MakePayment';
 import ReportProblem from './ReportProblem';
 import { WarningWrapper, TipsWrapper, ProfileLink } from './InternView.style';
 
-import { HOST_PROFILE } from '../../../../constants/navRoutes';
+import { HOST_PROFILE, HOSTS_URL } from '../../../../constants/navRoutes';
 
 // import Reviews from '../../../Common/Reviews';
 // import { Card } from '../../../Common/Profile/Profiles.style';
 
-const WaitingContent = ({ hostRespondingTime }) => (
+const ViewProfile = ({ hostId }) => {
+  const history = useHistory();
+
+  return (
+    <ButtonNew
+      small
+      outline
+      type="tertiary"
+      mt="4"
+      onClick={() => history.push(HOST_PROFILE.replace(':id', hostId))}
+    >
+      view profile
+    </ButtonNew>
+  );
+};
+
+const WaitingContent = ({ hostRespondingTime, hostId }) => (
   <>
     <PXSBold color="gray" mt="1">
       This host usually takes around {hostRespondingTime || 7} days to respond
@@ -25,11 +42,10 @@ const WaitingContent = ({ hostRespondingTime }) => (
       Your booking request has been successfully submitted. Make sure to check
       your account for a response.
     </P>
-    <ButtonNew small outline type="tertiary" mt="4">
-      view profile
-    </ButtonNew>
+    <ViewProfile hostId={hostId} />
   </>
 );
+
 const AcceptedContent = ({
   handlePayNowClick,
   handleCouponChange,
@@ -38,11 +54,10 @@ const AcceptedContent = ({
   startDate,
   endDate,
   couponInfo,
+  hostId,
 }) => (
   <>
-    <ButtonNew small outline type="tertiary" mt="4">
-      view profile
-    </ButtonNew>
+    <ViewProfile hostId={hostId} />
     <P mt="4">
       Good news, your booking request has been accepted! To confirm your booking
       you need to make your first payment.
@@ -68,25 +83,32 @@ const AcceptedContent = ({
   </>
 );
 
-const RejectedContent = ({ rejectReason }) => (
-  <>
-    <PBold mt="5" mb="1">
-      Sorry, your booking request has been rejected:
-    </PBold>
-    <PS color={rejectReason ? 'blue' : 'gray'}>
-      {rejectReason || 'Unfortunately no reason was provided by your host'}
-    </PS>
-    <ButtonNew small outline type="tertiary" mt="4">
-      find another host
-    </ButtonNew>
-  </>
-);
-const ConfirmedContent = ({ hostInfo, isLoading, userRole }) => (
+const RejectedContent = ({ rejectReason }) => {
+  const history = useHistory();
+  return (
+    <>
+      <PBold mt="5" mb="1">
+        Sorry, your booking request has been rejected:
+      </PBold>
+      <PS color={rejectReason ? 'blue' : 'gray'}>
+        {rejectReason || 'Unfortunately no reason was provided by your host'}
+      </PS>
+      <ButtonNew
+        small
+        outline
+        type="tertiary"
+        mt="4"
+        onClick={() => history.push(HOSTS_URL)}
+      >
+        find another host
+      </ButtonNew>
+    </>
+  );
+};
+const ConfirmedContent = ({ hostInfo, isLoading, userRole, hostId }) => (
   <>
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
-    <ButtonNew small outline type="tertiary" mt="4">
-      view profile
-    </ButtonNew>
+    <ViewProfile hostId={hostId} />
     <TipsWrapper height="290px">
       <div>
         <TipsCard
@@ -109,6 +131,7 @@ const PaymentDueContent = ({
   startDate,
   endDate,
   couponInfo,
+  hostId,
 }) => (
   <>
     <P mt="5" mb="1">
@@ -126,9 +149,7 @@ const PaymentDueContent = ({
       }}
     />
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
-    <ButtonNew small outline type="tertiary" mt="4">
-      view profile
-    </ButtonNew>
+    <ViewProfile hostId={hostId} />
     <TipsWrapper>
       <div>
         <TipsCard

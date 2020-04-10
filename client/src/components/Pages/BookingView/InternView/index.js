@@ -257,13 +257,19 @@ export default class BookingView extends Component {
       awaitingAdmin: {
         status: 'awaiting host response',
         statusContentsComponent: () => (
-          <WaitingContent hostRespondingTime={hostRespondingTime} />
+          <WaitingContent
+            hostId={host._id}
+            hostRespondingTime={hostRespondingTime}
+          />
         ),
       },
       pending: {
         status: 'awaiting host response',
         statusContentsComponent: () => (
-          <WaitingContent hostRespondingTime={hostRespondingTime} />
+          <WaitingContent
+            hostId={host._id}
+            hostRespondingTime={hostRespondingTime}
+          />
         ),
       },
       canceled: {
@@ -290,6 +296,7 @@ export default class BookingView extends Component {
           status: 'payment due',
           statusContentsComponent: () => (
             <PaymentDueContent
+              hostId={host._id}
               hostInfo={hostInfo}
               isLoading={isLoading}
               userRole={role}
@@ -308,6 +315,7 @@ export default class BookingView extends Component {
           status: 'confirmed',
           statusContentsComponent: () => (
             <ConfirmedContent
+              hostId={host._id}
               hostInfo={hostInfo}
               isLoading={isLoading}
               userRole={role}
@@ -320,6 +328,7 @@ export default class BookingView extends Component {
         status: 'accepted',
         statusContentsComponent: () => (
           <AcceptedContent
+            hostId={host._id}
             handlePayNowClick={this.handlePayNowClick}
             handleCouponChange={this.handleCouponChange}
             paymentInfo={paymentInfo}
