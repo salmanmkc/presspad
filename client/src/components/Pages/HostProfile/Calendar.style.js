@@ -176,7 +176,7 @@ export const PopoverContentContainer = styled.div`
 
 export const RequestBtnContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   padding-top: 1.5rem;
   padding-bottom: 2rem;
 
@@ -186,7 +186,11 @@ export const RequestBtnContainer = styled.div`
 `;
 
 export const CodeInput = styled.input`
-  width: 300px;
+  width: 200px;
+  height: 36px;
+  border: ${borders.newInputBox};
+  box-sizing: border-box;
+  border-radius: 10px;
 `;
 
 export const Row = styled.div`

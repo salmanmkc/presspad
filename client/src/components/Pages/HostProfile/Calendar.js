@@ -292,7 +292,7 @@ class CalendarComponent extends Component {
           </Popover>
         </Col>
         <Col value>
-          <CodeInput placeholder="type code ..." />
+          <CodeInput placeholder="     Type code ..." />
         </Col>
       </Row>
     </>
@@ -380,7 +380,17 @@ class CalendarComponent extends Component {
               </ErrorDiv>
             )}
             <RequestBtnContainer>
+              {isMobile ? (
+                <T.PS>
+                  Price for period <br /> <strong>140£</strong>
+                </T.PS>
+              ) : (
+                <T.PL>
+                  Price for period <br /> <strong>140£</strong>
+                </T.PL>
+              )}
               <Button
+                small={isMobile}
                 type="secondary"
                 onClick={this.handleClick}
                 disabled={

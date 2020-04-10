@@ -119,6 +119,7 @@ export const borders = {
   stripeBorder: `1px solid ${colors.borderGray}`,
   error: `1px solid ${colors.red}`,
   lightDivider: '1px solid rgba(0, 0, 0, 0.1)',
+  newInputBox: '1px solid rgba(224, 224, 224, 0.5)',
 };
 
 //  set colours for tags in the table
