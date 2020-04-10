@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form as StyledForm, Row, SubRow } from './style';
+import { Form as StyledForm, Row, SubRow, ErrorMessage } from './style';
 import * as T from '../../Common/Typography';
 import { Select, DatePicker, Switch } from '../../Common/AntdWrappers';
 import Button from '../../Common/ButtonNew';
@@ -9,7 +9,7 @@ import { dateRender } from './utils';
 const Form = ({
   formProps: {
     cities,
-    onInputChange,
+    onInputCityChange,
     startDate,
     onStartChange,
     disabledStartDate,
@@ -21,6 +21,7 @@ const Form = ({
     acceptAutomaticallyDisabled,
     switchToggle,
     within7Days,
+    error,
   },
 }) => (
   <StyledForm onSubmit={onSearchSubmit}>
@@ -44,7 +45,8 @@ const Form = ({
         id="city"
         autoFocus
         style={{ width: 215 }}
-        onSelect={onInputChange}
+        onSelect={onInputCityChange}
+        disabled={within7Days}
       >
         {cities.map(city => (
           <Select.Option value={city} key={city}>
@@ -93,9 +95,10 @@ const Form = ({
       </Switch>
     </Row>
     <Row mt="6">
-      <Button type="secondary" small>
+      <Button type="secondary" small disabled={within7Days}>
         SEARCH
       </Button>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Row>
   </StyledForm>
 );

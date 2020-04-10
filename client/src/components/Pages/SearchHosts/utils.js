@@ -13,7 +13,7 @@ import {
 import placeholder from '../../../assets/listing-placeholder.jpg';
 
 /**
- * styles the dates
+ * styles the dates in the datePickers
  */
 const dateRender = ({ current, endDate, startDate }) => {
   const style = {};
@@ -86,35 +86,22 @@ const disabledEndDate = ({ endDate, startDate }) => {
   return endDate.valueOf() <= startDate.valueOf();
 };
 
-const validateSearch = ({ city, startDate, endDate }) => {
-  const errors = {};
+const validateSearch = ({ city, startDate, endDate, acceptAutomatically }) => {
+  let error = '';
+
   let searchIsValid = true;
 
-  if (!city && !startDate && !endDate) {
+  if (!city && !startDate && !endDate && acceptAutomatically === null) {
     searchIsValid = false;
-    errors.searchError =
-      '* You must fill in at least one input before searching';
+    error = 'you must fill in at least one search field';
   }
 
-  if (startDate) {
-    if (!endDate) {
-      searchIsValid = false;
-      errors.searchError = '* You must enter both a start and end date';
-    }
-  }
-
-  if (endDate) {
-    if (!startDate) {
-      searchIsValid = false;
-      errors.searchError = '* You must enter both a start and end date';
-    }
-  }
-
-  return { errors, searchIsValid };
+  return { error, searchIsValid };
 };
 const check7And14DaysBooking = value => {
   const within7Days = value && value.isBefore(moment().add(7, 'days'));
   const within14Days = value && value.isBefore(moment().add(14, 'days'));
+
   return { within7Days, within14Days };
 };
 
@@ -131,6 +118,7 @@ const show7DaysWarning = () => {
         </T.Link>
       </>
     ),
+    hideOkButton: true,
   });
 };
 

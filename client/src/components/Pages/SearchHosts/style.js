@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import { H4C } from '../../Common/Typography';
+import { H4C, H7C } from '../../Common/Typography';
 
 export const HeroWrapper = styled.section`
   text-align: right;
@@ -74,6 +74,7 @@ export const HostsSection = styled.section`
 export const HostCardsWrapper = styled.section`
   margin-top: 50px;
   display: flex;
+  position: relative;
 `;
 
 export const HostCardWrapper = styled(Link)`
@@ -85,6 +86,7 @@ export const HostCardWrapper = styled(Link)`
   max-width: 480px;
   width: 100vw;
   margin-left: -3%; /**equaul to the side padding for the layout */
+  transition: 0.5s all;
 
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileM} {
     margin-left: -7%; /**equaul to the side padding for the layout */
@@ -92,6 +94,14 @@ export const HostCardWrapper = styled(Link)`
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileL} {
     margin-left: auto;
     width: 100%;
+  }
+
+  :active,
+  :hover {
+    transform: translate(0, -5px);
+    box-shadow: 0px 4px 4px rgba(128, 109, 109, 0.3),
+      0px -1px 4px rgba(128, 109, 109, 0.05);
+    max-width: 480px;
   }
 `;
 
@@ -140,4 +150,9 @@ export const MasonryItem = styled.div`
 
 export const NoResultsWrapper = styled.section`
   max-width: 700px;
+`;
+
+export const ErrorMessage = styled(H7C)`
+  padding: ${({ theme }) => theme.spacings[3]};
+  color: ${({ theme }) => theme.colors.pink};
 `;

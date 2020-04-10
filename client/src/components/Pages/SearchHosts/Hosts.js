@@ -30,13 +30,17 @@ const MasonryLayout = withWindowWidth(({ children, windowWidth }) => {
   for (let i = 0; i < children.length; i += 1) {
     const columnIndex = i % columns;
     columnWrapper[`column${columnIndex}`].push(
-      <MasonryItem>{children[i]}</MasonryItem>,
+      <MasonryItem key={`column${columnIndex}-${i}`}>
+        {children[i]}
+      </MasonryItem>,
     );
   }
 
   for (let i = 0; i < columns; i += 1) {
     result.push(
-      <MasonryColumn ml={i > 0}>{columnWrapper[`column${i}`]}</MasonryColumn>,
+      <MasonryColumn ml={i > 0} key={i}>
+        {columnWrapper[`column${i}`]}
+      </MasonryColumn>,
     );
   }
   return result;
@@ -47,19 +51,7 @@ const Hosts = ({ listings }) => (
     <T.H3C>available hosts </T.H3C>
     <HostCardsWrapper>
       <MasonryLayout>
-        {[
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-          ...listings,
-        ].map((listing, i) => (
+        {listings.map((listing, i) => (
           <HostCard
             img={getListingPic(listing.photos)}
             city={listing.address.city}
@@ -68,6 +60,7 @@ const Hosts = ({ listings }) => (
             endDate={showEndDate(listing.availableDates)}
             hostId={listing.userID}
             long={i % 2}
+            key={listing._id}
           />
         ))}
       </MasonryLayout>

@@ -22,11 +22,11 @@ const Switch = ({
   return (
     <SwitchWrapper mt={mt} mb={mb} ml={ml} mr={mr}>
       <AntdSwitch
-        {...props}
         id={id}
         size={windowWidth > MOBILE_M_WIDTH ? 'default' : 'small'}
+        {...props}
       />
-      <Label as="label" htmlFor={id}>
+      <Label as="label" htmlFor={id} disabled={props.disabled}>
         {children || label}
       </Label>
     </SwitchWrapper>

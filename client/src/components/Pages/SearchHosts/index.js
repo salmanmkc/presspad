@@ -29,7 +29,7 @@ export default class SearchHosts extends Component {
     },
     acceptAutomaticallyDisabled: null,
     within7Days: false,
-    errors: {},
+    error: null,
   };
 
   async componentDidMount() {
@@ -38,36 +38,36 @@ export default class SearchHosts extends Component {
   }
 
   fetchListings = async () => {
-    const { searchFields } = this.state;
-    const { listings, error } = await fetchListings(searchFields);
-    this.setState(state => ({
-      listings,
-      errors: { ...state.errors, searchError: error },
-    }));
-  };
-
-  onInputChange = e => {
-    const { searchFields } = this.state;
-    const newSearchFields = { ...searchFields };
-    if (e.target) {
-      newSearchFields[e.target.name] = e.target.value;
-      this.setState({ searchFields: newSearchFields });
-    } else {
-      // e is the city <Select>  value
-      newSearchFields.city = e;
-      this.setState({ searchFields: newSearchFields }, () => {
-        const isValid = this.validateSearch();
-        if (isValid) {
-          this.fetchListings();
-        }
+    const { searchFields, within7Days } = this.state;
+    if (!within7Days) {
+      const { listings, error } = await fetchListings(searchFields);
+      this.setState({
+        listings,
+        error,
       });
     }
   };
 
+  onInputCityChange = city => {
+    this.setState(
+      state => ({ searchFields: { ...state.searchFields, city, error: null } }),
+      () => {
+        const searchIsValid = this.validateSearch();
+        if (searchIsValid) {
+          this.fetchListings();
+        }
+      },
+    );
+  };
+
   switchToggle = checked => {
-    this.setState(state => ({
-      searchFields: { ...state.searchFields, acceptAutomatically: checked },
-    }));
+    this.setState(
+      state => ({
+        error: null,
+        searchFields: { ...state.searchFields, acceptAutomatically: checked },
+      }),
+      this.fetchListings,
+    );
   };
 
   // HANDLING DATE INPUTS
@@ -84,21 +84,29 @@ export default class SearchHosts extends Component {
   };
 
   onDateInputChange = (field, value) => {
-    const { searchFields } = this.state;
-    searchFields[field] = value;
-    this.setState({ searchFields });
+    this.setState(
+      state => ({
+        error: null,
+        searchFields: { ...state.searchFields, [field]: value },
+      }),
+      this.fetchListings,
+    );
   };
 
   onStartChange = value => {
-    const { within7Days, within14Days } = check7And14DaysBooking;
+    const { within7Days, within14Days } = check7And14DaysBooking(value);
     //  show the modal
+
     this.setState(
       state => ({
         within7Days,
         acceptAutomaticallyDisabled: within7Days || within14Days,
         searchFields: {
           ...state.searchFields,
-          acceptAutomatically: within7Days || within14Days,
+          acceptAutomatically:
+            within7Days ||
+            within14Days ||
+            state.searchFields.acceptAutomatically,
         },
       }),
       () => {
@@ -117,30 +125,29 @@ export default class SearchHosts extends Component {
 
   onSearchSubmit = e => {
     e.preventDefault();
-    const { isValid } = this.validateSearch();
-    // if (isValid) {
-    this.fetchListings();
-    // }
+    const searchIsValid = this.validateSearch();
+    if (searchIsValid) {
+      this.fetchListings();
+    }
   };
 
   validateSearch = () => {
     const { searchFields } = this.state;
-    const { searchIsValid, errors } = validateSearch({ ...searchFields });
-    this.setState({ errors });
+    const { searchIsValid, error } = validateSearch(searchFields);
+    this.setState({ error });
     return searchIsValid;
   };
 
   render() {
     const {
       searchFields,
-      errors,
+      error,
       listings,
       cities,
       acceptAutomaticallyDisabled,
       within7Days,
     } = this.state;
-    const { startDate, endDate, acceptAutomatically } = searchFields;
-    const { searchError } = errors;
+    const { startDate, endDate, acceptAutomatically, city } = searchFields;
 
     const formProps = {
       cities,
@@ -149,7 +156,8 @@ export default class SearchHosts extends Component {
       acceptAutomatically,
       acceptAutomaticallyDisabled,
       within7Days,
-      onInputChange: this.onInputChange,
+      error,
+      onInputCityChange: this.onInputCityChange,
       onStartChange: this.onStartChange,
       onEndChange: this.onEndChange,
       disabledStartDate: this.disabledStartDate,
@@ -162,9 +170,15 @@ export default class SearchHosts extends Component {
       <ContentWrapper>
         <Hero formProps={formProps} />
         {listings.length > 0 && !within7Days ? (
-          <Hosts listings={listings} />
+          <>
+            <Hosts listings={listings} />
+          </>
         ) : (
-          <NoResults within7Days={within7Days} />
+          <>
+            {startDate || endDate || acceptAutomatically || city ? (
+              <NoResults within7Days={within7Days} />
+            ) : null}
+          </>
         )}
       </ContentWrapper>
     );

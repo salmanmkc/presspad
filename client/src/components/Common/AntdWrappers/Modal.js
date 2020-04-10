@@ -1,24 +1,34 @@
 import React from 'react';
 import { Modal as AntdModal } from 'antd';
 import { MemoryRouter } from 'react-router-dom';
-import { withTheme, ThemeProvider } from 'styled-components';
-import * as T from '../Typography';
+import { ThemeProvider } from 'styled-components';
+
 import theme from '../../../theme';
-// const contentWrapper = withTheme(({ content }) => <T.PS>{content}</T.PS>);
 
-const Modal = ({ type, title, content, ...props }) => {
-  console.log({ title, content });
+const disableButton = (props = { style: {} }) => ({
+  ...props,
+  style: { ...props.style, display: 'none' },
+});
 
-  return AntdModal[type]({
+const Modal = ({
+  type,
+  title,
+  content,
+  hideOkButton,
+  okButtonProps = {},
+  ...props
+}) =>
+  AntdModal[type]({
     title,
     content: (
       <ThemeProvider theme={theme}>
         <MemoryRouter>{content}</MemoryRouter>
       </ThemeProvider>
     ),
+    okButtonProps: hideOkButton ? disableButton(okButtonProps) : okButtonProps,
+    maskClosable: true,
     ...props,
   });
-};
 
 Modal.info = props => Modal({ type: 'info', ...props });
 Modal.warning = props => Modal({ type: 'warning', ...props });
