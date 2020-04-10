@@ -9,6 +9,7 @@ import * as T from '../../Common/Typography';
 import HostCard from './HostCard';
 import { withWindowWidth } from '../../../HOCs';
 import { LAPTOP_WIDTH, TABLET_WIDTH } from '../../../constants/screenWidths';
+import { getListingPic, showStartDate, showEndDate } from './utils';
 
 const countColumns = windowWidth => {
   if (windowWidth >= LAPTOP_WIDTH) return 3;
@@ -41,7 +42,7 @@ const MasonryLayout = withWindowWidth(({ children, windowWidth }) => {
   return result;
 });
 
-export const Hosts = ({ listings, windowWidth }) => (
+const Hosts = ({ listings }) => (
   <HostsSection>
     <T.H3C>available hosts </T.H3C>
     <HostCardsWrapper>
@@ -60,9 +61,12 @@ export const Hosts = ({ listings, windowWidth }) => (
           ...listings,
         ].map((listing, i) => (
           <HostCard
-            img={listing.photos[0].url}
+            img={getListingPic(listing.photos)}
             city={listing.address.city}
             postcode={listing.address.postcode}
+            startDate={showStartDate(listing.availableDates)}
+            endDate={showEndDate(listing.availableDates)}
+            hostId={listing.userID}
             long={i % 2}
           />
         ))}

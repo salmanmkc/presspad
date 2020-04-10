@@ -1,51 +1,21 @@
 import React, { Component } from 'react';
-import { Input, DatePicker, Select } from 'antd';
-import axios from 'axios';
-import moment from 'moment';
-import Hero from './Hero';
-import NoResults from './NoResults';
-import Icon from '../../Common/Icon';
-import * as T from '../../Common/Typography';
-import { Modal } from '../../Common/AntdWrappers';
-// import API routes
-import {
-  API_SEARCH_PROFILES_URL,
-  API_GET_ALL_CETIES_URL,
-} from '../../../constants/apiRoutes';
-import Button from '../../Common/Button';
-import { titleCase } from '../../../helpers';
-import Hosts from './Hosts';
-// import Nav routes
-import { HOSTS_URL, SIGNUP_INTERN } from '../../../constants/navRoutes';
 
-import { TABLET_WIDTH } from '../../../constants/screenWidths';
-// TODO remove it and this should be handled in the layout itself
+import Hero from './Hero';
+
+import Hosts from './Hosts';
+import NoResults from './NoResults';
+
 import { ContentWrapper } from '../../Layouts/SideMenuLayout/style';
-import placeholder from '../../../assets/listing-placeholder.jpg';
-// import styled components
+
 import {
-  Wrapper,
-  Header,
-  HeaderTitle,
-  HeaderText,
-  SearchForm,
-  SearchLabel,
-  SearchInputDiv,
-  ErrorMsg,
-  ResultsWrapper,
-  ResultsText,
-  // Hosts,
-  HostResult,
-  HostHeader,
-  HostTitle,
-  HostImg,
-  HostDates,
-  HostLocation,
-  DisabledHostResult,
-  SignUpPromo,
-  SearchButtonDiv,
-  SearchButton,
-} from './SearchHosts.style';
+  getCities,
+  fetchListings,
+  disabledStartDate,
+  disabledEndDate,
+  validateSearch,
+  check7And14DaysBooking,
+  show7DaysWarning,
+} from './utils';
 
 export default class SearchHosts extends Component {
   state = {
@@ -63,32 +33,17 @@ export default class SearchHosts extends Component {
   };
 
   async componentDidMount() {
-    // fetch all cities from the listing
-    const { data } = await axios.get(API_GET_ALL_CETIES_URL);
-    const cities = data
-      .filter(({ address: { city } = {} }) => !!city)
-      .reduce((acc, curr) => {
-        acc.add(curr.address.city.toLowerCase());
-        return acc;
-      }, new Set());
-    this.fetchListings();
-
+    const cities = await getCities();
     this.setState({ cities: [...cities] });
   }
 
-  fetchListings = () => {
-    const { searchFields, errors } = this.state;
-    axios
-      .post(API_SEARCH_PROFILES_URL, searchFields)
-      .then(({ data }) => {
-        this.setState({ listings: data });
-      })
-      .catch(() => {
-        errors.searchError = 'Sorry, there was an error getting the listings';
-        this.setState({
-          errors,
-        });
-      });
+  fetchListings = async () => {
+    const { searchFields } = this.state;
+    const { listings, error } = await fetchListings(searchFields);
+    this.setState(state => ({
+      listings,
+      errors: { ...state.errors, searchError: error },
+    }));
   };
 
   onInputChange = e => {
@@ -119,20 +74,13 @@ export default class SearchHosts extends Component {
   disabledStartDate = startDate => {
     const { searchFields } = this.state;
     const { endDate } = searchFields;
-    if (!endDate || !startDate) {
-      return startDate && startDate < moment().subtract(1, 'day');
-    }
-    return startDate.valueOf() > endDate.valueOf();
+    return disabledStartDate({ endDate, startDate });
   };
 
   disabledEndDate = endDate => {
     const { searchFields } = this.state;
     const { startDate } = searchFields;
-    if (!startDate) {
-      return endDate && endDate < moment().endOf('day');
-    }
-
-    return endDate.valueOf() <= startDate.valueOf();
+    return disabledEndDate({ endDate, startDate });
   };
 
   onDateInputChange = (field, value) => {
@@ -142,8 +90,7 @@ export default class SearchHosts extends Component {
   };
 
   onStartChange = value => {
-    const within7Days = value && value.isBefore(moment().add(7, 'days'));
-    const within14Days = value && value.isBefore(moment().add(14, 'days'));
+    const { within7Days, within14Days } = check7And14DaysBooking;
     //  show the modal
     this.setState(
       state => ({
@@ -158,19 +105,7 @@ export default class SearchHosts extends Component {
         this.onDateInputChange('startDate', value);
         if (within7Days) {
           // show warning modal
-          Modal.warning({
-            title: 'Sorry, it is too close to your requested stay ',
-            content: (
-              <>
-                Booking requests must be made at least 1 week before your
-                internship starts. If you do not have anywhere to stay for your
-                upcoming internship and it is urgent, please email PressPad at{' '}
-                <T.Link to="urgent@presspad.co.uk" color="lightBlue">
-                  urgent@presspad.co.uk
-                </T.Link>
-              </>
-            ),
-          });
+          show7DaysWarning();
         }
       },
     );
@@ -182,7 +117,7 @@ export default class SearchHosts extends Component {
 
   onSearchSubmit = e => {
     e.preventDefault();
-    const isValid = this.validateSearch();
+    const { isValid } = this.validateSearch();
     // if (isValid) {
     this.fetchListings();
     // }
@@ -190,63 +125,9 @@ export default class SearchHosts extends Component {
 
   validateSearch = () => {
     const { searchFields } = this.state;
-    const errors = {};
-    let searchIsValid = true;
-
-    if (
-      !searchFields.city &&
-      !searchFields.startDate &&
-      !searchFields.endDate
-    ) {
-      searchIsValid = false;
-      errors.searchError =
-        '* You must fill in at least one input before searching';
-    }
-
-    if (searchFields.startDate) {
-      if (!searchFields.endDate) {
-        searchIsValid = false;
-        errors.searchError = '* You must enter both a start and end date';
-      }
-    }
-
-    if (searchFields.endDate) {
-      if (!searchFields.startDate) {
-        searchIsValid = false;
-        errors.searchError = '* You must enter both a start and end date';
-      }
-    }
-
-    this.setState({
-      errors,
-    });
-
+    const { searchIsValid, errors } = validateSearch({ ...searchFields });
+    this.setState({ errors });
     return searchIsValid;
-  };
-
-  // checks if lisitng image exists and goes to right folder
-  getListingPic = pics => {
-    if (!pics || !pics.length) return placeholder;
-    return pics.find(pic => !pic.isPrivate).url || placeholder;
-  };
-
-  showStartDate = dates => {
-    if (dates.length > 0) {
-      const sortedDates = dates.sort((a, b) => b.startDate - a.startDate);
-
-      return moment(sortedDates[0].startDate).format('Do MMM YYYY');
-    }
-    return moment(dates).format('Do MMM YYYY');
-  };
-
-  showEndDate = dates => {
-    if (dates.length > 0) {
-      const sortedDates = dates.sort((a, b) => b.endDate - a.endDate);
-      return moment(sortedDates[sortedDates.length - 1].endDate).format(
-        'Do MMM YYYY',
-      );
-    }
-    return moment(dates).format('Do MMM YYYY');
   };
 
   render() {
@@ -258,7 +139,6 @@ export default class SearchHosts extends Component {
       acceptAutomaticallyDisabled,
       within7Days,
     } = this.state;
-    const { isLoggedIn } = this.props;
     const { startDate, endDate, acceptAutomatically } = searchFields;
     const { searchError } = errors;
 
@@ -286,155 +166,6 @@ export default class SearchHosts extends Component {
         ) : (
           <NoResults within7Days={within7Days} />
         )}
-        {/* <Header>
-          <HeaderTitle>Hosts offering a PressPad</HeaderTitle>
-          <HeaderText>
-            You can search for hosts by filling in the city and dates
-            you&apos;re looking for, as well as any interests you might have so
-            we can find the perfect match for you.
-          </HeaderText>
-        </Header>
-        <SearchForm>
-          <SearchInputDiv order={0}>
-            <SearchLabel htmlFor="city">City</SearchLabel>
-            <Select
-              showSearch
-              placeholder="Enter your city"
-              name="city"
-              id="city"
-              autoFocus
-              style={{ width: 150 }}
-              onSelect={this.onInputChange}
-            >
-              {cities.map(city => (
-                <Select.Option value={city} key={city}>
-                  {titleCase(city)}
-                </Select.Option>
-              ))}
-            </Select>
-          </SearchInputDiv>
-          <SearchInputDiv order={1}>
-            <SearchLabel htmlFor="startDate">Between</SearchLabel>
-            <DatePicker
-              name="startDate"
-              disabledDate={this.disabledStartDate}
-              id="startDate"
-              type="date"
-              style={{ width: 150 }}
-              value={startDate}
-              onChange={this.onStartChange}
-              format="YYYY-MM-DD"
-            />
-          </SearchInputDiv>
-          <SearchInputDiv order={2}>
-            <SearchLabel htmlFor="endDate">and</SearchLabel>
-            <DatePicker
-              name="endDate"
-              disabledDate={this.disabledEndDate}
-              id="endDate"
-              type="date"
-              value={endDate}
-              onChange={this.onEndChange}
-              format="YYYY-MM-DD"
-              style={{ width: 150 }}
-            />
-          </SearchInputDiv>
-          <SearchInputDiv order={3} disabled>
-            <SearchLabel htmlFor="interests">Interests</SearchLabel>
-            <Input
-              name="interests"
-              id="interests"
-              type="text"
-              style={{ width: 150 }}
-              onChange={this.onInputChange}
-            />
-          </SearchInputDiv>
-
-          <SearchButtonDiv>
-            {windowWidth < TABLET_WIDTH ? (
-              <Button
-                label="search"
-                type="primary"
-                onClick={this.onSearchSubmit}
-              />
-            ) : (
-              <SearchButton onClick={this.onSearchSubmit}>
-                <Icon icon="search" width="20px" />
-              </SearchButton>
-            )}
-          </SearchButtonDiv>
-        </SearchForm>
-        <ErrorMsg>{searchError}</ErrorMsg>
-        {listings && (
-          <ResultsWrapper>
-            <ResultsText>
-              Your search returned {listings.length}{' '}
-              {listings.length === 1 ? 'result' : 'results'}
-            </ResultsText>
-            {isLoggedIn ? (
-              <Hosts underThree={listings.length < 3}>
-                {listings.map(listing => (
-                  <HostResult
-                    key={listing._id}
-                    underThree={listings.length < 3}
-                    to={`${HOSTS_URL}/${listing.userID}`}
-                  >
-                    <HostHeader>
-                      <HostTitle>{listing.address.city}</HostTitle>
-                    </HostHeader>
-                    <HostImg src={this.getListingPic(listing.photos)} />
-                    <HostDates>
-                      {this.showStartDate(listing.availableDates)} -{' '}
-                      {this.showEndDate(listing.availableDates)}
-                    </HostDates>
-                    <HostLocation>
-                      {listing.address.city && <>{listing.address.city}, </>}
-                      {listing.address.postcode && (
-                        <>{listing.address.postcode}</>
-                      )}
-                    </HostLocation>
-                  </HostResult>
-                ))}
-              </Hosts>
-            ) : (
-              <>
-                <Hosts>
-                  {listings.slice(0, 3).map(listing => (
-                    <DisabledHostResult
-                      key={`${listing._id}2`}
-                      to={`${HOSTS_URL}/${listing.userID}`}
-                      isLoggedIn={isLoggedIn}
-                    >
-                      <HostHeader>
-                        <HostTitle>
-                          {listing.address.borough || listing.address.city}
-                        </HostTitle>
-                      </HostHeader>
-                      <HostImg src={this.getListingPic(listing.photos)} />
-                      <HostDates>
-                        {this.showStartDate(listing.availableDates)} -{' '}
-                        {this.showEndDate(listing.availableDates)}
-                      </HostDates>
-                      <HostLocation>
-                        {listing.address.borough && (
-                          <>{listing.address.borough}, </>
-                        )}
-                        {listing.address.city && <>{listing.address.city}, </>}
-                        {listing.address.postcode && (
-                          <>{listing.address.postcode}</>
-                        )}
-                      </HostLocation>
-                    </DisabledHostResult>
-                  ))}
-                </Hosts>
-                <SignUpPromo to={SIGNUP_INTERN}>
-                  Sign up now to view all properties, full property details and
-                  request to stay.
-                </SignUpPromo>
-              </>
-            )}
-          </ResultsWrapper>
-        )} */}
       </ContentWrapper>
     );
   }

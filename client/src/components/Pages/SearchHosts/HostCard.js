@@ -1,6 +1,8 @@
 import React from 'react';
 import { H6C, H7C } from '../../Common/Typography';
 
+import { HOSTS_URL } from '../../../constants/navRoutes';
+
 import {
   HostCardWrapper,
   CardImage,
@@ -9,8 +11,16 @@ import {
   CardCity,
 } from './style';
 
-const HostCard = ({ city, postcode, img, long, startDate, endDate }) => (
-  <HostCardWrapper>
+const HostCard = ({
+  city,
+  postcode,
+  img,
+  long,
+  startDate,
+  endDate,
+  hostId,
+}) => (
+  <HostCardWrapper to={`${HOSTS_URL}/${hostId}`}>
     <CardImage src={img} long={long} />
     <CardDetailsWrapper>
       <CardDetails>

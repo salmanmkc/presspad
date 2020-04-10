@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
 import { H4C } from '../../Common/Typography';
 
 export const HeroWrapper = styled.section`
@@ -74,8 +76,9 @@ export const HostCardsWrapper = styled.section`
   display: flex;
 `;
 
-export const HostCardWrapper = styled.div`
+export const HostCardWrapper = styled(Link)`
   margin: 0 auto;
+  display: block;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0px 4px 4px rgba(128, 109, 109, 0.1),
     0px -1px 4px rgba(128, 109, 109, 0.05);
