@@ -23,7 +23,7 @@ const HostInternInfo = ({ info, isLoading }) => {
               return null;
             }
             return (
-              <InfoLine>
+              <InfoLine key={key}>
                 <H7C color="lightGray">{key}</H7C>
                 <PSBold color="darkerGray">{info[key]}</PSBold>
               </InfoLine>

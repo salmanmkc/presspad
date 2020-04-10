@@ -1,8 +1,10 @@
 /* eslint-disable consistent-return */
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Row, Col, message, Spin } from 'antd';
+import moment from 'moment';
+import { message } from 'antd';
 import { Elements } from 'react-stripe-elements';
+
 import {
   getDiscountDays,
   calculatePrice,
@@ -10,49 +12,27 @@ import {
   getFirstUnpaidInstallment,
 } from '../helpers';
 
-import { titleCase } from '../../../../helpers';
+import { H4C, H5C, H6C } from '../../../Common/Typography';
 
-import randomProfile from '../../../../assets/random-profile.jpg';
-import DisabledPopOver from '../../../Common/DisabledPopOver';
-import ListingGallery from '../../../Common/Profile/ListingGallery';
-import {
-  Card,
-  Header,
-  ProfilePicDiv,
-  HeaderDiv,
-  Headline,
-  Address,
-  Symbol,
-  ParagraphHeadline,
-  Paragraph,
-  ShowMoreSection,
-} from '../../../Common/Profile/Profiles.style';
-import Reviews from '../../../Common/Reviews';
-import Checklist from '../Checklist';
-import PaymentsPlan from './PaymentsPlan';
-import BookingInfo from './BookingInfo';
+import BookingDates from '../BookingDates';
+import CancelBookingButton from '../CancelBookingButton';
+
 import PayNowModal from './PayNowModal';
+import { Wrapper, ContentWrapper } from './InternView.style';
+import {
+  WaitingContent,
+  AcceptedContent,
+  RejectedContent,
+  ConfirmedContent,
+  PaymentDueContent,
+  CompletedContent,
+} from './statusContents';
 
 import {
   API_COUPON_URL,
   API_HOST_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import { Error404, Error500 } from '../../../../constants/navRoutes';
-
-import {
-  PageWrapper,
-  SectionWrapperContent,
-  SectionTitle,
-  BlueLink,
-} from '../../../Common/general';
-
-import {
-  AboutSectionDataContainer,
-  AboutSectionDataRow,
-  AboutSectionDataCell,
-} from '../../InternProfile/HostView/HostView.style';
-
-import starSign from '../../../../assets/star-sign-symbol.svg';
 
 export default class BookingView extends Component {
   state = {
@@ -211,10 +191,15 @@ export default class BookingView extends Component {
 
   render() {
     const { bookingInfo, role } = this.props;
-    const { _id: bookingId, installments, coupons } = bookingInfo;
+    const { installments, host } = bookingInfo;
 
-    const name = bookingInfo.host && bookingInfo.host.name;
-    const hostId = bookingInfo.host && bookingInfo.host._id;
+    const hostRespondingTime =
+      bookingInfo.host &&
+      Math.ceil(
+        bookingInfo.host.respondingTime /
+          bookingInfo.host.respondedRequests /
+          (24 * 60 * 60 * 1000),
+      );
 
     const {
       isLoading,
@@ -225,20 +210,19 @@ export default class BookingView extends Component {
       upfront,
     } = this.state;
 
-    const {
-      photos,
-      address: { city, postcode, addressline1, addressline2 } = {},
-    } = listing;
-    const {
-      profileImage,
-      badge,
-      bio,
-      organisation,
-      jobTitle,
+    const { photos } = listing;
+    const { interests, phoneNumber, school, hometown, gender } = profile;
+
+    const hostInfo = {
+      name: host.name,
+      email: host.email,
+      phoneNumber,
+      gender,
       school,
       hometown,
-      gender,
-    } = profile;
+      areaOfInterest: interests,
+      role,
+    };
 
     const listingPhotos = {};
     if (photos[0]) {
@@ -253,7 +237,7 @@ export default class BookingView extends Component {
     }
 
     let newInstallments = [];
-    const { price, startDate, endDate } = bookingInfo;
+    const { price, startDate, endDate, status, rejectReason } = bookingInfo;
     const { couponDiscount } = couponInfo;
     const netAmount = price - couponDiscount;
     if (!installments[0]) {
@@ -269,9 +253,90 @@ export default class BookingView extends Component {
       ? firstUnpaidInstallment
       : newInstallments;
 
-    if (isLoading) return <Spin />;
+    const bookingStatuses = {
+      awaitingAdmin: {
+        status: 'awaiting host response',
+        statusContentsComponent: () => (
+          <WaitingContent hostRespondingTime={hostRespondingTime} />
+        ),
+      },
+      pending: {
+        status: 'awaiting host response',
+        statusContentsComponent: () => (
+          <WaitingContent hostRespondingTime={hostRespondingTime} />
+        ),
+      },
+      canceled: {
+        status: 'rejected',
+        statusColor: 'pink',
+        statusContentsComponent: () => (
+          <RejectedContent rejectReason={rejectReason} />
+        ),
+      },
+      completed: {
+        status: 'complete',
+        statusContentsComponent: () => (
+          <CompletedContent hostId={host._id} hostName={host.name} />
+        ),
+      },
+    };
+
+    if (installments[0]) {
+      if (
+        firstUnpaidInstallment &&
+        moment().isSame(firstUnpaidInstallment.dueDate, 'day')
+      ) {
+        bookingStatuses.confirmed = {
+          status: 'payment due',
+          statusContentsComponent: () => (
+            <PaymentDueContent
+              hostInfo={hostInfo}
+              isLoading={isLoading}
+              userRole={role}
+              handlePayNowClick={this.handlePayNowClick}
+              handleCouponChange={this.handleCouponChange}
+              paymentInfo={paymentInfo}
+              price={price}
+              startDate={startDate}
+              endDate={endDate}
+              couponInfo={couponInfo}
+            />
+          ),
+        };
+      } else {
+        bookingStatuses.confirmed = {
+          status: 'confirmed',
+          statusContentsComponent: () => (
+            <ConfirmedContent
+              hostInfo={hostInfo}
+              isLoading={isLoading}
+              userRole={role}
+            />
+          ),
+        };
+      }
+    } else {
+      bookingStatuses.confirmed = {
+        status: 'accepted',
+        statusContentsComponent: () => (
+          <AcceptedContent
+            handlePayNowClick={this.handlePayNowClick}
+            handleCouponChange={this.handleCouponChange}
+            paymentInfo={paymentInfo}
+            price={price}
+            startDate={startDate}
+            endDate={endDate}
+            couponInfo={couponInfo}
+          />
+        ),
+      };
+    }
+
+    const bookingStatus = bookingStatuses[status];
+
     return (
-      <PageWrapper>
+      <Wrapper>
+        {/* PayNowModal should be wrapped in an Elements component in order to stripe api to work */}
         <Elements>
           <PayNowModal
             couponInfo={
@@ -283,141 +348,28 @@ export default class BookingView extends Component {
             handlePayNowClick={this.handlePayNowClick}
           />
         </Elements>
-        <Header justifyContent="space-between">
-          <div style={{ display: 'flex', width: '80%' }}>
-            <ProfilePicDiv
-              src={(profileImage && profileImage.url) || randomProfile}
-              defaultPic={randomProfile}
-              adminView={bookingInfo.status === 'confirmed'}
-            />
-            <HeaderDiv>
-              <Headline>
-                {name}
-                <span>
-                  {(jobTitle || organisation) &&
-                    ` (${jobTitle ? `A ${jobTitle}` : ''} ${
-                      organisation ? `at ${organisation}` : ''
-                    })`}
-                </span>
-              </Headline>
-              {city} {postcode}
-            </HeaderDiv>
-          </div>
-          {badge && <Symbol src={starSign} />}
-        </Header>
-        <ListingGallery {...listingPhotos} isLoading={isLoading} />
-        <Row gutter={24} style={{ marginRight: 0 }}>
-          {/* ToDo add loading skeleton */}
-          <Col lg={16} md={14} sm={24}>
-            <section>
-              <SectionWrapperContent style={{ minHeight: 200 }}>
-                <SectionTitle>About me</SectionTitle>
-                <ParagraphHeadline>
-                  {jobTitle} - {organisation}
-                </ParagraphHeadline>
-                <Paragraph>{bio}</Paragraph>
-                <AboutSectionDataContainer>
-                  {!!name && (
-                    <AboutSectionDataRow>
-                      <AboutSectionDataCell bold>Name:</AboutSectionDataCell>
-                      <AboutSectionDataCell>{name}</AboutSectionDataCell>
-                    </AboutSectionDataRow>
-                  )}
-
-                  <Address>
-                    <div style={{ display: 'flex', marginTop: '0.5rem' }}>
-                      <AboutSectionDataCell bold>Address:</AboutSectionDataCell>
-                      <div style={{ display: 'inline-block' }}>
-                        <AboutSectionDataCell>
-                          {titleCase(addressline1)}
-                        </AboutSectionDataCell>
-                        {addressline2 && (
-                          <AboutSectionDataCell>
-                            {titleCase(addressline2)}
-                          </AboutSectionDataCell>
-                        )}
-                        <AboutSectionDataCell>
-                          {titleCase(city)}
-                        </AboutSectionDataCell>
-                        <AboutSectionDataCell>{postcode}</AboutSectionDataCell>
-                      </div>
-                    </div>
-                  </Address>
-
-                  {!!school && (
-                    <AboutSectionDataRow>
-                      <AboutSectionDataCell bold>
-                        University / School:
-                      </AboutSectionDataCell>
-                      <AboutSectionDataCell>{school}</AboutSectionDataCell>
-                    </AboutSectionDataRow>
-                  )}
-                  {!!hometown && (
-                    <AboutSectionDataRow>
-                      <AboutSectionDataCell bold>
-                        Hometown:
-                      </AboutSectionDataCell>
-                      <AboutSectionDataCell>{hometown}</AboutSectionDataCell>
-                    </AboutSectionDataRow>
-                  )}
-                  {!!gender && (
-                    <AboutSectionDataRow>
-                      <AboutSectionDataCell bold>Gender:</AboutSectionDataCell>
-                      <AboutSectionDataCell>{gender}</AboutSectionDataCell>
-                    </AboutSectionDataRow>
-                  )}
-                </AboutSectionDataContainer>
-              </SectionWrapperContent>
-              <ShowMoreSection type="flex" style={{ marginBottom: '2rem' }}>
-                <BlueLink to={`/hosts/${hostId}`}>Show other Info</BlueLink>
-                <DisabledPopOver>
-                  <BlueLink to="#">Show PressPad offer</BlueLink>
-                </DisabledPopOver>
-                <DisabledPopOver>
-                  <BlueLink to="#">Show Reviews</BlueLink>
-                </DisabledPopOver>
-              </ShowMoreSection>
-            </section>
-            {bookingInfo.status === 'confirmed' ? (
-              <>
-                <Checklist bookingInfo={bookingInfo} userRole="intern" />
-                <PaymentsPlan
-                  handlePaymentMethod={this.handlePaymentMethod}
-                  handlePayNowClick={this.handlePayNowClick}
-                  handleNewInstallments={this.handleNewInstallments}
-                  handleCouponChange={this.handleCouponChange}
-                  data={{
-                    installments,
-                    newInstallments,
-                    isLoading,
-                    ...bookingInfo,
-                    couponInfo,
-                  }}
-                  role={role}
-                />
-              </>
-            ) : null}
-          </Col>
-          <Col lg={8} md={10} sm={24}>
-            <BookingInfo
-              isLoading={isLoading}
-              handlePayNowClick={this.handlePayNowClick}
-              data={{
-                bookingId,
-                ...bookingInfo,
-                installments,
-                firstUnpaidInstallment,
-                coupons,
-                couponDiscount: couponInfo.couponDiscount,
-              }}
-              role={role}
-            />
-          </Col>
-        </Row>
-        <Card>
-          <Reviews userId={hostId} name={name} userRole="host" />
-        </Card>
-      </PageWrapper>
+        <ContentWrapper>
+          <H4C mb="5">booking request</H4C>
+          <H6C mb="2" color="lightGray">
+            status
+          </H6C>
+          <H5C color={bookingStatus.statusColor || 'blue'}>
+            {bookingStatus.status}
+          </H5C>
+          {bookingStatus.statusContentsComponent()}
+        </ContentWrapper>
+        {status !== 'canceled' && status !== 'completed' && (
+          <CancelBookingButton onClick={() => console.log('cancle booking')}>
+            cancel booking request
+          </CancelBookingButton>
+        )}
+        <BookingDates
+          price={price / 100}
+          startDate={startDate}
+          endDate={endDate}
+          intern
+        />
+      </Wrapper>
     );
   }
 }
