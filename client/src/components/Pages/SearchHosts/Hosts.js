@@ -46,7 +46,7 @@ const MasonryLayout = withWindowWidth(({ children, windowWidth }) => {
   return result;
 });
 
-const Hosts = ({ listings }) => (
+const Hosts = ({ listings, startDate, endDate }) => (
   <HostsSection>
     <T.H3C>available hosts </T.H3C>
     <HostCardsWrapper>
@@ -61,6 +61,8 @@ const Hosts = ({ listings }) => (
             hostId={listing.userID}
             long={i % 2}
             key={listing._id}
+            selectedStartDate={startDate}
+            selectedEndDate={endDate}
           />
         ))}
       </MasonryLayout>

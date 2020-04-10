@@ -19,8 +19,15 @@ const HostCard = ({
   startDate,
   endDate,
   hostId,
+  selectedStartDate,
+  selectedEndDate,
 }) => (
-  <HostCardWrapper to={`${HOSTS_URL}/${hostId}`}>
+  <HostCardWrapper
+    to={{
+      pathname: `${HOSTS_URL}/${hostId}`,
+      state: { selectedStartDate, selectedEndDate },
+    }}
+  >
     <CardImage src={img} long={long} />
     <CardDetailsWrapper>
       <CardDetails>

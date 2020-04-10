@@ -171,7 +171,11 @@ export default class SearchHosts extends Component {
         <Hero formProps={formProps} />
         {listings.length > 0 && !within7Days ? (
           <>
-            <Hosts listings={listings} />
+            <Hosts
+              listings={listings}
+              startDate={startDate}
+              endDate={endDate}
+            />
           </>
         ) : (
           <>
