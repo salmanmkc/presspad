@@ -12,7 +12,6 @@ const {
 module.exports = async (req, res, next) => {
   try {
     const { city, startDate, endDate, acceptAutomatically } = req.body;
-
     const listings = await searchProfiles({
       city,
       startDate,

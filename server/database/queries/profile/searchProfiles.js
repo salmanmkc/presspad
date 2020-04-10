@@ -16,13 +16,39 @@ module.exports.searchProfiles = ({
 
   const startDateFilter = startDate
     ? {
-        $lte: ['$$availableDate.startDate', new Date(startDate)],
+        $lte: [
+          {
+            $dateToString: {
+              date: '$$availableDate.startDate',
+              format: '%Y-%m-%d', // just compare between dates without time
+            },
+          },
+          {
+            $dateToString: {
+              date: new Date(startDate),
+              format: '%Y-%m-%d',
+            },
+          },
+        ],
       }
     : true;
 
   const endDateFilter = endDate
     ? {
-        $gte: ['$$availableDate.endDate', new Date(endDate)],
+        $gte: [
+          {
+            $dateToString: {
+              date: '$$availableDate.endDate',
+              format: '%Y-%m-%d',
+            },
+          },
+          {
+            $dateToString: {
+              date: new Date(endDate),
+              format: '%Y-%m-%d',
+            },
+          },
+        ],
       }
     : true;
 
@@ -45,7 +71,6 @@ module.exports.searchProfiles = ({
     {
       $match: {
         ...acceptAutomaticallyMatch,
-        // get any listings that match the city
         'availableDates.endDate': { $gte: new Date() },
       },
     },
