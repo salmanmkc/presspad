@@ -23,16 +23,11 @@ import {
 import {
   CalendarWrapper,
   BookingRequestDetails,
-  PriceHeadline,
-  PriceLabel,
-  RequestBtn,
   ErrorDiv,
-  PriceTopDiv,
   Row,
   Col,
   BursaryContainer,
   PopoverContentContainer,
-  TextAndPopover,
   RequestBtnContainer,
   CodeInput,
 } from './Calendar.style';
@@ -248,7 +243,7 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  renderBookingDetails = isMobile => (
+  renderBookingDetails = (isMobile, price, duration) => (
     <>
       <Row>
         <Col>
@@ -259,7 +254,11 @@ class CalendarComponent extends Component {
           )}
         </Col>
         <Col value>
-          {isMobile ? <T.PSBold>21 days</T.PSBold> : <T.H4>21 days</T.H4>}
+          {isMobile ? (
+            <T.PSBold>{duration} days</T.PSBold>
+          ) : (
+            <T.H4>{duration} days</T.H4>
+          )}
         </Col>
       </Row>
       <Row>
@@ -271,7 +270,7 @@ class CalendarComponent extends Component {
           )}
         </Col>
         <Col value>
-          {isMobile ? <T.PSBold>21£</T.PSBold> : <T.H4>21£</T.H4>}
+          {isMobile ? <T.PSBold>{price}£</T.PSBold> : <T.H4>{price}£</T.H4>}
         </Col>
       </Row>
       <Row>
@@ -336,10 +335,13 @@ class CalendarComponent extends Component {
       messageType,
       isLoading,
       isBooking,
-      bursary,
+      dates,
     } = this.state;
 
     const { currentUserId, adminView, role, isMobile } = this.props;
+
+    const days =
+      dates.length > 1 && createDatesArray(dates[0], dates[1]).length;
 
     if (isLoading) return <Spin tip="Loading Profile" />;
 
@@ -365,9 +367,9 @@ class CalendarComponent extends Component {
         {/* Booking details */}
         {role === 'intern' && (
           <BookingRequestDetails>
-            {this.renderBookingDetails(isMobile)}
+            {this.renderBookingDetails(isMobile, price, days)}
             {/* Bursary checkbox */}
-            {currentUserId && this.renderBursaryCheckbox(isMobile)}
+            {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
             {/* Average Response Time */}
             <T.P>
@@ -382,11 +384,11 @@ class CalendarComponent extends Component {
             <RequestBtnContainer>
               {isMobile ? (
                 <T.PS>
-                  Price for period <br /> <strong>140£</strong>
+                  Price for period <br /> <strong>{price}£</strong>
                 </T.PS>
               ) : (
                 <T.PL>
-                  Price for period <br /> <strong>140£</strong>
+                  Price for period <br /> <strong>{price}£</strong>
                 </T.PL>
               )}
               <Button
