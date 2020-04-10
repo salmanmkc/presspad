@@ -4,6 +4,7 @@ import * as T from '../../Common/Typography';
 import { Select, DatePicker, Switch } from '../../Common/AntdWrappers';
 import Button from '../../Common/ButtonNew';
 import { titleCase, newId } from '../../../helpers';
+import { dateRender } from './utils';
 
 const Form = ({
   formProps: {
@@ -63,36 +64,7 @@ const Form = ({
           disabledDate={disabledStartDate}
           value={startDate}
           onChange={onStartChange}
-          dateRender={current => {
-            const style = {};
-
-            if (
-              endDate &&
-              startDate &&
-              current.isSameOrBefore(endDate, 'day') &&
-              current.isSameOrAfter(startDate, 'day')
-            ) {
-              return (
-                <div
-                  className="ant-picker-cell ant-picker-cell-in-view ant-picker-cell-in-range"
-                  style={style}
-                >
-                  {current.date()}
-                </div>
-              );
-            }
-
-            if (endDate && current.isSame(endDate, 'day')) {
-              style.borderRadius = '50%';
-              style.border = '1px solid';
-            }
-
-            return (
-              <div className="ant-picker-cell-inner" style={style}>
-                {current.date()}
-              </div>
-            );
-          }}
+          dateRender={current => dateRender({ current, startDate, endDate })}
         />
       </SubRow>
       <SubRow>
@@ -106,36 +78,7 @@ const Form = ({
           value={endDate}
           onChange={onEndChange}
           disabled={within7Days}
-          dateRender={current => {
-            const style = {};
-
-            if (
-              endDate &&
-              startDate &&
-              current.isSameOrBefore(endDate, 'day') &&
-              current.isSameOrAfter(startDate, 'day')
-            ) {
-              return (
-                <div
-                  className="ant-picker-cell ant-picker-cell-in-view ant-picker-cell-in-range"
-                  style={style}
-                >
-                  {current.date()}
-                </div>
-              );
-            }
-
-            if (endDate && current.isSame(endDate, 'day')) {
-              style.borderRadius = '50%';
-              style.border = '1px solid';
-            }
-
-            return (
-              <div className="ant-picker-cell-inner" style={style}>
-                {current.date()}
-              </div>
-            );
-          }}
+          dateRender={current => dateRender({ current, startDate, endDate })}
         />
       </SubRow>
     </Row>
