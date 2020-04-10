@@ -29,6 +29,7 @@ export const CalendarWrapper = styled.div.attrs(classNames)`
     max-width: 100%;
     font-family: Glacial Indifference;
     line-height: 1.125em;
+    font-size: 1.2rem;
     *,
     *:before,
     *:after {
@@ -146,11 +147,12 @@ export const CalendarWrapper = styled.div.attrs(classNames)`
 `;
 
 export const BookingRequestDetails = styled.div`
-  padding-top: 1.5rem;
+  margin-top: 5rem;
 
-  @media (max-width: ${size.mobileM}) {
+  @media (max-width: ${size.mobileL}) {
     height: auto;
     padding-bottom: 1rem;
+    margin-top: 2rem;
   }
 `;
 
@@ -159,6 +161,7 @@ export const BursaryContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding-top: 1rem;
+  padding-bottom: 1.5rem;
 `;
 
 export const PopoverContentContainer = styled.div`
@@ -169,6 +172,21 @@ export const PopoverContentContainer = styled.div`
     padding-right: 1rem;
     line-height: 1.2;
   }
+`;
+
+export const RequestBtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+
+  @media (max-width: ${size.mobileL}) {
+    padding-bottom: 0;
+  }
+`;
+
+export const CodeInput = styled.input`
+  width: 300px;
 `;
 
 export const Row = styled.div`

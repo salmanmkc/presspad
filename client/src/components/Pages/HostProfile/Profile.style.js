@@ -25,8 +25,8 @@ export const SideWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: ${({ left }) => (left ? '55%' : '45%')};
-  margin-left: ${({ left }) => (left ? '0' : '20px')};
+  width: ${({ left }) => (left ? '58%' : '42%')};
+  margin-left: ${({ left }) => (left ? '0' : '2.5rem')};
 
   @media (max-width: 775.98px) {
     width: 100%;
@@ -52,7 +52,7 @@ export const WhyHereDiv = styled(Card)`
   display: flex;
   align-items: center;
   padding-top: 0;
-  // margin-left: 2.5rem;
+
   align-self: flex-start;
   width: 70%;
   background: ${colors.darkBlue};
@@ -215,7 +215,6 @@ export const SubImage = styled.div`
 
 export const CalendarCard = styled(Card)`
   box-shadow: none;
-  border: 1px solid blue;
 `;
 
 export const AvailableHosting = styled.div`

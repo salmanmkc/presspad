@@ -33,6 +33,8 @@ import {
   BursaryContainer,
   PopoverContentContainer,
   TextAndPopover,
+  RequestBtnContainer,
+  CodeInput,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -290,7 +292,7 @@ class CalendarComponent extends Component {
           </Popover>
         </Col>
         <Col value>
-          <input placeholder="type code ..." />
+          <CodeInput placeholder="type code ..." />
         </Col>
       </Row>
     </>
@@ -367,34 +369,40 @@ class CalendarComponent extends Component {
             {/* Bursary checkbox */}
             {currentUserId && this.renderBursaryCheckbox(isMobile)}
 
+            {/* Average Response Time */}
+            <T.P>
+              This host typically takes <strong>3 days</strong> to respond to a
+              booking request.
+            </T.P>
             {message && (
               <ErrorDiv>
                 <Alert message={message} type={messageType} />
               </ErrorDiv>
             )}
-
-            <Button
-              type="secondary"
-              onClick={this.handleClick}
-              disabled={
-                !isRangeSelected || bookingExists || adminView || isBooking
-              }
-            >
-              <Spin
-                spinning={isBooking}
-                indicator={
-                  <Icon
-                    icon="loading"
-                    style={{
-                      fontSize: 24,
-                      marginRight: '8px',
-                      color: 'white',
-                    }}
-                  />
+            <RequestBtnContainer>
+              <Button
+                type="secondary"
+                onClick={this.handleClick}
+                disabled={
+                  !isRangeSelected || bookingExists || adminView || isBooking
                 }
-              />
-              {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
-            </Button>
+              >
+                <Spin
+                  spinning={isBooking}
+                  indicator={
+                    <Icon
+                      icon="loading"
+                      style={{
+                        fontSize: 24,
+                        marginRight: '8px',
+                        color: 'white',
+                      }}
+                    />
+                  }
+                />
+                {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
+              </Button>
+            </RequestBtnContainer>
           </BookingRequestDetails>
         )}
       </>
