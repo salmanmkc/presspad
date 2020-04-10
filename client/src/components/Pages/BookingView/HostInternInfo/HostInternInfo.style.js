@@ -4,6 +4,14 @@ export const Wrapper = styled.div`
   margin-top: ${({ theme }) => theme.spacings[7]};
 `;
 
+export const BioWrapper = styled.div`
+  display: none;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    display: block;
+    margin-top: ${({ theme }) => theme.spacings[6]};
+  }
+`;
+
 export const InfoLine = styled.div`
   display: flex;
   margin-bottom: ${({ theme }) => theme.spacings[5]};

@@ -211,7 +211,7 @@ export default class BookingView extends Component {
     } = this.state;
 
     const { photos } = listing;
-    const { interests, phoneNumber, school, hometown, gender } = profile;
+    const { interests, phoneNumber, school, hometown, gender, bio } = profile;
 
     const hostInfo = {
       name: host.name,
@@ -222,6 +222,7 @@ export default class BookingView extends Component {
       hometown,
       areaOfInterest: interests,
       role,
+      bio,
     };
 
     const listingPhotos = {};

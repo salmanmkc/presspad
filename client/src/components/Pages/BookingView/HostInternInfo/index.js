@@ -1,11 +1,12 @@
 import React from 'react';
 import { Spin } from 'antd';
 
-import { H2, H7C, PSBold } from '../../../Common/Typography';
-import { Wrapper, InfoLine } from './HostInternInfo.style';
+import { H2, H3, H7C, PS, PSBold } from '../../../Common/Typography';
+import { Wrapper, InfoLine, BioWrapper } from './HostInternInfo.style';
 
 const HostInternInfo = ({ info, isLoading }) => {
   const { name, role } = info;
+
   return (
     <Wrapper>
       {isLoading ? (
@@ -19,7 +20,7 @@ const HostInternInfo = ({ info, isLoading }) => {
             {name}
           </H2>
           {Object.keys(info).map(key => {
-            if (key === 'role' || !info[key]) {
+            if (key === 'role' || key === 'bio' || !info[key]) {
               return null;
             }
             return (
@@ -29,6 +30,12 @@ const HostInternInfo = ({ info, isLoading }) => {
               </InfoLine>
             );
           })}
+          {info.bio && (
+            <BioWrapper>
+              <H3 color="darkerGray">Bio</H3>
+              <PS color="gray">{info.bio}</PS>
+            </BioWrapper>
+          )}
         </>
       )}
     </Wrapper>
