@@ -86,6 +86,7 @@ const internProfileSchema = Joi.object({
   }),
   DBSCheck: Joi.object({
     fileName: Joi.string().allow(''),
+    refNum: Joi.string().allow(''),
     isPrivate: Joi.boolean().default(true),
   }),
   sexualOrientation: Joi.string().allow(''),

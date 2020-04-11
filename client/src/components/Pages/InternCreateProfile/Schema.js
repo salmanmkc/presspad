@@ -92,6 +92,7 @@ export const detailsSchema = object({
   }),
   DBSCheck: object({
     fileName: string().ensure(),
+    refNum: string().ensure(),
     isPrivate: boolean().default(true),
   }),
   sexualOrientation: lazy(optionalWordLengthValidator(250)),

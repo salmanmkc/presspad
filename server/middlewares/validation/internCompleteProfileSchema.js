@@ -59,6 +59,7 @@ const internCompleteProfileSchema = Joi.object({
   }),
   DBSCheck: Joi.object({
     fileName: Joi.string().required(),
+    refNum: Joi.string().required(),
     isPrivate: Joi.boolean().default(true),
   }),
 

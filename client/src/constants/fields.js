@@ -227,9 +227,9 @@ export default {
     type: 'text',
     max: 50,
   },
-  DBSCheck: {
+  DBSCheckCert: {
     type: 'file',
-    label: 'DBS check',
+    label: 'DBS certificate',
     hint: (
       <span>
         If you have not completed a DBS check, please{' '}
@@ -245,6 +245,13 @@ export default {
     ),
     parent: 'DBSCheck',
     name: 'fileName',
+    isPrivate: true,
+  },
+  DBSCheckNum: {
+    type: 'text',
+    label: 'DBS number',
+    parent: 'DBSCheck',
+    name: 'refNum',
     isPrivate: true,
   },
   sexualOrientation: {

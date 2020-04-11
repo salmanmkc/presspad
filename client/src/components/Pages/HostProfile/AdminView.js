@@ -99,6 +99,7 @@ export default class AdminView extends Component {
       },
       DBSCheck: {
         fileName: null,
+        refNum: null,
         isPrivate: true,
       },
       pressCard: {

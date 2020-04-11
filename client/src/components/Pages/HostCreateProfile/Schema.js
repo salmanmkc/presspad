@@ -94,6 +94,7 @@ export const detailsSchema = object({
   }),
   DBSCheck: object({
     fileName: string(),
+    refNum: string(),
     isPrivate: boolean().default(true),
   }),
   // options
