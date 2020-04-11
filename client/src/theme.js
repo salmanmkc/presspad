@@ -156,6 +156,11 @@ const spacings = {
     top: '80px',
     bottom: '80px',
   },
+  rightDivWidth: '500px',
+  rightDivLayout: {
+    top: '80px',
+    bottom: '80px',
+  },
   outerMargin: '100px',
   innerMargin: '140px',
 };
