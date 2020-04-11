@@ -230,19 +230,19 @@ export default {
   DBSCheckCert: {
     type: 'file',
     label: 'DBS certificate',
-    hint: (
-      <span>
-        If you have not completed a DBS check, please{' '}
-        <a
-          href="https://www.gov.uk/request-copy-criminal-record"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          click here
-        </a>{' '}
-        to do this first then upload your certificate
-      </span>
-    ),
+    // hint: (
+    //   <span>
+    //     If you have not completed a DBS check, please{' '}
+    //     <a
+    //       href="https://www.gov.uk/request-copy-criminal-record"
+    //       target="_blank"
+    //       rel="noopener noreferrer"
+    //     >
+    //       click here
+    //     </a>{' '}
+    //     to do this first then upload your certificate
+    //   </span>
+    // ),
     parent: 'DBSCheck',
     name: 'fileName',
     isPrivate: true,

@@ -140,28 +140,6 @@ const OtherInformationDetails = ({
             />
           </Col>
         </Row>
-
-        <Row gutter={25}>
-          <Col xs={24} sm={12}>
-            <Field
-              {...fields['DBSCheckCert']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-        </Row>
-        <Row gutter={25}>
-          <Col xs={24} sm={12}>
-            {console.log('fields', { fields })}
-            <Field
-              {...fields['DBSCheckNum']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-        </Row>
       </SectionContent>
     </SectionWrapper>
   );

@@ -4,6 +4,9 @@ import {
   SectionWrapper,
   SectionContent,
   Description,
+  HelperText,
+  SmallTitle,
+  StyledLink,
 } from '../ProfileComponents.style';
 
 import Title from '../Title';
@@ -68,6 +71,38 @@ const AboutYouDetails = ({
               {...fields['phoneNumber']}
               value={data['phoneNumber']}
               error={errors['phoneNumber']}
+              {...props}
+            />
+          </Col>
+        </Row>
+        <SmallTitle>DSB Check</SmallTitle>
+        <HelperText>
+          Please enter your DBS reference number and upload a photo of your DBS
+          certificate.
+          <br />
+          <span style={{ fontWeight: 'bold' }}>
+            If you have not completed a DBS check, please{' '}
+            <StyledLink to="/" target="_blank">
+              click here
+            </StyledLink>{' '}
+            and we will help you complete one for free
+          </span>
+        </HelperText>
+        <Row gutter={25}>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['DBSCheckCert']}
+              value={data['DBSCheck']}
+              error={errors['DBSCheck']}
+              {...props}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            {console.log('fields', { fields })}
+            <Field
+              {...fields['DBSCheckNum']}
+              value={data['DBSCheck']}
+              error={errors['DBSCheck']}
               {...props}
             />
           </Col>

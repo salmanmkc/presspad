@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { colors, size } from '../../../theme';
 
 export const SectionWrapper = styled.div``;
@@ -130,4 +131,26 @@ export const RequiredSpan = styled.span`
   font-size: 14px;
   margin-left: 0.5rem;
   color: red;
+`;
+
+export const SmallTitle = styled.p`
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: bold;
+  color: #393939;
+  max-width: 550px;
+  margin-top: 1rem;
+  margin-bottom: 0;
+`;
+
+export const HelperText = styled.p`
+  font-family: Roboto;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.gray}
+  max-width: 550px;
+  margin-bottom: 1rem;
+`;
+
+export const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.lightBlue};
 `;
