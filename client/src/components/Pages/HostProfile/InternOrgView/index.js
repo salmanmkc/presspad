@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
-import { Spin, message } from 'antd';
-import axios from 'axios';
+import { Spin } from 'antd';
 
-import {
-  API_VERIFY_PROFILE_URL,
-  API_GET_USER_BOOKINGS_URL,
-} from '../../../../constants/apiRoutes';
-
-import { HOST_COMPLETE_PROFILE_URL } from '../../../../constants/navRoutes';
 import Reviews from '../../../Common/Reviews';
 import ListingGallery from '../../../Common/Profile/ListingGallery';
 
@@ -42,6 +35,9 @@ import types from '../../../../constants/types';
 //  helpers
 import { titleCase, truncatePostcode } from '../../../../helpers';
 
+// utils
+import { getUserBookings, getHostProfile } from './utils';
+
 //  individual styles to overwrite components
 const tableFonts = { fontSize: '18px', lineHeight: '1.2' };
 
@@ -54,63 +50,28 @@ export default class InternView extends Component {
     showFullData: false,
   };
 
-  componentDidMount() {
-    const { role } = this.props;
+  async componentDidMount() {
+    const { role, id } = this.props;
 
-    this.getHostProfile();
-    if (role !== 'admin') {
-      axios
-        .get(API_GET_USER_BOOKINGS_URL.replace(':id', this.props.id))
-        .then(result => this.setState({ internBookings: result.data }))
-        .catch(err => message.error(err || 'Something went wrong'));
-    }
-  }
+    const { profileData, error: getHostProfileError } = await getHostProfile(
+      this.props,
+    );
 
-  getHostProfile = () => {
-    const { match, history, role } = this.props;
-    let hostId = match.params.id;
-    if (!hostId && match.path === '/my-profile') {
-      hostId = this.props.id;
-    }
-
-    axios
-      .get(`/api/host/${hostId}`)
-      .then(({ data }) => {
-        if (data.profile) {
-          this.setState({
-            isLoading: false,
-            profileData: data,
-            showFullData: data.showFullData,
-          });
-        }
-      })
-      .catch(err => {
-        const error =
-          err.response && err.response.data && err.response.data.error;
-        if (
-          error === 'User has no profile' &&
-          ['host', 'superhost'].includes(role)
-        ) {
-          message
-            .info(
-              <p>
-                You don&apos;t have profile
-                <br /> You will be redirected to complete your profile
-              </p>,
-              1,
-            )
-            .then(() => history.push(HOST_COMPLETE_PROFILE_URL));
-        } else {
-          message.error(error || 'Something went wrong');
-        }
+    if (!getHostProfileError) {
+      this.setState({
+        isLoading: false,
+        profileData,
+        showFullData: profileData.showFullData,
       });
-  };
+    }
 
-  verifyProfile = (profileId, bool) => {
-    axios
-      .post(API_VERIFY_PROFILE_URL, { profileId, verify: bool })
-      .catch(err => message.error(err || 'Something went wrong'));
-  };
+    const {
+      internBookings,
+      error: getInternBookingsError,
+    } = await getUserBookings(role, id);
+
+    if (!getInternBookingsError) this.setState({ internBookings });
+  }
 
   toggleDateSection = () => {
     const { expandDateSection } = this.state;
@@ -190,7 +151,7 @@ export default class InternView extends Component {
     const calendarData = {
       calendarBookingDetails,
       calendarFunctions: {
-        getHostProfile: this.getHostProfile,
+        getHostProfile,
         toggleDateSection: this.toggleDateSection,
       },
       stateProps: { expandDateSection },
