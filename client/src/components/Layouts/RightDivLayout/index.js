@@ -9,6 +9,7 @@ const RightDivLayout = ({
   sideContent,
   isLoggedIn,
   navbarProps,
+  renderSide,
 }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
 
@@ -17,7 +18,7 @@ const RightDivLayout = ({
       <S.ContentWrapper>
         <S.Content>{mainContent}</S.Content>
       </S.ContentWrapper>
-      <S.SideBar>{sideContent}</S.SideBar>
+      {(renderSide || largerThanTablet) && <S.SideBar>{sideContent}</S.SideBar>}
     </S.Wrapper>
   );
 };

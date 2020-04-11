@@ -20,11 +20,29 @@ const sideContent = (
   </div>
 );
 
-export const Main = () => (
+export const HideSidebarWhenMobile = () => (
+  <RightDivLayout
+    isLoggedIn
+    navbarProps={navbarProps}
+    mainContent={mainContent}
+  />
+);
+
+export const ShowTextButHideSidebarWhenMobile = () => (
   <RightDivLayout
     isLoggedIn
     navbarProps={navbarProps}
     mainContent={mainContent}
     sideContent={sideContent}
+  />
+);
+
+export const ShowSideBarWhenMobile = () => (
+  <RightDivLayout
+    isLoggedIn
+    navbarProps={navbarProps}
+    mainContent={mainContent}
+    sideContent={sideContent}
+    renderSide
   />
 );
