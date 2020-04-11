@@ -7,15 +7,13 @@ import Icon from '../../../Common/Icon';
 
 import HostInternInfo from '../HostInternInfo';
 import TipsCard from '../TipsCard';
+import LeaveReview from '../LeaveReview';
 
 import MakePayment from './MakePayment';
 import ReportProblem from './ReportProblem';
 import { WarningWrapper, TipsWrapper, ProfileLink } from './InternView.style';
 
 import { HOST_PROFILE, HOSTS_URL } from '../../../../constants/navRoutes';
-
-// import Reviews from '../../../Common/Reviews';
-// import { Card } from '../../../Common/Profile/Profiles.style';
 
 const ViewProfile = ({ hostId }) => {
   const history = useHistory();
@@ -162,7 +160,7 @@ const PaymentDueContent = ({
   </>
 );
 
-const CompletedContent = ({ hostId, hostName }) => (
+const CompletedContent = ({ hostId, hostName, reviews, bookingId, userId }) => (
   <>
     <P mt="5" mb="1">
       Your stay with{' '}
@@ -171,13 +169,13 @@ const CompletedContent = ({ hostId, hostName }) => (
       </ProfileLink>{' '}
       is now complete. We hope you enjoyed your stay.
     </P>
-    <div>
-      Leave a review component should go here. also if inter already given a
-      review?
-      {/* <Card>
-          <Reviews userId={hostId} name={name} userRole="host" />
-        </Card> */}
-    </div>
+    <LeaveReview
+      reviews={reviews}
+      userId={userId}
+      toId={hostId}
+      toName={hostName}
+      bookingId={bookingId}
+    />
   </>
 );
 

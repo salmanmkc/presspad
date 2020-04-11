@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import { Elements } from 'react-stripe-elements';
 
 import {
@@ -36,12 +36,8 @@ import { Error404, Error500 } from '../../../../constants/navRoutes';
 
 export default class BookingView extends Component {
   state = {
-    listing: {
-      userProfile: { organisation: '', profileImage: {} },
-      photos: [],
-    },
     profile: {},
-    // reviews: [],
+    reviews: [],
     couponInfo: {
       couponCode: '',
       discountDays: 0,
@@ -187,10 +183,10 @@ export default class BookingView extends Component {
 
   handlePayNowClick = payNow => this.setState({ payNow });
 
-  handlePaymentMethod = upfront => this.setState({ upfront });
+  // handlePaymentMethod = upfront => this.setState({ upfront });
 
   render() {
-    const { bookingInfo, role } = this.props;
+    const { bookingInfo, role, id } = this.props;
     const { installments, host } = bookingInfo;
 
     const hostRespondingTime =
@@ -203,14 +199,13 @@ export default class BookingView extends Component {
 
     const {
       isLoading,
-      listing,
       profile,
       couponInfo,
       payNow,
       upfront,
+      reviews,
     } = this.state;
 
-    const { photos } = listing;
     const { interests, phoneNumber, school, hometown, gender, bio } = profile;
 
     const hostInfo = {
@@ -225,20 +220,20 @@ export default class BookingView extends Component {
       bio,
     };
 
-    const listingPhotos = {};
-    if (photos[0]) {
-      listingPhotos.img1 = photos[0].url;
-      listingPhotos.img2 = photos[1].url;
-      listingPhotos.img3 = photos[2].url;
-    }
-
     let firstUnpaidInstallment;
     if (installments[0]) {
       firstUnpaidInstallment = getFirstUnpaidInstallment(installments);
     }
 
     let newInstallments = [];
-    const { price, startDate, endDate, status, rejectReason } = bookingInfo;
+    const {
+      price,
+      startDate,
+      endDate,
+      status,
+      rejectReason,
+      _id: bookingId,
+    } = bookingInfo;
     const { couponDiscount } = couponInfo;
     const netAmount = price - couponDiscount;
     if (!installments[0]) {
@@ -283,7 +278,14 @@ export default class BookingView extends Component {
       completed: {
         status: 'complete',
         statusContentsComponent: () => (
-          <CompletedContent hostId={host._id} hostName={host.name} />
+          <CompletedContent
+            userId={id}
+            hostId={host._id}
+            hostName={host.name}
+            isLoading={isLoading}
+            reviews={reviews}
+            bookingId={bookingId}
+          />
         ),
       },
     };
@@ -366,7 +368,7 @@ export default class BookingView extends Component {
           <H5C color={bookingStatus.statusColor || 'blue'}>
             {bookingStatus.status}
           </H5C>
-          {bookingStatus.statusContentsComponent()}
+          {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
         {status !== 'canceled' && status !== 'completed' && (
           <CancelBookingButton onClick={() => console.log('cancle booking')}>
