@@ -36,7 +36,7 @@ import types from '../../../../constants/types';
 import { titleCase, truncatePostcode } from '../../../../helpers';
 
 // utils
-import { getUserBookings, getHostProfile } from './utils';
+import { getUserBookings, getHostProfile } from '../utils';
 
 //  individual styles to overwrite components
 const tableFonts = { fontSize: '18px', lineHeight: '1.2' };
@@ -56,7 +56,7 @@ export default class InternView extends Component {
     const { profileData, error: getHostProfileError } = await getHostProfile(
       this.props,
     );
-
+    console.log('getError', getHostProfileError);
     if (!getHostProfileError) {
       this.setState({
         isLoading: false,

@@ -267,3 +267,9 @@ export const PriceTopDiv = styled.div`
     justify-content: space-between;
   }
 `;
+
+export const InputLabel = styled.label`
+  font-size: 1rem;
+  color: ${colors.fontLightBlack};
+  line-height: 2rem;
+`;

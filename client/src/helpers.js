@@ -2,6 +2,17 @@ import moment from 'moment';
 
 import * as yup from 'yup';
 
+export const createStartEndDate = (start, end) => {
+  // get all available dates in range
+  const currentDate = new Date(start);
+  const stopDate = new Date(end);
+
+  return [
+    moment(currentDate).format('YYYY-MM-DD'),
+    moment(stopDate).format('YYYY-MM-DD'),
+  ];
+};
+
 export const createDatesArray = (start, end) => {
   const datesArray = [];
 
