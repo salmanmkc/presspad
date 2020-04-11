@@ -60,7 +60,7 @@ export const calculatePrice = range => {
   }
   if (weeks < 2) return 0;
 
-  return weeks * 150 + days * 20;
+  return days * 20;
 };
 
 // fields to filter based on them

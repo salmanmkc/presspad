@@ -47,6 +47,10 @@ const defaultListingData = {
       startDate: Date.now() + 40 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
     },
+    {
+      startDate: Date.now() + 50 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 69 * 24 * 60 * 60 * 1000,
+    },
   ],
 };
 
