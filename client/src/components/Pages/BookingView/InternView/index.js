@@ -268,7 +268,7 @@ export default class BookingView extends Component {
           />
         ),
       },
-      canceled: {
+      rejected: {
         status: 'rejected',
         statusColor: 'pink',
         statusContentsComponent: () => (
