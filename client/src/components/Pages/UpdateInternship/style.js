@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import * as T from '../../Common/Typography';
 
 export const Row = styled.div`
   display: flex;
@@ -20,4 +21,25 @@ export const SubRow = styled(Row)`
   max-width: 313px;
   width: 100%;
   padding: ${({ theme }) => theme.spacings[3]} 0;
+`;
+
+export const DatePickersRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 313px;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
+    flex-wrap: nowrap;
+    max-width: 560px;
+  }
+`;
+
+export const UntilLabel = styled(T.PBold)`
+  align-self: center;
+  margin: 0 auto;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
+    margin: 0 ${({ theme }) => theme.spacings[3]};
+  }
 `;

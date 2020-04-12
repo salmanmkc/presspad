@@ -1,3 +1,4 @@
+import React from 'react';
 import moment from 'moment';
 
 import * as yup from 'yup';
@@ -176,4 +177,61 @@ let id = 0;
 export const newId = () => {
   id += 1;
   return id;
+};
+
+/**
+ * styles the dates in the datePickers
+ */
+export const dateRender = ({ current, endDate, startDate }) => {
+  const style = {};
+
+  // add background to the dates in between the endDate and the startDate
+  if (
+    endDate &&
+    startDate &&
+    current.isSameOrBefore(endDate, 'day') &&
+    current.isSameOrAfter(startDate, 'day')
+  ) {
+    return (
+      <div className="ant-picker-cell ant-picker-cell-in-view ant-picker-cell-in-range">
+        {current.date()}
+      </div>
+    );
+  }
+
+  // add a rounded border on the startDate and the endDate
+  if (
+    (endDate && current.isSame(endDate, 'day')) ||
+    (startDate && current.isSame(startDate, 'day'))
+  ) {
+    style.borderRadius = '50%';
+    style.border = '1px solid';
+  }
+
+  return (
+    <div className="ant-picker-cell-inner" style={style}>
+      {current.date()}
+    </div>
+  );
+};
+
+export const disabledStartDate = ({ endDate, startDate }) => {
+  if (!endDate || !startDate) {
+    return startDate && startDate < moment().subtract(1, 'day');
+  }
+  return (
+    startDate.valueOf() > endDate.valueOf() ||
+    startDate < moment().subtract(1, 'day')
+  );
+};
+
+export const disabledEndDate = ({ endDate, startDate }) => {
+  if (!startDate) {
+    return endDate && endDate < moment().endOf('day');
+  }
+
+  return (
+    endDate.valueOf() <= startDate.valueOf() ||
+    startDate < moment().subtract(1, 'day')
+  );
 };

@@ -3,8 +3,7 @@ import { Form as StyledForm, Row, SubRow, ErrorMessage } from './style';
 import * as T from '../../Common/Typography';
 import { Select, DatePicker, Switch } from '../../Common/AntdWrappers';
 import Button from '../../Common/ButtonNew';
-import { titleCase, newId } from '../../../helpers';
-import { dateRender } from './utils';
+import { titleCase, newId, dateRender } from '../../../helpers';
 
 const Form = ({
   formProps: {
@@ -60,28 +59,32 @@ const Form = ({
         <T.PL mb="1" mr="4">
           between
         </T.PL>
-        <DatePicker
-          mt="1"
-          mb="1"
-          disabledDate={disabledStartDate}
-          value={startDate}
-          onChange={onStartChange}
-          dateRender={current => dateRender({ current, startDate, endDate })}
-        />
+        <div>
+          <DatePicker
+            mt="1"
+            mb="1"
+            disabledDate={disabledStartDate}
+            value={startDate}
+            onChange={onStartChange}
+            dateRender={current => dateRender({ current, startDate, endDate })}
+          />
+        </div>
       </SubRow>
       <SubRow>
         <T.PL mt="1" mb="1" mr="4">
           and
         </T.PL>
-        <DatePicker
-          disabledDate={disabledEndDate}
-          mt="1"
-          mb="1"
-          value={endDate}
-          onChange={onEndChange}
-          disabled={within7Days}
-          dateRender={current => dateRender({ current, startDate, endDate })}
-        />
+        <div>
+          <DatePicker
+            disabledDate={disabledEndDate}
+            mt="1"
+            mb="1"
+            value={endDate}
+            onChange={onEndChange}
+            disabled={within7Days}
+            dateRender={current => dateRender({ current, startDate, endDate })}
+          />
+        </div>
       </SubRow>
     </Row>
     <Row mt="4">

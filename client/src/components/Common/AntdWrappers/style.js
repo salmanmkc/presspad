@@ -9,7 +9,10 @@ const Wrapper = styled.div`
 
 export const SelectWrapper = styled(Wrapper)``;
 
-export const DatePickerWrapper = styled(Wrapper)``;
+export const DatePickerWrapper = styled(Wrapper)`
+  width: 100%;
+`;
+
 export const SwitchWrapper = styled(Wrapper)`
   display: flex;
   align-items: center;
