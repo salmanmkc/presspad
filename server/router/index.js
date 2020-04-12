@@ -11,6 +11,8 @@ const getHostProfile = require('./../controllers/profile/getHostProfile');
 const hostViewInternProfile = require('./../controllers/profile/hostViewInternProfile');
 const getInternProfile = require('./../controllers/profile/getInternProfile');
 const searchProfiles = require('./../controllers/profile/searchProfiles');
+const getInternshipDetails = require('./../controllers/profile/getInternshipDetails');
+
 const {
   viewBooking,
   getUserBookings,
@@ -102,6 +104,7 @@ const {
   ADMIN_HOST_PROFILE,
   NOTIFICATION_URL,
   REVIEWS,
+  INTERNSHIP,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -244,4 +247,7 @@ router.patch(`${NOTIFICATION_URL}/seen`, authentication, markAsSeen);
 
 // get reviews (given || taken)
 router.get(REVIEWS, authentication, getReviews);
+
+router.get(INTERNSHIP, authentication, getInternshipDetails);
+
 module.exports = router;
