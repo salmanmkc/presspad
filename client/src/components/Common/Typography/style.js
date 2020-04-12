@@ -107,6 +107,6 @@ export const BodyXS = styled.p`
 
 export const StyledLink = styled(Link)`
   ${CommonStyle};
-  font-size: 20px;
-  line-height: 30px;
+  font-size: ${({ fz }) => (fz ? `${fz}px` : '20px')};
+  cursor: pointer;
 `;

@@ -113,7 +113,7 @@ const show7DaysWarning = () => {
         Booking requests must be made at least 1 week before your internship
         starts. If you do not have anywhere to stay for your upcoming internship
         and it is urgent, please email PressPad at{' '}
-        <T.Link to="urgent@presspad.co.uk" color="lightBlue">
+        <T.Link to="urgent@presspad.co.uk" color="lightBlue" fz="14">
           urgent@presspad.co.uk
         </T.Link>
       </>

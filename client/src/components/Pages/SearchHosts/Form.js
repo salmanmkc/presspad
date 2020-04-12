@@ -21,6 +21,7 @@ const Form = ({
     acceptAutomaticallyDisabled,
     switchToggle,
     within7Days,
+    loading,
     error,
   },
 }) => (
@@ -41,8 +42,7 @@ const Form = ({
         mb="1"
         showSearch
         placeholder="Enter your city"
-        name="city"
-        id="city"
+        autoComplete="off"
         autoFocus
         style={{ width: 215 }}
         onSelect={onInputCityChange}
@@ -95,7 +95,7 @@ const Form = ({
       </Switch>
     </Row>
     <Row mt="6">
-      <Button type="secondary" small disabled={within7Days}>
+      <Button type="secondary" small disabled={within7Days} loading={loading}>
         SEARCH
       </Button>
       {error && <ErrorMessage>{error}</ErrorMessage>}

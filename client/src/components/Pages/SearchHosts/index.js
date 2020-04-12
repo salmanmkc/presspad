@@ -30,7 +30,10 @@ export default class SearchHosts extends Component {
     acceptAutomaticallyDisabled: null,
     within7Days: false,
     error: null,
+    loading: false,
   };
+
+  resultsRef = React.createRef();
 
   async componentDidMount() {
     const cities = await getCities();
@@ -40,13 +43,25 @@ export default class SearchHosts extends Component {
   fetchListings = async () => {
     const { searchFields, within7Days } = this.state;
     if (!within7Days) {
+      this.setState({ loading: true });
       const { listings, error } = await fetchListings(searchFields);
-      this.setState({
-        listings,
-        error,
-      });
+      this.setState(
+        {
+          listings,
+          error,
+          loading: false,
+        },
+        this.scrollToResults,
+      );
     }
   };
+
+  scrollToResults = () =>
+    window.scrollTo({
+      left: 0,
+      top: this.resultsRef.current.offsetTop,
+      behavior: 'smooth',
+    });
 
   onInputCityChange = city => {
     this.setState(
@@ -146,6 +161,7 @@ export default class SearchHosts extends Component {
       cities,
       acceptAutomaticallyDisabled,
       within7Days,
+      loading,
     } = this.state;
     const { startDate, endDate, acceptAutomatically, city } = searchFields;
 
@@ -157,6 +173,7 @@ export default class SearchHosts extends Component {
       acceptAutomaticallyDisabled,
       within7Days,
       error,
+      loading,
       onInputCityChange: this.onInputCityChange,
       onStartChange: this.onStartChange,
       onEndChange: this.onEndChange,
@@ -169,21 +186,23 @@ export default class SearchHosts extends Component {
     return (
       <ContentWrapper>
         <Hero formProps={formProps} />
-        {listings.length > 0 && !within7Days ? (
-          <>
-            <Hosts
-              listings={listings}
-              startDate={startDate}
-              endDate={endDate}
-            />
-          </>
-        ) : (
-          <>
-            {startDate || endDate || acceptAutomatically || city ? (
-              <NoResults within7Days={within7Days} />
-            ) : null}
-          </>
-        )}
+        <div ref={this.resultsRef}>
+          {listings.length > 0 && !within7Days ? (
+            <>
+              <Hosts
+                listings={listings}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            </>
+          ) : (
+            <>
+              {startDate || endDate || acceptAutomatically || city ? (
+                <NoResults within7Days={within7Days} />
+              ) : null}
+            </>
+          )}
+        </div>
       </ContentWrapper>
     );
   }
