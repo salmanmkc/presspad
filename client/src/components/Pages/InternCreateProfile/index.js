@@ -190,19 +190,15 @@ export default class InternCreateProfile extends Component {
       this.setState(({ data: newData }) => ({
         data: { ...newData, ...validData },
       }));
-      console.log('here', this.state, validData);
     } catch (e) {
       this.setState(({ errors }) => ({
         errors: { ...errors, ...this.handleValidationError(e) },
       }));
       this.setState(() => ({ loading: false }));
-      console.log('err here', this.state, e);
       return;
     }
     try {
-      console.log('sending');
       await axios.post(API_INTERN_COMPLETE_PROFILE, { ...this.state.data });
-      console.log('done');
       Modal.destroyAll();
       Modal.success({
         title: 'Done',

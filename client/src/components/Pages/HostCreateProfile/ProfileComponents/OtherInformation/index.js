@@ -69,26 +69,6 @@ const OtherInformationDetails = ({
         <Row gutter={25}>
           <Col xs={24} sm={20}>
             <Field
-              {...fields['DBSCheckCert']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-        </Row>
-        <Row gutter={25}>
-          <Col xs={24} sm={20}>
-            <Field
-              {...fields['DBSCheckNum']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-        </Row>
-        <Row gutter={25}>
-          <Col xs={24} sm={20}>
-            <Field
               {...fields['pressCard']}
               value={data['pressCard']}
               error={errors['pressCard']}
