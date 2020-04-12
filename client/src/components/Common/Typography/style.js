@@ -112,9 +112,10 @@ export const StyledLink = styled(Link)`
 
 export const StyledSectionTitle = styled.header`
   position: relative;
-  width: auto;
+  height: 80px;
+  margin-bottom: ${({ theme }) => theme.spacings[4]};
 
-   {
+  h3 {
     padding-left: 30px;
     position: absolute;
     left: 0;

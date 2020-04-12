@@ -97,8 +97,10 @@ const Link = ({ children, to, isExternal, ...props }) => (
 );
 
 const SectionTitle = ({ children, ...props }) => (
-  <StyledSectionTitle>
-    <H3C>{children}</H3C>
+  <StyledSectionTitle {...props}>
+    <>
+      <H3C>{children}</H3C>
+    </>
   </StyledSectionTitle>
 );
 
