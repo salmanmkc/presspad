@@ -19,4 +19,5 @@ export const SubRow = styled(Row)`
   margin-right: ${({ theme }) => theme.spacings[4]};
   max-width: 313px;
   width: 100%;
+  padding: ${({ theme }) => theme.spacings[3]} 0;
 `;

@@ -11,11 +11,12 @@ const Field = ({ label, mt, mb, mr, ml, ...props }) => (
   <div style={{ width: '100%' }}>
     <T.PBold as="label" mt={mt} mb={mb} mr={mr} ml={ml}>
       {label}
-      <Input {...props} size="large" style={{ width: '100%' }} />
+      <Input {...props} size="large" style={{ marginTop: '5px' }} />
     </T.PBold>
   </div>
 );
-const UpdateInternship = () => {
+
+const UpdateInternship = ({ id }) => {
   const [state, setState] = useState({
     organisation: '',
     internshipContact: {
@@ -31,6 +32,11 @@ const UpdateInternship = () => {
     },
     internshipStartDate: '',
     internshipEndDate: '',
+    offerLetter: {
+      fileName: '',
+      isPrivate: true,
+      url: '',
+    },
   });
 
   const onInputChange = e => {
@@ -44,8 +50,14 @@ const UpdateInternship = () => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
+  const onUploadInternshipOffer = ({ value }) =>
+    setState(_state => ({
+      ..._state,
+      offerLetter: { ..._state.offerLetter, fileName: value },
+    }));
+
   return (
-    <div>
+    <form>
       <T.H3C mt="3">update internship details</T.H3C>
       <T.P mt="5">
         The dates you’ve requested to stay do not match the dates of your
@@ -57,7 +69,7 @@ const UpdateInternship = () => {
         request.
       </T.P>
       <Row>
-        <SubRow mt="5">
+        <SubRow>
           <Field
             label="Organisation"
             placeholder="Type where your internship is..."
@@ -72,7 +84,7 @@ const UpdateInternship = () => {
         to verify your internship
       </T.PS>
 
-      <SubRow mt="5">
+      <SubRow>
         <Field
           label="Contact Name"
           placeholder="Type full name here..."
@@ -83,7 +95,7 @@ const UpdateInternship = () => {
         />
       </SubRow>
 
-      <Row mt="5">
+      <Row>
         <SubRow>
           <Field
             label="Contact Email"
@@ -108,7 +120,7 @@ const UpdateInternship = () => {
 
       <T.PS mt="5">Please include the organisation’s address</T.PS>
 
-      <Row mt="5">
+      <Row>
         <SubRow>
           <Field
             label="Address Line 1"
@@ -131,7 +143,7 @@ const UpdateInternship = () => {
         </SubRow>
       </Row>
 
-      <Row mt="5">
+      <Row>
         <SubRow>
           <Field
             label="City"
@@ -163,23 +175,23 @@ const UpdateInternship = () => {
         Please make sure you image is clear enough to read or your request may
         be automatically rejected
       </T.PXS>
-      <File
-        placeholder="placeholder"
-        // value="value"
-        handleChange={console.log}
-        // error={error}
-        // name={name}
-        // parent={parent}
-        handleError={console.log}
-        // userId={userId}
-        // isPrivate={isPrivate}
-        // url={url}
-        // readOnly={readOnly}
-      />
+      <SubRow>
+        <File
+          placeholder="placeholder"
+          handleChange={onUploadInternshipOffer}
+          // error={error}
+          handleError={console.log}
+          userId={id}
+          isPrivate
+          url={state.offerLetter.url}
+          pathname={state.offerLetter.fileName}
+          // readOnly={readOnly}
+        />
+      </SubRow>
       <Button mt="5" type="primary">
         Update and complete request
       </Button>
-    </div>
+    </form>
   );
 };
 
