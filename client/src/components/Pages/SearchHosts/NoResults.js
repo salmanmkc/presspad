@@ -10,27 +10,27 @@ const NoResults = ({ within7Days }) => (
         : 'Sorry, No hosts are available'}
     </T.H4C>
     {within7Days ? (
-      <T.PXL>
+      <T.P>
         If you do not have anywhere to stay for your upcoming internship and it
         is urgent, please email PressPad at{' '}
         <T.Link to="urgent@presspad.co.uk" color="lightBlue">
           urgent@presspad.co.uk
         </T.Link>
-      </T.PXL>
+      </T.P>
     ) : (
-      <T.PXL>
+      <T.P>
         We can’t find any hosts that are available for your dates. Please try
         again another time. However, if you do not have anywhere to stay for
         your upcoming internship and it is urgent, please email PressPad at{' '}
         <T.Link to="urgent@presspad.co.uk" color="lightBlue">
           urgent@presspad.co.uk
         </T.Link>{' '}
-      </T.PXL>
+      </T.P>
     )}
-    <T.PXL mt="7">
+    <T.P mt="7">
       One of our team will get in touch personally to see if we can help you
       find somewhere to stay.
-    </T.PXL>
+    </T.P>
   </NoResultsWrapper>
 );
 
