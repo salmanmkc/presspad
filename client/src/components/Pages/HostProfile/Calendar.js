@@ -9,7 +9,6 @@ import {
   createDatesArray,
   getDateRangeFromArray,
   calculatePrice,
-  createStartEndDate,
 } from '../../../helpers';
 
 // Typography
@@ -19,7 +18,6 @@ import Button from '../../Common/ButtonNew';
 import {
   API_BOOKING_REQUEST_URL,
   API_GET_INTERN_STATUS,
-  API_COUPON_URL,
 } from '../../../constants/apiRoutes';
 
 import {
@@ -31,38 +29,13 @@ import {
   BursaryContainer,
   PopoverContentContainer,
   RequestBtnContainer,
-  CodeInput,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
 
-import CouponCode from './CouponCode';
+import CouponCode from '../../Common/CouponCode';
 
 const bookingRequest = (url, data) => axios.post(url, data);
-
-export const getIntersectRange = ({
-  bookingStart,
-  bookingEnd,
-  couponStart,
-  couponEnd,
-}) => {
-  const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
-  const couponRange = moment.range(moment(couponStart), moment(couponEnd));
-  return bookingRange.intersect(couponRange);
-};
-
-export const getDiscountDays = dates => {
-  const intersectRange = getIntersectRange(dates);
-
-  if (!intersectRange) return { discountDays: 0 };
-
-  // reset the time to 00:00 to calculate the start and the end day of the range
-  intersectRange.start.startOf('day');
-
-  const discountDays = intersectRange.diff('day') + 1;
-
-  return { discountDays };
-};
 
 class CalendarComponent extends Component {
   state = {
@@ -75,14 +48,6 @@ class CalendarComponent extends Component {
     message: '',
     messageType: '',
     isBooking: false,
-    couponInfo: {
-      discountRate: 0,
-      couponCode: '',
-      discountDays: 0,
-      isCouponLoading: false,
-      couponDiscount: 0,
-      error: '',
-    },
   };
 
   componentDidMount() {
@@ -279,144 +244,7 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  handleCouponChange = async e => {
-    const { dates } = this.state;
-
-    const initialCouponInfo = {
-      isCouponLoading: false,
-      couponDiscount: 0,
-      couponCode: '',
-      error: '',
-    };
-    const code = e.target.value;
-
-    // only send requests if the code is valid
-    if (
-      !code ||
-      typeof code !== 'string' ||
-      code.length < 7 ||
-      code.length > 14
-    ) {
-      this.setState({
-        couponInfo: {
-          ...initialCouponInfo,
-          error: 'invalid format',
-          couponCode: code,
-        },
-      });
-    } else {
-      // no error
-      this.setState(
-        prevState => ({
-          couponInfo: {
-            ...prevState.couponInfo,
-            couponCode: code,
-            isCouponLoading: true,
-            error: false,
-          },
-        }),
-        // send request
-        async () => {
-          try {
-            const {
-              data: {
-                data: [couponInfo],
-              },
-            } = await axios.get(`${API_COUPON_URL}?code=${code}`);
-
-            const {
-              startDate: couponStart,
-              endDate: couponEnd,
-              discountRate,
-              usedDays,
-              usedAmount,
-              reservedAmount,
-            } = couponInfo;
-
-            // get user booking request details
-            const bookingdates =
-              dates.length > 1 && createStartEndDate(dates[0], dates[1]);
-            const startDate = bookingdates[0];
-            const endDate = bookingdates[1];
-
-            // calculate discount days
-            const { discountDays } = getDiscountDays({
-              bookingStart: startDate,
-              bookingEnd: endDate,
-              couponStart,
-              couponEnd,
-              usedDays,
-            });
-
-            // calculate discounted percentage
-            let couponDiscount =
-              (calculatePrice(discountDays) * discountRate) / 100;
-
-            // get remaining amount
-            const availableAmount = reservedAmount - usedAmount;
-
-            if (availableAmount < couponDiscount) {
-              couponDiscount = availableAmount;
-            }
-
-            this.setState(prevState => {
-              const newCouponState = {
-                ...prevState.couponInfo,
-                discountDays,
-                discountRate,
-                couponDiscount,
-                isCouponLoading: false,
-                error: false,
-              };
-              if (discountDays === 0) {
-                newCouponState.error =
-                  "the coupon is expired or doesn't cover this booking period";
-              }
-              return { couponInfo: newCouponState };
-            });
-          } catch (error) {
-            let errorMsg = 'something went wrong';
-            if (error.response && error.response.status === 404) {
-              errorMsg = 'wrong code ..';
-            }
-            this.setState(prevState => ({
-              couponInfo: {
-                ...prevState.couponInfo,
-                isCouponLoading: false,
-                error: errorMsg,
-                couponDiscount: 0,
-              },
-            }));
-          }
-        },
-      );
-    }
-  };
-
-  renderCouponCode = couponInfo => {
-    const {
-      discountRate,
-      couponCode,
-      discountDays,
-      isCouponLoading,
-      couponDiscount,
-      error,
-    } = couponInfo;
-
-    return (
-      <CouponCode
-        couponCode={couponCode}
-        discountDays={discountDays}
-        discountRate={discountRate}
-        isLoading={isCouponLoading}
-        couponDiscount={couponDiscount}
-        error={error}
-        handleCouponChange={this.handleCouponChange}
-      />
-    );
-  };
-
-  renderBookingDetails = (isMobile, price, duration, couponInfo) => (
+  renderBookingDetails = (isMobile, price, duration) => (
     <>
       <Row>
         <Col>
@@ -464,11 +292,7 @@ class CalendarComponent extends Component {
           </Popover>
         </Col>
         <Col value>
-          {this.renderCouponCode(couponInfo)}
-          {/* <CodeInput
-            onBlur={this.handleCouponChange}
-            placeholder="     Type code ..."
-          /> */}
+          <CouponCode dates={this.state.dates} />
         </Col>
       </Row>
     </>
@@ -513,7 +337,6 @@ class CalendarComponent extends Component {
       isLoading,
       isBooking,
       dates,
-      couponInfo,
     } = this.state;
 
     const { currentUserId, adminView, role, isMobile } = this.props;
@@ -522,7 +345,6 @@ class CalendarComponent extends Component {
       dates.length > 1 && createDatesArray(dates[0], dates[1]).length;
 
     if (isLoading) return <Spin tip="Loading Profile" />;
-    console.log('couponinfo', couponInfo);
 
     return (
       <>
@@ -546,7 +368,7 @@ class CalendarComponent extends Component {
         {/* Booking details */}
         {role === 'intern' && (
           <BookingRequestDetails>
-            {this.renderBookingDetails(isMobile, price, days, couponInfo)}
+            {this.renderBookingDetails(isMobile, price, days)}
             {/* Bursary checkbox */}
             {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 

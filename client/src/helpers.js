@@ -184,3 +184,27 @@ export const truncatePostcode = postcode => {
   }
   return postcode.substr(0, 2);
 };
+
+export const getIntersectRange = ({
+  bookingStart,
+  bookingEnd,
+  couponStart,
+  couponEnd,
+}) => {
+  const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
+  const couponRange = moment.range(moment(couponStart), moment(couponEnd));
+  return bookingRange.intersect(couponRange);
+};
+
+export const getDiscountDays = dates => {
+  const intersectRange = getIntersectRange(dates);
+
+  if (!intersectRange) return { discountDays: 0 };
+
+  // reset the time to 00:00 to calculate the start and the end day of the range
+  intersectRange.start.startOf('day');
+
+  const discountDays = intersectRange.diff('day') + 1;
+
+  return { discountDays };
+};
