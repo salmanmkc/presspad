@@ -109,4 +109,5 @@ export const StyledLink = styled(Link)`
   ${CommonStyle};
   font-size: ${({ fz }) => (fz ? `${fz}px` : '20px')};
   cursor: pointer;
+  font-weight: ${({ light }) => (light ? 'normal' : 'bold')};
 `;
