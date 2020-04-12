@@ -43,7 +43,7 @@ export default class SearchHosts extends Component {
   fetchListings = async () => {
     const { searchFields, within7Days } = this.state;
     if (!within7Days) {
-      this.setState({ loading: true });
+      this.setState({ loading: true, attemptedToSubmit: true });
       const { listings, error } = await fetchListings(searchFields);
       this.setState(
         {
@@ -63,13 +63,17 @@ export default class SearchHosts extends Component {
       behavior: 'smooth',
     });
 
+  resetResults = () => {
+    this.setState({ listings: [], attemptedToSubmit: false });
+  };
+
   onInputCityChange = city => {
     this.setState(
       state => ({ searchFields: { ...state.searchFields, city, error: null } }),
       () => {
         const searchIsValid = this.validateSearch();
         if (searchIsValid) {
-          this.fetchListings();
+          this.resetResults();
         }
       },
     );
@@ -81,7 +85,7 @@ export default class SearchHosts extends Component {
         error: null,
         searchFields: { ...state.searchFields, acceptAutomatically: checked },
       }),
-      this.fetchListings,
+      this.resetResults,
     );
   };
 
@@ -104,7 +108,7 @@ export default class SearchHosts extends Component {
         error: null,
         searchFields: { ...state.searchFields, [field]: value },
       }),
-      this.fetchListings,
+      this.resetResults,
     );
   };
 
@@ -162,8 +166,9 @@ export default class SearchHosts extends Component {
       acceptAutomaticallyDisabled,
       within7Days,
       loading,
+      attemptedToSubmit,
     } = this.state;
-    const { startDate, endDate, acceptAutomatically, city } = searchFields;
+    const { startDate, endDate, acceptAutomatically } = searchFields;
 
     const formProps = {
       cities,
@@ -197,7 +202,7 @@ export default class SearchHosts extends Component {
             </>
           ) : (
             <>
-              {startDate || endDate || acceptAutomatically || city ? (
+              {attemptedToSubmit && !loading ? (
                 <NoResults within7Days={within7Days} />
               ) : null}
             </>
