@@ -1,205 +1,128 @@
 const Listing = require('../../models/Listing');
 
-module.exports.searchProfiles = ({ city, startDate, endDate }) =>
-  new Promise((resolve, reject) => {
-    // if only city get all listings that match that city
-    if (!startDate && !endDate) {
-      Listing.aggregate([
-        {
-          $match: { 'address.city': new RegExp(city, 'i') },
-        },
-        //  get the user id so we can link to the right profile
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $unwind: '$user',
-        },
-        {
-          $addFields: {
-            userID: '$user._id',
-          },
-        },
-        {
-          $lookup: {
-            from: 'profiles',
-            localField: 'user._id',
-            foreignField: 'user',
-            as: 'profile',
-          },
-        },
-        {
-          $unwind: '$profile',
-        },
-        {
-          $match: {
-            'profile.verified': true,
-          },
-        },
-        {
-          $project: {
-            'address.city': 1,
-            'address.postcode': 1,
-            availableDates: 1,
-            photos: 1,
-            userID: 1,
-          },
-        },
-      ])
-        .then(listings => resolve(listings))
-        .catch(error => reject(error));
-    } else if (!city) {
-      // if only dates get all listing that match those dates
-      Listing.aggregate([
-        // get any listings that have an end date later than today
-        {
-          $match: { 'availableDates.endDate': { $gte: new Date() } },
-        },
-        //  get the user id so we can link to the right profile
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $unwind: '$user',
-        },
-        {
-          $addFields: {
-            userID: '$user._id',
-          },
-        },
-        {
-          $lookup: {
-            from: 'profiles',
-            localField: 'user._id',
-            foreignField: 'user',
-            as: 'profile',
-          },
-        },
-        {
-          $unwind: '$profile',
-        },
-        {
-          $match: {
-            'profile.verified': true,
-          },
-        },
-        //  filter the availableDates so only availableDate objects within the time range remain
-        {
-          $project: {
-            availableDates: {
-              $filter: {
-                input: '$availableDates',
-                as: 'availableDate',
-                cond: {
-                  $and: [
-                    { $gte: ['$$availableDate.endDate', new Date(startDate)] },
-                    { $lte: ['$$availableDate.startDate', new Date(endDate)] },
-                  ],
-                },
-              },
+module.exports.searchProfiles = ({
+  city,
+  startDate,
+  endDate,
+  acceptAutomatically,
+}) => {
+  const cityMatch = city ? { 'address.city': new RegExp(city, 'i') } : {};
+  const acceptAutomaticallyMatch =
+    acceptAutomatically === true || acceptAutomatically === false
+      ? {
+          'user.acceptAutomatically': !!acceptAutomatically,
+        }
+      : {};
+
+  const startDateFilter = startDate
+    ? {
+        $lte: [
+          {
+            $dateToString: {
+              date: '$$availableDate.startDate',
+              format: '%Y-%m-%d', // just compare between dates without time
             },
-            address: 1,
-            photos: 1,
-            userID: 1,
           },
-        },
-        {
-          $addFields: {
-            totalDates: { $size: '$availableDates' },
-          },
-        },
-        // remove any listings that don't have any available dates within the range
-        {
-          $match: { totalDates: { $gt: 0 } },
-        },
-      ])
-        .then(listings => resolve(listings))
-        .catch(error => reject(error));
-    } else {
-      // otherwise find those that match city AND dates
-      Listing.aggregate([
-        // get any listings that match the city
-        {
-          $match: { 'address.city': new RegExp(city, 'i') },
-        },
-        // get any listings that have an end date later than today
-        {
-          $match: { 'availableDates.endDate': { $gte: new Date() } },
-        },
-        //  get the user id so we can link to the right profile
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'user',
-          },
-        },
-        {
-          $unwind: '$user',
-        },
-        {
-          $addFields: {
-            userID: '$user._id',
-          },
-        },
-        {
-          $lookup: {
-            from: 'profiles',
-            localField: 'user._id',
-            foreignField: 'user',
-            as: 'profile',
-          },
-        },
-        {
-          $unwind: '$profile',
-        },
-        {
-          $match: {
-            'profile.verified': true,
-          },
-        },
-        //  filter the availableDates so only availableDate objects within the time range remain
-        {
-          $project: {
-            availableDates: {
-              $filter: {
-                input: '$availableDates',
-                as: 'availableDate',
-                cond: {
-                  $and: [
-                    { $gte: ['$$availableDate.endDate', new Date(startDate)] },
-                    { $lte: ['$$availableDate.startDate', new Date(endDate)] },
-                  ],
-                },
-              },
+          {
+            $dateToString: {
+              date: new Date(startDate),
+              format: '%Y-%m-%d',
             },
-            address: 1,
-            photos: 1,
-            userID: 1,
+          },
+        ],
+      }
+    : true;
+
+  const endDateFilter = endDate
+    ? {
+        $gte: [
+          {
+            $dateToString: {
+              date: '$$availableDate.endDate',
+              format: '%Y-%m-%d',
+            },
+          },
+          {
+            $dateToString: {
+              date: new Date(endDate),
+              format: '%Y-%m-%d',
+            },
+          },
+        ],
+      }
+    : true;
+
+  const basicPipelines = [
+    {
+      $match: cityMatch,
+    },
+    //  get the user id so we can link to the right profile
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    {
+      $unwind: '$user',
+    },
+    {
+      $match: {
+        ...acceptAutomaticallyMatch,
+        'availableDates.endDate': { $gte: new Date() },
+      },
+    },
+
+    {
+      $addFields: {
+        userID: '$user._id',
+      },
+    },
+    {
+      $lookup: {
+        from: 'profiles',
+        localField: 'user._id',
+        foreignField: 'user',
+        as: 'profile',
+      },
+    },
+    {
+      $unwind: '$profile',
+    },
+    {
+      $match: {
+        'profile.verified': true,
+      },
+    },
+    {
+      $project: {
+        availableDates: {
+          $filter: {
+            input: '$availableDates',
+            as: 'availableDate',
+            cond: {
+              $and: [startDateFilter, endDateFilter],
+            },
           },
         },
-        {
-          $addFields: {
-            totalDates: { $size: '$availableDates' },
-          },
-        },
-        // remove any listings that don't have any available dates within the range
-        {
-          $match: { totalDates: { $gt: 0 } },
-        },
-      ])
-        .then(listings => resolve(listings))
-        .catch(error => reject(error));
-    }
-  });
+        address: 1,
+        photos: 1,
+        userID: 1,
+        user: 1,
+      },
+    },
+    {
+      $addFields: {
+        totalDates: { $size: '$availableDates' },
+      },
+    },
+    // remove any listings that don't have any available dates within the range
+    {
+      $match: { totalDates: { $gt: 0 } },
+    },
+  ];
+
+  return Listing.aggregate(basicPipelines);
+};
