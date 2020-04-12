@@ -108,8 +108,9 @@ export const UploadText = styled.button`
   background: none;
   border: none;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  display: block;
-  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  margin: 0 10px 0 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -153,4 +154,9 @@ export const HelperText = styled.p`
 
 export const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.colors.lightBlue};
+`;
+
+export const FileUpload = styled.div`
+  display: flex;
+  margin-bottom: 10px;
 `;

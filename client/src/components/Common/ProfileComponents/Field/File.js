@@ -5,7 +5,7 @@ import { ProgressBar } from '../../progress';
 
 import Icon from '../../Icon';
 
-import { UploadText, Error } from '../ProfileComponents.style';
+import { UploadText, Error, FileUpload } from '../ProfileComponents.style';
 
 export default class File extends Component {
   state = {
@@ -118,7 +118,7 @@ export default class File extends Component {
     }
 
     return (
-      <div>
+      <FileUpload>
         {isLoading ? (
           <ProgressBar progress={loading}>
             <UploadText disabled>{fileName || value}</UploadText>
@@ -137,8 +137,9 @@ export default class File extends Component {
                 <Icon
                   icon="circleTick"
                   style={{ color: 'green' }}
-                  width="16px"
-                  height="16px"
+                  width="20px"
+                  height="20px"
+                  margin="0 5px 0 0"
                 />
                 {fileName || value}
               </>
@@ -167,7 +168,7 @@ export default class File extends Component {
           </Tooltip>
         )}
         {error && <Error block>{error}</Error>}
-      </div>
+      </FileUpload>
     );
   }
 }
