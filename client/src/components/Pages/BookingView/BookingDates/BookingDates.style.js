@@ -26,7 +26,7 @@ export const AbsoluteWrapper = styled.div`
     padding-top: ${({ theme: { spacings } }) => spacings[5]};
     max-width: 507px;
     width: 50%;
-    height: 287px;
+    height: 300px;
     top: 162px;
     > h6:first-child {
       font-size: 18px;

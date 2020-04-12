@@ -64,7 +64,7 @@ const MakePayment = ({
               />
             </DiscountInput>
           </DiscountWrapper>
-          <H7C color="gray">{discountApplied.toFixed(1)}% discount applied</H7C>
+          <H7C color="gray">{discountApplied.toFixed()}% discount applied</H7C>
         </>
       )}
       <ButtonNew
