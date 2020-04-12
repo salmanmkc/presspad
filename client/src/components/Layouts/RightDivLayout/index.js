@@ -5,10 +5,10 @@ import * as S from './style';
 
 const RightDivLayout = ({
   windowWidth,
-  mainContent,
   sideContent,
   isLoggedIn,
   navbarProps,
+  children,
   renderSide,
 }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
@@ -16,7 +16,7 @@ const RightDivLayout = ({
   return (
     <S.Wrapper>
       <S.ContentWrapper>
-        <S.Content>{mainContent}</S.Content>
+        <S.Content>{children}</S.Content>
       </S.ContentWrapper>
       {(renderSide || largerThanTablet) && <S.SideBar>{sideContent}</S.SideBar>}
     </S.Wrapper>

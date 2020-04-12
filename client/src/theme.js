@@ -40,7 +40,7 @@ const newColors = {
   gray: '#2F2F2F',
   lightGray: '#B5B3B3',
   lighterGray: '#DCDCDC',
-  lightestGray: '#FDFDFD',
+  lightestGray: '#FAFAFA',
   white: '#FFFFFF',
   darkBlue: '#08294A',
   blue: '#0A3159',
