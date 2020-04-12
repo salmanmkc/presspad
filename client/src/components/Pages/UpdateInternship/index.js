@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { disabledStartDate, disabledEndDate } from '../../../helpers';
 
+import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import Form from './Form';
 
 const UpdateInternship = ({ id }) => {
@@ -18,8 +20,8 @@ const UpdateInternship = ({ id }) => {
       city: '',
       postcode: '',
     },
-    internshipStartDate: '',
-    internshipEndDate: '',
+    internshipStartDate: null,
+    internshipEndDate: null,
     offerLetter: {
       fileName: '',
       isPrivate: true,
@@ -58,6 +60,17 @@ const UpdateInternship = ({ id }) => {
     const { internshipStartDate } = state;
     return disabledEndDate({ endDate, startDate: internshipStartDate });
   };
+
+  const fetchInternshipDetails = async () => {
+    const { data } = await axios.get(API_INTERNSHIP_URL);
+    console.log({ data });
+    setState(_state => ({ ..._state, ...data }));
+  };
+
+  useEffect(() => {
+    fetchInternshipDetails(id);
+    return () => {};
+  }, [id]);
 
   return (
     <Form

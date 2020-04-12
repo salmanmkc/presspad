@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input } from 'antd';
+import moment from 'moment';
 import * as T from '../../Common/Typography';
 import { Row, SubRow, DatePickersRow, UntilLabel } from './style';
 import File from '../../Common/ProfileComponents/Field/File';
@@ -55,6 +56,7 @@ const UpdateInternship = ({
       <DatePicker
         mt="1"
         mb="1"
+        value={state.internshipStartDate && moment(state.internshipStartDate)}
         disabledDate={disabledStartDate}
         onChange={onStartChange}
         dateRender={current =>
@@ -73,6 +75,7 @@ const UpdateInternship = ({
       <DatePicker
         mt="1"
         mb="1"
+        value={state.internshipEndDate && moment(state.internshipEndDate)}
         disabledDate={disabledEndDate}
         onChange={onEndChange}
         dateRender={current =>

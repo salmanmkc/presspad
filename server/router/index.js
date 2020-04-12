@@ -107,6 +107,7 @@ const {
   INTERNSHIP,
 } = require('../../client/src/constants/apiRoutes');
 
+console.log({ INTERNSHIP });
 // add validation middleware
 router.use(validation);
 router.use(validation2);
