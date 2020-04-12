@@ -18,6 +18,7 @@ import BookingView from './BookingView';
 import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
+import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
 
 import { withWindowWidth } from '../../HOCs';
@@ -37,6 +38,7 @@ import {
   MYPROFILE_URL,
   ADD_REVIWE_URL,
   INTERN_PROFILE,
+  BOOKINGS_INTERNSHIP_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -53,6 +55,16 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          {...props}
+        />
+        <Route
+          isPrivate
+          exact
+          path={BOOKINGS_INTERNSHIP_URL}
+          Component={UpdateInternship}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
           {...props}
         />
         <Route

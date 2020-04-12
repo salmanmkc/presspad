@@ -134,7 +134,10 @@ export default class File extends Component {
           >
             {fileName || value ? (
               <>
-                <Icon icon="circleTick" style={{ color: 'green' }} />
+                <Icon
+                  icon="circleTick"
+                  style={{ color: 'green', fontSize: '14px' }}
+                />
                 {fileName || value}
               </>
             ) : (
