@@ -13,6 +13,8 @@ import Title from '../Title';
 import Field from '../Field';
 import fields from '../../../../constants/fields';
 
+import { DBS_CHECK_PAGE } from '../../../../constants/navRoutes';
+
 const AboutYouDetails = ({
   data = {},
   name = '',
@@ -82,7 +84,7 @@ const AboutYouDetails = ({
           <br />
           <span style={{ fontWeight: 'bold' }}>
             If you have not completed a DBS check, please{' '}
-            <StyledLink to="/" target="_blank">
+            <StyledLink to={DBS_CHECK_PAGE} target="_blank">
               click here
             </StyledLink>{' '}
             and we will help you complete one for free

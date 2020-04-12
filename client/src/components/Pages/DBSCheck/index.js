@@ -81,7 +81,7 @@ const DBSCheckPage = () => {
               pr&ssPad28512
             </PS>
           </S.LoginDetails>
-          <Link mb="8" to={DBS_EXTERNAL} color={colors.lightBlue}>
+          <Link mb="8" to={DBS_EXTERNAL} color={colors.lightBlue} isExternal>
             {DBS_EXTERNAL}
           </Link>
         </S.Wrapper>
