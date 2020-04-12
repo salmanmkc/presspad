@@ -125,6 +125,7 @@ const internDashboard = id =>
       $project: {
         name: 1,
         'profile.profileImage': 1,
+        'profile.DBSCheck': 1,
         notifications: 1,
         'installments._id': 1,
         'installments.booking': 1,

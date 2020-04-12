@@ -51,6 +51,8 @@ module.exports = async (req, res, next) => {
             status = 'Booking confirmed';
           }
 
+          console.log('dbs', intern);
+
           const internObj = {
             key: stats.indexOf(intern) + 1,
             name: intern.name,
@@ -61,6 +63,7 @@ module.exports = async (req, res, next) => {
             nextInstallmentDueDate: intern.nextInstallmentDueDate,
             nextInstallmentPaid: intern.nextInstallmentPaid,
             nextInstallmentAmount: intern.nextInstallmentAmount,
+            dbsCheck: intern.DBSCheck,
           };
           return internObj;
         });

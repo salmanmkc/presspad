@@ -105,6 +105,7 @@ module.exports.getAllInternStats = () =>
           organisationName: { $arrayElemAt: ['$organisation.name', 0] },
           // org name from profile collections
           orgName: { $arrayElemAt: ['$profile.organisation', 0] },
+          DBSCheck: { $arrayElemAt: ['$profile.DBSCheck', 0] },
         },
         account: { $push: '$account' },
         bookings: { $push: '$bookings' },
@@ -120,6 +121,7 @@ module.exports.getAllInternStats = () =>
         nextInstallment: '$nextInstallment',
         totalPayments: '$_id.totalPayments',
         orgName: '$_id.orgName',
+        DBSCheck: '$_id.DBSCheck',
       },
     },
     {
@@ -128,6 +130,7 @@ module.exports.getAllInternStats = () =>
         name: 1,
         organisationName: 1,
         orgName: 1,
+        DBSCheck: 1,
         nextInstallmentDueDate: '$nextInstallment.dueDate',
         nextInstallmentPaid: {
           $cond: [

@@ -4,8 +4,11 @@ import moment from 'moment';
 import { Table, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
+import Field from '../../Common/ProfileComponents/Field';
+import fields from '../../../constants/fields';
 
 import { tagColors, colors } from '../../../theme';
+import { DBS_CHECK_PAGE } from '../../../constants/navRoutes';
 
 export default function InternTable({
   getColumnSearchProps,
@@ -132,6 +135,29 @@ export default function InternTable({
           autoEscape
           textToHighlight={(text / 100).toFixed(2)}
         />
+      ),
+    },
+    {
+      title: 'DBS',
+      dataIndex: 'dbsCheck',
+      key: 'dbsCheck',
+      render: dbs => (
+        <div>
+          {console.log('dbs', data)}
+          {dbs ? (
+            <Field
+              {...fields['DBSCheckNum']}
+              value={dbs.fileName}
+              // error={errors['DBSCheck']}
+              // handleChange={handleChange}
+              // handleError={handleError}
+              // userId={userId}
+              // role={role}
+            />
+          ) : (
+            <p>hello</p>
+          )}
+        </div>
       ),
     },
     {
