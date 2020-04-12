@@ -292,7 +292,7 @@ class CalendarComponent extends Component {
           </Popover>
         </Col>
         <Col value>
-          <CouponCode dates={this.state.dates} />
+          <CouponCode bookingPrice={price} dates={this.state.dates} />
         </Col>
       </Row>
     </>

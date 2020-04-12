@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Row, Col, Input, Skeleton, Alert } from 'antd';
 
 import { API_COUPON_URL } from '../../../constants/apiRoutes';
 
-import {
-  calculatePrice,
-  createStartEndDate,
-  getDiscountDays,
-} from '../../../helpers';
-
-import { CouponInputWrapper } from './CouponCode.style';
+import { createStartEndDate, getDiscountDays } from '../../../helpers';
 
 const PaymentInfoRow = ({ data: { key, value } }) => (
   <Row
-    style={{ height: '2.3rem', borderBottom: '1px solid #d9d9d9' }}
+    style={{
+      width: '210px',
+      height: '4rem',
+      borderBottom: '1px solid #d9d9d9',
+    }}
     type="flex"
     align="middle"
   >
@@ -28,7 +26,7 @@ const PaymentInfoRow = ({ data: { key, value } }) => (
 );
 
 const CouponCode = props => {
-  const { dates } = props;
+  const { dates, bookingPrice } = props;
   const initialCouponInfo = {
     isCouponLoading: false,
     couponDiscount: 0,
@@ -93,9 +91,11 @@ const CouponCode = props => {
           usedDays,
         });
 
+        console.log('discountDays', discountDays);
+        console.log('proce', bookingPrice);
+
         // calculate discounted percentage
-        let couponDiscount =
-          (calculatePrice(discountDays) * discountRate) / 100;
+        let couponDiscount = bookingPrice * discountRate;
 
         // get remaining amount
         const availableAmount = reservedAmount - usedAmount;
