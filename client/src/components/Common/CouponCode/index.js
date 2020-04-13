@@ -1,29 +1,15 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { Row, Col, Input, Skeleton, Alert } from 'antd';
+import { Input } from 'antd';
 
 import { API_COUPON_URL } from '../../../constants/apiRoutes';
 
 import { createStartEndDate, getDiscountDays } from '../../../helpers';
 
-const PaymentInfoRow = ({ data: { key, value } }) => (
-  <Row
-    style={{
-      width: '210px',
-      height: '4rem',
-      borderBottom: '1px solid #d9d9d9',
-    }}
-    type="flex"
-    align="middle"
-  >
-    <Col offset={1} span={14}>
-      {key}:&nbsp;
-    </Col>
-    <Col span={9} style={{ color: 'rgba(0, 0, 0, 0.5)', fontWeight: 600 }}>
-      {value}
-    </Col>
-  </Row>
-);
+// Typography
+import * as T from '../Typography';
+
+import { colors } from '../../../theme';
 
 // checks db with code
 const makeRequest = async _code => {
@@ -38,7 +24,7 @@ const makeRequest = async _code => {
   } catch (error) {
     let errorMsg = 'something went wrong';
     if (error.response && error.response.status === 404) {
-      errorMsg = 'wrong code ..';
+      errorMsg = 'INVALID CODE';
     }
     return { apiError: errorMsg };
   }
@@ -51,6 +37,7 @@ const initialCouponState = {
   couponError: '',
   isCouponLoading: false,
   code: '',
+  couponId: '',
 };
 
 // calculates relevant details for coupon usage
@@ -66,6 +53,7 @@ const checkCouponCode = async (_code, _dates, _bookingPrice) => {
       usedDays,
       usedAmount,
       reservedAmount,
+      _id: couponId,
     } = couponInfo;
 
     // get user booking request details
@@ -96,11 +84,11 @@ const checkCouponCode = async (_code, _dates, _bookingPrice) => {
 
     const newCouponState = {
       code: _code,
-      discountDays: _discountDays,
       discountRate: _discountRate,
       couponDiscount,
       isCouponLoading: false,
       couponError: false,
+      couponId,
     };
 
     if (_discountDays === 0) {
@@ -125,19 +113,16 @@ const checkCouponCode = async (_code, _dates, _bookingPrice) => {
 const CouponCode = props => {
   const { dates, bookingPrice, setCouponState, couponState } = props;
 
-  const {
-    discountDays,
-    discountRate,
-    couponError,
-    isCouponLoading,
-    couponDiscount,
-  } = couponState;
+  const { discountRate, couponError, isCouponLoading, couponId } = couponState;
 
   let { code } = couponState;
 
-  const handleCouponChange = async e => {
+  const handleCouponChange = e => {
     code = e.target.value;
+    setCouponState({ ...initialCouponState, code });
+  };
 
+  const handleBlur = async () => {
     // validation
     if (
       !code ||
@@ -147,7 +132,7 @@ const CouponCode = props => {
     ) {
       setCouponState({
         ...initialCouponState,
-        couponError: 'invalid format',
+        couponError: 'INVALID CODE',
         code,
       });
     } else {
@@ -165,7 +150,7 @@ const CouponCode = props => {
         dates,
         bookingPrice,
       );
-      if (newCouponState.couponError.length) setCouponState(newCouponState);
+      setCouponState(newCouponState);
     }
   };
 
@@ -195,27 +180,26 @@ const CouponCode = props => {
         id="couponCode"
         size="large"
         onChange={handleCouponChange}
+        onBlur={handleBlur}
         placeholder="   Type code ..."
         disabled={bookingPrice === 0}
+        value={code || ''}
       />
 
-      {couponError ? <Alert type="error" message={couponError} /> : ''}
-      {isCouponLoading ? <Skeleton paragraph={{ rows: 0 }} /> : ''}
-      {!couponError && isCouponLoading === false && code && (
-        <>
-          <PaymentInfoRow
-            data={{ key: 'Discount Days', value: discountDays }}
-          />
-          <PaymentInfoRow
-            data={{ key: 'Discount', value: `${discountRate}%` }}
-          />
-          <PaymentInfoRow
-            data={{
-              key: 'Discount amount',
-              value: `£${couponDiscount}`,
-            }}
-          />
-        </>
+      {couponError ? (
+        <T.PSBold style={{ color: colors.pink }}>{couponError}</T.PSBold>
+      ) : (
+        ''
+      )}
+      {isCouponLoading && (
+        <T.PSBold style={{ color: colors.pink }}>
+          ...checking your code
+        </T.PSBold>
+      )}
+      {!couponError && isCouponLoading === false && couponId && (
+        <T.PSBold
+          style={{ color: colors.pink }}
+        >{`${discountRate}% DISCOUNT RATE APPLIED`}</T.PSBold>
       )}
     </>
   );

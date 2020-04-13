@@ -36,7 +36,14 @@ import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
 import CouponCode from '../../Common/CouponCode';
 
 const bookingRequest = (url, data) => axios.post(url, data);
-
+const initialCouponState = {
+  discountRate: 0,
+  couponDiscount: 0,
+  couponError: '',
+  isCouponLoading: false,
+  code: '',
+  couponId: '',
+};
 class CalendarComponent extends Component {
   state = {
     isLoading: true,
@@ -48,14 +55,7 @@ class CalendarComponent extends Component {
     message: '',
     messageType: '',
     isBooking: false,
-    couponState: {
-      discountDays: 0,
-      discountRate: 0,
-      couponDiscount: 0,
-      couponError: '',
-      isCouponLoading: false,
-      code: '',
-    },
+    couponState: initialCouponState,
   };
 
   componentDidMount() {
@@ -135,7 +135,7 @@ class CalendarComponent extends Component {
   };
 
   handleClick = async () => {
-    const { dates, price, couponState } = this.state;
+    const { dates, price, couponState, bursary } = this.state;
     const {
       currentUserId,
       listingId,
@@ -143,6 +143,7 @@ class CalendarComponent extends Component {
       getHostProfile,
       setProfileData,
     } = this.props;
+
     const data = {
       listing: listingId,
       intern: currentUserId,
@@ -150,7 +151,8 @@ class CalendarComponent extends Component {
       startDate: moment(dates[0]).format('YYYY-MM-DD'),
       endDate: moment(dates[1]).format('YYYY-MM-DD'),
       price,
-      discount: couponState.couponDiscount,
+      couponId: couponState.couponId,
+      bursary,
     };
 
     let message = '';
@@ -187,6 +189,9 @@ class CalendarComponent extends Component {
               title: 'Done!',
               content: 'your booking request was successfully sent',
             });
+
+            // update coupon state
+            this.setCouponState(initialCouponState);
             // update parent state
             getHostProfile(this.props).then(({ profileData }) =>
               setProfileData(profileData),
@@ -264,64 +269,85 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  renderBookingDetails = (isMobile, price, duration, couponState) => (
-    <>
-      <Row>
-        <Col>
-          {isMobile ? (
-            <T.PS>Selected Duration:</T.PS>
-          ) : (
-            <T.PL>Selected Duration:</T.PL>
-          )}
-        </Col>
-        <Col value>
-          {isMobile ? (
-            <T.PSBold>{duration > 0 ? duration : 0} days</T.PSBold>
-          ) : (
-            <T.H4>{duration > 0 ? duration : 0} days</T.H4>
-          )}
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          {isMobile ? (
-            <T.PS>Full price for period:</T.PS>
-          ) : (
-            <T.PL>Full price for period:</T.PL>
-          )}
-        </Col>
-        <Col value>
-          {isMobile ? <T.PSBold>{price}£</T.PSBold> : <T.H4>{price}£</T.H4>}
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Popover
-            content="Dummy content for now ..."
-            title="Discount Codes"
-            trigger="click"
-          >
-            <PopoverContentContainer>
-              {isMobile ? (
-                <T.PS>Discount Code:</T.PS>
+  renderBookingDetails = (isMobile, price, duration, couponState) => {
+    const { couponId, couponDiscount } = couponState;
+    return (
+      <>
+        <Row>
+          <Col>
+            {isMobile ? (
+              <T.PS>Selected Duration:</T.PS>
+            ) : (
+              <T.PL>Selected Duration:</T.PL>
+            )}
+          </Col>
+          <Col value>
+            {isMobile ? (
+              <T.PSBold>{duration > 0 ? duration : 0} days</T.PSBold>
+            ) : (
+              <T.H4>{duration > 0 ? duration : 0} days</T.H4>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <T.PS>Discounted price for period:</T.PS>
               ) : (
-                <T.PL>Discount Code:</T.PL>
-              )}
-              <Icon icon="questionCircle" width="24px" height="24px" />
-            </PopoverContentContainer>
-          </Popover>
-        </Col>
-        <Col value>
-          <CouponCode
-            bookingPrice={price}
-            couponState={couponState}
-            setCouponState={this.setCouponState}
-            dates={this.state.dates}
-          />
-        </Col>
-      </Row>
-    </>
-  );
+                <T.PS>Full price for period:</T.PS>
+              ))}
+
+            {couponId && couponDiscount > 0 ? (
+              <T.PL>Discounted price for period:</T.PL>
+            ) : (
+              <T.PL>Full price for period:</T.PL>
+            )}
+          </Col>
+          <Col value>
+            {isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <T.PSBold>{price - couponDiscount}£</T.PSBold>
+              ) : (
+                <T.PSBold>{price}£</T.PSBold>
+              ))}
+            {couponId && couponDiscount > 0 ? (
+              <T.PBold>{price - couponDiscount}£</T.PBold>
+            ) : (
+              <T.PBold>{price}£</T.PBold>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Popover
+              content="Dummy content for now ..."
+              title="Discount Codes"
+              trigger="click"
+            >
+              <PopoverContentContainer>
+                {isMobile ? (
+                  <T.PS>Discount Code:</T.PS>
+                ) : (
+                  <T.PL>Discount Code:</T.PL>
+                )}
+                <Icon icon="questionCircle" width="24px" height="24px" />
+              </PopoverContentContainer>
+            </Popover>
+          </Col>
+          <Col value>
+            <CouponCode
+              bookingPrice={price}
+              couponState={couponState}
+              setCouponState={this.setCouponState}
+              dates={this.state.dates}
+              isMobile={isMobile}
+            />
+          </Col>
+        </Row>
+      </>
+    );
+  };
 
   renderBursaryCheckbox = isMobile => (
     <BursaryContainer>
@@ -366,7 +392,7 @@ class CalendarComponent extends Component {
     } = this.state;
 
     const { currentUserId, adminView, role, isMobile } = this.props;
-    // console.log(couponState.couponDiscount);
+
     const { couponDiscount } = couponState;
 
     const days =

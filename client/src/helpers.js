@@ -62,16 +62,19 @@ export const calculatePrice = range => {
   let days;
   if (typeof range === 'number') {
     weeks = Math.trunc(range / 7);
-    days = range % 7;
+    days = range;
   } else {
     range.start.startOf('day');
     range.end.add(1, 'day').endOf('day');
     weeks = range.diff('weeks');
-    days = range.diff('days') % 7;
+    days = range.diff('days');
   }
-  if (weeks < 2) return 0;
 
-  return days * 20;
+  if (weeks > 2) {
+    return (days - 14) * 20;
+  }
+
+  return 0;
 };
 
 // fields to filter based on them
