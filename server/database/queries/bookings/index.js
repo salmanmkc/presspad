@@ -11,6 +11,7 @@ const getBookingWithUsers = require('./getBookingWithUsers');
 const getHostNextBooking = require('./getHostNextBooking');
 const getInternNextBooking = require('./getInternNextBooking');
 const countCompletedBookingsByUser = require('./countCompletedBookingsByUser');
+const findBookings = require('./findBookings');
 
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
@@ -171,6 +172,14 @@ module.exports.updateListingAvailability = async (listingId, bs, be) => {
   return update;
 };
 
+exports.getConfirmedBooking = (internId, hostId) =>
+  Booking.findOne({
+    intern: internId,
+    host: hostId,
+    status: { $in: ['confirmed', 'completed'] },
+  });
+
+module.exports.findBookings = findBookings;
 module.exports.getBooking = getBooking;
 module.exports.getInternBookingsWithReviews = getInternBookingsWithReviews;
 module.exports.getBookingById = getBookingById;
