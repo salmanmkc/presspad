@@ -171,3 +171,9 @@ export const truncatePostcode = postcode => {
   }
   return postcode.substr(0, 2);
 };
+
+let id = 0;
+export const newId = () => {
+  id += 1;
+  return id;
+};

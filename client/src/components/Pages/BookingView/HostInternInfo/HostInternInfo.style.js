@@ -23,12 +23,16 @@ export const InfoLine = styled.div`
       font-size: 18px;
     }
   }
-  > p {
+  > p,
+  > div {
     width: 50%;
-    @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
-      font-size: 22px;
+    > p {
+      @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+        font-size: 22px;
+      }
     }
   }
+
   :last-child {
     margin-bottom: 0;
   }

@@ -200,6 +200,7 @@ export default class BookingView extends Component {
     const {
       isLoading,
       profile,
+      listing,
       couponInfo,
       payNow,
       upfront,
@@ -212,8 +213,9 @@ export default class BookingView extends Component {
       name: host.name,
       email: host.email,
       phone_number: phoneNumber,
+      address: listing && listing.address,
       gender,
-      school,
+      'university_/_school': school,
       hometown,
       area_of_interest: interests,
       role: 'host',
@@ -285,6 +287,21 @@ export default class BookingView extends Component {
             isLoading={isLoading}
             reviews={reviews}
             bookingId={bookingId}
+          />
+        ),
+      },
+      accepted: {
+        status: 'accepted',
+        statusContentsComponent: () => (
+          <AcceptedContent
+            hostId={host._id}
+            handlePayNowClick={this.handlePayNowClick}
+            handleCouponChange={this.handleCouponChange}
+            paymentInfo={paymentInfo}
+            price={price}
+            startDate={startDate}
+            endDate={endDate}
+            couponInfo={couponInfo}
           />
         ),
       },

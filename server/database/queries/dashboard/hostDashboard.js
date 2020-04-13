@@ -72,6 +72,8 @@ const hostDashboard = id =>
                 $and: [
                   { $eq: ['$$host', '$host'] },
                   { $ne: ['$status', 'canceled'] },
+                  { $ne: ['$status', 'rejected by admin'] },
+                  { $ne: ['$status', 'awaiting admin'] },
                 ],
               },
             },

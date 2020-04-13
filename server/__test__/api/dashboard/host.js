@@ -69,7 +69,7 @@ describe('Testing for host dashboard route', () => {
         expect(requestedAmount).toBe(10000);
 
         expect(bookings).toBeDefined();
-        expect(bookings).toHaveLength(4);
+        expect(bookings).toHaveLength(6);
         expect(bookings[0].status).toBeDefined();
         expect(bookings[0].startDate).toBeDefined();
         expect(bookings[0].endDate).toBeDefined();

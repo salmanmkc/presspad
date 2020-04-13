@@ -11,11 +11,14 @@ import {
   Typography,
 } from 'antd';
 
+import Modal from '../Common/AntdWrappers/Modal';
+
 const { Option } = Select;
 const { Title } = Typography;
 
 const App = () => (
   <>
+    {Modal.confirm({ title: '------------' })}
     <section style={{ textAlign: 'center', marginTop: 48, marginBottom: 60 }}>
       <Title level={2}>
         <img

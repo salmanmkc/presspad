@@ -5,11 +5,14 @@ import { H4, H4C, H7C, PS } from '../../../../Common/Typography';
 import ButtonNew from '../../../../Common/ButtonNew';
 import Icon from '../../../../Common/Icon';
 
+import CodeLoading from './CodeLoading';
+
 import {
   Wrapper,
   PriceWrapper,
   DiscountWrapper,
   DiscountInput,
+  DisCountLoadingWrapper,
 } from './MakePayment.style';
 
 const MakePayment = ({
@@ -19,12 +22,8 @@ const MakePayment = ({
   isNew,
 }) => {
   const { fullPrice, couponInfo, paymentInfo } = data;
-  const {
-    couponCode,
-    couponDiscount,
-    // isCouponLoading,
-    // error,
-  } = couponInfo;
+  const { couponCode, couponDiscount, isCouponLoading, error } = couponInfo;
+
   const { amount } = paymentInfo;
 
   const discountApplied = (couponDiscount / fullPrice) * 100;
@@ -64,7 +63,17 @@ const MakePayment = ({
               />
             </DiscountInput>
           </DiscountWrapper>
-          <H7C color="gray">{discountApplied.toFixed()}% discount applied</H7C>
+          {error && <H7C color="pink">{error}</H7C>}
+          {isCouponLoading && (
+            <DisCountLoadingWrapper>
+              <CodeLoading />
+            </DisCountLoadingWrapper>
+          )}
+          {!isCouponLoading && !error && (
+            <H7C color="gray">
+              {discountApplied.toFixed()}% discount applied
+            </H7C>
+          )}
         </>
       )}
       <ButtonNew

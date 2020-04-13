@@ -27,3 +27,8 @@ export const DiscountWrapper = styled.div`
 export const DiscountInput = styled.div`
   width: 130px;
 `;
+
+export const DisCountLoadingWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;

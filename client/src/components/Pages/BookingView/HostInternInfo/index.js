@@ -6,6 +6,7 @@ import { Wrapper, InfoLine, BioWrapper } from './HostInternInfo.style';
 
 const HostInternInfo = ({ info, isLoading }) => {
   const { name, role } = info;
+
   return (
     <Wrapper>
       {isLoading ? (
@@ -21,6 +22,28 @@ const HostInternInfo = ({ info, isLoading }) => {
           {Object.keys(info).map(key => {
             if (key === 'role' || key === 'bio' || !info[key]) {
               return null;
+            }
+            if (key === 'address') {
+              const {
+                addressline1,
+                addressline2,
+                postcode,
+                city,
+              } = info.address;
+              return (
+                <InfoLine key={key}>
+                  <H7C color="lightGray">{key}</H7C>
+                  <div>
+                    {addressline1 && (
+                      <PSBold color="darkerGray">{addressline1}</PSBold>
+                    )}
+                    {addressline2 && (
+                      <PSBold color="darkerGray">{addressline2}</PSBold>
+                    )}
+                    <PSBold color="darkerGray">{`${city}, ${postcode}`}</PSBold>
+                  </div>
+                </InfoLine>
+              );
             }
             return (
               <InfoLine key={key}>

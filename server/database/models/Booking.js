@@ -34,13 +34,16 @@ const bookingSchema = new Schema(
     status: {
       type: String,
       enum: [
-        'awaitingAdmin',
+        'awaiting admin',
         'pending' /** ="awaiting host" */,
+        'accepted',
         'confirmed',
         'canceled',
         'completed',
+        'rejected by admin',
+        'rejected',
       ],
-      default: 'awaitingAdmin',
+      default: 'awaiting admin',
       required: true,
     },
     price: {
@@ -56,6 +59,7 @@ const bookingSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'users',
     },
+    // if the booking has been rejected by host/admin
     rejectReason: {
       type: String,
     },
@@ -65,6 +69,11 @@ const bookingSchema = new Schema(
       enum: ['presspad', 'host'],
       required: true,
       default: 'host',
+    },
+    // if the intern has entered a discount code in the booking request
+    coupon: {
+      type: Schema.Types.ObjectId,
+      ref: 'coupons',
     },
   },
   {

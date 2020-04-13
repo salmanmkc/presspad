@@ -61,7 +61,8 @@ const LeaveReview = ({ bookingId, toId, toName, reviews, userId }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  if (reviews[0] && reviews[0].from._id === userId) {
+  const userReviews = reviews.filter(review => review.from._id === userId);
+  if (userReviews[0]) {
     return null;
   }
 

@@ -130,9 +130,11 @@ export const tagColors = {
 //  set colours for tags in the table
 export const bookingStatus = {
   pending: colors.orange,
-  confirmed: colors.green,
+  confirmed: colors.yellow,
   canceled: colors.red,
-  completed: colors.gray,
+  completed: colors.blue,
+  rejected: colors.pink,
+  accepted: colors.lightBlue,
 };
 
 const spacings = {
