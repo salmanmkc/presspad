@@ -32,8 +32,25 @@ export default ({
     calendarFunctions: { getHostProfile, setProfileData, toggleDateSection },
     stateProps: { expandDateSection },
   },
-}) =>
-  type === 'desktop' ? (
+}) => {
+  const renderCalendar = () => (
+    <Calendar
+      currentUserId={currentUserId}
+      hostId={hostId}
+      role={role}
+      listingId={listingId}
+      availableDates={availableDates}
+      internBookings={internBookings}
+      price={price}
+      adminView={role === 'admin'}
+      getHostProfile={getHostProfile}
+      setProfileData={setProfileData}
+      isMobile={isMobile}
+      bookingSearchDates={bookingSearchDates}
+    />
+  );
+
+  return type === 'desktop' ? (
     <CalendarCard>
       <CalendarDiv userRole={role}>
         {role === 'host' && <T.H3>Availability & Price</T.H3>}
@@ -42,20 +59,7 @@ export default ({
             <T.H3>Availability & Price</T.H3>
           </>
         )}
-        <Calendar
-          currentUserId={currentUserId}
-          hostId={hostId}
-          role={role}
-          listingId={listingId}
-          availableDates={availableDates}
-          internBookings={internBookings}
-          price={price}
-          adminView={role === 'admin'}
-          getHostProfile={getHostProfile}
-          setProfileData={setProfileData}
-          isMobile={isMobile}
-          bookingSearchDates={bookingSearchDates}
-        />
+        {renderCalendar()}
       </CalendarDiv>
     </CalendarCard>
   ) : (
@@ -86,22 +90,7 @@ export default ({
             </MobileCalendarHeadline>
           )}
 
-          <CalendarDiv userRole={role}>
-            <Calendar
-              currentUserId={currentUserId}
-              hostId={hostId}
-              role={role}
-              listingId={listingId}
-              availableDates={availableDates}
-              internBookings={internBookings}
-              price={price}
-              adminView={role === 'admin'}
-              getHostProfile={getHostProfile}
-              setProfileData={setProfileData}
-              isMobile={isMobile}
-              bookingSearchDates={bookingSearchDates}
-            />
-          </CalendarDiv>
+          <CalendarDiv userRole={role}>{renderCalendar()}</CalendarDiv>
         </MobileCalendarCard>
       ) : (
         <MobileCalendarCard>
@@ -118,3 +107,4 @@ export default ({
       )}
     </AvailableHosting>
   );
+};
