@@ -12,6 +12,7 @@ const hostViewInternProfile = require('./../controllers/profile/hostViewInternPr
 const getInternProfile = require('./../controllers/profile/getInternProfile');
 const searchProfiles = require('./../controllers/profile/searchProfiles');
 const getInternshipDetails = require('./../controllers/profile/getInternshipDetails');
+const updateInternshipDetails = require('./../controllers/profile/updateInternshipDetails');
 
 const {
   viewBooking,
@@ -278,5 +279,6 @@ router.patch(`${NOTIFICATION_URL}/seen`, authentication, markAsSeen);
 router.get(REVIEWS, authentication, getReviews);
 
 router.get(INTERNSHIP, authentication, getInternshipDetails);
+router.patch(INTERNSHIP, authentication, updateInternshipDetails);
 
 module.exports = router;

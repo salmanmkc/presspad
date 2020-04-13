@@ -42,7 +42,7 @@ const UpdateInternship = ({ id }) => {
   const onUploadInternshipOffer = ({ value }) =>
     setState(_state => ({
       ..._state,
-      offerLetter: { ..._state.offerLetter, fileName: value },
+      offerLetter: { ..._state.offerLetter, fileName: value, url: '' },
     }));
 
   const onStartChange = value =>
@@ -63,7 +63,6 @@ const UpdateInternship = ({ id }) => {
 
   const fetchInternshipDetails = async () => {
     const { data } = await axios.get(API_INTERNSHIP_URL);
-    console.log({ data });
     setState(_state => ({ ..._state, ...data }));
   };
 
@@ -71,6 +70,12 @@ const UpdateInternship = ({ id }) => {
     fetchInternshipDetails(id);
     return () => {};
   }, [id]);
+
+  const onSubmit = async e => {
+    e.preventDefault();
+
+    await axios.patch(API_INTERNSHIP_URL, state);
+  };
 
   return (
     <Form
@@ -82,6 +87,7 @@ const UpdateInternship = ({ id }) => {
       disabledEndDate={_disabledEndDate}
       onEndChange={onEndChange}
       onUploadInternshipOffer={onUploadInternshipOffer}
+      onSubmit={onSubmit}
     />
   );
 };

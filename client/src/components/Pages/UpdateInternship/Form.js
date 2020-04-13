@@ -18,7 +18,7 @@ const Field = ({ label, mt, mb, mr, ml, ...props }) => (
   </div>
 );
 
-const UpdateInternship = ({
+const Form = ({
   state,
   userId,
   onInputChange,
@@ -27,8 +27,9 @@ const UpdateInternship = ({
   disabledEndDate,
   onEndChange,
   onUploadInternshipOffer,
+  onSubmit,
 }) => (
-  <form>
+  <form onSubmit={onSubmit}>
     <T.H3C mt="3">update internship details</T.H3C>
     <T.P mt="5">
       The dates you’ve requested to stay do not match the dates of your
@@ -202,4 +203,4 @@ const UpdateInternship = ({
   </form>
 );
 
-export default UpdateInternship;
+export default Form;

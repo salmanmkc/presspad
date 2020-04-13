@@ -19,7 +19,7 @@ const getInternshipDetails = async (req, res, next) => {
     }
 
     const internshipDetails = await getInternshipDetailsQuery(userId);
-    console.log({ internshipDetails });
+
     // get the offerLetter file links
     if (internshipDetails && internshipDetails.offerLetter) {
       await generateUrl(internshipDetails.offerLetter);

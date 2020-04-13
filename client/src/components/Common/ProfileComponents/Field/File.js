@@ -161,7 +161,7 @@ export default class File extends Component {
         {url && fileName !== value && (
           <Tooltip title="download" placement="bottomLeft">
             <UploadText as="a" href={url}>
-              <Icon icon="download" />
+              <Icon icon="download" width="30" />
             </UploadText>
           </Tooltip>
         )}
