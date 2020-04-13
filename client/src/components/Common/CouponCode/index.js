@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Row, Col, Input, Skeleton, Alert } from 'antd';
 
@@ -25,21 +25,119 @@ const PaymentInfoRow = ({ data: { key, value } }) => (
   </Row>
 );
 
-const CouponCode = props => {
-  const { dates, bookingPrice } = props;
-  const initialCouponInfo = {
-    isCouponLoading: false,
-    couponDiscount: 0,
-    couponCode: '',
-    error: '',
-  };
+// checks db with code
+const makeRequest = async _code => {
+  try {
+    const {
+      data: {
+        data: [couponInfo],
+      },
+    } = await axios.get(`${API_COUPON_URL}?code=${_code}`);
 
-  const [couponState, setCouponState] = useState(initialCouponInfo);
+    return { couponInfo };
+  } catch (error) {
+    let errorMsg = 'something went wrong';
+    if (error.response && error.response.status === 404) {
+      errorMsg = 'wrong code ..';
+    }
+    return { apiError: errorMsg };
+  }
+};
+
+const initialCouponState = {
+  discountDays: 0,
+  discountRate: 0,
+  couponDiscount: 0,
+  couponError: '',
+  isCouponLoading: false,
+  code: '',
+};
+
+// calculates relevant details for coupon usage
+const checkCouponCode = async (_code, _dates, _bookingPrice) => {
+  const { couponInfo, apiError } = await makeRequest(_code);
+  let couponDiscount;
+
+  if (couponInfo) {
+    const {
+      startDate: couponStart,
+      endDate: couponEnd,
+      discountRate: _discountRate,
+      usedDays,
+      usedAmount,
+      reservedAmount,
+    } = couponInfo;
+
+    // get user booking request details
+    const bookingdates =
+      _dates.length > 1 && createStartEndDate(_dates[0], _dates[1]);
+    const startDate = bookingdates[0];
+    const endDate = bookingdates[1];
+
+    // calculate discount days
+    const { discountDays: _discountDays } = getDiscountDays({
+      bookingStart: startDate,
+      bookingEnd: endDate,
+      couponStart,
+      couponEnd,
+      usedDays,
+    });
+
+    // calculate discount
+    couponDiscount = _bookingPrice * _discountRate;
+
+    // get remaining amount
+    const availableAmount = reservedAmount - usedAmount;
+
+    if (availableAmount < couponDiscount) {
+      couponDiscount = availableAmount;
+    }
+
+    const newCouponState = {
+      code: _code,
+      discountDays: _discountDays,
+      discountRate: _discountRate,
+      couponDiscount,
+      isCouponLoading: false,
+      couponError: false,
+    };
+
+    if (_discountDays === 0) {
+      newCouponState.couponError =
+        "the coupon is expired or doesn't cover this booking period";
+    }
+
+    return { newCouponState };
+  }
+  if (apiError) {
+    const newCouponState = {
+      ...initialCouponState,
+      code: _code,
+      couponError: apiError,
+    };
+
+    return { newCouponState };
+  }
+  return null;
+};
+
+const CouponCode = props => {
+  const { dates, bookingPrice, setCouponState, couponState } = props;
+
+  const {
+    discountDays,
+    discountRate,
+    couponError,
+    isCouponLoading,
+    couponDiscount,
+  } = couponState;
+
+  let { code } = couponState;
 
   const handleCouponChange = async e => {
-    const code = e.target.value;
+    code = e.target.value;
 
-    // check code format
+    // validation
     if (
       !code ||
       typeof code !== 'string' ||
@@ -47,101 +145,46 @@ const CouponCode = props => {
       code.length > 14
     ) {
       setCouponState({
-        ...initialCouponInfo,
-        error: 'invalid format',
-        couponCode: code,
+        ...initialCouponState,
+        couponError: 'invalid format',
+        code,
       });
     } else {
-      // no error
+      // no couponError
       setCouponState({
-        couponCode: code,
+        ...initialCouponState,
+        code,
         isCouponLoading: true,
-        error: false,
+        couponError: false,
       });
 
-      // send request to check coupon code
-      try {
-        const {
-          data: {
-            data: [couponInfo],
-          },
-        } = await axios.get(`${API_COUPON_URL}?code=${code}`);
-
-        const {
-          startDate: couponStart,
-          endDate: couponEnd,
-          discountRate,
-          usedDays,
-          usedAmount,
-          reservedAmount,
-        } = couponInfo;
-
-        // get user booking request details
-        const bookingdates =
-          dates.length > 1 && createStartEndDate(dates[0], dates[1]);
-        const startDate = bookingdates[0];
-        const endDate = bookingdates[1];
-
-        // calculate discount days
-        const { discountDays } = getDiscountDays({
-          bookingStart: startDate,
-          bookingEnd: endDate,
-          couponStart,
-          couponEnd,
-          usedDays,
-        });
-
-        console.log('discountDays', discountDays);
-        console.log('proce', bookingPrice);
-
-        // calculate discounted percentage
-        let couponDiscount = bookingPrice * discountRate;
-
-        // get remaining amount
-        const availableAmount = reservedAmount - usedAmount;
-
-        if (availableAmount < couponDiscount) {
-          couponDiscount = availableAmount;
-        }
-
-        const newCouponState = {
-          couponCode: code,
-          discountDays,
-          discountRate,
-          couponDiscount,
-          isCouponLoading: false,
-          error: false,
-        };
-
-        if (discountDays === 0) {
-          newCouponState.error =
-            "the coupon is expired or doesn't cover this booking period";
-        }
-        setCouponState(newCouponState);
-      } catch (error) {
-        let errorMsg = 'something went wrong';
-        if (error.response && error.response.status === 404) {
-          errorMsg = 'wrong code ..';
-        }
-
-        setCouponState({
-          couponCode: code,
-          isCouponLoading: false,
-          error: errorMsg,
-          couponDiscount: 0,
-        });
-      }
+      // send request to check coupon code and set errors
+      const { newCouponState } = await checkCouponCode(
+        code,
+        dates,
+        bookingPrice,
+      );
+      if (newCouponState.couponError.length) setCouponState(newCouponState);
     }
   };
 
-  const {
-    error,
-    isCouponLoading,
-    couponCode,
-    discountDays,
-    discountRate,
-    couponDiscount,
-  } = couponState;
+  // updates state when code is valid on date / price change
+  useEffect(() => {
+    const getNewCouponState = async () => {
+      const { newCouponState } = await checkCouponCode(
+        code,
+        dates,
+        bookingPrice,
+      );
+      return newCouponState;
+    };
+
+    getNewCouponState().then(updatedState => {
+      if (!updatedState.couponError.length) {
+        setCouponState(updatedState);
+      }
+    });
+  }, [bookingPrice, code, dates, setCouponState]);
 
   return (
     <>
@@ -149,16 +192,15 @@ const CouponCode = props => {
         name="couponCode"
         type="text"
         id="couponCode"
-        value={couponCode}
         size="large"
-        onChange={e => handleCouponChange(e)}
+        onChange={handleCouponChange}
         placeholder="   Type code ..."
-        // addonBefore={<CouponInputWrapper htmlFor="couponCode">Coupon code:</InputLabel>}
+        disabled={bookingPrice === 0}
       />
 
-      {error ? <Alert type="error" message={error} /> : ''}
+      {couponError ? <Alert type="error" message={couponError} /> : ''}
       {isCouponLoading ? <Skeleton paragraph={{ rows: 0 }} /> : ''}
-      {!error && isCouponLoading === false && couponCode && (
+      {!couponError && isCouponLoading === false && code && (
         <>
           <PaymentInfoRow
             data={{ key: 'Discount Days', value: discountDays }}

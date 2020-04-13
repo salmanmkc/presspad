@@ -48,6 +48,14 @@ class CalendarComponent extends Component {
     message: '',
     messageType: '',
     isBooking: false,
+    couponState: {
+      discountDays: 0,
+      discountRate: 0,
+      couponDiscount: 0,
+      couponError: '',
+      isCouponLoading: false,
+      code: '',
+    },
   };
 
   componentDidMount() {
@@ -95,6 +103,8 @@ class CalendarComponent extends Component {
     // check if booking exists and update state
     this.bookingFound(dates, internBookings);
   };
+
+  setCouponState = couponState => this.setState({ couponState });
 
   // disables calendar tiles (days)
   tileDisabled = ({ date }) => {
@@ -244,7 +254,7 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  renderBookingDetails = (isMobile, price, duration) => (
+  renderBookingDetails = (isMobile, price, duration, couponState) => (
     <>
       <Row>
         <Col>
@@ -256,9 +266,9 @@ class CalendarComponent extends Component {
         </Col>
         <Col value>
           {isMobile ? (
-            <T.PSBold>{duration} days</T.PSBold>
+            <T.PSBold>{duration > 0 ? duration : 0} days</T.PSBold>
           ) : (
-            <T.H4>{duration} days</T.H4>
+            <T.H4>{duration > 0 ? duration : 0} days</T.H4>
           )}
         </Col>
       </Row>
@@ -292,7 +302,12 @@ class CalendarComponent extends Component {
           </Popover>
         </Col>
         <Col value>
-          <CouponCode bookingPrice={price} dates={this.state.dates} />
+          <CouponCode
+            bookingPrice={price}
+            couponState={couponState}
+            setCouponState={this.setCouponState}
+            dates={this.state.dates}
+          />
         </Col>
       </Row>
     </>
@@ -337,9 +352,12 @@ class CalendarComponent extends Component {
       isLoading,
       isBooking,
       dates,
+      couponState,
     } = this.state;
 
     const { currentUserId, adminView, role, isMobile } = this.props;
+
+    const couponPrice = (couponState.couponDiscount / 100).toFixed(2);
 
     const days =
       dates.length > 1 && createDatesArray(dates[0], dates[1]).length;
@@ -368,7 +386,7 @@ class CalendarComponent extends Component {
         {/* Booking details */}
         {role === 'intern' && (
           <BookingRequestDetails>
-            {this.renderBookingDetails(isMobile, price, days)}
+            {this.renderBookingDetails(isMobile, price, days, couponState)}
             {/* Bursary checkbox */}
             {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
@@ -385,11 +403,13 @@ class CalendarComponent extends Component {
             <RequestBtnContainer>
               {isMobile ? (
                 <T.PS>
-                  Price for period <br /> <strong>{price}£</strong>
+                  Price for period <br />{' '}
+                  <strong>{price > 0 ? price - couponPrice : 0}£</strong>
                 </T.PS>
               ) : (
                 <T.PL>
-                  Price for period <br /> <strong>{price}£</strong>
+                  Price for period <br />{' '}
+                  <strong>{price > 0 ? price - couponPrice : 0}£</strong>
                 </T.PL>
               )}
               <Button
