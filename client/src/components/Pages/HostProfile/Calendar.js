@@ -29,7 +29,8 @@ import {
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
 
 const bookingRequest = (url, data) => axios.post(url, data);
-
+const inValidInternshipDates =
+  "Your internship period doesn't match the selected dates";
 class CalendarComponent extends Component {
   state = {
     isLoading: true,
@@ -111,8 +112,14 @@ class CalendarComponent extends Component {
     Modal.warning({
       title: "Sorry! You can't make a request.",
       content: message,
-      onOk: this.goToCompleteProfile,
-      onCancel: this.goToCompleteProfile,
+      onOk:
+        message === inValidInternshipDates
+          ? this.goToUpdateInternship
+          : this.goToCompleteProfile,
+      onCancel:
+        message === inValidInternshipDates
+          ? this.goToUpdateInternship
+          : this.goToCompleteProfile,
     });
   };
 
@@ -132,13 +139,17 @@ class CalendarComponent extends Component {
     try {
       this.setState({ isBooking: true, message: '' });
       const {
-        data: { verified, isComplete },
-      } = await axios.get(API_GET_INTERN_STATUS);
+        data: { verified, isComplete, validInternshipDates },
+      } = await axios.get(API_GET_INTERN_STATUS, {
+        params: { startDate: dates[0], endDate: dates[1] },
+      });
 
       if (!verified) {
         message = "You can't make a request until you get verified";
       } else if (!isComplete) {
         message = 'You need to complete your profile';
+      } else if (!validInternshipDates) {
+        message = inValidInternshipDates;
       }
 
       if (!verified || !isComplete) {

@@ -71,7 +71,7 @@ export const detailsSchema = object({
     fileName: string().ensure(),
     isPrivate: boolean().default(true),
   }),
-  internshipOfficeAddress: {
+  internshipOfficeAddress: object({
     addressline1: string()
       .ensure()
       .required(),
@@ -82,7 +82,7 @@ export const detailsSchema = object({
     postcode: string()
       .ensure()
       .required(),
-  },
+  }),
   emergencyContact: object({
     name: string().ensure(),
     email: string()

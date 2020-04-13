@@ -66,12 +66,12 @@ export default {
   },
   // intern + host
   organisation: {
-    label: 'Name of organisation you are or are going to be working for', // intern label
+    label: 'Name of Organisation', // intern label
     type: 'text',
     max: 10,
     name: 'organisation',
     hostLabel: 'Organisation you work for',
-    internLabel: 'Name of organisation you are or are going to be working for',
+    internLabel: 'Name of Organisation',
     requiredForHost: true,
   },
   useReasonAnswer: {
@@ -206,6 +206,43 @@ export default {
     label: `postcode`,
     type: 'text',
   },
+  internshipContactName: {
+    name: 'name',
+    parent: 'internshipContact',
+    label: `Contact Name`,
+    type: 'text',
+  },
+  internshipContactEmail: {
+    name: 'email',
+    parent: 'internshipContact',
+    label: `Contact Email`,
+    type: 'text',
+  },
+  internshipContactPhoneNumber: {
+    name: 'phoneNumber',
+    parent: 'internshipContact',
+    label: `Contact Number`,
+    type: 'text',
+  },
+
+  internshipStartDate: {
+    type: 'date',
+    label: 'Start Date',
+    placeholder: '',
+    name: 'internshipStartDate',
+    requiredForIntern: true,
+    openDate: true,
+  },
+
+  internshipEndDate: {
+    type: 'date',
+    label: 'End Date',
+    placeholder: '',
+    name: 'internshipEndDate',
+    requiredForIntern: true,
+    openDate: true,
+  },
+
   emergencyContactName: {
     parent: 'emergencyContact',
     name: 'name',
@@ -463,4 +500,32 @@ export default {
     parent: 'pressCard',
     hint: 'Please make sure this is an image (eg. picture of a letter/email)',
   },
+  // internshipAddressline1: {
+  //   label: 'Address Line 1',
+  //   type: 'text',
+  //   name: 'addressline1',
+  //   parent: 'internshipOfficeAddress',
+  //   requiredForIntern: true,
+  // },
+  // internshipAddressline2: {
+  //   label: 'Address Line 2',
+  //   type: 'text',
+  //   name: 'addressline2',
+  //   parent: 'internshipOfficeAddress',
+  //   requiredForIntern: true,
+  // },
+  // internshipCity: {
+  //   label: 'City',
+  //   type: 'text',
+  //   name: 'city',
+  //   parent: 'internshipOfficeAddress',
+  //   requiredForIntern: true,
+  // },
+  // internshipPostcode: {
+  //   label: 'Postcode',
+  //   type: 'text',
+  //   name: 'postcode',
+  //   parent: 'internshipOfficeAddress',
+  //   requiredForIntern: true,
+  // },
 };
