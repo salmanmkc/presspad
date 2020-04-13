@@ -57,7 +57,14 @@ const reducer = (state, action) => {
   }
 };
 
-const LeaveReview = ({ bookingId, toId, toName, reviews, userId }) => {
+const LeaveReview = ({
+  bookingId,
+  toId,
+  toName,
+  reviews,
+  userId,
+  userRole,
+}) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -69,7 +76,7 @@ const LeaveReview = ({ bookingId, toId, toName, reviews, userId }) => {
   const { review, text, rating, error, loading } = state;
 
   const handleTextChange = ({ target: { value } }) => {
-    if (message.length < 50) {
+    if (value.length < 50) {
       dispatch({
         type: 'isValidationError',
         value,
@@ -115,11 +122,21 @@ const LeaveReview = ({ bookingId, toId, toName, reviews, userId }) => {
   return review ? null : (
     <Wrapper>
       <H4C mb="4">leave a review</H4C>
-      <P>
-        Now that {toName}’s stay has finished, we’d love you to leave a review
-        on their profile. This will help Will find other hosts if they ever need
-        to and also will improve the PressPad community.
-      </P>
+      {userRole === 'host' ? (
+        <P>
+          Now that {toName.split(' ')[0]}’s stay has finished, we’d love you to
+          leave a review on their profile. This will help {toName.split(' ')[0]}{' '}
+          find other hosts if they ever need to and also will improve the
+          PressPad community.
+        </P>
+      ) : (
+        <P>
+          Now that {toName.split(' ')[0]}’s stay has finished, we’d love you to
+          leave a review on their profile. This will help {toName.split(' ')[0]}{' '}
+          find other hosts if they ever need to and also will improve the
+          PressPad community.
+        </P>
+      )}
       <PBold mt="4" mb="3">
         Rating
       </PBold>
