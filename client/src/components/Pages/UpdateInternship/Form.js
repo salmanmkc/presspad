@@ -1,23 +1,12 @@
 import React from 'react';
-import { Input } from 'antd';
 import moment from 'moment';
+import { Input, DatePicker } from '../../Common/AntdWrappers';
 import * as T from '../../Common/Typography';
 import { Row, SubRow, DatePickersRow, UntilLabel } from './style';
 import File from '../../Common/ProfileComponents/Field/File';
-import { DatePicker } from '../../Common/AntdWrappers';
+
 import Button from '../../Common/ButtonNew';
 import { dateRender } from '../../../helpers';
-
-// TODO move this to antd wrappers
-const Field = ({ label, mt, mb, mr, ml, error, ...props }) => (
-  <div style={{ width: '100%' }}>
-    <T.PBold as="label" mt={mt} mb={mb} mr={mr} ml={ml}>
-      {label}
-      <Input {...props} size="large" style={{ marginTop: '5px' }} />
-      {error && <T.PXS color="pink">{error}</T.PXS>}
-    </T.PBold>
-  </div>
-);
 
 const Form = ({
   state,
@@ -46,7 +35,7 @@ const Form = ({
     </T.P>
     <Row>
       <SubRow>
-        <Field
+        <Input
           label="Organisation"
           placeholder="Type where your internship is..."
           name="organisation"
@@ -100,7 +89,7 @@ const Form = ({
     </T.PS>
 
     <SubRow>
-      <Field
+      <Input
         label="Contact Name"
         placeholder="Type full name here..."
         onChange={onInputChange}
@@ -113,7 +102,7 @@ const Form = ({
 
     <Row>
       <SubRow>
-        <Field
+        <Input
           label="Contact Email"
           placeholder="Type email here..."
           onChange={onInputChange}
@@ -124,7 +113,7 @@ const Form = ({
         />
       </SubRow>
       <SubRow>
-        <Field
+        <Input
           label="Contact Number"
           placeholder="Type number here..."
           onChange={onInputChange}
@@ -140,7 +129,7 @@ const Form = ({
 
     <Row>
       <SubRow>
-        <Field
+        <Input
           label="Address Line 1"
           placeholder="TODO get correct placeholder"
           onChange={onInputChange}
@@ -151,7 +140,7 @@ const Form = ({
         />
       </SubRow>
       <SubRow>
-        <Field
+        <Input
           label="Address Line 2"
           placeholder="TODO get correct placeholder"
           onChange={onInputChange}
@@ -165,7 +154,7 @@ const Form = ({
 
     <Row>
       <SubRow>
-        <Field
+        <Input
           label="City"
           placeholder="TODO get correct placeholder"
           onChange={onInputChange}
@@ -177,7 +166,7 @@ const Form = ({
       </SubRow>
 
       <SubRow>
-        <Field
+        <Input
           label="Postcode"
           placeholder="TODO get correct placeholder"
           onChange={onInputChange}

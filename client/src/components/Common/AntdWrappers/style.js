@@ -25,7 +25,14 @@ export const SwitchWrapper = styled(Wrapper)`
   }
 `;
 
+export const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: ${({ error, theme }) => (error ? theme.spacings[2] : 0)};
+`;
+
 export const Error = styled(T.PXS)`
   position: absolute;
   bottom: -${({ theme }) => theme.spacings[4]};
+  color: ${({ theme }) => theme.colors.pink};
 `;

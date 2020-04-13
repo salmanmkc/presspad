@@ -11,7 +11,7 @@ const schema = object({
       .ensure()
       .required(errMsgs.REQUIRED),
     isPrivate: boolean().default(true),
-  }),
+  }).required(),
   internshipOfficeAddress: object({
     addressline1: string()
       .ensure()
