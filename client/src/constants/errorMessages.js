@@ -37,4 +37,7 @@ module.exports = {
     ROLE_INVALID: 'invalid role',
     ROLE_REQUIRED: 'role is required',
   },
+  leaveReview: {
+    TEXTAREA: 'Your review must be at least 50 characters',
+  },
 };

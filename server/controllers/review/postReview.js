@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
     }
 
     // create a review
-    await createReview({
+    const review = await createReview({
       to,
       from,
       rating,
@@ -38,7 +38,7 @@ module.exports = async (req, res, next) => {
       booking,
     });
 
-    return res.json({ success: true });
+    return res.json(review);
   } catch (error) {
     return next(boom.badImplementation(error));
   }
