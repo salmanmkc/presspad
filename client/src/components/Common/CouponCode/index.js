@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
 
@@ -117,12 +117,16 @@ const CouponCode = props => {
 
   let { code } = couponState;
 
+  const [typing, setTyping] = useState(false);
+
   const handleCouponChange = e => {
+    setTyping(true);
     code = e.target.value;
     setCouponState({ ...initialCouponState, code });
   };
 
   const handleBlur = async () => {
+    setTyping(false);
     // validation
     if (
       !code ||
@@ -164,13 +168,14 @@ const CouponCode = props => {
       );
       return newCouponState;
     };
-
-    getNewCouponState().then(updatedState => {
-      if (!updatedState.couponError.length) {
-        setCouponState(updatedState);
-      }
-    });
-  }, [bookingPrice, code, dates, setCouponState]);
+    if (!typing) {
+      getNewCouponState().then(updatedState => {
+        if (!updatedState.couponError.length) {
+          setCouponState(updatedState);
+        }
+      });
+    }
+  }, [bookingPrice, code, dates, setCouponState, typing]);
 
   return (
     <>

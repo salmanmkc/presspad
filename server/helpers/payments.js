@@ -99,7 +99,7 @@ exports.calculatePrice = range => {
     weeks = range.diff('weeks');
     days = range.diff('days');
   }
-  if (weeks > 2) {
+  if (weeks >= 2) {
     return (days - 14) * 20;
   }
 

@@ -70,7 +70,7 @@ export const calculatePrice = range => {
     days = range.diff('days');
   }
 
-  if (weeks > 2) {
+  if (weeks >= 2) {
     return (days - 14) * 20;
   }
 
