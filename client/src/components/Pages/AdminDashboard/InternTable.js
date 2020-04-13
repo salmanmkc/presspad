@@ -147,16 +147,12 @@ export default function InternTable({
           {console.log('dbs', dbs)}
           {dbs ? (
             <>
-              <Input
-                name="refNum"
-                id="refNum"
-                value={dbs.refNum}
-                placeholder="Enter DBS number here"
-              />
+              <p>{dbs.refNum || 'No reference number provided'}</p>
+
               {dbs.url ? (
                 <FileDownload url={dbs.url} fileName="View certificate" />
               ) : (
-                <p>Upload here</p>
+                <p>No certificate uploaded</p>
               )}
             </>
           ) : (

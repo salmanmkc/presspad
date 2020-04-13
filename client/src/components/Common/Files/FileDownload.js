@@ -7,25 +7,24 @@ const Wrapper = styled.div`
   padding-top: 10px;
 `;
 
-export const Link = styled.a`
-  margin-right: 10px;
-`;
+export const Link = styled.a``;
 
-const FileDownload = ({ url, fileName }) => {
+const FileDownload = ({ url, fileName, showIcon }) => {
   console.log('hello');
   return (
     <Wrapper>
       <Link type="button" as="a" href={url} download>
+        {showIcon && (
+          <Icon
+            icon="download"
+            width="15px"
+            height="15px"
+            color="lightBlue"
+            margin="0 10px 0 0"
+          />
+        )}
         {fileName}
       </Link>
-      <Icon icon="download" width="15px" height="15px" color="lightBlue" />
-      <Icon
-        icon="cross"
-        width="15px"
-        height="15px"
-        color="pink"
-        margin="0 0 0 10px"
-      />
     </Wrapper>
   );
 };
