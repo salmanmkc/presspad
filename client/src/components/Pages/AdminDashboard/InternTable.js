@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { Table, Tag } from 'antd';
+import { Table, Tag, Input } from 'antd';
 import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
 import Field from '../../Common/ProfileComponents/Field';
@@ -146,7 +146,19 @@ export default function InternTable({
         <div>
           {console.log('dbs', dbs)}
           {dbs ? (
-            <FileDownload fileUrl="/" fileName={dbs.fileName} />
+            <>
+              <Input
+                name="refNum"
+                id="refNum"
+                value={dbs.refNum}
+                placeholder="Enter DBS number here"
+              />
+              {dbs.url ? (
+                <FileDownload url={dbs.url} fileName="View certificate" />
+              ) : (
+                <p>Upload here</p>
+              )}
+            </>
           ) : (
             <p>hello</p>
           )}

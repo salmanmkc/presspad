@@ -14,6 +14,8 @@ const {
   findAllWithdrawRequests,
 } = require('../../database/queries/withdrawRequest');
 
+const generateUrl = require('./../../helpers/generateFileURL');
+
 module.exports = async (req, res, next) => {
   // get user data so we can check they are authorized
   const { user } = req;
@@ -37,36 +39,45 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'interns') {
     return getAllInternStats()
-      .then(stats => {
+      .then(async stats => {
         if (stats.length === 0) return res.json(stats);
 
-        const cleanStats = stats.map(intern => {
-          let status = 'Looking for host';
+        const cleanStats = await Promise.all(
+          stats.map(async intern => {
+            let status = 'Looking for host';
 
-          if (intern.liveBookings > 0) {
-            status = 'At host';
-          } else if (intern.pendingBookings > 0) {
-            status = 'Pending request';
-          } else if (intern.confirmedBookings > 0) {
-            status = 'Booking confirmed';
-          }
+            if (intern.liveBookings > 0) {
+              status = 'At host';
+            } else if (intern.pendingBookings > 0) {
+              status = 'Pending request';
+            } else if (intern.confirmedBookings > 0) {
+              status = 'Booking confirmed';
+            }
 
-          console.log('dbs', intern);
+            const internObj = {
+              key: stats.indexOf(intern) + 1,
+              name: intern.name,
+              organisation: intern.organisationName || intern.orgName,
+              totalPayments: intern.totalPayments || 0,
+              status,
+              userId: intern._id,
+              nextInstallmentDueDate: intern.nextInstallmentDueDate,
+              nextInstallmentPaid: intern.nextInstallmentPaid,
+              nextInstallmentAmount: intern.nextInstallmentAmount,
+              dbsCheck: intern.DBSCheck,
+            };
 
-          const internObj = {
-            key: stats.indexOf(intern) + 1,
-            name: intern.name,
-            organisation: intern.organisationName || intern.orgName,
-            totalPayments: intern.totalPayments || 0,
-            status,
-            userId: intern._id,
-            nextInstallmentDueDate: intern.nextInstallmentDueDate,
-            nextInstallmentPaid: intern.nextInstallmentPaid,
-            nextInstallmentAmount: intern.nextInstallmentAmount,
-            dbsCheck: intern.DBSCheck,
-          };
-          return internObj;
-        });
+            const { dbsCheck } = internObj;
+
+            if (dbsCheck && dbsCheck.fileName) {
+              await generateUrl(dbsCheck);
+            }
+
+            console.log('dbs', intern);
+
+            return internObj;
+          }),
+        );
 
         return res.json(cleanStats);
       })
