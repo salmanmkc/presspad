@@ -1,147 +1,85 @@
 import styled from 'styled-components';
 
-import { colors } from '../../../../theme';
-
-export const InfoWrapper = styled.div`
-  margin-right: 4rem;
-`;
-
-export const InfoText = styled.div`
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-`;
-export const InfoValue = styled.div`
-  font-weight: bold;
-  font-size: 25px;
-  line-height: 25px;
-  margin-top: 9px;
-`;
-
-export const MainSection = styled.section`
-  width: 100%;
-  margin-top: 7px;
-  display: flex;
-  @media (max-width: 775.98px) {
-    margin-top: 0px;
-    flex-direction: column;
-  }
-`;
-
-// export const MoreAboutSection = styled.section`
-//   width: 100%;
-//   margin-left: 15px;
-//   min-width: 300px;
-
-//   @media (max-width: 775.98px) {
-//     width: 100%;
-//     margin-left: 0px;
-//   }
-// `;
-
-export const BioSection = styled.section`
-  width: 35%;
-  margin-left: 15px;
-  min-width: 300px;
-
-  @media (max-width: 775.98px) {
-    width: 100%;
-    margin-left: 0px;
-  }
-`;
-
-export const AboutSection = styled.section`
-  width: 65%;
-  margin-left: 0px;
-  min-width: 300px;
-
-  @media (max-width: 775.98px) {
-    width: 100%;
-    margin-left: 0px;
-  }
-`;
-
-export const AboutSectionDataContainer = styled.div`
-  width: 45%;
+export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-
-  @media (max-width: 1400px) {
-    width: 50%;
+  height: 100%;
+  > button {
+    align-self: flex-end;
   }
-  @media (max-width: 1250px) {
-    width: 60%;
-  }
-  @media (max-width: 1100px) {
-    width: 80%;
-  }
-  @media (max-width: 900px) {
-    width: 100%;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    min-height: 530px;
   }
 `;
 
-export const AboutSectionDataRow = styled.div`
+export const ContentWrapper = styled.div`
   width: 100%;
+  min-height: 420px;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    width: 50%;
+    max-width: 436px;
+    > button {
+      width: 195px;
+    }
+  }
+`;
+
+export const FromNow = styled.span`
+  color: ${({ theme }) => theme.colors.gray};
+`;
+
+export const ButtonsWrapper = styled.div`
   display: flex;
+  position: relative;
   justify-content: space-between;
-  margin-top: ${({ pushDown = false }) => (pushDown ? '38' : '15')}px;
-`;
-
-export const AboutSectionDataCell = styled.div`
-  font-weight: ${({ bold = false }) => (bold ? 'bold' : 'normal')};
-  width: ${({ fullWidth = false }) => (fullWidth ? '100' : '50')}%;
-  text-align: left;
-`;
-
-export const ProfilePicDiv = styled.div`
-  width: 250px;
-  height: 250px;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-image: url(${({ src }) => src});
-
-  @media (max-width: 575.98px) {
-    width: 170px;
-    height: 140px;
-    margin-bottom: 20px;
+  margin-top: ${({ theme }) => theme.spacings[4]};
+  > button {
+    width: 45%;
+    min-width: unset;
+    height: 35px;
+    font-size: 14px;
+    line-height: 14px;
+    padding: ${({ theme }) => theme.spacings[2]};
+    > span {
+      display: none;
+    }
+  }
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    > button {
+      width: 215px;
+      height: 59px;
+      font-size: 18px;
+      line-height: 23px;
+      padding: ${({ theme }) => theme.spacings[3]};
+      > span {
+        display: inline;
+      }
+    }
   }
 `;
 
-export const Symbol = styled.div`
-  left: 0px;
-  margin-right: 5px;
-  width: 30px;
-  height: 30px;
-  background-image: url(${({ src }) => src});
-  background-repeat: no-repeat;
-  background-position: center center;
+export const Error = styled.div`
+  position: absolute;
+  color: ${({ theme }) => theme.colors.pink};
+  font-size: 14px;
+  bottom: -28px;
+  margin-left: ${({ theme }) => theme.spacings[2]};
 `;
 
-export const SymbolDiv = styled.div`
-  display: flex;
-
-  @media (max-width: 575.98px) {
-    flex-direction: column;
+export const TipsWrapper = styled.div`
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    margin-bottom: ${({ theme }) => theme.spacings[5]};
   }
-`;
-
-export const SymbolContainer = styled.div`
-  display: flex;
-  margin-right: 15px;
-`;
-
-export const SymbolHeadline = styled.h3`
-  font-weight: 300;
-  margin-right: 5px;
-  font-size: 16px;
-  text-align: left;
-  color: ${colors.fontLightBlack};
-  line-height: 2;
-`;
-
-export const IconDiv = styled.div`
-  line-height: 2.1;
-  opacity: 0.5;
+  > div {
+    margin-top: ${({ theme }) => theme.spacings[6]};
+    margin-bottom: ${({ theme }) => theme.spacings[5]};
+    @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+      position: absolute;
+      top: 470px;
+      right: 0;
+      width: 50%;
+      max-width: 507px;
+    }
+  }
 `;
