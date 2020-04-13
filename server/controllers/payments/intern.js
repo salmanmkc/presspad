@@ -37,8 +37,12 @@ const internPayment = async (req, res, next) => {
       return next(boom.forbidden("user didn't match booking.internId"));
 
     // check if the booking is confirmed
-    if (booking.status !== 'confirmed')
-      return next(boom.badData('booking is not confirmed'));
+    if (!['accepted', 'confirmed'].includes(booking.status))
+      return next(
+        boom.badData(
+          `booking is not confirmed. The booking status is ${booking.status}`,
+        ),
+      );
 
     let amount;
     let couponDiscount = 0;

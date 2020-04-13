@@ -4,13 +4,14 @@ const {
   checkOtherBookingExists,
   createNewBooking,
   updateListingAvailability,
-} = require('../../../database/queries/bookings');
+  getActiveBookings,
+} = require('../../../../database/queries/bookings/index');
 
-const buildDB = require('../../../database/data/test/index');
+const buildDB = require('../../../../database/data/test/index');
 
-const User = require('../../../database/models/User');
-const Listing = require('../../../database/models/Listing');
-const Booking = require('../../../database/models/Booking');
+const User = require('../../../../database/models/User');
+const Listing = require('../../../../database/models/Listing');
+const Booking = require('../../../../database/models/Booking');
 
 describe('Tests for booking queries', () => {
   beforeAll(async () => {
@@ -80,7 +81,7 @@ describe('Tests for booking queries', () => {
     await createNewBooking(data).then(result => {
       expect(result).toBeDefined();
       expect(result._id).toBeDefined();
-      expect(result.status).toBe('pending');
+      expect(result.status).toBe('awaiting admin');
       expect(result.intern).toBe(interns[0]._id);
     });
     done();
@@ -120,6 +121,15 @@ describe('Tests for booking queries', () => {
     await updateListingAvailability(listing._id, null, undefined).catch(err => {
       expect(err).toBeDefined();
     });
+    done();
+  });
+
+  test('admin can see all active bookings', async done => {
+    // run query
+    const bookings = await getActiveBookings();
+    expect(bookings).toBeDefined();
+    expect(bookings[0].status).toBe('pending');
+    expect(bookings.length).toBe(1);
     done();
   });
 });

@@ -76,15 +76,7 @@ module.exports = async (req, res, next) => {
       updateListingAvailability(listing, startDate, endDate),
     ]);
 
-    const notification = {
-      user: host,
-      secondParty: intern,
-      type: 'stayRequest',
-      private: false,
-      booking: booking._id,
-    };
-
-    await registerNotification(notification);
+    // EMAIL TO GO HERE TO SEND TO ADMIN THAT NEW BOOKING REQUEST IS READY TO REVIEW
 
     return res.json({ success: true });
   } catch (error) {

@@ -59,7 +59,7 @@ app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'test') {
     console.error(err);
   } else {
-    console.log(err.message);
+    console.error(err.message);
   }
 
   // send the error object

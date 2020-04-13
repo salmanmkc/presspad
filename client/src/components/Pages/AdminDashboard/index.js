@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Input, Button, message } from 'antd';
+import { Input, Button, message, Modal } from 'antd';
 
 import Icon from '../../Common/Icon';
 
@@ -14,6 +14,7 @@ import PaymentsTable from './PaymentsTable';
 import SearchBar from '../../Common/SearchBar';
 import InternProfile from '../InternProfile/AdminOrInternView';
 import HostProfile from '../HostProfile';
+import BookingsTable from './Bookings';
 
 // STYLING
 import {
@@ -31,8 +32,11 @@ import {
 import {
   API_ADMIN_STATS_URL,
   API_UPDATE_WITHDRAW_REQUEST_URL,
+  API_ADMIN_REVIEWS_BOOKING,
 } from '../../../constants/apiRoutes';
 import { filterArray } from '../../../helpers';
+
+const { TextArea } = Input;
 
 export default class AdminDashboard extends Component {
   state = {
@@ -52,6 +56,12 @@ export default class AdminDashboard extends Component {
       hostName: '',
       email: '',
     },
+    rejectMessage: null,
+    updatingBooking: false,
+    modalText: '',
+    modalVisible: false,
+    bookingToUpdate: null,
+    newBookingStatus: null,
   };
 
   componentDidMount() {
@@ -245,6 +255,87 @@ export default class AdminDashboard extends Component {
     }
   };
 
+  onInputChange = e => {
+    this.setState({ rejectMessage: e.target.value });
+  };
+
+  submitAdminReview = async () => {
+    const { rejectMessage, bookingToUpdate, newStatus } = this.state;
+    this.setState({
+      updatingBooking: true,
+      modalText: 'Updating booking request',
+    });
+    try {
+      await axios.patch(API_ADMIN_REVIEWS_BOOKING, {
+        status: newStatus,
+        message: rejectMessage,
+        booking: bookingToUpdate,
+      });
+      this.setState({ updateBooking: false, modalVisible: false });
+      Modal.success({
+        content: 'Booking request successfully updated',
+      });
+      this.selectSection('bookings');
+    } catch (err) {
+      console.error(err);
+      message.error('Something went wrong');
+    }
+  };
+
+  handleCancel = () => {
+    this.setState({
+      rejectMessage: null,
+      updatingBooking: false,
+      modalText: '',
+      modalVisible: false,
+      bookingToUpdate: null,
+      newBookingStatus: null,
+    });
+  };
+
+  rejectRequestConfirm = booking => {
+    const modalText = (
+      <>
+        <p>
+          Please write a message to the intern so they know why you are
+          rejecting their request
+        </p>
+        <TextArea rows={3} onChange={this.onInputChange} />
+      </>
+    );
+    this.setState({
+      modalText,
+      bookingToUpdate: booking,
+      newStatus: 'rejected by admin',
+      modalVisible: true,
+    });
+  };
+
+  approveRequestConfirm = booking => {
+    const modalText = (
+      <>
+        <p>Are you sure you want to approve this request?</p>
+      </>
+    );
+    this.setState({
+      modalText,
+      bookingToUpdate: booking,
+      newStatus: 'pending',
+      modalVisible: true,
+    });
+  };
+
+  handleAction = (action, booking) => {
+    switch (action) {
+      case 'approveRequest':
+        return this.approveRequestConfirm(booking);
+      case 'rejectRequest':
+        return this.rejectRequestConfirm(booking);
+      default:
+        return null;
+    }
+  };
+
   render() {
     const {
       activeLink,
@@ -253,6 +344,9 @@ export default class AdminDashboard extends Component {
       highlightVal,
       internView,
       hostView,
+      modalVisible,
+      updatingBooking,
+      modalText,
     } = this.state;
 
     return (
@@ -283,6 +377,18 @@ export default class AdminDashboard extends Component {
               active={activeLink === 'payments'} // change here
             >
               Payments
+            </MenuItem>
+            <MenuItem
+              onClick={() => this.selectSection('bookings')}
+              active={activeLink === 'bookings'} // change here
+            >
+              Bookings
+            </MenuItem>
+            <MenuItem
+              onClick={() => this.selectSection('bookingHistory')}
+              active={activeLink === 'bookingHistory'} // change here
+            >
+              Booking History
             </MenuItem>
           </DashboardMenu>
         </TopSection>
@@ -352,8 +458,47 @@ export default class AdminDashboard extends Component {
                 />
               </HostWrapper>
             )}
+            {activeLink === 'bookings' && (
+              <HostWrapper>
+                <BookingsTable
+                  getColumnSearchProps={this.getColumnSearchProps}
+                  loading={loading}
+                  data={filteredData}
+                  showProfile={this.showProfile}
+                  highlightVal={highlightVal}
+                  handleConfirm={this.handleConfirm}
+                  handleAction={this.handleAction}
+                  triggerHostView={this.triggerHostView}
+                  triggerInternView={this.triggerInternView}
+                />
+              </HostWrapper>
+            )}
+            {activeLink === 'bookingHistory' && (
+              <HostWrapper>
+                <BookingsTable
+                  getColumnSearchProps={this.getColumnSearchProps}
+                  loading={loading}
+                  data={filteredData}
+                  showProfile={this.showProfile}
+                  highlightVal={highlightVal}
+                  handleConfirm={this.handleConfirm}
+                  handleAction={this.handleAction}
+                  triggerHostView={this.triggerHostView}
+                  triggerInternView={this.triggerInternView}
+                />
+              </HostWrapper>
+            )}
           </MainSection>
         )}
+        <Modal
+          title="Are you sure?"
+          visible={modalVisible}
+          onOk={this.submitAdminReview}
+          confirmLoading={updatingBooking}
+          onCancel={this.handleCancel}
+        >
+          <p>{modalText}</p>
+        </Modal>
       </Wrapper>
     );
   }

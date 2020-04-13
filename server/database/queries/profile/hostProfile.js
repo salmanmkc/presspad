@@ -29,6 +29,8 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
     gender: 1,
     badge: 1,
     areasOfInterest: 1,
+    phoneNumber: 1,
+    interests: 1,
   };
 
   if (isPrivate) {
