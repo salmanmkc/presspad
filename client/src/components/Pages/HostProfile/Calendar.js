@@ -26,7 +26,10 @@ import {
   PriceTopDiv,
 } from './Calendar.style';
 
-import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
+import {
+  INTERN_COMPLETE_PROFILE_URL,
+  BOOKINGS_INTERNSHIP_URL,
+} from '../../../constants/navRoutes';
 
 const bookingRequest = (url, data) => axios.post(url, data);
 const inValidInternshipDates =
@@ -108,6 +111,10 @@ class CalendarComponent extends Component {
     this.props.history.push(INTERN_COMPLETE_PROFILE_URL);
   };
 
+  goToUpdateInternship = () => {
+    this.props.history.push(BOOKINGS_INTERNSHIP_URL);
+  };
+
   showAlertAndRedirectToProfile = message => {
     Modal.warning({
       title: "Sorry! You can't make a request.",
@@ -143,7 +150,6 @@ class CalendarComponent extends Component {
       } = await axios.get(API_GET_INTERN_STATUS, {
         params: { startDate: dates[0], endDate: dates[1] },
       });
-
       if (!verified) {
         message = "You can't make a request until you get verified";
       } else if (!isComplete) {
@@ -152,12 +158,12 @@ class CalendarComponent extends Component {
         message = inValidInternshipDates;
       }
 
-      if (!verified || !isComplete) {
+      if (!verified || !isComplete || !validInternshipDates) {
         this.showAlertAndRedirectToProfile(message);
         this.setState({ message, messageType: 'error', isBooking: false });
       }
 
-      if (verified && isComplete) {
+      if (verified && isComplete && validInternshipDates) {
         bookingRequest(API_BOOKING_REQUEST_URL, data)
           .then(() => {
             this.setState({

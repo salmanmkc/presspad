@@ -19,14 +19,22 @@ const checkInternshipDates = ({
   const betweenStartDates = moment(internshipStartDate)
     .startOf('day')
     .diff(moment(startDate).startOf('day'), 'days');
-  const betweenEndDates = moment(endDate)
+  const startDateBeforeInternshipEndDate = moment(startDate)
     .startOf('day')
-    .diff(moment(internshipEndDate).startOf('day'), 'days');
+    .isSameOrBefore(moment(internshipEndDate).startOf('day'));
 
-  if (betweenStartDates > 3 || betweenEndDates > 3) {
-    return false;
+  const betweenEndDates = moment(internshipEndDate)
+    .startOf('day')
+    .diff(moment(endDate).startOf('day'), 'days');
+
+  if (
+    betweenStartDates <= 3 &&
+    startDateBeforeInternshipEndDate &&
+    betweenEndDates >= -3
+  ) {
+    return true;
   }
-  return true;
+  return false;
 };
 module.exports = {
   capitalizeName,
