@@ -23,7 +23,8 @@ export const getUserBookings = async (role, id) => {
 };
 
 export const getHostProfile = async (...props) => {
-  const { match, role, history } = props[0];
+  const { match, role, history } = props.length && props[0];
+
   try {
     let hostId = match.params.id;
     if (!hostId && match.path === '/my-profile') {
@@ -31,6 +32,7 @@ export const getHostProfile = async (...props) => {
     }
 
     const { data } = await axios.get(`/api/host/${hostId}`);
+
     return { profileData: data };
   } catch (err) {
     let error = err.response && err.response.data && err.response.data.error;

@@ -84,7 +84,8 @@ const checkCouponCode = async (_code, _dates, _bookingPrice) => {
     });
 
     // calculate discount
-    couponDiscount = _bookingPrice * _discountRate;
+
+    couponDiscount = ((_bookingPrice * _discountRate) / 100).toFixed(2);
 
     // get remaining amount
     const availableAmount = reservedAmount - usedAmount;
@@ -211,7 +212,7 @@ const CouponCode = props => {
           <PaymentInfoRow
             data={{
               key: 'Discount amount',
-              value: `£${(couponDiscount / 100).toFixed(2)}`,
+              value: `£${couponDiscount}`,
             }}
           />
         </>

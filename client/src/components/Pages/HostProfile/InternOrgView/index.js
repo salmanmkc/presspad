@@ -56,7 +56,7 @@ export default class InternView extends Component {
     const { profileData, error: getHostProfileError } = await getHostProfile(
       this.props,
     );
-    console.log('getError', getHostProfileError);
+
     if (!getHostProfileError) {
       this.setState({
         isLoading: false,
@@ -72,6 +72,9 @@ export default class InternView extends Component {
 
     if (!getInternBookingsError) this.setState({ internBookings });
   }
+
+  setProfileData = profileData =>
+    this.setState({ profileData, showFullData: profileData.showFullData });
 
   toggleDateSection = () => {
     const { expandDateSection } = this.state;
@@ -152,6 +155,7 @@ export default class InternView extends Component {
       calendarBookingDetails,
       calendarFunctions: {
         getHostProfile,
+        setProfileData: this.setProfileData,
         toggleDateSection: this.toggleDateSection,
       },
       stateProps: { expandDateSection },

@@ -13,16 +13,9 @@ const { registerNotification } = require('../../services/notifications');
 
 module.exports = async (req, res, next) => {
   try {
-    const { listing, intern, host, startDate, endDate, price } = req.body;
+    const { listing, intern, host, startDate, endDate, discount } = req.body;
 
-    const data = {
-      listing,
-      intern,
-      host,
-      startDate,
-      endDate,
-      price,
-    };
+    let { price } = req.body;
 
     const [userHasBooking, listingUnavailable] = await Promise.all([
       checkOtherBookingExists(intern, startDate, endDate),
@@ -55,9 +48,31 @@ module.exports = async (req, res, next) => {
     }
     // validate price
     const calculatedPrice = calculatePrice(moment.range(startDate, endDate));
+
+    console.log('calc', calculatedPrice);
+    console.log('price', price);
+
     if (calculatedPrice !== price) {
       return next(boom.badRequest("Price doesn't match!"));
     }
+
+    // validate discount
+    // note: only gets applied if price > 0
+    if (discount > 0) {
+      if (discount > price) {
+        price = 0;
+      }
+      price -= discount;
+    }
+
+    const data = {
+      listing,
+      intern,
+      host,
+      startDate,
+      endDate,
+      price,
+    };
 
     const [booking] = await Promise.all([
       createNewBooking(data),

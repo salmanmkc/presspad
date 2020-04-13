@@ -28,7 +28,7 @@ export default ({
       internBookings,
       price,
     },
-    calendarFunctions: { getHostProfile, toggleDateSection },
+    calendarFunctions: { getHostProfile, setProfileData, toggleDateSection },
     stateProps: { expandDateSection },
   },
 }) =>
@@ -51,6 +51,7 @@ export default ({
           price={price}
           adminView={role === 'admin'}
           getHostProfile={getHostProfile}
+          setProfileData={setProfileData}
           isMobile={isMobile}
         />
       </CalendarDiv>
@@ -94,6 +95,7 @@ export default ({
               price={price}
               adminView={role === 'admin'}
               getHostProfile={getHostProfile}
+              setProfileData={setProfileData}
               isMobile={isMobile}
             />
           </CalendarDiv>

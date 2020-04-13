@@ -135,8 +135,14 @@ class CalendarComponent extends Component {
   };
 
   handleClick = async () => {
-    const { dates, price } = this.state;
-    const { currentUserId, listingId, hostId, getHostProfile } = this.props;
+    const { dates, price, couponState } = this.state;
+    const {
+      currentUserId,
+      listingId,
+      hostId,
+      getHostProfile,
+      setProfileData,
+    } = this.props;
     const data = {
       listing: listingId,
       intern: currentUserId,
@@ -144,11 +150,13 @@ class CalendarComponent extends Component {
       startDate: moment(dates[0]).format('YYYY-MM-DD'),
       endDate: moment(dates[1]).format('YYYY-MM-DD'),
       price,
+      discount: couponState.couponDiscount,
     };
 
     let message = '';
     try {
       this.setState({ isBooking: true, message: '' });
+      // check if profile is verified
       const {
         data: { verified, isComplete },
       } = await axios.get(API_GET_INTERN_STATUS);
@@ -163,7 +171,7 @@ class CalendarComponent extends Component {
         this.showAlertAndRedirectToProfile(message);
         this.setState({ message, messageType: 'error', isBooking: false });
       }
-
+      // make request
       if (verified && isComplete) {
         bookingRequest(API_BOOKING_REQUEST_URL, data)
           .then(() => {
@@ -171,16 +179,18 @@ class CalendarComponent extends Component {
               message: 'Booking request sent successfully',
               messageType: 'success',
               isBooking: false,
-              dates: null,
+              dates: new Date(),
               isRangeSelected: false,
               price: '0',
             });
             Modal.success({
               title: 'Done!',
-              content: 'your booking successfully sent',
+              content: 'your booking request was successfully sent',
             });
             // update parent state
-            getHostProfile();
+            getHostProfile(this.props).then(({ profileData }) =>
+              setProfileData(profileData),
+            );
           })
           .catch(error => {
             const serverError = error.response && error.response.data.error;
@@ -356,8 +366,8 @@ class CalendarComponent extends Component {
     } = this.state;
 
     const { currentUserId, adminView, role, isMobile } = this.props;
-
-    const couponPrice = (couponState.couponDiscount / 100).toFixed(2);
+    // console.log(couponState.couponDiscount);
+    const { couponDiscount } = couponState;
 
     const days =
       dates.length > 1 && createDatesArray(dates[0], dates[1]).length;
@@ -404,12 +414,12 @@ class CalendarComponent extends Component {
               {isMobile ? (
                 <T.PS>
                   Price for period <br />{' '}
-                  <strong>{price > 0 ? price - couponPrice : 0}£</strong>
+                  <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
                 </T.PS>
               ) : (
                 <T.PL>
                   Price for period <br />{' '}
-                  <strong>{price > 0 ? price - couponPrice : 0}£</strong>
+                  <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
                 </T.PL>
               )}
               <Button

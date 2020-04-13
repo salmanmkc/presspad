@@ -118,6 +118,7 @@ const internProfileData = {
     email: 'contact@email.com',
     phoneNumber: '004400011001100',
   },
+  verified: true,
 };
 
 const reset = () => Profile.deleteMany();
