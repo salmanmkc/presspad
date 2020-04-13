@@ -59,9 +59,12 @@ export default class AdminDashboard extends Component {
     rejectMessage: null,
     updatingBooking: false,
     modalText: '',
-    modalVisible: false,
+    modalToShow: '',
     bookingToUpdate: null,
     newBookingStatus: null,
+    updatingDBS: null,
+    dbsDetails: { refNum: null, fileName: null, url: null },
+    userToUpdate: null,
   };
 
   componentDidMount() {
@@ -271,7 +274,7 @@ export default class AdminDashboard extends Component {
         message: rejectMessage,
         booking: bookingToUpdate,
       });
-      this.setState({ updateBooking: false, modalVisible: false });
+      this.setState({ updateBooking: false, modalToShow: null });
       Modal.success({
         content: 'Booking request successfully updated',
       });
@@ -287,7 +290,7 @@ export default class AdminDashboard extends Component {
       rejectMessage: null,
       updatingBooking: false,
       modalText: '',
-      modalVisible: false,
+      modalToShow: null,
       bookingToUpdate: null,
       newBookingStatus: null,
     });
@@ -307,7 +310,7 @@ export default class AdminDashboard extends Component {
       modalText,
       bookingToUpdate: booking,
       newStatus: 'rejected by admin',
-      modalVisible: true,
+      modalToShow: 'bookingRequest',
     });
   };
 
@@ -321,7 +324,7 @@ export default class AdminDashboard extends Component {
       modalText,
       bookingToUpdate: booking,
       newStatus: 'pending',
-      modalVisible: true,
+      modalToShow: 'bookingRequest',
     });
   };
 
@@ -336,6 +339,22 @@ export default class AdminDashboard extends Component {
     }
   };
 
+  updateDBS = (dbs, userId) => {
+    this.setState({
+      dbsDetails: dbs,
+      userToUpdate: userId,
+      modalToShow: 'dbs',
+    });
+    console.log('hello');
+  };
+
+  handleDBSChange = e => {
+    console.log('val', e.target);
+    const { dbsDetails } = this.state;
+    dbsDetails[e.target.id] = e.target.value;
+    this.setState({ dbsDetails });
+  };
+
   render() {
     const {
       activeLink,
@@ -344,9 +363,11 @@ export default class AdminDashboard extends Component {
       highlightVal,
       internView,
       hostView,
-      modalVisible,
+      modalToShow,
       updatingBooking,
       modalText,
+      updatingDBS,
+      dbsDetails,
     } = this.state;
 
     return (
@@ -433,6 +454,9 @@ export default class AdminDashboard extends Component {
                 data={filteredData}
                 highlightVal={highlightVal}
                 triggerInternView={this.triggerInternView}
+                updatingDBS={updatingDBS}
+                updateDBS={this.updateDBS}
+                handleDBSChange={this.handleDBSChange}
               />
             )}
             {activeLink === 'hosts' && (
@@ -492,12 +516,28 @@ export default class AdminDashboard extends Component {
         )}
         <Modal
           title="Are you sure?"
-          visible={modalVisible}
+          visible={modalToShow === 'bookingRequest'}
           onOk={this.submitAdminReview}
           confirmLoading={updatingBooking}
           onCancel={this.handleCancel}
         >
           <p>{modalText}</p>
+        </Modal>
+        <Modal
+          title="Are you sure?"
+          visible={modalToShow === 'dbs'}
+          onOk={() => console.log('hello')}
+          confirmLoading={updatingDBS}
+          onCancel={this.handleCancel}
+        >
+          <p>Here you can edit DBS stuff</p>
+          <Input
+            name="refNum"
+            onChange={e => this.handleDBSChange(e)}
+            id="refNum"
+            value={dbsDetails.refNum}
+            placeholder="Enter reference number"
+          />
         </Modal>
       </Wrapper>
     );

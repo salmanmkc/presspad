@@ -7,6 +7,7 @@ import Icon from '../../Common/Icon';
 import Field from '../../Common/ProfileComponents/Field';
 import fields from '../../../constants/fields';
 import FileDownload from '../../Common/Files/FileDownload';
+import DBSField from './DBSField';
 
 import { tagColors, colors } from '../../../theme';
 import { DBS_CHECK_PAGE } from '../../../constants/navRoutes';
@@ -17,6 +18,10 @@ export default function InternTable({
   loading,
   highlightVal,
   triggerInternView,
+  updatingDBS,
+  updateDBS,
+  dbsDetails,
+  handleDBSChange,
 }) {
   const columns = [
     {
@@ -142,23 +147,14 @@ export default function InternTable({
       title: 'DBS',
       dataIndex: 'dbsCheck',
       key: 'dbsCheck',
-      render: dbs => (
-        <div>
-          {console.log('dbs', dbs)}
-          {dbs ? (
-            <>
-              <p>{dbs.refNum || 'No reference number provided'}</p>
-
-              {dbs.url ? (
-                <FileDownload url={dbs.url} fileName="View certificate" />
-              ) : (
-                <p>No certificate uploaded</p>
-              )}
-            </>
-          ) : (
-            <p>hello</p>
-          )}
-        </div>
+      render: (dbs, record) => (
+        <DBSField
+          dbs={dbs}
+          userId={record.userId}
+          updatingDBS={updatingDBS}
+          updateDBS={updateDBS}
+          handleDBSChange={handleDBSChange}
+        />
       ),
     },
     {
