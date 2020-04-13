@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+
 import { H6C, H7C } from '../../Common/Typography';
 
 import { HOSTS_URL } from '../../../constants/navRoutes';

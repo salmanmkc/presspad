@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Skeleton } from 'antd';
 import Review from './Review';
 import { API_REVIEWS } from '../../../constants/apiRoutes';
-import { Wrapper, MainTitle, SubTitle } from './Reviews.style';
+import { Wrapper } from './Reviews.style';
 
 // Typography
 import * as T from '../Typography';

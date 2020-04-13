@@ -96,8 +96,8 @@ export default class InternView extends Component {
           availableDates,
           price,
           address: {
-            addressline1 = '',
-            addressline2 = '',
+            // addressline1 = '',
+            // addressline2 = '',
             postcode = '',
             city = '',
           } = {},
