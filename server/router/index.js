@@ -18,6 +18,9 @@ const {
   acceptBooking,
   rejectBooking,
   getBookingsWithUsers,
+  getActiveBookingsApi,
+  adminReviewsBooking,
+  getBookingHistoryApi,
 } = require('./../controllers/booking');
 const adminStats = require('./../controllers/stats/adminStats');
 const verifyProfile = require('./../controllers/profile/verifyProfile');
@@ -102,6 +105,8 @@ const {
   ADMIN_HOST_PROFILE,
   NOTIFICATION_URL,
   REVIEWS,
+  ADMIN_REVIEWS_BOOKING,
+  ADMIN_BOOKING_HISTORY,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -157,6 +162,22 @@ router.get(GET_BOOKING_URL, authentication, viewBooking);
 // get all user bookings
 router.get(GET_USER_BOOKINGS_URL, getUserBookings);
 
+// get all active bookings
+router.get(
+  ADMIN_REVIEWS_BOOKING,
+  authentication,
+  authorization(['admin']),
+  getActiveBookingsApi,
+);
+
+// get all old bookings
+router.get(
+  ADMIN_BOOKING_HISTORY,
+  authentication,
+  authorization(['admin']),
+  getBookingHistoryApi,
+);
+
 // search for available listings
 router.post(SEARCH_PROFILES_URL, searchProfiles);
 
@@ -208,6 +229,14 @@ router.patch(
   UPDATE_WITHDRAW_REQUEST_URL,
   authentication,
   confirmOrCancelWithdrawRequest,
+);
+
+// admin confirms or rejects booking request
+router.patch(
+  ADMIN_REVIEWS_BOOKING,
+  authentication,
+  authorization(['admin']),
+  adminReviewsBooking,
 );
 
 // organisation add funds

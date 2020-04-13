@@ -11,6 +11,8 @@ const getBookingWithUsers = require('./getBookingWithUsers');
 const getHostNextBooking = require('./getHostNextBooking');
 const getInternNextBooking = require('./getInternNextBooking');
 const countCompletedBookingsByUser = require('./countCompletedBookingsByUser');
+const getActiveBookings = require('./getActiveBookings');
+const getBookingHistory = require('./getBookingHistory');
 
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
@@ -39,6 +41,13 @@ module.exports.hostRejectBookingById = ({ bookingId, hostId }) =>
     {
       new: true,
     },
+  );
+
+module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
+  Booking.findOneAndUpdate(
+    { _id: bookingId },
+    { status: 'rejected by admin', rejectReason },
+    { new: true },
   );
 
 module.exports.getNextPendingBooking = getNextPendingBooking;
@@ -171,6 +180,15 @@ module.exports.updateListingAvailability = async (listingId, bs, be) => {
   return update;
 };
 
+module.exports.updateBookingByID = (bookingID, newStatus) =>
+  Booking.findByIdAndUpdate(
+    bookingID,
+    { status: newStatus },
+    {
+      new: true,
+    },
+  );
+
 module.exports.getBooking = getBooking;
 module.exports.getInternBookingsWithReviews = getInternBookingsWithReviews;
 module.exports.getBookingById = getBookingById;
@@ -178,3 +196,5 @@ module.exports.getBookingWithUsers = getBookingWithUsers;
 module.exports.getHostNextBooking = getHostNextBooking;
 module.exports.getInternNextBooking = getInternNextBooking;
 module.exports.countCompletedBookingsByUser = countCompletedBookingsByUser;
+module.exports.getActiveBookings = getActiveBookings;
+module.exports.getBookingHistory = getBookingHistory;
