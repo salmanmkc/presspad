@@ -22,7 +22,8 @@ const PendingContent = ({
   createdAt,
   handleAccept,
   handleReject,
-  isLoading,
+  isAcceptLoading,
+  isRejectLoading,
   error,
 }) => (
   <>
@@ -31,11 +32,15 @@ const PendingContent = ({
       Booking request made on {madeAt} <span>[{getStringTime(createdAt)}]</span>
     </H6C>
     <ButtonsWrapper>
-      <ButtonNew loading={isLoading} type="primary" onClick={handleAccept}>
+      <ButtonNew
+        loading={isAcceptLoading}
+        type="primary"
+        onClick={handleAccept}
+      >
         accept <span>request</span>
       </ButtonNew>
       <ButtonNew
-        loading={isLoading}
+        loading={isRejectLoading}
         type="primary"
         outline
         onClick={handleReject}

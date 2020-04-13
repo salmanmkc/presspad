@@ -30,25 +30,41 @@ import { INTERN_PROFILE } from '../../../../constants/navRoutes';
 const initialState = {
   bookingStatus: '',
   internData: {},
-  isInternDataLoading: true,
-  isLoading: false,
+  isLoading: {
+    internData: true,
+  },
   error: '',
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'getInternData':
-      return { ...state, internData: action.value, isInternDataLoading: false };
+      return {
+        ...state,
+        internData: action.value,
+        isLoading: { ...state.isLoading, internData: false },
+      };
     case 'isInternDataLoading':
-      return { ...state, isInternDataLoading: true };
+      return { ...state, isLoading: { ...state.isLoading, internData: true } };
     case 'accept':
-      return { ...state, bookingStatus: 'accepted', isLoading: false };
+      return {
+        ...state,
+        bookingStatus: 'accepted',
+        isLoading: { ...state.isLoading, accept: false },
+      };
+    case 'isAcceptLoading':
+      return { ...state, isLoading: { ...state.isLoading, accept: true } };
     case 'reject':
-      return { ...state, bookingStatus: 'rejected', isLoading: false };
-    case 'isLoading':
-      return { ...state, isLoading: true };
+      return {
+        ...state,
+        bookingStatus: 'rejected',
+
+        isLoading: { ...state.isLoading, reject: false },
+      };
+    case 'isRejectLoading':
+      return { ...state, isLoading: { ...state.isLoading, reject: true } };
     case 'isError':
-      return { ...state, isLoading: false, error: action.error };
+      return { ...state, isLoading: {}, error: action.error };
     default:
       throw new Error();
   }
@@ -57,13 +73,7 @@ const reducer = (state, action) => {
 const HostView = ({ bookingInfo, id: userId }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const {
-    bookingStatus,
-    internData,
-    isInternDataLoading,
-    isLoading,
-    error,
-  } = state;
+  const { bookingStatus, internData, isLoading, error } = state;
 
   const {
     _id: bookingId,
@@ -79,7 +89,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
     // const { moneyGoTo } = this.state;
 
     try {
-      dispatch({ type: 'isLoading' });
+      dispatch({ type: 'isAcceptLoading' });
 
       await axios.patch(API_ACCEPT_BOOKING_URL.replace(':id', bookingInfo._id));
 
@@ -113,7 +123,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
       okType: 'danger',
       cancelText: 'No',
       onOk: async () => {
-        dispatch({ type: 'isLoading' });
+        dispatch({ type: 'isRejectLoading' });
 
         try {
           await axios.patch(
@@ -189,7 +199,8 @@ const HostView = ({ bookingInfo, id: userId }) => {
         createdAt={createdAt}
         handleAccept={handleAccept}
         handleReject={handleReject}
-        isLoading={isLoading}
+        isAcceptLoading={isLoading.accept}
+        isRejectLoading={isLoading.reject}
         error={error}
       />
     ),
@@ -203,7 +214,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
         reviews={reviews}
         bookingId={bookingId}
         userId={userId}
-        isLoading={isInternDataLoading}
+        isLoading={isLoading.internData}
       />
     ),
   };
@@ -214,7 +225,10 @@ const HostView = ({ bookingInfo, id: userId }) => {
         {statusContents[status]()}
         {status !== 'completed' && (
           <>
-            <HostInternInfo info={internInfo} isLoading={isInternDataLoading} />
+            <HostInternInfo
+              info={internInfo}
+              isLoading={isLoading.internData}
+            />
             <ButtonNew
               small
               outline
