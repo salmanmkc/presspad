@@ -27,6 +27,7 @@ export default ({
       availableDates,
       internBookings,
       price,
+      bookingSearchDates,
     },
     calendarFunctions: { getHostProfile, setProfileData, toggleDateSection },
     stateProps: { expandDateSection },
@@ -53,6 +54,7 @@ export default ({
           getHostProfile={getHostProfile}
           setProfileData={setProfileData}
           isMobile={isMobile}
+          bookingSearchDates={bookingSearchDates}
         />
       </CalendarDiv>
     </CalendarCard>
@@ -97,6 +99,7 @@ export default ({
               getHostProfile={getHostProfile}
               setProfileData={setProfileData}
               isMobile={isMobile}
+              bookingSearchDates={bookingSearchDates}
             />
           </CalendarDiv>
         </MobileCalendarCard>

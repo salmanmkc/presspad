@@ -49,6 +49,7 @@ class CalendarComponent extends Component {
     isLoading: true,
     avDates: [],
     dates: new Date(),
+    daysAmount: 0,
     isRangeSelected: false,
     price: 0,
     bookingExists: false,
@@ -59,8 +60,22 @@ class CalendarComponent extends Component {
   };
 
   componentDidMount() {
-    const { availableDates } = this.props;
+    const { availableDates, bookingSearchDates } = this.props;
 
+    // if dates were selected in search set state accordingly
+    if (bookingSearchDates) {
+      this.setState({
+        dates: bookingSearchDates,
+        price: calculatePrice(
+          moment.range(bookingSearchDates[0], bookingSearchDates[1]),
+        ),
+        daysAmount: createDatesArray(
+          bookingSearchDates[0],
+          bookingSearchDates[1],
+        ).length,
+        isRangeSelected: true,
+      });
+    }
     this.refreshAvailableDates(availableDates);
   }
 
@@ -99,6 +114,8 @@ class CalendarComponent extends Component {
       message: '',
       messageType: '',
       bursary: false,
+      daysAmount:
+        dates.length > 1 && createDatesArray(dates[0], dates[1]).length,
     });
     // check if booking exists and update state
     this.bookingFound(dates, internBookings);
@@ -380,23 +397,21 @@ class CalendarComponent extends Component {
 
   render() {
     const {
-      price,
       isRangeSelected,
       bookingExists,
       message,
       messageType,
       isLoading,
       isBooking,
-      dates,
       couponState,
+      dates,
+      daysAmount,
+      price,
     } = this.state;
 
     const { currentUserId, adminView, role, isMobile } = this.props;
 
     const { couponDiscount } = couponState;
-
-    const days =
-      dates.length > 1 && createDatesArray(dates[0], dates[1]).length;
 
     if (isLoading) return <Spin tip="Loading Profile" />;
 
@@ -409,7 +424,7 @@ class CalendarComponent extends Component {
             tileDisabled={this.tileDisabled}
             onChange={this.onChange}
             onClickDay={this.onDayClick}
-            value={this.state.date}
+            value={this.state.date || (dates.length && dates)}
             locale="en-t-jp"
             maxDetail="month"
             minDetail="month"
@@ -422,7 +437,12 @@ class CalendarComponent extends Component {
         {/* Booking details */}
         {role === 'intern' && (
           <BookingRequestDetails>
-            {this.renderBookingDetails(isMobile, price, days, couponState)}
+            {this.renderBookingDetails(
+              isMobile,
+              price,
+              daysAmount,
+              couponState,
+            )}
             {/* Bursary checkbox */}
             {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
@@ -436,6 +456,7 @@ class CalendarComponent extends Component {
                 <Alert message={message} type={messageType} />
               </ErrorDiv>
             )}
+
             <RequestBtnContainer>
               {isMobile ? (
                 <T.PS>
@@ -448,6 +469,7 @@ class CalendarComponent extends Component {
                   <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
                 </T.PL>
               )}
+
               <Button
                 small={isMobile}
                 type="secondary"
@@ -456,21 +478,9 @@ class CalendarComponent extends Component {
                   !isRangeSelected || bookingExists || adminView || isBooking
                 }
               >
-                <Spin
-                  spinning={isBooking}
-                  indicator={
-                    <Icon
-                      icon="loading"
-                      style={{
-                        fontSize: 24,
-                        marginRight: '8px',
-                        color: 'white',
-                      }}
-                    />
-                  }
-                />
                 {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
               </Button>
+              <Spin spinning={isBooking} />
             </RequestBtnContainer>
           </BookingRequestDetails>
         )}

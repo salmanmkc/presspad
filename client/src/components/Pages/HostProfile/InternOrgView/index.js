@@ -48,10 +48,15 @@ export default class InternView extends Component {
     internBookings: [],
     expandDateSection: false,
     showFullData: false,
+    bookingSearchDates: [],
   };
 
   async componentDidMount() {
-    const { role, id } = this.props;
+    const { role, id, location } = this.props;
+    // check if dates were selected in search
+    if (location && location.state) {
+      this.setState({ bookingSearchDates: location.state.selectedSearchDates });
+    }
 
     const { profileData, error: getHostProfileError } = await getHostProfile(
       this.props,
@@ -122,6 +127,7 @@ export default class InternView extends Component {
       internBookings,
       showFullData,
       expandDateSection,
+      bookingSearchDates,
     } = this.state;
 
     const { match, id: currentUserId, role, windowWidth } = this.props;
@@ -149,6 +155,7 @@ export default class InternView extends Component {
       availableDates,
       internBookings,
       price,
+      bookingSearchDates,
     };
 
     const calendarData = {

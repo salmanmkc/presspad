@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { H6C, H7C } from '../../Common/Typography';
 
 import { HOSTS_URL } from '../../../constants/navRoutes';
@@ -21,26 +22,33 @@ const HostCard = ({
   hostId,
   selectedStartDate,
   selectedEndDate,
-}) => (
-  <HostCardWrapper
-    to={{
-      pathname: `${HOSTS_URL}/${hostId}`,
-      state: { selectedStartDate, selectedEndDate },
-    }}
-  >
-    <CardImage src={img} long={long} />
-    <CardDetailsWrapper>
-      <CardDetails>
-        <CardCity>{city}</CardCity>
-      </CardDetails>
-      <CardDetails>
-        <H6C color="darkerGray" mb="1">
-          {startDate} - {endDate}
-        </H6C>
-        <H7C color="gray">{postcode}</H7C>
-      </CardDetails>
-    </CardDetailsWrapper>
-  </HostCardWrapper>
-);
+}) => {
+  const selectedSearchDates = [
+    selectedStartDate && selectedStartDate._d,
+    selectedEndDate && selectedEndDate._d,
+  ];
+
+  return (
+    <HostCardWrapper
+      to={{
+        pathname: `${HOSTS_URL}/${hostId}`,
+        state: { selectedSearchDates },
+      }}
+    >
+      <CardImage src={img} long={long} />
+      <CardDetailsWrapper>
+        <CardDetails>
+          <CardCity>{city}</CardCity>
+        </CardDetails>
+        <CardDetails>
+          <H6C color="darkerGray" mb="1">
+            {startDate} - {endDate}
+          </H6C>
+          <H7C color="gray">{postcode}</H7C>
+        </CardDetails>
+      </CardDetailsWrapper>
+    </HostCardWrapper>
+  );
+};
 
 export default HostCard;
