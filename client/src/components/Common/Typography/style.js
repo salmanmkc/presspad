@@ -13,6 +13,7 @@ const CommonStyle = css`
   margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
   margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
   text-align: ${({ align }) => align || 'left'};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'auto')};
 `;
 
 export const Heading1 = styled.h1`
@@ -106,6 +107,7 @@ export const BodyXS = styled.p`
 
 export const StyledLink = styled(Link)`
   ${CommonStyle};
-  font-size: 20px;
-  line-height: 30px;
+  font-size: ${({ fz }) => (fz ? `${fz}px` : '20px')};
+  cursor: pointer;
+  font-weight: ${({ light }) => (light ? 'normal' : 'bold')};
 `;

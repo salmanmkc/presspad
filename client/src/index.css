@@ -47,3 +47,17 @@ html {
 .ant-avatar > img {
   object-fit: cover;
 }
+
+
+
+
+@media screen and (min-width: 768px) {
+  .ant-modal.ant-modal-confirm.ant-modal-confirm-warning{ 
+    width:70% !important;
+    max-width: 730px;
+  }  
+}
+
+.ant-modal.ant-modal-confirm.ant-modal-confirm-warning .ant-modal-content{
+  border: 4px solid #FFDF59
+}
