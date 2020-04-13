@@ -174,12 +174,17 @@ export default function HostTable({
     },
   ];
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      pagination={{ pageSize: 5 }}
-      scroll={{ x: '100%' }}
-      loading={loading}
-    />
+    <>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{ pageSize: 5 }}
+        scroll={{ x: '100%' }}
+        loading={loading}
+        expandable={{
+          expandedRowRender: (record, index) => <div>Test</div>,
+        }}
+      />
+    </>
   );
 }

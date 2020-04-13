@@ -44,6 +44,6 @@ module.exports = async (req, res, next) => {
 
     res.json(listings);
   } catch (err) {
-    next(boom.badRequest(err));
+    next(boom.badImplementation(err));
   }
 };

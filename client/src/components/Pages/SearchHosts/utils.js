@@ -58,14 +58,14 @@ const show7DaysWarning = () => {
   Modal.warning({
     title: 'Sorry, it is too close to your requested stay ',
     content: (
-      <>
+      <T.PS>
         Booking requests must be made at least 1 week before your internship
         starts. If you do not have anywhere to stay for your upcoming internship
         and it is urgent, please email PressPad at{' '}
-        <T.Link to="urgent@presspad.co.uk" color="lightBlue" fz="14">
+        <T.Link to="urgent@presspad.co.uk" color="lightBlue" fz="18" light>
           urgent@presspad.co.uk
         </T.Link>
-      </>
+      </T.PS>
     ),
     hideOkButton: true,
   });

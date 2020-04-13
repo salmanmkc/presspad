@@ -31,7 +31,6 @@ const hostDashboard = async (req, res, next) => {
         return prev + cur.amount;
       }, 0);
 
-    // console.log({ withdrawRequests });
     if (nextBooking && nextBooking._id && bookings && bookings.length) {
       // get the next booking details
       nextBookingWithDetails = bookings.find(

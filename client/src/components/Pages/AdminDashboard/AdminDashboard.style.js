@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, shadows } from '../../../theme';
+import { colors, shadows, breakpoints } from '../../../theme';
 
 export const Wrapper = styled.div`
   padding-top: 6rem;
@@ -120,4 +120,31 @@ export const ProfileWrapper = styled.div`
 
 export const HostWrapper = styled.div`
   display: ${props => props.hide && 'none'};
+`;
+
+export const Discount = styled.div`
+  color: ${({ theme }) => theme.colors.darkGray};
+
+  p {
+    margin: 0;
+  }
+`;
+
+export const BookingDetails = styled.section`
+  padding-left: ${({ theme }) => theme.spacings[8]};
+  padding-top: ${({ theme }) => theme.spacings[3]};
+`;
+
+export const BookingDetailsRow = styled.div`
+  display: flex;
+  margin-bottom: ${({ theme }) => theme.spacings[5]};
+`;
+
+export const DetailsItem = styled.span`
+  width: auto;
+  margin-right: ${({ theme }) => theme.spacings[7]};
+
+  @media ${breakpoints.laptop} {
+    margin-right: ${({ theme }) => theme.spacings[9]};
+  }
 `;

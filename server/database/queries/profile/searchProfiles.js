@@ -15,42 +15,78 @@ module.exports.searchProfiles = ({
       : {};
 
   const startDateFilter = startDate
-    ? {
-        $lte: [
-          {
-            $dateToString: {
-              date: '$$availableDate.startDate',
-              format: '%Y-%m-%d', // just compare between dates without time
+    ? [
+        {
+          $lte: [
+            {
+              $dateToString: {
+                date: '$$availableDate.startDate',
+                format: '%Y-%m-%d', // just compare between dates without time
+              },
             },
-          },
-          {
-            $dateToString: {
-              date: new Date(startDate),
-              format: '%Y-%m-%d',
+            {
+              $dateToString: {
+                date: new Date(startDate),
+                format: '%Y-%m-%d',
+              },
             },
-          },
-        ],
-      }
-    : true;
+          ],
+        },
+        {
+          $gte: [
+            {
+              $dateToString: {
+                date: '$$availableDate.endDate',
+                format: '%Y-%m-%d', // just compare between dates without time
+              },
+            },
+            {
+              $dateToString: {
+                date: new Date(startDate),
+                format: '%Y-%m-%d',
+              },
+            },
+          ],
+        },
+      ]
+    : [];
 
   const endDateFilter = endDate
-    ? {
-        $gte: [
-          {
-            $dateToString: {
-              date: '$$availableDate.endDate',
-              format: '%Y-%m-%d',
+    ? [
+        {
+          $gte: [
+            {
+              $dateToString: {
+                date: '$$availableDate.endDate',
+                format: '%Y-%m-%d',
+              },
             },
-          },
-          {
-            $dateToString: {
-              date: new Date(endDate),
-              format: '%Y-%m-%d',
+            {
+              $dateToString: {
+                date: new Date(endDate),
+                format: '%Y-%m-%d',
+              },
             },
-          },
-        ],
-      }
-    : true;
+          ],
+        },
+        {
+          $lte: [
+            {
+              $dateToString: {
+                date: '$$availableDate.startDate',
+                format: '%Y-%m-%d',
+              },
+            },
+            {
+              $dateToString: {
+                date: new Date(endDate),
+                format: '%Y-%m-%d',
+              },
+            },
+          ],
+        },
+      ]
+    : [];
 
   const basicPipelines = [
     {
@@ -103,7 +139,7 @@ module.exports.searchProfiles = ({
             input: '$availableDates',
             as: 'availableDate',
             cond: {
-              $and: [startDateFilter, endDateFilter],
+              $and: [...startDateFilter, ...endDateFilter],
             },
           },
         },

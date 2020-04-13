@@ -225,7 +225,6 @@ class HostProfile extends Component {
               adminView={role === 'admin' || userId === currentUserId}
               onError={this.handleImageFail}
             />
-            {console.log({ organisation })}
             <HeaderDiv>
               {role === 'admin' ? (
                 <Headline>{name}</Headline>

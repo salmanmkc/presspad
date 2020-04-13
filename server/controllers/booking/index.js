@@ -4,6 +4,9 @@ const viewBooking = require('./viewBooking');
 const acceptBooking = require('./acceptBooking');
 const rejectBooking = require('./rejectBooking');
 const getBookingsWithUsers = require('./getBookingsWithUsers');
+const getActiveBookingsApi = require('./getActiveBookings');
+const adminReviewsBooking = require('./adminReviewsBooking');
+const getBookingHistoryApi = require('./getBookingHistory');
 
 module.exports = {
   newBookingRequest,
@@ -12,4 +15,7 @@ module.exports = {
   acceptBooking,
   rejectBooking,
   getBookingsWithUsers,
+  getActiveBookingsApi,
+  adminReviewsBooking,
+  getBookingHistoryApi,
 };

@@ -5,6 +5,17 @@ import moment from 'moment';
 import { BlueLink } from './InternDashboard.style';
 import { bookingStatus } from '../../../theme';
 
+const tidyStatusText = status => {
+  switch (status) {
+    case 'awaiting admin':
+      return 'pending';
+    case 'rejected by admin':
+      return 'rejected';
+    default:
+      return status;
+  }
+};
+
 export const paymentsColumns = [
   {
     title: 'Due date',
@@ -34,14 +45,14 @@ export const bookingsColumns = windowWidth => {
   const columns = [
     {
       title: 'Host',
-      dataIndex: 'host.name',
+      dataIndex: '',
       render: (text, record) => (
         <BlueLink
           style={{ textTransform: 'capitalize' }}
           onClick={e => e.stopPropagation()}
           to={`/hosts/${record.host._id}`}
         >
-          {text}
+          {record.host.name}
         </BlueLink>
       ),
     },
@@ -80,7 +91,14 @@ export const bookingsColumns = windowWidth => {
   columns.push({
     title: 'Status',
     dataIndex: 'status',
-    render: status => <Badge color={bookingStatus[status]} text={status} />,
+    render: status => (
+      <>
+        <Badge
+          color={bookingStatus[tidyStatusText(status)]}
+          text={tidyStatusText(status)}
+        />
+      </>
+    ),
   });
 
   if (windowWidth > 800) {
