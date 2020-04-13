@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -81,5 +82,22 @@ export const TipsWrapper = styled.div`
       width: 50%;
       max-width: 507px;
     }
+  }
+`;
+
+export const ProfileLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.blue};
+  font-weight: bold;
+`;
+
+export const FireWorksImg = styled.div`
+  display: none;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    display: inline-block;
+    width: 61px;
+    height: 61px;
+    background-image: url(${({ src }) => src});
+    margin-left: ${({ theme }) => theme.spacings[4]};
+    margin-bottom: -${({ theme }) => theme.spacings[1]};
   }
 `;

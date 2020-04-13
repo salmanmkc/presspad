@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spin } from 'antd';
 
-import { H4C, H6C, H5C } from '../../../Common/Typography';
+import { H4C, H6C, H5C, P } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 import { getStringTime } from '../../../../helpers';
 
@@ -10,8 +10,12 @@ import LeaveReview from '../LeaveReview';
 import {
   ButtonsWrapper,
   Error,
-  // ProfileLink,
+  ProfileLink,
+  FireWorksImg,
 } from './HostView.style';
+
+import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import fireworks from '../../../../assets/fireworks.png';
 
 const PendingContent = ({
   madeAt,
@@ -56,7 +60,10 @@ const AcceptedContent = ({ internName }) => (
 );
 const ConfirmedContent = () => (
   <>
-    <H4C>booking details</H4C>
+    <H4C>
+      booking details
+      <FireWorksImg src={fireworks} />
+    </H4C>
     <H6C mb="2" mt="4" color="lightGray">
       status
     </H6C>
@@ -88,6 +95,14 @@ const CompletedContent = ({
       status
     </H6C>
     <H5C color="pink">complete</H5C>
+    <P mt="2" mb="5">
+      <ProfileLink to={INTERN_PROFILE.replace(':id', internId)}>
+        {internName}
+      </ProfileLink>
+      ’s stay with you is now complete. Thank you again for helping support our
+      PressPad community! Any earnings you made can now be withdrawn from your
+      account or donated to PressPad.
+    </P>
     {isLoading ? (
       <Spin />
     ) : (

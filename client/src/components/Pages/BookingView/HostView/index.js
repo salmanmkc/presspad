@@ -158,8 +158,6 @@ const HostView = ({ bookingInfo, id: userId }) => {
   }, [internId]);
 
   const {
-    name,
-    email,
     phoneNumber,
     gender,
     school,
@@ -170,8 +168,8 @@ const HostView = ({ bookingInfo, id: userId }) => {
   } = internData;
 
   const internInfo = {
-    name,
-    email,
+    name: intern.name,
+    email: intern.email,
     phone_number: phoneNumber,
     gender,
     school,
@@ -214,7 +212,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
     <Wrapper>
       <ContentWrapper>
         {statusContents[status]()}
-        {status !== 'complete' && (
+        {status !== 'completed' && (
           <>
             <HostInternInfo info={internInfo} isLoading={isInternDataLoading} />
             <ButtonNew
