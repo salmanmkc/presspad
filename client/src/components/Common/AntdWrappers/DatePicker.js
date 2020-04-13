@@ -1,6 +1,7 @@
 import React from 'react';
 import { DatePicker as AntdDatePicker } from 'antd';
-import { DatePickerWrapper } from './style';
+import { DatePickerWrapper, Error } from './style';
+import * as T from '../Typography';
 
 const DatePicker = ({
   children,
@@ -12,9 +13,10 @@ const DatePicker = ({
   format,
   style,
   width,
+  error,
   ...props
 }) => (
-  <DatePickerWrapper mt={mt} mb={mb} ml={ml} mr={mr}>
+  <DatePickerWrapper mt={mt} mb={mb} ml={ml} mr={mr} error={!!error}>
     <AntdDatePicker
       size={size || 'large'}
       format={format || 'YYYY-MM-DD'}
@@ -24,6 +26,7 @@ const DatePicker = ({
     >
       {children}
     </AntdDatePicker>
+    {error && <Error color="pink">{error}</Error>}
   </DatePickerWrapper>
 );
 

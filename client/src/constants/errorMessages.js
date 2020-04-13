@@ -20,6 +20,7 @@ module.exports = {
   ORGANISATION: 'Organisation is required',
   WORKING_AREA: 'Working area is required',
   EMAIL: 'INVALID email',
+  INVALID_DATE: 'please select valid date',
   // sign up fields
   signup: {
     NAME_REQUIRED: 'Please enter your name.',

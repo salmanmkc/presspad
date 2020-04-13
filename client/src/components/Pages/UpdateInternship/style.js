@@ -40,6 +40,6 @@ export const UntilLabel = styled(T.PBold)`
   margin: 0 auto;
 
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {
-    margin: 0 ${({ theme }) => theme.spacings[3]};
+    margin: ${({ theme }) => theme.spacings[3]};
   }
 `;

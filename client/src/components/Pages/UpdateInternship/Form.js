@@ -9,17 +9,20 @@ import Button from '../../Common/ButtonNew';
 import { dateRender } from '../../../helpers';
 
 // TODO move this to antd wrappers
-const Field = ({ label, mt, mb, mr, ml, ...props }) => (
+const Field = ({ label, mt, mb, mr, ml, error, ...props }) => (
   <div style={{ width: '100%' }}>
     <T.PBold as="label" mt={mt} mb={mb} mr={mr} ml={ml}>
       {label}
       <Input {...props} size="large" style={{ marginTop: '5px' }} />
+      {error && <T.PXS color="pink">{error}</T.PXS>}
     </T.PBold>
   </div>
 );
 
 const Form = ({
   state,
+  errors,
+  loading,
   userId,
   onInputChange,
   disabledStartDate,
@@ -27,6 +30,7 @@ const Form = ({
   disabledEndDate,
   onEndChange,
   onUploadInternshipOffer,
+  fileErrorHandler,
   onSubmit,
 }) => (
   <form onSubmit={onSubmit}>
@@ -48,6 +52,7 @@ const Form = ({
           name="organisation"
           value={state.organisation}
           onChange={onInputChange}
+          error={errors.organisation}
         />
       </SubRow>
     </Row>
@@ -67,12 +72,12 @@ const Form = ({
             endDate: state.internshipEndDate,
           })
         }
+        error={errors.internshipStartDate}
       />
 
       <UntilLabel mr="3" ml="3">
         Until
       </UntilLabel>
-
       <DatePicker
         mt="1"
         mb="1"
@@ -86,6 +91,7 @@ const Form = ({
             endDate: state.internshipEndDate,
           })
         }
+        error={errors.internshipEndDate}
       />
     </DatePickersRow>
     <T.PS mt="6">
@@ -101,6 +107,7 @@ const Form = ({
         name="name"
         value={state.internshipContact.name}
         data-parent="internshipContact"
+        error={errors.internshipContact.name}
       />
     </SubRow>
 
@@ -113,6 +120,7 @@ const Form = ({
           name="email"
           value={state.internshipContact.email}
           data-parent="internshipContact"
+          error={errors.internshipContact.email}
         />
       </SubRow>
       <SubRow>
@@ -123,6 +131,7 @@ const Form = ({
           name="phoneNumber"
           value={state.internshipContact.phoneNumber}
           data-parent="internshipContact"
+          error={errors.internshipContact.phoneNumber}
         />
       </SubRow>
     </Row>
@@ -138,6 +147,7 @@ const Form = ({
           name="addressline1"
           value={state.internshipOfficeAddress.addressline1}
           data-parent="internshipOfficeAddress"
+          error={errors.internshipOfficeAddress.addressline1}
         />
       </SubRow>
       <SubRow>
@@ -148,6 +158,7 @@ const Form = ({
           name="addressline2"
           value={state.internshipOfficeAddress.addressline2}
           data-parent="internshipOfficeAddress"
+          error={errors.internshipOfficeAddress.addressline2}
         />
       </SubRow>
     </Row>
@@ -161,6 +172,7 @@ const Form = ({
           name="city"
           value={state.internshipOfficeAddress.city}
           data-parent="internshipOfficeAddress"
+          error={errors.internshipOfficeAddress.city}
         />
       </SubRow>
 
@@ -172,6 +184,7 @@ const Form = ({
           name="postcode"
           value={state.internshipOfficeAddress.postcode}
           data-parent="internshipOfficeAddress"
+          error={errors.internshipOfficeAddress.postcode}
         />
       </SubRow>
     </Row>
@@ -188,16 +201,15 @@ const Form = ({
       <File
         placeholder="placeholder"
         handleChange={onUploadInternshipOffer}
-        // error={error}
-        handleError={console.log}
+        error={errors.offerLetter}
+        handleError={fileErrorHandler}
         userId={userId}
         isPrivate
         url={state.offerLetter.url}
         pathname={state.offerLetter.fileName}
-        // readOnly={readOnly}
       />
     </SubRow>
-    <Button mt="5" type="primary">
+    <Button mt="5" type="primary" loading={loading}>
       Update and complete request
     </Button>
   </form>

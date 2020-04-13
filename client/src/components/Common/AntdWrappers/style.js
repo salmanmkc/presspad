@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import * as T from '../Typography';
 
 const Wrapper = styled.div`
   margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
@@ -10,7 +11,9 @@ const Wrapper = styled.div`
 export const SelectWrapper = styled(Wrapper)``;
 
 export const DatePickerWrapper = styled(Wrapper)`
+  position: relative;
   width: 100%;
+  margin-bottom: ${({ error, theme }) => (error ? theme.spacings[2] : 0)};
 `;
 
 export const SwitchWrapper = styled(Wrapper)`
@@ -20,4 +23,9 @@ export const SwitchWrapper = styled(Wrapper)`
   button {
     margin-right: ${({ theme }) => theme.spacings[2]};
   }
+`;
+
+export const Error = styled(T.PXS)`
+  position: absolute;
+  bottom: -${({ theme }) => theme.spacings[4]};
 `;
