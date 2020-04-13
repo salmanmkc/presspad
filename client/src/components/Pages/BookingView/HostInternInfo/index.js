@@ -20,7 +20,12 @@ const HostInternInfo = ({ info, isLoading }) => {
             {name}
           </H2>
           {Object.keys(info).map(key => {
-            if (key === 'role' || key === 'bio' || !info[key]) {
+            if (
+              key === 'role' ||
+              key === 'bio' ||
+              key === 'name' ||
+              !info[key]
+            ) {
               return null;
             }
             if (key === 'address') {
