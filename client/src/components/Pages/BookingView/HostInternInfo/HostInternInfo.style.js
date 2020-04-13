@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
 `;
 
 export const BioWrapper = styled.div`
-  display: none;
+  display: ${({ userRole }) => (userRole === 'intern' ? 'block' : 'none')};
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
     display: block;
     margin-top: ${({ theme }) => theme.spacings[6]};

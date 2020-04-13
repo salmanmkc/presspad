@@ -211,12 +211,12 @@ export default class BookingView extends Component {
     const hostInfo = {
       name: host.name,
       email: host.email,
-      phoneNumber,
+      phone_number: phoneNumber,
       gender,
       school,
       hometown,
-      areaOfInterest: interests,
-      role,
+      area_of_interest: interests,
+      role: 'host',
       bio,
     };
 

@@ -6,7 +6,6 @@ import { Wrapper, InfoLine, BioWrapper } from './HostInternInfo.style';
 
 const HostInternInfo = ({ info, isLoading }) => {
   const { name, role } = info;
-
   return (
     <Wrapper>
       {isLoading ? (
@@ -25,13 +24,13 @@ const HostInternInfo = ({ info, isLoading }) => {
             }
             return (
               <InfoLine key={key}>
-                <H7C color="lightGray">{key}</H7C>
+                <H7C color="lightGray">{key.replace(/_/g, ' ')}</H7C>
                 <PSBold color="darkerGray">{info[key]}</PSBold>
               </InfoLine>
             );
           })}
           {info.bio && (
-            <BioWrapper>
+            <BioWrapper userRole={role}>
               <H3 color="darkerGray">Bio</H3>
               <PS color="gray">{info.bio}</PS>
             </BioWrapper>
