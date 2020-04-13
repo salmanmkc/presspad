@@ -6,6 +6,7 @@ import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
 import Field from '../../Common/ProfileComponents/Field';
 import fields from '../../../constants/fields';
+import FileDownload from '../../Common/Files/FileDownload';
 
 import { tagColors, colors } from '../../../theme';
 import { DBS_CHECK_PAGE } from '../../../constants/navRoutes';
@@ -143,17 +144,9 @@ export default function InternTable({
       key: 'dbsCheck',
       render: dbs => (
         <div>
-          {console.log('dbs', data)}
+          {console.log('dbs', dbs)}
           {dbs ? (
-            <Field
-              {...fields['DBSCheckNum']}
-              value={dbs.fileName}
-              // error={errors['DBSCheck']}
-              // handleChange={handleChange}
-              // handleError={handleError}
-              // userId={userId}
-              // role={role}
-            />
+            <FileDownload fileUrl="/" fileName={dbs.fileName} />
           ) : (
             <p>hello</p>
           )}
