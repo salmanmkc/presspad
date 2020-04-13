@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { disabledStartDate, disabledEndDate } from '../../../helpers';
-
+import { updateInternship } from './utils';
 import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import Form from './Form';
 
@@ -94,7 +94,7 @@ const UpdateInternship = ({ id }) => {
 
     if (!_errors) {
       setLoading(true);
-      await axios.patch(API_INTERNSHIP_URL, state);
+      await updateInternship(state);
       setLoading(false);
     } else {
       setErrors(oldErrors => ({ ...oldErrors, ..._errors }));

@@ -1,14 +1,22 @@
 const boom = require('boom');
-const { SIGNUP_URL } = require('../../../client/src/constants/apiRoutes');
-const { signupSchema } = require('../../../client/src/validation');
+const {
+  SIGNUP_URL,
+  INTERNSHIP,
+} = require('../../../client/src/constants/apiRoutes');
+const {
+  signupSchema,
+  internshipSchema,
+} = require('../../../client/src/validation');
 // Schemas for each route
 const schemas = {
   [SIGNUP_URL]: signupSchema,
+  [INTERNSHIP]: internshipSchema,
 };
 
 // The supported methods for each route
 const methods = {
   [SIGNUP_URL]: ['POST'],
+  [INTERNSHIP]: ['PATCH'],
 };
 
 // Validate function
