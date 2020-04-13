@@ -102,6 +102,12 @@ const buildData = options =>
       users,
       accounts,
     });
+
+    // add a coupon to a pending booking request
+    const addCouponToBooking = await booking.update(
+      coupons.expiredCoupon[0]._id,
+    );
+
     return {
       connection,
       mongoServer,
@@ -121,6 +127,7 @@ const buildData = options =>
       externalTransactions,
       installments,
       withdrawRequests,
+      addCouponToBooking,
     };
   });
 

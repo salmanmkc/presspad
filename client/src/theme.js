@@ -37,7 +37,7 @@ const newColors = {
   black: '#181818',
   darkerGray: '#2F2F2F',
   darkGray: '#464646',
-  gray: '#2F2F2F',
+  gray: '#595959',
   lightGray: '#B5B3B3',
   lighterGray: '#DCDCDC',
   lightestGray: '#FAFAFA',
@@ -130,9 +130,11 @@ export const tagColors = {
 //  set colours for tags in the table
 export const bookingStatus = {
   pending: colors.orange,
-  confirmed: colors.green,
+  confirmed: colors.yellow,
   canceled: colors.red,
-  completed: colors.gray,
+  completed: colors.blue,
+  rejected: colors.pink,
+  accepted: colors.lightBlue,
 };
 
 const spacings = {

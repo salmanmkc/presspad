@@ -11,7 +11,7 @@ const GeneralLayout = ({ children, isLoggedIn, navbarProps }) => (
       role={navbarProps.userType}
       resetState={navbarProps.resetState}
     />
-    {children}
+    <S.ContentWrapper>{children}</S.ContentWrapper>
   </S.Wrapper>
 );
 

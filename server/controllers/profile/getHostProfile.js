@@ -59,7 +59,9 @@ const getHostProfile = async (req, res, next) => {
       city,
     };
 
-    hostProfile.listing.address = address;
+    if (!booking) {
+      hostProfile.listing.address = address;
+    }
 
     if (!hostProfile || !hostProfile.profile || !hostProfile.listing)
       return next(boom.notFound('Host has no profile or does not exist'));

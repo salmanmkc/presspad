@@ -11,9 +11,13 @@ const {
 
 module.exports = async (req, res, next) => {
   try {
-    const { city, startDate, endDate } = req.body;
-
-    const listings = await searchProfiles({ city, startDate, endDate });
+    const { city, startDate, endDate, acceptAutomatically } = req.body;
+    const listings = await searchProfiles({
+      city,
+      startDate,
+      endDate,
+      acceptAutomatically,
+    });
     if (listings.length) {
       await Promise.all(
         listings.map(listing => generateUrl(listing.photos[0])),
@@ -40,6 +44,6 @@ module.exports = async (req, res, next) => {
 
     res.json(listings);
   } catch (err) {
-    next(boom.badRequest(err));
+    next(boom.badImplementation(err));
   }
 };

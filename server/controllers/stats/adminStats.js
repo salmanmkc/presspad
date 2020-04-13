@@ -13,6 +13,10 @@ const {
 const {
   findAllWithdrawRequests,
 } = require('../../database/queries/withdrawRequest');
+const {
+  getActiveBookings,
+  getBookingHistory,
+} = require('../../database/queries/bookings/');
 
 const generateUrl = require('./../../helpers/generateFileURL');
 
@@ -111,6 +115,26 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'payments') {
     return findAllWithdrawRequests().then(data => res.json(data));
+  }
+  if (userType === 'bookings') {
+    return getActiveBookings().then(data => {
+      const cleanData = data.map(booking => {
+        const updatedBooking = { key: data.indexOf(booking) + 1, ...booking };
+
+        return updatedBooking;
+      });
+      res.json(cleanData);
+    });
+  }
+  if (userType === 'bookingHistory') {
+    return getBookingHistory().then(data => {
+      const cleanData = data.map(booking => {
+        const updatedBooking = { key: data.indexOf(booking) + 1, ...booking };
+
+        return updatedBooking;
+      });
+      res.json(cleanData);
+    });
   }
   return next(boom.badRequest('Invalid userType'));
 };

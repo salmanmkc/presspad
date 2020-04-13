@@ -31,6 +31,10 @@ const notificationSchema = new Schema(
       ],
       required: true,
     },
+    // message that has been sent by the user
+    message: {
+      type: String,
+    },
     // flag to store if the user saw this or not
     seen: {
       type: Boolean,

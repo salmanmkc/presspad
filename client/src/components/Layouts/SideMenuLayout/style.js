@@ -12,6 +12,7 @@ export const Wrapper = styled.div`
 export const ContentWrapper = styled.div`
   position: relative;
   display: flex;
+  flex-direction: column;
   width: 100%;
   padding: ${({ theme }) =>
     `${theme.spacings.sideMenuLayout.top} 3% ${theme.spacings.sideMenuLayout.bottom}`};
