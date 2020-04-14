@@ -77,8 +77,6 @@ module.exports = async (req, res, next) => {
               await generateUrl(dbsCheck);
             }
 
-            console.log('dbs', intern);
-
             return internObj;
           }),
         );
@@ -89,26 +87,36 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'hosts') {
     return getAllHostStats()
-      .then(stats => {
+      .then(async stats => {
         if (stats.length === 0) return res.json(stats);
 
-        const cleanStats = stats.map(host => {
-          const hostObj = {
-            key: stats.indexOf(host) + 1,
-            name: host.name,
-            email: host.email,
-            hometown: host.listing.hometown,
-            hosted: host.internsHosted,
-            approvalStatus: host.profile[0].verified
-              ? 'Approved'
-              : 'Waiting for approval',
-            profileId: host.profile[0]._id,
-            userId: host._id,
-            totalIncome: host.totalIncome,
-            currentBalance: host.currentBalance,
-          };
-          return hostObj;
-        });
+        const cleanStats = await Promise.all(
+          stats.map(async host => {
+            const hostObj = {
+              key: stats.indexOf(host) + 1,
+              name: host.name,
+              email: host.email,
+              hometown: host.listing.hometown,
+              hosted: host.internsHosted,
+              approvalStatus: host.profile[0].verified
+                ? 'Approved'
+                : 'Waiting for approval',
+              profileId: host.profile[0]._id,
+              dbsCheck: host.profile[0].DBSCheck,
+              userId: host._id,
+              totalIncome: host.totalIncome,
+              currentBalance: host.currentBalance,
+            };
+
+            const { dbsCheck } = hostObj;
+
+            if (dbsCheck && dbsCheck.fileName) {
+              await generateUrl(dbsCheck);
+            }
+
+            return hostObj;
+          }),
+        );
         return res.json(cleanStats);
       })
       .catch(err => next(boom.badImplementation(err)));

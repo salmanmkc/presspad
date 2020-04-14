@@ -524,6 +524,9 @@ export default class AdminDashboard extends Component {
                   data={filteredData}
                   highlightVal={highlightVal}
                   triggerHostView={this.triggerHostView}
+                  updatingDBS={updatingDBS}
+                  updateDBS={this.updateDBS}
+                  handleDBSChange={this.handleDBSChange}
                 />
               </HostWrapper>
             )}

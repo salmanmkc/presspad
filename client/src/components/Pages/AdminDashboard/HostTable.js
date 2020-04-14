@@ -3,6 +3,9 @@ import { Table, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 
 import { colors } from '../../../theme';
+import { PXS } from '../../Common/Typography';
+import FileDownload from '../../Common/Files/FileDownload';
+import { EditButton } from './AdminDashboard.style';
 
 //  set colours for tags in the table
 const tagColors = {
@@ -16,6 +19,7 @@ export default function HostTable({
   loading,
   highlightVal,
   triggerHostView,
+  updateDBS,
 }) {
   const columns = [
     {
@@ -147,6 +151,28 @@ export default function HostTable({
       ),
     },
     {
+      title: 'DBS',
+      dataIndex: 'dbsCheck',
+      key: 'dbsCheck',
+      render: (dbs, record) => (
+        <>
+          <PXS>{(dbs && dbs.refNum) || 'N/A'}</PXS>
+          {dbs && dbs.url ? (
+            <FileDownload
+              style={{ marginBottom: '10px', border: '1px red solid' }}
+              url={dbs.url}
+              fileName="View certificate"
+            />
+          ) : (
+            <PXS>No certificate</PXS>
+          )}
+          <EditButton type="button" onClick={() => updateDBS(record)}>
+            Edit
+          </EditButton>
+        </>
+      ),
+    },
+    {
       title: 'Approval Status',
       dataIndex: 'approvalStatus',
       key: 'approvalStatus',
@@ -181,9 +207,6 @@ export default function HostTable({
         pagination={{ pageSize: 5 }}
         scroll={{ x: '100%' }}
         loading={loading}
-        expandable={{
-          expandedRowRender: (record, index) => <div>Test</div>,
-        }}
       />
     </>
   );
