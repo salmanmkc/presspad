@@ -111,7 +111,7 @@ const checkCouponCode = async (_code, _dates, _bookingPrice) => {
 };
 
 const CouponCode = props => {
-  const { dates, bookingPrice, setCouponState, couponState } = props;
+  const { dates, bookingPrice, setCouponState, couponState, bursary } = props;
 
   const { discountRate, couponError, isCouponLoading, couponId } = couponState;
 
@@ -187,7 +187,7 @@ const CouponCode = props => {
         onChange={handleCouponChange}
         onBlur={handleBlur}
         placeholder="   Type code ..."
-        disabled={bookingPrice === 0}
+        disabled={bookingPrice === 0 || bursary}
         value={code || ''}
       />
 

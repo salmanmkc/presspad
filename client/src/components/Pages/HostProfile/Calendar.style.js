@@ -273,3 +273,9 @@ export const InputLabel = styled.label`
   color: ${colors.fontLightBlack};
   line-height: 2rem;
 `;
+
+export const DiscountPriceDetails = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+`;

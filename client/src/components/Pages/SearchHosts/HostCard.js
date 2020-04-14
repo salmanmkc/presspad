@@ -24,10 +24,16 @@ const HostCard = ({
   selectedEndDate,
   isLoggedIn,
 }) => {
-  const selectedSearchDates = [
-    selectedStartDate && selectedStartDate._d,
-    selectedEndDate && selectedEndDate._d,
-  ];
+  let selectedSearchDates;
+
+  if (
+    selectedStartDate &&
+    selectedStartDate._d !== null &&
+    selectedEndDate &&
+    selectedEndDate._d !== null
+  ) {
+    selectedSearchDates = [selectedStartDate._d, selectedEndDate._d];
+  }
 
   return (
     <HostCardWrapper

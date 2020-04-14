@@ -87,7 +87,6 @@ module.exports = async (req, res, next) => {
 
     return res.json({ success: true });
   } catch (error) {
-    console.log('err', error);
     return next(boom.badImplementation(error));
   }
 };

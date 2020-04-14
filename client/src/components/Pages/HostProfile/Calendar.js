@@ -13,6 +13,7 @@ import {
 
 // Typography
 import * as T from '../../Common/Typography';
+import { colors } from '../../../theme';
 import Button from '../../Common/ButtonNew';
 
 import {
@@ -29,6 +30,7 @@ import {
   BursaryContainer,
   PopoverContentContainer,
   RequestBtnContainer,
+  DiscountPriceDetails,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -113,7 +115,6 @@ class CalendarComponent extends Component {
       price: calculatePrice(moment.range(dates[0], dates[1])),
       message: '',
       messageType: '',
-      bursary: false,
       daysAmount:
         dates.length > 1 && createDatesArray(dates[0], dates[1]).length,
     });
@@ -159,7 +160,10 @@ class CalendarComponent extends Component {
       hostId,
       getHostProfile,
       setProfileData,
+      history,
     } = this.props;
+
+    if (!currentUserId) return history.push('/sign-in');
 
     const data = {
       listing: listingId,
@@ -285,7 +289,7 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  renderBookingDetails = (isMobile, price, duration, couponState) => {
+  renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
     const { couponId, couponDiscount } = couponState;
     return (
       <>
@@ -308,30 +312,54 @@ class CalendarComponent extends Component {
         <Row>
           <Col>
             {isMobile &&
-              (couponId && couponDiscount > 0 ? (
+              ((couponId && couponDiscount > 0) || bursary ? (
                 <T.PS>Discounted price for period:</T.PS>
               ) : (
                 <T.PS>Full price for period:</T.PS>
               ))}
-
-            {couponId && couponDiscount > 0 ? (
-              <T.PL>Discounted price for period:</T.PL>
-            ) : (
-              <T.PL>Full price for period:</T.PL>
-            )}
+            {/* Price calculation */}
+            {!isMobile &&
+              (price > 0 && ((couponId && couponDiscount > 0) || bursary) ? (
+                <T.PL>Discounted price for period:</T.PL>
+              ) : (
+                <T.PL>Full price for period:</T.PL>
+              ))}
           </Col>
           <Col value>
             {isMobile &&
-              (couponId && couponDiscount > 0 ? (
-                <T.PSBold>{price - couponDiscount}£</T.PSBold>
+              (price > 0 && ((couponId && couponDiscount > 0) || bursary) ? (
+                <DiscountPriceDetails>
+                  <T.PSBold>£{bursary ? 0 : price - couponDiscount}</T.PSBold>
+                  <T.PXSBold
+                    style={{
+                      color: colors.gray,
+                      textDecoration: 'line-through',
+                      marginLeft: '-1rem',
+                    }}
+                  >
+                    £{price}
+                  </T.PXSBold>
+                </DiscountPriceDetails>
               ) : (
-                <T.PSBold>{price}£</T.PSBold>
+                <T.PSBold>£{price}</T.PSBold>
               ))}
-            {couponId && couponDiscount > 0 ? (
-              <T.PBold>{price - couponDiscount}£</T.PBold>
-            ) : (
-              <T.PBold>{price}£</T.PBold>
-            )}
+            {!isMobile &&
+              (price > 0 && ((couponId && couponDiscount > 0) || bursary) ? (
+                <DiscountPriceDetails>
+                  <T.PBold>£{bursary ? 0 : price - couponDiscount}</T.PBold>
+                  <T.PXSBold
+                    style={{
+                      color: colors.gray,
+                      textDecoration: 'line-through',
+                      marginLeft: '0.5rem',
+                    }}
+                  >
+                    £{price}
+                  </T.PXSBold>
+                </DiscountPriceDetails>
+              ) : (
+                <T.PBold>£{price}</T.PBold>
+              ))}
           </Col>
         </Row>
         <Row>
@@ -353,6 +381,7 @@ class CalendarComponent extends Component {
           </Col>
           <Col value>
             <CouponCode
+              bursary={this.state.bursary}
               bookingPrice={price}
               couponState={couponState}
               setCouponState={this.setCouponState}
@@ -370,7 +399,7 @@ class CalendarComponent extends Component {
       <Checkbox
         style={{ paddingRight: '1rem' }}
         name="checkbox"
-        onChange={e => this.onCheckboxChange(e)}
+        onChange={this.onCheckboxChange}
       />
 
       <Popover
@@ -406,9 +435,10 @@ class CalendarComponent extends Component {
       dates,
       daysAmount,
       price,
+      bursary,
     } = this.state;
 
-    const { currentUserId, adminView, role, isMobile } = this.props;
+    const { currentUserId, adminView, isMobile } = this.props;
 
     const { couponDiscount } = couponState;
 
@@ -435,7 +465,13 @@ class CalendarComponent extends Component {
         </CalendarWrapper>
         {/* Booking details */}
         <BookingRequestDetails>
-          {this.renderBookingDetails(isMobile, price, daysAmount, couponState)}
+          {this.renderBookingDetails(
+            isMobile,
+            price,
+            daysAmount,
+            couponState,
+            bursary,
+          )}
           {/* Bursary checkbox */}
           {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
@@ -454,12 +490,12 @@ class CalendarComponent extends Component {
             {isMobile ? (
               <T.PS>
                 Price for period <br />{' '}
-                <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
+                <strong>£{bursary ? 0 : price - couponDiscount}</strong>
               </T.PS>
             ) : (
               <T.PL>
                 Price for period <br />{' '}
-                <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
+                <strong>£{bursary ? 0 : price - couponDiscount}</strong>
               </T.PL>
             )}
 
