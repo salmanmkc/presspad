@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+
 import { disabledStartDate, disabledEndDate } from '../../../helpers';
-import { updateInternship } from './utils';
+import { updateInternshipAndCreateBooking } from './utils';
 import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import Form from './Form';
 
@@ -28,10 +30,14 @@ const fields = {
     url: '',
   },
 };
+
+const useQuery = () => new URLSearchParams(useLocation().search);
+
 const UpdateInternship = ({ id }) => {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({ ...fields });
   const [errors, setErrors] = useState({ ...fields, offerLetter: '' });
+  const query = useQuery();
 
   const onInputChange = e => {
     const { value, name, dataset: { parent } = {} } = e.target;
@@ -86,6 +92,14 @@ const UpdateInternship = ({ id }) => {
   }, [id]);
 
   const onSubmit = async e => {
+    const bookingData = {
+      startDate: query.get('startDate'),
+      endDate: query.get('endDate'),
+      host: query.get('hostId'),
+      price: query.get('price'),
+      listing: query.get('listing'),
+    };
+
     e.preventDefault();
     const { errors: _errors } = await validate({
       schema: internshipSchema,
@@ -94,11 +108,14 @@ const UpdateInternship = ({ id }) => {
 
     if (!_errors) {
       setLoading(true);
-      await updateInternship(state);
-      setLoading(false);
+      await updateInternshipAndCreateBooking({
+        internshipData: state,
+        bookingData,
+      });
     } else {
       setErrors(oldErrors => ({ ...oldErrors, ..._errors }));
     }
+    setLoading(false);
   };
 
   const fileErrorHandler = ({ errorMsg }) => {

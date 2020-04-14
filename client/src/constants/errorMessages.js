@@ -3,7 +3,7 @@ module.exports = {
   HOMETOWN: 'Hometown is required',
   BIO: 'Please write a short bio about yourself',
   JOB_TITLE: 'Job title is required',
-  REQUIRED: 'This field is required',
+  REQUIRED: field => `This field is required ${field}`,
   BIRTHDATE: 'Please provide your birth date',
   SCHOOL: 'Please enter your school or university',
   PROFILE_IMAGE: 'Please upload a photo of yourself',

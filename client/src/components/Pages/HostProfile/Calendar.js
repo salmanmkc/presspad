@@ -5,6 +5,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { Spin, Alert, Modal } from 'antd';
 import Icon from '../../Common/Icon';
+import sendBookingRequest from '../../../helpers/sendBookingRequest';
+
 import {
   createDatesArray,
   getDateRangeFromArray,
@@ -31,7 +33,6 @@ import {
   BOOKINGS_INTERNSHIP_URL,
 } from '../../../constants/navRoutes';
 
-const bookingRequest = (url, data) => axios.post(url, data);
 const inValidInternshipDates =
   "Your internship period doesn't match the selected dates";
 class CalendarComponent extends Component {
@@ -112,7 +113,22 @@ class CalendarComponent extends Component {
   };
 
   goToUpdateInternship = () => {
-    this.props.history.push(BOOKINGS_INTERNSHIP_URL);
+    const { dates, price } = this.state;
+
+    const { listingId, hostId } = this.props;
+
+    const searchParams = new URLSearchParams();
+    searchParams.append('startDate', dates[0]);
+    searchParams.append('endDate', dates[1]);
+    searchParams.append('hostId', hostId);
+    searchParams.append('price', price);
+    searchParams.append('listing', listingId);
+    searchParams.append('host', hostId);
+
+    this.props.history.push({
+      pathname: BOOKINGS_INTERNSHIP_URL,
+      search: searchParams.toString(),
+    });
   };
 
   showAlertAndRedirectToProfile = message => {
@@ -164,49 +180,26 @@ class CalendarComponent extends Component {
       }
 
       if (verified && isComplete && validInternshipDates) {
-        bookingRequest(API_BOOKING_REQUEST_URL, data)
-          .then(() => {
-            this.setState({
-              message: 'Booking request sent successfully',
-              messageType: 'success',
-              isBooking: false,
-              dates: null,
-              isRangeSelected: false,
-              price: '0',
-            });
-            Modal.success({
-              title: 'Done!',
-              content: 'your booking successfully sent',
-            });
-            // update parent state
-            getHostProfile();
-          })
-          .catch(error => {
-            const serverError = error.response && error.response.data.error;
-
-            let errorMsg;
-
-            if (
-              serverError ===
-              'user has already a booking request for those dates'
-            ) {
-              errorMsg =
-                'It seems like you have already requested a booking during those dates. You can only make one request at a time.';
-            } else if (
-              serverError === 'listing is not available during those dates'
-            ) {
-              errorMsg =
-                'Unfortunately this listing is not fully available during your requested booking dates.';
-            } else {
-              errorMsg = serverError;
-            }
-
-            this.setState({
-              isBooking: false,
-              messageType: 'error',
-              message: errorMsg,
-            });
+        const { error } = await sendBookingRequest(data);
+        if (!error) {
+          this.setState({
+            message: 'Booking request sent successfully',
+            messageType: 'success',
+            isBooking: false,
+            dates: null,
+            isRangeSelected: false,
+            price: '0',
           });
+
+          // update parent state
+          getHostProfile();
+        } else {
+          this.setState({
+            isBooking: false,
+            messageType: 'error',
+            message: error,
+          });
+        }
       }
     } catch (err) {
       if (err && err.response && err.response.status === 404) {
