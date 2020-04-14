@@ -2,16 +2,16 @@ import React, { useReducer, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
-import { Modal, message } from 'antd';
+import { message } from 'antd';
 
 import ButtonNew from '../../../Common/ButtonNew';
+import { Modal } from '../../../Common/AntdWrappers';
 
 import BookingDates from '../BookingDates';
 import HostInternInfo from '../HostInternInfo';
 import TipsCard from '../TipsCard';
 import CancelBookingButton from '../CancelBookingButton';
 
-import { Wrapper, ContentWrapper, Error, TipsWrapper } from './HostView.style';
 import {
   PendingContent,
   AcceptedContent,
@@ -19,11 +19,12 @@ import {
   ConfirmedContent,
   CompletedContent,
 } from './statusContents';
+import WarningModal from './WarningModal';
+import { Wrapper, ContentWrapper, Error, TipsWrapper } from './HostView.style';
 
 import {
   API_INTERN_PROFILE_URL,
   API_ACCEPT_BOOKING_URL,
-  API_REJECT_BOOKING_URL,
 } from '../../../../constants/apiRoutes';
 import { INTERN_PROFILE } from '../../../../constants/navRoutes';
 
@@ -33,6 +34,7 @@ const initialState = {
   isLoading: {
     internData: true,
   },
+  visible: false,
   error: '',
 };
 
@@ -58,11 +60,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         bookingStatus: 'rejected',
-
-        isLoading: { ...state.isLoading, reject: false },
+        visible: false,
       };
-    case 'isRejectLoading':
-      return { ...state, isLoading: { ...state.isLoading, reject: true } };
+    case 'closeModal':
+      return { ...state, visible: false };
+    case 'openModal':
+      return { ...state, visible: true };
     case 'isError':
       return { ...state, isLoading: {}, error: action.error };
     default:
@@ -73,7 +76,7 @@ const reducer = (state, action) => {
 const HostView = ({ bookingInfo, id: userId }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { bookingStatus, internData, isLoading, error } = state;
+  const { bookingStatus, internData, isLoading, visible, error } = state;
 
   const {
     _id: bookingId,
@@ -114,42 +117,14 @@ const HostView = ({ bookingInfo, id: userId }) => {
   };
 
   const handleReject = () => {
-    Modal.confirm({
-      title: 'Are you sure?',
-      content: `Reject ${
-        bookingInfo.intern.name.split(' ')[0]
-      }'s booking request?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk: async () => {
-        dispatch({ type: 'isRejectLoading' });
+    dispatch({ type: 'reject' });
+  };
 
-        try {
-          await axios.patch(
-            API_REJECT_BOOKING_URL.replace(':id', bookingInfo._id),
-          );
-
-          Modal.success({
-            title: 'Done!',
-            content: `You successfully rejected ${
-              bookingInfo.intern.name.split(' ')[0]
-            }'s request`,
-            onOk: () => {
-              dispatch({ type: 'reject' });
-            },
-            onCancel: () => {
-              dispatch({ type: 'reject' });
-            },
-          });
-        } catch (err) {
-          const errorMsg =
-            err.response && err.response.data && err.response.data.error;
-          message.error(errorMsg || 'Something went wrong');
-          dispatch({ type: 'isError', error: errorMsg });
-        }
-      },
-    });
+  const handleModalClose = () => {
+    dispatch({ type: 'closeModal' });
+  };
+  const handleModalOpen = () => {
+    dispatch({ type: 'openModal' });
   };
 
   useEffect(() => {
@@ -198,7 +173,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
         madeAt={madeAt}
         createdAt={createdAt}
         handleAccept={handleAccept}
-        handleReject={handleReject}
+        handleReject={handleModalOpen}
         isAcceptLoading={isLoading.accept}
         isRejectLoading={isLoading.reject}
         error={error}
@@ -221,6 +196,13 @@ const HostView = ({ bookingInfo, id: userId }) => {
 
   return (
     <Wrapper>
+      <WarningModal
+        handleReject={handleReject}
+        handleClose={handleModalClose}
+        internName={intern.name}
+        bookingId={bookingId}
+        visible={visible}
+      />
       <ContentWrapper>
         {statusContents[status]()}
         {status !== 'completed' && (

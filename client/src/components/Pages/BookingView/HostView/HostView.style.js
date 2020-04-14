@@ -46,6 +46,7 @@ export const ButtonsWrapper = styled.div`
       display: none;
     }
   }
+
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
     > button {
       width: 215px;
@@ -55,6 +56,18 @@ export const ButtonsWrapper = styled.div`
       padding: ${({ theme }) => theme.spacings[3]};
       > span {
         display: inline;
+        display: ${({ loading }) => (loading ? 'none' : 'inline')};
+      }
+    }
+
+    > button:first-child {
+      > span {
+      }
+    }
+
+    > button:last-child {
+      > span {
+        display: ${({ loading }) => (loading ? 'none' : 'inline')};
       }
     }
   }
