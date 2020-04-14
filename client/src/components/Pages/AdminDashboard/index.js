@@ -67,7 +67,7 @@ export default class AdminDashboard extends Component {
     bookingToUpdate: null,
     newBookingStatus: null,
     updatingDBS: null,
-    dbsDetails: { refNum: null, fileName: null },
+    dbsDetails: { refNum: '', fileName: '' },
     userToUpdate: null,
     errors: { dbsDetails: { refNum: null, fileName: null } },
   };
@@ -348,12 +348,18 @@ export default class AdminDashboard extends Component {
   };
 
   updateDBS = record => {
-    // const { }
-    this.setState({
-      dbsDetails: record.dbsCheck,
-      userToUpdate: record.userId,
-      modalToShow: 'dbs',
-    });
+    if (record.dbsCheck) {
+      this.setState({
+        dbsDetails: record.dbsCheck,
+        userToUpdate: record.userId,
+        modalToShow: 'dbs',
+      });
+    } else {
+      this.setState({
+        userToUpdate: record.userId,
+        modalToShow: 'dbs',
+      });
+    }
   };
 
   handleDBSChange = ({ value, key }) => {

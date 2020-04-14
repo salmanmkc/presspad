@@ -145,8 +145,8 @@ export default function InternTable({
       key: 'dbsCheck',
       render: (dbs, record) => (
         <>
-          <PXS>{dbs.refNum || 'N/A'}</PXS>
-          {dbs.url ? (
+          <PXS>{(dbs && dbs.refNum) || 'N/A'}</PXS>
+          {dbs && dbs.url ? (
             <FileDownload
               style={{ marginBottom: '10px', border: '1px red solid' }}
               url={dbs.url}
