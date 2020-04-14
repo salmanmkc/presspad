@@ -152,7 +152,7 @@ class CalendarComponent extends Component {
   };
 
   handleClick = async () => {
-    const { dates, price, couponState, bursary } = this.state;
+    const { dates, price, couponState } = this.state;
     const {
       currentUserId,
       listingId,
@@ -169,7 +169,6 @@ class CalendarComponent extends Component {
       endDate: moment(dates[1]).format('YYYY-MM-DD'),
       price,
       couponId: couponState.couponId,
-      bursary,
     };
 
     let message = '';
@@ -435,55 +434,47 @@ class CalendarComponent extends Component {
           />
         </CalendarWrapper>
         {/* Booking details */}
-        {role === 'intern' && (
-          <BookingRequestDetails>
-            {this.renderBookingDetails(
-              isMobile,
-              price,
-              daysAmount,
-              couponState,
+        <BookingRequestDetails>
+          {this.renderBookingDetails(isMobile, price, daysAmount, couponState)}
+          {/* Bursary checkbox */}
+          {!currentUserId && this.renderBursaryCheckbox(isMobile)}
+
+          {/* Average Response Time */}
+          <T.P>
+            This host typically takes <strong>3 days</strong> to respond to a
+            booking request.
+          </T.P>
+          {message && (
+            <ErrorDiv>
+              <Alert message={message} type={messageType} />
+            </ErrorDiv>
+          )}
+
+          <RequestBtnContainer>
+            {isMobile ? (
+              <T.PS>
+                Price for period <br />{' '}
+                <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
+              </T.PS>
+            ) : (
+              <T.PL>
+                Price for period <br />{' '}
+                <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
+              </T.PL>
             )}
-            {/* Bursary checkbox */}
-            {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
-            {/* Average Response Time */}
-            <T.P>
-              This host typically takes <strong>3 days</strong> to respond to a
-              booking request.
-            </T.P>
-            {message && (
-              <ErrorDiv>
-                <Alert message={message} type={messageType} />
-              </ErrorDiv>
-            )}
-
-            <RequestBtnContainer>
-              {isMobile ? (
-                <T.PS>
-                  Price for period <br />{' '}
-                  <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
-                </T.PS>
-              ) : (
-                <T.PL>
-                  Price for period <br />{' '}
-                  <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
-                </T.PL>
-              )}
-
-              <Button
-                small={isMobile}
-                type="secondary"
-                onClick={this.handleClick}
-                disabled={
-                  !isRangeSelected || bookingExists || adminView || isBooking
-                }
-              >
-                {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
-              </Button>
-              <Spin spinning={isBooking} />
-            </RequestBtnContainer>
-          </BookingRequestDetails>
-        )}
+            <Button
+              small={isMobile}
+              type="secondary"
+              onClick={this.handleClick}
+              disabled={
+                !isRangeSelected || bookingExists || adminView || isBooking
+              }
+              label={currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
+              loading={isBooking}
+            />
+          </RequestBtnContainer>
+        </BookingRequestDetails>
       </>
     );
   }

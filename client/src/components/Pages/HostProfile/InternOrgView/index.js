@@ -216,7 +216,7 @@ export default class InternView extends Component {
         text: industryExperienceAnswer,
       },
     };
-    console.log('state', this.state);
+
     return (
       <SideMenuLayout navbarProps={{ isLoggedIn: currentUserId, role }} goBack>
         {/* Header */}
