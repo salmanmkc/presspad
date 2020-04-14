@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import { disabledStartDate, disabledEndDate } from '../../../helpers';
 import { updateInternshipAndCreateBooking } from './utils';
 import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
+import { DASHBOARD_URL } from '../../../constants/navRoutes';
 import Form from './Form';
 
 const { validate, internshipSchema } = require('../../../validation');
@@ -38,6 +39,7 @@ const UpdateInternship = ({ id }) => {
   const [state, setState] = useState({ ...fields });
   const [errors, setErrors] = useState({ ...fields, offerLetter: '' });
   const query = useQuery();
+  const history = useHistory();
 
   const onInputChange = e => {
     const { value, name, dataset: { parent } = {} } = e.target;
@@ -108,10 +110,13 @@ const UpdateInternship = ({ id }) => {
 
     if (!_errors) {
       setLoading(true);
-      await updateInternshipAndCreateBooking({
+      const { error } = await updateInternshipAndCreateBooking({
         internshipData: state,
         bookingData,
       });
+      if (!error) {
+        history.push(DASHBOARD_URL);
+      }
     } else {
       setErrors(oldErrors => ({ ...oldErrors, ..._errors }));
     }
