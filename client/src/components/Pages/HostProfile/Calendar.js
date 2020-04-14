@@ -13,10 +13,7 @@ import {
   calculatePrice,
 } from '../../../helpers';
 
-import {
-  API_BOOKING_REQUEST_URL,
-  API_GET_INTERN_STATUS,
-} from '../../../constants/apiRoutes';
+import { API_GET_INTERN_STATUS } from '../../../constants/apiRoutes';
 
 import {
   CalendarWrapper,
