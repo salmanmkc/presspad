@@ -17,7 +17,14 @@ module.exports = bookingId =>
         let: { hostId: '$host' },
         pipeline: [
           { $match: { $expr: { $eq: ['$$hostId', '$_id'] } } },
-          { $project: { name: 1 } },
+          {
+            $project: {
+              name: 1,
+              email: 1,
+              respondingTime: 1,
+              respondedRequests: 1,
+            },
+          },
         ],
         as: 'host',
       },

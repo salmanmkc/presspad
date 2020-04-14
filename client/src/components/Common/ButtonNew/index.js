@@ -110,13 +110,13 @@ const StyledButton = styled.button`
   
 `;
 
-export const ButtonSpinner = withTheme(({ outline, theme }) => {
+export const ButtonSpinner = withTheme(({ outline, size, theme }) => {
   // antd spinner for the submit button
   const antIcon = (
     <LoadingOutlined
       type="loading"
       style={{
-        fontSize: 24,
+        fontSize: size || 24,
         color: outline ? theme.colors.darkGray : theme.colors.white,
       }}
       spin

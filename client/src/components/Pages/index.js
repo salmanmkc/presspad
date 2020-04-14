@@ -69,6 +69,7 @@ function Pages(props) {
         />
         <Route
           isPrivate
+          layout="sideMenu"
           path={BOOKING_VIEW_URL}
           Component={BookingView}
           {...props}

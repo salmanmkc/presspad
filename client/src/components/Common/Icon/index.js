@@ -23,6 +23,7 @@ import Info from './icons/Info';
 import MapPin from './icons/MapPin';
 import Download from './icons/Download';
 import Tick from './icons/Tick';
+import QuestionMark from './icons/QuestionMark';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -54,6 +55,7 @@ const iconMap = {
   mapPin: MapPin,
   download: Download,
   tick: Tick,
+  questionMark: QuestionMark,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {

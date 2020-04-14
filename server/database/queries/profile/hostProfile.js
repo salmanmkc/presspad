@@ -28,6 +28,8 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
     hometown: 1,
     gender: 1,
     badge: 1,
+    phoneNumber: 1,
+    interests: 1,
   };
 
   if (isPrivate) {
