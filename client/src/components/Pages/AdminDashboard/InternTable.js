@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import { Table, Tag, Input } from 'antd';
+import { Table, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
 import FileDownload from '../../Common/Files/FileDownload';

@@ -7,9 +7,7 @@ import { Button, message, Modal } from 'antd';
 import Icon from '../../Common/Icon';
 
 import Field from '../../Common/ProfileComponents/Field';
-import File from '../../Common/ProfileComponents/Field/File';
 import Input from '../../Common/ProfileComponents/Field/Input';
-import fields from '../../../constants/fields';
 
 // SUB COMPONENTS
 import ClientTable from './ClientTable';
