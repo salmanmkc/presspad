@@ -1,16 +1,18 @@
 const router = require('express').Router();
 
 // IMPORT CONTROLLERS
-const loginController = require('./../controllers/user/login');
-const userInfo = require('./../controllers/user/userInfo');
-const signUpController = require('./../controllers/user/signup');
-const getAllOrgs = require('./../controllers/user/getAllOrgs');
-const hostsCompleteProfile = require('./../controllers/hostsCompleteProfile');
-const internsCompleteProfile = require('./../controllers/user/internsCompleteProfile');
-const getHostProfile = require('./../controllers/profile/getHostProfile');
-const hostViewInternProfile = require('./../controllers/profile/hostViewInternProfile');
-const getInternProfile = require('./../controllers/profile/getInternProfile');
-const searchProfiles = require('./../controllers/profile/searchProfiles');
+const loginController = require('../controllers/user/login');
+const userInfo = require('../controllers/user/userInfo');
+const signUpController = require('../controllers/user/signup');
+const getAllOrgs = require('../controllers/user/getAllOrgs');
+const hostsCompleteProfile = require('../controllers/hostsCompleteProfile');
+const internsCompleteProfile = require('../controllers/user/internsCompleteProfile');
+const getHostProfile = require('../controllers/profile/getHostProfile');
+const getHostProfileSoft = require('../controllers/profile/getHostProfileSoft');
+
+const hostViewInternProfile = require('../controllers/profile/hostViewInternProfile');
+const getInternProfile = require('../controllers/profile/getInternProfile');
+const searchProfiles = require('../controllers/profile/searchProfiles');
 const {
   viewBooking,
   getUserBookings,
@@ -21,14 +23,11 @@ const {
   getActiveBookingsApi,
   adminReviewsBooking,
   getBookingHistoryApi,
-} = require('./../controllers/booking');
-const adminStats = require('./../controllers/stats/adminStats');
-const verifyProfile = require('./../controllers/profile/verifyProfile');
-const orgsDashboard = require('./../controllers/organisation/dashboard');
-const {
-  internDashboard,
-  hostDashboard,
-} = require('./../controllers/dashboard');
+} = require('../controllers/booking');
+const adminStats = require('../controllers/stats/adminStats');
+const verifyProfile = require('../controllers/profile/verifyProfile');
+const orgsDashboard = require('../controllers/organisation/dashboard');
+const { internDashboard, hostDashboard } = require('../controllers/dashboard');
 const getMyProfile = require('../controllers/profile/getMyProfile');
 const { getUploadSignedURL } = require('../controllers/storage');
 const { postReview, getReviews } = require('../controllers/review');
@@ -56,11 +55,11 @@ const { markAsSeen } = require('../controllers/notifications');
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
 
 // IMPORT MIDDLEWARES
-const authentication = require('./../middlewares/authentication');
-const authorization = require('./../middlewares/authorization');
+const authentication = require('../middlewares/authentication');
+const authorization = require('../middlewares/authorization');
 
 // const softAuthCheck = require("./../middlewares/softAuthCheck");
-const { validation, validation2 } = require('./../middlewares/validation');
+const { validation, validation2 } = require('../middlewares/validation');
 
 // API ROUTES
 const {
@@ -107,6 +106,7 @@ const {
   REVIEWS,
   ADMIN_REVIEWS_BOOKING,
   ADMIN_BOOKING_HISTORY,
+  HOST_PROFILE_SOFT_URL,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -124,8 +124,11 @@ router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);
 // get HOST dashboard data
 router.get(HOST_DASHBOARD_URL, authentication, hostDashboard);
 
-// gets hosts profile data
+// gets hosts profile data (authenticated user)
 router.get(HOST_PROFILE_URL, authentication, getHostProfile);
+
+// gets hosts profile data (unauthenticated user)
+router.get(HOST_PROFILE_SOFT_URL, getHostProfileSoft);
 
 // update host profile and create new offer
 router.post(HOST_COMPLETE_PROFILE, authentication, hostsCompleteProfile);

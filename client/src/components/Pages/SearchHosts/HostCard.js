@@ -2,7 +2,7 @@ import React from 'react';
 
 import { H6C, H7C } from '../../Common/Typography';
 
-import { HOSTS_URL } from '../../../constants/navRoutes';
+import { HOST_PROFILE, HOST_PROFILE_SOFT } from '../../../constants/navRoutes';
 
 import {
   HostCardWrapper,
@@ -22,6 +22,7 @@ const HostCard = ({
   hostId,
   selectedStartDate,
   selectedEndDate,
+  isLoggedIn,
 }) => {
   const selectedSearchDates = [
     selectedStartDate && selectedStartDate._d,
@@ -31,7 +32,7 @@ const HostCard = ({
   return (
     <HostCardWrapper
       to={{
-        pathname: `${HOSTS_URL}/${hostId}`,
+        pathname: isLoggedIn ? `/host/${hostId}` : `/host-light/${hostId}`,
         state: { selectedSearchDates },
       }}
     >

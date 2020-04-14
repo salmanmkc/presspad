@@ -52,12 +52,26 @@ export default class InternView extends Component {
   };
 
   async componentDidMount() {
-    const { role, id, location } = this.props;
+    const { role, id, location, unauthenticated } = this.props;
+
     // check if dates were selected in search
     if (location && location.state) {
-      this.setState({ bookingSearchDates: location.state.selectedSearchDates });
+      this.setState({
+        bookingSearchDates: location.state.selectedSearchDates,
+      });
     }
 
+    // check intern's bookings
+    if (role && !unauthenticated) {
+      const {
+        internBookings,
+        error: getInternBookingsError,
+      } = await getUserBookings(role, id);
+
+      if (!getInternBookingsError) this.setState({ internBookings });
+    }
+
+    // get profile data
     const { profileData, error: getHostProfileError } = await getHostProfile(
       this.props,
     );
@@ -69,13 +83,6 @@ export default class InternView extends Component {
         showFullData: profileData.showFullData,
       });
     }
-
-    const {
-      internBookings,
-      error: getInternBookingsError,
-    } = await getUserBookings(role, id);
-
-    if (!getInternBookingsError) this.setState({ internBookings });
   }
 
   setProfileData = profileData =>
@@ -209,7 +216,7 @@ export default class InternView extends Component {
         text: industryExperienceAnswer,
       },
     };
-
+    console.log('state', this.state);
     return (
       <SideMenuLayout navbarProps={{ isLoggedIn: currentUserId, role }} goBack>
         {/* Header */}

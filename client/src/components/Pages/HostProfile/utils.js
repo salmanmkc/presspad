@@ -3,6 +3,8 @@ import { message } from 'antd';
 import {
   API_VERIFY_PROFILE_URL,
   API_GET_USER_BOOKINGS_URL,
+  API_HOST_PROFILE_URL,
+  API_HOST_PROFILE_SOFT_URL,
 } from '../../../constants/apiRoutes';
 
 import { HOST_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -31,7 +33,9 @@ export const getHostProfile = async (...props) => {
       hostId = props.id;
     }
 
-    const { data } = await axios.get(`/api/host/${hostId}`);
+    const { data } = await axios.get(
+      role ? `/api/host/${hostId}` : `/api/host-light/${hostId}`,
+    );
 
     return { profileData: data };
   } catch (err) {
