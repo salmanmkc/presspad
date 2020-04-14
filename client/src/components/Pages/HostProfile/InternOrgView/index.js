@@ -62,7 +62,7 @@ export default class InternView extends Component {
     }
 
     // check intern's bookings
-    if (role && !unauthenticated) {
+    if (role) {
       const {
         internBookings,
         error: getInternBookingsError,

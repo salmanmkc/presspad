@@ -12,7 +12,6 @@ const createPostcode = require('../../helpers/createPostcode');
 // expect hostId as query param
 // responds with data obj: user info, profile, listings, reviews
 const getHostProfile = async (req, res, next) => {
-  console.log('para', req.params);
   const { id: hostId } = req.params;
 
   const { id: userId, role } = req.user;
