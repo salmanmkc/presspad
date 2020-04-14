@@ -55,7 +55,7 @@ describe('Testing host accepting booking route', () => {
           booking: pendingBooking._id,
         });
 
-        expect(acceptedRequest.status).toBe('confirmed');
+        expect(acceptedRequest.status).toBe('accepted');
         // notification must be sent to intern
         expect(notificationsAfter.length).toBe(notificationsBefore.length + 1);
         done();
