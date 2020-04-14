@@ -9,6 +9,7 @@ const { getConfirmedBooking } = require('./../../database/queries/bookings');
 module.exports = async (req, res, next) => {
   try {
     const { id: internId } = req.params;
+    const { view } = req.query;
     const { role, _id: hostId } = req.user;
     // check for role
     if (!['host', 'organisation'].includes(role)) {
@@ -22,13 +23,14 @@ module.exports = async (req, res, next) => {
       return next(boom.notFound());
     }
 
-    const confirmedBookings = await getConfirmedBooking(internId, hostId);
-
     let profileData;
-    if (confirmedBookings) {
-      profileData = await internProfileBookingView(internId);
-      if (!profileData[0]) return next(boom.notFound());
-      return res.json(profileData[0]);
+    if (view === 'booking_details') {
+      const confirmedBookings = await getConfirmedBooking(internId, hostId);
+      if (confirmedBookings) {
+        profileData = await internProfileBookingView(internId);
+        if (!profileData[0]) return next(boom.notFound());
+        return res.json(profileData[0]);
+      }
     }
 
     // get intern's basic profile data

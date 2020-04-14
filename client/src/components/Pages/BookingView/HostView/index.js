@@ -130,7 +130,12 @@ const HostView = ({ bookingInfo, id: userId }) => {
   useEffect(() => {
     dispatch({ type: 'isInternDataLoading' });
     axios
-      .get(API_INTERN_PROFILE_URL.replace(':id', internId))
+      .get(
+        `${API_INTERN_PROFILE_URL.replace(
+          ':id',
+          internId,
+        )}?view=booking_details`,
+      )
       .then(({ data }) => {
         dispatch({ type: 'getInternData', value: data });
       })
