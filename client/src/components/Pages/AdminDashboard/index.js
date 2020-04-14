@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Input, Button, message, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 
 import Icon from '../../Common/Icon';
 
 import Field from '../../Common/ProfileComponents/Field';
 import File from '../../Common/ProfileComponents/Field/File';
+import Input from '../../Common/ProfileComponents/Field/Input';
 import fields from '../../../constants/fields';
 
 // SUB COMPONENTS
@@ -37,7 +38,7 @@ import {
   API_ADMIN_STATS_URL,
   API_UPDATE_WITHDRAW_REQUEST_URL,
   API_ADMIN_REVIEWS_BOOKING,
-  API_HOST_COMPLETE_PROFILE,
+  API_ADMIN_UPDATE_PROFILE,
 } from '../../../constants/apiRoutes';
 import { filterArray } from '../../../helpers';
 
@@ -68,9 +69,9 @@ export default class AdminDashboard extends Component {
     bookingToUpdate: null,
     newBookingStatus: null,
     updatingDBS: null,
-    dbsDetails: { refNum: null, fileName: null, url: null },
+    dbsDetails: { refNum: null, fileName: null },
     userToUpdate: null,
-    errors: { dbsDetails: { refNum: null, fileName: null, url: null } },
+    errors: { dbsDetails: { refNum: null, fileName: null } },
   };
 
   componentDidMount() {
@@ -299,7 +300,10 @@ export default class AdminDashboard extends Component {
       modalToShow: null,
       bookingToUpdate: null,
       newBookingStatus: null,
+      dbsDetails: {},
     });
+    const { activeLink } = this.state;
+    this.selectSection(activeLink);
   };
 
   rejectRequestConfirm = booking => {
@@ -345,26 +349,43 @@ export default class AdminDashboard extends Component {
     }
   };
 
-  updateDBS = (dbs, userId) => {
+  updateDBS = record => {
+    // const { }
     this.setState({
-      dbsDetails: dbs,
-      userToUpdate: userId,
+      dbsDetails: record.dbsCheck,
+      userToUpdate: record.userId,
       modalToShow: 'dbs',
     });
-    console.log('hello');
   };
 
-  handleDBSChange = ({ value }) => {
-    // console.log('val', e.target);
-    // const { dbsDetails } = this.state;
-    // dbsDetails[e.target.id] = e.target.value;
-    // this.setState({ dbsDetails });
+  handleDBSChange = ({ value, key }) => {
     const { dbsDetails } = this.state;
-    dbsDetails.fileName = value;
+    dbsDetails[key] = value;
 
     this.setState({ dbsDetails });
+  };
 
-    console.log('value', value);
+  submitDBSChange = async () => {
+    const { dbsDetails, userToUpdate } = this.state;
+    const { refNum, fileName } = dbsDetails;
+    this.setState({
+      updatingDBS: true,
+      modalText: 'Saving changes',
+    });
+    try {
+      await axios.patch(API_ADMIN_UPDATE_PROFILE, {
+        fieldsToUpdate: { DBSCheck: { refNum, fileName } },
+        userId: userToUpdate,
+      });
+      this.setState({ updatingDBS: false, modalToShow: null });
+      Modal.success({
+        content: 'Successfully updated',
+      });
+      this.selectSection('interns');
+    } catch (err) {
+      console.error(err);
+      message.error('Something went wrong');
+    }
   };
 
   handleError = ({ errorMsg, key, parent }) => {
@@ -399,6 +420,7 @@ export default class AdminDashboard extends Component {
       updatingDBS,
       dbsDetails,
       userToUpdate,
+      errors,
     } = this.state;
 
     return (
@@ -555,28 +577,32 @@ export default class AdminDashboard extends Component {
           <p>{modalText}</p>
         </Modal>
         <Modal
-          title="Are you sure?"
+          title="Update DBS Details"
           visible={modalToShow === 'dbs'}
-          onOk={() => console.log('hello')}
+          onOk={this.submitDBSChange}
           confirmLoading={updatingDBS}
           onCancel={this.handleCancel}
         >
-          <p>Here you can edit DBS stuff</p>
-          <Input
+          <Field
             name="refNum"
-            onChange={e => this.handleDBSChange(e)}
+            handleChange={this.handleDBSChange}
             id="refNum"
             value={dbsDetails.refNum}
             placeholder="Enter reference number"
+            type="text"
+            label="Reference Number"
+            error={errors['refNum']}
           />
-          <File
+          <Field
             value={dbsDetails.fileName}
             url={dbsDetails.url}
             handleChange={this.handleDBSChange}
             name="fileName"
-            parent="dbsDetails"
             handleError={this.handleError}
             userId={userToUpdate}
+            id="fileName"
+            label="DBS Certificate"
+            type="file"
           />
         </Modal>
       </Wrapper>

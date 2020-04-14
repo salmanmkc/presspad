@@ -5,10 +5,11 @@ import { Table, Tag, Input } from 'antd';
 import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
 import FileDownload from '../../Common/Files/FileDownload';
-import DBSField from './DBSField';
 
 import { tagColors, colors } from '../../../theme';
-import { DBS_CHECK_PAGE } from '../../../constants/navRoutes';
+import { PXS } from '../../Common/Typography';
+
+import { EditButton } from './AdminDashboard.style';
 
 export default function InternTable({
   getColumnSearchProps,
@@ -16,10 +17,7 @@ export default function InternTable({
   loading,
   highlightVal,
   triggerInternView,
-  updatingDBS,
   updateDBS,
-  dbsDetails,
-  handleDBSChange,
 }) {
   const columns = [
     {
@@ -146,13 +144,21 @@ export default function InternTable({
       dataIndex: 'dbsCheck',
       key: 'dbsCheck',
       render: (dbs, record) => (
-        <DBSField
-          dbs={dbs}
-          userId={record.userId}
-          updatingDBS={updatingDBS}
-          updateDBS={updateDBS}
-          handleDBSChange={handleDBSChange}
-        />
+        <>
+          <PXS>{dbs.refNum || 'N/A'}</PXS>
+          {dbs.url ? (
+            <FileDownload
+              style={{ marginBottom: '10px', border: '1px red solid' }}
+              url={dbs.url}
+              fileName="View certificate"
+            />
+          ) : (
+            <PXS>No certificate</PXS>
+          )}
+          <EditButton type="button" onClick={() => updateDBS(record)}>
+            Edit
+          </EditButton>
+        </>
       ),
     },
     {

@@ -148,3 +148,14 @@ export const DetailsItem = styled.span`
     margin-right: ${({ theme }) => theme.spacings[9]};
   }
 `;
+
+export const EditButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.pink};
+  font-weight: bold;
+  padding-top: 5px;
+  text-align: right;
+  width: 100%;
+`;
