@@ -8,12 +8,12 @@ const { registerNotification } = require('../../services/notifications');
 const requestAcceptedToIntern = require('./../../helpers/mailHelper/requestAcceptedToIntern');
 const requestAcceptedToAdmin = require('./../../helpers/mailHelper/requestAcceptedToAdmin');
 const { scheduleReminderEmails } = require('./../../services/mailing');
-const {
-  findAllQuestions,
-  createChecklistAnswers,
-} = require('./../../database/queries/checkList');
+// const {
+//   findAllQuestions,
+//   createChecklistAnswers,
+// } = require('./../../database/queries/checkList');
 
-const createBookingChecklistAnswers = require('../../helpers/createBookingChecklistAnswers');
+// const createBookingChecklistAnswers = require('../../helpers/createBookingChecklistAnswers');
 
 const acceptBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
@@ -42,15 +42,15 @@ const acceptBooking = async (req, res, next) => {
     // get emails data
     const bookingDetails = await getBookingWithUsers(bookingId);
 
-    const allQuestions = await findAllQuestions();
+    // const allQuestions = await findAllQuestions();
 
     // create answers checklist for this booking
-    const answers = createBookingChecklistAnswers({
-      questions: allQuestions,
-      host: bookingDetails.host,
-      intern: bookingDetails.intern,
-      bookingId,
-    });
+    // const answers = createBookingChecklistAnswers({
+    //   questions: allQuestions,
+    //   host: bookingDetails.host,
+    //   intern: bookingDetails.intern,
+    //   bookingId,
+    // });
 
     let promiseArray = [
       // create a notification for intern
@@ -62,7 +62,7 @@ const acceptBooking = async (req, res, next) => {
         internId: updatedBookingRequest.intern._id,
       }),
       // store the answers
-      createChecklistAnswers(answers),
+      // createChecklistAnswers(answers),
     ];
 
     if (process.env.NODE_ENV === 'production') {

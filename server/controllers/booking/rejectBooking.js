@@ -9,6 +9,7 @@ const requestRejectedToIntern = require('./../../helpers/mailHelper/requestRejec
 
 const rejectBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
+  const { rejectReason } = req.body;
   const { role, _id: hostId } = req.user;
   try {
     // check for role
@@ -19,6 +20,7 @@ const rejectBooking = async (req, res, next) => {
     const updatedBookingRequest = await hostRejectBookingById({
       bookingId,
       hostId,
+      rejectReason,
     });
 
     // create a notification for intern

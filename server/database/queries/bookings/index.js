@@ -21,7 +21,7 @@ module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
     { _id: bookingId, host: hostId },
     // update date
     {
-      status: 'confirmed',
+      status: 'accepted',
       moneyGoTo,
       confirmDate: moment.utc(),
     },
@@ -30,14 +30,15 @@ module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
     },
   );
 
-module.exports.hostRejectBookingById = ({ bookingId, hostId }) =>
+module.exports.hostRejectBookingById = ({ bookingId, hostId, rejectReason }) =>
   Booking.findOneAndUpdate(
     //  filter
     { _id: bookingId, host: hostId },
     // update date
     {
-      status: 'canceled',
-      canceledBy: hostId,
+      status: 'rejected',
+      // canceledBy: hostId,
+      rejectReason,
     },
     {
       new: true,
