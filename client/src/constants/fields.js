@@ -500,32 +500,4 @@ export default {
     parent: 'pressCard',
     hint: 'Please make sure this is an image (eg. picture of a letter/email)',
   },
-  // internshipAddressline1: {
-  //   label: 'Address Line 1',
-  //   type: 'text',
-  //   name: 'addressline1',
-  //   parent: 'internshipOfficeAddress',
-  //   requiredForIntern: true,
-  // },
-  // internshipAddressline2: {
-  //   label: 'Address Line 2',
-  //   type: 'text',
-  //   name: 'addressline2',
-  //   parent: 'internshipOfficeAddress',
-  //   requiredForIntern: true,
-  // },
-  // internshipCity: {
-  //   label: 'City',
-  //   type: 'text',
-  //   name: 'city',
-  //   parent: 'internshipOfficeAddress',
-  //   requiredForIntern: true,
-  // },
-  // internshipPostcode: {
-  //   label: 'Postcode',
-  //   type: 'text',
-  //   name: 'postcode',
-  //   parent: 'internshipOfficeAddress',
-  //   requiredForIntern: true,
-  // },
 };
