@@ -13,6 +13,7 @@ import {
 
 // Typography
 import * as T from '../../Common/Typography';
+import { colors } from '../../../theme';
 import Button from '../../Common/ButtonNew';
 
 import {
@@ -29,6 +30,7 @@ import {
   BursaryContainer,
   PopoverContentContainer,
   RequestBtnContainer,
+  DiscountPriceDetails,
 } from './Calendar.style';
 
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -315,24 +317,48 @@ class CalendarComponent extends Component {
                 <T.PS>Full price for period:</T.PS>
               ))}
 
-            {couponId && couponDiscount > 0 ? (
-              <T.PL>Discounted price for period:</T.PL>
-            ) : (
-              <T.PL>Full price for period:</T.PL>
-            )}
+            {!isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <T.PL>Discounted price for period:</T.PL>
+              ) : (
+                <T.PL>Full price for period:</T.PL>
+              ))}
           </Col>
           <Col value>
             {isMobile &&
               (couponId && couponDiscount > 0 ? (
-                <T.PSBold>{price - couponDiscount}£</T.PSBold>
+                <DiscountPriceDetails>
+                  <T.PSBold>£{price - couponDiscount}</T.PSBold>
+                  <T.PXSBold
+                    style={{
+                      color: colors.gray,
+                      textDecoration: 'line-through',
+                      marginLeft: '-1rem',
+                    }}
+                  >
+                    £{price}
+                  </T.PXSBold>
+                </DiscountPriceDetails>
               ) : (
-                <T.PSBold>{price}£</T.PSBold>
+                <T.PSBold>£{price}</T.PSBold>
               ))}
-            {couponId && couponDiscount > 0 ? (
-              <T.PBold>{price - couponDiscount}£</T.PBold>
-            ) : (
-              <T.PBold>{price}£</T.PBold>
-            )}
+            {!isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <DiscountPriceDetails>
+                  <T.PBold>£{price - couponDiscount}</T.PBold>
+                  <T.PXSBold
+                    style={{
+                      color: colors.gray,
+                      textDecoration: 'line-through',
+                      marginLeft: '0.5rem',
+                    }}
+                  >
+                    £{price}
+                  </T.PXSBold>
+                </DiscountPriceDetails>
+              ) : (
+                <T.PBold>£{price}</T.PBold>
+              ))}
           </Col>
         </Row>
         <Row>
@@ -461,16 +487,17 @@ class CalendarComponent extends Component {
               {isMobile ? (
                 <T.PS>
                   Price for period <br />{' '}
-                  <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
+                  <strong>£{price > 0 ? price - couponDiscount : 0}</strong>
                 </T.PS>
               ) : (
                 <T.PL>
                   Price for period <br />{' '}
-                  <strong>{price > 0 ? price - couponDiscount : 0}£</strong>
+                  <strong>£{price > 0 ? price - couponDiscount : 0}</strong>
                 </T.PL>
               )}
 
               <Button
+                loading={isBooking}
                 small={isMobile}
                 type="secondary"
                 onClick={this.handleClick}
@@ -480,7 +507,6 @@ class CalendarComponent extends Component {
               >
                 {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
               </Button>
-              <Spin spinning={isBooking} />
             </RequestBtnContainer>
           </BookingRequestDetails>
         )}

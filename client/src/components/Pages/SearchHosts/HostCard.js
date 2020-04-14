@@ -23,16 +23,24 @@ const HostCard = ({
   selectedStartDate,
   selectedEndDate,
 }) => {
-  const selectedSearchDates = [
-    selectedStartDate && selectedStartDate._d,
-    selectedEndDate && selectedEndDate._d,
-  ];
+  let selectedSearchDates;
+
+  if (
+    selectedStartDate &&
+    selectedStartDate._d !== null &&
+    selectedEndDate &&
+    selectedEndDate._d !== null
+  ) {
+    selectedSearchDates = [selectedStartDate._d, selectedEndDate._d];
+  }
 
   return (
     <HostCardWrapper
       to={{
         pathname: `${HOSTS_URL}/${hostId}`,
-        state: { selectedSearchDates },
+        state: {
+          selectedSearchDates,
+        },
       }}
     >
       <CardImage src={img} long={long} />

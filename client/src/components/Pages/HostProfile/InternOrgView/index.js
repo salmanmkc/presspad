@@ -54,7 +54,7 @@ export default class InternView extends Component {
   async componentDidMount() {
     const { role, id, location } = this.props;
     // check if dates were selected in search
-    if (location && location.state) {
+    if (location && location.state && location.state.selectedSearchDates) {
       this.setState({ bookingSearchDates: location.state.selectedSearchDates });
     }
 
