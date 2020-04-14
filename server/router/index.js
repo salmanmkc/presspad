@@ -123,12 +123,10 @@ router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);
 
 // get HOST dashboard data
 router.get(HOST_DASHBOARD_URL, authentication, hostDashboard);
-
-// gets hosts profile data (authenticated user)
-router.get(HOST_PROFILE_URL, authentication, getHostProfile);
-
 // gets hosts profile data (unauthenticated user)
 router.get(HOST_PROFILE_SOFT_URL, getHostProfileSoft);
+// gets hosts profile data (authenticated user)
+router.get(HOST_PROFILE_URL, authentication, getHostProfile);
 
 // update host profile and create new offer
 router.post(HOST_COMPLETE_PROFILE, authentication, hostsCompleteProfile);

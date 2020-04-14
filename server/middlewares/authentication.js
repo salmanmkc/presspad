@@ -1,9 +1,10 @@
 const { verify } = require('jsonwebtoken');
 const boom = require('boom');
 
-const { getUserById } = require('./../database/queries/user');
+const { getUserById } = require('../database/queries/user');
 
 module.exports = (req, res, next) => {
+  console.log('reached auth');
   // get cookies from the request
   const { cookies } = req;
 

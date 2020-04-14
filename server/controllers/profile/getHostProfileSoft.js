@@ -13,7 +13,7 @@ const createPostcode = require('../../helpers/createPostcode');
 const getHostProfile = async (req, res, next) => {
   console.log(req.params);
   const { id: hostId } = req.params;
-  console.log('reached me', hostId);
+
   if (!hostId) return next(boom.badRequest('User does not exist'));
   let address = {};
 

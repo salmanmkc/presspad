@@ -33,9 +33,15 @@ export const getHostProfile = async (...props) => {
       hostId = props.id;
     }
 
-    const { data } = await axios.get(
-      role ? `/api/host/${hostId}` : `/api/host-light/${hostId}`,
-    );
+    // const { data } = await axios.get(
+    //   role
+    //     ? API_HOST_PROFILE_URL.replace(':id', hostId)
+    //     : API_HOST_PROFILE_SOFT_URL.replace(':id', hostId),
+    // );
+    console.log('ide', hostId);
+    const data = await axios.get(`${API_HOST_PROFILE_URL}`, {
+      params: { hostId },
+    });
 
     return { profileData: data };
   } catch (err) {
