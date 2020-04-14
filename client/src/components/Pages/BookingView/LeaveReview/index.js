@@ -110,11 +110,12 @@ const LeaveReview = ({
           .success('Submited review succesfully')
           .then(() => dispatch({ type: 'submitedReview', value: data }));
       } catch (err) {
-        const errorResponse = err.response.data.error;
-        if (errorResponse.includes('You have already submitted')) {
-          message.error(errorResponse, 4).then(() => history.go(0));
+        const errorMsg =
+          err.response && err.response.data && err.response.data.error;
+        if (errorMsg.includes('You have already submitted')) {
+          message.error(errorMsg, 4).then(() => history.go(0));
         }
-        dispatch({ type: 'isError', error: errorResponse });
+        dispatch({ type: 'isError', error: errorMsg });
       }
     }
   };
