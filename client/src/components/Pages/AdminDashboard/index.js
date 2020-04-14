@@ -6,6 +6,10 @@ import { Input, Button, message, Modal } from 'antd';
 
 import Icon from '../../Common/Icon';
 
+import Field from '../../Common/ProfileComponents/Field';
+import File from '../../Common/ProfileComponents/Field/File';
+import fields from '../../../constants/fields';
+
 // SUB COMPONENTS
 import ClientTable from './ClientTable';
 import InternTable from './InternTable';
@@ -33,6 +37,7 @@ import {
   API_ADMIN_STATS_URL,
   API_UPDATE_WITHDRAW_REQUEST_URL,
   API_ADMIN_REVIEWS_BOOKING,
+  API_HOST_COMPLETE_PROFILE,
 } from '../../../constants/apiRoutes';
 import { filterArray } from '../../../helpers';
 
@@ -65,6 +70,7 @@ export default class AdminDashboard extends Component {
     updatingDBS: null,
     dbsDetails: { refNum: null, fileName: null, url: null },
     userToUpdate: null,
+    errors: { dbsDetails: { refNum: null, fileName: null, url: null } },
   };
 
   componentDidMount() {
@@ -348,11 +354,35 @@ export default class AdminDashboard extends Component {
     console.log('hello');
   };
 
-  handleDBSChange = e => {
-    console.log('val', e.target);
+  handleDBSChange = ({ value }) => {
+    // console.log('val', e.target);
+    // const { dbsDetails } = this.state;
+    // dbsDetails[e.target.id] = e.target.value;
+    // this.setState({ dbsDetails });
     const { dbsDetails } = this.state;
-    dbsDetails[e.target.id] = e.target.value;
+    dbsDetails.fileName = value;
+
     this.setState({ dbsDetails });
+
+    console.log('value', value);
+  };
+
+  handleError = ({ errorMsg, key, parent }) => {
+    if (parent) {
+      this.setState(prevState => ({
+        errors: {
+          ...prevState.errors,
+          [parent]: { ...prevState.errors[parent], [key]: errorMsg },
+        },
+      }));
+    } else {
+      this.setState(prevState => ({
+        errors: {
+          ...prevState.errors,
+          [key]: errorMsg,
+        },
+      }));
+    }
   };
 
   render() {
@@ -368,6 +398,7 @@ export default class AdminDashboard extends Component {
       modalText,
       updatingDBS,
       dbsDetails,
+      userToUpdate,
     } = this.state;
 
     return (
@@ -537,6 +568,15 @@ export default class AdminDashboard extends Component {
             id="refNum"
             value={dbsDetails.refNum}
             placeholder="Enter reference number"
+          />
+          <File
+            value={dbsDetails.fileName}
+            url={dbsDetails.url}
+            handleChange={this.handleDBSChange}
+            name="fileName"
+            parent="dbsDetails"
+            handleError={this.handleError}
+            userId={userToUpdate}
           />
         </Modal>
       </Wrapper>

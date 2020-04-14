@@ -4,8 +4,6 @@ import moment from 'moment';
 import { Table, Tag, Input } from 'antd';
 import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
-import Field from '../../Common/ProfileComponents/Field';
-import fields from '../../../constants/fields';
 import FileDownload from '../../Common/Files/FileDownload';
 import DBSField from './DBSField';
 

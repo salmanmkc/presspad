@@ -15,11 +15,9 @@ const generateUrl = async fileRef => {
     // check if the fileName is presented and not empty string
     if (fileName) {
       if (isPrivate) {
-        console.log('file1', fileRef);
         // add url property to the reference
         // eslint-disable-next-line no-param-reassign
         fileRef.url = await generateV4SignedUrl(bucketName, fileName, 'read');
-        console.log('file', fileRef);
         return;
       }
       // eslint-disable-next-line no-param-reassign

@@ -71,6 +71,7 @@ export default class File extends Component {
               error: '',
             },
             () => {
+              console.log('val', generatedName, 'key', name, 'parent', parent);
               this.props.handleChange({
                 value: generatedName,
                 key: name,
