@@ -14,6 +14,7 @@ const countCompletedBookingsByUser = require('./countCompletedBookingsByUser');
 const findBookings = require('./findBookings');
 const getActiveBookings = require('./getActiveBookings');
 const getBookingHistory = require('./getBookingHistory');
+const getOverlappingBookings = require('./getOverlappingBookings');
 
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
@@ -208,3 +209,4 @@ module.exports.getInternNextBooking = getInternNextBooking;
 module.exports.countCompletedBookingsByUser = countCompletedBookingsByUser;
 module.exports.getActiveBookings = getActiveBookings;
 module.exports.getBookingHistory = getBookingHistory;
+module.exports.getOverlappingBookings = getOverlappingBookings;
