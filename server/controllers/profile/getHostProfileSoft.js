@@ -11,7 +11,6 @@ const createPostcode = require('../../helpers/createPostcode');
 // expect hostId as query param
 // responds with data obj: user info, profile, listings, reviews
 const getHostProfile = async (req, res, next) => {
-  console.log(req.params);
   const { id: hostId } = req.params;
 
   if (!hostId) return next(boom.badRequest('User does not exist'));

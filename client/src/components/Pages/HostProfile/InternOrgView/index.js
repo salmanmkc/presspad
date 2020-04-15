@@ -140,7 +140,8 @@ export default class InternView extends Component {
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
 
-    const isMobile = windowWidth < 776;
+    const isMobile =
+      (windowWidth && windowWidth < 776) || window.innerWidth < 776;
 
     // passed on to Header Component
     const headerProfileData = {

@@ -276,5 +276,5 @@ router.get(GET_CHECKLIST, authentication, getChecklist);
 router.patch(`${NOTIFICATION_URL}/seen`, authentication, markAsSeen);
 
 // get reviews (given || taken)
-router.get(REVIEWS, authentication, getReviews);
+router.get(REVIEWS, getReviews);
 module.exports = router;

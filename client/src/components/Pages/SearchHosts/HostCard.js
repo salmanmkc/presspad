@@ -38,7 +38,9 @@ const HostCard = ({
   return (
     <HostCardWrapper
       to={{
-        pathname: isLoggedIn ? `/host/${hostId}` : `/host-light/${hostId}`,
+        pathname: isLoggedIn
+          ? HOST_PROFILE.replace(':id', hostId)
+          : HOST_PROFILE_SOFT.replace(':id', hostId),
         state: { selectedSearchDates },
       }}
     >

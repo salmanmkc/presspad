@@ -51,7 +51,7 @@ function Pages(props) {
         <Route
           isPrivate
           exact
-          path="/host/:id"
+          path={HOST_PROFILE}
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
@@ -60,11 +60,12 @@ function Pages(props) {
         {/* public host profile */}
         <Route
           exact
-          path="/host-light/:id"
+          path={HOST_PROFILE_SOFT}
           Component={HostProfile}
           handleChangeState={handleChangeState}
           {...props}
         />
+
         <Route
           isPrivate
           layout="sideMenu"

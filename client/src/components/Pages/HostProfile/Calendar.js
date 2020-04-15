@@ -298,6 +298,7 @@ class CalendarComponent extends Component {
           style={{
             color: colors.gray,
             textDecoration: 'line-through',
+            marginLeft: isMobile ? '-1rem' : 0,
           }}
         >
           £{content}
@@ -331,6 +332,10 @@ class CalendarComponent extends Component {
 
   renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
     const { couponId, couponDiscount, couponError } = couponState;
+
+    const discountExists =
+      (!couponError && couponId && couponDiscount > 0) || bursary;
+    const validPrice = price > 0;
     return (
       <>
         <Row>
@@ -352,15 +357,14 @@ class CalendarComponent extends Component {
         <Row>
           <Col>
             {isMobile &&
-              ((!couponError && couponId && couponDiscount > 0) || bursary ? (
+              (validPrice && discountExists ? (
                 <T.PS>Discounted price for period:</T.PS>
               ) : (
                 <T.PS>Full price for period:</T.PS>
               ))}
             {/* Price calculation */}
             {!isMobile &&
-              (price > 0 &&
-              ((!couponError && couponId && couponDiscount > 0) || bursary) ? (
+              (validPrice && discountExists ? (
                 <T.PL>Discounted price for period:</T.PL>
               ) : (
                 <T.PL>Full price for period:</T.PL>
