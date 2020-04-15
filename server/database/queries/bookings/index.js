@@ -15,6 +15,7 @@ const findBookings = require('./findBookings');
 const getActiveBookings = require('./getActiveBookings');
 const getBookingHistory = require('./getBookingHistory');
 const getOverlappingBookings = require('./getOverlappingBookings');
+const getBookingsDetails = require('./getBookingsDetails');
 
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
@@ -31,10 +32,14 @@ module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
     },
   );
 
-module.exports.hostRejectBookingById = ({ bookingId, hostId, rejectReason }) =>
-  Booking.findOneAndUpdate(
+module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
+  Booking.updateMany(
     //  filter
-    { _id: bookingId, host: hostId },
+    {
+      $expr: {
+        $and: [{ $eq: ['$host', hostId] }, { $in: ['$_id', bookingIds] }],
+      },
+    },
     // update date
     {
       status: 'rejected',
@@ -210,3 +215,4 @@ module.exports.countCompletedBookingsByUser = countCompletedBookingsByUser;
 module.exports.getActiveBookings = getActiveBookings;
 module.exports.getBookingHistory = getBookingHistory;
 module.exports.getOverlappingBookings = getOverlappingBookings;
+module.exports.getBookingsDetails = getBookingsDetails;
