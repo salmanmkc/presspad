@@ -205,8 +205,9 @@ class CalendarComponent extends Component {
               price: '0',
             });
             Modal.success({
-              title: 'Done!',
-              content: 'your booking request was successfully sent',
+              title: 'Booking Request Sent!',
+              content:
+                'Your booking request has been submitted. Make sure to check your dashboard for a response shortly.',
             });
 
             // update coupon state
