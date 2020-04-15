@@ -124,7 +124,6 @@ const CouponCode = props => {
     bursary,
     currentUserId: userId,
   } = props;
-  console.log('props', props);
 
   const { discountRate, couponError, isCouponLoading, couponId } = couponState;
 

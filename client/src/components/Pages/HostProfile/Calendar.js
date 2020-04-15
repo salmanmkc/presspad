@@ -289,8 +289,48 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
+  renderPrice = (isMobile, price, couponState, bursary) => {
+    const pricingTypographies = {
+      priceMobile: content => <T.PSBold>£{content}</T.PSBold>,
+      priceDesktop: content => <T.PBold>£{content}</T.PBold>,
+      formerPrice: content => (
+        <T.PXSBold
+          style={{
+            color: colors.gray,
+            textDecoration: 'line-through',
+          }}
+        >
+          £{content}
+        </T.PXSBold>
+      ),
+    };
+
+    const { couponError, couponId, couponDiscount } = couponState;
+    const discountExists =
+      (!couponError && couponId && couponDiscount > 0) || bursary;
+    const validPrice = price > 0;
+
+    if (validPrice && discountExists) {
+      return (
+        <DiscountPriceDetails>
+          {isMobile
+            ? pricingTypographies.priceMobile(
+                bursary ? 0 : price - couponDiscount,
+              )
+            : pricingTypographies.priceDesktop(
+                bursary ? 0 : price - couponDiscount,
+              )}
+          {pricingTypographies.formerPrice(price)}
+        </DiscountPriceDetails>
+      );
+    }
+    return isMobile
+      ? pricingTypographies.priceMobile(price)
+      : pricingTypographies.priceDesktop(price);
+  };
+
   renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
-    const { couponId, couponDiscount } = couponState;
+    const { couponId, couponDiscount, couponError } = couponState;
     return (
       <>
         <Row>
@@ -312,54 +352,22 @@ class CalendarComponent extends Component {
         <Row>
           <Col>
             {isMobile &&
-              ((couponId && couponDiscount > 0) || bursary ? (
+              ((!couponError && couponId && couponDiscount > 0) || bursary ? (
                 <T.PS>Discounted price for period:</T.PS>
               ) : (
                 <T.PS>Full price for period:</T.PS>
               ))}
             {/* Price calculation */}
             {!isMobile &&
-              (price > 0 && ((couponId && couponDiscount > 0) || bursary) ? (
+              (price > 0 &&
+              ((!couponError && couponId && couponDiscount > 0) || bursary) ? (
                 <T.PL>Discounted price for period:</T.PL>
               ) : (
                 <T.PL>Full price for period:</T.PL>
               ))}
           </Col>
           <Col value>
-            {isMobile &&
-              (price > 0 && ((couponId && couponDiscount > 0) || bursary) ? (
-                <DiscountPriceDetails>
-                  <T.PSBold>£{bursary ? 0 : price - couponDiscount}</T.PSBold>
-                  <T.PXSBold
-                    style={{
-                      color: colors.gray,
-                      textDecoration: 'line-through',
-                      marginLeft: '-1rem',
-                    }}
-                  >
-                    £{price}
-                  </T.PXSBold>
-                </DiscountPriceDetails>
-              ) : (
-                <T.PSBold>£{price}</T.PSBold>
-              ))}
-            {!isMobile &&
-              (price > 0 && ((couponId && couponDiscount > 0) || bursary) ? (
-                <DiscountPriceDetails>
-                  <T.PBold>£{bursary ? 0 : price - couponDiscount}</T.PBold>
-                  <T.PXSBold
-                    style={{
-                      color: colors.gray,
-                      textDecoration: 'line-through',
-                      marginLeft: '0.5rem',
-                    }}
-                  >
-                    £{price}
-                  </T.PXSBold>
-                </DiscountPriceDetails>
-              ) : (
-                <T.PBold>£{price}</T.PBold>
-              ))}
+            {this.renderPrice(isMobile, price, couponState, bursary)}
           </Col>
         </Row>
         <Row>
@@ -441,7 +449,7 @@ class CalendarComponent extends Component {
 
     const { currentUserId, adminView, isMobile } = this.props;
 
-    const { couponDiscount } = couponState;
+    const { couponDiscount, couponError } = couponState;
 
     if (isLoading) return <Spin tip="Loading Profile" />;
 
@@ -491,12 +499,22 @@ class CalendarComponent extends Component {
             {isMobile ? (
               <T.PS>
                 Price for period <br />{' '}
-                <strong>£{bursary ? 0 : price - couponDiscount}</strong>
+                <strong>
+                  £
+                  {bursary
+                    ? 0
+                    : (!couponError && price - couponDiscount) || price}
+                </strong>
               </T.PS>
             ) : (
               <T.PL>
                 Price for period <br />{' '}
-                <strong>£{bursary ? 0 : price - couponDiscount}</strong>
+                <strong>
+                  £
+                  {bursary
+                    ? 0
+                    : (!couponError && price - couponDiscount) || price}
+                </strong>
               </T.PL>
             )}
 
