@@ -18,7 +18,7 @@ const Review = ({ rate, name, jobTitle, message }) => (
         style={{ color: '#5EBFD0', lineHeight: '5' }}
       />
     </ReviewHeader>
-    <T.P>{message}</T.P>
+    <T.P style={{ marginTop: '-1.75rem' }}>{message}</T.P>
   </ReviewWrapper>
 );
 

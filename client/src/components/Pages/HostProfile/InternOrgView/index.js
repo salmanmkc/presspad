@@ -55,10 +55,8 @@ export default class InternView extends Component {
     const { role, id, location, unauthenticated } = this.props;
 
     // check if dates were selected in search
-    if (location && location.state) {
-      this.setState({
-        bookingSearchDates: location.state.selectedSearchDates,
-      });
+    if (location && location.state && location.state.selectedSearchDates) {
+      this.setState({ bookingSearchDates: location.state.selectedSearchDates });
     }
 
     // check intern's bookings
