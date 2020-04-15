@@ -20,15 +20,24 @@ const sendMail = ({ type, userType, params }) => {
 
   const header = createHeader(subject);
   const body = createBody(params);
-  const footer = createFooter(params);
+  const footer = createFooter();
 
   const html = composeHtml({ header, body, footer });
+
+  const attachments = [
+    {
+      filename: 'presspad-logo.png',
+      path: `${__dirname}/../../../assets/presspad-logo.png`,
+      cid: 'logo',
+    },
+  ];
 
   return transporter.sendMail({
     from: email,
     to: params.email,
-    subject: 'Your profile has been approved',
+    subject,
     html,
+    attachments,
   });
 };
 module.exports = sendMail;
