@@ -5,7 +5,7 @@ const errMsgs = require('../constants/errorMessages');
 const schema = object({
   organisation: string()
     .ensure()
-    .required(errMsgs.REQUIRED),
+    .required(errMsgs.REQUIRED('organisation')),
   offerLetter: object({
     fileName: string()
       .ensure()
