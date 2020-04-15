@@ -1,9 +1,10 @@
 const request = require('supertest');
+const moment = require('moment');
 
 const buildDB = require('../../../database/data/test');
 const app = require('../../../app');
 const createToken = require('../../../helpers/createToken');
-const Booking = require('./../../../database/models/Booking');
+const { Booking, User } = require('./../../../database/models');
 const Notification = require('./../../../database/models/Notification');
 
 const {
@@ -54,7 +55,20 @@ describe('Testing host accepting booking route', () => {
           type: 'stayApproved',
           booking: pendingBooking._id,
         });
+        const updatedHostUser = await User.findById(acceptedRequest.host);
+        const { confirmDate, createdAt } = acceptedRequest;
+        const respondTime = moment(confirmDate).diff(
+          createdAt,
+          'milliseconds',
+          true,
+        );
 
+        expect(hostUser.respondedRequests).toBe(
+          updatedHostUser.respondedRequests - 1,
+        );
+        expect(hostUser.respondingTime).toBe(
+          updatedHostUser.respondingTime - respondTime,
+        );
         expect(acceptedRequest.status).toBe('accepted');
         // notification must be sent to intern
         expect(notificationsAfter.length).toBe(notificationsBefore.length + 1);
