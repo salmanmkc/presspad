@@ -32,7 +32,7 @@ const getMyProfile = require('../controllers/profile/getMyProfile');
 const { getUploadSignedURL } = require('../controllers/storage');
 const { postReview, getReviews } = require('../controllers/review');
 const signOut = require('../controllers/user/signOut');
-const { getCoupons } = require('../controllers/coupon');
+const { getCoupons, getCouponsSoft } = require('../controllers/coupon');
 const getInternStatus = require('../controllers/profile/getInternStatus');
 const {
   internPayment,
@@ -84,6 +84,7 @@ const {
   UPLOAD_SIGNED_URL,
   REVIEW_URL,
   COUPON_URL,
+  COUPON_SOFT_URL,
   GET_INTERN_STATUS,
   BOOKING_REVIEW_INFO_URL,
   INTERN_PAYMENT_URL,
@@ -248,6 +249,8 @@ router.route(REVIEW_URL).post(authentication, postReview);
 
 // Coupons
 router.route(COUPON_URL).get(authentication, getCoupons);
+
+router.get(COUPON_SOFT_URL, getCouponsSoft);
 
 // Signout
 router.route(SIGNOUT_URL).get(signOut);

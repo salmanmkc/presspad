@@ -387,6 +387,7 @@ class CalendarComponent extends Component {
               setCouponState={this.setCouponState}
               dates={this.state.dates}
               isMobile={isMobile}
+              currentUserId={this.currentUserId}
             />
           </Col>
         </Row>
