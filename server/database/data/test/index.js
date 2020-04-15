@@ -104,9 +104,7 @@ const buildData = options =>
     });
 
     // add a coupon to a pending booking request
-    const addCouponToBooking = await booking.update(
-      coupons.expiredCoupon[0]._id,
-    );
+    const addCouponToBooking = await booking.update(coupons.expiredCoupon._id);
 
     return {
       connection,

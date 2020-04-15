@@ -1,8 +1,8 @@
 const request = require('supertest');
 const moment = require('moment');
 
-const buildDB = require('./../../../database/data/test/index');
-const app = require('./../../../app');
+const buildDB = require('../../../database/data/test/index');
+const app = require('../../../app');
 
 const createToken = require('../../../helpers/createToken');
 
@@ -37,9 +37,10 @@ describe('Testing for create new booking route', () => {
       intern: internUser._id,
       host: hostUser._id,
       listing: LondonListing._id,
-      startDate: moment.utc().add(140, 'days'),
-      endDate: moment.utc().add(145, 'days'),
-      price: 12000,
+      startDate: moment.utc().add(81, 'days'),
+      endDate: moment.utc().add(101, 'days'),
+      //   days to pay for
+      price: 140,
     };
 
     request(app)
@@ -49,8 +50,8 @@ describe('Testing for create new booking route', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
-        expect(res).toBeDefined();
         expect(res.body).toBeDefined();
+
         done(err);
       });
   });

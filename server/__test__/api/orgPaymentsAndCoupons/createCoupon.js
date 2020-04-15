@@ -2,11 +2,11 @@ const request = require('supertest');
 
 const app = require('../../../app');
 const { Account } = require('../../../database/models');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const buildDb = require('../../../database/data/test');
 const {
   API_COUPONS_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 
 describe('Testing Organisation payemnts (create coupons):', () => {
   test('create new coupon', async done => {
@@ -15,17 +15,18 @@ describe('Testing Organisation payemnts (create coupons):', () => {
     });
 
     const { organisationUser } = users;
+
     const token = `token=${createToken(organisationUser._id)}`;
-    // coupon for 10 days = 15000 + 3 * 2000 = 21000
-    // 21000 * 50% = 10500
-    const newCouponValue = 10500; // 105 pound * 100 penny
 
     const data = {
       internName: 'some intern',
       discountRate: 50,
       startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 29 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 34 * 24 * 60 * 60 * 1000,
     };
+
+    // coupon for 14 days means that it will discount for 1 payed day (20£)
+    const newCouponValue = 10;
 
     request(app)
       .post(API_COUPONS_URL)
@@ -42,6 +43,7 @@ describe('Testing Organisation payemnts (create coupons):', () => {
 
         expect(res).toBeDefined();
         expect(res.body.code).toBeDefined();
+
         expect(res.body.reservedAmount).toBe(newCouponValue);
 
         // Organisation account checks

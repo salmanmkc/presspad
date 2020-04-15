@@ -1,5 +1,6 @@
 const boom = require('boom');
 const moment = require('moment');
+const { ObjectId } = require('mongoose').Types;
 
 const {
   checkOtherBookingExists,
@@ -13,7 +14,15 @@ const { registerNotification } = require('../../services/notifications');
 
 module.exports = async (req, res, next) => {
   try {
-    const { listing, intern, host, startDate, endDate, price } = req.body;
+    const {
+      listing,
+      intern,
+      host,
+      price,
+      startDate,
+      endDate,
+      couponId,
+    } = req.body;
 
     const data = {
       listing,
@@ -55,8 +64,18 @@ module.exports = async (req, res, next) => {
     }
     // validate price
     const calculatedPrice = calculatePrice(moment.range(startDate, endDate));
+
     if (calculatedPrice !== price) {
       return next(boom.badRequest("Price doesn't match!"));
+    }
+
+    // validate discount
+
+    if (couponId && couponId.length > 0) {
+      if (!ObjectId.isValid(couponId)) {
+        return next(boom.badRequest('invalid coupon Id'));
+      }
+      data.coupon = couponId;
     }
 
     const [booking] = await Promise.all([
