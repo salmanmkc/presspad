@@ -34,6 +34,7 @@ module.exports.admin = admin;
 module.exports.email = process.env.EMAIL;
 module.exports.pass = process.env.MAIL_PASSWORD;
 module.exports.domain = process.env.DOMAIN;
+module.exports.mailService = process.env.MAIL_TRANSPORTER;
 
 module.exports.links = {
   fb: process.env.FACEBOOK_GROUP_LINK,
