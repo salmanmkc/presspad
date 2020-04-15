@@ -23,6 +23,8 @@ import Info from './icons/Info';
 import MapPin from './icons/MapPin';
 import Download from './icons/Download';
 import Tick from './icons/Tick';
+import Close from './icons/Close';
+import QuestionCircle from './icons/QuestionCircle';
 import QuestionMark from './icons/QuestionMark';
 
 const iconStyles = props => css`
@@ -42,8 +44,9 @@ const iconMap = {
   youTube: Youtube,
   // general icons
   arrow: Arrow,
-  circleTick: CircleTick,
   cross: Cross,
+  tick: Tick,
+  circleTick: CircleTick,
   crossCircle: CrossCircle,
   loading: Loading,
   menu: Menu,
@@ -54,7 +57,9 @@ const iconMap = {
   info: Info,
   mapPin: MapPin,
   download: Download,
-  tick: Tick,
+  close: Close,
+  questionCircle: QuestionCircle,
+
   questionMark: QuestionMark,
 };
 

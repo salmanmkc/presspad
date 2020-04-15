@@ -6,8 +6,9 @@ const postBooking = async data => {
   try {
     await axios.post(API_BOOKING_REQUEST_URL, data);
     Modal.success({
-      title: 'Done!',
-      content: 'your booking successfully sent',
+      title: 'Booking Request Sent!',
+      content:
+        'Your booking request has been submitted. Make sure to check your dashboard for a response shortly.',
     });
     return { error: null };
   } catch (error) {

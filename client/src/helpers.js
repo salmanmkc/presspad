@@ -2,6 +2,17 @@ import React from 'react';
 import moment from 'moment';
 import * as yup from 'yup';
 
+export const createStartEndDate = (start, end) => {
+  // get all available dates in range
+  const currentDate = new Date(start);
+  const stopDate = new Date(end);
+
+  return [
+    moment(currentDate).format('YYYY-MM-DD'),
+    moment(stopDate).format('YYYY-MM-DD'),
+  ];
+};
+
 export const createDatesArray = (start, end) => {
   const datesArray = [];
 
@@ -51,14 +62,19 @@ export const calculatePrice = range => {
   let days;
   if (typeof range === 'number') {
     weeks = Math.trunc(range / 7);
-    days = range % 7;
+    days = range;
   } else {
     range.start.startOf('day');
     range.end.add(1, 'day').endOf('day');
     weeks = range.diff('weeks');
-    days = range.diff('days') % 7;
+    days = range.diff('days');
   }
-  return weeks * 15000 + days * 2000;
+
+  if (weeks >= 2) {
+    return (days - 14) * 20;
+  }
+
+  return 0;
 };
 
 // fields to filter based on them
@@ -170,6 +186,30 @@ export const truncatePostcode = postcode => {
     return postcode.substr(0, 3);
   }
   return postcode.substr(0, 2);
+};
+
+export const getIntersectRange = ({
+  bookingStart,
+  bookingEnd,
+  couponStart,
+  couponEnd,
+}) => {
+  const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
+  const couponRange = moment.range(moment(couponStart), moment(couponEnd));
+  return bookingRange.intersect(couponRange);
+};
+
+export const getDiscountDays = dates => {
+  const intersectRange = getIntersectRange(dates);
+
+  if (!intersectRange) return { discountDays: 0 };
+
+  // reset the time to 00:00 to calculate the start and the end day of the range
+  intersectRange.start.startOf('day');
+
+  const discountDays = intersectRange.diff('day') + 1;
+
+  return { discountDays };
 };
 
 let id = 0;

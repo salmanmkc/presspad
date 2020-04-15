@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
-const { types } = require('./../constants');
+const { types } = require('../constants');
 const { wordLengthValidator } = require('../utils');
 
 const profileSchema = new Schema(
@@ -137,6 +137,11 @@ const profileSchema = new Schema(
     workingArea: {
       type: String,
       enum: types.workingArea,
+      required: false, // required for hosts
+    },
+    areasOfInterest: {
+      type: String,
+      enum: types.areasOfInterest,
       required: false, // required for hosts
     },
     hostingReasonAnswer: {

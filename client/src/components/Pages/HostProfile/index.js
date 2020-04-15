@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import HostView from './HostView';
-import InternOrgView from './InternOrgView';
+import InternOrgView from './InternOrgView/index';
 import AdminView from './AdminView';
 import { Error404 } from '../../../constants/navRoutes';
 

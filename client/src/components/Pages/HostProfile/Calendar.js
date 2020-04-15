@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar/dist/entry.nostyle';
 import moment from 'moment';
 import axios from 'axios';
-import { Spin, Alert, Modal } from 'antd';
+import { Spin, Alert, Modal, Checkbox, Popover } from 'antd';
 import Icon from '../../Common/Icon';
 import sendBookingRequest from '../../../helpers/sendBookingRequest';
 
@@ -13,16 +13,23 @@ import {
   calculatePrice,
 } from '../../../helpers';
 
+// Typography
+import * as T from '../../Common/Typography';
+import { colors } from '../../../theme';
+import Button from '../../Common/ButtonNew';
+
 import { API_GET_INTERN_STATUS } from '../../../constants/apiRoutes';
 
 import {
   CalendarWrapper,
-  PricingDiv,
-  PriceHeadline,
-  PriceLabel,
-  RequestBtn,
+  BookingRequestDetails,
   ErrorDiv,
-  PriceTopDiv,
+  Row,
+  Col,
+  BursaryContainer,
+  PopoverContentContainer,
+  RequestBtnContainer,
+  DiscountPriceDetails,
 } from './Calendar.style';
 
 import {
@@ -30,24 +37,51 @@ import {
   BOOKINGS_INTERNSHIP_URL,
 } from '../../../constants/navRoutes';
 
+import CouponCode from '../../Common/CouponCode';
+
 const inValidInternshipDates =
   "Your internship period doesn't match the selected dates";
+
+const initialCouponState = {
+  discountRate: 0,
+  couponDiscount: 0,
+  couponError: '',
+  isCouponLoading: false,
+  code: '',
+  couponId: '',
+};
 class CalendarComponent extends Component {
   state = {
     isLoading: true,
     avDates: [],
     dates: new Date(),
+    daysAmount: 0,
     isRangeSelected: false,
     price: 0,
     bookingExists: false,
     message: '',
     messageType: '',
     isBooking: false,
+    couponState: initialCouponState,
   };
 
   componentDidMount() {
-    const { availableDates } = this.props;
+    const { availableDates, bookingSearchDates } = this.props;
 
+    // if dates were selected in search set state accordingly
+    if (bookingSearchDates) {
+      this.setState({
+        dates: bookingSearchDates,
+        price: calculatePrice(
+          moment.range(bookingSearchDates[0], bookingSearchDates[1]),
+        ),
+        daysAmount: createDatesArray(
+          bookingSearchDates[0],
+          bookingSearchDates[1],
+        ).length,
+        isRangeSelected: true,
+      });
+    }
     this.refreshAvailableDates(availableDates);
   }
 
@@ -85,10 +119,15 @@ class CalendarComponent extends Component {
       price: calculatePrice(moment.range(dates[0], dates[1])),
       message: '',
       messageType: '',
+      bursary: false,
+      daysAmount:
+        dates.length > 1 && createDatesArray(dates[0], dates[1]).length,
     });
     // check if booking exists and update state
     this.bookingFound(dates, internBookings);
   };
+
+  setCouponState = couponState => this.setState({ couponState });
 
   // disables calendar tiles (days)
   tileDisabled = ({ date }) => {
@@ -144,8 +183,15 @@ class CalendarComponent extends Component {
   };
 
   handleClick = async () => {
-    const { dates, price } = this.state;
-    const { currentUserId, listingId, hostId, getHostProfile } = this.props;
+    const { dates, price, couponState, bursary } = this.state;
+    const {
+      currentUserId,
+      listingId,
+      hostId,
+      getHostProfile,
+      setProfileData,
+    } = this.props;
+
     const data = {
       listing: listingId,
       intern: currentUserId,
@@ -153,11 +199,14 @@ class CalendarComponent extends Component {
       startDate: moment(dates[0]).format('YYYY-MM-DD'),
       endDate: moment(dates[1]).format('YYYY-MM-DD'),
       price,
+      couponId: couponState.couponId,
+      bursary,
     };
 
     let message = '';
     try {
       this.setState({ isBooking: true, message: '' });
+      // check if profile is verified
       const {
         data: { verified, isComplete, validInternshipDates },
       } = await axios.get(API_GET_INTERN_STATUS, {
@@ -183,10 +232,16 @@ class CalendarComponent extends Component {
             message: 'Booking request sent successfully',
             messageType: 'success',
             isBooking: false,
-            dates: null,
+            dates: new Date(),
             isRangeSelected: false,
             price: '0',
           });
+          // update coupon state
+          this.setCouponState(initialCouponState);
+          // update parent state
+          getHostProfile(this.props).then(({ profileData }) =>
+            setProfileData(profileData),
+          );
 
           // update parent state
           getHostProfile();
@@ -233,21 +288,171 @@ class CalendarComponent extends Component {
       : this.setState({ bookingExists: false });
   };
 
+  // host checkbox function
+  onCheckboxChange = e =>
+    e.target.checked
+      ? this.setState({
+          bursary: true,
+        })
+      : this.setState({
+          bursary: false,
+        });
+
+  renderBookingDetails = (isMobile, price, duration, couponState) => {
+    const { couponId, couponDiscount } = couponState;
+    return (
+      <>
+        <Row>
+          <Col>
+            {isMobile ? (
+              <T.PS>Selected Duration:</T.PS>
+            ) : (
+              <T.PL>Selected Duration:</T.PL>
+            )}
+          </Col>
+          <Col value>
+            {isMobile ? (
+              <T.PSBold>{duration > 0 ? duration : 0} days</T.PSBold>
+            ) : (
+              <T.H4>{duration > 0 ? duration : 0} days</T.H4>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <T.PS>Discounted price for period:</T.PS>
+              ) : (
+                <T.PS>Full price for period:</T.PS>
+              ))}
+
+            {!isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <T.PL>Discounted price for period:</T.PL>
+              ) : (
+                <T.PL>Full price for period:</T.PL>
+              ))}
+          </Col>
+          <Col value>
+            {isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <DiscountPriceDetails>
+                  <T.PSBold>£{price - couponDiscount}</T.PSBold>
+                  <T.PXSBold
+                    style={{
+                      color: colors.gray,
+                      textDecoration: 'line-through',
+                      marginLeft: '-1rem',
+                    }}
+                  >
+                    £{price}
+                  </T.PXSBold>
+                </DiscountPriceDetails>
+              ) : (
+                <T.PSBold>£{price}</T.PSBold>
+              ))}
+            {!isMobile &&
+              (couponId && couponDiscount > 0 ? (
+                <DiscountPriceDetails>
+                  <T.PBold>£{price - couponDiscount}</T.PBold>
+                  <T.PXSBold
+                    style={{
+                      color: colors.gray,
+                      textDecoration: 'line-through',
+                      marginLeft: '0.5rem',
+                    }}
+                  >
+                    £{price}
+                  </T.PXSBold>
+                </DiscountPriceDetails>
+              ) : (
+                <T.PBold>£{price}</T.PBold>
+              ))}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Popover
+              content="Dummy content for now ..."
+              title="Discount Codes"
+              trigger="click"
+            >
+              <PopoverContentContainer>
+                {isMobile ? (
+                  <T.PS>Discount Code:</T.PS>
+                ) : (
+                  <T.PL>Discount Code:</T.PL>
+                )}
+                <Icon icon="questionCircle" width="24px" height="24px" />
+              </PopoverContentContainer>
+            </Popover>
+          </Col>
+          <Col value>
+            <CouponCode
+              bookingPrice={price}
+              couponState={couponState}
+              setCouponState={this.setCouponState}
+              dates={this.state.dates}
+              isMobile={isMobile}
+            />
+          </Col>
+        </Row>
+      </>
+    );
+  };
+
+  renderBursaryCheckbox = isMobile => (
+    <BursaryContainer>
+      <Checkbox
+        style={{ paddingRight: '1rem' }}
+        name="checkbox"
+        onChange={e => this.onCheckboxChange(e)}
+      />
+
+      <Popover
+        content="Dummy content for now ..."
+        title="Presspad Bursary"
+        trigger="click"
+      >
+        <PopoverContentContainer>
+          {isMobile ? (
+            <T.PS>
+              Apply for a <strong> Presspad Bursary </strong>
+            </T.PS>
+          ) : (
+            <T.PL>
+              Apply for a <strong> Presspad Bursary </strong>
+            </T.PL>
+          )}
+          <Icon icon="questionCircle" width="24px" height="24px" />
+        </PopoverContentContainer>
+      </Popover>
+    </BursaryContainer>
+  );
+
   render() {
     const {
-      price,
       isRangeSelected,
       bookingExists,
       message,
       messageType,
       isLoading,
       isBooking,
+      couponState,
+      dates,
+      daysAmount,
+      price,
     } = this.state;
-    const { adminView, role } = this.props;
+
+    const { currentUserId, adminView, role, isMobile } = this.props;
+
+    const { couponDiscount } = couponState;
+
     if (isLoading) return <Spin tip="Loading Profile" />;
 
     return (
-      <div>
+      <>
         <CalendarWrapper>
           <Calendar
             prev2Label={null}
@@ -255,7 +460,7 @@ class CalendarComponent extends Component {
             tileDisabled={this.tileDisabled}
             onChange={this.onChange}
             onClickDay={this.onDayClick}
-            value={this.state.date}
+            value={this.state.date || (dates.length && dates)}
             locale="en-t-jp"
             maxDetail="month"
             minDetail="month"
@@ -265,42 +470,57 @@ class CalendarComponent extends Component {
             }
           />
         </CalendarWrapper>
+        {/* Booking details */}
         {role === 'intern' && (
-          <PricingDiv>
-            <PriceTopDiv>
-              <PriceHeadline>Full price for period</PriceHeadline>
-              <PriceLabel>£{price}</PriceLabel>
-            </PriceTopDiv>
+          <BookingRequestDetails>
+            {this.renderBookingDetails(
+              isMobile,
+              price,
+              daysAmount,
+              couponState,
+            )}
+            {/* Bursary checkbox */}
+            {!currentUserId && this.renderBursaryCheckbox(isMobile)}
+
+            {/* Average Response Time */}
+            <T.P>
+              This host typically takes <strong>3 days</strong> to respond to a
+              booking request.
+            </T.P>
             {message && (
               <ErrorDiv>
                 <Alert message={message} type={messageType} />
               </ErrorDiv>
             )}
 
-            <RequestBtn
-              onClick={this.handleClick}
-              disabled={
-                !isRangeSelected || bookingExists || adminView || isBooking
-              }
-            >
-              <Spin
-                spinning={isBooking}
-                indicator={
-                  <Icon
-                    icon="loading"
-                    style={{
-                      fontSize: 24,
-                      marginRight: '8px',
-                      color: 'white',
-                    }}
-                  />
+            <RequestBtnContainer>
+              {isMobile ? (
+                <T.PS>
+                  Price for period <br />{' '}
+                  <strong>£{price > 0 ? price - couponDiscount : 0}</strong>
+                </T.PS>
+              ) : (
+                <T.PL>
+                  Price for period <br />{' '}
+                  <strong>£{price > 0 ? price - couponDiscount : 0}</strong>
+                </T.PL>
+              )}
+
+              <Button
+                loading={isBooking}
+                small={isMobile}
+                type="secondary"
+                onClick={this.handleClick}
+                disabled={
+                  !isRangeSelected || bookingExists || adminView || isBooking
                 }
-              />
-              Request Stay
-            </RequestBtn>
-          </PricingDiv>
+              >
+                {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
+              </Button>
+            </RequestBtnContainer>
+          </BookingRequestDetails>
         )}
-      </div>
+      </>
     );
   }
 }
