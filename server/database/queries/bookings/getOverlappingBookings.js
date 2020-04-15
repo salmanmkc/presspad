@@ -10,6 +10,6 @@ const getOverlappingBookings = (bookingId, startDate, endDate) =>
         { $gte: ['$endDate', new Date(startDate)] },
       ],
     },
-  });
+  }).populate('intern', '-password');
 
 module.exports = getOverlappingBookings;

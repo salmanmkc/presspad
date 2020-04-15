@@ -1,13 +1,17 @@
+const mongoose = require('mongoose');
 const boom = require('boom');
 
 const {
   hostAcceptBookingById,
   getBookingWithUsers,
+  getOverlappingBookings,
 } = require('../../database/queries/bookings');
+const { updateRespondingData } = require('../../database/queries/user');
 const { registerNotification } = require('../../services/notifications');
 const requestAcceptedToIntern = require('./../../helpers/mailHelper/requestAcceptedToIntern');
 const requestAcceptedToAdmin = require('./../../helpers/mailHelper/requestAcceptedToAdmin');
 const { scheduleReminderEmails } = require('./../../services/mailing');
+const { rejectBookings } = require('./../../services/bookings');
 // const {
 //   findAllQuestions,
 //   createChecklistAnswers,
@@ -17,6 +21,7 @@ const { scheduleReminderEmails } = require('./../../services/mailing');
 
 const acceptBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
+  const { 'cancel-others': cancelOthers } = req.query;
   const { role, _id: hostId } = req.user;
   const { moneyGoTo } = req.body;
   try {
@@ -25,11 +30,50 @@ const acceptBooking = async (req, res, next) => {
       return next(boom.forbidden());
     }
 
+    // get emails data
+    const bookingDetails = await getBookingWithUsers(bookingId);
+
+    // get all overlaping requests
+    const { startDate, endDate } = bookingDetails;
+    const overLappingBookings = await getOverlappingBookings(
+      mongoose.Types.ObjectId(bookingId),
+      startDate,
+      endDate,
+    );
+
+    // if overlaping cancel overlapping
+    if (!cancelOthers && overLappingBookings.length) {
+      return res.status(409).json({ overLappingBookings });
+    }
+
+    if (cancelOthers) {
+      if (!overLappingBookings.length) return next(boom.badRequest());
+      // reject others
+      const rejectBookingIds = overLappingBookings.map(({ _id, status }) => {
+        if (status !== 'pending') {
+          throw new Error("You can'nt reject accepted bookings");
+        }
+        return _id;
+      });
+
+      await rejectBookings(
+        rejectBookingIds,
+        hostId,
+        'The host has accepted another booking for this time',
+      );
+    }
+
     const updatedBookingRequest = await hostAcceptBookingById({
       bookingId,
       hostId,
       moneyGoTo,
     });
+
+    // update respondingData
+    const { createdAt, confirmDate } = updatedBookingRequest;
+
+    const respondingTimeInMs = confirmDate - createdAt;
+    await updateRespondingData(hostId, respondingTimeInMs);
 
     const notification = {
       private: false,
@@ -38,9 +82,6 @@ const acceptBooking = async (req, res, next) => {
       type: 'stayApproved',
       booking: bookingId,
     };
-
-    // get emails data
-    const bookingDetails = await getBookingWithUsers(bookingId);
 
     // const allQuestions = await findAllQuestions();
 
@@ -74,7 +115,6 @@ const acceptBooking = async (req, res, next) => {
       ];
     }
     await Promise.all(promiseArray);
-
     return res.json({});
   } catch (error) {
     return next(boom.badImplementation(error));
