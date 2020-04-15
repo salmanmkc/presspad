@@ -18,6 +18,7 @@ const sendMail = ({ type, userType, params }) => {
     });
   const { subject, createBody } = mailsTypes[userType][type];
 
+  // TODO check for intern/host/organisation names in the params and captalize them
   const header = createHeader(subject);
   const body = createBody(params);
   const footer = createFooter();
