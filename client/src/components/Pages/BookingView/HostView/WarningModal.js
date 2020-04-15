@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Input, Modal } from 'antd';
+import { Input, Modal, Table } from 'antd';
 import styled from 'styled-components';
 
-import { H4C, PBold, PXS } from '../../../Common/Typography';
+import { H4C, H6C, PBold, PXS } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 import { API_REJECT_BOOKING_URL } from '../../../../constants/apiRoutes';
+import { SERVER_ERROR } from '../../../../constants/errorMessages';
+
+import { bookingsColumns } from '../../HostDashboard/TablesColumns';
+import { BookingsTableWrapper } from '../../HostDashboard/HostDashboard.style';
+import { withWindowWidth } from '../../../../HOCs';
 
 const { TextArea } = Input;
 
@@ -42,14 +47,71 @@ const OptionalSpan = styled.span`
 
 const WarningModal = ({
   handleReject,
+  handleAccept,
   handleClose,
   internName,
   bookingId,
   visible,
+  overLapping,
+  windowWidth,
+  acceptError,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [text, setText] = useState('');
+
+  if (overLapping) {
+    return (
+      <Modal
+        type="warning"
+        visible={visible}
+        footer={null}
+        width={680}
+        onCancel={handleClose}
+      >
+        <Wrapper>
+          <H6C mb="4" color="blue">
+            You have an overlapping request, accepting this will reject others
+            automaticly?
+          </H6C>
+          {overLapping.map(a => a.startDate)}
+          <BookingsTableWrapper>
+            <Table
+              columns={bookingsColumns(windowWidth)}
+              dataSource={overLapping}
+              // dataSource={overLapping.slice(0, viewNumber)}
+              rowKey="_id"
+              pagination={false}
+              onRow={record => ({
+                onClick: () => {
+                  const newTab = window.open(
+                    `/booking/${record._id}`,
+                    '_blank',
+                  );
+                  newTab.focus();
+                },
+                style: { cursor: 'pointer' },
+              })}
+            />
+          </BookingsTableWrapper>
+          <ButtonsWrapper>
+            <ButtonNew
+              type="primary"
+              onClick={() => handleAccept(null, true, setLoading)}
+              loading={loading}
+              disabled={acceptError}
+            >
+              confirm
+            </ButtonNew>
+            <ButtonNew type="secondary" outline onClick={handleClose}>
+              cancel
+            </ButtonNew>
+          </ButtonsWrapper>
+          {acceptError && <PXS color="pink">{acceptError}</PXS>}
+        </Wrapper>
+      </Modal>
+    );
+  }
 
   const handleTextChange = ({ target }) => {
     setText(target.value);
@@ -64,8 +126,8 @@ const WarningModal = ({
       });
       handleReject();
     } catch (err) {
-      const errMsg = err.response.data;
-      setError(errMsg);
+      const errMsg = err.response.data && err.response.data.error;
+      setError(errMsg || SERVER_ERROR);
       setLoading(false);
     }
   };
@@ -110,4 +172,4 @@ const WarningModal = ({
   );
 };
 
-export default WarningModal;
+export default withWindowWidth(WarningModal);

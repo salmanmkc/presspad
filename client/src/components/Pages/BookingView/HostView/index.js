@@ -5,7 +5,6 @@ import axios from 'axios';
 import { message } from 'antd';
 
 import ButtonNew from '../../../Common/ButtonNew';
-import { Modal } from '../../../Common/AntdWrappers';
 
 import BookingDates from '../BookingDates';
 import HostInternInfo from '../HostInternInfo';
@@ -20,7 +19,8 @@ import {
   CompletedContent,
 } from './statusContents';
 import WarningModal from './WarningModal';
-import { Wrapper, ContentWrapper, Error, TipsWrapper } from './HostView.style';
+import { Wrapper, ContentWrapper, TipsWrapper } from './HostView.style';
+import reducer from './reducer';
 
 import {
   API_INTERN_PROFILE_URL,
@@ -38,45 +38,17 @@ const initialState = {
   error: '',
 };
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'getInternData':
-      return {
-        ...state,
-        internData: action.value,
-        isLoading: { ...state.isLoading, internData: false },
-      };
-    case 'isInternDataLoading':
-      return { ...state, isLoading: { ...state.isLoading, internData: true } };
-    case 'accept':
-      return {
-        ...state,
-        bookingStatus: 'accepted',
-        isLoading: { ...state.isLoading, accept: false },
-      };
-    case 'isAcceptLoading':
-      return { ...state, isLoading: { ...state.isLoading, accept: true } };
-    case 'reject':
-      return {
-        ...state,
-        bookingStatus: 'rejected',
-        visible: false,
-      };
-    case 'closeModal':
-      return { ...state, visible: false };
-    case 'openModal':
-      return { ...state, visible: true };
-    case 'isError':
-      return { ...state, isLoading: {}, error: action.error };
-    default:
-      throw new Error();
-  }
-};
-
 const HostView = ({ bookingInfo, id: userId }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { bookingStatus, internData, isLoading, visible, error } = state;
+  const {
+    bookingStatus,
+    internData,
+    isLoading,
+    visible,
+    overLapping,
+    error,
+  } = state;
 
   const {
     _id: bookingId,
@@ -88,31 +60,44 @@ const HostView = ({ bookingInfo, id: userId }) => {
   } = bookingInfo;
   const { _id: internId } = intern;
 
-  const handleAccept = async () => {
+  const handleAccept = async (e, cancelOthers, setLoading) => {
     // const { moneyGoTo } = this.state;
-
     try {
-      dispatch({ type: 'isAcceptLoading' });
+      if (cancelOthers) {
+        setLoading(true);
+      } else {
+        dispatch({ type: 'isAcceptLoading' });
+      }
 
-      await axios.patch(API_ACCEPT_BOOKING_URL.replace(':id', bookingInfo._id));
+      const acceptUrl = `${API_ACCEPT_BOOKING_URL.replace(
+        ':id',
+        bookingInfo._id,
+      )}/${cancelOthers ? '?cancel-others=true' : ''}`;
 
-      Modal.success({
-        title: 'Done!',
-        content: `You successfully accepted ${
-          bookingInfo.intern.name.split(' ')[0]
-        }'s request`,
-        onOk: () => {
+      await axios.patch(acceptUrl);
+
+      message
+        .success(
+          `You successfully accepted ${bookingInfo.intern.name.split(
+            ' ',
+          )}'s request`,
+          2,
+        )
+        .then(() => {
           dispatch({ type: 'accept' });
-        },
-        onCancel: () => {
-          dispatch({ type: 'accept' });
-        },
-      });
+        });
     } catch (err) {
-      const errorMsg =
-        err.response && err.response.data && err.response.data.error;
-      message.error(errorMsg || 'Something went wrong');
-      dispatch({ type: 'isError', error: errorMsg });
+      if (err.response.status === 409) {
+        dispatch({
+          type: 'openModal',
+          value: err.response.data.overLappingBookings,
+        });
+      } else {
+        const errorMsg =
+          err.response && err.response.data && err.response.data.error;
+        message.error(errorMsg || 'Something went wrong');
+        dispatch({ type: 'isError', error: errorMsg });
+      }
     }
   };
 
@@ -207,10 +192,13 @@ const HostView = ({ bookingInfo, id: userId }) => {
     <Wrapper>
       <WarningModal
         handleReject={handleReject}
+        handleAccept={handleAccept}
         handleClose={handleModalClose}
         internName={intern.name}
         bookingId={bookingId}
         visible={visible}
+        overLapping={overLapping}
+        acceptError={error}
       />
       <ContentWrapper>
         {statusContents[status]()}
