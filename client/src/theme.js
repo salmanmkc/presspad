@@ -33,7 +33,7 @@ export const breakpoints = {
   desktopL: `(min-width: ${size.desktop})`,
 };
 
-const newColors = {
+export const newColors = {
   black: '#181818',
   darkerGray: '#2F2F2F',
   darkGray: '#464646',

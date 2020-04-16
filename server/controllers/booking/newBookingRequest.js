@@ -6,24 +6,26 @@ const {
   checkOtherBookingExists,
   checkIfListingAvailable,
   createNewBooking,
-  updateListingAvailability,
+  // updateListingAvailability,
 } = require('../../database/queries/bookings');
 const { calculatePrice } = require('../../helpers/payments');
 
-const { registerNotification } = require('../../services/notifications');
+// const { registerNotification } = require('../../services/notifications');
 
 module.exports = async (req, res, next) => {
   try {
     const {
       listing,
-      intern,
       host,
-      price,
       startDate,
       endDate,
+      price: _price,
       couponId,
     } = req.body;
 
+    const { _id: intern } = req.user;
+
+    const price = Number(_price);
     const data = {
       listing,
       intern,
@@ -78,9 +80,9 @@ module.exports = async (req, res, next) => {
       data.coupon = couponId;
     }
 
-    const [booking] = await Promise.all([
+    await Promise.all([
       createNewBooking(data),
-      updateListingAvailability(listing, startDate, endDate),
+      // updateListingAvailability(listing, startDate, endDate),
     ]);
 
     // EMAIL TO GO HERE TO SEND TO ADMIN THAT NEW BOOKING REQUEST IS READY TO REVIEW

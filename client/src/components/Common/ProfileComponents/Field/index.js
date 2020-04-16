@@ -37,6 +37,7 @@ export default function Field({
   role,
   internLabel,
   hostLabel,
+  openDate,
   // date Range
   disabledStartDate,
   disabledEndDate,
@@ -132,6 +133,7 @@ export default function Field({
           name={name}
           parent={parent}
           readOnly={readOnly}
+          openDate={openDate}
         />
       )}
 
