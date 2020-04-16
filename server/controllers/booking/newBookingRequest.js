@@ -6,7 +6,7 @@ const {
   checkOtherBookingExists,
   checkIfListingAvailable,
   createNewBooking,
-  // updateListingAvailability,
+  updateListingAvailability,
 } = require('../../database/queries/bookings');
 const { calculatePrice } = require('../../helpers/payments');
 
@@ -82,7 +82,7 @@ module.exports = async (req, res, next) => {
 
     await Promise.all([
       createNewBooking(data),
-      // updateListingAvailability(listing, startDate, endDate),
+      updateListingAvailability(listing, startDate, endDate),
     ]);
 
     // EMAIL TO GO HERE TO SEND TO ADMIN THAT NEW BOOKING REQUEST IS READY TO REVIEW

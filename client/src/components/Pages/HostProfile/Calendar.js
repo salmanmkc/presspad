@@ -213,6 +213,7 @@ class CalendarComponent extends Component {
       } = await axios.get(API_GET_INTERN_STATUS, {
         params: { startDate: dates[0], endDate: dates[1] },
       });
+
       if (!verified) {
         message = "You can't make a request until you get verified";
       } else if (!isComplete) {
@@ -243,9 +244,6 @@ class CalendarComponent extends Component {
           getHostProfile(this.props).then(({ profileData }) =>
             setProfileData(profileData),
           );
-
-          // update parent state
-          getHostProfile();
         } else {
           this.setState({
             isBooking: false,
