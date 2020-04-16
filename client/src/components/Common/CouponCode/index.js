@@ -181,7 +181,7 @@ const CouponCode = props => {
       );
       return newCouponState;
     };
-    if (!typing) {
+    if (code.length > 0 && !typing) {
       getNewCouponState().then(updatedState => {
         if (!updatedState.couponError.length) {
           setCouponState(updatedState);
