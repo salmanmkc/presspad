@@ -277,5 +277,5 @@ export const InputLabel = styled.label`
 export const DiscountPriceDetails = styled.div`
   display: flex;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
 `;

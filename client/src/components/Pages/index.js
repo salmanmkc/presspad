@@ -38,6 +38,7 @@ import {
   MYPROFILE_URL,
   ADD_REVIWE_URL,
   INTERN_PROFILE,
+  HOST_PROFILE_SOFT,
   BOOKINGS_INTERNSHIP_URL,
 } from '../../constants/navRoutes';
 
@@ -48,6 +49,7 @@ function Pages(props) {
     <>
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        {/* protected host profile */}
         <Route
           isPrivate
           exact
@@ -57,6 +59,15 @@ function Pages(props) {
           isLoggedIn={isLoggedIn}
           {...props}
         />
+        {/* public host profile */}
+        <Route
+          exact
+          path={HOST_PROFILE_SOFT}
+          Component={HostProfile}
+          handleChangeState={handleChangeState}
+          {...props}
+        />
+
         <Route
           isPrivate
           exact

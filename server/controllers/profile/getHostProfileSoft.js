@@ -2,7 +2,6 @@ const boom = require('boom');
 // QUERIES
 const {
   hostProfileData,
-  getConfirmedBooking,
 } = require('../../database/queries/profile/hostProfile');
 
 const generateUrl = require('../../helpers/generateFileURL');
@@ -14,8 +13,6 @@ const createPostcode = require('../../helpers/createPostcode');
 const getHostProfile = async (req, res, next) => {
   const { id: hostId } = req.params;
 
-  const { id: userId, role } = req.user;
-
   if (!hostId) return next(boom.badRequest('User does not exist'));
   let address = {};
 
@@ -23,16 +20,7 @@ const getHostProfile = async (req, res, next) => {
     if (!isValidMongoObjectId(hostId))
       return next(boom.notFound('Invalid Host ID'));
 
-    let hostProfile;
-    let booking;
-    if (role === 'intern') {
-      booking = await getConfirmedBooking(userId, hostId);
-      if (booking) [hostProfile] = await hostProfileData(hostId, true);
-      else {
-        // TODO 1- generate address as text eg. Canada Water SE8 (no booking)
-        [hostProfile] = await hostProfileData(hostId);
-      }
-    } else [hostProfile] = await hostProfileData(hostId);
+    const [hostProfile] = await hostProfileData(hostId);
 
     if (!hostProfile) {
       return next(boom.notFound('Host has no profile or does not exist'));
@@ -48,9 +36,7 @@ const getHostProfile = async (req, res, next) => {
       city,
     };
 
-    if (!booking) {
-      hostProfile.listing.address = address;
-    }
+    hostProfile.listing.address = address;
 
     if (!hostProfile || !hostProfile.profile || !hostProfile.listing)
       return next(boom.notFound('Host has no profile or does not exist'));
@@ -60,7 +46,7 @@ const getHostProfile = async (req, res, next) => {
 
     await generateUrl(hostProfile.profile.profileImage);
 
-    return res.json({ ...hostProfile, showFullData: !!booking });
+    return res.json({ ...hostProfile, showFullData: false });
   } catch (err) {
     return next(boom.badImplementation(err));
   }

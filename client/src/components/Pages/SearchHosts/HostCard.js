@@ -2,7 +2,7 @@ import React from 'react';
 
 import { H6C, H7C } from '../../Common/Typography';
 
-import { HOSTS_URL } from '../../../constants/navRoutes';
+import { HOST_PROFILE, HOST_PROFILE_SOFT } from '../../../constants/navRoutes';
 
 import {
   HostCardWrapper,
@@ -22,6 +22,7 @@ const HostCard = ({
   hostId,
   selectedStartDate,
   selectedEndDate,
+  isLoggedIn,
 }) => {
   let selectedSearchDates;
 
@@ -37,10 +38,10 @@ const HostCard = ({
   return (
     <HostCardWrapper
       to={{
-        pathname: `${HOSTS_URL}/${hostId}`,
-        state: {
-          selectedSearchDates,
-        },
+        pathname: isLoggedIn
+          ? HOST_PROFILE.replace(':id', hostId)
+          : HOST_PROFILE_SOFT.replace(':id', hostId),
+        state: { selectedSearchDates },
       }}
     >
       <CardImage src={img} long={long} />

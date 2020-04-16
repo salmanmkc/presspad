@@ -4,17 +4,17 @@
 const boom = require('boom');
 const mongoose = require('mongoose');
 
-const generateUrl = require('./../../helpers/generateFileURL');
+const generateUrl = require('../../helpers/generateFileURL');
 
 // QUERIES
 const {
   internProfileData,
-} = require('./../../database/queries/profile/internProfile');
+} = require('../../database/queries/profile/internProfile');
 
-const { getUserReviews } = require('./../../database/queries/user/index');
+const { getUserReviews } = require('../../database/queries/user/index');
 const {
   getInternBookingsWithReviews,
-} = require('./../../database/queries/bookings');
+} = require('../../database/queries/bookings');
 
 module.exports = async (req, res, next) => {
   try {

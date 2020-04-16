@@ -4,9 +4,7 @@ const { getReviewsGiventToUser } = require('../../database/queries/review');
 //   countCompletedBookingsByUser,
 // } = require("./../../database/queries/bookings");
 
-const {
-  isValidMongoObjectId,
-} = require('./../../helpers/isValidMongoObjectId');
+const { isValidMongoObjectId } = require('../../helpers/isValidMongoObjectId');
 
 module.exports = async (req, res, next) => {
   try {
