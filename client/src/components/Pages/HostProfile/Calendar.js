@@ -35,6 +35,7 @@ import {
 import {
   INTERN_COMPLETE_PROFILE_URL,
   BOOKINGS_INTERNSHIP_URL,
+  SIGNIN_URL,
 } from '../../../constants/navRoutes';
 
 import CouponCode from '../../Common/CouponCode';
@@ -192,7 +193,7 @@ class CalendarComponent extends Component {
       history,
     } = this.props;
 
-    if (!currentUserId) return history.push('/sign-in');
+    if (!currentUserId) return history.push(SIGNIN_URL);
 
     const data = {
       listing: listingId,
@@ -306,7 +307,7 @@ class CalendarComponent extends Component {
           style={{
             color: colors.gray,
             textDecoration: 'line-through',
-            marginLeft: isMobile ? '-1rem' : 0,
+            marginLeft: isMobile ? '-1.25rem' : '1rem',
           }}
         >
           £{content}
