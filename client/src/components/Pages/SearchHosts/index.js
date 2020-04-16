@@ -6,12 +6,10 @@ import Hosts from './Hosts';
 import NoResults from './NoResults';
 
 import { ContentWrapper } from '../../Layouts/SideMenuLayout/style';
-
+import { disabledStartDate, disabledEndDate } from '../../../helpers';
 import {
   getCities,
   fetchListings,
-  disabledStartDate,
-  disabledEndDate,
   validateSearch,
   check7And14DaysBooking,
   show7DaysWarning,

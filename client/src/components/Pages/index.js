@@ -18,6 +18,7 @@ import BookingView from './BookingView';
 import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
+import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
 
 import { withWindowWidth } from '../../HOCs';
@@ -38,6 +39,7 @@ import {
   ADD_REVIWE_URL,
   INTERN_PROFILE,
   HOST_PROFILE_SOFT,
+  BOOKINGS_INTERNSHIP_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -66,6 +68,16 @@ function Pages(props) {
           {...props}
         />
 
+        <Route
+          isPrivate
+          exact
+          path={BOOKINGS_INTERNSHIP_URL}
+          Component={UpdateInternship}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
         <Route
           isPrivate
           layout="sideMenu"

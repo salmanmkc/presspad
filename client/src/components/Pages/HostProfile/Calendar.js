@@ -5,6 +5,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { Spin, Alert, Modal, Checkbox, Popover } from 'antd';
 import Icon from '../../Common/Icon';
+import sendBookingRequest from '../../../helpers/sendBookingRequest';
+
 import {
   createDatesArray,
   getDateRangeFromArray,
@@ -16,10 +18,7 @@ import * as T from '../../Common/Typography';
 import { colors } from '../../../theme';
 import Button from '../../Common/ButtonNew';
 
-import {
-  API_BOOKING_REQUEST_URL,
-  API_GET_INTERN_STATUS,
-} from '../../../constants/apiRoutes';
+import { API_GET_INTERN_STATUS } from '../../../constants/apiRoutes';
 
 import {
   CalendarWrapper,
@@ -33,11 +32,16 @@ import {
   DiscountPriceDetails,
 } from './Calendar.style';
 
-import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
+import {
+  INTERN_COMPLETE_PROFILE_URL,
+  BOOKINGS_INTERNSHIP_URL,
+} from '../../../constants/navRoutes';
 
 import CouponCode from '../../Common/CouponCode';
 
-const bookingRequest = (url, data) => axios.post(url, data);
+const inValidInternshipDates =
+  "Your internship period doesn't match the selected dates";
+
 const initialCouponState = {
   discountRate: 0,
   couponDiscount: 0,
@@ -143,12 +147,37 @@ class CalendarComponent extends Component {
     this.props.history.push(INTERN_COMPLETE_PROFILE_URL);
   };
 
+  goToUpdateInternship = () => {
+    const { dates, price } = this.state;
+
+    const { listingId, hostId } = this.props;
+
+    const searchParams = new URLSearchParams();
+    searchParams.append('startDate', dates[0]);
+    searchParams.append('endDate', dates[1]);
+    searchParams.append('hostId', hostId);
+    searchParams.append('price', price);
+    searchParams.append('listing', listingId);
+    searchParams.append('host', hostId);
+
+    this.props.history.push({
+      pathname: BOOKINGS_INTERNSHIP_URL,
+      search: searchParams.toString(),
+    });
+  };
+
   showAlertAndRedirectToProfile = message => {
     Modal.warning({
       title: "Sorry! You can't make a request.",
       content: message,
-      onOk: this.goToCompleteProfile,
-      onCancel: this.goToCompleteProfile,
+      onOk:
+        message === inValidInternshipDates
+          ? this.goToUpdateInternship
+          : this.goToCompleteProfile,
+      onCancel:
+        message === inValidInternshipDates
+          ? this.goToUpdateInternship
+          : this.goToCompleteProfile,
     });
   };
 
@@ -180,70 +209,50 @@ class CalendarComponent extends Component {
       this.setState({ isBooking: true, message: '' });
       // check if profile is verified
       const {
-        data: { verified, isComplete },
-      } = await axios.get(API_GET_INTERN_STATUS);
-
+        data: { verified, isComplete, validInternshipDates },
+      } = await axios.get(API_GET_INTERN_STATUS, {
+        params: { startDate: dates[0], endDate: dates[1] },
+      });
       if (!verified) {
         message = "You can't make a request until you get verified";
       } else if (!isComplete) {
         message = 'You need to complete your profile';
+      } else if (!validInternshipDates) {
+        message = inValidInternshipDates;
       }
 
-      if (!verified || !isComplete) {
+      if (!verified || !isComplete || !validInternshipDates) {
         this.showAlertAndRedirectToProfile(message);
         this.setState({ message, messageType: 'error', isBooking: false });
       }
-      // make request
-      if (verified && isComplete) {
-        bookingRequest(API_BOOKING_REQUEST_URL, data)
-          .then(() => {
-            this.setState({
-              message: 'Booking request sent successfully',
-              messageType: 'success',
-              isBooking: false,
-              dates: new Date(),
-              isRangeSelected: false,
-              price: '0',
-            });
-            Modal.success({
-              title: 'Booking Request Sent!',
-              content:
-                'Your booking request has been submitted. Make sure to check your dashboard for a response shortly.',
-            });
 
-            // update coupon state
-            this.setCouponState(initialCouponState);
-            // update parent state
-            getHostProfile(this.props).then(({ profileData }) =>
-              setProfileData(profileData),
-            );
-          })
-          .catch(error => {
-            const serverError = error.response && error.response.data.error;
-
-            let errorMsg;
-
-            if (
-              serverError ===
-              'user has already a booking request for those dates'
-            ) {
-              errorMsg =
-                'It seems like you have already requested a booking during those dates. You can only make one request at a time.';
-            } else if (
-              serverError === 'listing is not available during those dates'
-            ) {
-              errorMsg =
-                'Unfortunately this listing is not fully available during your requested booking dates.';
-            } else {
-              errorMsg = serverError;
-            }
-
-            this.setState({
-              isBooking: false,
-              messageType: 'error',
-              message: errorMsg,
-            });
+      if (verified && isComplete && validInternshipDates) {
+        const { error } = await sendBookingRequest(data);
+        if (!error) {
+          this.setState({
+            message: 'Booking request sent successfully',
+            messageType: 'success',
+            isBooking: false,
+            dates: new Date(),
+            isRangeSelected: false,
+            price: '0',
           });
+          // update coupon state
+          this.setCouponState(initialCouponState);
+          // update parent state
+          getHostProfile(this.props).then(({ profileData }) =>
+            setProfileData(profileData),
+          );
+
+          // update parent state
+          getHostProfile();
+        } else {
+          this.setState({
+            isBooking: false,
+            messageType: 'error',
+            message: error,
+          });
+        }
       }
     } catch (err) {
       if (err && err.response && err.response.status === 404) {

@@ -27,6 +27,7 @@ const Modal = ({
     ),
     okButtonProps: hideOkButton ? disableButton(okButtonProps) : okButtonProps,
     maskClosable: true,
+    icon: false,
     ...props,
   });
 

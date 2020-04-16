@@ -9,10 +9,12 @@ const hostsCompleteProfile = require('../controllers/hostsCompleteProfile');
 const internsCompleteProfile = require('../controllers/user/internsCompleteProfile');
 const getHostProfile = require('../controllers/profile/getHostProfile');
 const getHostProfileSoft = require('../controllers/profile/getHostProfileSoft');
-
 const hostViewInternProfile = require('../controllers/profile/hostViewInternProfile');
 const getInternProfile = require('../controllers/profile/getInternProfile');
 const searchProfiles = require('../controllers/profile/searchProfiles');
+const getInternshipDetails = require('../controllers/profile/getInternshipDetails');
+const updateInternshipDetails = require('../controllers/profile/updateInternshipDetails');
+
 const {
   viewBooking,
   getUserBookings,
@@ -105,6 +107,7 @@ const {
   ADMIN_HOST_PROFILE,
   NOTIFICATION_URL,
   REVIEWS,
+  INTERNSHIP,
   ADMIN_REVIEWS_BOOKING,
   ADMIN_BOOKING_HISTORY,
   HOST_PROFILE_SOFT_URL,
@@ -277,4 +280,8 @@ router.patch(`${NOTIFICATION_URL}/seen`, authentication, markAsSeen);
 
 // get reviews (given || taken)
 router.get(REVIEWS, getReviews);
+
+router.get(INTERNSHIP, authentication, getInternshipDetails);
+router.patch(INTERNSHIP, authentication, updateInternshipDetails);
+
 module.exports = router;
