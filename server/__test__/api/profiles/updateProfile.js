@@ -15,16 +15,9 @@ let users;
 let profiles;
 
 describe('Testing for get host profile route', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     // build dummy data
-    const {
-      connection: _connection,
-      users: _users,
-      profiles: _profiles,
-    } = await buildDB();
-    connection = _connection;
-    users = _users;
-    profiles = _profiles;
+    ({ connection, users, profiles } = await buildDB());
   });
 
   afterAll(async () => {

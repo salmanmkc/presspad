@@ -348,25 +348,19 @@ export default class AdminDashboard extends Component {
   };
 
   updateDBS = record => {
-    if (record.dbsCheck) {
-      this.setState({
-        dbsDetails: record.dbsCheck,
-        userToUpdate: record.userId,
-        modalToShow: 'dbs',
-      });
-    } else {
-      this.setState({
-        userToUpdate: record.userId,
-        modalToShow: 'dbs',
-      });
-    }
+    this.setState({
+      ...(record.dbsCheck ? { dbsDetails: record.dbsCheck } : {}),
+      userToUpdate: record.userId,
+      modalToShow: 'dbs',
+    });
   };
 
   handleDBSChange = ({ value, key }) => {
     const { dbsDetails } = this.state;
-    dbsDetails[key] = value;
 
-    this.setState({ dbsDetails });
+    this.setState({
+      dbsDetails: { ...dbsDetails, [key]: value },
+    });
   };
 
   submitDBSChange = async () => {
