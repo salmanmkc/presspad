@@ -11,8 +11,8 @@ import {
 
 import { Span } from '../../Typography';
 
-import Title from '../Title';
-import Field from '../Field';
+import { Title, Field, DBSCheck } from '../index.js';
+
 import fields from '../../../../constants/fields';
 
 import { DBS_CHECK_PAGE } from '../../../../constants/navRoutes';
@@ -79,37 +79,14 @@ const AboutYouDetails = ({
             />
           </Col>
         </Row>
-        <SmallTitle>DSB Check</SmallTitle>
-        <HelperText>
-          Please enter your DBS reference number and upload a photo of your DBS
-          certificate.
-          <br />
-          <Span weight="bold">
-            If you have not completed a DBS check, please{' '}
-            <StyledLink to={DBS_CHECK_PAGE} target="_blank">
-              click here
-            </StyledLink>{' '}
-            and we will help you complete one for free
-          </Span>
-        </HelperText>
-        <Row gutter={25}>
-          <Col xs={24} sm={12}>
-            <Field
-              {...fields['DBSCheckCert']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <Field
-              {...fields['DBSCheckNum']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-        </Row>
+        <DBSCheck
+          data={data}
+          errors={errors}
+          handleChange={handleChange}
+          handleError={handleError}
+          userId={userId}
+          role={role}
+        />
       </SectionContent>
     </SectionWrapper>
   );
