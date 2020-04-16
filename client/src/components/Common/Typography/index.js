@@ -15,6 +15,7 @@ import {
   BodyXS,
   StyledLink,
   StyledSectionTitle,
+  StyledSpan,
 } from './style';
 
 const H1 = ({ children, ...props }) => (
@@ -98,10 +99,12 @@ const Link = ({ children, to, isExternal, caps, ...props }) => (
 
 const SectionTitle = ({ children, ...props }) => (
   <StyledSectionTitle {...props}>
-    <>
-      <H3C>{children}</H3C>
-    </>
+    <H3C>{children}</H3C>
   </StyledSectionTitle>
+);
+
+const Span = ({ children, ...props }) => (
+  <StyledSpan {...props}>{children}</StyledSpan>
 );
 
 export {
@@ -128,4 +131,5 @@ export {
   PXSBold,
   Link,
   SectionTitle,
+  Span,
 };

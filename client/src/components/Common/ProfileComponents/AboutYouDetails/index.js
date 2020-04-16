@@ -9,6 +9,8 @@ import {
   StyledLink,
 } from '../ProfileComponents.style';
 
+import { Span } from '../../Typography';
+
 import Title from '../Title';
 import Field from '../Field';
 import fields from '../../../../constants/fields';
@@ -82,13 +84,13 @@ const AboutYouDetails = ({
           Please enter your DBS reference number and upload a photo of your DBS
           certificate.
           <br />
-          <span style={{ fontWeight: 'bold' }}>
+          <Span weight="bold">
             If you have not completed a DBS check, please{' '}
             <StyledLink to={DBS_CHECK_PAGE} target="_blank">
               click here
             </StyledLink>{' '}
             and we will help you complete one for free
-          </span>
+          </Span>
         </HelperText>
         <Row gutter={25}>
           <Col xs={24} sm={12}>
@@ -100,7 +102,6 @@ const AboutYouDetails = ({
             />
           </Col>
           <Col xs={24} sm={12}>
-            {console.log('fields', { fields })}
             <Field
               {...fields['DBSCheckNum']}
               value={data['DBSCheck']}

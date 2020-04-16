@@ -138,7 +138,7 @@ export const SmallTitle = styled.p`
   font-family: Roboto;
   font-size: 14px;
   font-weight: bold;
-  color: #393939;
+  color: ${({ theme }) => theme.colors.darkGray});
   max-width: 550px;
   margin-top: 1rem;
   margin-bottom: 0;

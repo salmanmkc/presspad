@@ -17,7 +17,6 @@ export default function InputWithLabel({
   readOnly = false,
 }) {
   const onChange = ({ target: { name: fieldName, value: fieldValue } }) => {
-    console.log('field', fieldName);
     handleChange({ key: fieldName, value: fieldValue, parent });
   };
 

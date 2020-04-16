@@ -137,3 +137,7 @@ export const StyledSectionTitle = styled.header`
     }
   }
 `;
+
+export const StyledSpan = styled.span`
+  font-weight: ${({ weight }) => weight && weight};
+`;

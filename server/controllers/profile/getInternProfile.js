@@ -74,8 +74,6 @@ module.exports = async (req, res, next) => {
 
     const { profile } = formedData.userInfo;
 
-    console.log('profile', profile);
-
     // get the file links
     if (profile) {
       const promises = [];

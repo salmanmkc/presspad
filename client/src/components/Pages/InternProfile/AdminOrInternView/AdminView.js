@@ -68,7 +68,7 @@ export default class AdminView extends React.Component {
       },
       DBSCheck: {
         fileName: null,
-        refNum: null,
+        refNum: '',
         isPrivate: true,
       },
       sexualOrientation: null,

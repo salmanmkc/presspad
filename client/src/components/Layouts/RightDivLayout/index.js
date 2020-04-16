@@ -3,14 +3,7 @@ import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import * as S from './style';
 
-const RightDivLayout = ({
-  windowWidth,
-  sideContent,
-  isLoggedIn,
-  navbarProps,
-  children,
-  renderSide,
-}) => {
+const RightDivLayout = ({ windowWidth, sideContent, children, renderSide }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
 
   return (
