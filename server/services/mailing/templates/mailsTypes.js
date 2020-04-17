@@ -76,7 +76,18 @@ const types = {
       params: ['internName', 'hostName', 'bookingId'],
     },
   },
-  organisation: {},
+  organisation: {
+    BOOKING_ACCEPTED: {
+      createBody: organisation.bookingAccepted,
+      subject: 'Booking accepted!',
+      params: ['internName', 'amountSpent', 'couponCode'],
+    },
+    BOOKING_OVERDUE: {
+      createBody: organisation.bookingOverdue,
+      subject: ' IMPORTANT! Intern’s booking has been terminated ',
+      params: ['internName'],
+    },
+  },
 };
 
 module.exports = types;
