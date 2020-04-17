@@ -271,7 +271,7 @@ export default class AdminDashboard extends Component {
         message: rejectMessage,
         booking: bookingToUpdate,
       });
-      this.setState({ updateBooking: false, modalVisible: false });
+      this.setState({ updatingBooking: false, modalVisible: false });
       Modal.success({
         content: 'Booking request successfully updated',
       });
@@ -279,6 +279,7 @@ export default class AdminDashboard extends Component {
     } catch (err) {
       console.error(err);
       message.error('Something went wrong');
+      this.setState({ updatingBooking: false, modalVisible: false });
     }
   };
 
