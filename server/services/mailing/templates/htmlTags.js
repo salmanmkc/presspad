@@ -10,11 +10,24 @@ const link = (page, data, text) => {
       href = ``;
       break;
 
+    case 'INTERN_COMPLETE_PROFILE':
+      href = ``;
+      break;
+
     case 'HOST_GUIDANCE':
       href = ``;
       break;
 
+    case 'INTERN_GUIDANCE':
+      href = ``;
+      break;
+
     case 'HOST_LOGIN':
+    case 'INTERN_LOGIN':
+      href = ``;
+      break;
+
+    case 'HOSTS_LINK':
       href = ``;
       break;
 

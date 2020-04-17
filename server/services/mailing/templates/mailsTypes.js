@@ -67,7 +67,63 @@ const types = {
     },
   },
 
-  intern: {},
+  intern: {
+    BOOKING_APPROVED_PAYMENT_NEEDED: {
+      createBody: intern.bookingApprovedPaymentNeeded,
+      subject: 'Booking accepted!',
+      params: [],
+    },
+    BOOKING_CANCELLED_BY_HOST: {
+      createBody: intern.bookingCancelledByHost,
+      subject: 'Cancellation',
+      params: [],
+    },
+    BOOKING_REJECTED: {
+      createBody: intern.bookingRejected,
+      subject: 'Booking Request', // check the subject title
+      params: ['bookingId'],
+    },
+    BOOKING_REQUEST_RECEIVED: {
+      createBody: intern.bookingRequestReceived,
+      subject: 'Action Needed: Online Profile',
+      params: [],
+    },
+    BOOKING_TERMINATED: {
+      createBody: intern.bookingterminated,
+      subject: 'IMPORTANT! Booking terminated',
+      params: [],
+    },
+    HOST_CANCELLATION_AFTER_PAYMENT: {
+      createBody: intern.hostCancellationAfterPayment,
+      subject: 'Host cancellation',
+      params: [],
+    },
+    INCOMPLETE_PROFILE_AFTER_3_WEEKS: {
+      createBody: intern.incompleteProfileAfter3Weeks,
+      subject: 'We need some more information!',
+      params: [],
+    },
+    ONE_WEEK_TO_GO: {
+      createBody: intern.oneWeekToGo,
+      subject: 'One week to go! ',
+      params: ['bookingId'],
+    },
+    PAYMENT_OVERDUE: {
+      createBody: intern.paymentOverdue,
+      subject: 'IMPORTANT! Payment overdue',
+      params: [],
+    },
+    PROFILE_APPROVED: {
+      createBody: intern.profileApproved,
+      subject: 'Congratulations! Your profile has been approved!',
+      params: [],
+    },
+    PROFILE_REJECTED: {
+      createBody: intern.profileRejected,
+      subject: 'Action Needed: Online Profile',
+      params: [],
+    },
+  },
 
   internAndHost: {
     BOOKING_COMPLETED: {
