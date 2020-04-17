@@ -4,15 +4,10 @@ import {
   SectionWrapper,
   SectionContent,
   Description,
-  HelperText,
-  SmallTitle,
-  StyledLink,
 } from '../../../../Common/ProfileComponents/ProfileComponents.style';
 
 import { Title, Field, DBSCheck } from '../../../../Common/ProfileComponents';
 import fields from '../../../../../constants/fields';
-
-import { DBS_CHECK_PAGE } from '../../../../../constants/navRoutes';
 
 const Details = ({
   data = {},

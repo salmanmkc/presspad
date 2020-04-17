@@ -4,18 +4,11 @@ import {
   SectionWrapper,
   SectionContent,
   Description,
-  HelperText,
-  SmallTitle,
-  StyledLink,
 } from '../ProfileComponents.style';
-
-import { Span } from '../../Typography';
 
 import { Title, Field, DBSCheck } from '../index.js';
 
 import fields from '../../../../constants/fields';
-
-import { DBS_CHECK_PAGE } from '../../../../constants/navRoutes';
 
 const AboutYouDetails = ({
   data = {},
