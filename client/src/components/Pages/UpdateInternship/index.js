@@ -41,6 +41,14 @@ const UpdateInternship = ({ id }) => {
   const query = useQuery();
   const history = useHistory();
 
+  const bookingData = {
+    startDate: query.get('startDate'),
+    endDate: query.get('endDate'),
+    host: query.get('hostId'),
+    price: query.get('price'),
+    listing: query.get('listing'),
+  };
+
   const onInputChange = e => {
     const { value, name, dataset: { parent } = {} } = e.target;
     if (parent) {
@@ -94,14 +102,6 @@ const UpdateInternship = ({ id }) => {
   }, [id]);
 
   const onSubmit = async e => {
-    const bookingData = {
-      startDate: query.get('startDate'),
-      endDate: query.get('endDate'),
-      host: query.get('hostId'),
-      price: query.get('price'),
-      listing: query.get('listing'),
-    };
-
     e.preventDefault();
     const { errors: _errors } = await validate({
       schema: internshipSchema,

@@ -23,16 +23,21 @@ const Form = ({
   onSubmit,
 }) => (
   <form onSubmit={onSubmit}>
-    <T.H3C mt="3">update internship details</T.H3C>
-    <T.P mt="5">
-      The dates you’ve requested to stay do not match the dates of your
-      internship. We can only let you stay with hosts during and around the
-      dates of your internship.
-    </T.P>
-    <T.P mt="6" mb="1">
-      Please update your internship details below to complete this booking
-      request.
-    </T.P>
+    <Header>
+      <Divider>
+        <T.H3C mt="3">update internship details</T.H3C>
+        <T.P mt="5">
+          The dates you’ve requested to stay do not match the dates of your
+          internship. We can only let you stay with hosts during and around the
+          dates of your internship.
+        </T.P>
+        <T.P mt="6" mb="1">
+          Please update your internship details below to complete this booking
+          request.
+        </T.P>
+      </Divider>
+    </Header>
+
     <Row>
       <SubRow>
         <Input
