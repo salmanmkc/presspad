@@ -1,3 +1,4 @@
 const getCoupons = require('./getCoupons');
+const getCouponsSoft = require('./getCouponsSoft');
 
-module.exports = { getCoupons };
+module.exports = { getCoupons, getCouponsSoft };

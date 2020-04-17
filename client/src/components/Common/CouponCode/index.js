@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Input } from 'antd';
 
-import { API_COUPON_URL } from '../../../constants/apiRoutes';
+import {
+  API_COUPON_URL,
+  API_COUPON_SOFT_URL,
+} from '../../../constants/apiRoutes';
 
 import { createStartEndDate, getDiscountDays } from '../../../helpers';
 
@@ -12,13 +15,15 @@ import * as T from '../Typography';
 import { colors } from '../../../theme';
 
 // checks db with code
-const makeRequest = async _code => {
+const makeRequest = async (_code, userId) => {
   try {
     const {
       data: {
         data: [couponInfo],
       },
-    } = await axios.get(`${API_COUPON_URL}?code=${_code}`);
+    } = await axios.get(
+      `${userId ? API_COUPON_URL : API_COUPON_SOFT_URL}?code=${_code}`,
+    );
 
     return { couponInfo };
   } catch (error) {
@@ -41,8 +46,8 @@ const initialCouponState = {
 };
 
 // calculates relevant details for coupon usage
-const checkCouponCode = async (_code, _dates, _bookingPrice) => {
-  const { couponInfo, apiError } = await makeRequest(_code);
+const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
+  const { couponInfo, apiError } = await makeRequest(_code, userId);
   let couponDiscount;
 
   if (couponInfo) {
@@ -111,7 +116,14 @@ const checkCouponCode = async (_code, _dates, _bookingPrice) => {
 };
 
 const CouponCode = props => {
-  const { dates, bookingPrice, setCouponState, couponState } = props;
+  const {
+    dates,
+    bookingPrice,
+    setCouponState,
+    couponState,
+    bursary,
+    currentUserId: userId,
+  } = props;
 
   const { discountRate, couponError, isCouponLoading, couponId } = couponState;
 
@@ -153,6 +165,7 @@ const CouponCode = props => {
         code,
         dates,
         bookingPrice,
+        userId,
       );
       setCouponState(newCouponState);
     }
@@ -168,7 +181,7 @@ const CouponCode = props => {
       );
       return newCouponState;
     };
-    if (!typing) {
+    if (code.length > 0 && !typing) {
       getNewCouponState().then(updatedState => {
         if (!updatedState.couponError.length) {
           setCouponState(updatedState);
@@ -187,7 +200,7 @@ const CouponCode = props => {
         onChange={handleCouponChange}
         onBlur={handleBlur}
         placeholder="   Type code ..."
-        disabled={bookingPrice === 0}
+        disabled={bookingPrice === 0 || bursary}
         value={code || ''}
       />
 

@@ -167,6 +167,7 @@ export default class SearchHosts extends Component {
       attemptedToSubmit,
     } = this.state;
     const { startDate, endDate, acceptAutomatically } = searchFields;
+    const { isLoggedIn } = this.props;
 
     const formProps = {
       cities,
@@ -193,6 +194,7 @@ export default class SearchHosts extends Component {
           {listings.length > 0 && !within7Days ? (
             <>
               <Hosts
+                isLoggedIn={isLoggedIn}
                 listings={listings}
                 startDate={startDate}
                 endDate={endDate}

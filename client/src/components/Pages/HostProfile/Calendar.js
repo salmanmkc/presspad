@@ -35,6 +35,7 @@ import {
 import {
   INTERN_COMPLETE_PROFILE_URL,
   BOOKINGS_INTERNSHIP_URL,
+  SIGNUP_INTERN,
 } from '../../../constants/navRoutes';
 
 import CouponCode from '../../Common/CouponCode';
@@ -119,7 +120,6 @@ class CalendarComponent extends Component {
       price: calculatePrice(moment.range(dates[0], dates[1])),
       message: '',
       messageType: '',
-      bursary: false,
       daysAmount:
         dates.length > 1 && createDatesArray(dates[0], dates[1]).length,
     });
@@ -183,14 +183,17 @@ class CalendarComponent extends Component {
   };
 
   handleClick = async () => {
-    const { dates, price, couponState, bursary } = this.state;
+    const { dates, price, couponState } = this.state;
     const {
       currentUserId,
       listingId,
       hostId,
       getHostProfile,
       setProfileData,
+      history,
     } = this.props;
+
+    if (!currentUserId) return history.push(SIGNUP_INTERN);
 
     const data = {
       listing: listingId,
@@ -200,7 +203,6 @@ class CalendarComponent extends Component {
       endDate: moment(dates[1]).format('YYYY-MM-DD'),
       price,
       couponId: couponState.couponId,
-      bursary,
     };
 
     let message = '';
@@ -212,6 +214,7 @@ class CalendarComponent extends Component {
       } = await axios.get(API_GET_INTERN_STATUS, {
         params: { startDate: dates[0], endDate: dates[1] },
       });
+
       if (!verified) {
         message = "You can't make a request until you get verified";
       } else if (!isComplete) {
@@ -242,9 +245,6 @@ class CalendarComponent extends Component {
           getHostProfile(this.props).then(({ profileData }) =>
             setProfileData(profileData),
           );
-
-          // update parent state
-          getHostProfile();
         } else {
           this.setState({
             isBooking: false,
@@ -298,8 +298,53 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  renderBookingDetails = (isMobile, price, duration, couponState) => {
-    const { couponId, couponDiscount } = couponState;
+  renderPrice = (isMobile, price, couponState, bursary) => {
+    const pricingTypographies = {
+      priceMobile: content => <T.PSBold>£{content}</T.PSBold>,
+      priceDesktop: content => <T.PBold>£{content}</T.PBold>,
+      formerPrice: content => (
+        <T.PXSBold
+          style={{
+            color: colors.gray,
+            textDecoration: 'line-through',
+            marginLeft: isMobile ? '-1.25rem' : '1rem',
+          }}
+        >
+          £{content}
+        </T.PXSBold>
+      ),
+    };
+
+    const { couponError, couponId, couponDiscount } = couponState;
+    const discountExists =
+      (!couponError && couponId && couponDiscount > 0) || bursary;
+    const validPrice = price > 0;
+
+    if (validPrice && discountExists) {
+      return (
+        <DiscountPriceDetails>
+          {isMobile
+            ? pricingTypographies.priceMobile(
+                bursary ? 0 : price - couponDiscount,
+              )
+            : pricingTypographies.priceDesktop(
+                bursary ? 0 : price - couponDiscount,
+              )}
+          {pricingTypographies.formerPrice(price)}
+        </DiscountPriceDetails>
+      );
+    }
+    return isMobile
+      ? pricingTypographies.priceMobile(price)
+      : pricingTypographies.priceDesktop(price);
+  };
+
+  renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
+    const { couponId, couponDiscount, couponError } = couponState;
+
+    const discountExists =
+      (!couponError && couponId && couponDiscount > 0) || bursary;
+    const validPrice = price > 0;
     return (
       <>
         <Row>
@@ -321,54 +366,21 @@ class CalendarComponent extends Component {
         <Row>
           <Col>
             {isMobile &&
-              (couponId && couponDiscount > 0 ? (
+              (validPrice && discountExists ? (
                 <T.PS>Discounted price for period:</T.PS>
               ) : (
                 <T.PS>Full price for period:</T.PS>
               ))}
-
+            {/* Price calculation */}
             {!isMobile &&
-              (couponId && couponDiscount > 0 ? (
+              (validPrice && discountExists ? (
                 <T.PL>Discounted price for period:</T.PL>
               ) : (
                 <T.PL>Full price for period:</T.PL>
               ))}
           </Col>
           <Col value>
-            {isMobile &&
-              (couponId && couponDiscount > 0 ? (
-                <DiscountPriceDetails>
-                  <T.PSBold>£{price - couponDiscount}</T.PSBold>
-                  <T.PXSBold
-                    style={{
-                      color: colors.gray,
-                      textDecoration: 'line-through',
-                      marginLeft: '-1rem',
-                    }}
-                  >
-                    £{price}
-                  </T.PXSBold>
-                </DiscountPriceDetails>
-              ) : (
-                <T.PSBold>£{price}</T.PSBold>
-              ))}
-            {!isMobile &&
-              (couponId && couponDiscount > 0 ? (
-                <DiscountPriceDetails>
-                  <T.PBold>£{price - couponDiscount}</T.PBold>
-                  <T.PXSBold
-                    style={{
-                      color: colors.gray,
-                      textDecoration: 'line-through',
-                      marginLeft: '0.5rem',
-                    }}
-                  >
-                    £{price}
-                  </T.PXSBold>
-                </DiscountPriceDetails>
-              ) : (
-                <T.PBold>£{price}</T.PBold>
-              ))}
+            {this.renderPrice(isMobile, price, couponState, bursary)}
           </Col>
         </Row>
         <Row>
@@ -390,11 +402,13 @@ class CalendarComponent extends Component {
           </Col>
           <Col value>
             <CouponCode
+              bursary={this.state.bursary}
               bookingPrice={price}
               couponState={couponState}
               setCouponState={this.setCouponState}
               dates={this.state.dates}
               isMobile={isMobile}
+              currentUserId={this.currentUserId}
             />
           </Col>
         </Row>
@@ -407,7 +421,7 @@ class CalendarComponent extends Component {
       <Checkbox
         style={{ paddingRight: '1rem' }}
         name="checkbox"
-        onChange={e => this.onCheckboxChange(e)}
+        onChange={this.onCheckboxChange}
       />
 
       <Popover
@@ -443,11 +457,12 @@ class CalendarComponent extends Component {
       dates,
       daysAmount,
       price,
+      bursary,
     } = this.state;
 
-    const { currentUserId, adminView, role, isMobile } = this.props;
+    const { currentUserId, adminView, isMobile } = this.props;
 
-    const { couponDiscount } = couponState;
+    const { couponDiscount, couponError } = couponState;
 
     if (isLoading) return <Spin tip="Loading Profile" />;
 
@@ -471,55 +486,63 @@ class CalendarComponent extends Component {
           />
         </CalendarWrapper>
         {/* Booking details */}
-        {role === 'intern' && (
-          <BookingRequestDetails>
-            {this.renderBookingDetails(
-              isMobile,
-              price,
-              daysAmount,
-              couponState,
+        <BookingRequestDetails>
+          {this.renderBookingDetails(
+            isMobile,
+            price,
+            daysAmount,
+            couponState,
+            bursary,
+          )}
+          {/* Bursary checkbox */}
+          {!currentUserId && this.renderBursaryCheckbox(isMobile)}
+
+          {/* Average Response Time */}
+          <T.P>
+            This host typically takes <strong>3 days</strong> to respond to a
+            booking request.
+          </T.P>
+          {message && (
+            <ErrorDiv>
+              <Alert message={message} type={messageType} />
+            </ErrorDiv>
+          )}
+
+          <RequestBtnContainer>
+            {isMobile ? (
+              <T.PS>
+                Price for period <br />{' '}
+                <strong>
+                  £
+                  {bursary
+                    ? 0
+                    : (!couponError && price - couponDiscount) || price}
+                </strong>
+              </T.PS>
+            ) : (
+              <T.PL>
+                Price for period <br />{' '}
+                <strong>
+                  £
+                  {bursary
+                    ? 0
+                    : (!couponError && price - couponDiscount) || price}
+                </strong>
+              </T.PL>
             )}
-            {/* Bursary checkbox */}
-            {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
-            {/* Average Response Time */}
-            <T.P>
-              This host typically takes <strong>3 days</strong> to respond to a
-              booking request.
-            </T.P>
-            {message && (
-              <ErrorDiv>
-                <Alert message={message} type={messageType} />
-              </ErrorDiv>
-            )}
-
-            <RequestBtnContainer>
-              {isMobile ? (
-                <T.PS>
-                  Price for period <br />{' '}
-                  <strong>£{price > 0 ? price - couponDiscount : 0}</strong>
-                </T.PS>
-              ) : (
-                <T.PL>
-                  Price for period <br />{' '}
-                  <strong>£{price > 0 ? price - couponDiscount : 0}</strong>
-                </T.PL>
-              )}
-
-              <Button
-                loading={isBooking}
-                small={isMobile}
-                type="secondary"
-                onClick={this.handleClick}
-                disabled={
-                  !isRangeSelected || bookingExists || adminView || isBooking
-                }
-              >
-                {currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
-              </Button>
-            </RequestBtnContainer>
-          </BookingRequestDetails>
-        )}
+            <Button
+              small={isMobile}
+              type="secondary"
+              onClick={this.handleClick}
+              disabled={
+                !isRangeSelected || bookingExists || adminView || isBooking
+              }
+              label={currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
+              loading={isBooking}
+            />
+          </RequestBtnContainer>
+        </BookingRequestDetails>
       </>
     );
   }

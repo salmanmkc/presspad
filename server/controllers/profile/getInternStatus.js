@@ -8,7 +8,7 @@ const {
 // validation
 const internCompleteProfileSchema = require('../../middlewares/validation/internCompleteProfileSchema');
 const { validate } = require('../../middlewares/validation/index');
-const { checkInternshipDates } = require('./../../helpers/general');
+const { checkInternshipDates } = require('../../helpers/general');
 /**
  * get the profile data adn the listing based on the role
  * @param {string} _id user id
