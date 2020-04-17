@@ -129,6 +129,7 @@ const UpdateInternship = ({ id }) => {
 
   return (
     <Form
+      bookingData={bookingData}
       state={state}
       errors={errors}
       loading={loading}

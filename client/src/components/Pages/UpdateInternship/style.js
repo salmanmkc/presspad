@@ -1,6 +1,31 @@
 import styled from 'styled-components';
 import * as T from '../../Common/Typography';
 
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  > button {
+    align-self: flex-end;
+  }
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    min-height: 530px;
+  }
+`;
+
+export const ContentWrapper = styled.div`
+  width: 100%;
+  min-height: 420px;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    width: 50%;
+    max-width: 436px;
+    > button {
+      width: 195px;
+    }
+  }
+`;
+
 export const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
