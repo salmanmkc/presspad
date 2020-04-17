@@ -24,14 +24,7 @@ describe('Tests for booking queries', () => {
   let listings;
   beforeEach(async () => {
     // build dummy data
-    const {
-      connection: _connection,
-      users: _users,
-      listings: _listings,
-    } = await buildDB();
-    connection = _connection;
-    users = _users;
-    listings = _listings;
+    ({ connection, users, listings } = await buildDB());
   });
 
   afterAll(async () => {
