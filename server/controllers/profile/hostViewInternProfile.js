@@ -23,18 +23,17 @@ module.exports = async (req, res, next) => {
       return next(boom.notFound());
     }
 
-    let profileData;
     if (view === 'booking_details') {
       const confirmedBookings = await getConfirmedBooking(internId, hostId);
       if (confirmedBookings) {
-        profileData = await internProfileBookingView(internId);
+        const profileData = await internProfileBookingView(internId);
         if (!profileData[0]) return next(boom.notFound());
         return res.json(profileData[0]);
       }
     }
 
     // get intern's basic profile data
-    profileData = await internProfileData(internId);
+    const profileData = await internProfileData(internId);
 
     if (!profileData[0]) return next(boom.notFound());
     if (profileData[0].profile && profileData[0].profile.profileImage) {
