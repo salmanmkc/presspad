@@ -108,15 +108,11 @@ const internProfileSchema = Joi.object({
   internshipStartDate: Joi.date().required(),
   internshipEndDate: Joi.date().required(),
   internshipContact: {
-    name: Joi.string()
-      .email()
-      .allow(''),
+    name: Joi.string().required(),
     email: Joi.string()
       .email()
-      .allow(''),
-    phoneNumber: Joi.string()
-      .email()
-      .allow(''),
+      .required(),
+    phoneNumber: Joi.string().required(),
   },
 });
 

@@ -71,18 +71,20 @@ export const detailsSchema = object({
     fileName: string().ensure(),
     isPrivate: boolean().default(true),
   }),
-  internshipOfficeAddress: {
+  internshipOfficeAddress: object({
     addressline1: string()
       .ensure()
       .required(),
-    addressline2: string().ensure(),
+    addressline2: string()
+      .ensure()
+      .required(),
     city: string()
       .ensure()
       .required(),
     postcode: string()
       .ensure()
       .required(),
-  },
+  }),
   emergencyContact: object({
     name: string().ensure(),
     email: string()
@@ -107,4 +109,21 @@ export const detailsSchema = object({
   consentedOnPressPadTerms: boolean()
     .oneOf([true], errMsgs.CONSENT)
     .required(),
+  internshipContact: object({
+    name: string()
+      .ensure()
+      .required(errMsgs.REQUIRED('internshipContact.name')),
+    email: string()
+      .ensure()
+      .required(errMsgs.REQUIRED('internshipContact.email')),
+    phoneNumber: string()
+      .ensure()
+      .required(errMsgs.REQUIRED('internshipContact.phoneNumber')),
+  }),
+  internshipStartDate: date()
+    .typeError(errMsgs.INVALID_DATE)
+    .required(errMsgs.REQUIRED('internshipStartDate')),
+  internshipEndDate: date()
+    .typeError(errMsgs.INVALID_DATE)
+    .required(errMsgs.REQUIRED('internshipEndDate')),
 });

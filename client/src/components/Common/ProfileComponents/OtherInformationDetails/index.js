@@ -76,6 +76,54 @@ const OtherInformationDetails = ({
         <Row gutter={25}>
           <Col xs={24} sm={12}>
             <Field
+              {...fields['internshipContactName']}
+              value={data['internshipContact']}
+              error={errors['internshipContact']}
+              {...props}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipContactEmail']}
+              value={data['internshipContact']}
+              error={errors['internshipContact']}
+              {...props}
+            />
+          </Col>
+        </Row>
+        <Row gutter={25}>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipContactPhoneNumber']}
+              value={data['internshipContact']}
+              error={errors['internshipContact']}
+              {...props}
+            />
+          </Col>
+        </Row>
+
+        <Row gutter={25}>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipStartDate']}
+              value={data['internshipStartDate']}
+              error={errors['internshipStartDate']}
+              {...props}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <Field
+              {...fields['internshipEndDate']}
+              value={data['internshipEndDate']}
+              error={errors['internshipEndDate']}
+              {...props}
+            />
+          </Col>
+        </Row>
+        <Row gutter={25}>
+          {/*  */}
+          <Col xs={24} sm={12}>
+            <Field
               {...fields['internshipOfficeAddressAddress1']}
               value={data['internshipOfficeAddress']}
               error={errors['internshipOfficeAddress']}

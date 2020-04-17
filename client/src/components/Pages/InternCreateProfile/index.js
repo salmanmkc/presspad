@@ -50,6 +50,11 @@ const INITIAL_STATE = {
     city: '',
     postcode: '',
   },
+  internshipContact: {
+    name: '',
+    email: '',
+    phoneNumber: '',
+  },
   emergencyContact: {
     name: '',
     phoneNumber: '',

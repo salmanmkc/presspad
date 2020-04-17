@@ -3,28 +3,17 @@ const boom = require('boom');
 const {
   hostProfileData,
   getConfirmedBooking,
-} = require('./../../database/queries/profile/hostProfile');
+} = require('../../database/queries/profile/hostProfile');
 
 const generateUrl = require('../../helpers/generateFileURL');
 const { isValidMongoObjectId } = require('../../helpers/isValidMongoObjectId');
+const createPostcode = require('../../helpers/createPostcode');
 
-const firstPart = postcode => {
-  // split by space
-  const splited = postcode && postcode.split(' ');
-  // get first part
-  if (splited && splited.length > 1) {
-    // eslint-disable-next-line no-param-reassign
-    return splited[0].substring(0, 4);
-  }
-  // eslint-disable-next-line no-param-reassign
-  return postcode
-    ? postcode.substring(0, postcode.length - 3).substring(0, 4)
-    : '';
-};
 // expect hostId as query param
 // responds with data obj: user info, profile, listings, reviews
 const getHostProfile = async (req, res, next) => {
   const { id: hostId } = req.params;
+
   const { id: userId, role } = req.user;
 
   if (!hostId) return next(boom.badRequest('User does not exist'));
@@ -55,7 +44,7 @@ const getHostProfile = async (req, res, next) => {
     address = {
       addressline1: '',
       addressline2: '',
-      postcode: firstPart(postcode),
+      postcode: createPostcode(postcode),
       city,
     };
 

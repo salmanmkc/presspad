@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
 export const ImageSection = styled.section`
-  margin-top: 15px;
   height: 400px;
+
   display: flex;
   align-items: center;
-
   .ant-carousel {
     width: 100%;
   }
 
   @media (max-width: 775.98px) {
     height: auto;
+    width: 100%;
     flex-direction: column;
     padding-top: 20px;
   }
@@ -23,6 +23,7 @@ export const MainImageDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   @media (max-width: 775.98px) {
     width: 100%;
   }
@@ -34,6 +35,10 @@ export const MainImage = styled.img`
   height: 380px;
   object-fit: cover;
   object-position: center center;
+
+  @media (max-width: 775.98px) {
+    height: auto;
+  }
 `;
 
 export const SideImageDiv = styled.div`

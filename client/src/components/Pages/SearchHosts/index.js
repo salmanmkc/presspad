@@ -6,12 +6,10 @@ import Hosts from './Hosts';
 import NoResults from './NoResults';
 
 import { ContentWrapper } from '../../Layouts/SideMenuLayout/style';
-
+import { disabledStartDate, disabledEndDate } from '../../../helpers';
 import {
   getCities,
   fetchListings,
-  disabledStartDate,
-  disabledEndDate,
   validateSearch,
   check7And14DaysBooking,
   show7DaysWarning,
@@ -169,6 +167,7 @@ export default class SearchHosts extends Component {
       attemptedToSubmit,
     } = this.state;
     const { startDate, endDate, acceptAutomatically } = searchFields;
+    const { isLoggedIn } = this.props;
 
     const formProps = {
       cities,
@@ -195,6 +194,7 @@ export default class SearchHosts extends Component {
           {listings.length > 0 && !within7Days ? (
             <>
               <Hosts
+                isLoggedIn={isLoggedIn}
                 listings={listings}
                 startDate={startDate}
                 endDate={endDate}

@@ -25,10 +25,11 @@ const classNames = {
 
 export const CalendarWrapper = styled.div.attrs(classNames)`
   ${classNames.reactCalendar} {
-    width: 350px;
+    padding-top: 2rem;
     max-width: 100%;
-    font-family: Roboto;
+    font-family: Glacial Indifference;
     line-height: 1.125em;
+    font-size: 1.2rem;
     *,
     *:before,
     *:after {
@@ -145,17 +146,70 @@ export const CalendarWrapper = styled.div.attrs(classNames)`
   }
 `;
 
-export const PricingDiv = styled.div`
-  width: 95%;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  border-top: ${borders.lightDivider};
-  height: 185px;
+export const BookingRequestDetails = styled.div`
+  margin-top: 5rem;
 
-  @media (max-width: ${size.mobileM}) {
+  @media (max-width: ${size.mobileL}) {
     height: auto;
     padding-bottom: 1rem;
+    margin-top: 2rem;
+  }
+`;
+
+export const BursaryContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+`;
+
+export const PopoverContentContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+
+  p {
+    padding-right: 0.5rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: ${size.mobileL}) {
+  }
+`;
+
+export const RequestBtnContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+
+  @media (max-width: ${size.mobileL}) {
+    padding-bottom: 0;
+  }
+`;
+
+export const CodeInput = styled.input`
+  width: 200px;
+
+  border: ${borders.newInputBox};
+  border-radius: 10px;
+
+  @media (max-width: ${size.mobileL}) {
+    width: 160px;
+  }
+`;
+
+export const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+`;
+
+export const Col = styled.div`
+  @media (max-width: ${size.mobileM}) {
+    margin-right: ${({ value }) => value && '-2rem'};
   }
 `;
 
@@ -203,7 +257,7 @@ export const RequestBtn = styled.button`
 `;
 
 export const ErrorDiv = styled.div`
-  margin-bottom: 25px;
+  margin-top: 1rem;
 `;
 
 export const PriceTopDiv = styled.div`
@@ -212,4 +266,16 @@ export const PriceTopDiv = styled.div`
     padding: 0.5rem 0;
     justify-content: space-between;
   }
+`;
+
+export const InputLabel = styled.label`
+  font-size: 1rem;
+  color: ${colors.fontLightBlack};
+  line-height: 2rem;
+`;
+
+export const DiscountPriceDetails = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;

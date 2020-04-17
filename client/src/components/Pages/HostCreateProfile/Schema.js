@@ -80,7 +80,7 @@ export const detailsSchema = object({
   hearAboutPressPadAnswer: string()
     .ensure()
     .wordLengthValidator(50)
-    .required(errMsgs.REQUIRED),
+    .required(errMsgs.REQUIRED('hearAboutPressPadAnswer')),
   phoneNumber: string()
     .max(50, errMsgs.MAX(50))
     .required(errMsgs.PHONE_NUMBER),

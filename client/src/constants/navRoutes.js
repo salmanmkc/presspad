@@ -4,11 +4,13 @@ export const ABOUT_URL = '/about';
 export const MYPROFILE_URL = '/my-profile';
 export const DASHBOARD_URL = '/dashboard';
 export const HOSTS_URL = '/hosts';
-export const HOST_PROFILE = '/hosts/:id';
+export const HOST_PROFILE = '/host/:id';
+export const HOST_PROFILE_SOFT = '/host-light/:id';
 export const INTERN_PROFILE = '/interns/:id';
 export const BOOKING_VIEW_URL = '/booking/:id';
 export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
+export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
 export const PAYMENTS_URL = '/payments';
 

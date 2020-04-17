@@ -1,16 +1,20 @@
 const router = require('express').Router();
 
 // IMPORT CONTROLLERS
-const loginController = require('./../controllers/user/login');
-const userInfo = require('./../controllers/user/userInfo');
-const signUpController = require('./../controllers/user/signup');
-const getAllOrgs = require('./../controllers/user/getAllOrgs');
-const hostsCompleteProfile = require('./../controllers/hostsCompleteProfile');
-const internsCompleteProfile = require('./../controllers/user/internsCompleteProfile');
-const getHostProfile = require('./../controllers/profile/getHostProfile');
-const hostViewInternProfile = require('./../controllers/profile/hostViewInternProfile');
-const getInternProfile = require('./../controllers/profile/getInternProfile');
-const searchProfiles = require('./../controllers/profile/searchProfiles');
+const loginController = require('../controllers/user/login');
+const userInfo = require('../controllers/user/userInfo');
+const signUpController = require('../controllers/user/signup');
+const getAllOrgs = require('../controllers/user/getAllOrgs');
+const hostsCompleteProfile = require('../controllers/hostsCompleteProfile');
+const internsCompleteProfile = require('../controllers/user/internsCompleteProfile');
+const getHostProfile = require('../controllers/profile/getHostProfile');
+const getHostProfileSoft = require('../controllers/profile/getHostProfileSoft');
+const hostViewInternProfile = require('../controllers/profile/hostViewInternProfile');
+const getInternProfile = require('../controllers/profile/getInternProfile');
+const searchProfiles = require('../controllers/profile/searchProfiles');
+const getInternshipDetails = require('../controllers/profile/getInternshipDetails');
+const updateInternshipDetails = require('../controllers/profile/updateInternshipDetails');
+
 const {
   viewBooking,
   getUserBookings,
@@ -21,19 +25,16 @@ const {
   getActiveBookingsApi,
   adminReviewsBooking,
   getBookingHistoryApi,
-} = require('./../controllers/booking');
-const adminStats = require('./../controllers/stats/adminStats');
-const verifyProfile = require('./../controllers/profile/verifyProfile');
-const orgsDashboard = require('./../controllers/organisation/dashboard');
-const {
-  internDashboard,
-  hostDashboard,
-} = require('./../controllers/dashboard');
+} = require('../controllers/booking');
+const adminStats = require('../controllers/stats/adminStats');
+const verifyProfile = require('../controllers/profile/verifyProfile');
+const orgsDashboard = require('../controllers/organisation/dashboard');
+const { internDashboard, hostDashboard } = require('../controllers/dashboard');
 const getMyProfile = require('../controllers/profile/getMyProfile');
 const { getUploadSignedURL } = require('../controllers/storage');
 const { postReview, getReviews } = require('../controllers/review');
 const signOut = require('../controllers/user/signOut');
-const { getCoupons } = require('../controllers/coupon');
+const { getCoupons, getCouponsSoft } = require('../controllers/coupon');
 const getInternStatus = require('../controllers/profile/getInternStatus');
 const {
   internPayment,
@@ -57,11 +58,11 @@ const { updateProfile } = require('../controllers/profile/updateProfile');
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
 
 // IMPORT MIDDLEWARES
-const authentication = require('./../middlewares/authentication');
-const authorization = require('./../middlewares/authorization');
+const authentication = require('../middlewares/authentication');
+const authorization = require('../middlewares/authorization');
 
 // const softAuthCheck = require("./../middlewares/softAuthCheck");
-const { validation, validation2 } = require('./../middlewares/validation');
+const { validation, validation2 } = require('../middlewares/validation');
 
 // API ROUTES
 const {
@@ -86,6 +87,7 @@ const {
   UPLOAD_SIGNED_URL,
   REVIEW_URL,
   COUPON_URL,
+  COUPON_SOFT_URL,
   GET_INTERN_STATUS,
   BOOKING_REVIEW_INFO_URL,
   INTERN_PAYMENT_URL,
@@ -106,9 +108,11 @@ const {
   ADMIN_HOST_PROFILE,
   NOTIFICATION_URL,
   REVIEWS,
+  INTERNSHIP,
   ADMIN_REVIEWS_BOOKING,
   ADMIN_BOOKING_HISTORY,
   ADMIN_UPDATE_PROFILE,
+  HOST_PROFILE_SOFT_URL,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -125,8 +129,9 @@ router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);
 
 // get HOST dashboard data
 router.get(HOST_DASHBOARD_URL, authentication, hostDashboard);
-
-// gets hosts profile data
+// gets hosts profile data (unauthenticated user)
+router.get(HOST_PROFILE_SOFT_URL, getHostProfileSoft);
+// gets hosts profile data (authenticated user)
 router.get(HOST_PROFILE_URL, authentication, getHostProfile);
 
 // update host profile and create new offer
@@ -250,6 +255,8 @@ router.route(REVIEW_URL).post(authentication, postReview);
 // Coupons
 router.route(COUPON_URL).get(authentication, getCoupons);
 
+router.get(COUPON_SOFT_URL, getCouponsSoft);
+
 // Signout
 router.route(SIGNOUT_URL).get(signOut);
 
@@ -282,5 +289,9 @@ router.patch(
 );
 
 // get reviews (given || taken)
-router.get(REVIEWS, authentication, getReviews);
+router.get(REVIEWS, getReviews);
+
+router.get(INTERNSHIP, authentication, getInternshipDetails);
+router.patch(INTERNSHIP, authentication, updateInternshipDetails);
+
 module.exports = router;

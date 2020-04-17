@@ -18,6 +18,7 @@ import BookingView from './BookingView';
 import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
+import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
 import DBSCheckPage from './DBSCheck';
 
@@ -39,6 +40,8 @@ import {
   ADD_REVIWE_URL,
   INTERN_PROFILE,
   DBS_CHECK_PAGE,
+  HOST_PROFILE_SOFT,
+  BOOKINGS_INTERNSHIP_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -48,6 +51,7 @@ function Pages(props) {
     <>
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        {/* protected host profile */}
         <Route
           isPrivate
           exact
@@ -55,6 +59,25 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          {...props}
+        />
+        {/* public host profile */}
+        <Route
+          exact
+          path={HOST_PROFILE_SOFT}
+          Component={HostProfile}
+          handleChangeState={handleChangeState}
+          {...props}
+        />
+
+        <Route
+          isPrivate
+          exact
+          path={BOOKINGS_INTERNSHIP_URL}
+          Component={UpdateInternship}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
           {...props}
         />
         <Route

@@ -65,12 +65,12 @@ export default {
   },
   // intern + host
   organisation: {
-    label: 'Name of organisation you are or are going to be working for', // intern label
+    label: 'Name of Organisation', // intern label
     type: 'text',
     max: 10,
     name: 'organisation',
     hostLabel: 'Organisation you work for',
-    internLabel: 'Name of organisation you are or are going to be working for',
+    internLabel: 'Name of Organisation',
     requiredForHost: true,
   },
   useReasonAnswer: {
@@ -186,25 +186,69 @@ export default {
     parent: 'internshipOfficeAddress',
     label: `Address line 1`,
     type: 'text',
+    requiredForIntern: true,
   },
   internshipOfficeAddressAddress2: {
     name: 'addressline2',
     parent: 'internshipOfficeAddress',
     label: `Address line 2`,
     type: 'text',
+    requiredForIntern: true,
   },
   internshipOfficeAddressCity: {
     name: 'city',
     parent: 'internshipOfficeAddress',
     label: `city`,
     type: 'text',
+    requiredForIntern: true,
   },
   internshipOfficeAddressPostcode: {
     name: 'postcode',
     parent: 'internshipOfficeAddress',
     label: `postcode`,
     type: 'text',
+    requiredForIntern: true,
   },
+  internshipContactName: {
+    name: 'name',
+    parent: 'internshipContact',
+    label: `Contact Name`,
+    type: 'text',
+    requiredForIntern: true,
+  },
+  internshipContactEmail: {
+    name: 'email',
+    parent: 'internshipContact',
+    label: `Contact Email`,
+    type: 'text',
+    requiredForIntern: true,
+  },
+  internshipContactPhoneNumber: {
+    name: 'phoneNumber',
+    parent: 'internshipContact',
+    label: `Contact Number`,
+    type: 'text',
+    requiredForIntern: true,
+  },
+
+  internshipStartDate: {
+    type: 'date',
+    label: 'Start Date',
+    placeholder: '',
+    name: 'internshipStartDate',
+    requiredForIntern: true,
+    openDate: true,
+  },
+
+  internshipEndDate: {
+    type: 'date',
+    label: 'End Date',
+    placeholder: '',
+    name: 'internshipEndDate',
+    requiredForIntern: true,
+    openDate: true,
+  },
+
   emergencyContactName: {
     parent: 'emergencyContact',
     name: 'name',
