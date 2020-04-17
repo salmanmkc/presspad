@@ -3,11 +3,14 @@ const mongoose = require('mongoose');
 
 const generateUrl = require('../../helpers/generateFileURL');
 const internProfileData = require('./../../database/queries/profile/internPublicProfile');
+const internProfileBookingView = require('./../../database/queries/profile/internProfileBookingView');
+const { getConfirmedBooking } = require('./../../database/queries/bookings');
 
 module.exports = async (req, res, next) => {
   try {
     const { id: internId } = req.params;
-    const { role } = req.user;
+    const { view } = req.query;
+    const { role, _id: hostId } = req.user;
     // check for role
     if (!['host', 'organisation'].includes(role)) {
       return next();
@@ -20,11 +23,19 @@ module.exports = async (req, res, next) => {
       return next(boom.notFound());
     }
 
+    if (view === 'booking_details') {
+      const confirmedBookings = await getConfirmedBooking(internId, hostId);
+      if (confirmedBookings) {
+        const profileData = await internProfileBookingView(internId);
+        if (!profileData[0]) return next(boom.notFound());
+        return res.json(profileData[0]);
+      }
+    }
+
     // get intern's basic profile data
     const profileData = await internProfileData(internId);
 
     if (!profileData[0]) return next(boom.notFound());
-
     if (profileData[0].profile && profileData[0].profile.profileImage) {
       await generateUrl(profileData[0].profile.profileImage);
     }

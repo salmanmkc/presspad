@@ -217,7 +217,7 @@ export default class BookingView extends Component {
       gender,
       'university_/_school': school,
       hometown,
-      areaOfInterest: interests,
+      area_of_interest: interests,
       role: 'host',
       bio,
     };
@@ -277,6 +277,16 @@ export default class BookingView extends Component {
           <RejectedContent rejectReason={rejectReason} />
         ),
       },
+      // toDo "When we get more about canceled bookings"
+      // maybe there should be a different view for canceled bookings?
+      // or the intern shouldn't see them?
+      canceled: {
+        status: 'rejected',
+        statusColor: 'pink',
+        statusContentsComponent: () => (
+          <RejectedContent rejectReason={rejectReason} />
+        ),
+      },
       completed: {
         status: 'complete',
         statusContentsComponent: () => (
@@ -305,50 +315,32 @@ export default class BookingView extends Component {
           />
         ),
       },
+      confirmed: {
+        status: 'confirmed',
+        statusContentsComponent: () => (
+          <ConfirmedContent
+            hostId={host._id}
+            hostInfo={hostInfo}
+            isLoading={isLoading}
+            userRole={role}
+          />
+        ),
+      },
     };
 
-    if (installments[0]) {
-      if (
-        firstUnpaidInstallment &&
-        moment().isSame(firstUnpaidInstallment.dueDate, 'day')
-      ) {
-        bookingStatuses.confirmed = {
-          status: 'payment due',
-          statusContentsComponent: () => (
-            <PaymentDueContent
-              hostId={host._id}
-              hostInfo={hostInfo}
-              isLoading={isLoading}
-              userRole={role}
-              handlePayNowClick={this.handlePayNowClick}
-              handleCouponChange={this.handleCouponChange}
-              paymentInfo={paymentInfo}
-              price={price}
-              startDate={startDate}
-              endDate={endDate}
-              couponInfo={couponInfo}
-            />
-          ),
-        };
-      } else {
-        bookingStatuses.confirmed = {
-          status: 'confirmed',
-          statusContentsComponent: () => (
-            <ConfirmedContent
-              hostId={host._id}
-              hostInfo={hostInfo}
-              isLoading={isLoading}
-              userRole={role}
-            />
-          ),
-        };
-      }
-    } else {
+    if (
+      status === 'confirmed' &&
+      firstUnpaidInstallment &&
+      moment().isSame(firstUnpaidInstallment.dueDate, 'day')
+    ) {
       bookingStatuses.confirmed = {
-        status: 'accepted',
+        status: 'payment due',
         statusContentsComponent: () => (
-          <AcceptedContent
+          <PaymentDueContent
             hostId={host._id}
+            hostInfo={hostInfo}
+            isLoading={isLoading}
+            userRole={role}
             handlePayNowClick={this.handlePayNowClick}
             handleCouponChange={this.handleCouponChange}
             paymentInfo={paymentInfo}
@@ -361,7 +353,14 @@ export default class BookingView extends Component {
       };
     }
 
-    const bookingStatus = bookingStatuses[status];
+    let bookingStatus = bookingStatuses[status];
+    if (status === 'awaiting admin') {
+      bookingStatus = bookingStatuses.awaitingAdmin;
+    }
+    if (status === 'rejected by admin') {
+      // toDo "is there a different wording for rejecting by admin?"
+      bookingStatus = bookingStatuses.rejected;
+    }
 
     return (
       <Wrapper>
@@ -388,6 +387,7 @@ export default class BookingView extends Component {
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
         {status !== 'canceled' && status !== 'completed' && (
+          // toDo handle cancel booking button
           <CancelBookingButton onClick={() => console.log('cancle booking')}>
             cancel booking request
           </CancelBookingButton>

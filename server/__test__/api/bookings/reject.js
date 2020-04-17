@@ -56,10 +56,11 @@ describe('Testing for host should be able to reject booking route', () => {
           user: pendingBooking.intern,
         });
 
-        expect(acceptedRequest.status).toBe('canceled');
-        expect(acceptedRequest.canceledBy.toString()).toBe(
-          hostUser._id.toString(),
-        );
+        expect(acceptedRequest.status).toBe('rejected');
+        // since it will only be rejected by a host
+        // expect(acceptedRequest.canceledBy.toString()).toBe(
+        //   hostUser._id.toString(),
+        // );
         // notification must be sent to intern
         expect(notificationsAfter.length).toBe(notificationsBefore.length + 1);
         done();

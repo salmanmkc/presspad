@@ -13,7 +13,7 @@ const CommonStyle = css`
   margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
   margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
   text-align: ${({ align }) => align || 'left'};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'auto')};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'unset')};
 `;
 
 export const Heading1 = styled.h1`
