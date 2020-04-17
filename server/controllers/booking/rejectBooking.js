@@ -1,14 +1,10 @@
 const boom = require('boom');
-const {
-  hostRejectBookingById,
-  getBookingWithUsers,
-} = require('../../database/queries/bookings');
-const { registerNotification } = require('../../services/notifications');
 
-const requestRejectedToIntern = require('./../../helpers/mailHelper/requestRejectedToIntern');
+const { rejectBookings } = require('../../services/bookings');
 
 const rejectBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
+  const { rejectReason } = req.body;
   const { role, _id: hostId } = req.user;
   try {
     // check for role
@@ -16,30 +12,7 @@ const rejectBooking = async (req, res, next) => {
       return next(boom.forbidden());
     }
 
-    const updatedBookingRequest = await hostRejectBookingById({
-      bookingId,
-      hostId,
-    });
-
-    // create a notification for intern
-    const notification = {
-      private: false,
-      user: updatedBookingRequest.intern,
-      secondParty: updatedBookingRequest.host,
-      type: 'stayRejected',
-      booking: bookingId,
-    };
-
-    // get emails data
-    const bookingDetails = await getBookingWithUsers(bookingId);
-
-    const promiseArray = [registerNotification(notification)];
-
-    if (process.env.NODE_ENV === 'production') {
-      promiseArray.push(requestRejectedToIntern(bookingDetails));
-    }
-
-    await Promise.all(promiseArray);
+    await rejectBookings(bookingId, hostId, rejectReason);
 
     return res.json({});
   } catch (error) {

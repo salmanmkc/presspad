@@ -19,17 +19,12 @@ const HostInternInfo = ({ info, isLoading }) => {
           <H2 color="blue" mb="5">
             {name}
           </H2>
-          {Object.keys(info).map(key => {
-            if (key === 'role' || key === 'bio' || !info[key]) {
+          {Object.entries(info).map(([key, value]) => {
+            if (key === 'role' || key === 'bio' || key === 'name' || !value) {
               return null;
             }
             if (key === 'address') {
-              const {
-                addressline1,
-                addressline2,
-                postcode,
-                city,
-              } = info.address;
+              const { addressline1, addressline2, postcode, city } = value;
               return (
                 <InfoLine key={key}>
                   <H7C color="lightGray">{key}</H7C>
@@ -48,12 +43,12 @@ const HostInternInfo = ({ info, isLoading }) => {
             return (
               <InfoLine key={key}>
                 <H7C color="lightGray">{key.replace(/_/g, ' ')}</H7C>
-                <PSBold color="darkerGray">{info[key]}</PSBold>
+                <PSBold color="darkerGray">{value}</PSBold>
               </InfoLine>
             );
           })}
           {info.bio && (
-            <BioWrapper>
+            <BioWrapper userRole={role}>
               <H3 color="darkerGray">Bio</H3>
               <PS color="gray">{info.bio}</PS>
             </BioWrapper>
