@@ -14,7 +14,7 @@ import {
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
 
-import BookingDates from '../BookingDates';
+import BookingDates from '../../../Common/BookingDetailsBox';
 import CancelBookingButton from '../CancelBookingButton';
 
 import PayNowModal from './PayNowModal';
