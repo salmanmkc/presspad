@@ -19,7 +19,6 @@ const sharedStyles = css`
   min-width: ${({ theme, small }) => (small ? '150px' : theme.spacings[12])};
   border-radius: 10px;
   text-transform: uppercase;
-
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   opacity: ${props => props.disabled && !props.loading && 0.3};
 

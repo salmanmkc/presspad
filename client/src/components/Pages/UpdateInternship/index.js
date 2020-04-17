@@ -6,6 +6,7 @@ import { disabledStartDate, disabledEndDate } from '../../../helpers';
 import { updateInternshipAndCreateBooking } from './utils';
 import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import { DASHBOARD_URL } from '../../../constants/navRoutes';
+import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import Form from './Form';
 
 const { validate, internshipSchema } = require('../../../validation');
@@ -34,7 +35,7 @@ const fields = {
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
-const UpdateInternship = ({ id }) => {
+const UpdateInternship = ({ id, windowWidth }) => {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({ ...fields });
   const [errors, setErrors] = useState({ ...fields, offerLetter: '' });
@@ -129,6 +130,7 @@ const UpdateInternship = ({ id }) => {
 
   return (
     <Form
+      isMobile={windowWidth < TABLET_WIDTH}
       bookingData={bookingData}
       state={state}
       errors={errors}

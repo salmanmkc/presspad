@@ -30,6 +30,7 @@ const Form = ({
   fileErrorHandler,
   onSubmit,
   bookingData,
+  isMobile,
 }) => (
   <Wrapper>
     <ContentWrapper>
@@ -212,7 +213,13 @@ const Form = ({
             pathname={state.offerLetter.fileName}
           />
         </SubRow>
-        <Button mt="5" type="primary" loading={loading}>
+        <Button
+          mt="5"
+          ml={isMobile ? '5' : '0'}
+          type="primary"
+          loading={loading}
+          small={isMobile}
+        >
           Update and complete request
         </Button>
       </form>
