@@ -1,5 +1,5 @@
 const link = (page, data, text) => {
-  // TODO add domain and base link
+  // TODO add domain and base links
   let href = '';
   switch (page) {
     case 'SINGLE_BOOKING':
@@ -24,4 +24,17 @@ const link = (page, data, text) => {
   return `<a href="${href}">${text}</a>`;
 };
 
-module.exports = { link };
+const p = (text, style) => {
+  return `<p style=${style}>${text}</p>`;
+};
+
+const greeting = text => {
+  const style = '';
+  return p(text, style);
+};
+
+const content = text => {
+  const style = '';
+  return p(text, style);
+};
+module.exports = { link, greeting, content };

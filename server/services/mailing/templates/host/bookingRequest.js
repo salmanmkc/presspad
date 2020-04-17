@@ -1,4 +1,4 @@
-const { link } = require('./../htmlTags');
+const { link, greeting, content } = require('./../htmlTags');
 
 module.exports = params => {
   const bookingLink = link(
@@ -8,17 +8,11 @@ module.exports = params => {
   );
 
   return `
-  <main>
-    <p>Hi there,</p>
-    <p>
-      Congratulations! You have a booking request! 
-    </p>
-    <p>
-      Please click ${bookingLink} for the details and to respond.
-    </p>
-    <p>
-      If you have any questions, please don’t hesitate to get in touch.
-    </p>
-  </main>
+    ${greeting('Hi there,')}
+    ${content(`Congratulations! You have a booking request!`)}
+    ${content(`Please click ${bookingLink} for the details and to respond.`)}
+    ${content(
+      `If you have any questions, please don’t hesitate to get in touch.`,
+    )}
   `;
 };

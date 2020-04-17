@@ -1,13 +1,11 @@
+const { greeting, content } = require('./../htmlTags');
+
 module.exports = () => {
   return `
-  <main>
-    <p>Hi there,</p>
-    <p>
-      The booking with your intern is almost complete – we are just awaiting payment from them.
-    </p>
-    <p>
-      We will be in touch as soon as we’ve received it!
-    </p>
-  </main>
+  ${greeting('Hi there,')}
+  ${content(
+    `The booking with your intern is almost complete – we are just awaiting payment from them.`,
+  )}
+  ${content(`We will be in touch as soon as we’ve received it!`)}
   `;
 };
