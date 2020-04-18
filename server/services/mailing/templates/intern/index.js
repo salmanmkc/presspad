@@ -9,6 +9,7 @@ const oneWeekToGo = require('./oneWeekToGo');
 const paymentOverdue = require('./paymentOverdue');
 const profileApproved = require('./profileApproved');
 const profileRejected = require('./profileRejected');
+const welcome = require('./welcome');
 
 module.exports = {
   bookingApprovedPaymentNeeded,
@@ -22,4 +23,5 @@ module.exports = {
   paymentOverdue,
   profileApproved,
   profileRejected,
+  welcome,
 };

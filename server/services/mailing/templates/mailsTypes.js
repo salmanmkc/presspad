@@ -6,7 +6,7 @@ const internAndHost = require('./internAndHost');
 const types = {
   host: {
     BOOKING_CANCELED: {
-      createBody: host.bookingCancelled,
+      createBody: host.bookingCancelled, // automated cancellation
       subject: 'Booking cancellation',
       params: ['internName'],
     },
@@ -121,6 +121,11 @@ const types = {
     PROFILE_REJECTED: {
       createBody: intern.profileRejected,
       subject: 'Action Needed: Online Profile',
+      params: [],
+    },
+    WELCOME: {
+      createBody: intern.welcome,
+      subject: 'Welcome to PressPad!',
       params: [],
     },
   },

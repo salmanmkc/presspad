@@ -2,6 +2,7 @@
 // respond with user info and create new token
 
 const boom = require('boom');
+const pubSub = require('./../../pubSub');
 
 // QUERIES
 const { findByEmail, addNewUser } = require('./../../database/queries/user');
@@ -41,6 +42,8 @@ module.exports = (req, res, next) => {
               name: user.name,
             };
 
+            pubSub.emit(pubSub.events.INTERN_SIGNUP);
+
             req.sqreen.signup_track({ email: user.email });
             return res.json(newUserInfo);
           })
@@ -64,6 +67,14 @@ module.exports = (req, res, next) => {
             name: user.name,
           };
 
+          if (role === 'host') {
+            pubSub.emit(pubSub.events.INTERN_SIGNUP);
+          }
+          if (role === 'organisation') {
+            pubSub.emit(pubSub.events.ORGANISATION_SIGNUP);
+          }
+
+          // TODO move sqreen to pubSub folder
           req.sqreen.signup_track({ email: user.email });
           return res.json(newUserInfo);
         })
