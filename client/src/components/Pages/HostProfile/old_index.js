@@ -123,7 +123,7 @@ class HostProfile extends Component {
       axios
         .get(API_GET_USER_BOOKINGS_URL.replace(':id', this.props.id))
         .then(result => this.setState({ internBookings: result.data }))
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
     }
   }
 

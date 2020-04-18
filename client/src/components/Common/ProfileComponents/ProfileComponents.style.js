@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { colors, size } from '../../../theme';
 
 export const SectionWrapper = styled.div``;
@@ -107,8 +108,9 @@ export const UploadText = styled.button`
   background: none;
   border: none;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  display: block;
-  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  margin: 0 10px 0 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -130,4 +132,31 @@ export const RequiredSpan = styled.span`
   font-size: 14px;
   margin-left: 0.5rem;
   color: red;
+`;
+
+export const SmallTitle = styled.p`
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.darkGray});
+  max-width: 550px;
+  margin-top: 1rem;
+  margin-bottom: 0;
+`;
+
+export const HelperText = styled.p`
+  font-family: Roboto;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.gray}
+  max-width: 550px;
+  margin-bottom: 1rem;
+`;
+
+export const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.lightBlue};
+`;
+
+export const FileUpload = styled.div`
+  display: flex;
+  margin-bottom: 10px;
 `;

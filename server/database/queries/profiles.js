@@ -16,3 +16,6 @@ module.exports.createNewProfile = async (data, session) => {
   const profiles = await Profile.create([data], { session });
   return profiles[0];
 };
+
+module.exports.newUpdateUserProfile = (userId, data) =>
+  Profile.findOneAndUpdate({ user: userId }, data, { new: true });

@@ -2,9 +2,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Input, Button, message, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 
 import Icon from '../../Common/Icon';
+
+import Field from '../../Common/ProfileComponents/Field';
+import Input from '../../Common/ProfileComponents/Field/Input';
 
 // SUB COMPONENTS
 import ClientTable from './ClientTable';
@@ -33,6 +36,7 @@ import {
   API_ADMIN_STATS_URL,
   API_UPDATE_WITHDRAW_REQUEST_URL,
   API_ADMIN_REVIEWS_BOOKING,
+  API_ADMIN_UPDATE_PROFILE,
 } from '../../../constants/apiRoutes';
 import { filterArray } from '../../../helpers';
 
@@ -59,9 +63,13 @@ export default class AdminDashboard extends Component {
     rejectMessage: null,
     updatingBooking: false,
     modalText: '',
-    modalVisible: false,
+    modalToShow: '',
     bookingToUpdate: null,
     newBookingStatus: null,
+    updatingDBS: null,
+    dbsDetails: { refNum: '', fileName: '' },
+    userToUpdate: null,
+    errors: { dbsDetails: { refNum: null, fileName: null } },
   };
 
   componentDidMount() {
@@ -271,14 +279,14 @@ export default class AdminDashboard extends Component {
         message: rejectMessage,
         booking: bookingToUpdate,
       });
-      this.setState({ updateBooking: false, modalVisible: false });
+      this.setState({ updatingBooking: false, modalVisible: false });
       Modal.success({
         content: 'Booking request successfully updated',
       });
       this.selectSection('bookings');
     } catch (err) {
-      console.error(err);
       message.error('Something went wrong');
+      this.setState({ updatingBooking: false, modalVisible: false });
     }
   };
 
@@ -287,10 +295,13 @@ export default class AdminDashboard extends Component {
       rejectMessage: null,
       updatingBooking: false,
       modalText: '',
-      modalVisible: false,
+      modalToShow: null,
       bookingToUpdate: null,
       newBookingStatus: null,
+      dbsDetails: {},
     });
+    const { activeLink } = this.state;
+    this.selectSection(activeLink);
   };
 
   rejectRequestConfirm = booking => {
@@ -307,7 +318,7 @@ export default class AdminDashboard extends Component {
       modalText,
       bookingToUpdate: booking,
       newStatus: 'rejected by admin',
-      modalVisible: true,
+      modalToShow: 'bookingRequest',
     });
   };
 
@@ -321,7 +332,7 @@ export default class AdminDashboard extends Component {
       modalText,
       bookingToUpdate: booking,
       newStatus: 'pending',
-      modalVisible: true,
+      modalToShow: 'bookingRequest',
     });
   };
 
@@ -336,6 +347,63 @@ export default class AdminDashboard extends Component {
     }
   };
 
+  updateDBS = record => {
+    this.setState({
+      ...(record.dbsCheck ? { dbsDetails: record.dbsCheck } : {}),
+      userToUpdate: record.userId,
+      modalToShow: 'dbs',
+    });
+  };
+
+  handleDBSChange = ({ value, key }) => {
+    const { dbsDetails } = this.state;
+
+    this.setState({
+      dbsDetails: { ...dbsDetails, [key]: value },
+    });
+  };
+
+  submitDBSChange = async () => {
+    const { dbsDetails, userToUpdate } = this.state;
+    const { refNum, fileName } = dbsDetails;
+    this.setState({
+      updatingDBS: true,
+      modalText: 'Saving changes',
+    });
+    try {
+      await axios.patch(API_ADMIN_UPDATE_PROFILE, {
+        fieldsToUpdate: { DBSCheck: { refNum, fileName } },
+        userId: userToUpdate,
+      });
+      this.setState({ updatingDBS: false, modalToShow: null });
+      Modal.success({
+        content: 'Successfully updated',
+      });
+      this.selectSection('interns');
+    } catch (err) {
+      console.error(err);
+      message.error('Something went wrong');
+    }
+  };
+
+  handleError = ({ errorMsg, key, parent }) => {
+    if (parent) {
+      this.setState(prevState => ({
+        errors: {
+          ...prevState.errors,
+          [parent]: { ...prevState.errors[parent], [key]: errorMsg },
+        },
+      }));
+    } else {
+      this.setState(prevState => ({
+        errors: {
+          ...prevState.errors,
+          [key]: errorMsg,
+        },
+      }));
+    }
+  };
+
   render() {
     const {
       activeLink,
@@ -344,9 +412,13 @@ export default class AdminDashboard extends Component {
       highlightVal,
       internView,
       hostView,
-      modalVisible,
+      modalToShow,
       updatingBooking,
       modalText,
+      updatingDBS,
+      dbsDetails,
+      userToUpdate,
+      errors,
     } = this.state;
 
     return (
@@ -433,6 +505,9 @@ export default class AdminDashboard extends Component {
                 data={filteredData}
                 highlightVal={highlightVal}
                 triggerInternView={this.triggerInternView}
+                updatingDBS={updatingDBS}
+                updateDBS={this.updateDBS}
+                handleDBSChange={this.handleDBSChange}
               />
             )}
             {activeLink === 'hosts' && (
@@ -443,6 +518,9 @@ export default class AdminDashboard extends Component {
                   data={filteredData}
                   highlightVal={highlightVal}
                   triggerHostView={this.triggerHostView}
+                  updatingDBS={updatingDBS}
+                  updateDBS={this.updateDBS}
+                  handleDBSChange={this.handleDBSChange}
                 />
               </HostWrapper>
             )}
@@ -492,12 +570,41 @@ export default class AdminDashboard extends Component {
         )}
         <Modal
           title="Are you sure?"
-          visible={modalVisible}
+          visible={modalToShow === 'bookingRequest'}
           onOk={this.submitAdminReview}
           confirmLoading={updatingBooking}
           onCancel={this.handleCancel}
         >
           <p>{modalText}</p>
+        </Modal>
+        <Modal
+          title="Update DBS Details"
+          visible={modalToShow === 'dbs'}
+          onOk={this.submitDBSChange}
+          confirmLoading={updatingDBS}
+          onCancel={this.handleCancel}
+        >
+          <Field
+            name="refNum"
+            handleChange={this.handleDBSChange}
+            id="refNum"
+            value={dbsDetails.refNum}
+            placeholder="Enter reference number"
+            type="text"
+            label="Reference Number"
+            error={errors['refNum']}
+          />
+          <Field
+            value={dbsDetails.fileName}
+            url={dbsDetails.url}
+            handleChange={this.handleDBSChange}
+            name="fileName"
+            handleError={this.handleError}
+            userId={userToUpdate}
+            id="fileName"
+            label="DBS Certificate"
+            type="file"
+          />
         </Modal>
       </Wrapper>
     );

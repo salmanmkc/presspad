@@ -112,3 +112,33 @@ export const StyledLink = styled(Link)`
   cursor: pointer;
   font-weight: ${({ light }) => (light ? 'normal' : 'bold')};
 `;
+
+export const StyledSectionTitle = styled.header`
+  position: relative;
+  height: 80px;
+  margin-bottom: ${({ theme }) => theme.spacings[4]};
+
+  h3 {
+    padding-left: 30px;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: auto;
+    :after {
+      content: ' ';
+      z-index: -1;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: calc(100% + 80px);
+      height: 100%;
+      background-color: ${({ theme }) => theme.colors.lightestGray};
+    }
+  }
+`;
+
+export const StyledSpan = styled.span`
+  font-weight: ${({ weight }) => weight && weight};
+`;

@@ -70,6 +70,7 @@ const INITIAL_STATE = {
   },
   DBSCheck: {
     fileName: '',
+    refNum: '',
     isPrivate: true,
   },
   pressCard: {
