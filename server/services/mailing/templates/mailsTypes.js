@@ -100,6 +100,7 @@ const types = {
       subject: 'Action Needed: Online Profile',
       params: [],
     },
+    // not implemented yet
     BOOKING_TERMINATED: {
       createBody: intern.bookingterminated,
       subject: 'IMPORTANT! Booking terminated',
@@ -148,6 +149,8 @@ const types = {
   },
 
   internAndHost: {
+    // not implemented yet (this should be sent when intern pay instalments)
+    // for payment sprint
     BOOKING_COMPLETED: {
       createBody: internAndHost.bookingCompleted,
       subject: 'Congratulations! Your booking is complete!',
@@ -160,6 +163,8 @@ const types = {
       subject: 'Booking accepted!',
       params: ['internName', 'amountSpent', 'couponCode'],
     },
+
+    // not implemented yet
     BOOKING_OVERDUE: {
       createBody: organisation.bookingOverdue,
       subject: ' IMPORTANT! Intern’s booking has been terminated ',
