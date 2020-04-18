@@ -3,6 +3,7 @@ const sendOutstandingReminders = require('./sendOutstandingReminders');
 const markScheduledEmailsAsSent = require('./markScheduledEmailsAsSent');
 const schedulePaymentReminders = require('./schedulePaymentReminders');
 const sendOutstandingPaymentReminders = require('./sendOutstandingPaymentReminders');
+const sendWelcomeEmail = require('./sendWelcomeEmail');
 
 module.exports = {
   scheduleReminderEmails,
@@ -10,4 +11,5 @@ module.exports = {
   markScheduledEmailsAsSent,
   schedulePaymentReminders,
   sendOutstandingPaymentReminders,
+  sendWelcomeEmail,
 };
