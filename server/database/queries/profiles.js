@@ -1,7 +1,7 @@
 const Profile = require('./../models/Profile');
 
 module.exports.updateUserProfile = (userId, data, session) =>
-  Profile.updateOne({ user: userId }, data, {
+  Profile.findOneAndUpdate({ user: userId }, data, {
     omitUndefined: true,
     session,
     new: true,

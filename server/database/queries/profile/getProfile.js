@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const Profile = require('../../models/Profile');
 
-const getProfile = id => Profile.findOne({ user: id });
+const getProfileByUserId = id => Profile.findOne({ user: id });
+const getProfileById = id => Profile.findById(id);
 
 const getProfileByRoleAndId = (id, role) =>
   Profile.aggregate([
@@ -55,4 +56,9 @@ const getUserDataByProfileId = id =>
     },
   ]);
 
-module.exports = { getProfile, getProfileByRoleAndId, getUserDataByProfileId };
+module.exports = {
+  getProfileByUserId,
+  getProfileByRoleAndId,
+  getUserDataByProfileId,
+  getProfileById,
+};

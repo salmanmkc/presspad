@@ -1,4 +1,4 @@
-const { getProfile } = require('../../database/queries/profile/getProfile');
+const { getProfileById } = require('../../database/queries/profile/getProfile');
 const { updateProfile } = require('../../database/queries/profiles');
 const { getUserById } = require('./../../database/queries/user');
 const {
@@ -15,7 +15,7 @@ const updateIncompletedProfilesStatus = async profileId => {
   let schema = internCompleteProfileSchema;
   let data = {};
 
-  const profile = await getProfile(profileId);
+  const profile = await getProfileById(profileId);
   data = profile;
 
   const user = await getUserById(profile.user);
