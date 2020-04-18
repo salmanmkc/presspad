@@ -1,34 +1,32 @@
+const { domain } = require('./../../../config');
+
 const link = (page, data, text) => {
-  // TODO add domain and base links
   let href = '';
   switch (page) {
     case 'SINGLE_BOOKING':
-      href = `/bookings/${data.bookingId}`;
+      href = `${domain}/booking/${data.bookingId}`;
       break;
 
     case 'HOST_COMPLETE_PROFILE':
-      href = ``;
-      break;
-
     case 'INTERN_COMPLETE_PROFILE':
-      href = ``;
+      href = `${domain}/my-profile`;
       break;
 
     case 'HOST_GUIDANCE':
-      href = ``;
+      href = ``; // TODO require PO to provide this
       break;
 
     case 'INTERN_GUIDANCE':
-      href = ``;
+      href = ``; // TODO require PO to provide this
       break;
 
     case 'HOST_LOGIN':
     case 'INTERN_LOGIN':
-      href = ``;
+      href = `${domain}/sign-in`;
       break;
 
     case 'HOSTS_LINK':
-      href = ``;
+      href = `${domain}/hosts`;
       break;
 
     default:
@@ -50,4 +48,5 @@ const content = text => {
   const style = '';
   return p(text, style);
 };
+
 module.exports = { link, greeting, content };
