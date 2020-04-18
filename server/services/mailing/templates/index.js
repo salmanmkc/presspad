@@ -39,7 +39,7 @@ const sendMail = ({ type, userType, params = {} }) => {
     // eslint-disable-next-line no-console
     console.log('email details', {
       from: email,
-      to: params.email,
+      to: params.to,
       subject,
       html,
       attachments,
@@ -49,7 +49,7 @@ const sendMail = ({ type, userType, params = {} }) => {
 
   return transporter.sendMail({
     from: email,
-    to: params.email,
+    to: params.to,
     subject,
     html,
     attachments,

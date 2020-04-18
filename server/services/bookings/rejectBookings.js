@@ -4,6 +4,7 @@ const {
   getBookingsDetails,
 } = require('../../database/queries/bookings');
 const { registerNotification } = require('../notifications');
+const pubSub = require('./../../pubSub');
 
 const requestRejectedToIntern = require('../../helpers/mailHelper/requestRejectedToIntern');
 
@@ -23,14 +24,19 @@ const rejectBookings = async (bookingIds, hostId, rejectReason) => {
     bookingArr = [mongoose.Types.ObjectId(bookingIds)];
   }
 
-  const rejectedBookings = await hostRejectBookingsByIds(
-    bookingArr,
-    hostId,
-    rejectReason,
-  );
+  await hostRejectBookingsByIds(bookingArr, hostId, rejectReason);
 
   // get bookings data
   const bookingDetails = await getBookingsDetails(bookingArr);
+
+  bookingDetails.forEach(({ _id, intern, host }) => {
+    pubSub.emit(pubSub.events.BOOKING_REJECTED, {
+      bookingId: _id,
+      intern,
+      host,
+      rejectedBy: 'host',
+    });
+  });
 
   // create a notifications for intern
   const notifications = bookingDetails.map(({ _id, intern, host }) => ({

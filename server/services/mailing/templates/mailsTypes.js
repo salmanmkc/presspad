@@ -5,11 +5,13 @@ const internAndHost = require('./internAndHost');
 
 const types = {
   host: {
+    // TODO need to run cron job to check unpaid bookings withing 48hrs
     BOOKING_CANCELED: {
       createBody: host.bookingCancelled, // automated cancellation
       subject: 'Booking cancellation',
       params: ['internName'],
     },
+    // done
     BOOKING_CANCELED_BY_HOST: {
       createBody: host.bookingCancelledByHost,
       subject: 'Cancellation',

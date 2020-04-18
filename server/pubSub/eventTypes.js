@@ -7,6 +7,8 @@ const events = {
   // PROFILE
   PROFILE_CREATED: `profile.created`,
   PROFILE_UPDATED: `profile.updated`,
+  // BOOKING
+  BOOKING_REJECTED: `booking.rejected`,
 };
 
 module.exports = events;
