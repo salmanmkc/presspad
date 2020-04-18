@@ -4,8 +4,12 @@ import moment from 'moment';
 import { Table, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 import Icon from '../../Common/Icon';
+import FileDownload from '../../Common/Files/FileDownload';
 
 import { tagColors, colors } from '../../../theme';
+import { PXS } from '../../Common/Typography';
+
+import { EditButton } from './AdminDashboard.style';
 
 export default function InternTable({
   getColumnSearchProps,
@@ -13,6 +17,7 @@ export default function InternTable({
   loading,
   highlightVal,
   triggerInternView,
+  updateDBS,
 }) {
   const columns = [
     {
@@ -132,6 +137,28 @@ export default function InternTable({
           autoEscape
           textToHighlight={(text / 100).toFixed(2)}
         />
+      ),
+    },
+    {
+      title: 'DBS',
+      dataIndex: 'dbsCheck',
+      key: 'dbsCheck',
+      render: (dbs, record) => (
+        <>
+          <PXS>{(dbs && dbs.refNum) || 'N/A'}</PXS>
+          {dbs && dbs.url ? (
+            <FileDownload
+              style={{ marginBottom: '10px', border: '1px red solid' }}
+              url={dbs.url}
+              fileName="View certificate"
+            />
+          ) : (
+            <PXS>No certificate</PXS>
+          )}
+          <EditButton type="button" onClick={() => updateDBS(record)}>
+            Edit
+          </EditButton>
+        </>
       ),
     },
     {

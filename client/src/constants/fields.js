@@ -1,4 +1,3 @@
-import React from 'react';
 import types from './types';
 
 export default {
@@ -271,24 +270,18 @@ export default {
     type: 'text',
     max: 50,
   },
-  DBSCheck: {
+  DBSCheckCert: {
     type: 'file',
-    label: 'DBS check',
-    hint: (
-      <span>
-        If you have not completed a DBS check, please{' '}
-        <a
-          href="https://www.gov.uk/request-copy-criminal-record"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          click here
-        </a>{' '}
-        to do this first then upload your certificate
-      </span>
-    ),
+    label: 'DBS certificate',
     parent: 'DBSCheck',
     name: 'fileName',
+    isPrivate: true,
+  },
+  DBSCheckNum: {
+    type: 'text',
+    label: 'DBS number',
+    parent: 'DBSCheck',
+    name: 'refNum',
     isPrivate: true,
   },
   sexualOrientation: {

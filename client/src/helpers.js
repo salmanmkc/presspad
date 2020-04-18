@@ -288,3 +288,18 @@ export const dateRender = ({ current, endDate, startDate }) => {
   // default
   return <div className="ant-picker-cell-inner">{current.date()}</div>;
 };
+
+/**
+ * Calculate responding time (days)
+ * @param {Number} respondingTime
+ * @param {Number} respondedRequests
+ */
+export const calculateHostRespondingTime = (
+  respondingTime,
+  respondedRequests,
+) => {
+  const hostRespondingTime = Math.ceil(
+    respondingTime / respondedRequests / (24 * 60 * 60 * 1000),
+  );
+  return hostRespondingTime || 7;
+};

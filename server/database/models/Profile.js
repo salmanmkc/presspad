@@ -80,6 +80,10 @@ const profileSchema = new Schema(
         type: String,
         required: false,
       },
+      refNum: {
+        type: String,
+        required: false,
+      },
       isPrivate: {
         type: Boolean,
         default: true,

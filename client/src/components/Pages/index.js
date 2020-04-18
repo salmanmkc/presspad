@@ -20,6 +20,7 @@ import AddReview from './AddReview';
 import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
+import DBSCheckPage from './DBSCheck';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -38,6 +39,7 @@ import {
   MYPROFILE_URL,
   ADD_REVIWE_URL,
   INTERN_PROFILE,
+  DBS_CHECK_PAGE,
   HOST_PROFILE_SOFT,
   BOOKINGS_INTERNSHIP_URL,
 } from '../../constants/navRoutes';
@@ -156,6 +158,16 @@ function Pages(props) {
           isLoggedIn={isLoggedIn}
           {...props}
         />
+        <Route
+          path={DBS_CHECK_PAGE}
+          exact
+          isPrivate
+          Component={DBSCheckPage}
+          isLoggedIn={isLoggedIn}
+          {...props}
+          layout="rightDiv"
+        />
+
         {['intern', 'host', 'superhost'].includes(role) && (
           <Route
             isPrivate

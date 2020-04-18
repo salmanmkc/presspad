@@ -7,3 +7,6 @@ module.exports.findProfile = userId => Profile.findOne({ user: userId });
 
 module.exports.createNewProfile = (data, session) =>
   Profile.create([data], { session });
+
+module.exports.newUpdateUserProfile = (userId, data) =>
+  Profile.findOneAndUpdate({ user: userId }, data, { new: true });

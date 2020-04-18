@@ -6,8 +6,8 @@ import axios from 'axios';
 import { Spin, Alert, Modal, Checkbox, Popover } from 'antd';
 import Icon from '../../Common/Icon';
 import sendBookingRequest from '../../../helpers/sendBookingRequest';
-
 import {
+  calculateHostRespondingTime,
   createDatesArray,
   getDateRangeFromArray,
   calculatePrice,
@@ -460,9 +460,20 @@ class CalendarComponent extends Component {
       bursary,
     } = this.state;
 
-    const { currentUserId, adminView, isMobile } = this.props;
+    const {
+      currentUserId,
+      adminView,
+      isMobile,
+      respondedRequests,
+      respondingTime,
+    } = this.props;
 
     const { couponDiscount, couponError } = couponState;
+
+    const hostRespondingTime = calculateHostRespondingTime(
+      respondingTime,
+      respondedRequests,
+    );
 
     if (isLoading) return <Spin tip="Loading Profile" />;
 
@@ -499,7 +510,8 @@ class CalendarComponent extends Component {
 
           {/* Average Response Time */}
           <T.P>
-            This host typically takes <strong>3 days</strong> to respond to a
+            This host typically takes{' '}
+            <strong>{hostRespondingTime || 7} days</strong> to respond to a
             booking request.
           </T.P>
           {message && (

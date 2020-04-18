@@ -33,6 +33,7 @@ import {
   API_HOST_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import { Error404, Error500 } from '../../../../constants/navRoutes';
+import { calculateHostRespondingTime } from '../../../../helpers';
 
 export default class BookingView extends Component {
   state = {
@@ -190,12 +191,8 @@ export default class BookingView extends Component {
     const { installments, host } = bookingInfo;
 
     const hostRespondingTime =
-      bookingInfo.host &&
-      Math.ceil(
-        bookingInfo.host.respondingTime /
-          bookingInfo.host.respondedRequests /
-          (24 * 60 * 60 * 1000),
-      );
+      host &&
+      calculateHostRespondingTime(host.respondingTime, host.respondedRequests);
 
     const {
       isLoading,

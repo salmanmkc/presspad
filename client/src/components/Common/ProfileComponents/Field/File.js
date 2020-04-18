@@ -5,7 +5,7 @@ import { ProgressBar } from '../../progress';
 
 import Icon from '../../Icon';
 
-import { UploadText, Error } from '../ProfileComponents.style';
+import { UploadText, Error, FileUpload } from '../ProfileComponents.style';
 
 export default class File extends Component {
   state = {
@@ -118,7 +118,7 @@ export default class File extends Component {
     }
 
     return (
-      <div style={{ width: '100%' }}>
+      <FileUpload>
         {isLoading ? (
           <ProgressBar progress={loading}>
             <UploadText disabled>{fileName || value}</UploadText>
@@ -133,14 +133,16 @@ export default class File extends Component {
             }
           >
             {fileName || value ? (
-              <div style={{ display: 'flex' }}>
-                <div style={{ width: '30px' }}>
-                  <Icon icon="circleTick" style={{ color: 'green' }} />
-                </div>
-                <div style={{ width: 'calc(100% - 30px)' }}>
-                  {fileName || value}
-                </div>
-              </div>
+              <>
+                <Icon
+                  icon="circleTick"
+                  style={{ color: 'green' }}
+                  width="20px"
+                  height="20px"
+                  margin="0 5px 0 0"
+                />
+                {fileName || value}
+              </>
             ) : (
               '+ Add file'
             )}
@@ -161,12 +163,12 @@ export default class File extends Component {
         {url && fileName !== value && (
           <Tooltip title="download" placement="bottomLeft">
             <UploadText as="a" href={url}>
-              <Icon icon="download" width="30" />
+              <Icon icon="download" width="16px" height="16px" />
             </UploadText>
           </Tooltip>
         )}
         {error && <Error block>{error}</Error>}
-      </div>
+      </FileUpload>
     );
   }
 }
