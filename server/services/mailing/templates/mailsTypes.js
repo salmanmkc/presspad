@@ -40,6 +40,7 @@ const types = {
       subject: 'Booking update',
       params: [],
     },
+    // done
     INCOMPLETE_PROFILE_AFTER_3_WEEKS: {
       createBody: host.incompleteProfileAfter3Weeks,
       subject: 'PressPad needs some more information!',
