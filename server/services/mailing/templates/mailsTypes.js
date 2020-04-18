@@ -35,12 +35,13 @@ const types = {
       subject: 'IMPORTANT! Intern’s booking has been terminated',
       params: ['internName'],
     },
+    // done
     BOOKING_UPDATE_WAITING_FOR_PAYMENT: {
       createBody: host.bookingUpdateWaitingForPayment,
       subject: 'Booking update',
       params: [],
     },
-    // done
+    // TODO need to run cron job to check incompleted profiles after 3 weeks
     INCOMPLETE_PROFILE_AFTER_3_WEEKS: {
       createBody: host.incompleteProfileAfter3Weeks,
       subject: 'PressPad needs some more information!',
@@ -66,6 +67,7 @@ const types = {
       subject: 'Video property check',
       params: [],
     },
+    // done
     WELCOME: {
       createBody: host.welcome,
       subject: 'Welcome to PressPad!',
@@ -129,6 +131,7 @@ const types = {
       subject: 'Action Needed: Online Profile',
       params: [],
     },
+    // done
     WELCOME: {
       createBody: intern.welcome,
       subject: 'Welcome to PressPad!',
