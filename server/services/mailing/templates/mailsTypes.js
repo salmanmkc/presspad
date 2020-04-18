@@ -50,7 +50,7 @@ const types = {
     ONE_WEEK_TO_GO: {
       createBody: host.OneWeekToGo,
       subject: 'One week to go!',
-      params: [],
+      params: ['bookingId'],
     },
     PAYMENT_OVERDUE: {
       createBody: host.paymentOverdue,
@@ -157,6 +157,7 @@ const types = {
       params: ['internName', 'hostName', 'bookingId'],
     },
   },
+  // done
   organisation: {
     BOOKING_ACCEPTED: {
       createBody: organisation.bookingAccepted,

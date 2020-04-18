@@ -26,8 +26,8 @@ const scheduleReminderEmails = async ({
 
   const currnetDate = moment();
   const beforeOneWeekDate = moment(startDate).subtract(1, 'weeks');
-  const beforeTwoWeekDate = moment(startDate).subtract(2, 'weeks');
-  const beforeThreeWeekDate = moment(startDate).subtract(3, 'weeks');
+  // const beforeTwoWeekDate = moment(startDate).subtract(2, 'weeks');
+  // const beforeThreeWeekDate = moment(startDate).subtract(3, 'weeks');
 
   const data = {
     bookingId: mongoose.Types.ObjectId(bookingId),
@@ -43,21 +43,21 @@ const scheduleReminderEmails = async ({
     });
   }
 
-  if (currnetDate.isSameOrBefore(beforeTwoWeekDate)) {
-    reminders.push({
-      type: 'BOOKING_REMINDER_2_WEEKS',
-      dueDate: beforeTwoWeekDate,
-      data,
-    });
-  }
+  // if (currnetDate.isSameOrBefore(beforeTwoWeekDate)) {
+  //   reminders.push({
+  //     type: 'BOOKING_REMINDER_2_WEEKS',
+  //     dueDate: beforeTwoWeekDate,
+  //     data,
+  //   });
+  // }
 
-  if (currnetDate.isSameOrBefore(beforeThreeWeekDate)) {
-    reminders.push({
-      type: 'BOOKING_REMINDER_3_WEEKS',
-      dueDate: beforeThreeWeekDate,
-      data,
-    });
-  }
+  // if (currnetDate.isSameOrBefore(beforeThreeWeekDate)) {
+  //   reminders.push({
+  //     type: 'BOOKING_REMINDER_3_WEEKS',
+  //     dueDate: beforeThreeWeekDate,
+  //     data,
+  //   });
+  // }
 
   if (reminders.length) {
     await createScheduledEmails(reminders);
