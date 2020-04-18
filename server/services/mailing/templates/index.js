@@ -33,6 +33,20 @@ const sendMail = ({ type, userType, params = {} }) => {
     },
   ];
 
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.log('email suppose to be sent to');
+    // eslint-disable-next-line no-console
+    console.log('email details', {
+      from: email,
+      to: params.email,
+      subject,
+      html,
+      attachments,
+    });
+    return;
+  }
+
   return transporter.sendMail({
     from: email,
     to: params.email,

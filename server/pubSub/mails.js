@@ -1,4 +1,4 @@
-const pubSub = require('..');
+const pubSub = require('./index');
 const events = require('./eventTypes');
 const mails = require('./../services/mailing');
 
