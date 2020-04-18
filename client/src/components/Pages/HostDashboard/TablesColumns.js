@@ -75,7 +75,7 @@ export const bookingsColumns = windowWidth => {
             onClick={e => e.stopPropagation()}
             to={`/interns/${record.intern._id}`}
           >
-            {text}
+            {record.intern.name}
           </Link>
         </BlueLink>
       ),

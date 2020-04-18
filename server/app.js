@@ -75,6 +75,7 @@ app.use((err, req, res, next) => {
   }
   let error = err.message;
   const { details } = err;
+  console.log(error);
   if (err.isJoi) {
     error = 'Invalid request data. Please review request and try again.';
   }

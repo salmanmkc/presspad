@@ -4,6 +4,7 @@ const Booking = require('../../models/Booking');
 const Review = require('../../models/Review');
 
 const { addOrg } = require('./organisation');
+const updateRespondingData = require('./updateRespondingData');
 const { createNewAccount } = require('../account');
 
 module.exports.findByEmail = email =>
@@ -180,3 +181,5 @@ module.exports.getUserOrg = userId =>
 
 module.exports.getAllInterns = () =>
   User.find({ role: 'intern' }, { password: 0 });
+
+module.exports.updateRespondingData = updateRespondingData;

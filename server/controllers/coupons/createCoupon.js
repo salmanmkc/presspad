@@ -7,7 +7,7 @@ const moment = extendMoment(Moment);
 const {
   createCoupon: createCouponQuery,
 } = require('../../database/queries/payments');
-const { calculatePrice } = require('./../../helpers/payments');
+const { calculatePrice } = require('../../helpers/payments');
 
 const createCoupon = async (req, res, next) => {
   const { user, body } = req;

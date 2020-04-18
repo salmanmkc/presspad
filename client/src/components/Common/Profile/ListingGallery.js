@@ -15,9 +15,8 @@ import ListingPlaceholder from '../../../assets/listing-placeholder.jpg';
 function ListingGallery({ img1, img2, img3, windowWidth = window.innerWidth }) {
   return (
     <ImageSection>
+      {/* Mobile View */}
       {windowWidth < 776 ? (
-        // <MainImageDiv>
-
         <Carousel autoplay effect="fade" style={{ width: '100%' }}>
           <MainImage
             src={img1 || ListingPlaceholder}
@@ -33,8 +32,8 @@ function ListingGallery({ img1, img2, img3, windowWidth = window.innerWidth }) {
           />
         </Carousel>
       ) : (
-        // </MainImageDiv>
         <>
+          {/* Desktop View */}
           <MainImageDiv>
             <MainImage
               src={img1 || ListingPlaceholder}

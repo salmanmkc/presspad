@@ -1,6 +1,17 @@
+import React from 'react';
 import moment from 'moment';
-
 import * as yup from 'yup';
+
+export const createStartEndDate = (start, end) => {
+  // get all available dates in range
+  const currentDate = new Date(start);
+  const stopDate = new Date(end);
+
+  return [
+    moment(currentDate).format('YYYY-MM-DD'),
+    moment(stopDate).format('YYYY-MM-DD'),
+  ];
+};
 
 export const createDatesArray = (start, end) => {
   const datesArray = [];
@@ -51,14 +62,19 @@ export const calculatePrice = range => {
   let days;
   if (typeof range === 'number') {
     weeks = Math.trunc(range / 7);
-    days = range % 7;
+    days = range;
   } else {
     range.start.startOf('day');
     range.end.add(1, 'day').endOf('day');
     weeks = range.diff('weeks');
-    days = range.diff('days') % 7;
+    days = range.diff('days');
   }
-  return weeks * 15000 + days * 2000;
+
+  if (weeks >= 2) {
+    return (days - 14) * 20;
+  }
+
+  return 0;
 };
 
 // fields to filter based on them
@@ -150,7 +166,7 @@ export const titleCase = str =>
 yup.addMethod(yup.string, 'wordLengthValidator', function wordLengthValidator(
   length,
 ) {
-  return this.test(function(value) {
+  return this.test(value => {
     if (!value) return '';
     return value.split(' ').length <= length
       ? value
@@ -172,8 +188,118 @@ export const truncatePostcode = postcode => {
   return postcode.substr(0, 2);
 };
 
+export const getIntersectRange = ({
+  bookingStart,
+  bookingEnd,
+  couponStart,
+  couponEnd,
+}) => {
+  const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
+  const couponRange = moment.range(moment(couponStart), moment(couponEnd));
+  return bookingRange.intersect(couponRange);
+};
+
+export const getDiscountDays = dates => {
+  const intersectRange = getIntersectRange(dates);
+
+  if (!intersectRange) return { discountDays: 0 };
+
+  // reset the time to 00:00 to calculate the start and the end day of the range
+  intersectRange.start.startOf('day');
+
+  const discountDays = intersectRange.diff('day') + 1;
+
+  return { discountDays };
+};
+
 let id = 0;
 export const newId = () => {
   id += 1;
   return id;
+};
+
+export const disabledStartDate = ({ endDate, startDate }) => {
+  if (!endDate || !startDate) {
+    return startDate && startDate < moment().subtract(1, 'day');
+  }
+  return (
+    startDate.valueOf() > endDate.valueOf() ||
+    startDate < moment().subtract(1, 'day')
+  );
+};
+
+export const disabledEndDate = ({ endDate, startDate }) => {
+  if (!startDate) {
+    return endDate && endDate < moment().endOf('day');
+  }
+
+  return (
+    endDate.valueOf() <= startDate.valueOf() ||
+    startDate < moment().subtract(1, 'day')
+  );
+};
+
+/**
+ * styles the dates in the datePickers
+ */
+export const dateRender = ({ current, endDate, startDate }) => {
+  const style = {};
+  let isDisabled = false;
+  if (disabledStartDate({ endDate, startDate: current })) {
+    isDisabled = true;
+    style.backgroundColor = '#e6f7ff';
+  }
+
+  // add background to the dates in between the endDate and the startDate
+  if (
+    endDate &&
+    startDate &&
+    current.isSameOrBefore(endDate, 'day') &&
+    current.isSameOrAfter(startDate, 'day')
+  ) {
+    return (
+      <div
+        className={
+          isDisabled
+            ? 'ant-picker-cell-inner'
+            : 'ant-picker-cell-in-view ant-picker-cell-in-range'
+        }
+        style={{ backgroundColor: '#e6f7ff' }}
+      >
+        {current.date()}
+      </div>
+    );
+  }
+
+  // add a rounded border on the startDate and the endDate
+  if (
+    (endDate && current.isSame(endDate, 'day')) ||
+    (startDate && current.isSame(startDate, 'day'))
+  ) {
+    style.borderRadius = '50%';
+    style.border = '1px solid';
+    return (
+      <div className="ant-picker-cell-inner" style={style}>
+        {current.date()}
+      </div>
+    );
+  }
+
+  // default
+  return <div className="ant-picker-cell-inner">{current.date()}</div>;
+};
+
+/**
+ * Calculate responding time (days)
+ * @param {Number} respondingTime
+ * @param {Number} respondedRequests
+ */
+export const calculateHostRespondingTime = (
+  respondingTime,
+  respondedRequests,
+) => {
+  const hostRespondingTime = Math.ceil(
+    respondingTime / respondedRequests / (24 * 60 * 60 * 1000),
+  );
+  return hostRespondingTime || 7;
 };

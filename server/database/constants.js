@@ -86,15 +86,16 @@ module.exports = {
       'PR',
       'Other',
     ],
+    areasOfInterest: ['Foreign Affairs'],
     accommodationChecklist: [
       'Lock on the bathroom door',
       'Lock on the bedroom door',
       'Spare key for intern',
-      'You’ll be there to welcome them on their first day',
+      'I’ll be there to welcome them on their first day',
       'WiFi code made available',
       'Bed linen including towel',
       'Space provided in fridge and cupboard for intern’s food',
-      'You can provide info for someone they can contact if you’re not available (neighbour/emergency contact/partner etc.) - this will be done once the booking is confirmed',
+      'I can provide info for someone they can contact if I’m not available',
       'None of these',
     ],
     degreeLevel: [

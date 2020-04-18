@@ -20,7 +20,7 @@ const couponSchema = new Schema(
     },
     internName: {
       type: String,
-      required: true,
+
       lowercase: true,
       trim: true,
     },

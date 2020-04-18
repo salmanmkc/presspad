@@ -1,8 +1,9 @@
 const request = require('supertest');
+const moment = require('moment');
 
 const app = require('../../../app');
 const buildDB = require('../../../database/data/test/index');
-const Booking = require('../../../database/models/Booking');
+const { Booking, User } = require('./../../../database/models');
 const Notification = require('./../../../database/models/Notification');
 
 const {
@@ -50,16 +51,30 @@ describe('Testing for host should be able to reject booking route', () => {
       .end(async (error, result) => {
         expect(result).toBeDefined();
 
-        const acceptedRequest = await Booking.findById(pendingBooking._id);
+        const rejectedRequest = await Booking.findById(pendingBooking._id);
         const notificationsAfter = await Notification.find({
           type: 'stayRejected',
           user: pendingBooking.intern,
         });
-
-        expect(acceptedRequest.status).toBe('canceled');
-        expect(acceptedRequest.canceledBy.toString()).toBe(
-          hostUser._id.toString(),
+        const updatedHostUser = await User.findById(rejectedRequest.host);
+        const { confirmOrRejectDate, createdAt } = rejectedRequest;
+        const respondTime = moment(confirmOrRejectDate).diff(
+          createdAt,
+          'milliseconds',
+          true,
         );
+
+        expect(hostUser.respondedRequests).toBe(
+          updatedHostUser.respondedRequests - 1,
+        );
+        expect(hostUser.respondingTime).toBe(
+          updatedHostUser.respondingTime - respondTime,
+        );
+        expect(rejectedRequest.status).toBe('rejected');
+        // since it will only be rejected by a host
+        // expect(acceptedRequest.canceledBy.toString()).toBe(
+        //   hostUser._id.toString(),
+        // );
         // notification must be sent to intern
         expect(notificationsAfter.length).toBe(notificationsBefore.length + 1);
         done();

@@ -11,8 +11,11 @@ const getBookingWithUsers = require('./getBookingWithUsers');
 const getHostNextBooking = require('./getHostNextBooking');
 const getInternNextBooking = require('./getInternNextBooking');
 const countCompletedBookingsByUser = require('./countCompletedBookingsByUser');
+const findBookings = require('./findBookings');
 const getActiveBookings = require('./getActiveBookings');
 const getBookingHistory = require('./getBookingHistory');
+const getOverlappingBookings = require('./getOverlappingBookings');
+const getBookingsDetails = require('./getBookingsDetails');
 
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
@@ -20,26 +23,29 @@ module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
     { _id: bookingId, host: hostId },
     // update date
     {
-      status: 'confirmed',
+      status: 'accepted',
       moneyGoTo,
-      confirmDate: moment.utc(),
+      confirmOrRejectDate: moment.utc(),
     },
     {
       new: true,
     },
   );
 
-module.exports.hostRejectBookingById = ({ bookingId, hostId }) =>
-  Booking.findOneAndUpdate(
+module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
+  Booking.updateMany(
     //  filter
-    { _id: bookingId, host: hostId },
+    {
+      $expr: {
+        $and: [{ $eq: ['$host', hostId] }, { $in: ['$_id', bookingIds] }],
+      },
+    },
     // update date
     {
-      status: 'canceled',
-      canceledBy: hostId,
-    },
-    {
-      new: true,
+      status: 'rejected',
+      // canceledBy: hostId,
+      confirmOrRejectDate: moment.utc(),
+      rejectReason,
     },
   );
 
@@ -180,6 +186,14 @@ module.exports.updateListingAvailability = async (listingId, bs, be) => {
   return update;
 };
 
+exports.getConfirmedBooking = (internId, hostId) =>
+  Booking.findOne({
+    intern: internId,
+    host: hostId,
+    status: { $in: ['confirmed', 'completed'] },
+  });
+
+module.exports.findBookings = findBookings;
 module.exports.updateBookingByID = (bookingID, newStatus) =>
   Booking.findByIdAndUpdate(
     bookingID,
@@ -198,3 +212,5 @@ module.exports.getInternNextBooking = getInternNextBooking;
 module.exports.countCompletedBookingsByUser = countCompletedBookingsByUser;
 module.exports.getActiveBookings = getActiveBookings;
 module.exports.getBookingHistory = getBookingHistory;
+module.exports.getOverlappingBookings = getOverlappingBookings;
+module.exports.getBookingsDetails = getBookingsDetails;

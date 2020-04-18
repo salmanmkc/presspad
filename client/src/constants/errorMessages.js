@@ -1,9 +1,14 @@
 module.exports = {
+  SERVER_ERROR: 'Gender is required',
   GENDER: 'Gender is required',
   HOMETOWN: 'Hometown is required',
   BIO: 'Please write a short bio about yourself',
   JOB_TITLE: 'Job title is required',
-  REQUIRED: 'This field is required',
+  // show field title on the backend only
+  REQUIRED: field =>
+    this && this.window
+      ? `This field is required`
+      : `This field is required ${field}`,
   BIRTHDATE: 'Please provide your birth date',
   SCHOOL: 'Please enter your school or university',
   PROFILE_IMAGE: 'Please upload a photo of yourself',
@@ -20,6 +25,7 @@ module.exports = {
   ORGANISATION: 'Organisation is required',
   WORKING_AREA: 'Working area is required',
   EMAIL: 'INVALID email',
+  INVALID_DATE: 'please select valid date',
   // sign up fields
   signup: {
     NAME_REQUIRED: 'Please enter your name.',

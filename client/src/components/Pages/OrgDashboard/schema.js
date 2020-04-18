@@ -8,10 +8,7 @@ export default Yup.object().shape({
     .min(0)
     .max(100),
 
-  internName: Yup.string()
-    .typeError('must be a string')
-    .required('Required'),
-
+  internName: Yup.string().typeError('must be a string'),
   internId: Yup.string()
     .nullable()
     .test('is-mongo-id-length', 'not valid', value =>

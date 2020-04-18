@@ -42,7 +42,7 @@ module.exports = bookingId =>
         let: { internId: '$intern' },
         pipeline: [
           { $match: { $expr: { $eq: ['$$internId', '$_id'] } } },
-          { $project: { name: 1 } },
+          { $project: { name: 1, email: 1 } },
         ],
         as: 'intern',
       },

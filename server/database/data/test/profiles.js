@@ -15,6 +15,7 @@ const hostProfileData = {
   jobTitle: 'Journalist',
   organisation: 'Financial Times',
   workingArea: types.workingArea[0],
+  areasOfInterest: types.areasOfInterest[0],
   hostingReasonAnswer:
     'I have worked in a similar capacity for four years. I enjoy meeting new people every day. Nothing makes my day contended than knowing that the patrons are happy because of my direct and indirect service.',
   mentoringExperienceAnswer:
@@ -117,6 +118,7 @@ const internProfileData = {
     email: 'contact@email.com',
     phoneNumber: '004400011001100',
   },
+  verified: true,
 };
 
 const reset = () => Profile.deleteMany();
@@ -153,6 +155,7 @@ const createAll = async ({ users }) => {
   const host = { ...hostProfileData, user: hostUser };
   const intern = { ...internProfileData, user: internUser };
   const [hostProfile, internProfile] = await Profile.create([host, intern]);
+
   return { hostProfile, internProfile };
 };
 

@@ -14,7 +14,6 @@ const internCompleteProfileSchema = Joi.object({
   bio: Joi.string().required(),
 
   // Other information 1 (required for booking)
-  organisation: Joi.string().required(),
   useReasonAnswer: Joi.string().required(),
   issueAnswer: Joi.string().required(),
   storyAnswer: Joi.string().required(),
@@ -41,15 +40,7 @@ const internCompleteProfileSchema = Joi.object({
       .email()
       .required(),
   }),
-  offerLetter: Joi.object({
-    fileName: Joi.string().required(),
-    isPrivate: Joi.boolean().default(true),
-  }),
-  internshipOfficeAddress: {
-    addressline1: Joi.string().required(),
-    city: Joi.string().required(),
-    postcode: Joi.string().required(),
-  },
+
   emergencyContact: Joi.object({
     name: Joi.string().required(),
     email: Joi.string()
@@ -73,6 +64,28 @@ const internCompleteProfileSchema = Joi.object({
   allergies: Joi.string().required(),
   backgroundAnswer: Joi.string().required(),
   consentedOnPressPadTerms: Joi.any().allow(true),
+
+  // internship
+  internshipOfficeAddress: {
+    addressline1: Joi.string().required(),
+    addressline2: Joi.string().required(),
+    city: Joi.string().required(),
+    postcode: Joi.string().required(),
+  },
+  internshipStartDate: Joi.date().required(),
+  internshipEndDate: Joi.date().required(),
+  internshipContact: Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string()
+      .email()
+      .required(),
+    phoneNumber: Joi.string().required(),
+  }),
+  offerLetter: Joi.object({
+    fileName: Joi.string().required(),
+    isPrivate: Joi.boolean().default(true),
+  }),
+  organisation: Joi.string().required(),
 });
 
 module.exports = internCompleteProfileSchema;

@@ -33,7 +33,7 @@ export const breakpoints = {
   desktopL: `(min-width: ${size.desktop})`,
 };
 
-const newColors = {
+export const newColors = {
   black: '#181818',
   darkerGray: '#2F2F2F',
   darkGray: '#464646',
@@ -108,6 +108,8 @@ export const shadows = {
   card: '0px 0px 24px rgba(0, 0, 0, 0.04)',
   pic: '0px 2px 24px rgba(0, 0, 0, 0.215882)',
   stripeBorder: '0px 0px 0px 2px rgba(24, 144, 255, 0.2)',
+  hostProfileCard:
+    '0px 4px 4px rgba(128, 109, 109, 0.1), 0px -1px 4px rgba(128, 109, 109, 0.05)',
 };
 
 // borders
@@ -117,6 +119,7 @@ export const borders = {
   stripeBorder: `1px solid ${colors.borderGray}`,
   error: `1px solid ${colors.red}`,
   lightDivider: '1px solid rgba(0, 0, 0, 0.1)',
+  newInputBox: '1px solid rgba(224, 224, 224, 0.5)',
 };
 
 //  set colours for tags in the table

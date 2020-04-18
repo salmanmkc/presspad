@@ -118,7 +118,7 @@ export default class File extends Component {
     }
 
     return (
-      <div>
+      <div style={{ width: '100%' }}>
         {isLoading ? (
           <ProgressBar progress={loading}>
             <UploadText disabled>{fileName || value}</UploadText>
@@ -133,10 +133,14 @@ export default class File extends Component {
             }
           >
             {fileName || value ? (
-              <>
-                <Icon icon="circleTick" style={{ color: 'green' }} />
-                {fileName || value}
-              </>
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: '30px' }}>
+                  <Icon icon="circleTick" style={{ color: 'green' }} />
+                </div>
+                <div style={{ width: 'calc(100% - 30px)' }}>
+                  {fileName || value}
+                </div>
+              </div>
             ) : (
               '+ Add file'
             )}
@@ -157,7 +161,7 @@ export default class File extends Component {
         {url && fileName !== value && (
           <Tooltip title="download" placement="bottomLeft">
             <UploadText as="a" href={url}>
-              <Icon icon="download" />
+              <Icon icon="download" width="30" />
             </UploadText>
           </Tooltip>
         )}
