@@ -17,16 +17,19 @@ const types = {
       subject: 'Cancellation',
       params: ['internName'],
     },
+    // not implemented yet
     BOOKING_CANCELED_BY_INTERN: {
       createBody: host.bookingCancelledByIntern,
       subject: 'Cancellation request',
       params: [],
     },
+    // done
     BOOKIN_REQUEST: {
       createBody: host.bookingRequest,
       subject: 'Booking request',
       params: ['bookingId'],
     },
+    // not implemented yet
     BOOKING_TERMINATED: {
       createBody: host.bookingTerminated,
       subject: 'IMPORTANT! Intern’s booking has been terminated',

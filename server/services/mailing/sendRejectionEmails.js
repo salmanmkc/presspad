@@ -17,10 +17,13 @@ module.exports = async ({
   }
 
   if (rejectedBy === 'host') {
-    await await sendMail({
+    await sendMail({
       type: 'BOOKING_CANCELED_BY_HOST',
       userType: 'host',
       params: { to: host.email, internName: intern.name },
     });
+  }
+  if (rejectedBy === 'admin') {
+    //
   }
 };

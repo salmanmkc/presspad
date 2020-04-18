@@ -9,6 +9,8 @@ const events = {
   PROFILE_UPDATED: `profile.updated`,
   // BOOKING
   BOOKING_REJECTED: `booking.rejected`,
+  BOOKING_REQUESTED: `booking.requested`,
+  BOOKING_ACCEPTED_BY_ADMIN: 'booking.accepted_by_admin',
 };
 
 module.exports = events;

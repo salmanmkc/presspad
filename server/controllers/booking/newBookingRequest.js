@@ -1,6 +1,7 @@
 const boom = require('boom');
 const moment = require('moment');
 const { ObjectId } = require('mongoose').Types;
+const pubSub = require('./../../pubSub');
 
 const {
   checkOtherBookingExists,
@@ -80,12 +81,13 @@ module.exports = async (req, res, next) => {
       data.coupon = couponId;
     }
 
-    await Promise.all([
+    const [booking] = await Promise.all([
       createNewBooking(data),
       updateListingAvailability(listing, startDate, endDate),
     ]);
 
     // EMAIL TO GO HERE TO SEND TO ADMIN THAT NEW BOOKING REQUEST IS READY TO REVIEW
+    pubSub.emit(pubSub.events.BOOKING_REQUESTED, { bookingId: booking._id });
 
     return res.json({ success: true });
   } catch (error) {
