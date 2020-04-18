@@ -24,10 +24,11 @@ const updateIncompletedProfilesStatus = async profileId => {
   if (user.role === 'host') {
     const listing = await getListingByUserId(user._id);
     schema = hostProfileSchema;
-    data = { ...data, listing };
+    data = { ...data, ...listing };
   }
 
   try {
+    // TODO somehow validation throw error for hosts even if the profile data is completed
     await validate(schema, data);
     isCompleted = true;
   } catch (error) {

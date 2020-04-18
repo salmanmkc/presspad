@@ -12,5 +12,7 @@ module.exports.updateProfile = (profileId, data) =>
 
 module.exports.findProfile = userId => Profile.findOne({ user: userId });
 
-module.exports.createNewProfile = (data, session) =>
-  Profile.create([data], { session });
+module.exports.createNewProfile = async (data, session) => {
+  const profiles = await Profile.create([data], { session });
+  return profiles[0];
+};

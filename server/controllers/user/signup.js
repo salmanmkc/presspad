@@ -68,7 +68,7 @@ module.exports = (req, res, next) => {
           };
 
           if (role === 'host') {
-            pubSub.emit(pubSub.events.INTERN_SIGNUP, user);
+            pubSub.emit(pubSub.events.HOST_SIGNUP, user);
           }
           if (role === 'organisation') {
             pubSub.emit(pubSub.events.ORGANISATION_SIGNUP, user);
