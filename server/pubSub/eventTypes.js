@@ -8,6 +8,7 @@ const events = {
   PROFILE_CREATED: `profile.created`,
   PROFILE_UPDATED: `profile.updated`,
   PROFILE_APPROVED: `profile.approved`,
+  PROFILE_COMPLETED: `profile.completed`,
   // BOOKING
   BOOKING_REJECTED: `booking.rejected`,
   BOOKING_REQUESTED: `booking.requested`,

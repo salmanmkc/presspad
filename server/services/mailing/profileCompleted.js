@@ -3,7 +3,7 @@ const sendMail = require('./templates');
 module.exports = async ({ user }) => {
   if (user.role === 'host') {
     await sendMail({
-      type: 'PROFILE_APPROVED',
+      type: 'VIDEO_PROPERTY_CHECK',
       userType: 'host',
       params: { to: user.email },
     });

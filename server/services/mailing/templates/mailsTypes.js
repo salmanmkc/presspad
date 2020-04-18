@@ -47,11 +47,13 @@ const types = {
       subject: 'PressPad needs some more information!',
       params: [],
     },
+    // done
     ONE_WEEK_TO_GO: {
       createBody: host.OneWeekToGo,
       subject: 'One week to go!',
       params: ['bookingId'],
     },
+    // not implemented yet
     PAYMENT_OVERDUE: {
       createBody: host.paymentOverdue,
       subject: 'IMPORTANT! Payment from intern overdue',
@@ -63,6 +65,7 @@ const types = {
       subject: 'Congratulations! Your profile has been approved!',
       params: [],
     },
+    // done
     VIDEO_PROPERTY_CHECK: {
       createBody: host.videoPropertyCheck,
       subject: 'Video property check',
@@ -95,6 +98,7 @@ const types = {
       subject: 'Booking Request', // check the subject title
       params: ['bookingId'],
     },
+    // not implemented yet
     BOOKING_REQUEST_RECEIVED: {
       createBody: intern.bookingRequestReceived,
       subject: 'Action Needed: Online Profile',
@@ -117,6 +121,7 @@ const types = {
       subject: 'We need some more information!',
       params: [],
     },
+    // done
     ONE_WEEK_TO_GO: {
       createBody: intern.oneWeekToGo,
       subject: 'One week to go! ',
