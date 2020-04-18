@@ -6,8 +6,8 @@ import {
   Description,
 } from '../ProfileComponents.style';
 
-import Title from '../Title';
-import Field from '../Field';
+import { Title, Field, DBSCheck } from '../index.js';
+
 import fields from '../../../../constants/fields';
 
 const AboutYouDetails = ({
@@ -72,6 +72,14 @@ const AboutYouDetails = ({
             />
           </Col>
         </Row>
+        <DBSCheck
+          data={data}
+          errors={errors}
+          handleChange={handleChange}
+          handleError={handleError}
+          userId={userId}
+          role={role}
+        />
       </SectionContent>
     </SectionWrapper>
   );

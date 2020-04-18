@@ -6,8 +6,7 @@ import {
   Description,
 } from '../../../../Common/ProfileComponents/ProfileComponents.style';
 
-import Title from '../../../../Common/ProfileComponents/Title';
-import Field from '../../../../Common/ProfileComponents/Field';
+import { Title, Field, DBSCheck } from '../../../../Common/ProfileComponents';
 import fields from '../../../../../constants/fields';
 
 const Details = ({
@@ -75,6 +74,14 @@ const Details = ({
             />
           </Col>
         </Row>
+        <DBSCheck
+          data={data}
+          errors={errors}
+          handleChange={handleChange}
+          handleError={handleError}
+          userId={userId}
+          role={role}
+        />
       </SectionContent>
     </SectionWrapper>
   );

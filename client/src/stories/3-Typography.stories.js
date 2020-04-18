@@ -22,6 +22,7 @@ import {
   PXS,
   PXSBold,
   Link,
+  SectionTitle,
 } from '../components/Common/Typography';
 
 export default {
@@ -122,3 +123,7 @@ export const WithMargins = () => (
 
 export const RightBody = () => <P align="right"> {loremIpsum}</P>;
 export const CenteredBody = () => <P align="center"> {loremIpsum}</P>;
+
+export const SectionTitleExample = () => (
+  <SectionTitle>Section Title</SectionTitle>
+);

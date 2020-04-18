@@ -188,17 +188,6 @@ const OtherInformationDetails = ({
             />
           </Col>
         </Row>
-
-        <Row gutter={25}>
-          <Col xs={24} sm={12}>
-            <Field
-              {...fields['DBSCheck']}
-              value={data['DBSCheck']}
-              error={errors['DBSCheck']}
-              {...props}
-            />
-          </Col>
-        </Row>
       </SectionContent>
     </SectionWrapper>
   );

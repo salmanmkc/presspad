@@ -23,6 +23,7 @@ module.exports = {
     "react/jsx-props-no-spreading": 0,
     "react/prop-types": 0,
     "no-underscore-dangle": 0,
+    "no-console": "error",
     "destructuring-assignment": 0,
     "dot-notation": 0,
     "react/destructuring-assignment": 0,

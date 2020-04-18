@@ -99,6 +99,7 @@ const internProfileData = {
   },
   DBSCheck: {
     fileName: 'fake-DBSCheck.pdf',
+    refNum: '1232134',
   },
   sexualOrientation: types.sexualOrientation[1],
   degreeLevel: types.degreeLevel[1],
