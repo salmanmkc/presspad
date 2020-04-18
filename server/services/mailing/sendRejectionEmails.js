@@ -22,7 +22,14 @@ module.exports = async ({
       userType: 'host',
       params: { to: host.email, internName: intern.name },
     });
+
+    await sendMail({
+      type: 'BOOKING_REJECTED',
+      userType: 'intern',
+      params: { to: intern.email, bookingId },
+    });
   }
+
   if (rejectedBy === 'admin') {
     //
   }

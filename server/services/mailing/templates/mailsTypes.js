@@ -57,6 +57,7 @@ const types = {
       subject: 'IMPORTANT! Payment from intern overdue',
       params: ['internName'],
     },
+    // done
     PROFILE_APPROVED: {
       createBody: host.profileApproved,
       subject: 'Congratulations! Your profile has been approved!',
@@ -76,16 +77,19 @@ const types = {
   },
 
   intern: {
+    // done
     BOOKING_APPROVED_PAYMENT_NEEDED: {
       createBody: intern.bookingApprovedPaymentNeeded,
       subject: 'Booking accepted!',
       params: [],
     },
+    // not implemented yet
     BOOKING_CANCELLED_BY_HOST: {
       createBody: intern.bookingCancelledByHost,
       subject: 'Cancellation',
       params: [],
     },
+    // done
     BOOKING_REJECTED: {
       createBody: intern.bookingRejected,
       subject: 'Booking Request', // check the subject title
@@ -101,6 +105,7 @@ const types = {
       subject: 'IMPORTANT! Booking terminated',
       params: [],
     },
+    // not implemented yet
     HOST_CANCELLATION_AFTER_PAYMENT: {
       createBody: intern.hostCancellationAfterPayment,
       subject: 'Host cancellation',
@@ -116,16 +121,19 @@ const types = {
       subject: 'One week to go! ',
       params: ['bookingId'],
     },
+    // not implemented yet
     PAYMENT_OVERDUE: {
       createBody: intern.paymentOverdue,
       subject: 'IMPORTANT! Payment overdue',
       params: [],
     },
+    // not implemented yet
     PROFILE_APPROVED: {
       createBody: intern.profileApproved,
       subject: 'Congratulations! Your profile has been approved!',
       params: [],
     },
+    // not implemented yet
     PROFILE_REJECTED: {
       createBody: intern.profileRejected,
       subject: 'Action Needed: Online Profile',

@@ -16,4 +16,10 @@ module.exports = async ({ bookingId, host: _host, intern: _intern }) => {
     userType: 'host',
     params: { to: host.email },
   });
+
+  await sendMail({
+    type: 'BOOKING_APPROVED_PAYMENT_NEEDED',
+    userType: 'intern',
+    params: { to: intern.email },
+  });
 };
