@@ -13,6 +13,8 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
     'listing.otherInfo': 1,
     'listing.address': 1,
     reviews: 1,
+    respondingTime: 1,
+    respondedRequests: 1,
   };
 
   const profileProject = {

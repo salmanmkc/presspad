@@ -51,7 +51,7 @@ const rejectBookings = async (bookingIds, hostId, rejectReason) => {
 
   await Promise.all(promiseArray);
 
-  return rejectedBookings;
+  return bookingDetails;
 };
 
 module.exports = rejectBookings;

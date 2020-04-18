@@ -29,6 +29,8 @@ export default ({
       price,
       bookingSearchDates,
     },
+    respondedRequests,
+    respondingTime,
     calendarFunctions: { getHostProfile, setProfileData, toggleDateSection },
     stateProps: { expandDateSection },
   },
@@ -47,6 +49,8 @@ export default ({
       setProfileData={setProfileData}
       isMobile={isMobile}
       bookingSearchDates={bookingSearchDates}
+      respondedRequests={respondedRequests}
+      respondingTime={respondingTime}
     />
   );
 

@@ -128,6 +128,8 @@ export default class InternView extends Component {
           areasOfInterest,
         },
         name,
+        respondedRequests,
+        respondingTime,
       },
       internBookings,
       showFullData,
@@ -171,6 +173,8 @@ export default class InternView extends Component {
         setProfileData: this.setProfileData,
         toggleDateSection: this.toggleDateSection,
       },
+      respondedRequests,
+      respondingTime,
       stateProps: { expandDateSection },
     };
 

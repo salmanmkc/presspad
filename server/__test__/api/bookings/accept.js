@@ -56,8 +56,8 @@ describe('Testing host accepting booking route', () => {
           booking: pendingBooking._id,
         });
         const updatedHostUser = await User.findById(acceptedRequest.host);
-        const { confirmDate, createdAt } = acceptedRequest;
-        const respondTime = moment(confirmDate).diff(
+        const { confirmOrRejectDate, createdAt } = acceptedRequest;
+        const respondTime = moment(confirmOrRejectDate).diff(
           createdAt,
           'milliseconds',
           true,
