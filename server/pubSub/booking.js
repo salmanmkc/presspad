@@ -1,4 +1,4 @@
-const pubSub = require('./index');
+const pubSub = require('./createPubSub');
 const events = require('./eventTypes');
 const sendEmail = require('./../services/mailing');
 

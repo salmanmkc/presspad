@@ -7,11 +7,6 @@ const logger = require('morgan');
 const Sentry = require('./sentry');
 const Sqreen = require('./sqreen');
 
-const pubSub = require('./pubSub');
-const mails = require('./pubSub/mails');
-const profile = require('./pubSub/profile');
-const booking = require('./pubSub/booking');
-
 const router = require('./router');
 const cronJobs = require('./helpers/cronjobs');
 

@@ -1,6 +1,6 @@
-const pubSub = require('./index');
+const pubSub = require('./createPubSub');
 const events = require('./eventTypes');
-const mails = require('./../services/mailing');
+const mails = require('../services/mailing');
 
 // user listeners
 pubSub.listen(events.INTERN_SIGNUP, mails.sendWelcomeEmail);
