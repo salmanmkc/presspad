@@ -1,6 +1,7 @@
 const boom = require('boom');
 
 const { rejectBookings } = require('../../services/bookings');
+const { updateRespondingData } = require('../../database/queries/user');
 
 const rejectBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
@@ -12,7 +13,16 @@ const rejectBooking = async (req, res, next) => {
       return next(boom.forbidden());
     }
 
-    await rejectBookings(bookingId, hostId, rejectReason);
+    const updatedBooking = await rejectBookings(
+      bookingId,
+      hostId,
+      rejectReason,
+    );
+
+    // update respondingData
+    const { createdAt, confirmOrRejectDate } = updatedBooking[0];
+    const respondingTimeInMs = confirmOrRejectDate - createdAt;
+    await updateRespondingData(hostId, respondingTimeInMs);
 
     return res.json({});
   } catch (error) {

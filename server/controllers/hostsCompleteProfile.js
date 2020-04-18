@@ -14,8 +14,10 @@ const { getListing } = require('../database/queries/listing/getListing');
 module.exports = async (req, res, next) => {
   const { user } = req;
 
-  if (user.role !== 'host') {
-    return next(boom.forbidden('only host can update his profile'));
+  if (user.role !== 'host' || user.role !== 'admin') {
+    return next(
+      boom.forbidden('you do not have permission to update this profile'),
+    );
   }
 
   const {

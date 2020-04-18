@@ -70,9 +70,9 @@ const acceptBooking = async (req, res, next) => {
     });
 
     // update respondingData
-    const { createdAt, confirmDate } = updatedBookingRequest;
+    const { createdAt, confirmOrRejectDate } = updatedBookingRequest;
 
-    const respondingTimeInMs = confirmDate - createdAt;
+    const respondingTimeInMs = confirmOrRejectDate - createdAt;
     await updateRespondingData(hostId, respondingTimeInMs);
 
     const notification = {

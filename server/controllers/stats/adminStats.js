@@ -18,6 +18,8 @@ const {
   getBookingHistory,
 } = require('../../database/queries/bookings/');
 
+const generateUrl = require('./../../helpers/generateFileURL');
+
 module.exports = async (req, res, next) => {
   // get user data so we can check they are authorized
   const { user } = req;
@@ -41,33 +43,43 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'interns') {
     return getAllInternStats()
-      .then(stats => {
+      .then(async stats => {
         if (stats.length === 0) return res.json(stats);
 
-        const cleanStats = stats.map(intern => {
-          let status = 'Looking for host';
+        const cleanStats = await Promise.all(
+          stats.map(async intern => {
+            let status = 'Looking for host';
 
-          if (intern.liveBookings > 0) {
-            status = 'At host';
-          } else if (intern.pendingBookings > 0) {
-            status = 'Pending request';
-          } else if (intern.confirmedBookings > 0) {
-            status = 'Booking confirmed';
-          }
+            if (intern.liveBookings > 0) {
+              status = 'At host';
+            } else if (intern.pendingBookings > 0) {
+              status = 'Pending request';
+            } else if (intern.confirmedBookings > 0) {
+              status = 'Booking confirmed';
+            }
 
-          const internObj = {
-            key: stats.indexOf(intern) + 1,
-            name: intern.name,
-            organisation: intern.organisationName || intern.orgName,
-            totalPayments: intern.totalPayments || 0,
-            status,
-            userId: intern._id,
-            nextInstallmentDueDate: intern.nextInstallmentDueDate,
-            nextInstallmentPaid: intern.nextInstallmentPaid,
-            nextInstallmentAmount: intern.nextInstallmentAmount,
-          };
-          return internObj;
-        });
+            const internObj = {
+              key: stats.indexOf(intern) + 1,
+              name: intern.name,
+              organisation: intern.organisationName || intern.orgName,
+              totalPayments: intern.totalPayments || 0,
+              status,
+              userId: intern._id,
+              nextInstallmentDueDate: intern.nextInstallmentDueDate,
+              nextInstallmentPaid: intern.nextInstallmentPaid,
+              nextInstallmentAmount: intern.nextInstallmentAmount,
+              dbsCheck: intern.DBSCheck,
+            };
+
+            const { dbsCheck } = internObj;
+
+            if (dbsCheck && dbsCheck.fileName) {
+              await generateUrl(dbsCheck);
+            }
+
+            return internObj;
+          }),
+        );
 
         return res.json(cleanStats);
       })
@@ -75,26 +87,36 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'hosts') {
     return getAllHostStats()
-      .then(stats => {
+      .then(async stats => {
         if (stats.length === 0) return res.json(stats);
 
-        const cleanStats = stats.map(host => {
-          const hostObj = {
-            key: stats.indexOf(host) + 1,
-            name: host.name,
-            email: host.email,
-            hometown: host.listing.hometown,
-            hosted: host.internsHosted,
-            approvalStatus: host.profile[0].verified
-              ? 'Approved'
-              : 'Waiting for approval',
-            profileId: host.profile[0]._id,
-            userId: host._id,
-            totalIncome: host.totalIncome,
-            currentBalance: host.currentBalance,
-          };
-          return hostObj;
-        });
+        const cleanStats = await Promise.all(
+          stats.map(async host => {
+            const hostObj = {
+              key: stats.indexOf(host) + 1,
+              name: host.name,
+              email: host.email,
+              hometown: host.listing.hometown,
+              hosted: host.internsHosted,
+              approvalStatus: host.profile[0].verified
+                ? 'Approved'
+                : 'Waiting for approval',
+              profileId: host.profile[0]._id,
+              dbsCheck: host.profile[0].DBSCheck,
+              userId: host._id,
+              totalIncome: host.totalIncome,
+              currentBalance: host.currentBalance,
+            };
+
+            const { dbsCheck } = hostObj;
+
+            if (dbsCheck && dbsCheck.fileName) {
+              await generateUrl(dbsCheck);
+            }
+
+            return hostObj;
+          }),
+        );
         return res.json(cleanStats);
       })
       .catch(err => next(boom.badImplementation(err)));

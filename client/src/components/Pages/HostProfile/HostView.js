@@ -99,6 +99,7 @@ export default class HostView extends Component {
       },
       DBSCheck: {
         fileName: null,
+        refNum: '',
         isPrivate: true,
       },
       pressCard: {
@@ -162,6 +163,7 @@ export default class HostView extends Component {
       },
       DBSCheck: {
         fileName: null,
+        refNum: '',
         isPrivate: true,
       },
       pressCard: {

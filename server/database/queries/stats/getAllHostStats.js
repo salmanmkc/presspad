@@ -51,6 +51,7 @@ module.exports.getAllHostStats = () =>
         'listing.hometown': 1,
         'profile.verified': 1,
         'profile._id': 1,
+        'profile.DBSCheck': 1,
         totalIncome: { $arrayElemAt: ['$account.income', 0] },
         currentBalance: { $arrayElemAt: ['$account.currentBalance', 0] },
         // look up from bookings:

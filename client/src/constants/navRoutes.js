@@ -28,6 +28,7 @@ export const SIGNUP_HOST = '/sign-up/host';
 export const SIGNUP_ORG = '/sign-up/organisation';
 export const HOST_COMPLETE_PROFILE_URL = '/host-complete-profile';
 export const INTERN_COMPLETE_PROFILE_URL = '/intern-complete-profile';
+export const DBS_CHECK_PAGE = '/dbs-check';
 
 // sign in/out
 export const SIGNIN_URL = '/sign-in';

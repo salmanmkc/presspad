@@ -52,6 +52,7 @@ const {
   getChecklist,
 } = require('../controllers/checklist');
 const { markAsSeen } = require('../controllers/notifications');
+const { updateProfile } = require('../controllers/profile/updateProfile');
 
 // controller for admin to view all withdraw requests in presspad
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
@@ -110,6 +111,7 @@ const {
   INTERNSHIP,
   ADMIN_REVIEWS_BOOKING,
   ADMIN_BOOKING_HISTORY,
+  ADMIN_UPDATE_PROFILE,
   HOST_PROFILE_SOFT_URL,
 } = require('../../client/src/constants/apiRoutes');
 
@@ -277,6 +279,14 @@ router.get(GET_CHECKLIST, authentication, getChecklist);
 
 // [ host | intern | orgs ] mark their notifications as seen
 router.patch(`${NOTIFICATION_URL}/seen`, authentication, markAsSeen);
+
+// admin updates a user's profile
+router.patch(
+  `${ADMIN_UPDATE_PROFILE}`,
+  authentication,
+  authorization(['admin']),
+  updateProfile,
+);
 
 // get reviews (given || taken)
 router.get(REVIEWS, getReviews);

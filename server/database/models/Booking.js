@@ -27,7 +27,7 @@ const bookingSchema = new Schema(
       type: Date,
       required: true,
     },
-    confirmDate: {
+    confirmOrRejectDate: {
       type: Date,
     },
     // bookings need to be confirmed or canceled by [host,intern,admin]
