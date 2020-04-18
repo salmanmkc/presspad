@@ -7,7 +7,7 @@ const createHeader = require('./createHeader');
 const createFooter = require('./createFooter');
 const composeHtml = require('./composeHtml');
 
-const sendMail = ({ type, userType, params }) => {
+const sendMail = ({ type, userType, params = {} }) => {
   const transporter = () =>
     nodeMailer.createTransport({
       service: service || 'gmail',
