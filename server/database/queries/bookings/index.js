@@ -25,7 +25,7 @@ module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
     {
       status: 'accepted',
       moneyGoTo,
-      confirmDate: moment.utc(),
+      confirmOrRejectDate: moment.utc(),
     },
     {
       new: true,
@@ -44,10 +44,8 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
     {
       status: 'rejected',
       // canceledBy: hostId,
+      confirmOrRejectDate: moment.utc(),
       rejectReason,
-    },
-    {
-      new: true,
     },
   );
 
