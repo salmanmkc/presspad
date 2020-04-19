@@ -1,4 +1,5 @@
 const { domain } = require('./../../../config');
+
 /**
  * create html anchor tag
  * @param {string} page page title, where link will redirect user to
@@ -6,37 +7,17 @@ const { domain } = require('./../../../config');
  * @param {{bookingId}} data data coming from email params eg. bookingId
  */
 const link = (page, text, data = {}) => {
-  let href = '';
-  switch (page) {
-    case 'SINGLE_BOOKING':
-      href = `${domain}/booking/${data.bookingId}`;
-      break;
-
-    case 'HOST_COMPLETE_PROFILE':
-    case 'INTERN_COMPLETE_PROFILE':
-      href = `${domain}/my-profile`;
-      break;
-
-    case 'HOST_GUIDANCE':
-      href = ``; // TODO require PO to provide this
-      break;
-
-    case 'INTERN_GUIDANCE':
-      href = ``; // TODO require PO to provide this
-      break;
-
-    case 'HOST_LOGIN':
-    case 'INTERN_LOGIN':
-      href = `${domain}/sign-in`;
-      break;
-
-    case 'HOSTS_LINK':
-      href = `${domain}/hosts`;
-      break;
-
-    default:
-      break;
-  }
+  const hrefs = {
+    SINGLE_BOOKING: `${domain}/booking/${data.bookingId}`,
+    HOST_COMPLETE_PROFILE: `${domain}/my-profile`,
+    INTERN_COMPLETE_PROFILE: `${domain}/my-profile`,
+    HOST_GUIDANCE: `${domain}`, // TODO require PO to provide this
+    INTERN_GUIDANCE: `${domain}`, // TODO require PO to provide this
+    HOST_LOGIN: `${domain}/sign-in`,
+    INTERN_LOGIN: `${domain}/sign-in`,
+    HOSTS_LINK: `${domain}/hosts`,
+  };
+  const href = hrefs[page];
   return `<a href="${href}">${text}</a>`;
 };
 
