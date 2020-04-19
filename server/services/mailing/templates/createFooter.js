@@ -1,3 +1,6 @@
+/**
+ * create common footer for the template
+ */
 const createFooter = () => {
   const footer = `
   <footer>
