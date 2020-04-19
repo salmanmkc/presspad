@@ -1,12 +1,12 @@
 const events = require('./eventTypes');
-const { emit, listen } = require('./createPubSub');
+const pubSub = require('./createPubSub');
 
 require('./booking');
 require('./profile');
 require('./user');
 
 module.exports = {
-  emit,
-  listen,
+  emit: pubSub.emit,
+  listen: pubSub.listen,
   events,
 };
