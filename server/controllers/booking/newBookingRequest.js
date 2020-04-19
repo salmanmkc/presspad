@@ -87,7 +87,7 @@ module.exports = async (req, res, next) => {
     ]);
 
     // EMAIL TO GO HERE TO SEND TO ADMIN THAT NEW BOOKING REQUEST IS READY TO REVIEW
-    pubSub.emit(pubSub.events.BOOKING_REQUESTED, { bookingId: booking._id });
+    pubSub.emit(pubSub.events.booking.REQUESTED, { bookingId: booking._id });
 
     return res.json({ success: true });
   } catch (error) {

@@ -33,10 +33,10 @@ module.exports = async (req, res, next) => {
     // update the intern profile
     if (foundProfile) {
       const profile = await updateUserProfile(user._id, profileData);
-      pubSub.emit(pubSub.events.PROFILE_UPDATED, profile._id);
+      pubSub.emit(pubSub.events.profile.UPDATED, profile._id);
     } else {
       const profile = await createNewProfile(profileData);
-      pubSub.emit(pubSub.events.PROFILE_CREATED, profile._id);
+      pubSub.emit(pubSub.events.profile.CREATED, profile._id);
     }
 
     return res.json({ success: true });

@@ -42,7 +42,7 @@ module.exports = (req, res, next) => {
               name: user.name,
             };
 
-            pubSub.emit(pubSub.events.INTERN_SIGNUP, user);
+            pubSub.emit(pubSub.events.user.INTERN_SIGNUP, user);
 
             req.sqreen.signup_track({ email: user.email });
             return res.json(newUserInfo);
@@ -68,10 +68,10 @@ module.exports = (req, res, next) => {
           };
 
           if (role === 'host') {
-            pubSub.emit(pubSub.events.HOST_SIGNUP, user);
+            pubSub.emit(pubSub.events.user.HOST_SIGNUP, user);
           }
           if (role === 'organisation') {
-            pubSub.emit(pubSub.events.ORGANISATION_SIGNUP, user);
+            pubSub.emit(pubSub.events.user.ORGANISATION_SIGNUP, user);
           }
 
           // TODO move sqreen to pubSub folder

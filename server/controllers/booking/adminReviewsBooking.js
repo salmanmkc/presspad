@@ -33,7 +33,7 @@ const adminReviewsBooking = async (req, res, next) => {
       const promiseArray = [registerNotification(notification)];
 
       // EMAIL TO GO HERE - MIGHT BE ABLE TO USE REJECTBOOKING.JS EMAIL
-      pubSub.emit(pubSub.events.BOOKING_REJECTED, {
+      pubSub.emit(pubSub.events.booking.REJECTED, {
         bookingId: bookingID,
         intern,
         host,
@@ -55,7 +55,7 @@ const adminReviewsBooking = async (req, res, next) => {
       booking: bookingID,
     };
 
-    pubSub.emit(pubSub.events.BOOKING_ACCEPTED_BY_ADMIN, {
+    pubSub.emit(pubSub.events.booking.ACCEPTED_BY_ADMIN, {
       bookingId: bookingID,
       intern,
       host,

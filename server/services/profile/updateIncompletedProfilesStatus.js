@@ -38,7 +38,7 @@ const updateIncompletedProfilesStatus = async profileId => {
   if (profile.isCompleted !== isCompleted) {
     await updateProfile(profileId, { isCompleted });
     if (isCompleted) {
-      pubSub.emit(pubSub.events.PROFILE_COMPLETED, { profile, user });
+      pubSub.emit(pubSub.events.profile.COMPLETED, { profile, user });
     }
   }
 };

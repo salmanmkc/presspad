@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
 
     // get host details
     const [host] = await getUserDataByProfileId(profileId);
-    pubSub.emit(pubSub.events.PROFILE_APPROVED, { user: host });
+    pubSub.emit(pubSub.events.profile.APPROVED, { user: host });
 
     return res.json('success');
   } catch (error) {

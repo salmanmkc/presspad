@@ -30,7 +30,7 @@ const rejectBookings = async (bookingIds, hostId, rejectReason) => {
   const bookingDetails = await getBookingsDetails(bookingArr);
 
   bookingDetails.forEach(({ _id, intern, host }) => {
-    pubSub.emit(pubSub.events.BOOKING_REJECTED, {
+    pubSub.emit(pubSub.events.booking.REJECTED, {
       bookingId: _id,
       intern,
       host,

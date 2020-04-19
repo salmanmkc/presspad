@@ -84,7 +84,7 @@ const acceptBooking = async (req, res, next) => {
       booking: bookingId,
     };
 
-    pubSub.emit(pubSub.events.BOOKING_ACCEPTED_BY_HOST, { bookingId });
+    pubSub.emit(pubSub.events.booking.ACCEPTED_BY_HOST, { bookingId });
 
     // const allQuestions = await findAllQuestions();
 
