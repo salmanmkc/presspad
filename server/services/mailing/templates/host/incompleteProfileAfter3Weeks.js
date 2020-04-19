@@ -1,7 +1,7 @@
 const { link, greeting, content } = require('./../htmlTags');
 
 module.exports = () => {
-  const completeProfileLink = link('HOST_COMPLETE_PROFILE', {}, 'here');
+  const completeProfileLink = link('HOST_COMPLETE_PROFILE', 'here');
 
   return `
   ${greeting('Hi there,')}

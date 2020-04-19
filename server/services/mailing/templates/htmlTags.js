@@ -2,10 +2,10 @@ const { domain } = require('./../../../config');
 /**
  * create html anchor tag
  * @param {string} page page title, where link will redirect user to
- * @param {{bookingId}} data data coming from email params eg. bookingId
  * @param {string} text text to display for achor tag
+ * @param {{bookingId}} data data coming from email params eg. bookingId
  */
-const link = (page, data, text) => {
+const link = (page, text, data = {}) => {
   let href = '';
   switch (page) {
     case 'SINGLE_BOOKING':
@@ -39,6 +39,7 @@ const link = (page, data, text) => {
   }
   return `<a href="${href}">${text}</a>`;
 };
+
 /**
  * create and return html p tag that wraps the given text
  * @param {string} text wrapped text

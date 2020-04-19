@@ -1,12 +1,10 @@
 const { greeting, content, link } = require('../htmlTags');
 
 module.exports = params => {
-  const guidanceLink = link('INTERN_GUIDANCE', {}, 'here');
-  const bookingLink = link(
-    'SINGLE_BOOKING',
-    { bookingId: params.bookingId },
-    'here',
-  );
+  const guidanceLink = link('INTERN_GUIDANCE', 'here');
+  const bookingLink = link('SINGLE_BOOKING', 'here', {
+    bookingId: params.bookingId,
+  });
 
   return `
     ${greeting('Hi there,')}

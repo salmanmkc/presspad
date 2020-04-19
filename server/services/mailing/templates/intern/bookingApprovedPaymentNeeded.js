@@ -1,7 +1,7 @@
 const { greeting, content, link } = require('./../htmlTags');
 
 module.exports = () => {
-  const loginLink = link('INTERN_LOGIN', {}, 'login');
+  const loginLink = link('INTERN_LOGIN', 'login');
 
   return `
     ${greeting('Hi there,')}

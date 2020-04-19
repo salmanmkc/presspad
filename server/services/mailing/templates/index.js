@@ -33,6 +33,10 @@ const sendMail = ({ type, userType, params = {} }) => {
     },
   ];
 
+  if (params.attachments && params.attachments.length) {
+    attachments.push(params.attachments);
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console
     console.log('email suppose to be sent to');
