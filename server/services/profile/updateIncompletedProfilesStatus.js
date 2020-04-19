@@ -1,4 +1,3 @@
-const { getProfileById } = require('../../database/queries/profile/getProfile');
 const { updateProfile } = require('../../database/queries/profiles');
 const { getUserById } = require('./../../database/queries/user');
 const {
@@ -10,12 +9,11 @@ const hostProfileSchema = require('../../middlewares/validation/hostProfileSchem
 
 const { validate } = require('../../middlewares/validation/index');
 
-const updateIncompletedProfilesStatus = async profileId => {
+const updateIncompletedProfilesStatus = async profile => {
   let isCompleted = false;
   let schema = internCompleteProfileSchema;
   let data = {};
 
-  const profile = await getProfileById(profileId);
   data = profile;
 
   const user = await getUserById(profile.user);
@@ -36,7 +34,7 @@ const updateIncompletedProfilesStatus = async profileId => {
   }
 
   if (profile.isCompleted !== isCompleted) {
-    await updateProfile(profileId, { isCompleted });
+    await updateProfile(profile._id, { isCompleted });
     if (isCompleted) {
       pubSub.emit(pubSub.events.profile.COMPLETED, { profile, user });
     }

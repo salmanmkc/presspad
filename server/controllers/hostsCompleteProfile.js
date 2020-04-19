@@ -116,7 +116,7 @@ module.exports = async (req, res, next) => {
 
       try {
         const profile = await updateUserProfile(user._id, profileData, session);
-        pubSub.emit(pubSub.events.profile.UPDATED, profile._id);
+        pubSub.emit(pubSub.events.profile.UPDATED, profile);
 
         if (foundHostListing) {
           await updateListing(user._id, listingData, session);
@@ -137,7 +137,7 @@ module.exports = async (req, res, next) => {
 
       try {
         const profile = await createNewProfile(profileData, session);
-        pubSub.emit(pubSub.events.profile.CREATED, profile._id);
+        pubSub.emit(pubSub.events.profile.CREATED, profile);
         await createNewListing(listingData, session);
         await session.commitTransaction();
         await session.endSession();

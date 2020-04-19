@@ -18,7 +18,6 @@ module.exports = async (req, res, next) => {
     return next(boom.forbidden('Only admin can access this route'));
   try {
     await approveRejectProfile(profileId, verify);
-    // if admin approved host's profile
 
     // get host details
     const [host] = await getUserDataByProfileId(profileId);

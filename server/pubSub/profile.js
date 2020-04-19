@@ -3,7 +3,7 @@ const events = require('./eventTypes');
 const profile = require('./../services/profile');
 const sendEmail = require('./../services/mailing');
 
-pubSub.listen(events.PROFILE_CREATED, profile.updateIncompletedProfilesStatus);
-pubSub.listen(events.PROFILE_UPDATED, profile.updateIncompletedProfilesStatus);
-pubSub.listen(events.PROFILE_APPROVED, sendEmail.profileApproved);
-pubSub.listen(events.PROFILE_COMPLETED, sendEmail.profileCompleted);
+pubSub.listen(events.profile.CREATED, profile.updateIncompletedProfilesStatus);
+pubSub.listen(events.profile.UPDATED, profile.updateIncompletedProfilesStatus);
+pubSub.listen(events.profile.APPROVED, sendEmail.profileApproved);
+pubSub.listen(events.profile.COMPLETED, sendEmail.profileCompleted);
