@@ -333,7 +333,6 @@ export default class AdminDashboard extends Component {
   };
 
   handleAction = (action, booking) => {
-    console.log('action', action, booking);
     switch (action) {
       case 'approveRequest':
         return this.approveRequestConfirm(booking);
