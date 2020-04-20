@@ -31,7 +31,9 @@ const schema = object({
     .required(errMsgs.REQUIRED('internshipStartDate')),
   internshipEndDate: date()
     .typeError(errMsgs.INVALID_DATE)
+    .when('internshipStartDate', st => date().min(st, errMsgs.INVALID_END_DATE))
     .required(errMsgs.REQUIRED('internshipEndDate')),
+
   internshipContact: object({
     name: string()
       .ensure()

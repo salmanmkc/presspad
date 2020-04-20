@@ -26,6 +26,7 @@ module.exports = {
   WORKING_AREA: 'Working area is required',
   EMAIL: 'INVALID email',
   INVALID_DATE: 'please select valid date',
+  INVALID_END_DATE: 'please select an end date greater than your start date',
   // sign up fields
   signup: {
     NAME_REQUIRED: 'Please enter your name.',
