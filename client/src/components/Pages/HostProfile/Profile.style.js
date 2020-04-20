@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
-import { colors, breakpoints, shadows, size } from '../../../theme';
+import { colors, shadows, size } from '../../../theme';
 import { ReactComponent as BackArrowIcon } from '../../../assets/back-arrow.svg';
 
 const classNames = {
