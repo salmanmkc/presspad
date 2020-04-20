@@ -6,7 +6,7 @@ import { message } from 'antd';
 
 import ButtonNew from '../../../Common/ButtonNew';
 
-import BookingDates from '../BookingDates';
+import BookingDates from '../../../Common/BookingDetailsBox';
 import HostInternInfo from '../HostInternInfo';
 import TipsCard from '../TipsCard';
 import CancelBookingButton from '../CancelBookingButton';

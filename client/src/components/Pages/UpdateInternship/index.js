@@ -6,7 +6,9 @@ import { disabledStartDate, disabledEndDate } from '../../../helpers';
 import { updateInternshipAndCreateBooking } from './utils';
 import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import { DASHBOARD_URL } from '../../../constants/navRoutes';
+import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import Form from './Form';
+import ScrollToTop from '../../Common/ScrollToTop';
 
 const { validate, internshipSchema } = require('../../../validation');
 
@@ -34,12 +36,20 @@ const fields = {
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
-const UpdateInternship = ({ id }) => {
+const UpdateInternship = ({ id, windowWidth }) => {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({ ...fields });
   const [errors, setErrors] = useState({ ...fields, offerLetter: '' });
   const query = useQuery();
   const history = useHistory();
+
+  const bookingData = {
+    startDate: query.get('startDate'),
+    endDate: query.get('endDate'),
+    host: query.get('hostId'),
+    price: query.get('price'),
+    listing: query.get('listing'),
+  };
 
   const onInputChange = e => {
     const { value, name, dataset: { parent } = {} } = e.target;
@@ -94,14 +104,6 @@ const UpdateInternship = ({ id }) => {
   }, [id]);
 
   const onSubmit = async e => {
-    const bookingData = {
-      startDate: query.get('startDate'),
-      endDate: query.get('endDate'),
-      host: query.get('hostId'),
-      price: query.get('price'),
-      listing: query.get('listing'),
-    };
-
     e.preventDefault();
     const { errors: _errors } = await validate({
       schema: internshipSchema,
@@ -128,20 +130,25 @@ const UpdateInternship = ({ id }) => {
   };
 
   return (
-    <Form
-      state={state}
-      errors={errors}
-      loading={loading}
-      userId={id}
-      onInputChange={onInputChange}
-      disabledStartDate={_disabledStartDate}
-      onStartChange={onStartChange}
-      disabledEndDate={_disabledEndDate}
-      onEndChange={onEndChange}
-      onUploadInternshipOffer={onUploadInternshipOffer}
-      fileErrorHandler={fileErrorHandler}
-      onSubmit={onSubmit}
-    />
+    <>
+      <ScrollToTop />
+      <Form
+        isMobile={windowWidth < TABLET_WIDTH}
+        bookingData={bookingData}
+        state={state}
+        errors={errors}
+        loading={loading}
+        userId={id}
+        onInputChange={onInputChange}
+        disabledStartDate={_disabledStartDate}
+        onStartChange={onStartChange}
+        disabledEndDate={_disabledEndDate}
+        onEndChange={onEndChange}
+        onUploadInternshipOffer={onUploadInternshipOffer}
+        fileErrorHandler={fileErrorHandler}
+        onSubmit={onSubmit}
+      />
+    </>
   );
 };
 
