@@ -85,7 +85,7 @@ const Form = ({
           <DatePicker
             mt="1"
             mb="1"
-            value={state.internshipStartDate && moment(state.internshipEndDate)}
+            value={state.internshipEndDate && moment(state.internshipEndDate)}
             disabledDate={disabledEndDate}
             onChange={e => onEndChange(e)}
             dateRender={current =>
