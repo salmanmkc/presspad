@@ -72,7 +72,7 @@ const adminReviewsBooking = async (req, res, next) => {
         message: `Your request to stay with ${userDetails.name} has been approved`,
       };
 
-      pubSub.emit(pubSub.events.booking.BOOKING_APPROVED_PAYMENT_NEEDED, {
+      pubSub.emit(pubSub.events.booking.ACCEPTED_BY_HOST, {
         bookingId: bookingID,
         intern,
         host,

@@ -1,6 +1,6 @@
 const pubSub = require('./createPubSub');
 const events = require('./eventTypes');
-const sendEmail = require('./../services/mailing');
+const sendEmail = require('../services/mailing');
 
 pubSub.listen(events.booking.REJECTED, sendEmail.sendRejectionEmails);
 pubSub.listen(events.booking.REQUESTED /** email goes to admin here */);
