@@ -1,15 +1,11 @@
 const sendMail = require('./templates');
-const { getBookingsDetails } = require('../../database/queries/bookings');
+const { getBookingUsersInfo } = require('./helpers');
 
-module.exports = async ({ bookingId, host: _host, intern: _intern }) => {
-  let intern = _intern;
-  let host = _host;
-
-  if (!intern || !host) {
-    const booking = await getBookingsDetails(bookingId);
-    intern = booking.intern;
-    host = booking.host;
-  }
+module.exports = async ({ bookingId, host: _host }) => {
+  const { host } = await getBookingUsersInfo({
+    bookingId,
+    host: _host,
+  });
 
   await sendMail({
     type: 'BOOKIN_REQUEST',

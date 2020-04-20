@@ -1,5 +1,5 @@
 const sendMail = require('./templates');
-const { getBookingsDetails } = require('../../database/queries/bookings');
+const { getBookingUsersInfo } = require('./helpers');
 
 module.exports = async ({
   bookingId,
@@ -7,15 +7,11 @@ module.exports = async ({
   intern: _intern,
   rejectedBy,
 }) => {
-  let intern = _intern;
-  let host = _host;
-
-  if (!intern || !host) {
-    const booking = await getBookingsDetails(bookingId);
-    intern = booking.intern;
-    host = booking.host;
-  }
-
+  const { host, intern } = await getBookingUsersInfo({
+    bookingId,
+    host: _host,
+    intern: _intern,
+  });
   if (rejectedBy === 'host') {
     await sendMail({
       type: 'BOOKING_CANCELED_BY_HOST',
