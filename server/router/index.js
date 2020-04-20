@@ -292,6 +292,6 @@ router.patch(
 router.get(REVIEWS, getReviews);
 
 router.get(INTERNSHIP, authentication, getInternshipDetails);
-router.patch(INTERNSHIP, authentication, updateInternshipDetails);
+router.put(INTERNSHIP, authentication, updateInternshipDetails);
 
 module.exports = router;

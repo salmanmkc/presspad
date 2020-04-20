@@ -69,7 +69,7 @@ const internCompleteProfileSchema = Joi.object({
   // internship
   internshipOfficeAddress: {
     addressline1: Joi.string().required(),
-    addressline2: Joi.string().required(),
+    addressline2: Joi.string().allow(''),
     city: Joi.string().required(),
     postcode: Joi.string().required(),
   },

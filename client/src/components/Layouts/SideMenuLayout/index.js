@@ -18,6 +18,7 @@ const SideMenuLayout = ({
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet || !isLoggedIn;
   const sideMenuRendered = !topHeaderRendered && isLoggedIn;
+
   return (
     <>
       <Wrapper

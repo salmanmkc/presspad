@@ -16,9 +16,7 @@ const schema = object({
     addressline1: string()
       .ensure()
       .required(errMsgs.REQUIRED('internshipOfficeAddress.addressline1')),
-    addressline2: string()
-      .ensure()
-      .required(errMsgs.REQUIRED('internshipOfficeAddress.addressline2')),
+    addressline2: string().ensure(),
     city: string()
       .ensure()
       .required(errMsgs.REQUIRED('internshipOfficeAddress.city')),
@@ -31,7 +29,9 @@ const schema = object({
     .required(errMsgs.REQUIRED('internshipStartDate')),
   internshipEndDate: date()
     .typeError(errMsgs.INVALID_DATE)
+    .when('internshipStartDate', st => date().min(st, errMsgs.INVALID_END_DATE))
     .required(errMsgs.REQUIRED('internshipEndDate')),
+
   internshipContact: object({
     name: string()
       .ensure()

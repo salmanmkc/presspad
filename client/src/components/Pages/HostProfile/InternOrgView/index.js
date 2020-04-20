@@ -10,13 +10,11 @@ import ProfileCard from './Card';
 import AccommodationCheckList from './AccommodationCheckList';
 import HostProfileCalendar from './HostProfileCalendar';
 
-// Layouts
-import SideMenuLayout from '../../../Layouts/SideMenuLayout';
-
 // Typography
 import * as T from '../../../Common/Typography';
 import { colors } from '../../../../theme';
 // Styles
+import { ContentWrapper } from '../../../Layouts/SideMenuLayout/style';
 import {
   SideWrapper,
   Card,
@@ -221,7 +219,7 @@ export default class InternView extends Component {
     };
 
     return (
-      <SideMenuLayout navbarProps={{ isLoggedIn: currentUserId, role }} goBack>
+      <ContentWrapper>
         {/* Header */}
         <Header
           profileImage={profileImage}
@@ -396,7 +394,7 @@ export default class InternView extends Component {
             isMobile={isMobile}
           />
         )}
-      </SideMenuLayout>
+      </ContentWrapper>
     );
   }
 }
