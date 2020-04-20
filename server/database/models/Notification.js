@@ -19,6 +19,7 @@ const notificationSchema = new Schema(
       type: String,
       enum: [
         'stayRequest',
+        'automaticStayRequest', // to let host knows about request if they automatically accept
         'stayApproved',
         'stayRejected',
         'stayCompleted',

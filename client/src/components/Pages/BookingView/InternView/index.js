@@ -385,7 +385,9 @@ export default class BookingView extends Component {
         </ContentWrapper>
         {status !== 'canceled' && status !== 'completed' && (
           // toDo handle cancel booking button
-          <CancelBookingButton onClick={() => console.log('cancle booking')}>
+          <CancelBookingButton
+            onClick={() => console.log('cancle booking query to go here')}
+          >
             cancel booking request
           </CancelBookingButton>
         )}

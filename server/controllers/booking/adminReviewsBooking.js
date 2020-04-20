@@ -1,5 +1,7 @@
 const boom = require('boom');
-const pubSub = require('./../../pubSub');
+const pubSub = require('../../pubSub');
+
+const { getUserById } = require('../../database/queries/user');
 
 const {
   updateBookingByID,
@@ -13,6 +15,9 @@ const adminReviewsBooking = async (req, res, next) => {
   const { _id: bookingID } = booking;
   const { intern, host } = await getBookingWithUsers(bookingID);
 
+  const userDetails = await getUserById(host, true);
+  const { acceptAutomatically } = userDetails;
+
   try {
     // if rejected, create a notification for intern
     if (status === 'rejected by admin') {
@@ -24,7 +29,7 @@ const adminReviewsBooking = async (req, res, next) => {
       const notification = {
         private: true,
         user: updatedBookingRequest.intern,
-        secondParty: req.user,
+        secondParty: req.user._id,
         type: 'stayRejected',
         booking: bookingID,
         message,
@@ -41,6 +46,37 @@ const adminReviewsBooking = async (req, res, next) => {
       });
 
       await Promise.all(promiseArray);
+      return res.json({ success: 'Booking request successfully updated' });
+    }
+
+    if (acceptAutomatically) {
+      await updateBookingByID(bookingID, 'accepted');
+
+      // Notification to let host know they have a confirmed request
+      const hostNotification = {
+        user: host._id,
+        secondParty: req.user._id,
+        type: 'automaticStayRequest',
+        booking: bookingID,
+        private: true,
+        message: 'You have a new guest staying with you',
+      };
+
+      // Notification to let intern know their request is accepted
+      const internNotification = {
+        user: intern._id,
+        secondParty: req.user._id,
+        type: 'stayApproved',
+        booking: bookingID,
+        private: true,
+        message: `Your request to stay with ${userDetails.name} has been approved`,
+      };
+
+      await registerNotification(hostNotification);
+      await registerNotification(internNotification);
+
+      // EMAIL TO GO HERE TO LET INTERN KNOW THEIR REQUEST HAS BEEN ACCEPTED
+
       return res.json({ success: 'Booking request successfully updated' });
     }
 
@@ -62,6 +98,8 @@ const adminReviewsBooking = async (req, res, next) => {
     });
 
     await registerNotification(notification);
+
+    // EMAIL TO GO HERE TO LET HOST KNOW THEY HAVE BOOKING REQUEST
 
     return res.json({ success: 'Booking request successfully updated' });
   } catch (err) {

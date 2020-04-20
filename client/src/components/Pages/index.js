@@ -67,6 +67,7 @@ function Pages(props) {
           path={HOST_PROFILE_SOFT}
           Component={HostProfile}
           handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
           {...props}
         />
 

@@ -6,7 +6,7 @@ const update = couponID =>
   Booking.findOneAndUpdate({ status: 'pending' }, { coupon: couponID });
 
 const createAll = async ({ users, listings }) => {
-  const { internUser, hostUser } = users;
+  const { internUser, hostUser, hostUser2 } = users;
   const { LondonListing } = listings;
 
   await reset();
@@ -83,11 +83,23 @@ const createAll = async ({ users, listings }) => {
       payedAmount: 0,
       moneyGoTo: 'host',
     },
-    // awaitingAdmin
+    // awaitingAdmin and host does accept automatically
     {
       listing: LondonListing._id,
       intern: internUser,
       host: hostUser,
+      startDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
+      status: 'awaiting admin',
+      price: 12000,
+      payedAmount: 0,
+      moneyGoTo: 'host',
+    },
+    // awaiting admin and host doesn't accept automatically
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser2,
       startDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
       status: 'awaiting admin',
@@ -105,6 +117,7 @@ const createAll = async ({ users, listings }) => {
     cancelledBooking,
     rejectedBooking,
     awaitingAdminBooking,
+    awaitingAdminNotAutomaticBooking,
   ] = await Booking.create(bookings);
 
   return {
@@ -115,6 +128,7 @@ const createAll = async ({ users, listings }) => {
     cancelledBooking,
     rejectedBooking,
     awaitingAdminBooking,
+    awaitingAdminNotAutomaticBooking,
   };
 };
 
