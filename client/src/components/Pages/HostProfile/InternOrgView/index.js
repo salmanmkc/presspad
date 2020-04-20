@@ -10,14 +10,12 @@ import ProfileCard from './Card';
 import AccommodationCheckList from './AccommodationCheckList';
 import HostProfileCalendar from './HostProfileCalendar';
 
-// Layouts
-import SideMenuLayout from '../../../Layouts/SideMenuLayout';
-
 // Typography
 import * as T from '../../../Common/Typography';
 import { colors } from '../../../../theme';
 // Styles
 import {
+  ContentWrapper,
   SideWrapper,
   Card,
   PageDivider,
@@ -219,9 +217,9 @@ export default class InternView extends Component {
         text: industryExperienceAnswer,
       },
     };
-
+    console.log('current', currentUserId);
     return (
-      <SideMenuLayout navbarProps={{ isLoggedIn: currentUserId, role }} goBack>
+      <ContentWrapper>
         {/* Header */}
         <Header
           profileImage={profileImage}
@@ -396,7 +394,7 @@ export default class InternView extends Component {
             isMobile={isMobile}
           />
         )}
-      </SideMenuLayout>
+      </ContentWrapper>
     );
   }
 }
