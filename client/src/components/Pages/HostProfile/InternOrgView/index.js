@@ -14,8 +14,8 @@ import HostProfileCalendar from './HostProfileCalendar';
 import * as T from '../../../Common/Typography';
 import { colors } from '../../../../theme';
 // Styles
+import { ContentWrapper } from '../../../Layouts/SideMenuLayout/style';
 import {
-  ContentWrapper,
   SideWrapper,
   Card,
   PageDivider,
@@ -217,7 +217,7 @@ export default class InternView extends Component {
         text: industryExperienceAnswer,
       },
     };
-    console.log('current', currentUserId);
+
     return (
       <ContentWrapper>
         {/* Header */}
