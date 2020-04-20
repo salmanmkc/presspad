@@ -69,6 +69,8 @@ const adminReviewsBooking = async (req, res, next) => {
       await registerNotification(hostNotification);
       await registerNotification(internNotification);
 
+      // EMAIL TO GO HERE TO LET INTERN KNOW THEIR REQUEST HAS BEEN ACCEPTED
+
       return res.json({ success: 'Booking request successfully updated' });
     }
 
@@ -84,6 +86,8 @@ const adminReviewsBooking = async (req, res, next) => {
     };
 
     await registerNotification(notification);
+
+    // EMAIL TO GO HERE TO LET HOST KNOW THEY HAVE BOOKING REQUEST
 
     return res.json({ success: 'Booking request successfully updated' });
   } catch (err) {
