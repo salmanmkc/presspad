@@ -150,14 +150,19 @@ const createNew = async ({
 };
 
 const createAll = async ({ users }) => {
-  const { hostUser, internUser } = users;
+  const { hostUser, hostUser2, internUser } = users;
 
   await reset();
   const host = { ...hostProfileData, user: hostUser };
+  const host2 = { ...hostProfileData, user: hostUser2 };
   const intern = { ...internProfileData, user: internUser };
-  const [hostProfile, internProfile] = await Profile.create([host, intern]);
+  const [hostProfile, host2Profile, internProfile] = await Profile.create([
+    host,
+    host2,
+    intern,
+  ]);
 
-  return { hostProfile, internProfile };
+  return { hostProfile, host2Profile, internProfile };
 };
 
 module.exports = {

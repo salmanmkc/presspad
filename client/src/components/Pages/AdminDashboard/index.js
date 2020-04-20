@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Button, message, Modal } from 'antd';
+import { Button, message, Modal, Input as antInput } from 'antd';
 
 import Icon from '../../Common/Icon';
 
@@ -40,7 +40,7 @@ import {
 } from '../../../constants/apiRoutes';
 import { filterArray } from '../../../helpers';
 
-const { TextArea } = Input;
+const { TextArea } = antInput;
 
 export default class AdminDashboard extends Component {
   state = {
@@ -279,14 +279,14 @@ export default class AdminDashboard extends Component {
         message: rejectMessage,
         booking: bookingToUpdate,
       });
-      this.setState({ updatingBooking: false, modalVisible: false });
+      this.setState({ updatingBooking: false, modalToShow: '' });
       Modal.success({
         content: 'Booking request successfully updated',
       });
       this.selectSection('bookings');
     } catch (err) {
       message.error('Something went wrong');
-      this.setState({ updatingBooking: false, modalVisible: false });
+      this.setState({ updatingBooking: false, modalToShow: '' });
     }
   };
 
@@ -323,11 +323,7 @@ export default class AdminDashboard extends Component {
   };
 
   approveRequestConfirm = booking => {
-    const modalText = (
-      <>
-        <p>Are you sure you want to approve this request?</p>
-      </>
-    );
+    const modalText = <p>Are you sure you want to approve this request?</p>;
     this.setState({
       modalText,
       bookingToUpdate: booking,
@@ -381,7 +377,6 @@ export default class AdminDashboard extends Component {
       });
       this.selectSection('interns');
     } catch (err) {
-      console.error(err);
       message.error('Something went wrong');
     }
   };
@@ -575,7 +570,7 @@ export default class AdminDashboard extends Component {
           confirmLoading={updatingBooking}
           onCancel={this.handleCancel}
         >
-          <p>{modalText}</p>
+          {modalText}
         </Modal>
         <Modal
           title="Update DBS Details"
