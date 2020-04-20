@@ -1,8 +1,8 @@
 const request = require('supertest');
 
-const buildDB = require('./../../../database/data/test');
-const app = require('./../../../app');
-const createToken = require('./../../../helpers/createToken');
+const buildDB = require('../../../database/data/test');
+const app = require('../../../app');
+const createToken = require('../../../helpers/createToken');
 
 const {
   API_INTERN_DASHBOARD_URL,
@@ -59,7 +59,7 @@ describe('Testing for intern dashboard route', () => {
         expect(installments[0].dueDate).toBeDefined();
 
         expect(bookings).toBeDefined();
-        expect(bookings).toHaveLength(7);
+        expect(bookings).toHaveLength(8);
         expect(bookings[0].status).toBeDefined();
         expect(bookings[0].startDate).toBeDefined();
         expect(bookings[0].endDate).toBeDefined();
