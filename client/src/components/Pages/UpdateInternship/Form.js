@@ -87,7 +87,7 @@ const Form = ({
             mb="1"
             value={state.internshipEndDate && moment(state.internshipEndDate)}
             disabledDate={disabledEndDate}
-            onChange={e => onEndChange(e)}
+            onChange={onEndChange}
             dateRender={current =>
               dateRender({
                 current,
