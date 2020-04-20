@@ -8,6 +8,7 @@ import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import { DASHBOARD_URL } from '../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import Form from './Form';
+import ScrollToTop from '../../Common/ScrollToTop';
 
 const { validate, internshipSchema } = require('../../../validation');
 
@@ -129,22 +130,25 @@ const UpdateInternship = ({ id, windowWidth }) => {
   };
 
   return (
-    <Form
-      isMobile={windowWidth < TABLET_WIDTH}
-      bookingData={bookingData}
-      state={state}
-      errors={errors}
-      loading={loading}
-      userId={id}
-      onInputChange={onInputChange}
-      disabledStartDate={_disabledStartDate}
-      onStartChange={onStartChange}
-      disabledEndDate={_disabledEndDate}
-      onEndChange={onEndChange}
-      onUploadInternshipOffer={onUploadInternshipOffer}
-      fileErrorHandler={fileErrorHandler}
-      onSubmit={onSubmit}
-    />
+    <>
+      <ScrollToTop />
+      <Form
+        isMobile={windowWidth < TABLET_WIDTH}
+        bookingData={bookingData}
+        state={state}
+        errors={errors}
+        loading={loading}
+        userId={id}
+        onInputChange={onInputChange}
+        disabledStartDate={_disabledStartDate}
+        onStartChange={onStartChange}
+        disabledEndDate={_disabledEndDate}
+        onEndChange={onEndChange}
+        onUploadInternshipOffer={onUploadInternshipOffer}
+        fileErrorHandler={fileErrorHandler}
+        onSubmit={onSubmit}
+      />
+    </>
   );
 };
 
