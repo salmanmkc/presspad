@@ -65,6 +65,18 @@ const createAll = async ({ accounts, organisations }) => {
     respondedRequests: 3,
   };
 
+  // host who doesn't accept automatically
+  const host2 = {
+    email: 'host2@test.com',
+    name: 'Bob Berry',
+    password: '123456',
+    role: 'host',
+    account: hostAccount._id,
+    acceptAutomatically: false,
+    respondingTime: 432000000, // 5 days in ms
+    respondedRequests: 3,
+  };
+
   const intern = {
     email: 'intern@test.com',
     name: 'Mone Dupree',
@@ -78,13 +90,15 @@ const createAll = async ({ accounts, organisations }) => {
     adminUser,
     createdOrganisationUser,
     hostUser,
+    hostUser2,
     internUser,
-  ] = await User.create([admin, organisationUser, host, intern]);
+  ] = await User.create([admin, organisationUser, host, host2, intern]);
 
   return {
     adminUser,
     organisationUser: createdOrganisationUser,
     hostUser,
+    hostUser2,
     internUser,
   };
 };

@@ -1,5 +1,7 @@
 const boom = require('boom');
 
+const { getUserById } = require('../../database/queries/user');
+
 const {
   updateBookingByID,
   adminRejectBookingById,
@@ -9,6 +11,9 @@ const { registerNotification } = require('../../services/notifications');
 const adminReviewsBooking = async (req, res, next) => {
   const { booking, status, message } = req.body;
   const { _id: bookingID, host, intern } = booking;
+
+  const userDetails = await getUserById(host, true);
+  const { acceptAutomatically } = userDetails;
 
   try {
     // if rejected, create a notification for intern
@@ -38,12 +43,41 @@ const adminReviewsBooking = async (req, res, next) => {
       return res.json({ success: 'Booking request successfully updated' });
     }
 
+    if (acceptAutomatically) {
+      await updateBookingByID(bookingID, 'accepted');
+
+      // Notification to let host know they have a confirmed request
+      const hostNotification = {
+        user: host,
+        secondParty: req.user,
+        type: 'automaticStayRequest',
+        booking: bookingID,
+        private: true,
+        message: 'You have a new guest staying with you',
+      };
+
+      // Notification to let intern know their request is accepted
+      const internNotification = {
+        user: intern,
+        secondParty: req.user,
+        type: 'stayApproved',
+        booking: bookingID,
+        private: true,
+        message: `Your request to stay with ${userDetails.name} has been approved`,
+      };
+
+      await registerNotification(hostNotification);
+      await registerNotification(internNotification);
+
+      return res.json({ success: 'Booking request successfully updated' });
+    }
+
     await updateBookingByID(bookingID, status);
 
     // Notification to let host know they have a booking request
     const notification = {
       user: host,
-      secondParty: intern,
+      secondParty: req.user,
       type: 'stayRequest',
       private: false,
       booking: bookingID,
