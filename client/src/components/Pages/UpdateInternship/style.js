@@ -61,7 +61,6 @@ export const DatePickersRow = styled.div`
 `;
 
 export const UntilLabel = styled(T.PBold)`
-  align-self: center;
   margin: 0 auto;
 
   @media ${({ theme: { breakpoints } }) => breakpoints.mobileXL} {

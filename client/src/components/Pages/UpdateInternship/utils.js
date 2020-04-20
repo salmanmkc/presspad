@@ -25,10 +25,10 @@ export const updateInternship = async internshipData => {
         : 'Error updating your details!';
 
     Modal.error({
-      title,
+      title: <h2 style={{ fontWeight: 'bold' }}>{title}</h2>,
       // TODO: add better description
       content: <T.PS>{errorMessage}</T.PS>,
-      hideOkButton: true,
+      // hideOkButton: true,
     });
 
     return { updateInternError: errorMessage };
@@ -49,10 +49,10 @@ export const updateInternshipAndCreateBooking = async (
 
     if (bookingError) {
       Modal.error({
-        title: 'Something went wrong',
+        title: <h2 style={{ fontWeight: 'bold' }}>'Something went wrong</h2>,
         // TODO: add better description
         content: <T.PS>{bookingError}</T.PS>,
-        hideOkButton: true,
+        // hideOkButton: true,
       });
       return { error: bookingError };
     }

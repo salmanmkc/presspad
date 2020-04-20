@@ -19,6 +19,7 @@ export const DatePickerWrapper = styled(Wrapper)`
 export const SwitchWrapper = styled(Wrapper)`
   display: flex;
   align-items: center;
+  position: relative;
 
   button {
     margin-right: ${({ theme }) => theme.spacings[2]};
@@ -32,7 +33,5 @@ export const InputWrapper = styled.div`
 `;
 
 export const Error = styled(T.PXS)`
-  position: absolute;
-  bottom: -${({ theme }) => theme.spacings[4]};
   color: ${({ theme }) => theme.colors.pink};
 `;
