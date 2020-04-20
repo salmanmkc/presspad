@@ -75,9 +75,7 @@ export const detailsSchema = object({
     addressline1: string()
       .ensure()
       .required(),
-    addressline2: string()
-      .ensure()
-      .required(),
+    addressline2: string().ensure(),
     city: string()
       .ensure()
       .required(),

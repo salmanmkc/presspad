@@ -16,9 +16,7 @@ const schema = object({
     addressline1: string()
       .ensure()
       .required(errMsgs.REQUIRED('internshipOfficeAddress.addressline1')),
-    addressline2: string()
-      .ensure()
-      .required(errMsgs.REQUIRED('internshipOfficeAddress.addressline2')),
+    addressline2: string().ensure(),
     city: string()
       .ensure()
       .required(errMsgs.REQUIRED('internshipOfficeAddress.city')),

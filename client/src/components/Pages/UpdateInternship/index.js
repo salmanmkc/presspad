@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { disabledStartDate, disabledEndDate } from '../../../helpers';
@@ -76,11 +77,17 @@ const UpdateInternship = ({ id, windowWidth }) => {
     }));
 
   const onStartChange = value => {
-    setState(_state => ({ ..._state, internshipStartDate: value }));
+    setState(_state => ({
+      ..._state,
+      internshipStartDate: value._d && value._d,
+    }));
     setErrors(_errors => ({ ..._errors, internshipStartDate: '' }));
   };
   const onEndChange = value => {
-    setState(_state => ({ ..._state, internshipEndDate: value }));
+    setState(_state => ({
+      ..._state,
+      internshipEndDate: value._d && value._d,
+    }));
     setErrors(_errors => ({ ..._errors, internshipEndDate: '' }));
   };
   const _disabledStartDate = startDate => {
@@ -113,9 +120,10 @@ const UpdateInternship = ({ id, windowWidth }) => {
     if (!_errors) {
       setLoading(true);
       const { error } = await updateInternshipAndCreateBooking({
-        internshipData: state,
-        bookingData,
+        ...state,
+        ...bookingData,
       });
+
       if (!error) {
         history.push(DASHBOARD_URL);
       }

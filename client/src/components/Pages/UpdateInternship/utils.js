@@ -9,7 +9,9 @@ import * as T from '../../Common/Typography';
 
 export const updateInternship = async internshipData => {
   try {
-    await axios.patch(API_INTERNSHIP_URL, internshipData);
+    await axios.put(API_INTERNSHIP_URL, internshipData);
+
+    return { error: null };
   } catch (error) {
     const status = (error.response && error.response.status) || 500;
 
@@ -18,31 +20,42 @@ export const updateInternship = async internshipData => {
       'Something went wrong';
 
     const title =
-      status === 422 ? 'Sorry! your data is invalid.' : errorMessage;
+      status === 422
+        ? 'Sorry! your data is invalid.'
+        : 'Error updating your details!';
 
     Modal.error({
       title,
       // TODO: add better description
-      content: <T.PS>{error}</T.PS>,
+      content: <T.PS>{errorMessage}</T.PS>,
       hideOkButton: true,
     });
+
+    return { updateInternError: errorMessage };
   }
 };
 
-export const updateInternshipAndCreateBooking = async ({
+export const updateInternshipAndCreateBooking = async (
   bookingData,
   internshipData,
-}) => {
-  await updateInternship(internshipData);
-  const { error } = await sendBookingRequest(bookingData);
+) => {
+  const { updateInternError } = await updateInternship({
+    ...internshipData,
+    ...bookingData,
+  });
 
-  if (error) {
-    Modal.error({
-      title: 'Something went wrong',
-      // TODO: add better description
-      content: <T.PS>{error}</T.PS>,
-      hideOkButton: true,
-    });
+  if (!updateInternError) {
+    const { error: bookingError } = await sendBookingRequest(bookingData);
+
+    if (bookingError) {
+      Modal.error({
+        title: 'Something went wrong',
+        // TODO: add better description
+        content: <T.PS>{bookingError}</T.PS>,
+        hideOkButton: true,
+      });
+      return { error: bookingError };
+    }
   }
-  return { error };
+  return { error: updateInternError };
 };

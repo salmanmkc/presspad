@@ -193,7 +193,7 @@ export default {
     parent: 'internshipOfficeAddress',
     label: `Address line 2`,
     type: 'text',
-    requiredForIntern: true,
+    // requiredForIntern: true,
   },
   internshipOfficeAddressCity: {
     name: 'city',
