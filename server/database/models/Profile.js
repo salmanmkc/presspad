@@ -300,6 +300,14 @@ const profileSchema = new Schema(
         required: false,
       },
     },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    isNotifiedAfter3Weeks: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

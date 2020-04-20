@@ -10,7 +10,7 @@ const { createNewAccount } = require('../account');
 module.exports.findByEmail = email =>
   User.findOne({ email: email.toLowerCase() });
 
-module.exports.getUserById = (id, withoutPassword) =>
+module.exports.getUserById = (id, withoutPassword = true) =>
   withoutPassword
     ? User.findById(id, { password: 0 }).exec()
     : User.findById(id).exec();

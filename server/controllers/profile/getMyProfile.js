@@ -1,6 +1,10 @@
 const boom = require('boom');
-const { getProfile } = require('../../database/queries/profile/getProfile');
-const { getListing } = require('../../database/queries/listing/getListing');
+const {
+  getProfileByUserId,
+} = require('../../database/queries/profile/getProfile');
+const {
+  getListingByUserId,
+} = require('../../database/queries/listing/getListing');
 
 const generateUrl = require('./../../helpers/generateFileURL');
 
@@ -13,7 +17,7 @@ const generateUrl = require('./../../helpers/generateFileURL');
 
 const _getProfileBasedRole = async (_id, role, res) => {
   // use lean() or toJSON() to convert mongoose document to json
-  const profile = await getProfile(_id).lean();
+  const profile = await getProfileByUserId(_id).lean();
   // you should check the object on the frontEnd
   if (!profile) return res.json({});
 
@@ -26,7 +30,7 @@ const _getProfileBasedRole = async (_id, role, res) => {
   ]);
 
   if (role === 'host' || role === 'superhost') {
-    const listing = await getListing(_id).lean();
+    const listing = await getListingByUserId(_id).lean();
 
     if (listing && listing.photos) {
       await Promise.all(listing.photos.map(generateUrl));

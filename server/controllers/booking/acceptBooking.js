@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const boom = require('boom');
+const pubSub = require('./../../pubSub');
 
 const {
   hostAcceptBookingById,
@@ -82,6 +83,8 @@ const acceptBooking = async (req, res, next) => {
       type: 'stayApproved',
       booking: bookingId,
     };
+
+    pubSub.emit(pubSub.events.booking.ACCEPTED_BY_HOST, { bookingId });
 
     // const allQuestions = await findAllQuestions();
 

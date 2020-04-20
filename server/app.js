@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const Sentry = require('@sentry/node');
+const Sentry = require('./sentry');
 const Sqreen = require('./sqreen');
 
 const router = require('./router');
@@ -14,7 +14,6 @@ const app = express();
 require('dotenv').config();
 
 if (process.env.NODE_ENV === 'production') {
-  Sentry.init({ dsn: process.env.SENTRY_DSN });
   // The request handler must be the first middleware on the app
   app.use(Sentry.Handlers.requestHandler());
 }

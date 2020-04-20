@@ -1,12 +1,13 @@
 // expect boolean and profileId
 
 const boom = require('boom');
+const pubSub = require('./../../pubSub');
 
 // QUERIES
 const {
   approveRejectProfile,
 } = require('./../../database/queries/profile/verifyProfile');
-const profileApprovedToHost = require('./../../helpers/mailHelper/profileApprovedToHost');
+
 const {
   getUserDataByProfileId,
 } = require('./../../database/queries/profile/getProfile');
@@ -17,14 +18,11 @@ module.exports = async (req, res, next) => {
     return next(boom.forbidden('Only admin can access this route'));
   try {
     await approveRejectProfile(profileId, verify);
-    // if admin approved host's profile
 
-    if (verify && process.env.NODE_ENV === 'production') {
-      // get host details
-      const [host] = await getUserDataByProfileId(profileId);
-      // send email to host
-      await profileApprovedToHost(host);
-    }
+    // get host details
+    const [host] = await getUserDataByProfileId(profileId);
+    pubSub.emit(pubSub.events.profile.APPROVED, { user: host });
+
     return res.json('success');
   } catch (error) {
     return next(boom.badImplementation(error));

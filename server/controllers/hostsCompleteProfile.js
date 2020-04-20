@@ -1,5 +1,6 @@
 const boom = require('boom');
 const mongoose = require('mongoose');
+const pubSub = require('./../pubSub');
 
 const {
   updateUserProfile,
@@ -9,7 +10,9 @@ const {
 const { createNewListing } = require('./../database/queries/listings');
 
 const { updateListing } = require('../database/queries/listing');
-const { getListing } = require('../database/queries/listing/getListing');
+const {
+  getListingByUserId,
+} = require('../database/queries/listing/getListing');
 
 module.exports = async (req, res, next) => {
   const { user } = req;
@@ -104,7 +107,7 @@ module.exports = async (req, res, next) => {
 
   try {
     const foundProfile = await findProfile(user._id);
-    const foundHostListing = await getListing(user._id);
+    const foundHostListing = await getListingByUserId(user._id);
 
     // update the host profile
     if (foundProfile) {
@@ -112,7 +115,9 @@ module.exports = async (req, res, next) => {
       session.startTransaction();
 
       try {
-        await updateUserProfile(user._id, profileData, session);
+        const profile = await updateUserProfile(user._id, profileData, session);
+        pubSub.emit(pubSub.events.profile.UPDATED, profile);
+
         if (foundHostListing) {
           await updateListing(user._id, listingData, session);
         } else {
@@ -131,7 +136,8 @@ module.exports = async (req, res, next) => {
       session.startTransaction();
 
       try {
-        await createNewProfile(profileData, session);
+        const profile = await createNewProfile(profileData, session);
+        pubSub.emit(pubSub.events.profile.CREATED, profile);
         await createNewListing(listingData, session);
         await session.commitTransaction();
         await session.endSession();

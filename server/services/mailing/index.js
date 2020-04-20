@@ -3,6 +3,12 @@ const sendOutstandingReminders = require('./sendOutstandingReminders');
 const markScheduledEmailsAsSent = require('./markScheduledEmailsAsSent');
 const schedulePaymentReminders = require('./schedulePaymentReminders');
 const sendOutstandingPaymentReminders = require('./sendOutstandingPaymentReminders');
+const sendWelcomeEmail = require('./sendWelcomeEmail');
+const sendRejectionEmails = require('./sendRejectionEmails');
+const sendNewBookingEmails = require('./sendNewBookingEmails');
+const sendAcceptedBookingEmails = require('./sendAcceptedBookingEmails');
+const profileApproved = require('./profileApproved');
+const profileCompleted = require('./profileCompleted');
 
 module.exports = {
   scheduleReminderEmails,
@@ -10,4 +16,10 @@ module.exports = {
   markScheduledEmailsAsSent,
   schedulePaymentReminders,
   sendOutstandingPaymentReminders,
+  sendWelcomeEmail,
+  sendRejectionEmails,
+  sendNewBookingEmails,
+  sendAcceptedBookingEmails,
+  profileApproved,
+  profileCompleted,
 };

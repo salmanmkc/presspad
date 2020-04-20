@@ -1,4 +1,6 @@
 const boom = require('boom');
+const pubSub = require('./../../pubSub');
+
 const {
   updateUserProfile,
   findProfile,
@@ -30,9 +32,11 @@ module.exports = async (req, res, next) => {
 
     // update the intern profile
     if (foundProfile) {
-      await updateUserProfile(user._id, profileData);
+      const profile = await updateUserProfile(user._id, profileData);
+      pubSub.emit(pubSub.events.profile.UPDATED, profile);
     } else {
-      await createNewProfile(profileData);
+      const profile = await createNewProfile(profileData);
+      pubSub.emit(pubSub.events.profile.CREATED, profile);
     }
 
     return res.json({ success: true });
