@@ -1,13 +1,13 @@
 const boom = require('boom');
 const mongoose = require('mongoose');
-const pubSub = require('./../pubSub');
+const pubSub = require('../pubSub');
 
 const {
   updateUserProfile,
   findProfile,
   createNewProfile,
-} = require('./../database/queries/profiles');
-const { createNewListing } = require('./../database/queries/listings');
+} = require('../database/queries/profiles');
+const { createNewListing } = require('../database/queries/listings');
 
 const { updateListing } = require('../database/queries/listing');
 const {
@@ -17,7 +17,7 @@ const {
 module.exports = async (req, res, next) => {
   const { user } = req;
 
-  if (user.role !== 'host' || user.role !== 'admin') {
+  if (user.role !== 'host' && user.role !== 'admin') {
     return next(
       boom.forbidden('you do not have permission to update this profile'),
     );
