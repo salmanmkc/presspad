@@ -29,3 +29,28 @@ export const ContentWrapper = styled.div`
     }
   }
 `;
+
+export const CancelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const ButtonContainer = styled.div`
+  display: flex;
+  align-self: center;
+  justify-content: space-between;
+  margin-top: 3rem;
+  width: 70%;
+`;
+
+export const ErrorWrapper = styled.div`
+  border: ${({ error }) => (error ? '1px solid red' : 'initial')};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
+  height: ${({ fullHeight }) => (fullHeight ? 'auto' : 'calc(100% - 27px)')};
+  border-radius: 4px;
+  position: relative;
+
+  .ant-select-disabled .ant-select-selection {
+    background: transparent;
+    cursor: auto;
+  }
+`;
