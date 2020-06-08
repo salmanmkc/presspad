@@ -21,6 +21,7 @@ import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
 import DBSCheckPage from './DBSCheck';
+import Cancellation from './Cancellation';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -42,6 +43,7 @@ import {
   DBS_CHECK_PAGE,
   HOST_PROFILE_SOFT,
   BOOKINGS_INTERNSHIP_URL,
+  CANCELLATION_CONFIRM,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -86,6 +88,16 @@ function Pages(props) {
           layout="sideMenu"
           path={BOOKING_VIEW_URL}
           Component={BookingView}
+          {...props}
+        />
+        {/* CANCELLATION COMPONENTS */}
+        <Route
+          isPrivate
+          layout="sideMenu"
+          exact
+          path={CANCELLATION_CONFIRM}
+          Component={Cancellation}
+          cancellationType="areYouSure"
           {...props}
         />
         <Route

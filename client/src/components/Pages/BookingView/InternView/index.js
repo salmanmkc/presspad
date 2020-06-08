@@ -32,7 +32,11 @@ import {
   API_COUPON_URL,
   API_HOST_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
-import { Error404, Error500 } from '../../../../constants/navRoutes';
+import {
+  Error404,
+  Error500,
+  CANCELLATION_CONFIRM,
+} from '../../../../constants/navRoutes';
 import { calculateHostRespondingTime } from '../../../../helpers';
 
 export default class BookingView extends Component {
@@ -386,13 +390,28 @@ export default class BookingView extends Component {
         {status !== 'canceled' && status !== 'completed' && (
           // toDo handle cancel booking button
           <CancelBookingButton
-            onClick={() => console.log('cancle booking query to go here')}
+            // this loads cancellation AreYouSure page and sends user and booking infos
+            onClick={() => {
+              const { name } = this.props;
+              const cancellingUserInfo = { id, name, role };
+              const url = CANCELLATION_CONFIRM.replace(':id', bookingInfo._id);
+
+              return this.props.history.push({
+                pathname: url,
+                state: { bookingInfo, cancellingUserInfo },
+              });
+              // console.log(
+              //   'cancel booking query to go here',
+              //   bookingInfo,
+              //   cancellingUserInfo,
+              // );
+            }}
           >
             cancel booking request
           </CancelBookingButton>
         )}
         <BookingDates
-          price={price / 100}
+          price={price}
           startDate={startDate}
           endDate={endDate}
           intern
