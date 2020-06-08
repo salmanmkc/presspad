@@ -1,9 +1,5 @@
-// add cancel flows here
 const boom = require('boom');
 
-// const {
-//   cancelBookingBeforePayment,
-// } = require('../../database/queries/bookings');
 const {
   getBooking,
   cancelBookingBeforePaymentQuery,
@@ -39,8 +35,10 @@ const cancelBooking = async (req, res, next) => {
         cancellingUserId,
       });
     }
-    console.log('cancelledId', cancelledBooking);
-    return res.json({});
+
+    if (cancelledBooking) {
+      return res.json(cancelledBooking);
+    }
 
     // run query to update booking status
   } catch (err) {
