@@ -26,8 +26,6 @@ const cancelBooking = async (req, res, next) => {
     let cancelledBooking;
     // check if booking is valid and if cancellation before payment
     const booking = await getBooking(bookingId);
-    console.log('bookingId', bookingId);
-    console.log('booking[0]id', booking[0]._id);
 
     const canCancelDirectly =
       ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(
@@ -41,7 +39,7 @@ const cancelBooking = async (req, res, next) => {
         cancellingUserId,
       });
     }
-    console.log('cancelledId', cancelledBooking._id);
+    console.log('cancelledId', cancelledBooking);
     return res.json({});
 
     // run query to update booking status

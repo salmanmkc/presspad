@@ -1,7 +1,9 @@
 const moment = require('moment');
+const mongoose = require('mongoose');
 const Booking = require('../../models/Booking');
 const Listing = require('../../models/Listing');
 
+const { ObjectId } = mongoose.Types;
 const createDatesArray = require('../../../helpers/createDatesArray');
 const getInternBookingsWithReviews = require('./getInternBookingsWithReviews');
 const getNextPendingBooking = require('./getNextPendingBooking');
@@ -207,16 +209,20 @@ module.exports.cancelBookingBeforePaymentQuery = ({
   bookingId,
   message,
   cancellingUserId,
-}) => {
-  console.log('queryId', bookingId);
-  return Booking.findOneAndUpdate(bookingId, {
-    status: 'cancelled',
-    cancellationDetails: {
-      cancelledBy: cancellingUserId,
-      cancellationUserMessage: message,
+}) =>
+  Booking.findOneAndUpdate(
+    { _id: bookingId },
+    {
+      status: 'cancelled',
+      cancellationDetails: {
+        cancelledBy: cancellingUserId,
+        cancellationUserMessage: message,
+      },
     },
-  });
-};
+    {
+      new: true,
+    },
+  );
 
 module.exports.getBooking = getBooking;
 module.exports.getInternBookingsWithReviews = getInternBookingsWithReviews;
