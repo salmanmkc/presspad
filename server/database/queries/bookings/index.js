@@ -1,6 +1,6 @@
 const moment = require('moment');
-const Booking = require('.//../../models/Booking');
-const Listing = require('./../../models/Listing');
+const Booking = require('../../models/Booking');
+const Listing = require('../../models/Listing');
 
 const createDatesArray = require('../../../helpers/createDatesArray');
 const getInternBookingsWithReviews = require('./getInternBookingsWithReviews');
@@ -201,6 +201,23 @@ module.exports.updateBookingByID = (bookingID, newStatus) =>
     {
       new: true,
     },
+  );
+
+module.exports.cancelBookingBeforePayment = (
+  bookingId,
+  message,
+  cancellingUserId,
+) =>
+  Booking.findOneAndUpdate(
+    bookingId,
+    {
+      status: 'canceled',
+      cancellationDetails: {
+        cancelledBy: cancellingUserId,
+        cancellationMessage: message,
+      },
+    },
+    { new: true },
   );
 
 module.exports.getBooking = getBooking;

@@ -2,11 +2,13 @@
 // clicking yes button updates booking status and loads cofirmation (if before payment) or cancellation request (if after payment) pages
 import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
+import axios from 'axios';
 import * as S from './style';
 import * as T from '../../Common/Typography';
 import BookingDates from '../../Common/BookingDetailsBox';
 import ButtonNew from '../../Common/ButtonNew';
 import { BOOKING_VIEW_URL } from '../../../constants/navRoutes';
+import { API_CANCEL_BOOKING_URL } from '../../../constants/apiRoutes';
 
 const { TextArea } = Input;
 
@@ -16,7 +18,7 @@ const AreYouSure = ({ bookingDetails, ...props }) => {
   const { bookingInfo, cancellingUserInfo } = bookingDetails;
 
   const { price, startDate, endDate, payedAmount, status, _id } = bookingInfo;
-  const { id, name, role } = cancellingUserInfo;
+  const { id: cancellingUserId, name, role } = cancellingUserInfo;
 
   useEffect(() => {
     if (message.length < 4) {
@@ -51,10 +53,15 @@ const AreYouSure = ({ bookingDetails, ...props }) => {
   );
 
   const handleCancellation = () => {
-    console.log('reached');
-    // needs to render booking confirmation page with different props
+    // update booking status and redirect to booking confirmation page
+    // case: booking before payment
     if (canCancelDirectly) {
-      // update booking status and redirect to booking confirmation page
+      const { data } = axios.patch(API_CANCEL_BOOKING_URL.replace(':id', _id), {
+        message,
+        cancellingUserId,
+      });
+
+      console.log('data', data);
     }
   };
   console.log('bookinfo', bookingInfo);
