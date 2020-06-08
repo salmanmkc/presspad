@@ -203,22 +203,20 @@ module.exports.updateBookingByID = (bookingID, newStatus) =>
     },
   );
 
-module.exports.cancelBookingBeforePayment = (
+module.exports.cancelBookingBeforePaymentQuery = ({
   bookingId,
   message,
   cancellingUserId,
-) =>
-  Booking.findOneAndUpdate(
-    bookingId,
-    {
-      status: 'canceled',
-      cancellationDetails: {
-        cancelledBy: cancellingUserId,
-        cancellationMessage: message,
-      },
+}) => {
+  console.log('queryId', bookingId);
+  return Booking.findOneAndUpdate(bookingId, {
+    status: 'cancelled',
+    cancellationDetails: {
+      cancelledBy: cancellingUserId,
+      cancellationUserMessage: message,
     },
-    { new: true },
-  );
+  });
+};
 
 module.exports.getBooking = getBooking;
 module.exports.getInternBookingsWithReviews = getInternBookingsWithReviews;

@@ -38,7 +38,7 @@ const bookingSchema = new Schema(
         'pending' /** ="awaiting host" */,
         'accepted',
         'confirmed',
-        'canceled',
+        'cancelled',
         'completed',
         'rejected by admin',
         'rejected',
@@ -54,11 +54,17 @@ const bookingSchema = new Schema(
       type: Number,
       default: 0,
     },
-    // user's ID who canceled the booking
-    canceledBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'users',
+    cancellationDetails: {
+      // user's ID who canceled the booking
+      cancelledBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+      },
+      cancellationUserMessage: {
+        type: String,
+      },
     },
+
     // if the booking has been rejected by host/admin
     rejectReason: {
       type: String,

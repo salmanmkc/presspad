@@ -11,10 +11,9 @@ const {
 
 const cancelBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
-  const { role, _id: userId } = req.user;
+  const { role } = req.user;
   const { message, cancellingUserId } = req.body;
   try {
-    console.log('reached controller', bookingId, role, userId, message);
     // check for role
     if (!['host', 'superhost', 'intern', 'admin'].includes(role)) {
       return next(boom.forbidden());
@@ -27,11 +26,13 @@ const cancelBooking = async (req, res, next) => {
     let cancelledBooking;
     // check if booking is valid and if cancellation before payment
     const booking = await getBooking(bookingId);
+    console.log('bookingId', bookingId);
+    console.log('booking[0]id', booking[0]._id);
 
     const canCancelDirectly =
       ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(
-        booking.status,
-      ) && booking.payedAmount === 0;
+        booking[0].status,
+      ) && booking[0].payedAmount === 0;
 
     if (canCancelDirectly) {
       cancelledBooking = await cancelBookingBeforePaymentQuery({
@@ -40,7 +41,7 @@ const cancelBooking = async (req, res, next) => {
         cancellingUserId,
       });
     }
-    console.log('cancelled', cancelledBooking);
+    console.log('cancelledId', cancelledBooking._id);
     return res.json({});
 
     // run query to update booking status
