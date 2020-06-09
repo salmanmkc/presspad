@@ -12,6 +12,7 @@ const cancelBooking = async (req, res, next) => {
 
   try {
     // check if all required parameters are present to update booking details
+
     if (!bookingId || cancellingUserMessage.length < 4 || !cancellingUserId) {
       return next(boom.badData());
     }

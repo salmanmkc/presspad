@@ -29,14 +29,12 @@ const CancellationConfirm = ({ ...props }) => {
     endDate,
     payedAmount,
     status,
-    _id,
+    _id: bookingId,
     intern,
     host,
   } = bookingInfo;
-  const { id: cancellingUserId, name, role } = cancellingUserInfo;
 
-  console.log(bookingInfo);
-  console.log(cancellingUserInfo);
+  const { id: cancellingUserId, role } = cancellingUserInfo;
 
   const decideName = () => (role === 'host' ? intern.name : host.namer);
   const nameCancelledUser = decideName();
@@ -79,14 +77,14 @@ const CancellationConfirm = ({ ...props }) => {
     try {
       if (canCancelDirectly) {
         const { data } = await axios.patch(
-          API_CANCEL_BOOKING_URL.replace(':id', _id),
+          API_CANCEL_BOOKING_URL.replace(':id', bookingId),
           {
             cancellingUserMessage: message,
             cancellingUserId,
           },
         );
         if (data) {
-          props.history.push(BOOKING_VIEW_URL.replace(':id', _id));
+          props.history.push(BOOKING_VIEW_URL.replace(':id', bookingId));
         }
       }
     } catch (err) {
@@ -127,7 +125,7 @@ const CancellationConfirm = ({ ...props }) => {
               outline
               type="tertiary"
               onClick={() =>
-                props.history.push(BOOKING_VIEW_URL.replace(':id', _id))
+                props.history.push(BOOKING_VIEW_URL.replace(':id', bookingId))
               }
             >
               go back

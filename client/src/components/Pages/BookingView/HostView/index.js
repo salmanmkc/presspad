@@ -4,6 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { message } from 'antd';
 
+import { H4C } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 
 import BookingDates from '../../../Common/BookingDetailsBox';
@@ -17,6 +18,7 @@ import {
   RejectedContent,
   ConfirmedContent,
   CompletedContent,
+  CancelledContent,
 } from './statusContents';
 import WarningModal from './WarningModal';
 import { Wrapper, ContentWrapper, TipsWrapper } from './HostView.style';
@@ -178,7 +180,8 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
     // toDo "When we get more about canceled bookings"
     // maybe there should be a different view for canceled bookings?
     // or the host shouldn't see them?
-    canceled: () => <RejectedContent />,
+    cancelled: () => <CancelledContent internName={intern.name} />,
+
     completed: () => (
       <CompletedContent
         internId={internId}
@@ -204,8 +207,9 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         acceptError={error}
       />
       <ContentWrapper>
+        {status === 'cancelled' && <H4C mb="7">booking cancelled</H4C>}
         {statusContents[status]()}
-        {status !== 'completed' && (
+        {!['completed', 'cancelled'].includes(status) && (
           <>
             <HostInternInfo
               info={internInfo}
@@ -247,7 +251,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
           // this loads confirm cancellatiom page and sends user and booking infos
           onClick={() => {
             const { name, role } = props;
-            const cancellingUserInfo = { userId, name, role };
+            const cancellingUserInfo = { id: userId, name, role };
             const url = CANCELLATION_CONFIRM.replace(':id', bookingId);
 
             return history.push({
@@ -261,7 +265,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
       )}
 
       <BookingDates
-        price={price / 100}
+        price={price}
         startDate={startDate}
         endDate={endDate}
         intern

@@ -1,7 +1,8 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Spin } from 'antd';
 
-import { H4C, H6C, H5C, P } from '../../../Common/Typography';
+import { H4C, H6C, H5C, P, Link } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 import { getStringTime } from '../../../../helpers';
 
@@ -14,7 +15,11 @@ import {
   FireWorksImg,
 } from './HostView.style';
 
-import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import {
+  INTERN_PROFILE,
+  DASHBOARD_URL,
+  MYPROFILE_URL,
+} from '../../../../constants/navRoutes';
 import fireworks from '../../../../assets/fireworks.png';
 
 const PendingContent = ({
@@ -86,6 +91,30 @@ const RejectedContent = () => (
   </>
 );
 
+const CancelledContent = ({ internName }) => {
+  const history = useHistory();
+  return (
+    <>
+      <P mt="5" mb="1">
+        {internName}’s stay with you has been successfully cancelled.
+        <br /> <br />
+        If you had to cancel due to no longer being available on the dates
+        listed in your profile, please make sure you{' '}
+        <Link to={MYPROFILE_URL}> update your listing now</Link>.
+      </P>
+
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CompletedContent = ({
   internId,
   internName,
@@ -128,4 +157,5 @@ export {
   RejectedContent,
   ConfirmedContent,
   CompletedContent,
+  CancelledContent,
 };
