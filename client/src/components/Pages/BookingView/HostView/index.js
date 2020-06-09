@@ -177,9 +177,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
     accepted: () => <AcceptedContent internName={intern.name} />,
     confirmed: () => <ConfirmedContent />,
     rejected: () => <RejectedContent />,
-    // toDo "When we get more about canceled bookings"
-    // maybe there should be a different view for canceled bookings?
-    // or the host shouldn't see them?
+
     cancelled: () => (
       <CancelledContent
         cancellingUserMessage={

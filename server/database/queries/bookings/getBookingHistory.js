@@ -8,7 +8,7 @@ module.exports = () =>
       $match: {
         $or: [
           {
-            status: 'canceled',
+            status: 'cancelled',
           },
           {
             status: 'completed',

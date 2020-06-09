@@ -3,8 +3,8 @@ const moment = require('moment');
 
 const app = require('../../../app');
 const buildDB = require('../../../database/data/test/index');
-const { Booking, User } = require('./../../../database/models');
-const Notification = require('./../../../database/models/Notification');
+const { Booking, User } = require('../../../database/models');
+const Notification = require('../../../database/models/Notification');
 
 const {
   API_REJECT_BOOKING_URL,

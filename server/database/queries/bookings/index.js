@@ -1,5 +1,5 @@
 const moment = require('moment');
-const mongoose = require('mongoose');
+
 const Booking = require('../../models/Booking');
 const Listing = require('../../models/Listing');
 
@@ -44,7 +44,7 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
     // update date
     {
       status: 'rejected',
-      // canceledBy: hostId,
+      // cancelledBy: hostId,
       confirmOrRejectDate: moment.utc(),
       rejectReason,
     },
@@ -58,9 +58,30 @@ module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
   );
 
 module.exports.getNextPendingBooking = getNextPendingBooking;
-// get all bookings of user
+// get all active bookings of user
+
 module.exports.getUserBookings = async intern => {
-  const bookings = await Booking.find({ intern });
+  const bookings = await Booking.find({
+    intern,
+    $or: [
+      {
+        status: 'awaiting admin',
+      },
+      {
+        status: 'pending',
+      },
+      {
+        status: 'accepted',
+      },
+      {
+        status: 'confirmed',
+      },
+      {
+        status: 'live',
+      },
+    ],
+  });
+
   const userBookingDates = bookings.reduce((acc, cur) => {
     const dates = createDatesArray(cur.startDate, cur.endDate);
     acc.push(dates);

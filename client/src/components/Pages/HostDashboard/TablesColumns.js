@@ -11,7 +11,7 @@ const tagColors = {
   pending: colors.green,
   transfered: '#faad14',
   rejected: 'yellow',
-  canceled: '#606060',
+  cancelled: '#606060',
 };
 
 export const withdrawRequestsColumns = windowWidth => {

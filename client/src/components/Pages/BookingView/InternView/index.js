@@ -280,9 +280,6 @@ export default class BookingView extends Component {
           <RejectedContent rejectReason={rejectReason} />
         ),
       },
-      // toDo "When we get more about canceled bookings"
-      // maybe there should be a different view for canceled bookings?
-      // or the intern shouldn't see them?
       cancelled: {
         status: 'cancelled',
         statusColor: 'pink',
@@ -389,17 +386,21 @@ export default class BookingView extends Component {
         </Elements>
 
         <ContentWrapper>
-          <H4C mb="5">
+          <H4C mb="7">
             {bookingStatus.status === 'cancelled'
               ? 'booking cancelled'
               : 'booking request'}
           </H4C>
-          <H6C mb="2" color="lightGray">
-            status
-          </H6C>
-          <H5C color={bookingStatus.statusColor || 'blue'}>
-            {bookingStatus.status}
-          </H5C>
+          {bookingStatus.status !== 'cancelled' && (
+            <>
+              <H6C mb="2" color="lightGray">
+                status
+              </H6C>
+              <H5C color={bookingStatus.statusColor || 'blue'}>
+                {bookingStatus.status}
+              </H5C>
+            </>
+          )}
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
         {status !== 'cancelled' && status !== 'completed' && (

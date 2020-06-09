@@ -78,8 +78,8 @@ export default class extends React.Component {
             content: `You successfully rejected ${
               bookingInfo.intern.name.split(' ')[0]
             }'s request`,
-            onOk: () => handleBooking('canceled'),
-            onCancel: () => handleBooking('canceled'),
+            onOk: () => handleBooking('cancelled'),
+            onCancel: () => handleBooking('cancelled'),
           });
         } catch (err) {
           this.setState({ apiLoading: false });

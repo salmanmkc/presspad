@@ -15,7 +15,7 @@ const emailBodyToInternAndHost = ({
   const html = `
   <div style="font-size: 16px; font-weight: 500;">
     <p>
-      Hello, ${capitalizeName(name)}! 
+      Hello, ${capitalizeName(name)}!
       <br>
       This is a reminder that your <a href="${bookingURL}">booking</a> is scheduled to start in one week from now, on <span style="font-weight=650;">${startDateString}</span>.
       See below the booking checklist.
@@ -26,7 +26,7 @@ const emailBodyToInternAndHost = ({
 
 
     <p>
-      Make sure you've done them 7 days before your booking due date, otherwise the booking maybe got canceled. 
+      Make sure you've done them 7 days before your booking due date, otherwise the booking maybe got cancelled.
     </p>
 
     <p>

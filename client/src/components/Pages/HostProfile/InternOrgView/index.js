@@ -134,6 +134,8 @@ export default class InternView extends Component {
       expandDateSection,
       bookingSearchDates,
     } = this.state;
+    console.log('available Dates', availableDates);
+    console.log('intern bookings', internBookings);
 
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;

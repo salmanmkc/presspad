@@ -15,8 +15,8 @@ const confirmOrCancelWithdrawRequest = async (req, res, next) => {
   // Autherizations
   if (role !== 'admin')
     return next(boom.forbidden('only admin allow to confirm/cancel withdraw'));
-  // validate the types [transfered, canceled]
-  if (type !== 'transfered' && type !== 'canceled')
+  // validate the types [transfered, cancelled]
+  if (type !== 'transfered' && type !== 'cancelled')
     return next(boom.badData('bad type value'));
 
   let session;

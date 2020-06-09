@@ -18,7 +18,7 @@ const CheckBoxJsx = ({ paymentStatus }) => {
           color={colors.blue}
         />
       );
-    case 'canceled':
+    case 'cancelled':
       return (
         <Icon
           icon="crossCircle"
@@ -144,7 +144,7 @@ const columns = (highlightVal, handleClick) => [
           </Popconfirm>
           <Popconfirm
             title={`Cancel transfer request to ${record.host}`}
-            onConfirm={() => handleClick(id, 'canceled')}
+            onConfirm={() => handleClick(id, 'cancelled')}
           >
             <Tooltip placement="top" title="Cancel">
               <Button type="danger" ghost>
