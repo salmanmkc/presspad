@@ -9,7 +9,7 @@ import { SectionWrapperContent } from '../../Common/general';
 
 function BookingsSection(props) {
   const { data, windowWidth, history } = props;
-  console.log('data', data);
+
   return (
     <section>
       <SectionWrapperContent id="viewBooking" style={{ minHeight: 200 }}>

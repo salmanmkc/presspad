@@ -109,26 +109,51 @@ const RejectedContent = ({ rejectReason }) => {
   );
 };
 
-const CancelledContent = ({ hostName }) => {
+const CancelledContent = ({
+  hostName,
+  cancelledByIntern,
+  cancellingUserMessage,
+}) => {
   const history = useHistory();
+
   return (
     <>
-      <P mt="5" mb="1">
-        Your stay with {hostName} has been successfully cancelled. To confirm,
-        you will not be charged anything for this cancellation. <br /> <br /> If
-        you had to cancel due to any changes in your internship, please make
-        sure you
-        <Link to={MYPROFILE_URL}> update your profile now</Link>.
-      </P>
-
-      <ButtonNew
-        small
-        type="primary"
-        mt="4"
-        onClick={() => history.push(DASHBOARD_URL)}
-      >
-        go to dashboard
-      </ButtonNew>
+      {cancelledByIntern ? (
+        <>
+          <P mt="5" mb="1">
+            Your stay with {hostName} has been successfully cancelled. To
+            confirm, you will not be charged anything for this cancellation.
+            <br /> <br /> If you had to cancel due to any changes in your
+            internship, please make sure you
+            <Link to={MYPROFILE_URL}> update your profile now</Link>.
+          </P>
+          <ButtonNew
+            small
+            type="primary"
+            mt="4"
+            onClick={() => history.push(DASHBOARD_URL)}
+          >
+            go to dashboard
+          </ButtonNew>
+        </>
+      ) : (
+        <>
+          <P mt="5" mb="1">
+            Sorry, your booking with {hostName} has been cancelled. You will not
+            be charged anything for this booking. Here is the reason they
+            provided: <br /> <br /> {cancellingUserMessage}
+          </P>
+          <ButtonNew
+            small
+            outline
+            type="tertiary"
+            mt="4"
+            onClick={() => history.push(HOSTS_URL)}
+          >
+            find another host
+          </ButtonNew>
+        </>
+      )}
     </>
   );
 };

@@ -287,7 +287,15 @@ export default class BookingView extends Component {
         status: 'cancelled',
         statusColor: 'pink',
         statusContentsComponent: () => (
-          <CancelledContent hostName={host.name} />
+          <CancelledContent
+            cancellingUserMessage={
+              bookingInfo.cancellationDetails.cancellingUserMessage || 'N/A'
+            }
+            cancelledByIntern={
+              bookingInfo.cancellationDetails.cancelledBy === id
+            }
+            hostName={host.name}
+          />
         ),
       },
       completed: {
