@@ -37,7 +37,8 @@ describe('Testing for cancel booking route', () => {
 
     const data = {
       booking: confirmedNotPaid._id,
-      message: 'this is a test to cancel a booking before payment',
+      cancellingUserMessage:
+        'this is a test to cancel a booking before payment',
       cancellingUserId: confirmedNotPaid.intern._id,
     };
 
@@ -54,6 +55,32 @@ describe('Testing for cancel booking route', () => {
         expect(res.body.cancellationDetails.cancelledBy).toBe(
           internUser._id.toString(),
         );
+        done(err);
+      });
+  });
+
+  test('test to cancel booking with invalid request BEFORE payment', async done => {
+    const { internUser } = users;
+    const { confirmedPaidFirst } = bookings;
+
+    const token = `token=${createToken(internUser._id)}`;
+
+    const data = {
+      booking: confirmedPaidFirst._id,
+      cancellingUserMessage:
+        'this is another test to cancel a booking before payment',
+      cancellingUserId: confirmedPaidFirst.intern._id,
+    };
+
+    request(app)
+      .patch(API_CANCEL_BOOKING_URL.replace(':id', confirmedPaidFirst._id))
+      .send(data)
+      .set('Cookie', [token])
+      .expect('Content-Type', /json/)
+      .expect(500)
+      .end((err, res) => {
+        expect(res.error).toBeDefined();
+
         done(err);
       });
   });

@@ -60,7 +60,7 @@ const bookingSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: 'users',
       },
-      cancellationUserMessage: {
+      cancellingUserMessage: {
         type: String,
       },
     },

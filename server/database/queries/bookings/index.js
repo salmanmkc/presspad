@@ -216,7 +216,7 @@ module.exports.cancelBookingBeforePaymentQuery = ({
       status: 'cancelled',
       cancellationDetails: {
         cancelledBy: cancellingUserId,
-        cancellationUserMessage: message,
+        cancellingUserMessage: message,
       },
     },
     {

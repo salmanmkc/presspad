@@ -57,14 +57,14 @@ const AreYouSure = ({ bookingDetails, ...props }) => {
     // case: booking before payment
     if (canCancelDirectly) {
       const { data } = axios.patch(API_CANCEL_BOOKING_URL.replace(':id', _id), {
-        message,
+        cancellingUserMessage: message,
         cancellingUserId,
       });
 
       console.log('data', data);
     }
   };
-  console.log('bookinfo', bookingInfo);
+
   return (
     <S.Wrapper>
       <S.ContentWrapper>
