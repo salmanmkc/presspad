@@ -26,6 +26,7 @@ import {
   ConfirmedContent,
   PaymentDueContent,
   CompletedContent,
+  CancelledContent,
 } from './statusContents';
 
 import {
@@ -237,6 +238,7 @@ export default class BookingView extends Component {
       rejectReason,
       _id: bookingId,
     } = bookingInfo;
+
     const { couponDiscount } = couponInfo;
     const netAmount = price - couponDiscount;
     if (!installments[0]) {
@@ -281,11 +283,11 @@ export default class BookingView extends Component {
       // toDo "When we get more about canceled bookings"
       // maybe there should be a different view for canceled bookings?
       // or the intern shouldn't see them?
-      canceled: {
-        status: 'rejected',
+      cancelled: {
+        status: 'cancelled',
         statusColor: 'pink',
         statusContentsComponent: () => (
-          <RejectedContent rejectReason={rejectReason} />
+          <CancelledContent hostName={host.name} />
         ),
       },
       completed: {
@@ -377,8 +379,13 @@ export default class BookingView extends Component {
             handlePayNowClick={this.handlePayNowClick}
           />
         </Elements>
+
         <ContentWrapper>
-          <H4C mb="5">booking request</H4C>
+          <H4C mb="5">
+            {bookingStatus.status === 'cancelled'
+              ? 'booking cancelled'
+              : 'booking request'}
+          </H4C>
           <H6C mb="2" color="lightGray">
             status
           </H6C>
@@ -387,7 +394,7 @@ export default class BookingView extends Component {
           </H5C>
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
-        {status !== 'canceled' && status !== 'completed' && (
+        {status !== 'cancelled' && status !== 'completed' && (
           // toDo handle cancel booking button
           <CancelBookingButton
             // this loads cancellation AreYouSure page and sends user and booking infos

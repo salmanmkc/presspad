@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { PXSBold, P, PS, PBold } from '../../../Common/Typography';
+import { PXSBold, P, PS, PBold, Link } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 import Icon from '../../../Common/Icon';
 
@@ -13,7 +13,12 @@ import MakePayment from './MakePayment';
 import ReportProblem from './ReportProblem';
 import { WarningWrapper, TipsWrapper, ProfileLink } from './InternView.style';
 
-import { HOST_PROFILE, HOSTS_URL } from '../../../../constants/navRoutes';
+import {
+  HOST_PROFILE,
+  HOSTS_URL,
+  MYPROFILE_URL,
+  DASHBOARD_URL,
+} from '../../../../constants/navRoutes';
 
 const ViewProfile = ({ hostId }) => {
   const history = useHistory();
@@ -103,6 +108,31 @@ const RejectedContent = ({ rejectReason }) => {
     </>
   );
 };
+
+const CancelledContent = ({ hostName }) => {
+  const history = useHistory();
+  return (
+    <>
+      <P mt="5" mb="1">
+        Your stay with {hostName} has been successfully cancelled. To confirm,
+        you will not be charged anything for this cancellation. <br /> <br /> If
+        you had to cancel due to any changes in your internship, please make
+        sure you
+        <Link to={MYPROFILE_URL}> update your profile now</Link>.
+      </P>
+
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const ConfirmedContent = ({ hostInfo, isLoading, userRole, hostId }) => (
   <>
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
@@ -186,4 +216,5 @@ export {
   ConfirmedContent,
   PaymentDueContent,
   CompletedContent,
+  CancelledContent,
 };

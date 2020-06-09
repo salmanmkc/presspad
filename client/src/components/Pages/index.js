@@ -21,7 +21,7 @@ import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
 import DBSCheckPage from './DBSCheck';
-import Cancellation from './Cancellation';
+import CancellationConfirm from './CancellationConfirm';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -96,8 +96,7 @@ function Pages(props) {
           layout="sideMenu"
           exact
           path={CANCELLATION_CONFIRM}
-          Component={Cancellation}
-          cancellationType="areYouSure"
+          Component={CancellationConfirm}
           {...props}
         />
         <Route
