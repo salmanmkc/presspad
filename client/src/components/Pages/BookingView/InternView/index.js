@@ -395,9 +395,8 @@ export default class BookingView extends Component {
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
         {status !== 'cancelled' && status !== 'completed' && (
-          // toDo handle cancel booking button
           <CancelBookingButton
-            // this loads cancellation AreYouSure page and sends user and booking infos
+            // this loads confirm cancellatiom page and sends user and booking infos
             onClick={() => {
               const { name } = this.props;
               const cancellingUserInfo = { id, name, role };
@@ -407,11 +406,6 @@ export default class BookingView extends Component {
                 pathname: url,
                 state: { bookingInfo, cancellingUserInfo },
               });
-              // console.log(
-              //   'cancel booking query to go here',
-              //   bookingInfo,
-              //   cancellingUserInfo,
-              // );
             }}
           >
             cancel booking request

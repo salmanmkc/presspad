@@ -23,8 +23,23 @@ const CancellationConfirm = ({ ...props }) => {
   } = props;
   const { bookingInfo, cancellingUserInfo } = state;
 
-  const { price, startDate, endDate, payedAmount, status, _id } = bookingInfo;
+  const {
+    price,
+    startDate,
+    endDate,
+    payedAmount,
+    status,
+    _id,
+    intern,
+    host,
+  } = bookingInfo;
   const { id: cancellingUserId, name, role } = cancellingUserInfo;
+
+  console.log(bookingInfo);
+  console.log(cancellingUserInfo);
+
+  const decideName = () => (role === 'host' ? intern.name : host.namer);
+  const nameCancelledUser = decideName();
 
   useEffect(() => {
     if (message.length < 4) {
@@ -94,13 +109,13 @@ const CancellationConfirm = ({ ...props }) => {
           {canCancelDirectly && (
             <>
               <T.PS mb="5">
-                This will immediately cancel your booking with{' '}
-                <strong>{name && name}</strong> and cannot be undone.
+                This will immediately cancel your booking with
+                <strong> {nameCancelledUser}</strong> and cannot be undone.
               </T.PS>
               <T.PS mb="5">
-                Please include a message to let{' '}
-                <strong>{name && name.split(' ')[0]}</strong> know why you now
-                need to cancel.{' '}
+                Please include a message to let
+                <strong> {nameCancelledUser.split(' ')[0]} </strong>
+                know why you now need to cancel.
               </T.PS>
               {renderTextArea()}
             </>

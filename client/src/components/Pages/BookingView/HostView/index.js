@@ -26,7 +26,10 @@ import {
   API_INTERN_PROFILE_URL,
   API_ACCEPT_BOOKING_URL,
 } from '../../../../constants/apiRoutes';
-import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import {
+  INTERN_PROFILE,
+  CANCELLATION_CONFIRM,
+} from '../../../../constants/navRoutes';
 
 const initialState = {
   bookingStatus: '',
@@ -38,7 +41,7 @@ const initialState = {
   error: '',
 };
 
-const HostView = ({ bookingInfo, id: userId }) => {
+const HostView = ({ bookingInfo, id: userId, ...props }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
@@ -238,7 +241,24 @@ const HostView = ({ bookingInfo, id: userId }) => {
           </>
         )}
       </ContentWrapper>
-      <CancelBookingButton>cancel booking</CancelBookingButton>
+
+      {status !== 'cancelled' && status !== 'completed' && (
+        <CancelBookingButton
+          // this loads confirm cancellatiom page and sends user and booking infos
+          onClick={() => {
+            const { name, role } = props;
+            const cancellingUserInfo = { userId, name, role };
+            const url = CANCELLATION_CONFIRM.replace(':id', bookingId);
+
+            return history.push({
+              pathname: url,
+              state: { bookingInfo, cancellingUserInfo },
+            });
+          }}
+        >
+          cancel booking request
+        </CancelBookingButton>
+      )}
 
       <BookingDates
         price={price / 100}
