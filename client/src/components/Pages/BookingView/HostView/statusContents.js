@@ -91,18 +91,29 @@ const RejectedContent = () => (
   </>
 );
 
-const CancelledContent = ({ internName }) => {
+const CancelledContent = ({
+  internName,
+  cancellingUserMessage,
+  cancelledByHost,
+}) => {
   const history = useHistory();
   return (
     <>
-      <P mt="5" mb="1">
-        {internName}’s stay with you has been successfully cancelled.
-        <br /> <br />
-        If you had to cancel due to no longer being available on the dates
-        listed in your profile, please make sure you{' '}
-        <Link to={MYPROFILE_URL}> update your listing now</Link>.
-      </P>
-
+      {cancelledByHost ? (
+        <P mt="5" mb="1">
+          {internName}’s stay with you has been successfully cancelled.
+          <br /> <br />
+          If you had to cancel due to no longer being available on the dates
+          listed in your profile, please make sure you{' '}
+          <Link to={MYPROFILE_URL}> update your listing now</Link>.
+        </P>
+      ) : (
+        <P mt="5" mb="1">
+          Sorry, your booking with {internName} has been cancelled. You will not
+          be charged anything for this booking. Here is the reason they
+          provided: <br /> <br /> {cancellingUserMessage}
+        </P>
+      )}
       <ButtonNew
         small
         type="primary"

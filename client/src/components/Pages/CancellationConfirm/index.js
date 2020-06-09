@@ -36,7 +36,7 @@ const CancellationConfirm = ({ ...props }) => {
 
   const { id: cancellingUserId, role } = cancellingUserInfo;
 
-  const decideName = () => (role === 'host' ? intern.name : host.namer);
+  const decideName = () => (role === 'host' ? intern.name : host.name);
   const nameCancelledUser = decideName();
 
   useEffect(() => {

@@ -180,7 +180,15 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
     // toDo "When we get more about canceled bookings"
     // maybe there should be a different view for canceled bookings?
     // or the host shouldn't see them?
-    cancelled: () => <CancelledContent internName={intern.name} />,
+    cancelled: () => (
+      <CancelledContent
+        cancellingUserMessage={
+          bookingInfo.cancellationDetails.cancellingUserMessage || 'N/A'
+        }
+        cancelledByHost={bookingInfo.cancellationDetails.cancelledBy === userId}
+        internName={intern.name}
+      />
+    ),
 
     completed: () => (
       <CompletedContent
