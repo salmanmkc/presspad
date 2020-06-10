@@ -55,6 +55,7 @@ const buildData = options =>
     const bookings = await booking.createAll({
       users,
       listings,
+      couponDiscountRate,
     });
 
     const reviews = await review.createAll({ bookings });
@@ -103,8 +104,20 @@ const buildData = options =>
       accounts,
     });
 
-    // add a coupon to a pending booking request
-    const addCouponToBooking = await booking.update(coupons.expiredCoupon._id);
+    // add a coupon to a booking requests (pending + upfront + installment)
+    const updatedPendingBooking = await booking.update(
+      coupons.expiredCoupon._id,
+      bookings.pendingBooking._id,
+    );
+
+    const updatedConfirmedPaidUpfrontBooking = await booking.update(
+      coupons.expiredCoupon._id,
+      bookings.confirmedPaidUpfront._id,
+    );
+    const updatedConfirmedPaidFirst = await booking.update(
+      coupons.expiredCoupon._id,
+      bookings.confirmedPaidFirst._id,
+    );
 
     return {
       connection,
@@ -125,7 +138,9 @@ const buildData = options =>
       externalTransactions,
       installments,
       withdrawRequests,
-      addCouponToBooking,
+      updatedPendingBooking,
+      updatedConfirmedPaidUpfrontBooking,
+      updatedConfirmedPaidFirst,
     };
   });
 

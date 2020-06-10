@@ -9,10 +9,10 @@ const {
 } = require('../../../database/models');
 
 const buildDb = require('../../../database/data/test');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const {
   API_INTERN_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
 describe('Testing Intern payemnts (Pay old installment):', () => {
@@ -146,7 +146,7 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 
   test('pay old installment - invalid price', async done => {
     const {
@@ -240,5 +240,5 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 });

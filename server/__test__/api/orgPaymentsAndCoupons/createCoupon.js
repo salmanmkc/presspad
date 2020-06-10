@@ -68,5 +68,5 @@ describe('Testing Organisation payemnts (create coupons):', () => {
         await mongoServer.stop();
         done();
       });
-  }, 20000);
+  }, 40000);
 });

@@ -61,13 +61,13 @@ const hostDonateToPresspad = async ({ fromAccount, amount, userId }) => {
           },
         },
         // update presspad account details
+        // no need to update presspad account since external transaction (source of money) update only donation field
         {
           updateOne: {
             filter: { _id: mongoose.Types.ObjectId(presspadAdmin.account) },
             update: {
               $inc: {
-                income: amount,
-                currentBalance: amount,
+                donation: amount,
               },
             },
           },

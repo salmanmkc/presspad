@@ -5,19 +5,17 @@ const reset = () => InternalTransaction.deleteMany();
 const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
   const { internUser, organisationUser } = users;
   const { hostAccount, internAccount, organisationAccount } = accounts;
-  const { completedBooking } = bookings;
+  const { confirmedPaidUpfront, confirmedPaidFirst } = bookings;
 
   await reset();
 
   const internalTransactions = [
-    // completedBooking installment
+    // confirmedPaidUpfront installment
     {
       user: internUser._id,
       from: internAccount._id,
       to: hostAccount._id,
-      amount:
-        completedBooking.price -
-        (completedBooking.price * (100 - couponDiscountRate)) / 100, // 60
+      amount: confirmedPaidUpfront.payedAmount,
       type: 'installment',
     },
     // from organsisation to host
@@ -26,7 +24,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       // this is the account for the org not the user
       from: organisationAccount._id,
       to: hostAccount._id,
-      amount: (completedBooking.price * couponDiscountRate) / 100, // 60
+      amount: (confirmedPaidUpfront.price * couponDiscountRate) / 100, // 50
       type: 'couponTransaction',
     },
     // confirmedPaidFirst
@@ -34,19 +32,19 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       user: internUser._id,
       from: internAccount._id,
       to: hostAccount._id,
-      amount: 3333,
+      amount: confirmedPaidFirst.payedAmount,
       type: 'installment',
     },
   ];
   const [
-    internalTransactionsCompletedIntern,
-    internalTransactionsCompletedCoupon,
+    internalTransactionsPaidUpFrontIntern,
+    internalTransactionsPaidUpFrontCoupon,
     internalTransactionsConfirmedPaidFirst,
   ] = await InternalTransaction.create(internalTransactions);
 
   return {
-    internalTransactionsCompletedIntern,
-    internalTransactionsCompletedCoupon,
+    internalTransactionsPaidUpFrontIntern,
+    internalTransactionsPaidUpFrontCoupon,
     internalTransactionsConfirmedPaidFirst,
   };
 };

@@ -4,46 +4,46 @@ const reset = () => Installment.deleteMany();
 
 const createAll = async ({ bookings, users, internalTransactions }) => {
   const {
-    internalTransactionsCompletedIntern,
+    internalTransactionsPaidUpFrontIntern,
     internalTransactionsConfirmedPaidFirst,
   } = internalTransactions;
   const { internUser, hostUser } = users;
   await reset();
 
-  const { completedBooking, confirmedPaidFirst } = bookings;
+  const { confirmedPaidUpfront, confirmedPaidFirst } = bookings;
 
   const installments = [
-    // for the completed booking and paid upfront
+    // for the confirmed booking and paid upfront
     {
-      booking: completedBooking._id,
+      booking: confirmedPaidUpfront._id,
       intern: internUser._id,
       host: hostUser._id,
-      amount: 6000,
-      dueDate: Date.now() - 20 * 24 * 60 * 60 * 1000,
-      transaction: internalTransactionsCompletedIntern._id,
+      amount: confirmedPaidUpfront.payedAmount,
+      dueDate: Date.now(),
+      transaction: internalTransactionsPaidUpFrontIntern._id,
     },
     // for the confimed booking and paid first insatallment
     {
       booking: confirmedPaidFirst._id,
       intern: internUser._id,
       host: hostUser._id,
-      amount: 3333,
-      dueDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
+      amount: confirmedPaidFirst.payedAmount,
+      dueDate: Date.now(),
       transaction: internalTransactionsConfirmedPaidFirst._id,
     },
     {
       booking: confirmedPaidFirst._id,
       intern: internUser._id,
       host: hostUser._id,
-      amount: 3333,
-      dueDate: Date.now() + 26 * 24 * 60 * 60 * 1000,
+      amount: 28000,
+      dueDate: Date.now() + 179 * 24 * 60 * 60 * 1000,
     },
     {
       booking: confirmedPaidFirst._id,
       intern: internUser._id,
       host: hostUser._id,
-      amount: 3334,
-      dueDate: Date.now() + 29 * 24 * 60 * 60 * 1000,
+      amount: 4000,
+      dueDate: Date.now() + 207 * 24 * 60 * 60 * 1000,
     },
   ];
   const [

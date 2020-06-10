@@ -10,22 +10,22 @@ const emptyAccount = {
 
 const presspadAccountData = {
   ...emptyAccount,
-  currentBalance: 12000 + 3333 + 10500,
-  income: 12000 + 3333 + 10500,
+  currentBalance: 6000 + 365000 + 5000 + 14000 - 10000,
+  income: 6000 + 365000 + 5000 + 14000,
 };
 
-const internAccountData = { ...emptyAccount, income: 6000 + 3333 };
+const internAccountData = { ...emptyAccount, income: 5000 + 14000 };
 
 const hostAccountData = {
   ...emptyAccount,
-  income: 12000 + 3333,
-  currentBalance: 12000 + 3333,
+  income: 5000 + 5000 + 14000 + 46000,
+  currentBalance: 14000 + 46000, // first bookings moneyGoTo presspad
 };
 
 const organisationAccountData = {
   ...emptyAccount,
-  income: 6000 + 10500,
-  currentBalance: 10500,
+  income: 6000 + 365000,
+  currentBalance: 6000 + 365000,
 };
 
 const allAccounts = [

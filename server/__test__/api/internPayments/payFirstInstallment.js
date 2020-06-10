@@ -8,11 +8,11 @@ const {
   ExternalTransaction,
 } = require('../../../database/models');
 const buildDb = require('../../../database/data/test');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const { createInstallments } = require('../../../helpers/payments');
 const {
   API_INTERN_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
 describe('Testing Intern payemnts (Pay in 3 installments):', () => {
@@ -38,7 +38,12 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
 
     const token = `token=${createToken(internUser._id)}`;
 
-    const { _id, price, startDate, endDate } = bookings.confirmedNotPaid;
+    const {
+      _id,
+      price,
+      startDate,
+      endDate,
+    } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
     const paymentInfo = createInstallments(price, startDate, endDate, false);
@@ -149,7 +154,7 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 
   test('new installments pay first of 3 - invalid price', async done => {
     const {
@@ -162,7 +167,12 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
       replSet: true,
     });
 
-    const { _id, price, startDate, endDate } = bookings.confirmedNotPaid;
+    const {
+      _id,
+      price,
+      startDate,
+      endDate,
+    } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
     const { internUser } = users;
@@ -245,5 +255,5 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 });

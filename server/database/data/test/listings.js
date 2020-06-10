@@ -44,16 +44,16 @@ const defaultListingData = {
       endDate: Date.now() + 22 * 24 * 60 * 60 * 1000,
     },
     {
-      startDate: Date.now() + 40 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
+      startDate: Date.now() + 111 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 115 * 24 * 60 * 60 * 1000,
     },
     {
-      startDate: Date.now() + 60 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 125 * 24 * 60 * 60 * 1000,
+      startDate: Date.now() + 220 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 300 * 24 * 60 * 60 * 1000,
     },
     {
-      startDate: Date.now() + 135 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 150 * 24 * 60 * 60 * 1000,
+      startDate: Date.now() + 335 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 450 * 24 * 60 * 60 * 1000,
     },
   ],
 };

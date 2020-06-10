@@ -21,24 +21,24 @@ const createAll = async ({ users, accounts }) => {
       user: organisationUser._id,
       account: organisationAccount._id,
       type: 'deposite',
-      amount: 10500,
+      amount: 365000,
       createdAt: Date.now() - 15 * 24 * 60 * 60 * 1000,
     },
-    // intern paying the completed booking
+    // intern paying the confirmed booking upfront
     {
       user: internUser._id,
       account: internAccount._id,
       type: 'deposite',
-      amount: 6000,
-      createdAt: Date.now() - 20 * 24 * 60 * 60 * 1000,
+      amount: 5000,
+      createdAt: Date.now(),
     },
     // intern paying the conrfimed booking (first payment)
     {
       user: internUser._id,
       account: internAccount._id,
       type: 'deposite',
-      amount: 3333,
-      createdAt: Date.now() + 20 * 24 * 60 * 60 * 1000,
+      amount: 14000,
+      createdAt: Date.now(),
     },
   ];
   const [

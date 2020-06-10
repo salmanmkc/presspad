@@ -8,11 +8,11 @@ const {
   InternalTransaction,
   ExternalTransaction,
 } = require('../../../database/models');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const buildDb = require('../../../database/data/test');
 const {
   API_INTERN_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
 describe('Testing Intern payemnts (Pay upfront):', () => {
@@ -36,7 +36,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
 
     const { internUser } = users;
     const token = `token=${createToken(internUser._id)}`;
-    const booking = bookings.confirmedNotPaid;
+    const booking = bookings.acceptedNotPaidOnePayment;
     const { _id: bookingId, price } = booking;
 
     const paymentInfo = {
@@ -147,7 +147,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 
   test('new installments pay up front - invalid price', async done => {
     const {
@@ -162,7 +162,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
 
     const { internUser } = users;
     const token = `token=${createToken(internUser._id)}`;
-    const booking = bookings.confirmedNotPaid;
+    const booking = bookings.acceptedNotPaidOnePayment;
     const bookingId = booking._id;
 
     const paymentInfo = {
@@ -245,5 +245,5 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 });
