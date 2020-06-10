@@ -55,7 +55,7 @@ class CalendarComponent extends Component {
   state = {
     isLoading: true,
     avDates: [],
-    listingConfirmedBookings: [],
+    listingActiveBookings: [],
     dates: new Date(),
     daysAmount: 0,
     isRangeSelected: false,
@@ -71,7 +71,7 @@ class CalendarComponent extends Component {
     const {
       availableDates,
       bookingSearchDates,
-      listingConfirmedBookings,
+      listingActiveBookings,
     } = this.props;
 
     // if dates were selected in search set state accordingly
@@ -89,17 +89,16 @@ class CalendarComponent extends Component {
       });
     }
     this.refreshAvailableDates(availableDates);
-    this.refreshListingConfirmedBookings(listingConfirmedBookings);
+    this.refreshlistingActiveBookings(listingActiveBookings);
   }
 
   // listens for prop changes to re-render calendar tiles
   componentDidUpdate(prevProps) {
     if (prevProps.availableDates !== this.props.availableDates) {
       this.refreshAvailableDates(this.props.availableDates);
-    } else if (
-      prevProps.listingConfirmedBookings !== this.props.listingConfirmedBookings
-    ) {
-      this.refreshListingConfirmedBookings(this.props.listingConfirmedBookings);
+    }
+    if (prevProps.listingActiveBookings !== this.props.listingActiveBookings) {
+      this.refreshlistingActiveBookings(this.props.listingActiveBookings);
     }
   }
 
@@ -116,17 +115,17 @@ class CalendarComponent extends Component {
   };
 
   // adds and refreshes confirmed bookings for listing
-  refreshListingConfirmedBookings = dates => {
-    let _listingConfirmedBookings;
+  refreshlistingActiveBookings = dates => {
+    let _listingActiveBookings;
     if (dates) {
-      _listingConfirmedBookings = dates.reduce((acc, cur) => {
+      _listingActiveBookings = dates.reduce((acc, cur) => {
         const _dates = createDatesArray(cur.startDate, cur.endDate);
         acc.push(_dates);
         return [].concat(...acc);
       }, []);
     }
     this.setState({
-      listingConfirmedBookings: _listingConfirmedBookings,
+      listingActiveBookings: _listingActiveBookings,
       loading: false,
     });
   };
@@ -157,13 +156,13 @@ class CalendarComponent extends Component {
 
   // disables calendar tiles (days)
   tileDisabled = ({ date }) => {
-    const { avDates, listingConfirmedBookings } = this.state;
+    const { avDates, listingActiveBookings } = this.state;
 
     // return true if current date is not included in available dates => disable tile
     date = moment(date).format('YYYY-MM-DD');
     return (
       !avDates.includes(date) ||
-      (listingConfirmedBookings && listingConfirmedBookings.includes(date)) ||
+      (listingActiveBookings && listingActiveBookings.includes(date)) ||
       moment
         .utc()
         .startOf('day')

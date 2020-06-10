@@ -2,7 +2,7 @@ const boom = require('boom');
 // QUERIES
 const {
   hostProfileData,
-  getListingConfirmedBookings,
+  getListingActiveBookings,
 } = require('../../database/queries/profile/hostProfile');
 
 const generateUrl = require('../../helpers/generateFileURL');
@@ -42,7 +42,7 @@ const getHostProfile = async (req, res, next) => {
     hostProfile.listing.address = address;
 
     if (listingId) {
-      hostProfile.listingConfirmedBookings = await getListingConfirmedBookings(
+      hostProfile.listingConfirmedBookings = await getListingActiveBookings(
         listingId,
       );
     }

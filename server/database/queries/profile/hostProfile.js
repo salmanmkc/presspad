@@ -164,11 +164,16 @@ exports.getConfirmedBooking = (internId, hostId) =>
     status: { $in: ['confirmed', 'completed'] },
   });
 
-exports.getListingConfirmedBookings = listingId =>
+exports.getListingActiveBookings = listingId =>
   Booking.find({
     listing: listingId,
-
     $or: [
+      {
+        status: 'awaiting admin',
+      },
+      {
+        status: 'pending',
+      },
       {
         status: 'accepted',
       },
