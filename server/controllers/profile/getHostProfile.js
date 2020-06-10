@@ -3,6 +3,7 @@ const boom = require('boom');
 const {
   hostProfileData,
   getConfirmedBooking,
+  getListingConfirmedBookings,
 } = require('../../database/queries/profile/hostProfile');
 
 const generateUrl = require('../../helpers/generateFileURL');
@@ -25,6 +26,7 @@ const getHostProfile = async (req, res, next) => {
 
     let hostProfile;
     let booking;
+
     if (role === 'intern') {
       booking = await getConfirmedBooking(userId, hostId);
       if (booking) [hostProfile] = await hostProfileData(hostId, true);
@@ -37,9 +39,11 @@ const getHostProfile = async (req, res, next) => {
     if (!hostProfile) {
       return next(boom.notFound('Host has no profile or does not exist'));
     }
+    const { listing = {} } = hostProfile;
     const {
-      listing: { address: { postcode = '', city = '' } = {} } = {},
-    } = hostProfile;
+      _id: listingId = null,
+      address: { postcode = '', city = '' } = {},
+    } = listing;
 
     address = {
       addressline1: '',
@@ -50,6 +54,12 @@ const getHostProfile = async (req, res, next) => {
 
     if (!booking) {
       hostProfile.listing.address = address;
+    }
+
+    if (listingId) {
+      hostProfile.listingConfirmedBookings = await getListingConfirmedBookings(
+        listingId,
+      );
     }
 
     if (!hostProfile || !hostProfile.profile || !hostProfile.listing)

@@ -163,3 +163,20 @@ exports.getConfirmedBooking = (internId, hostId) =>
     host: hostId,
     status: { $in: ['confirmed', 'completed'] },
   });
+
+exports.getListingConfirmedBookings = listingId =>
+  Booking.find({
+    listing: listingId,
+
+    $or: [
+      {
+        status: 'accepted',
+      },
+      {
+        status: 'confirmed',
+      },
+      {
+        status: 'live',
+      },
+    ],
+  });

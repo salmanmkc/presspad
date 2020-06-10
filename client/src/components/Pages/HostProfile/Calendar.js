@@ -55,6 +55,7 @@ class CalendarComponent extends Component {
   state = {
     isLoading: true,
     avDates: [],
+    listingConfirmedBookings: [],
     dates: new Date(),
     daysAmount: 0,
     isRangeSelected: false,
@@ -67,7 +68,11 @@ class CalendarComponent extends Component {
   };
 
   componentDidMount() {
-    const { availableDates, bookingSearchDates } = this.props;
+    const {
+      availableDates,
+      bookingSearchDates,
+      listingConfirmedBookings,
+    } = this.props;
 
     // if dates were selected in search set state accordingly
     if (bookingSearchDates) {
@@ -84,12 +89,17 @@ class CalendarComponent extends Component {
       });
     }
     this.refreshAvailableDates(availableDates);
+    this.refreshListingConfirmedBookings(listingConfirmedBookings);
   }
 
   // listens for prop changes to re-render calendar tiles
   componentDidUpdate(prevProps) {
     if (prevProps.availableDates !== this.props.availableDates) {
       this.refreshAvailableDates(this.props.availableDates);
+    } else if (
+      prevProps.listingConfirmedBookings !== this.props.listingConfirmedBookings
+    ) {
+      this.refreshListingConfirmedBookings(this.props.listingConfirmedBookings);
     }
   }
 
@@ -102,6 +112,22 @@ class CalendarComponent extends Component {
     this.setState({
       avDates: avDateRange || [],
       isLoading: false,
+    });
+  };
+
+  // adds and refreshes confirmed bookings for listing
+  refreshListingConfirmedBookings = dates => {
+    let _listingConfirmedBookings;
+    if (dates) {
+      _listingConfirmedBookings = dates.reduce((acc, cur) => {
+        const _dates = createDatesArray(cur.startDate, cur.endDate);
+        acc.push(_dates);
+        return [].concat(...acc);
+      }, []);
+    }
+    this.setState({
+      listingConfirmedBookings: _listingConfirmedBookings,
+      loading: false,
     });
   };
 
@@ -131,11 +157,13 @@ class CalendarComponent extends Component {
 
   // disables calendar tiles (days)
   tileDisabled = ({ date }) => {
-    const { avDates } = this.state;
+    const { avDates, listingConfirmedBookings } = this.state;
+
     // return true if current date is not included in available dates => disable tile
     date = moment(date).format('YYYY-MM-DD');
     return (
       !avDates.includes(date) ||
+      (listingConfirmedBookings && listingConfirmedBookings.includes(date)) ||
       moment
         .utc()
         .startOf('day')

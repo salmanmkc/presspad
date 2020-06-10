@@ -135,8 +135,8 @@ module.exports.createNewBooking = async data => {
   return newBooking;
 };
 
-// 3)
-// updates listing
+// !UPDATE LISTING NOT USED ANYMORE
+
 module.exports.updateListingAvailability = async (listingId, bs, be) => {
   const listing = await Listing.findOne({ _id: listingId });
   const listingAvDates = listing.availableDates.reduce((acc, cur) => {

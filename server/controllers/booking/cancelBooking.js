@@ -28,11 +28,11 @@ const cancelBooking = async (req, res, next) => {
     let cancelledBooking;
     // check if booking is valid and if cancellation before payment
     const booking = await getBooking(bookingId);
+    const { status, payedAmount } = booking[0];
 
     const canCancelDirectly =
-      ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(
-        booking[0].status,
-      ) && booking[0].payedAmount === 0;
+      ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(status) &&
+      payedAmount === 0;
 
     if (canCancelDirectly) {
       cancelledBooking = await cancelBookingBeforePaymentQuery({
@@ -51,7 +51,6 @@ const cancelBooking = async (req, res, next) => {
 
     // run query to update booking status
   } catch (err) {
-    console.log('err', err);
     return next(boom.badImplementation(err));
   }
 };
