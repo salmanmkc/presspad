@@ -50,7 +50,6 @@ const hostDashboard = async (req, res, next) => {
 
     if (profile && profile.profileImage) generateFileURL(profile.profileImage);
 
-    console.log('dashboardData', dashboardData);
     return res.json({
       ...dashboardData,
       nextBookingWithDetails,

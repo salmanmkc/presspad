@@ -35,7 +35,7 @@ const BookingInfo = ({ startDate, endDate, price, intern }) => {
         ) : (
           <H7C color="white">earnings</H7C>
         )}
-        <H4 color="white">£{price / 100}</H4>
+        <H4 color="white">£{price}</H4>
       </AbsoluteWrapper>
     </Wrapper>
   );

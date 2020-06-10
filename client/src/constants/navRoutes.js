@@ -32,7 +32,6 @@ export const DBS_CHECK_PAGE = '/dbs-check';
 
 // booking cancellation type urls
 export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
-// TODO add cancellation confirmed, cancellation requested
 
 // sign in/out
 export const SIGNIN_URL = '/sign-in';

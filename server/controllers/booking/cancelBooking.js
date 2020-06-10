@@ -12,8 +12,7 @@ const cancelBooking = async (req, res, next) => {
 
   try {
     // check if all required parameters are present to update booking details
-
-    if (!bookingId || cancellingUserMessage.length < 4 || !cancellingUserId) {
+    if (!bookingId || cancellingUserMessage || !cancellingUserId) {
       return next(boom.badData());
     }
 
@@ -33,7 +32,7 @@ const cancelBooking = async (req, res, next) => {
     const canCancelDirectly =
       ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(status) &&
       payedAmount === 0;
-
+    // run query to update booking
     if (canCancelDirectly) {
       cancelledBooking = await cancelBookingBeforePaymentQuery({
         bookingId,
@@ -48,8 +47,6 @@ const cancelBooking = async (req, res, next) => {
     }
 
     return next(boom.badImplementation());
-
-    // run query to update booking status
   } catch (err) {
     return next(boom.badImplementation(err));
   }
