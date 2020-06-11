@@ -46,7 +46,10 @@ const WaitingContent = ({ hostRespondingTime, hostId }) => (
 
 const AcceptedContent = ({
   handlePayNowClick,
+  handlePaymentMethod,
   handleCouponChange,
+  upfront,
+  bookingDays,
   paymentInfo,
   price,
   startDate,
@@ -68,8 +71,11 @@ const AcceptedContent = ({
     </PXSBold>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handlePaymentMethod={handlePaymentMethod}
       handleCouponChange={handleCouponChange}
       data={{
+        upfront,
+        bookingDays,
         paymentInfo,
         fullPrice: price,
         startDate,

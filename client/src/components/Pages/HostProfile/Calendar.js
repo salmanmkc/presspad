@@ -10,7 +10,7 @@ import {
   calculateHostRespondingTime,
   createDatesArray,
   getDateRangeFromArray,
-  calculatePrice,
+  calculatePriceByRange,
 } from '../../../helpers';
 
 // Typography
@@ -73,7 +73,7 @@ class CalendarComponent extends Component {
     if (bookingSearchDates) {
       this.setState({
         dates: bookingSearchDates,
-        price: calculatePrice(
+        price: calculatePriceByRange(
           moment.range(bookingSearchDates[0], bookingSearchDates[1]),
         ),
         daysAmount: createDatesArray(
@@ -117,7 +117,7 @@ class CalendarComponent extends Component {
     this.setState({
       dates,
       isRangeSelected: true,
-      price: calculatePrice(moment.range(dates[0], dates[1])),
+      price: calculatePriceByRange(moment.range(dates[0], dates[1])),
       message: '',
       messageType: '',
       daysAmount:

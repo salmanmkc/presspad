@@ -15,6 +15,11 @@ export const PriceWrapper = styled.div`
   margin-bottom: ${({ theme }) => theme.spacings[5]};
 `;
 
+export const PreviousPriceWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const DiscountWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -31,4 +36,23 @@ export const DiscountInput = styled.div`
 export const DisCountLoadingWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+`;
+
+export const PaymentMethodWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: ${({ theme }) => theme.spacings[3]};
+  & .ant-checkbox-inner {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+  }
+  & .ant-checkbox-inner::after {
+    left: 29%;
+  }
+  & label {
+    margin-left: 0 !important;
+    margin-top: ${({ theme }) => theme.spacings[3]};
+  }
 `;

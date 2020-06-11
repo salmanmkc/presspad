@@ -65,8 +65,11 @@ export const Heading7 = styled.h6`
 const CommonParagraphStyle = css`
   ${CommonStyle};
   font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
-  color: ${({ theme, color }) =>
-    color ? theme.colors[color] : theme.colors.darkerGray};
+  color: ${({ theme, color, disabled }) => {
+    if (disabled) return 'rgba(0,0,0,.25)';
+    if (color) return theme.colors[color];
+    return theme.colors.darkerGray;
+  }};
 `;
 
 export const BodyXL = styled.p`

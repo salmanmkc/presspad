@@ -7,10 +7,14 @@ import { Elements } from 'react-stripe-elements';
 
 import {
   getDiscountDays,
-  calculatePrice,
   createInstallments,
   getFirstUnpaidInstallment,
 } from '../helpers';
+
+import {
+  calculatePrice,
+  calculateHostRespondingTime,
+} from '../../../../helpers';
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
 
@@ -33,7 +37,6 @@ import {
   API_HOST_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import { Error404, Error500 } from '../../../../constants/navRoutes';
-import { calculateHostRespondingTime } from '../../../../helpers';
 
 export default class BookingView extends Component {
   state = {
@@ -184,7 +187,7 @@ export default class BookingView extends Component {
 
   handlePayNowClick = payNow => this.setState({ payNow });
 
-  // handlePaymentMethod = upfront => this.setState({ upfront });
+  handlePaymentMethod = upfront => this.setState({ upfront });
 
   render() {
     const { bookingInfo, role, id } = this.props;
@@ -233,15 +236,17 @@ export default class BookingView extends Component {
       rejectReason,
       _id: bookingId,
     } = bookingInfo;
-    const { couponDiscount } = couponInfo;
-    const netAmount = price - couponDiscount;
+
+    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+
     if (!installments[0]) {
-      newInstallments = createInstallments(
-        netAmount,
+      newInstallments = createInstallments({
         startDate,
         endDate,
         upfront,
-      );
+        couponInfo,
+        bookingDays,
+      });
     }
 
     const paymentInfo = installments[0]
@@ -303,7 +308,10 @@ export default class BookingView extends Component {
           <AcceptedContent
             hostId={host._id}
             handlePayNowClick={this.handlePayNowClick}
+            handlePaymentMethod={this.handlePaymentMethod}
             handleCouponChange={this.handleCouponChange}
+            upfront={upfront}
+            bookingDays={bookingDays}
             paymentInfo={paymentInfo}
             price={price}
             startDate={startDate}
