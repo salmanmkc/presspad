@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const { bookingStatuses } = require('../../constants');
+
 const { Schema, model } = mongoose;
 
 const bookingSchema = new Schema(
@@ -34,14 +36,15 @@ const bookingSchema = new Schema(
     status: {
       type: String,
       enum: [
-        'awaiting admin',
-        'pending' /** ="awaiting host" */,
-        'accepted',
-        'confirmed',
-        'canceled',
-        'completed',
-        'rejected by admin',
-        'rejected',
+        // 'awaiting admin',
+        // 'pending' /** ="awaiting host" */,
+        // 'accepted',
+        // 'confirmed',
+        // 'canceled',
+        // 'completed',
+        // 'rejected by admin',
+        // 'rejected',
+        ...Object.values(bookingStatuses),
       ],
       default: 'awaiting admin',
       required: true,

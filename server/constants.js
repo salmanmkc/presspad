@@ -16,4 +16,14 @@ module.exports = {
       { name: 'photoIDFile' },
     ],
   },
+  bookingStatuses: {
+    awaitingAdmin: 'awaiting admin',
+    pending: 'pending',
+    accepted: 'accepted',
+    confirmed: 'confirmed',
+    canceled: 'canceled',
+    completed: 'completed',
+    rejectedByAdmin: 'rejected by admin',
+    rejected: 'rejected',
+  },
 };

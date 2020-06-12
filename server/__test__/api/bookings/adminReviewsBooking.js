@@ -11,6 +11,8 @@ const {
 
 const createToken = require('../../../helpers/createToken');
 
+const { bookingStatuses } = require('../../../constants');
+
 let connection;
 let users;
 let bookings;
@@ -39,7 +41,7 @@ describe('Testing host can approve and reject booking requests', () => {
 
     const data = {
       booking: awaitingAdminBooking,
-      status: 'rejected by admin',
+      status: bookingStatuses.rejectedByAdmin,
       message: 'Your internship details proved to be fake when we checked them',
     };
 
@@ -78,7 +80,7 @@ describe('Testing host can approve and reject booking requests', () => {
 
     const data = {
       booking: awaitingAdminBooking,
-      status: 'pending',
+      status: bookingStatuses.pending,
     };
 
     const hostNotificationsBefore = await Notification.find({
@@ -135,7 +137,7 @@ describe('Testing host can approve and reject booking requests', () => {
 
     const data = {
       booking: awaitingAdminNotAutomaticBooking,
-      status: 'pending',
+      status: bookingStatuses.pending,
     };
 
     const hostNotificationsBefore = await Notification.find({

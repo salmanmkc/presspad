@@ -1,5 +1,7 @@
 const Booking = require('../../models/Booking');
 
+const { bookingStatuses } = require('../../../constants');
+
 const reset = () => Booking.deleteMany();
 
 const update = (couponID, bookingId) =>
@@ -18,7 +20,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() - 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 15 * 24 * 60 * 60 * 1000,
-      status: 'completed',
+      status: bookingStatuses.completed,
       price: 0, // because first two weeks always free
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -30,7 +32,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 15 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
-      status: 'pending',
+      status: bookingStatuses.pending,
       price: 0, // because first two weeks always free
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -42,7 +44,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 25 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 50 * 24 * 60 * 60 * 1000,
-      status: 'accepted',
+      status: bookingStatuses.accepted,
       price: 24000,
       payedAmount: 0,
       moneyGoTo: 'presspad',
@@ -54,7 +56,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 51 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 110 * 24 * 60 * 60 * 1000,
-      status: 'accepted',
+      status: bookingStatuses.accepted,
       price: 92000,
       payedAmount: 0,
       moneyGoTo: 'presspad',
@@ -66,7 +68,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 116 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 126 * 24 * 60 * 60 * 1000,
-      status: 'confirmed',
+      status: bookingStatuses.confirmed,
       price: 0,
       payedAmount: 0,
       moneyGoTo: 'presspad',
@@ -78,7 +80,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 130 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 148 * 24 * 60 * 60 * 1000,
-      status: 'confirmed',
+      status: bookingStatuses.confirmed,
       price: 10000,
       payedAmount: 10000 - (10000 * couponDiscountRate) / 100,
       moneyGoTo: 'presspad',
@@ -91,7 +93,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 151 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 210 * 24 * 60 * 60 * 1000,
-      status: 'confirmed',
+      status: bookingStatuses.confirmed,
       price: 92000,
       payedAmount: 14000,
       moneyGoTo: 'host',
@@ -103,7 +105,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() - 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 40 * 24 * 60 * 60 * 1000,
-      status: 'canceled',
+      status: bookingStatuses.canceled,
       price: 12000,
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -115,7 +117,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() - 35 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 30 * 24 * 60 * 60 * 1000,
-      status: 'rejected',
+      status: bookingStatuses.rejected,
       price: 12000,
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -127,7 +129,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser,
       startDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
-      status: 'awaiting admin',
+      status: bookingStatuses.awaitingAdmin,
       price: 44000,
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -139,7 +141,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       host: hostUser2,
       startDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
-      status: 'awaiting admin',
+      status: bookingStatuses.awaitingAdmin,
       price: 44000,
       payedAmount: 0,
       moneyGoTo: 'host',
