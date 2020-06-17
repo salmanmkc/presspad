@@ -27,12 +27,20 @@ export const getIntersectRange = ({
  * @param {Object} dates {bookingStart, bookingEnd, couponStart, couponEnd, usedDays}
  */
 export const getDiscountDays = dates => {
-  const _dates = {
-    ...dates,
-    // do not calculate discount from the first free two weeks
-    bookingStart: moment(dates.bookingStart).add(14, 'd'),
-  };
-
+  let _dates = dates;
+  if (!dates.installmentDate) {
+    _dates = {
+      ...dates,
+      // do not calculate discount from the first free two weeks
+      bookingStart: moment(dates.bookingStart).add(14, 'd'),
+    };
+  } else {
+    _dates = {
+      ...dates,
+      // do not calculate paid days
+      bookingStart: moment(dates.installmentDate),
+    };
+  }
   const intersectRange = getIntersectRange(_dates);
 
   if (!intersectRange) return { discountDays: 0 };
@@ -54,6 +62,7 @@ export const getDiscountDays = dates => {
  * @returns {Array}
  */
 export const createInstallments = ({
+  startDate,
   endDate,
   upfront,
   couponInfo,
@@ -88,7 +97,7 @@ export const createInstallments = ({
     key += 1;
     installments.push({
       key,
-      dueDate: moment()
+      dueDate: moment(startDate)
         .add(28 * key, 'd')
         .toISOString(),
       amount:
@@ -100,6 +109,35 @@ export const createInstallments = ({
   }
 
   return installments;
+};
+
+/**
+ *
+ * @param {object} obj
+ * @param {array} obj.installments
+ * @param {object} obj.couponInfo
+ * @param {number} obj.couponInfo.discountDays
+ * @param {number} obj.couponInfo.discountRate
+ */
+export const createUpdatedNewInstallments = ({ installments, couponInfo }) => {
+  const { discountDays, discountRate } = couponInfo;
+  let _discountDays = discountDays;
+  return installments.map(installment => {
+    if (installment.transaction || _discountDays <= 0)
+      return { ...installment };
+    const installmentDiscountDays = installment.amount / 2000;
+
+    const installmentDiscount =
+      _discountDays > installmentDiscountDays
+        ? (installmentDiscountDays * discountRate * 2000) / 100
+        : (_discountDays * discountRate * 2000) / 100;
+
+    _discountDays -= installmentDiscountDays;
+    return {
+      ...installment,
+      amount: installment.amount - installmentDiscount,
+    };
+  });
 };
 
 /**
@@ -128,3 +166,11 @@ export const getFirstUnpaidInstallment = installments => {
 };
 
 export const getDueDateText = date => moment(date).format('Do MMM');
+
+export const getRemainingPrice = installments =>
+  installments.reduce((acc, installment) => {
+    if (!installment.transaction) {
+      return acc + installment.amount;
+    }
+    return acc;
+  }, 0);

@@ -55,6 +55,7 @@ const AcceptedContent = ({
   startDate,
   endDate,
   couponInfo,
+  usedCoupon,
   hostId,
 }) => (
   <>
@@ -81,6 +82,7 @@ const AcceptedContent = ({
         startDate,
         endDate,
         couponInfo,
+        usedCoupon,
       }}
       isNew
     />
@@ -109,8 +111,45 @@ const RejectedContent = ({ rejectReason }) => {
     </>
   );
 };
-const ConfirmedContent = ({ hostInfo, isLoading, userRole, hostId }) => (
+const ConfirmedContent = ({
+  hostInfo,
+  isLoading,
+  userRole,
+  hostId,
+  handlePayNowClick,
+  handlePaymentMethod,
+  handleCouponChange,
+  upfront,
+  bookingDays,
+  paymentInfo,
+  installments,
+  updatedInstallments,
+  price,
+  startDate,
+  endDate,
+  couponInfo,
+  usedCoupon,
+}) => (
   <>
+    {!!price && (
+      <MakePayment
+        handlePayNowClick={handlePayNowClick}
+        handlePaymentMethod={handlePaymentMethod}
+        handleCouponChange={handleCouponChange}
+        data={{
+          upfront,
+          bookingDays,
+          paymentInfo,
+          installments,
+          updatedInstallments,
+          fullPrice: price,
+          startDate,
+          endDate,
+          couponInfo,
+          usedCoupon,
+        }}
+      />
+    )}
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
     <ViewProfile hostId={hostId} />
     <TipsWrapper height="290px">

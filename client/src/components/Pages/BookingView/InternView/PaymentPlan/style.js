@@ -12,6 +12,11 @@ export const Wrapper = styled.div`
 
 export const PaymentLine = styled.div`
   display: flex;
+  position: relative;
   justify-content: space-between;
   margin-bottom: ${({ theme }) => theme.spacings[1]};
+  > p {
+    color: ${({ transaction, theme }) =>
+      transaction ? theme.colors.lighterGray : theme.colors.darkerGray};
+  }
 `;

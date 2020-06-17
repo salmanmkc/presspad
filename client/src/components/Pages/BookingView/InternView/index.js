@@ -9,6 +9,7 @@ import {
   getDiscountDays,
   createInstallments,
   getFirstUnpaidInstallment,
+  createUpdatedNewInstallments,
 } from '../helpers';
 
 import {
@@ -88,6 +89,8 @@ export default class BookingView extends Component {
         couponInfo: {
           ...prevState.couponInfo,
           isCouponLoading: false,
+          discountDays: 0,
+          discountRate: 0,
           couponDiscount: 0,
           couponCode: '',
           error: '',
@@ -110,6 +113,9 @@ export default class BookingView extends Component {
           couponInfo: {
             ...prevState.couponInfo,
             couponCode: code,
+            discountDays: 0,
+            discountRate: 0,
+            couponDiscount: 0,
             isCouponLoading: true,
             error: false,
           },
@@ -123,6 +129,10 @@ export default class BookingView extends Component {
             } = await axios.get(`${API_COUPON_URL}?code=${code}`);
 
             const {
+              bookingInfo: { startDate, endDate, status, installments },
+            } = this.props;
+
+            const {
               startDate: couponStart,
               endDate: couponEnd,
               discountRate,
@@ -131,13 +141,19 @@ export default class BookingView extends Component {
               reservedAmount,
             } = couponInfo;
 
-            const {
-              bookingInfo: { startDate, endDate },
-            } = this.props;
+            const firstUnpaidInstallment = getFirstUnpaidInstallment(
+              installments,
+            );
+
+            const installmentDate =
+              status === 'confirmed'
+                ? firstUnpaidInstallment.dueDate
+                : undefined;
 
             const { discountDays } = getDiscountDays({
               bookingStart: startDate,
               bookingEnd: endDate,
+              installmentDate,
               couponStart,
               couponEnd,
               usedDays,
@@ -191,7 +207,7 @@ export default class BookingView extends Component {
 
   render() {
     const { bookingInfo, role, id } = this.props;
-    const { installments, host } = bookingInfo;
+    const { installments, host, coupon: usedCoupon } = bookingInfo;
 
     const hostRespondingTime =
       host &&
@@ -249,9 +265,17 @@ export default class BookingView extends Component {
       });
     }
 
-    const paymentInfo = installments[0]
+    let paymentInfo = installments[0]
       ? firstUnpaidInstallment
       : newInstallments;
+
+    const updatedInstallments =
+      installments[0] &&
+      createUpdatedNewInstallments({ installments, couponInfo });
+
+    if (updatedInstallments) {
+      paymentInfo = getFirstUnpaidInstallment(updatedInstallments);
+    }
 
     const bookingStatuses = {
       awaitingAdmin: {
@@ -317,6 +341,7 @@ export default class BookingView extends Component {
             startDate={startDate}
             endDate={endDate}
             couponInfo={couponInfo}
+            usedCoupon={usedCoupon}
           />
         ),
       },
@@ -328,6 +353,19 @@ export default class BookingView extends Component {
             hostInfo={hostInfo}
             isLoading={isLoading}
             userRole={role}
+            handlePayNowClick={this.handlePayNowClick}
+            handlePaymentMethod={this.handlePaymentMethod}
+            handleCouponChange={this.handleCouponChange}
+            upfront={upfront}
+            bookingDays={bookingDays}
+            paymentInfo={paymentInfo}
+            installments={installments}
+            updatedInstallments={updatedInstallments}
+            price={price}
+            startDate={startDate}
+            endDate={endDate}
+            couponInfo={couponInfo}
+            usedCoupon={usedCoupon}
           />
         ),
       },
@@ -377,6 +415,7 @@ export default class BookingView extends Component {
             }
             bookingId={bookingInfo._id}
             paymentInfo={paymentInfo}
+            updatedInstallments={updatedInstallments}
             visible={payNow}
             handlePayNowClick={this.handlePayNowClick}
           />

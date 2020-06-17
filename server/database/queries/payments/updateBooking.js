@@ -18,7 +18,9 @@ const updateBooking = ({ bookingId, amount, status, couponId, session }) => {
   }
   if (couponId) {
     updateQuery.coupon = couponId;
-  } else {
+  }
+  // if paying first time
+  if (status && !couponId) {
     updateQuery['$unset'] = { coupon: 1 };
   }
 
