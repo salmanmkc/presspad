@@ -175,20 +175,28 @@ const PaymentDueContent = ({
   endDate,
   couponInfo,
   hostId,
+  installments,
+  updatedInstallments,
+  usedCoupon,
+  bookingDays,
+  dueToday,
 }) => (
   <>
-    <P mt="5" mb="1">
-      Your next payment is due! Please complete your payment below:
-    </P>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
       handleCouponChange={handleCouponChange}
+      paymentDue={dueToday}
+      paymentOverdue={!dueToday}
       data={{
         paymentInfo,
         fullPrice: price,
         startDate,
         endDate,
         couponInfo,
+        installments,
+        updatedInstallments,
+        usedCoupon,
+        bookingDays,
       }}
     />
     <HostInternInfo info={hostInfo} isLoading={isLoading} />

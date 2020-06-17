@@ -374,10 +374,19 @@ export default class BookingView extends Component {
     if (
       status === 'confirmed' &&
       firstUnpaidInstallment &&
-      moment().isSame(firstUnpaidInstallment.dueDate, 'day')
+      moment().isSameOrAfter(firstUnpaidInstallment.dueDate, 'day')
     ) {
+      const dueToday = moment()
+        .subtract(6, 'd')
+        .startOf('d')
+        .isSameOrBefore(
+          moment(firstUnpaidInstallment.dueDate).startOf('d'),
+          'd',
+        );
+
       bookingStatuses.confirmed = {
-        status: 'payment due',
+        status: dueToday ? 'payment due' : 'payment overdue!',
+        statusColor: 'pink',
         statusContentsComponent: () => (
           <PaymentDueContent
             hostId={host._id}
@@ -391,6 +400,11 @@ export default class BookingView extends Component {
             startDate={startDate}
             endDate={endDate}
             couponInfo={couponInfo}
+            installments={installments}
+            updatedInstallments={updatedInstallments}
+            usedCoupon={usedCoupon}
+            bookingDays={bookingDays}
+            dueToday={dueToday}
           />
         ),
       };

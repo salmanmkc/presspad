@@ -29,6 +29,8 @@ const MakePayment = ({
   handlePayNowClick,
   handlePaymentMethod,
   handleCouponChange,
+  paymentDue,
+  paymentOverdue,
   data,
   isNew,
 }) => {
@@ -38,8 +40,8 @@ const MakePayment = ({
     usedCoupon = {},
     bookingDays,
     paymentInfo = {},
-    installments,
-    updatedInstallments,
+    installments = [],
+    updatedInstallments = [],
     upfront,
   } = data;
   const {
@@ -150,11 +152,22 @@ const MakePayment = ({
   netAmount = remainingPrice - couponDiscount;
   return (
     <>
-      {remainingPrice > 0 && (
+      {remainingPrice > 0 && !paymentDue && !paymentOverdue && (
         <T.P>
           Your next payment is due on{' '}
           <b>{getDueDateText(firstUnpaid.dueDate)}</b> You can make the payment
           below.
+        </T.P>
+      )}
+      {paymentDue && (
+        <T.P mt="5" mb="1">
+          Your next payment is due! Please complete your payment below:
+        </T.P>
+      )}
+      {paymentOverdue && (
+        <T.P mt="5" mb="1">
+          Your next payment is now 7 days over due! Please complete your payment
+          below within the next 48 hours or your booking will be terminated.
         </T.P>
       )}
       <Wrapper>
