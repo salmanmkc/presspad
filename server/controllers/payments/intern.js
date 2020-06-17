@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.stripeSK);
 const boom = require('boom');
+const moment = require('moment');
 
 const { getBookingById } = require('../../database/queries/bookings');
 const { getCoupons } = require('../../database/queries/coupon');
+const { discountStripeFees } = require('../../database/queries/payments');
 
 const generatePaymentResponse = require('./generatePaymentResponse');
 const internTransaction = require('./internTransaction');
 
-const { schedulePaymentReminders } = require('./../../services/mailing');
+const { schedulePaymentReminders } = require('../../services/mailing');
 
 const {
   getDiscountDays,
@@ -89,28 +91,30 @@ const internPayment = async (req, res, next) => {
       }
 
       // calculate net booking price
-      const netPrice = booking.price - couponDiscount;
+      // const netPrice = booking.price - couponDiscount;
 
       // calculate installments and compare them
       let newInstallments;
+      const bookingDays =
+        moment(booking.endDate).diff(booking.startDate, 'd') + 1;
       // if 3 installments
       if (Array.isArray(paymentInfo)) {
-        newInstallments = createInstallments(
-          netPrice,
-          booking.startDate,
-          booking.endDate,
-          false,
-        );
+        newInstallments = createInstallments({
+          couponInfo,
+          bookingDays,
+          endDate: booking.endDate,
+          upfront: false,
+        });
         // eslint-disable-next-line prefer-destructuring
         amount = newInstallments[0].amount;
       } else {
         // if paying upfront
-        newInstallments = createInstallments(
-          netPrice,
-          booking.startDate,
-          booking.endDate,
-          true,
-        );
+        newInstallments = createInstallments({
+          couponInfo,
+          bookingDays,
+          endDate: booking.endDate,
+          upfront: true,
+        });
         // eslint-disable-next-line prefer-destructuring
         amount = newInstallments.amount;
       }
@@ -148,6 +152,7 @@ const internPayment = async (req, res, next) => {
     try {
       if (Array.isArray(paymentInfo)) {
         // create payments reminders only in first payment if paying in installments
+        // ToDo  modify to match 4week dates
         await schedulePaymentReminders({
           bookingId,
           startDate: booking.startDate,
@@ -172,7 +177,7 @@ const internPayment = async (req, res, next) => {
       if (paymentMethod) {
         intent = await stripe.paymentIntents.create({
           payment_method: paymentMethod.id,
-          amount: Math.floor(amount * 100),
+          amount,
           currency: 'gbp',
           confirmation_method: 'manual',
           confirm: true,
@@ -189,6 +194,19 @@ const internPayment = async (req, res, next) => {
       if (response.success) {
         await session.commitTransaction();
         // await session.endSession();
+
+        try {
+          const { fee } = await stripe.balanceTransactions.retrieve(
+            intent.charges.data[0].balance_transaction,
+          );
+
+          await discountStripeFees(fee, 'installment');
+        } catch (error) {
+          console.log(error);
+          // ToDo add logs on sentry for this failing errors
+          // should not throw an error because at this point
+          // the stripe payment has been successful and stored in db
+        }
       } else {
         await session.abortTransaction();
         // await session.endSession();

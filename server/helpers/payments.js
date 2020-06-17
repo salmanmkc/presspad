@@ -4,6 +4,28 @@ const { extendMoment } = require('moment-range');
 const moment = extendMoment(Moment);
 
 /**
+ * calculate the price giving range of dates
+ * @param {import("moment-range").MomentRange} range moment range OR number
+ */
+const calculatePrice = range => {
+  if (!range) return 0;
+  let days;
+  if (typeof range === 'number') {
+    if (range <= 0) return 0;
+    days = range;
+  } else {
+    const _range = moment.range(range.start, range.end);
+    _range.start.startOf('day');
+    _range.end.add(1, 'day');
+    days = _range.diff('days');
+  }
+
+  return days * 2000;
+};
+
+exports.calculatePrice = calculatePrice;
+
+/**
  * Create installments array
  * @param {number} netAmount the remaining amount that the intern has to pay
  * @param {Date} startDate booking starting date
@@ -11,41 +33,54 @@ const moment = extendMoment(Moment);
  * @param {boolean} upfront true if pay upfront
  * @returns {Array}
  */
-exports.createInstallments = (netAmount, startDate, endDate, upfront) => {
-  if (upfront) {
+
+exports.createInstallments = ({
+  couponInfo,
+  bookingDays,
+  endDate,
+  upfront,
+}) => {
+  const installments = [];
+  let key = 0;
+  let _bookingDays = bookingDays;
+  const { couponDiscount, discountRate } = couponInfo;
+
+  if (_bookingDays <= 14) return [];
+  if (upfront || _bookingDays < 56) {
+    const amount = calculatePrice(_bookingDays - 14) - couponDiscount;
     return {
-      key: 1,
-      dueDate: moment().isBefore(moment(startDate).subtract(7, 'day'))
-        ? moment(startDate)
-            .subtract(7, 'day')
-            .toISOString()
-        : moment().toISOString(),
-      amount: netAmount,
+      key,
+      dueDate: moment().toISOString(),
+      amount,
     };
   }
   if (moment().isAfter(endDate)) return [];
+  // push first installment
+  installments.push({
+    key,
+    dueDate: moment().toISOString(),
+    amount:
+      _bookingDays > 28
+        ? (calculatePrice(14) * (100 - discountRate)) / 100
+        : (calculatePrice(_bookingDays - 14) * (100 - discountRate)) / 100,
+  });
+  _bookingDays -= 28;
+  while (_bookingDays > 0) {
+    key += 1;
+    installments.push({
+      key,
+      dueDate: moment()
+        .add(28 * key, 'd')
+        .toISOString(),
+      amount:
+        _bookingDays > 28
+          ? (calculatePrice(28) * (100 - discountRate)) / 100
+          : (calculatePrice(_bookingDays) * (100 - discountRate)) / 100,
+    });
+    _bookingDays -= 28;
+  }
 
-  // split payemnts amount
-  const firstPay = Math.floor(netAmount / 3);
-  const secondPay = Math.floor((netAmount - firstPay) / 2);
-  const thirdPay = netAmount - firstPay - secondPay;
-
-  // split payments dueDate
-  const firstDueDate = moment().isBefore(moment(startDate).subtract(7, 'day'))
-    ? moment(startDate)
-        .subtract(7, 'day')
-        .toISOString()
-    : moment().toISOString();
-  const secondDueDate = moment(startDate)
-    .add(Math.round(moment(endDate).diff(startDate, 'days') / 2), 'day')
-    .toISOString();
-  const thirdDueDate = endDate;
-
-  return [
-    { key: 1, dueDate: firstDueDate, amount: firstPay },
-    { key: 2, dueDate: secondDueDate, amount: secondPay },
-    { key: 3, dueDate: thirdDueDate, amount: thirdPay },
-  ];
+  return installments;
 };
 
 /**
@@ -70,7 +105,13 @@ exports.getIntersectRange = getIntersectRange;
  * @param {Object} dates {bookingStart, bookingEnd, couponStart, couponEnd}
  */
 exports.getDiscountDays = dates => {
-  const intersectRange = getIntersectRange(dates);
+  const _dates = {
+    ...dates,
+    // do not calculate discount from the first free two weeks
+    bookingStart: moment(dates.bookingStart).add(14, 'd'),
+  };
+
+  const intersectRange = getIntersectRange(_dates);
 
   if (!intersectRange) return { discountDays: 0 };
 
@@ -80,31 +121,6 @@ exports.getDiscountDays = dates => {
   const discountDays = intersectRange.diff('day') + 1;
 
   return { discountDays, discountRange: intersectRange };
-};
-
-/**
- * calculate the price giving range of dates
- * @param {import("moment-range").MomentRange} range moment range OR number
- */
-exports.calculatePrice = range => {
-  if (!range) return 0;
-  let weeks;
-  let days;
-  if (typeof range === 'number') {
-    weeks = Math.trunc(range / 7);
-    days = range;
-  } else {
-    range.start.startOf('day');
-    range.end.add(1, 'day').endOf('day');
-    weeks = range.diff('weeks');
-    days = range.diff('days');
-  }
-
-  if (weeks >= 2) {
-    return (days - 14) * 20;
-  }
-
-  return 0;
 };
 
 /**

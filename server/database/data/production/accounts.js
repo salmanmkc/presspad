@@ -8,6 +8,8 @@ module.exports = async () => {
       withdrawal: 0,
       donation: 0,
       currentBalance: 0,
+      hostingIncome: 0,
+      bursaryFunds: 0,
     },
   ];
   await Account.create(account);

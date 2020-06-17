@@ -60,7 +60,7 @@ export const createInstallments = ({
   bookingDays,
 }) => {
   const installments = [];
-  let key = 1;
+  let key = 0;
   let _bookingDays = bookingDays;
   const { couponDiscount, discountRate } = couponInfo;
 
@@ -68,7 +68,7 @@ export const createInstallments = ({
   if (upfront || _bookingDays < 56) {
     const amount = calculatePrice(_bookingDays - 14) - couponDiscount;
     return {
-      key: 1,
+      key,
       dueDate: moment().toISOString(),
       amount,
     };
@@ -89,7 +89,7 @@ export const createInstallments = ({
     installments.push({
       key,
       dueDate: moment()
-        .add(28, 'd')
+        .add(28 * key, 'd')
         .toISOString(),
       amount:
         _bookingDays > 28

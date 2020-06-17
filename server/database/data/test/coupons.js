@@ -38,6 +38,7 @@ const createAll = async ({
       usedAmount: 6000,
       startDate: Date.now() + 1 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 365 * 24 * 60 * 60 * 1000, // 365days => 7300 pound
+      code: 'easycode',
     },
   ];
   const expiredCoupon = await Coupon.create(coupon[0]);

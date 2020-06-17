@@ -4,11 +4,14 @@ const {
   createInternalTransaction,
   updatePaidInstallment,
   updateCouponTransaction,
+  updateBooking,
 } = require('../../database/queries/payments');
 
 const { getUserById } = require('../../database/queries/user');
 
 const { getFirstUnpaidInstallment } = require('../../helpers/payments');
+
+const { bookingStatuses } = require('../../constants');
 
 const internTransaction = async (
   session,
@@ -25,8 +28,11 @@ const internTransaction = async (
     { account: hostAccount },
   ] = await Promise.all([getUserById(intern, true), getUserById(host, true)]);
 
+  let newBookingStatus;
+  const { couponId } = coupon;
   // check if new installments
   if (Array.isArray(paymentInfo) || !paymentInfo._id) {
+    newBookingStatus = bookingStatuses.confirmed;
     // create installments
     const installments = await createInstallments(
       paymentInfo,
@@ -57,22 +63,16 @@ const internTransaction = async (
 
     // update the paid installment
     const firstInstallment = await getFirstUnpaidInstallment(installments);
-    await updatePaidInstallment(
-      firstInstallment._id,
-      transaction._id,
-      bookingId,
-      amount,
-      session,
-    );
+    await updatePaidInstallment(firstInstallment._id, transaction._id, session);
 
     // check if there is a coupon used
-    if (coupon.couponId) {
+    if (couponId) {
       const {
         couponDiscount,
         couponDiscountDays,
         couponOrganisationAccount,
-        couponId,
       } = coupon;
+
       const { _id: transactionId } = await createInternalTransaction(
         intern,
         couponOrganisationAccount,
@@ -114,7 +114,6 @@ const internTransaction = async (
       session,
     );
 
-    // update the paid installment
     await updatePaidInstallment(
       paymentInfo._id,
       transaction._id,
@@ -123,6 +122,14 @@ const internTransaction = async (
       session,
     );
   }
+
+  await updateBooking({
+    bookingId,
+    amount,
+    status: newBookingStatus,
+    couponId,
+    session,
+  });
 };
 
 module.exports = internTransaction;

@@ -85,6 +85,7 @@ const MakePayment = ({
                 placeholder="Type code..."
                 value={couponCode}
                 onChange={handleCouponChange}
+                autocomplete="off"
               />
             </DiscountInput>
           </DiscountWrapper>

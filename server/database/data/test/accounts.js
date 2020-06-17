@@ -12,6 +12,8 @@ const presspadAccountData = {
   ...emptyAccount,
   currentBalance: 6000 + 365000 + 5000 + 14000 - 10000,
   income: 6000 + 365000 + 5000 + 14000,
+  hostingIncome: 0,
+  bursaryFunds: 0,
 };
 
 const internAccountData = { ...emptyAccount, income: 5000 + 14000 };

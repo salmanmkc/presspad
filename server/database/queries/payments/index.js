@@ -9,6 +9,8 @@ const {
   confirmOrCancelWithdrawRequest,
   getWithdrawRequestById,
 } = require('./withdrawRequests');
+const updateBooking = require('./updateBooking');
+const discountStripeFees = require('./discountStripeFees');
 
 module.exports = {
   createInstallments,
@@ -21,4 +23,6 @@ module.exports = {
   hostRequestToWithdrawMoney,
   confirmOrCancelWithdrawRequest,
   getWithdrawRequestById,
+  updateBooking,
+  discountStripeFees,
 };
