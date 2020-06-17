@@ -18,6 +18,7 @@ const {
   createInstallments,
   compareInstallments,
   getFirstUnpaidInstallment,
+  createUpdatedNewInstallments,
 } = require('../../helpers/payments');
 
 const internPayment = async (req, res, next) => {
@@ -51,44 +52,52 @@ const internPayment = async (req, res, next) => {
     let couponDiscountDays = 0;
     let couponOrganisationAccount;
     let couponId;
+    let updatedInstallments;
+
+    // Coupon used
+    if (couponInfo.couponCode) {
+      const [coupon] = await getCoupons({
+        code: couponInfo.couponCode,
+      }).exec();
+
+      let installmentDate;
+      if (booking.installments[0]) {
+        const firstUnpaid = getFirstUnpaidInstallment(booking.installments);
+        installmentDate = firstUnpaid.dueDate;
+      }
+
+      // get coupon discount days that maches the booking dates
+      const { discountDays } = getDiscountDays({
+        bookingStart: booking.startDate,
+        installmentDate,
+        bookingEnd: booking.endDate,
+        couponStart: coupon.startDate,
+        couponEnd: coupon.endDate,
+        usedDays: coupon.usedDays,
+      });
+
+      // Validate discount days
+      if (discountDays !== couponInfo.discountDays)
+        return next(boom.badData('wrong coupon Info'));
+
+      // Calculate coupon discount amount
+      couponDiscount =
+        (calculatePrice(discountDays) * coupon.discountRate) / 100;
+
+      // Validate discount amount
+      if (couponDiscount !== couponInfo.couponDiscount)
+        return next(boom.badData('wrong coupon Info'));
+
+      couponDiscountDays = discountDays;
+      couponOrganisationAccount = coupon.organisationAccount;
+      couponId = coupon._id;
+    }
 
     // User ask to create new installments
     if (Array.isArray(paymentInfo) || !paymentInfo._id) {
       // check for old installments
       if (booking.installments[0])
         return next(boom.badData('booking already have installments'));
-
-      // Coupon used
-      if (couponInfo.couponCode) {
-        const [coupon] = await getCoupons({
-          code: couponInfo.couponCode,
-        }).exec();
-
-        // get coupon discount days that maches the booking dates
-        const { discountDays } = getDiscountDays({
-          bookingStart: booking.startDate,
-          bookingEnd: booking.endDate,
-          couponStart: coupon.startDate,
-          couponEnd: coupon.endDate,
-          usedDays: coupon.usedDays,
-        });
-
-        // Validate discount days
-        if (discountDays !== couponInfo.discountDays)
-          return next(boom.badData('wrong coupon Info'));
-
-        // Calculate coupon discount amount
-        couponDiscount =
-          (calculatePrice(discountDays) * coupon.discountRate) / 100;
-
-        // Validate discount amount
-        if (couponDiscount !== couponInfo.couponDiscount)
-          return next(boom.badData('wrong coupon Info'));
-
-        couponDiscountDays = discountDays;
-        couponOrganisationAccount = coupon.organisationAccount;
-        couponId = coupon._id;
-      }
 
       // calculate net booking price
       // const netPrice = booking.price - couponDiscount;
@@ -102,6 +111,7 @@ const internPayment = async (req, res, next) => {
         newInstallments = createInstallments({
           couponInfo,
           bookingDays,
+          startDate: booking.startDate,
           endDate: booking.endDate,
           upfront: false,
         });
@@ -112,6 +122,7 @@ const internPayment = async (req, res, next) => {
         newInstallments = createInstallments({
           couponInfo,
           bookingDays,
+          startDate: booking.startDate,
           endDate: booking.endDate,
           upfront: true,
         });
@@ -123,8 +134,22 @@ const internPayment = async (req, res, next) => {
         return next(boom.badData('wrong installments info'));
     } else {
       // old installment
+
+      // check coupon info
+      if (couponInfo.couponCode) {
+        if (booking.coupon)
+          return next(boom.badData('can only use coupon once per a booking'));
+
+        updatedInstallments = createUpdatedNewInstallments({
+          installments: booking.installments,
+          couponInfo,
+        });
+      }
+
+      const checkInstallment = updatedInstallments || booking.installments;
+
       const firstUnpaidInstallment = getFirstUnpaidInstallment(
-        booking.installments,
+        checkInstallment,
       );
 
       // eslint-disable-next-line prefer-destructuring
@@ -170,6 +195,7 @@ const internPayment = async (req, res, next) => {
         stripeInfo,
         amount,
         coupon,
+        updatedInstallments,
       );
 
       // confirm stripe payments

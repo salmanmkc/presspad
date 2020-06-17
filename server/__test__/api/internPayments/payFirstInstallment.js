@@ -46,7 +46,12 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
     } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
-    const paymentInfo = createInstallments(price, startDate, endDate, false);
+    const paymentInfo = createInstallments({
+      price,
+      startDate,
+      endDate,
+      upfront: false,
+    });
 
     const data = {
       bookingId,
@@ -177,7 +182,12 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
 
     const { internUser } = users;
     const token = `token=${createToken(internUser._id)}`;
-    const paymentInfo = createInstallments(price, startDate, endDate, false);
+    const paymentInfo = createInstallments({
+      price,
+      startDate,
+      endDate,
+      upfront: false,
+    });
 
     paymentInfo[0].amount = 0;
 

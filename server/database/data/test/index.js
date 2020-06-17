@@ -110,6 +110,11 @@ const buildData = options =>
       bookings.pendingBooking._id,
     );
 
+    const updatedAcceptedBooking = await booking.update(
+      coupons.activeCoupon._id,
+      bookings.acceptedNotPaidOnePayment._id,
+    );
+
     const updatedConfirmedPaidUpfrontBooking = await booking.update(
       coupons.expiredCoupon._id,
       bookings.confirmedPaidUpfront._id,
@@ -139,6 +144,7 @@ const buildData = options =>
       installments,
       withdrawRequests,
       updatedPendingBooking,
+      updatedAcceptedBooking,
       updatedConfirmedPaidUpfrontBooking,
       updatedConfirmedPaidFirst,
     };

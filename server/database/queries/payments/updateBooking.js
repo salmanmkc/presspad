@@ -18,6 +18,8 @@ const updateBooking = ({ bookingId, amount, status, couponId, session }) => {
   }
   if (couponId) {
     updateQuery.coupon = couponId;
+  } else {
+    updateQuery['$unset'] = { coupon: 1 };
   }
 
   return Booking.updateOne(

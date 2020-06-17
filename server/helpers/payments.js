@@ -37,6 +37,7 @@ exports.calculatePrice = calculatePrice;
 exports.createInstallments = ({
   couponInfo,
   bookingDays,
+  startDate,
   endDate,
   upfront,
 }) => {
@@ -69,7 +70,7 @@ exports.createInstallments = ({
     key += 1;
     installments.push({
       key,
-      dueDate: moment()
+      dueDate: moment(startDate)
         .add(28 * key, 'd')
         .toISOString(),
       amount:
@@ -81,6 +82,35 @@ exports.createInstallments = ({
   }
 
   return installments;
+};
+
+/**
+ *
+ * @param {object} obj
+ * @param {array} obj.installments
+ * @param {object} obj.couponInfo
+ * @param {number} obj.couponInfo.discountDays
+ * @param {number} obj.couponInfo.discountRate
+ */
+exports.createUpdatedNewInstallments = ({ installments, couponInfo }) => {
+  const { discountDays, discountRate } = couponInfo;
+  let _discountDays = discountDays;
+  return installments.map(installment => {
+    if (installment.transaction || _discountDays <= 0)
+      return { ...installment };
+    const installmentDiscountDays = installment.amount / 2000;
+
+    const installmentDiscount =
+      _discountDays > installmentDiscountDays
+        ? (installmentDiscountDays * discountRate * 2000) / 100
+        : (_discountDays * discountRate * 2000) / 100;
+
+    _discountDays -= installmentDiscountDays;
+    return {
+      ...installment,
+      amount: installment.amount - installmentDiscount,
+    };
+  });
 };
 
 /**
@@ -105,11 +135,20 @@ exports.getIntersectRange = getIntersectRange;
  * @param {Object} dates {bookingStart, bookingEnd, couponStart, couponEnd}
  */
 exports.getDiscountDays = dates => {
-  const _dates = {
-    ...dates,
-    // do not calculate discount from the first free two weeks
-    bookingStart: moment(dates.bookingStart).add(14, 'd'),
-  };
+  let _dates = dates;
+  if (!dates.installmentDate) {
+    _dates = {
+      ...dates,
+      // do not calculate discount from the first free two weeks
+      bookingStart: moment(dates.bookingStart).add(14, 'd'),
+    };
+  } else {
+    _dates = {
+      ...dates,
+      // do not calculate paid days
+      bookingStart: moment(dates.installmentDate),
+    };
+  }
 
   const intersectRange = getIntersectRange(_dates);
 

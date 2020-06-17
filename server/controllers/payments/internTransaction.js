@@ -5,6 +5,7 @@ const {
   updatePaidInstallment,
   updateCouponTransaction,
   updateBooking,
+  updateUnpaidInstallments,
 } = require('../../database/queries/payments');
 
 const { getUserById } = require('../../database/queries/user');
@@ -20,6 +21,7 @@ const internTransaction = async (
   stripeInfo,
   amount,
   coupon,
+  updatedInstallments,
 ) => {
   const { _id: bookingId, intern, host } = booking;
 
@@ -64,34 +66,6 @@ const internTransaction = async (
     // update the paid installment
     const firstInstallment = await getFirstUnpaidInstallment(installments);
     await updatePaidInstallment(firstInstallment._id, transaction._id, session);
-
-    // check if there is a coupon used
-    if (couponId) {
-      const {
-        couponDiscount,
-        couponDiscountDays,
-        couponOrganisationAccount,
-      } = coupon;
-
-      const { _id: transactionId } = await createInternalTransaction(
-        intern,
-        couponOrganisationAccount,
-        hostAccount,
-        couponDiscount,
-        'couponTransaction',
-        session,
-      );
-
-      await updateCouponTransaction(
-        intern,
-        couponId,
-        transactionId,
-        bookingId,
-        couponDiscountDays,
-        couponDiscount,
-        session,
-      );
-    }
   } else {
     // user paying old installment
     // create external transaction
@@ -114,11 +88,38 @@ const internTransaction = async (
       session,
     );
 
-    await updatePaidInstallment(
-      paymentInfo._id,
-      transaction._id,
+    // if used coupon update unpaidInstallments
+    if (couponId) {
+      await updateUnpaidInstallments(updatedInstallments, session);
+    }
+
+    await updatePaidInstallment(paymentInfo._id, transaction._id, session);
+  }
+
+  // check if there is a coupon used
+  if (couponId) {
+    const {
+      couponDiscount,
+      couponDiscountDays,
+      couponOrganisationAccount,
+    } = coupon;
+
+    const { _id: transactionId } = await createInternalTransaction(
+      intern,
+      couponOrganisationAccount,
+      hostAccount,
+      couponDiscount,
+      'couponTransaction',
+      session,
+    );
+
+    await updateCouponTransaction(
+      intern,
+      couponId,
+      transactionId,
       bookingId,
-      amount,
+      couponDiscountDays,
+      couponDiscount,
       session,
     );
   }
