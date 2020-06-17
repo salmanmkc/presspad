@@ -26,7 +26,7 @@ describe('Testing Organisation payemnts (create coupons):', () => {
     };
 
     // coupon for 14 days means that it will discount for 1 payed day (20£)
-    const newCouponValue = 10;
+    const newCouponValue = 1000;
 
     request(app)
       .post(API_COUPONS_URL)

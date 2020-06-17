@@ -41,7 +41,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
 
     const paymentInfo = {
       key: 1,
-      dueDate: moment(booking.startDate).subtract(7, 'day'),
+      dueDate: moment().toISOString(),
       amount: price,
     };
 
@@ -94,23 +94,29 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(price);
-        expect(oldHostCurrentBalance + price).toBe(hostCurrentBalance);
+        expect(hostIncom - oldHostIncom).toBe(price * 0.45);
+        expect(oldHostCurrentBalance + 0.45 * price).toBe(hostCurrentBalance);
 
         // Presspad account checks
         const {
           _id: presspadAccId,
           income: oldPresspadIncom,
           currentBalance: oldPresspadCurrentBalance,
+          bursaryFunds: oldPresspadBursaryFunds,
         } = accounts.presspadAccount;
 
         const {
           income: presspadIncom,
           currentBalance: presspadCurrentBalance,
+          bursaryFunds: presspadBursaryFunds,
         } = await Account.findById(presspadAccId);
 
         expect(presspadIncom - oldPresspadIncom).toBe(price);
         expect(oldPresspadCurrentBalance + price).toBe(presspadCurrentBalance);
+        expect(oldPresspadBursaryFunds + 0.1 * price).toBe(
+          presspadBursaryFunds,
+        );
+        // ToDo test hostingIncome
 
         // Installments check
         const [

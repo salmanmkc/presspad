@@ -40,7 +40,7 @@ describe('Testing for create new booking route', () => {
       startDate: moment.utc().add(281, 'days'),
       endDate: moment.utc().add(300, 'days'),
       //   days to pay for
-      price: 120,
+      price: 12000,
     };
 
     request(app)
@@ -51,7 +51,7 @@ describe('Testing for create new booking route', () => {
       .expect(200)
       .end((err, res) => {
         expect(res.body).toBeDefined();
-
+        expect(res.body.success).toBe(true);
         done(err);
       });
   });
