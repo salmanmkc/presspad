@@ -169,12 +169,6 @@ exports.getListingActiveBookings = listingId =>
     listing: listingId,
     $or: [
       {
-        status: 'awaiting admin',
-      },
-      {
-        status: 'pending',
-      },
-      {
         status: 'accepted',
       },
       {
