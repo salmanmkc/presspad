@@ -22,6 +22,7 @@ const MakePayment = ({
   isNew,
 }) => {
   const { fullPrice, couponInfo, paymentInfo } = data;
+  console.log('info', data);
   const { couponCode, couponDiscount, isCouponLoading, error } = couponInfo;
 
   const { amount } = paymentInfo;

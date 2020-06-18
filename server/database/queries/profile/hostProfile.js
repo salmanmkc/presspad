@@ -169,9 +169,6 @@ exports.getListingActiveBookings = listingId =>
     listing: listingId,
     $or: [
       {
-        status: 'accepted',
-      },
-      {
         status: 'confirmed',
       },
       {
