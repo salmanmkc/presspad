@@ -71,7 +71,7 @@ const internDashboard = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$intern', '$intern'] },
-                  { $ne: ['$status', 'cancelled'] },
+                  // { $ne: ['$status', 'cancelled'] },
                 ],
               },
             },
