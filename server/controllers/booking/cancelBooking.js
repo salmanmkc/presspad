@@ -26,6 +26,7 @@ const cancelBooking = async (req, res, next) => {
 
     let cancelledBooking;
     // check if booking is valid and if cancellation before payment
+    console.log('REACHED', bookingId);
     const booking = await getBooking(bookingId);
     const { status, payedAmount } = booking[0];
 
@@ -48,6 +49,7 @@ const cancelBooking = async (req, res, next) => {
 
     return next(boom.badImplementation());
   } catch (err) {
+    console.log(err);
     return next(boom.badImplementation(err));
   }
 };
