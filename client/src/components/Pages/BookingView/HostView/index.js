@@ -170,7 +170,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
       />
     ),
     accepted: () => <AcceptedContent internName={intern.name} />,
-    confirmed: () => <ConfirmedContent />,
+    confirmed: () => <ConfirmedContent bookingInfo={bookingInfo} />,
     rejected: () => <RejectedContent />,
     // toDo "When we get more about canceled bookings"
     // maybe there should be a different view for canceled bookings?
