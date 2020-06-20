@@ -46,6 +46,7 @@ const WaitingContent = ({ hostRespondingTime, hostId }) => (
 
 const AcceptedContent = ({
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
   handlePaymentMethod,
   handleCouponChange,
   upfront,
@@ -72,6 +73,7 @@ const AcceptedContent = ({
     </PXSBold>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
       handlePaymentMethod={handlePaymentMethod}
       handleCouponChange={handleCouponChange}
       data={{
@@ -117,6 +119,7 @@ const ConfirmedContent = ({
   userRole,
   hostId,
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
   handlePaymentMethod,
   handleCouponChange,
   upfront,
@@ -134,6 +137,7 @@ const ConfirmedContent = ({
     {!!price && (
       <MakePayment
         handlePayNowClick={handlePayNowClick}
+        handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
         handlePaymentMethod={handlePaymentMethod}
         handleCouponChange={handleCouponChange}
         data={{
@@ -168,6 +172,7 @@ const PaymentDueContent = ({
   isLoading,
   userRole,
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
   handleCouponChange,
   paymentInfo,
   price,
@@ -184,6 +189,7 @@ const PaymentDueContent = ({
   <>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
       handleCouponChange={handleCouponChange}
       paymentDue={dueToday}
       paymentOverdue={!dueToday}

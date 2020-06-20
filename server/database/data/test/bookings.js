@@ -82,7 +82,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 148 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 10000,
-      payedAmount: 10000 - (10000 * couponDiscountRate) / 100,
+      payedAmount: 10000,
       moneyGoTo: 'presspad',
     },
     // confirmed & paid (first payment)

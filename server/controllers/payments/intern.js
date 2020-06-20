@@ -28,6 +28,7 @@ const internPayment = async (req, res, next) => {
     paymentInfo,
     couponInfo,
     bookingId,
+    withoutPay,
   } = req.body;
 
   try {
@@ -53,6 +54,9 @@ const internPayment = async (req, res, next) => {
     let couponOrganisationAccount;
     let couponId;
     let updatedInstallments;
+
+    if (!couponInfo.couponCode && withoutPay)
+      return next(boom.badData('coupon must be used'));
 
     // Coupon used
     if (couponInfo.couponCode) {
@@ -173,7 +177,7 @@ const internPayment = async (req, res, next) => {
     };
     try {
       // do all transaction queries
-      await internTransaction(
+      const { storedInstallments } = await internTransaction(
         session,
         paymentInfo,
         booking,
@@ -181,59 +185,67 @@ const internPayment = async (req, res, next) => {
         amount,
         coupon,
         updatedInstallments,
+        withoutPay,
       );
 
-      // confirm stripe payments
-      let intent; // to store the stripe info respone then check if it require 3d secure
-      if (paymentMethod) {
-        intent = await stripe.paymentIntents.create({
-          payment_method: paymentMethod.id,
-          amount,
-          currency: 'gbp',
-          confirmation_method: 'manual',
-          confirm: true,
-        });
-      } else if (paymentIntent) {
-        intent = await stripe.paymentIntents.confirm(paymentIntent.id);
-      } else {
-        throw boom.badData('no payment object from the client');
-      }
-
-      const response = await generatePaymentResponse(intent);
-
-      // check if payment confirmed then commit transaction
-      if (response.success) {
+      let response;
+      if (withoutPay) {
+        response = { success: true };
         await session.commitTransaction();
-
-        try {
-          if (Array.isArray(paymentInfo)) {
-            // create payments reminders only once when paying in installments
-            // ToDo  modify to match 4week dates
-            await schedulePaymentReminders({
-              bookingId,
-              installments: paymentInfo,
-              startDate: booking.startDate,
-              endDate: booking.endDate,
-              internId: booking.intern,
-              // session,  // ToDo Debug it later then move it up
-            });
-          }
-
-          const { fee } = await stripe.balanceTransactions.retrieve(
-            intent.charges.data[0].balance_transaction,
-          );
-
-          await discountStripeFees(fee, 'installment');
-        } catch (error) {
-          console.log(error);
-          // ToDo add logs on sentry for this failing errors
-          // should not throw an error because at this point
-          // the stripe payment has been successful and stored in db
-        }
       } else {
-        await session.abortTransaction();
-        // await session.endSession();
+        // confirm stripe payments
+        let intent; // to store the stripe info respone then check if it require 3d secure
+        if (paymentMethod) {
+          intent = await stripe.paymentIntents.create({
+            payment_method: paymentMethod.id,
+            amount,
+            currency: 'gbp',
+            confirmation_method: 'manual',
+            confirm: true,
+          });
+        } else if (paymentIntent) {
+          intent = await stripe.paymentIntents.confirm(paymentIntent.id);
+        } else {
+          throw boom.badData('no payment object from the client');
+        }
+
+        response = await generatePaymentResponse(intent);
+
+        // check if payment confirmed then commit transaction
+        if (response.success) {
+          await session.commitTransaction();
+
+          try {
+            if (Array.isArray(paymentInfo)) {
+              // create payments reminders only once when paying in installments
+              // ToDo  modify to match 4week dates
+              await schedulePaymentReminders({
+                bookingId,
+                installments: storedInstallments,
+                startDate: booking.startDate,
+                endDate: booking.endDate,
+                internId: booking.intern,
+                // session,  // ToDo Debug it later then move it up
+              });
+            }
+
+            const { fee } = await stripe.balanceTransactions.retrieve(
+              intent.charges.data[0].balance_transaction,
+            );
+
+            await discountStripeFees(fee, 'installment');
+          } catch (error) {
+            console.log(error);
+            // ToDo add logs on sentry for this failing errors
+            // should not throw an error because at this point
+            // the stripe payment has been successful and stored in db
+          }
+        } else {
+          await session.abortTransaction();
+          // await session.endSession();
+        }
       }
+
       return res.json(response);
     } catch (error) {
       await session.abortTransaction();

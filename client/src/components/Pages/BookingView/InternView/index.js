@@ -24,6 +24,7 @@ import BookingDates from '../../../Common/BookingDetailsBox';
 import CancelBookingButton from '../CancelBookingButton';
 
 import PayNowModal from './PayNowModal';
+import ConfirmWithoutPayModal from './ConfirmWithoutPayModal';
 import { Wrapper, ContentWrapper } from './InternView.style';
 import {
   WaitingContent,
@@ -53,6 +54,7 @@ export default class BookingView extends Component {
       error: '',
     },
     payNow: false,
+    withoutPay: false,
     upfront: true,
     isLoading: true,
   };
@@ -204,6 +206,8 @@ export default class BookingView extends Component {
 
   handlePayNowClick = payNow => this.setState({ payNow });
 
+  handleConfirmWithoutPayClick = withoutPay => this.setState({ withoutPay });
+
   handlePaymentMethod = upfront => this.setState({ upfront });
 
   render() {
@@ -220,6 +224,7 @@ export default class BookingView extends Component {
       listing,
       couponInfo,
       payNow,
+      withoutPay,
       upfront,
       reviews,
     } = this.state;
@@ -333,6 +338,7 @@ export default class BookingView extends Component {
           <AcceptedContent
             hostId={host._id}
             handlePayNowClick={this.handlePayNowClick}
+            handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
             handlePaymentMethod={this.handlePaymentMethod}
             handleCouponChange={this.handleCouponChange}
             upfront={upfront}
@@ -355,6 +361,7 @@ export default class BookingView extends Component {
             isLoading={isLoading}
             userRole={role}
             handlePayNowClick={this.handlePayNowClick}
+            handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
             handlePaymentMethod={this.handlePaymentMethod}
             handleCouponChange={this.handleCouponChange}
             upfront={upfront}
@@ -395,6 +402,7 @@ export default class BookingView extends Component {
             isLoading={isLoading}
             userRole={role}
             handlePayNowClick={this.handlePayNowClick}
+            handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
             handleCouponChange={this.handleCouponChange}
             paymentInfo={paymentInfo}
             price={price}
@@ -423,6 +431,16 @@ export default class BookingView extends Component {
     return (
       <Wrapper>
         {/* PayNowModal should be wrapped in an Elements component in order to stripe api to work */}
+        <ConfirmWithoutPayModal
+          handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
+          paymentInfo={paymentInfo}
+          updatedInstallments={updatedInstallments}
+          couponInfo={
+            couponInfo.error ? { ...couponInfo, couponCode: '' } : couponInfo
+          }
+          bookingId={bookingInfo._id}
+          visible={withoutPay}
+        />
         <Elements>
           <PayNowModal
             couponInfo={

@@ -11,7 +11,11 @@ const {
 } = require('./withdrawRequests');
 const updateBooking = require('./updateBooking');
 const discountStripeFees = require('./discountStripeFees');
-const updateUnpaidInstallments = require('./updateUnpaidInstallments');
+const {
+  updateUnpaidInstallments,
+  removeUnpaidInstallments,
+} = require('./updateUnpaidInstallments');
+const removePaymentsReminders = require('./removePaymentsReminders');
 
 module.exports = {
   createInstallments,
@@ -27,4 +31,6 @@ module.exports = {
   updateBooking,
   discountStripeFees,
   updateUnpaidInstallments,
+  removeUnpaidInstallments,
+  removePaymentsReminders,
 };

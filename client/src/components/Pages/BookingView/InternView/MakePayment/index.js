@@ -29,6 +29,7 @@ import {
 
 const MakePayment = ({
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
   handlePaymentMethod,
   handleCouponChange,
   paymentDue,
@@ -60,15 +61,19 @@ const MakePayment = ({
     }
   }, [handleCouponChange, isNew, usedCoupon.code]);
 
+  let netAmount = fullPrice - couponDiscount;
+  useEffect(() => {
+    if (netAmount <= 0) {
+      handlePaymentMethod(true);
+    }
+  }, [handlePaymentMethod, netAmount]);
+
   let { amount } = paymentInfo;
   if (!upfront && isNew) {
     amount = paymentInfo[0] ? paymentInfo[0].amount : 0;
   }
 
   const discountApplied = discountRate;
-  let netAmount = fullPrice - couponDiscount;
-  const remainingPrice = !isNew && getRemainingPrice(installments);
-  const firstUnpaid = !isNew && getFirstUnpaidInstallment(installments);
 
   if (isNew) {
     return (
@@ -129,27 +134,41 @@ const MakePayment = ({
           <Checkbox
             checked={!upfront}
             onChange={() => handlePaymentMethod(false)}
-            disabled={bookingDays < 56}
+            disabled={bookingDays < 56 || netAmount <= 0}
           >
-            <T.P disabled={bookingDays < 56} as="span">
+            <T.P disabled={bookingDays < 56 || netAmount <= 0} as="span">
               Pay in 4-week installments
             </T.P>
           </Checkbox>
         </PaymentMethodWrapper>
         {!upfront && <PaymentPlan installments={paymentInfo} />}
-        <ButtonNew
-          outline
-          type="tertiary"
-          mt="6"
-          mb="7"
-          onClick={() => handlePayNowClick(true)}
-        >
-          Pay £{formatPrice(amount)} now
-        </ButtonNew>
+        {netAmount <= 0 ? (
+          <ButtonNew
+            outline
+            type="tertiary"
+            mt="6"
+            mb="7"
+            onClick={() => handleConfirmWithoutPayClick(true)}
+          >
+            Confirm now
+          </ButtonNew>
+        ) : (
+          <ButtonNew
+            outline
+            type="tertiary"
+            mt="6"
+            mb="7"
+            onClick={() => handlePayNowClick(true)}
+          >
+            Pay £{formatPrice(amount)} now
+          </ButtonNew>
+        )}
       </Wrapper>
     );
   }
 
+  const remainingPrice = getRemainingPrice(installments);
+  const firstUnpaid = getFirstUnpaidInstallment(installments);
   netAmount = remainingPrice - couponDiscount;
   return (
     <>
@@ -240,7 +259,7 @@ const MakePayment = ({
           </>
         )}
         <PaymentPlan installments={updatedInstallments} />
-        {remainingPrice > 0 && (
+        {netAmount > 0 && (
           <ButtonNew
             outline
             type="tertiary"
@@ -249,6 +268,17 @@ const MakePayment = ({
             onClick={() => handlePayNowClick(true)}
           >
             Pay £{formatPrice(amount)} now
+          </ButtonNew>
+        )}
+        {netAmount <= 0 && remainingPrice > 0 && (
+          <ButtonNew
+            outline
+            type="tertiary"
+            mt="6"
+            mb="7"
+            onClick={() => handleConfirmWithoutPayClick(true)}
+          >
+            Confirm now
           </ButtonNew>
         )}
       </Wrapper>

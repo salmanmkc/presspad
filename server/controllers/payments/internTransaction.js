@@ -6,6 +6,8 @@ const {
   updateCouponTransaction,
   updateBooking,
   updateUnpaidInstallments,
+  removeUnpaidInstallments,
+  removePaymentsReminders,
 } = require('../../database/queries/payments');
 
 const { getUserById } = require('../../database/queries/user');
@@ -22,6 +24,7 @@ const internTransaction = async (
   amount,
   coupon,
   updatedInstallments,
+  withoutPay,
 ) => {
   const { _id: bookingId, intern, host } = booking;
 
@@ -31,69 +34,93 @@ const internTransaction = async (
   ] = await Promise.all([getUserById(intern, true), getUserById(host, true)]);
 
   let newBookingStatus;
+  let installments;
   const { couponId } = coupon;
   // check if new installments
   if (Array.isArray(paymentInfo) || !paymentInfo._id) {
     newBookingStatus = bookingStatuses.confirmed;
-    // create installments
-    const installments = await createInstallments(
-      paymentInfo,
-      bookingId,
-      intern,
-      host,
-      session,
-    );
-    // create external transaction
-    await createExternalTransaction(
-      intern,
-      internAccount,
-      amount,
-      stripeInfo,
-      'deposite',
-      session,
-    );
+    if (!withoutPay) {
+      // create installments
+      installments = await createInstallments(
+        paymentInfo,
+        bookingId,
+        intern,
+        host,
+        session,
+      );
+      // create external transaction
+      await createExternalTransaction(
+        intern,
+        internAccount,
+        amount,
+        stripeInfo,
+        'deposite',
+        session,
+      );
 
-    // create internal transaction for the installment
-    const transaction = await createInternalTransaction(
-      intern,
-      internAccount,
-      hostAccount,
-      amount,
-      'installment',
-      session,
-    );
+      // create internal transaction for the installment
+      const transaction = await createInternalTransaction(
+        intern,
+        internAccount,
+        hostAccount,
+        amount,
+        'installment',
+        session,
+      );
 
-    // update the paid installment
-    const firstInstallment = await getFirstUnpaidInstallment(installments);
-    await updatePaidInstallment(firstInstallment._id, transaction._id, session);
+      // update the paid installment
+      const firstInstallment = await getFirstUnpaidInstallment(installments);
+      await updatePaidInstallment(
+        firstInstallment._id,
+        transaction._id,
+        session,
+      );
+    }
   } else {
     // user paying old installment
-    // create external transaction
-    await createExternalTransaction(
-      intern,
-      internAccount,
-      amount,
-      stripeInfo,
-      'deposite',
-      session,
-    );
+    let transaction;
+    if (!withoutPay) {
+      // create external transaction
+      await createExternalTransaction(
+        intern,
+        internAccount,
+        amount,
+        stripeInfo,
+        'deposite',
+        session,
+      );
 
-    // create internal transaction for the installment
-    const transaction = await createInternalTransaction(
-      intern,
-      internAccount,
-      hostAccount,
-      amount,
-      'installment',
-      session,
-    );
+      // create internal transaction for the installment
+      transaction = await createInternalTransaction(
+        intern,
+        internAccount,
+        hostAccount,
+        amount,
+        'installment',
+        session,
+      );
+    }
 
     // if used coupon update unpaidInstallments
     if (couponId) {
-      await updateUnpaidInstallments(updatedInstallments, session);
+      const installmentsIds = updatedInstallments.reduce((acc, curr) => {
+        if (!curr.transaction) {
+          acc.push(curr._id);
+        }
+        return acc;
+      }, []);
+      if (withoutPay) {
+        await removeUnpaidInstallments(installmentsIds, session);
+      } else {
+        await updateUnpaidInstallments(updatedInstallments, session);
+      }
+      await removePaymentsReminders(installmentsIds, session);
     }
 
-    await updatePaidInstallment(paymentInfo._id, transaction._id, session);
+    // has to come after updateUnpaidInstallments
+    if (!withoutPay) {
+      await updatePaidInstallment(paymentInfo._id, transaction._id, session);
+    }
   }
 
   // check if there is a coupon used
@@ -131,6 +158,8 @@ const internTransaction = async (
     couponId,
     session,
   });
+
+  return { storedInstallments: installments };
 };
 
 module.exports = internTransaction;

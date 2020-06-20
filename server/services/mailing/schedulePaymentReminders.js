@@ -19,12 +19,13 @@ const schedulePaymentReminders = async ({
     throw new Error('start date must be before end date');
   }
 
-  installments.forEach(({ dueDate, key }) => {
+  installments.forEach(({ _id, dueDate, key }) => {
     if (!moment().isSameOrAfter(dueDate, 'd')) {
       reminders.push({
         type: 'PAYMENT_REMINDER',
         dueDate: moment(dueDate).subtract(2, 'd'),
         data: {
+          installmentId: _id,
           bookingId: mongoose.Types.ObjectId(bookingId),
           internId: mongoose.Types.ObjectId(internId),
           paymentNumber: key + 1,

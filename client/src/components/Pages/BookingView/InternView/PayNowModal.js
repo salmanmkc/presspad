@@ -111,7 +111,12 @@ class PayNowModal extends Component {
     }
 
     if (!stripe) {
-      return <Alert type="error" message="stripejs hasn't loaded yet" />;
+      return (
+        <Alert
+          type="error"
+          message="stripejs hasn't loaded yet, refresh the page"
+        />
+      );
     }
 
     if (success) {
