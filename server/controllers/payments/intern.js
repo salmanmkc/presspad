@@ -172,18 +172,6 @@ const internPayment = async (req, res, next) => {
       couponId,
     };
     try {
-      if (Array.isArray(paymentInfo)) {
-        // create payments reminders only in first payment if paying in installments
-        // ToDo  modify to match 4week dates
-        await schedulePaymentReminders({
-          bookingId,
-          startDate: booking.startDate,
-          endDate: booking.endDate,
-          internId: booking.intern,
-          // session,  // ToDo Debug it later
-        });
-      }
-
       // do all transaction queries
       await internTransaction(
         session,
@@ -216,9 +204,21 @@ const internPayment = async (req, res, next) => {
       // check if payment confirmed then commit transaction
       if (response.success) {
         await session.commitTransaction();
-        // await session.endSession();
 
         try {
+          if (Array.isArray(paymentInfo)) {
+            // create payments reminders only once when paying in installments
+            // ToDo  modify to match 4week dates
+            await schedulePaymentReminders({
+              bookingId,
+              installments: paymentInfo,
+              startDate: booking.startDate,
+              endDate: booking.endDate,
+              internId: booking.intern,
+              // session,  // ToDo Debug it later then move it up
+            });
+          }
+
           const { fee } = await stripe.balanceTransactions.retrieve(
             intent.charges.data[0].balance_transaction,
           );
@@ -237,8 +237,9 @@ const internPayment = async (req, res, next) => {
       return res.json(response);
     } catch (error) {
       await session.abortTransaction();
-      // await session.endSession();
       throw error;
+    } finally {
+      session.endSession();
     }
   } catch (error) {
     if (error.statusCode === 402) {

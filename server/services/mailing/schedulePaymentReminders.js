@@ -4,59 +4,36 @@ const {
   createScheduledEmails,
 } = require('../../database/queries/ScheduledEmail');
 
-const schedulePaymentReminders = ({
+const schedulePaymentReminders = async ({
   startDate,
   endDate,
   bookingId,
   internId,
+  installments,
   session,
-}) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const reminders = [];
+}) => {
+  const reminders = [];
 
-      const currnetDate = moment();
-      const stayIntervalInMS =
-        (moment(endDate).valueOf() - moment(startDate).valueOf()) / 2;
-      const stayMidWayDate = moment(
-        stayIntervalInMS + moment(startDate).valueOf(),
-      );
-      const before2WeeksOfStayMidWayDate = stayMidWayDate.subtract(2, 'weeks');
-      const before2WeeksOfStayEndDate = moment(endDate).subtract(2, 'weeks');
+  // checks
+  if (moment(startDate).isSameOrAfter(moment(endDate))) {
+    throw new Error('start date must be before end date');
+  }
 
-      // checks
-      if (moment(startDate).isSameOrAfter(moment(endDate))) {
-        return reject(new Error('start date must be before end date'));
-      }
-
-      const data = {
-        bookingId: mongoose.Types.ObjectId(bookingId),
-        internId: mongoose.Types.ObjectId(internId),
-      };
-
-      reminders.push(
-        {
-          type: 'SECOND_PAYMENT_REMINDER',
-          dueDate: moment.max(
-            before2WeeksOfStayMidWayDate,
-            currnetDate.endOf('day'),
-          ),
-          data,
+  installments.forEach(({ dueDate, key }) => {
+    if (!moment().isSameOrAfter(dueDate, 'd')) {
+      reminders.push({
+        type: 'PAYMENT_REMINDER',
+        dueDate: moment(dueDate).subtract(2, 'd'),
+        data: {
+          bookingId: mongoose.Types.ObjectId(bookingId),
+          internId: mongoose.Types.ObjectId(internId),
+          paymentNumber: key + 1,
         },
-        {
-          type: 'THIRD_PAYMENT_REMINDER',
-          dueDate: moment.max(
-            before2WeeksOfStayEndDate,
-            currnetDate.endOf('day'),
-          ),
-          data,
-        },
-      );
-      await createScheduledEmails(reminders, session);
-      return resolve();
-    } catch (error) {
-      return reject(error);
+      });
     }
   });
+
+  await createScheduledEmails(reminders, session);
+};
 
 module.exports = schedulePaymentReminders;
