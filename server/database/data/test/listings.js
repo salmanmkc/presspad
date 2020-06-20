@@ -76,12 +76,15 @@ const createNew = async ({ fillMissedFields = true, listingData = {} }) => {
 };
 
 const createAll = async ({ users }) => {
-  const { hostUser } = users;
+  const { hostUser, hostUser2 } = users;
 
   await reset();
-  const listings = [{ ...defaultListingData, user: hostUser }];
-  const [LondonListing] = await Listing.create(listings);
-  return { LondonListing };
+  const listings = [
+    { ...defaultListingData, user: hostUser },
+    { ...defaultListingData, user: hostUser2 },
+  ];
+  const [LondonListing, LondonListing2] = await Listing.create(listings);
+  return { LondonListing, LondonListing2 };
 };
 
 module.exports = {

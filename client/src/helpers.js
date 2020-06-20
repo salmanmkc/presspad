@@ -92,7 +92,7 @@ export const calculatePriceByRange = range => {
   }
 
   if (weeks >= 2) {
-    return (days - 14) * 20;
+    return (days - 14) * 2000;
   }
 
   return 0;
@@ -324,3 +324,5 @@ export const calculateHostRespondingTime = (
   );
   return hostRespondingTime || 7;
 };
+
+export const formatPrice = price => (price / 100).toFixed();

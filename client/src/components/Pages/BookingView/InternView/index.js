@@ -15,6 +15,7 @@ import {
 import {
   calculatePrice,
   calculateHostRespondingTime,
+  formatPrice,
 } from '../../../../helpers';
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
@@ -453,7 +454,7 @@ export default class BookingView extends Component {
           </CancelBookingButton>
         )}
         <BookingDates
-          price={price / 100}
+          price={formatPrice(price)}
           startDate={startDate}
           endDate={endDate}
           intern

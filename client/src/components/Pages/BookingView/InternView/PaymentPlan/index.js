@@ -6,6 +6,7 @@ import * as T from '../../../../Common/Typography';
 import Icon from '../../../../Common/Icon';
 
 import { getDueDateText } from '../../helpers';
+import { formatPrice } from '../../../../../helpers';
 
 const PaymentPlan = ({ installments }) => (
   <Wrapper>
@@ -36,7 +37,7 @@ const PaymentPlan = ({ installments }) => (
             ) : (
               <T.P>{getDueDateText(dueDate)}</T.P>
             )}
-            <T.P>£{(amount / 100).toFixed(2)}</T.P>
+            <T.P>£{formatPrice(amount)}</T.P>
           </PaymentLine>
         ))
     )}

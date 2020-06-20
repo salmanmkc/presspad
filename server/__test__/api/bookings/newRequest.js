@@ -96,7 +96,7 @@ describe('Testing for create new booking route', () => {
       listing: LondonListing._id,
       startDate: moment.utc().add(10, 'days'),
       endDate: moment.utc().add(20, 'days'),
-      price: 220,
+      price: 0,
     };
 
     request(app)
@@ -128,7 +128,7 @@ describe('Testing for create new booking route', () => {
       listing: LondonListing._id,
       startDate: moment.utc().add(6, 'days'),
       endDate: moment.utc().add(14, 'days'),
-      price: 220,
+      price: 0,
     };
 
     request(app)

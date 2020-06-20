@@ -20,7 +20,7 @@ const createCoupon = async (req, res, next) => {
 
   const { internName, discountRate, startDate, endDate, intern } = body;
 
-  const range = moment.range(moment(startDate).add(14, 'd'), endDate);
+  const range = moment.range(moment(startDate), endDate);
   const amount = calculatePrice(range);
 
   const days = range.diff('days');

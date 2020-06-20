@@ -27,6 +27,7 @@ import {
   API_ACCEPT_BOOKING_URL,
 } from '../../../../constants/apiRoutes';
 import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import { formatPrice } from '../../../../helpers';
 
 const initialState = {
   bookingStatus: '',
@@ -241,7 +242,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
       <CancelBookingButton>cancel booking</CancelBookingButton>
 
       <BookingDates
-        price={price / 100}
+        price={formatPrice(price)}
         startDate={startDate}
         endDate={endDate}
         intern

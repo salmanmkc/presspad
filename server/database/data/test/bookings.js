@@ -95,7 +95,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 210 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 92000,
-      payedAmount: 14000,
+      payedAmount: 14000 + 46000,
       moneyGoTo: 'host',
     },
     // cancelled

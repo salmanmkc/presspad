@@ -9,6 +9,7 @@ import {
   PaymentModalTitle,
   InfoMessage,
 } from './PaymentsPlan.style';
+import { formatPrice } from '../../../../helpers';
 
 import { API_INTERN_PAYMENT_URL } from '../../../../constants/apiRoutes';
 
@@ -149,7 +150,7 @@ class PayNowModal extends Component {
           onClick={this.handleSubmit}
           disabled={isLoading}
         >
-          Pay £{(amount / 100).toFixed(2)}&nbsp;now
+          Pay £{formatPrice(amount)}&nbsp;now
         </Button>
       </>
     );

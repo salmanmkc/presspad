@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import { Row, Skeleton, Alert } from 'antd';
 
-// import { calculatePrice } from "../helpers";
+import { formatPrice } from '../../../../helpers';
 
 import { BookingInfoWrapper, InfoText, InfoValue } from './PaymentsPlan.style';
 
@@ -62,13 +62,13 @@ const BookingInfo = props => {
             </InfoValue>
             <InfoText>Full price for period</InfoText>
             <InfoValue mbottom="2.5rem" align="center" light>
-              £{(fullPrice / 100).toFixed(2)}
+              £{formatPrice(fullPrice)}
             </InfoValue>
             {status === 'confirmed' ? (
               <>
                 <InfoText>Coupon discounts</InfoText>
                 <InfoValue mbottom="2.5rem" align="center" light>
-                  £{(discounts / 100).toFixed(2)}
+                  £{formatPrice(discounts)}
                 </InfoValue>
                 <InfoText>
                   {role === 'intern'
@@ -76,7 +76,7 @@ const BookingInfo = props => {
                     : 'So far you’ve recieved'}
                 </InfoText>
                 <InfoValue mbottom="2.5rem" align="center" light>
-                  £{(payedAmount / 100).toFixed(2)}
+                  £{formatPrice(payedAmount)}
                 </InfoValue>
               </>
             ) : null}
@@ -100,11 +100,11 @@ const BookingInfo = props => {
               <InfoValue mbottom="2.5rem" align="center">
                 £
                 {firstUnpaidInstallment.amount &&
-                  (firstUnpaidInstallment.amount / 100).toFixed(2)}
+                  formatPrice(firstUnpaidInstallment.amount)}
               </InfoValue>
               {role === 'intern' && (
                 <PayButton onClick={() => handlePayNowClick(true)}>
-                  Pay £{(firstUnpaidInstallment.amount / 100).toFixed(2)} now
+                  Pay £{formatPrice(firstUnpaidInstallment.amount)} now
                 </PayButton>
               )}
             </Row>

@@ -11,6 +11,7 @@ import {
   createDatesArray,
   getDateRangeFromArray,
   calculatePriceByRange,
+  formatPrice,
 } from '../../../helpers';
 
 // Typography
@@ -319,24 +320,22 @@ class CalendarComponent extends Component {
     const discountExists =
       (!couponError && couponId && couponDiscount > 0) || bursary;
     const validPrice = price > 0;
+    const _price = formatPrice(price);
+    const _newPrice = formatPrice(bursary ? 0 : price - couponDiscount);
 
     if (validPrice && discountExists) {
       return (
         <DiscountPriceDetails>
           {isMobile
-            ? pricingTypographies.priceMobile(
-                bursary ? 0 : price - couponDiscount,
-              )
-            : pricingTypographies.priceDesktop(
-                bursary ? 0 : price - couponDiscount,
-              )}
-          {pricingTypographies.formerPrice(price)}
+            ? pricingTypographies.priceMobile(_newPrice)
+            : pricingTypographies.priceDesktop(_newPrice)}
+          {pricingTypographies.formerPrice(_price)}
         </DiscountPriceDetails>
       );
     }
     return isMobile
-      ? pricingTypographies.priceMobile(price)
-      : pricingTypographies.priceDesktop(price);
+      ? pricingTypographies.priceMobile(_price)
+      : pricingTypographies.priceDesktop(_price);
   };
 
   renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
@@ -528,7 +527,8 @@ class CalendarComponent extends Component {
                   £
                   {bursary
                     ? 0
-                    : (!couponError && price - couponDiscount) || price}
+                    : formatPrice(!couponError && price - couponDiscount) ||
+                      formatPrice(price)}
                 </strong>
               </T.PS>
             ) : (
@@ -538,7 +538,8 @@ class CalendarComponent extends Component {
                   £
                   {bursary
                     ? 0
-                    : (!couponError && price - couponDiscount) || price}
+                    : formatPrice(!couponError && price - couponDiscount) ||
+                      formatPrice(price)}
                 </strong>
               </T.PL>
             )}

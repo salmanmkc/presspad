@@ -15,6 +15,8 @@ import {
   getDueDateText,
 } from '../../helpers';
 
+import { formatPrice } from '../../../../../helpers';
+
 import {
   Wrapper,
   PriceWrapper,
@@ -77,7 +79,7 @@ const MakePayment = ({
           <PS>Full price for period:</PS>
           {couponDiscount > 0 ? (
             <PreviousPriceWrapper>
-              <T.PBold>£{(netAmount / 100).toFixed(2)}</T.PBold>
+              <T.PBold>£{formatPrice(netAmount)}</T.PBold>
               <T.PXSBold
                 color="gray"
                 style={{
@@ -85,11 +87,11 @@ const MakePayment = ({
                   marginLeft: '0.5rem',
                 }}
               >
-                £{(fullPrice / 100).toFixed(2)}
+                £{formatPrice(fullPrice)}
               </T.PXSBold>
             </PreviousPriceWrapper>
           ) : (
-            <H4 color="darkerGray">£{(netAmount / 100).toFixed(2)}</H4>
+            <H4 color="darkerGray">£{formatPrice(netAmount)}</H4>
           )}
         </PriceWrapper>
         <DiscountWrapper>
@@ -143,7 +145,7 @@ const MakePayment = ({
           mb="7"
           onClick={() => handlePayNowClick(true)}
         >
-          Pay £{(amount / 100).toFixed(2)} now
+          Pay £{formatPrice(amount)} now
         </ButtonNew>
       </Wrapper>
     );
@@ -176,7 +178,7 @@ const MakePayment = ({
           <PS>Remaining cost for period:</PS>
           {usedCoupon.code || couponDiscount > 0 ? (
             <PreviousPriceWrapper>
-              <T.PBold>£{(netAmount / 100).toFixed(2)}</T.PBold>
+              <T.PBold>£{formatPrice(netAmount)}</T.PBold>
               <T.PXSBold
                 color="lightGray"
                 style={{
@@ -184,11 +186,11 @@ const MakePayment = ({
                   marginLeft: '0.5rem',
                 }}
               >
-                £{(fullPrice / 100).toFixed(2)}
+                £{formatPrice(fullPrice)}
               </T.PXSBold>
             </PreviousPriceWrapper>
           ) : (
-            <H4 color="darkerGray">£{(remainingPrice / 100).toFixed(2)}</H4>
+            <H4 color="darkerGray">£{formatPrice(remainingPrice)}</H4>
           )}
         </PriceWrapper>
         {(remainingPrice > 0 || usedCoupon.code) && (
@@ -247,7 +249,7 @@ const MakePayment = ({
             mb="7"
             onClick={() => handlePayNowClick(true)}
           >
-            Pay £{(amount / 100).toFixed(2)} now
+            Pay £{formatPrice(amount)} now
           </ButtonNew>
         )}
       </Wrapper>
