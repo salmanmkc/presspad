@@ -12,8 +12,8 @@ module.exports = async () => {
   return Booking.updateMany(
     { _id: { $in: oldBookingsIds } },
     {
-      status: bookingStatuses.canceled,
-      canceledBy: null,
+      status: bookingStatuses.cancelled,
+      cancelledBy: null,
     },
   );
 };

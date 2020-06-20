@@ -72,6 +72,7 @@ class AddFundsModal extends Component {
     }
   };
 
+  // eslint-disable-next-line consistent-return
   handleSubmit = async () => {
     try {
       const { cardElement, amount } = this.state;

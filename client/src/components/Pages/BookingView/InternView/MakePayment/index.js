@@ -66,7 +66,6 @@ const MakePayment = ({
   }
 
   const discountApplied = discountRate;
-  // const discountApplied = (couponDiscount / fullPrice) * 100;
   let netAmount = fullPrice - couponDiscount;
   const remainingPrice = !isNew && getRemainingPrice(installments);
   const firstUnpaid = !isNew && getFirstUnpaidInstallment(installments);

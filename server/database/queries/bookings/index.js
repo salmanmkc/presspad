@@ -45,7 +45,7 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
     // update date
     {
       status: bookingStatuses.rejected,
-      // canceledBy: hostId,
+      // cancelledBy: hostId,
       confirmOrRejectDate: moment.utc(),
       rejectReason,
     },

@@ -32,7 +32,7 @@ const bookingSchema = new Schema(
     confirmOrRejectDate: {
       type: Date,
     },
-    // bookings need to be confirmed or canceled by [host,intern,admin]
+    // bookings need to be confirmed or cancelled by [host,intern,admin]
     status: {
       type: String,
       enum: [
@@ -40,7 +40,7 @@ const bookingSchema = new Schema(
         // 'pending' /** ="awaiting host" */,
         // 'accepted',
         // 'confirmed',
-        // 'canceled',
+        // 'cancelled',
         // 'completed',
         // 'rejected by admin',
         // 'rejected',
@@ -57,8 +57,9 @@ const bookingSchema = new Schema(
       type: Number,
       default: 0,
     },
-    // user's ID who canceled the booking
-    canceledBy: {
+    // user's ID who cancelled the booking
+    cancelledBy: {
+      // check all cancelledBy
       type: Schema.Types.ObjectId,
       ref: 'users',
     },

@@ -304,10 +304,10 @@ export default class BookingView extends Component {
           <RejectedContent rejectReason={rejectReason} />
         ),
       },
-      // toDo "When we get more about canceled bookings"
-      // maybe there should be a different view for canceled bookings?
+      // toDo "When we get more about cancelled bookings"
+      // maybe there should be a different view for cancelled bookings?
       // or the intern shouldn't see them?
-      canceled: {
+      cancelled: {
         status: 'rejected',
         statusColor: 'pink',
         statusContentsComponent: () => (
@@ -445,7 +445,7 @@ export default class BookingView extends Component {
           </H5C>
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
-        {status !== 'canceled' && status !== 'completed' && (
+        {status !== 'cancelled' && status !== 'completed' && (
           // toDo handle cancel booking button
           <CancelBookingButton
             onClick={() => console.log('cancle booking query to go here')}

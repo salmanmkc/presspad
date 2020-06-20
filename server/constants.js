@@ -21,7 +21,7 @@ module.exports = {
     pending: 'pending',
     accepted: 'accepted',
     confirmed: 'confirmed',
-    canceled: 'canceled',
+    cancelled: 'cancelled',
     completed: 'completed',
     rejectedByAdmin: 'rejected by admin',
     rejected: 'rejected',

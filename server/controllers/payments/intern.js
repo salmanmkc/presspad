@@ -99,9 +99,6 @@ const internPayment = async (req, res, next) => {
       if (booking.installments[0])
         return next(boom.badData('booking already have installments'));
 
-      // calculate net booking price
-      // const netPrice = booking.price - couponDiscount;
-
       // calculate installments and compare them
       let newInstallments;
       const bookingDays =

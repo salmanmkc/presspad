@@ -3,8 +3,8 @@ const moment = require('moment');
 
 const app = require('../../../app');
 const buildDB = require('../../../database/data/test/index');
-const { Booking, User } = require('./../../../database/models');
-const Notification = require('./../../../database/models/Notification');
+const { Booking, User } = require('../../../database/models');
+const Notification = require('../../../database/models/Notification');
 
 const {
   API_REJECT_BOOKING_URL,
@@ -72,7 +72,7 @@ describe('Testing for host should be able to reject booking route', () => {
         );
         expect(rejectedRequest.status).toBe('rejected');
         // since it will only be rejected by a host
-        // expect(acceptedRequest.canceledBy.toString()).toBe(
+        // expect(acceptedRequest.cancelledBy.toString()).toBe(
         //   hostUser._id.toString(),
         // );
         // notification must be sent to intern

@@ -100,7 +100,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(205),
         endDate: endDateAfter(219),
-        status: bookingStatuses.canceled,
+        status: bookingStatuses.cancelled,
       },
       {
         // not overlapping
