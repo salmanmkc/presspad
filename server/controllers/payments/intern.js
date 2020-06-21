@@ -3,6 +3,7 @@ const stripe = require('stripe')(process.env.stripeSK);
 const boom = require('boom');
 const moment = require('moment');
 
+const Sentry = require('../../sentry');
 const { getBookingById } = require('../../database/queries/bookings');
 const { getCoupons } = require('../../database/queries/coupon');
 const { discountStripeFees } = require('../../database/queries/payments');
@@ -235,10 +236,10 @@ const internPayment = async (req, res, next) => {
 
             await discountStripeFees(fee, 'installment');
           } catch (error) {
-            console.log(error);
-            // ToDo add logs on sentry for this failing errors
+            // add logs on sentry for this failing errors
             // should not throw an error because at this point
             // the stripe payment has been successful and stored in db
+            Sentry.captureException(error);
           }
         } else {
           await session.abortTransaction();

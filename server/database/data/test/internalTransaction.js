@@ -5,7 +5,11 @@ const reset = () => InternalTransaction.deleteMany();
 const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
   const { internUser, organisationUser } = users;
   const { hostAccount, internAccount, organisationAccount } = accounts;
-  const { confirmedPaidUpfront, confirmedPaidFirst } = bookings;
+  const {
+    confirmedPaidUpfront,
+    confirmedPaidFirst,
+    confirmedPaidFirstNoCoupon,
+  } = bookings;
 
   await reset();
 
@@ -35,17 +39,27 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       amount: confirmedPaidFirst.payedAmount,
       type: 'installment',
     },
+    // confirmedPaidFirstNoCoupon
+    {
+      user: internUser._id,
+      from: internAccount._id,
+      to: hostAccount._id,
+      amount: confirmedPaidFirstNoCoupon.payedAmount,
+      type: 'installment',
+    },
   ];
   const [
     internalTransactionsPaidUpFrontIntern,
     internalTransactionsPaidUpFrontCoupon,
     internalTransactionsConfirmedPaidFirst,
+    internalTransactionsConfirmedPaidFirstNoCoupon,
   ] = await InternalTransaction.create(internalTransactions);
 
   return {
     internalTransactionsPaidUpFrontIntern,
     internalTransactionsPaidUpFrontCoupon,
     internalTransactionsConfirmedPaidFirst,
+    internalTransactionsConfirmedPaidFirstNoCoupon,
   };
 };
 

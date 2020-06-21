@@ -38,13 +38,28 @@ const createAll = async ({
       usedAmount: 6000,
       startDate: Date.now() + 1 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 365 * 24 * 60 * 60 * 1000, // 365days => 7300 pound
-      code: 'easycode',
+      code: 'halfpay',
+    },
+    // active from tomorrow for 1 year
+    {
+      organisation: financialTimeOrganisation._id,
+      organisationAccount: organisationAccount._id,
+      intern: internUser._id,
+      internName: internUser.name,
+      createdBy: organisationUser._id,
+      discountRate: 100,
+      reservedAmount: 730000, // 7300 pound X 100%
+      usedAmount: 0,
+      startDate: Date.now() + 1 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 365 * 24 * 60 * 60 * 1000, // 365days => 7300 pound
+      code: 'fullpay',
     },
   ];
   const expiredCoupon = await Coupon.create(coupon[0]);
   const activeCoupon = await Coupon.create(coupon[1]);
+  const activeFull = await Coupon.create(coupon[2]);
 
-  return { expiredCoupon, activeCoupon };
+  return { expiredCoupon, activeCoupon, activeFull };
 };
 
 module.exports = {

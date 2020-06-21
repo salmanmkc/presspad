@@ -40,7 +40,7 @@ describe('Testing for getting active bookings for admin', () => {
       .expect(200)
       .end(async (err, res) => {
         expect(res).toBeDefined();
-        expect(res.body.length).toBe(8);
+        expect(res.body.length).toBe(9);
         done();
       });
   });

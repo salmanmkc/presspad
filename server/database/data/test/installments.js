@@ -6,11 +6,16 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
   const {
     internalTransactionsPaidUpFrontIntern,
     internalTransactionsConfirmedPaidFirst,
+    internalTransactionsConfirmedPaidFirstNoCoupon,
   } = internalTransactions;
   const { internUser, hostUser } = users;
   await reset();
 
-  const { confirmedPaidUpfront, confirmedPaidFirst } = bookings;
+  const {
+    confirmedPaidUpfront,
+    confirmedPaidFirst,
+    confirmedPaidFirstNoCoupon,
+  } = bookings;
 
   const installments = [
     // for the confirmed booking and paid upfront
@@ -45,12 +50,38 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
       amount: 4000,
       dueDate: Date.now() + 207 * 24 * 60 * 60 * 1000,
     },
+    // for the confimed booking and paid first insatallment no coupon
+    {
+      booking: confirmedPaidFirstNoCoupon._id,
+      intern: internUser._id,
+      host: hostUser._id,
+      amount: confirmedPaidFirstNoCoupon.payedAmount,
+      dueDate: Date.now(),
+      transaction: internalTransactionsConfirmedPaidFirstNoCoupon._id,
+    },
+    {
+      booking: confirmedPaidFirstNoCoupon._id,
+      intern: internUser._id,
+      host: hostUser._id,
+      amount: 56000,
+      dueDate: Date.now() + 179 * 24 * 60 * 60 * 1000,
+    },
+    {
+      booking: confirmedPaidFirstNoCoupon._id,
+      intern: internUser._id,
+      host: hostUser._id,
+      amount: 16000,
+      dueDate: Date.now() + 207 * 24 * 60 * 60 * 1000,
+    },
   ];
   const [
     upfrontPayment,
     firstPaidPayment,
     secondUnpaidPayment,
     thirdUnpaidPayment,
+    firstPaidPaymentNoCoupon,
+    secondUnpaidPaymentNoCoupon,
+    thirdUnpaidPaymentNoCoupon,
   ] = await Installment.create(installments);
 
   return {
@@ -58,6 +89,9 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
     firstPaidPayment,
     secondUnpaidPayment,
     thirdUnpaidPayment,
+    firstPaidPaymentNoCoupon,
+    secondUnpaidPaymentNoCoupon,
+    thirdUnpaidPaymentNoCoupon,
   };
 };
 

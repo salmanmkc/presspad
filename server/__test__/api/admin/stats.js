@@ -103,8 +103,8 @@ describe('Testing for get host profile route', () => {
         expect(result.body[0].email).toBe(hostUser.email);
         expect(result.body[0].hosted).toBe(1);
         expect(result.body[0].approvalStatus).toBe('Approved');
-        expect(result.body[0].totalIncome).toBe(31500);
-        expect(result.body[0].currentBalance).toBe(27000);
+        expect(result.body[0].totalIncome).toBe(44100);
+        expect(result.body[0].currentBalance).toBe(39600);
         done(error);
       });
   });
