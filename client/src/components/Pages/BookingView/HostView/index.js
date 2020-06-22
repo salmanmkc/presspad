@@ -11,6 +11,7 @@ import BookingDates from '../../../Common/BookingDetailsBox';
 import HostInternInfo from '../HostInternInfo';
 import TipsCard from '../TipsCard';
 import CancelBookingButton from '../CancelBookingButton';
+import { formatPrice } from '../../../../helpers';
 
 import {
   PendingContent,
@@ -177,7 +178,6 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
     accepted: () => <AcceptedContent internName={intern.name} />,
     confirmed: () => <ConfirmedContent />,
     rejected: () => <RejectedContent />,
-
     cancelled: () => (
       <CancelledContent
         cancellingUserMessage={
@@ -271,7 +271,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
       )}
 
       <BookingDates
-        price={price}
+        price={formatPrice(price)}
         startDate={startDate}
         endDate={endDate}
         intern

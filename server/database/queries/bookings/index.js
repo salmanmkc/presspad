@@ -1,5 +1,4 @@
 const moment = require('moment');
-
 const Booking = require('../../models/Booking');
 const Listing = require('../../models/Listing');
 
@@ -18,13 +17,15 @@ const getBookingHistory = require('./getBookingHistory');
 const getOverlappingBookings = require('./getOverlappingBookings');
 const getBookingsDetails = require('./getBookingsDetails');
 
+const { bookingStatuses } = require('../../../constants');
+
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
     //  filter
     { _id: bookingId, host: hostId },
     // update date
     {
-      status: 'accepted',
+      status: bookingStatuses.accepted,
       moneyGoTo,
       confirmOrRejectDate: moment.utc(),
     },
@@ -43,7 +44,7 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
     },
     // update date
     {
-      status: 'rejected',
+      status: bookingStatuses.rejected,
       // cancelledBy: hostId,
       confirmOrRejectDate: moment.utc(),
       rejectReason,
@@ -53,7 +54,7 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
 module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
   Booking.findOneAndUpdate(
     { _id: bookingId },
-    { status: 'rejected by admin', rejectReason },
+    { status: bookingStatuses.rejectedByAdmin, rejectReason },
     { new: true },
   );
 
@@ -209,7 +210,7 @@ exports.getConfirmedBooking = (internId, hostId) =>
   Booking.findOne({
     intern: internId,
     host: hostId,
-    status: { $in: ['confirmed', 'completed'] },
+    status: { $in: [bookingStatuses.confirmed, bookingStatuses.completed] },
   });
 
 module.exports.findBookings = findBookings;

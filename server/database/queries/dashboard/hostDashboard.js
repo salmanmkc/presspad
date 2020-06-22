@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const User = require('../../models/User');
+const { bookingStatuses } = require('../../../constants');
 
 /**
  * get host dashboard information
@@ -71,9 +72,9 @@ const hostDashboard = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$host', '$host'] },
-                  // { $ne: ['$status', 'cancelled'] },
-                  { $ne: ['$status', 'rejected by admin'] },
-                  { $ne: ['$status', 'awaiting admin'] },
+                  { $ne: ['$status', bookingStatuses.cancelled] },
+                  { $ne: ['$status', bookingStatuses.rejectedByAdmin] },
+                  { $ne: ['$status', bookingStatuses.awaitingAdmin] },
                 ],
               },
             },

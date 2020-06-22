@@ -6,6 +6,7 @@ import { colors } from '../../../theme';
 import { PXS } from '../../Common/Typography';
 import FileDownload from '../../Common/Files/FileDownload';
 import { EditButton } from './AdminDashboard.style';
+import { formatPrice } from '../../../helpers';
 
 //  set colours for tags in the table
 const tagColors = {
@@ -117,7 +118,7 @@ export default function HostTable({
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
           searchWords={[highlightVal]}
           autoEscape
-          textToHighlight={(text / 100).toFixed(2)}
+          textToHighlight={formatPrice(text)}
         />
       ),
     },
@@ -146,7 +147,7 @@ export default function HostTable({
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
           searchWords={[highlightVal]}
           autoEscape
-          textToHighlight={(text / 100).toFixed(2)}
+          textToHighlight={formatPrice(text)}
         />
       ),
     },

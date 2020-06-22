@@ -7,7 +7,7 @@ const getOutstandingPaymentReminders = () =>
       $match: {
         dueDate: { $lte: new Date() },
         type: {
-          $in: ['SECOND_PAYMENT_REMINDER', 'THIRD_PAYMENT_REMINDER'],
+          $in: ['PAYMENT_REMINDER'],
         },
         isSent: false,
       },

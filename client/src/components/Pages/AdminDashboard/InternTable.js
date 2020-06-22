@@ -8,6 +8,7 @@ import FileDownload from '../../Common/Files/FileDownload';
 
 import { tagColors, colors } from '../../../theme';
 import { PXS } from '../../Common/Typography';
+import { formatPrice } from '../../../helpers';
 
 import { EditButton } from './AdminDashboard.style';
 
@@ -100,7 +101,7 @@ export default function InternTable({
                 }}
                 searchWords={[highlightVal]}
                 autoEscape
-                textToHighlight={`£${(nextInstallmentAmount / 100).toFixed(2)}`}
+                textToHighlight={`£${formatPrice(nextInstallmentAmount)}`}
               />
             </>
           ) : (
@@ -135,7 +136,7 @@ export default function InternTable({
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
           searchWords={[highlightVal]}
           autoEscape
-          textToHighlight={(text / 100).toFixed(2)}
+          textToHighlight={formatPrice(text)}
         />
       ),
     },

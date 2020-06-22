@@ -65,7 +65,9 @@ module.exports = async (req, res, next) => {
       );
     }
     // validate price
-    const calculatedPrice = calculatePrice(moment.range(startDate, endDate));
+    const calculatedPrice = calculatePrice(
+      moment.range(moment(startDate).add(14, 'd'), endDate),
+    );
 
     if (calculatedPrice !== price) {
       return next(boom.badRequest("Price doesn't match!"));

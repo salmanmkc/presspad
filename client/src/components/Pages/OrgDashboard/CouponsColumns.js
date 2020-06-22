@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { Badge } from 'antd';
 import { tagColors } from '../../../theme';
+import { formatPrice } from '../../../helpers';
 
 import { BlueLink1, BlueLink } from './OrgDashboard.style';
 
@@ -39,7 +40,7 @@ export default windowWidth => {
 
   columnsObject.push({
     title: 'Total potential cost',
-    render: (_, row) => <span>£{(row.reservedAmount / 100).toFixed(2)}</span>,
+    render: (_, row) => <span>£{formatPrice(row.reservedAmount)}</span>,
   });
 
   if (windowWidth > 690) {
@@ -47,7 +48,7 @@ export default windowWidth => {
       title: 'Amount spent so far',
       dataIndex: 'usedAmount',
       key: 'usedAmount',
-      render: usedAmount => <span>£{(usedAmount / 100).toFixed(2) || 0}</span>,
+      render: usedAmount => <span>£{formatPrice(usedAmount) || 0}</span>,
     });
   }
 

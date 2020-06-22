@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const User = require('../../models/User');
+const { bookingStatuses } = require('../../../constants');
 
 /**
  * get intern dashboard information
@@ -71,7 +72,7 @@ const internDashboard = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$intern', '$intern'] },
-                  // { $ne: ['$status', 'cancelled'] },
+                  { $ne: ['$status', bookingStatuses.cancelled] },
                 ],
               },
             },

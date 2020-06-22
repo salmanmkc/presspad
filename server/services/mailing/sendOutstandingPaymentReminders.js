@@ -1,53 +1,36 @@
 const {
   getOutstandingPaymentReminders,
-} = require('./../../database/queries/ScheduledEmail');
+} = require('../../database/queries/ScheduledEmail');
 const sendPaymentReminderToIntern = require('../../helpers/mailHelper/sendPaymentReminderToIntern');
+const { ordinalSuffixOf } = require('../../helpers/general');
 
-const sendOutstandingPaymentReminders = async () =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const emails = await getOutstandingPaymentReminders();
-      if (!emails.length) {
-        // nothing to send!
-        return resolve();
-      }
+const sendOutstandingPaymentReminders = async () => {
+  const emails = await getOutstandingPaymentReminders();
+  if (!emails.length) {
+    // nothing to send!
+    return;
+  }
 
-      const promises = [];
-      const sentEmailsIds = [];
+  const promises = [];
+  const sentEmailsIds = [];
 
-      emails.forEach(email => {
-        const { intern, type, booking, _id } = email;
-        let paymentNumber;
-        switch (type) {
-          case 'SECOND_PAYMENT_REMINDER':
-            paymentNumber = 'second';
-            break;
+  emails.forEach(email => {
+    const { data, intern, booking, _id } = email;
 
-          case 'THIRD_PAYMENT_REMINDER':
-            paymentNumber = 'third';
-            break;
+    promises.push(
+      sendPaymentReminderToIntern({
+        internName: intern.name,
+        internEmail: intern.email,
+        bookingId: booking._id,
+        paymentNumber: ordinalSuffixOf(data.paymentNumber),
+      }),
+    );
 
-          default:
-            break;
-        }
-
-        promises.push(
-          sendPaymentReminderToIntern({
-            internName: intern.name,
-            internEmail: intern.email,
-            bookingId: booking._id,
-            paymentNumber,
-          }),
-        );
-
-        sentEmailsIds.push(_id);
-      });
-
-      await Promise.all(promises);
-      return resolve(sentEmailsIds);
-    } catch (error) {
-      return reject(error);
-    }
+    sentEmailsIds.push(_id);
   });
+
+  await Promise.all(promises);
+  return sentEmailsIds;
+};
 
 module.exports = sendOutstandingPaymentReminders;

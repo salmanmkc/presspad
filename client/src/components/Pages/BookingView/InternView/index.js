@@ -7,10 +7,16 @@ import { Elements } from 'react-stripe-elements';
 
 import {
   getDiscountDays,
-  calculatePrice,
   createInstallments,
   getFirstUnpaidInstallment,
+  createUpdatedNewInstallments,
 } from '../helpers';
+
+import {
+  calculatePrice,
+  calculateHostRespondingTime,
+  formatPrice,
+} from '../../../../helpers';
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
 
@@ -18,6 +24,7 @@ import BookingDates from '../../../Common/BookingDetailsBox';
 import CancelBookingButton from '../CancelBookingButton';
 
 import PayNowModal from './PayNowModal';
+import ConfirmWithoutPayModal from './ConfirmWithoutPayModal';
 import { Wrapper, ContentWrapper } from './InternView.style';
 import {
   WaitingContent,
@@ -38,7 +45,6 @@ import {
   Error500,
   CANCELLATION_CONFIRM,
 } from '../../../../constants/navRoutes';
-import { calculateHostRespondingTime } from '../../../../helpers';
 
 export default class BookingView extends Component {
   state = {
@@ -53,6 +59,7 @@ export default class BookingView extends Component {
       error: '',
     },
     payNow: false,
+    withoutPay: false,
     upfront: true,
     isLoading: true,
   };
@@ -90,6 +97,8 @@ export default class BookingView extends Component {
         couponInfo: {
           ...prevState.couponInfo,
           isCouponLoading: false,
+          discountDays: 0,
+          discountRate: 0,
           couponDiscount: 0,
           couponCode: '',
           error: '',
@@ -112,6 +121,9 @@ export default class BookingView extends Component {
           couponInfo: {
             ...prevState.couponInfo,
             couponCode: code,
+            discountDays: 0,
+            discountRate: 0,
+            couponDiscount: 0,
             isCouponLoading: true,
             error: false,
           },
@@ -125,6 +137,10 @@ export default class BookingView extends Component {
             } = await axios.get(`${API_COUPON_URL}?code=${code}`);
 
             const {
+              bookingInfo: { startDate, endDate, status, installments },
+            } = this.props;
+
+            const {
               startDate: couponStart,
               endDate: couponEnd,
               discountRate,
@@ -133,13 +149,19 @@ export default class BookingView extends Component {
               reservedAmount,
             } = couponInfo;
 
-            const {
-              bookingInfo: { startDate, endDate },
-            } = this.props;
+            const firstUnpaidInstallment = getFirstUnpaidInstallment(
+              installments,
+            );
+
+            const installmentDate =
+              status === 'confirmed'
+                ? firstUnpaidInstallment.dueDate
+                : undefined;
 
             const { discountDays } = getDiscountDays({
               bookingStart: startDate,
               bookingEnd: endDate,
+              installmentDate,
               couponStart,
               couponEnd,
               usedDays,
@@ -189,11 +211,13 @@ export default class BookingView extends Component {
 
   handlePayNowClick = payNow => this.setState({ payNow });
 
-  // handlePaymentMethod = upfront => this.setState({ upfront });
+  handleConfirmWithoutPayClick = withoutPay => this.setState({ withoutPay });
+
+  handlePaymentMethod = upfront => this.setState({ upfront });
 
   render() {
     const { bookingInfo, role, id } = this.props;
-    const { installments, host } = bookingInfo;
+    const { installments, host, coupon: usedCoupon } = bookingInfo;
 
     const hostRespondingTime =
       host &&
@@ -205,6 +229,7 @@ export default class BookingView extends Component {
       listing,
       couponInfo,
       payNow,
+      withoutPay,
       upfront,
       reviews,
     } = this.state;
@@ -239,20 +264,29 @@ export default class BookingView extends Component {
       _id: bookingId,
     } = bookingInfo;
 
-    const { couponDiscount } = couponInfo;
-    const netAmount = price - couponDiscount;
+    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+
     if (!installments[0]) {
-      newInstallments = createInstallments(
-        netAmount,
+      newInstallments = createInstallments({
         startDate,
         endDate,
         upfront,
-      );
+        couponInfo,
+        bookingDays,
+      });
     }
 
-    const paymentInfo = installments[0]
+    let paymentInfo = installments[0]
       ? firstUnpaidInstallment
       : newInstallments;
+
+    const updatedInstallments =
+      installments[0] &&
+      createUpdatedNewInstallments({ installments, couponInfo });
+
+    if (updatedInstallments) {
+      paymentInfo = getFirstUnpaidInstallment(updatedInstallments);
+    }
 
     const bookingStatuses = {
       awaitingAdmin: {
@@ -314,12 +348,17 @@ export default class BookingView extends Component {
           <AcceptedContent
             hostId={host._id}
             handlePayNowClick={this.handlePayNowClick}
+            handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
+            handlePaymentMethod={this.handlePaymentMethod}
             handleCouponChange={this.handleCouponChange}
+            upfront={upfront}
+            bookingDays={bookingDays}
             paymentInfo={paymentInfo}
             price={price}
             startDate={startDate}
             endDate={endDate}
             couponInfo={couponInfo}
+            usedCoupon={usedCoupon}
           />
         ),
       },
@@ -331,6 +370,20 @@ export default class BookingView extends Component {
             hostInfo={hostInfo}
             isLoading={isLoading}
             userRole={role}
+            handlePayNowClick={this.handlePayNowClick}
+            handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
+            handlePaymentMethod={this.handlePaymentMethod}
+            handleCouponChange={this.handleCouponChange}
+            upfront={upfront}
+            bookingDays={bookingDays}
+            paymentInfo={paymentInfo}
+            installments={installments}
+            updatedInstallments={updatedInstallments}
+            price={price}
+            startDate={startDate}
+            endDate={endDate}
+            couponInfo={couponInfo}
+            usedCoupon={usedCoupon}
           />
         ),
       },
@@ -339,10 +392,19 @@ export default class BookingView extends Component {
     if (
       status === 'confirmed' &&
       firstUnpaidInstallment &&
-      moment().isSame(firstUnpaidInstallment.dueDate, 'day')
+      moment().isSameOrAfter(firstUnpaidInstallment.dueDate, 'day')
     ) {
+      const dueToday = moment()
+        .subtract(6, 'd')
+        .startOf('d')
+        .isSameOrBefore(
+          moment(firstUnpaidInstallment.dueDate).startOf('d'),
+          'd',
+        );
+
       bookingStatuses.confirmed = {
-        status: 'payment due',
+        status: dueToday ? 'payment due' : 'payment overdue!',
+        statusColor: 'pink',
         statusContentsComponent: () => (
           <PaymentDueContent
             hostId={host._id}
@@ -350,12 +412,18 @@ export default class BookingView extends Component {
             isLoading={isLoading}
             userRole={role}
             handlePayNowClick={this.handlePayNowClick}
+            handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
             handleCouponChange={this.handleCouponChange}
             paymentInfo={paymentInfo}
             price={price}
             startDate={startDate}
             endDate={endDate}
             couponInfo={couponInfo}
+            installments={installments}
+            updatedInstallments={updatedInstallments}
+            usedCoupon={usedCoupon}
+            bookingDays={bookingDays}
+            dueToday={dueToday}
           />
         ),
       };
@@ -373,6 +441,16 @@ export default class BookingView extends Component {
     return (
       <Wrapper>
         {/* PayNowModal should be wrapped in an Elements component in order to stripe api to work */}
+        <ConfirmWithoutPayModal
+          handleConfirmWithoutPayClick={this.handleConfirmWithoutPayClick}
+          paymentInfo={paymentInfo}
+          updatedInstallments={updatedInstallments}
+          couponInfo={
+            couponInfo.error ? { ...couponInfo, couponCode: '' } : couponInfo
+          }
+          bookingId={bookingInfo._id}
+          visible={withoutPay}
+        />
         <Elements>
           <PayNowModal
             couponInfo={
@@ -380,6 +458,7 @@ export default class BookingView extends Component {
             }
             bookingId={bookingInfo._id}
             paymentInfo={paymentInfo}
+            updatedInstallments={updatedInstallments}
             visible={payNow}
             handlePayNowClick={this.handlePayNowClick}
           />
@@ -421,7 +500,7 @@ export default class BookingView extends Component {
           </CancelBookingButton>
         )}
         <BookingDates
-          price={price}
+          price={formatPrice(price)}
           startDate={startDate}
           endDate={endDate}
           intern

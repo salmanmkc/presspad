@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Table } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { colors } from '../../../theme';
+import { formatPrice } from '../../../helpers';
 
 export default class ClientTable extends Component {
   state = {
@@ -54,7 +55,7 @@ export default class ClientTable extends Component {
             highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
             searchWords={[highlightVal]}
             autoEscape
-            textToHighlight={(text / 100).toFixed(2)}
+            textToHighlight={formatPrice(text)}
           />
         ),
       },
@@ -83,7 +84,7 @@ export default class ClientTable extends Component {
             highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
             searchWords={[highlightVal]}
             autoEscape
-            textToHighlight={(text / 100).toFixed(2)}
+            textToHighlight={formatPrice(text)}
           />
         ),
       },

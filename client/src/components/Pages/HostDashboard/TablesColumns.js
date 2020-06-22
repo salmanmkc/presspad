@@ -4,7 +4,7 @@ import { Tag } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { BlueLink } from './HostDashboard.style';
-import { getStringTime } from '../../../helpers';
+import { getStringTime, formatPrice } from '../../../helpers';
 import { colors } from '../../../theme';
 
 const tagColors = {
@@ -20,7 +20,7 @@ export const withdrawRequestsColumns = windowWidth => {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
-      render: amount => <span>£{(amount / 100).toFixed(2)}</span>,
+      render: amount => <span>£{formatPrice(amount)}</span>,
     },
     {
       title: 'Status',
@@ -107,7 +107,7 @@ export const bookingsColumns = windowWidth => {
       title: 'Earnings',
       dataIndex: 'price',
       key: 'price',
-      render: text => `£${(text / 100).toFixed(2)}`,
+      render: text => `£${formatPrice(text)}`,
     });
   }
 
