@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
-const Account = require('../../models/Account');
-const InternalTransaction = require('../../models/InternalTransaction');
+const { Account, User, InternalTransaction } = require('../../models');
 
 /**
  * Create an internal transaction, Must be done inside a database transaction session
@@ -34,6 +33,10 @@ const createInternalTransaction = async (
   );
 
   let bulkWriteArr;
+  const { account: pressPadAccountId } = await User.findOne({
+    role: 'admin',
+  }).session(session);
+
   if (type === 'installment') {
     // update intern Account "from"
     bulkWriteArr = [
@@ -50,7 +53,16 @@ const createInternalTransaction = async (
         updateOne: {
           filter: { _id: mongoose.Types.ObjectId(toAccount) },
           update: {
-            $inc: { currentBalance: amount, income: amount },
+            $inc: { currentBalance: 0.45 * amount, income: 0.45 * amount },
+          },
+        },
+      },
+      // update presspad account
+      {
+        updateOne: {
+          filter: { _id: mongoose.Types.ObjectId(pressPadAccountId) },
+          update: {
+            $inc: { bursaryFunds: 0.1 * amount, hostingIncome: 0.45 * amount },
           },
         },
       },
@@ -73,7 +85,16 @@ const createInternalTransaction = async (
         updateOne: {
           filter: { _id: mongoose.Types.ObjectId(toAccount) },
           update: {
-            $inc: { currentBalance: amount, income: amount },
+            $inc: { currentBalance: 0.45 * amount, income: 0.45 * amount },
+          },
+        },
+      },
+      // update presspad account
+      {
+        updateOne: {
+          filter: { _id: mongoose.Types.ObjectId(pressPadAccountId) },
+          update: {
+            $inc: { bursaryFunds: 0.1 * amount, hostingIncome: 0.45 * amount },
           },
         },
       },

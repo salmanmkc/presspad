@@ -47,16 +47,37 @@ export const getDateRangeFromArray = datesArray => {
 };
 
 /**
+ * calculate the price giving range of dates
+ * @param {import("moment-range").MomentRange} range moment-range OR number
+ */
+export const calculatePrice = _range => {
+  if (!_range) return 0;
+  let days;
+  if (typeof _range === 'number') {
+    if (_range <= 0) return 0;
+    days = _range;
+  } else {
+    const range = moment.range(_range.start, _range.end);
+    range.start.startOf('day');
+    range.end.add(1, 'day');
+    days = range.diff('days');
+  }
+
+  return days * 2000;
+};
+
+/**
  * return the time in words eg. 5 minutes ago, few seconds ago
  * @param {Date} time moment time
  */
 export const getStringTime = time => moment(time).fromNow();
 
 /**
- * calculate the price giving range of dates
+ * calculate booking the price giving range of dates
+ * this will discount the 14 free days
  * @param {import("moment-range").MomentRange} range
  */
-export const calculatePrice = range => {
+export const calculatePriceByRange = range => {
   if (!range) return 0;
   let weeks;
   let days;
@@ -71,7 +92,7 @@ export const calculatePrice = range => {
   }
 
   if (weeks >= 2) {
-    return (days - 14) * 20;
+    return (days - 14) * 2000;
   }
 
   return 0;
@@ -303,3 +324,5 @@ export const calculateHostRespondingTime = (
   );
   return hostRespondingTime || 7;
 };
+
+export const formatPrice = price => (price / 100).toFixed();

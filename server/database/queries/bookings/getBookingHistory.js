@@ -1,6 +1,7 @@
 // this gets all bookings that are no longer active
-// (i.e. canceled, pending, accepted, confirmed, live)
+// (i.e. cancelled, pending, accepted, confirmed, live)
 const Booking = require('../../models/Booking');
+const { bookingStatuses } = require('../../../constants');
 
 module.exports = () =>
   Booking.aggregate([
@@ -8,16 +9,16 @@ module.exports = () =>
       $match: {
         $or: [
           {
-            status: 'canceled',
+            status: bookingStatuses.cancelled,
           },
           {
-            status: 'completed',
+            status: bookingStatuses.completed,
           },
           {
-            status: 'rejected by admin',
+            status: bookingStatuses.rejectedByAdmin,
           },
           {
-            status: 'rejected',
+            status: bookingStatuses.rejected,
           },
         ],
       },

@@ -6,6 +6,7 @@ const Review = require('../../models/Review');
 const { addOrg } = require('./organisation');
 const updateRespondingData = require('./updateRespondingData');
 const { createNewAccount } = require('../account');
+const { bookingStatuses } = require('../../../constants');
 
 module.exports.findByEmail = email =>
   User.findOne({ email: email.toLowerCase() });
@@ -73,7 +74,7 @@ module.exports.getInternStatus = internId =>
                   $and: [
                     { $lte: ['$startDate', new Date()] },
                     { $gte: ['$endDate', new Date()] },
-                    { $eq: ['$status', 'confirmed'] },
+                    { $eq: ['$status', bookingStatuses.confirmed] },
                   ],
                 },
                 then: 'At host',
@@ -82,7 +83,7 @@ module.exports.getInternStatus = internId =>
                 case: {
                   $and: [
                     { $gt: ['$startDate', new Date()] },
-                    { $eq: ['$status', 'pending'] },
+                    { $eq: ['$status', bookingStatuses.pending] },
                   ],
                 },
                 then: 'Pending request',
@@ -93,8 +94,8 @@ module.exports.getInternStatus = internId =>
                     { $gt: ['$startDate', new Date()] },
                     {
                       $or: [
-                        { $eq: ['$status', 'confirmed'] },
-                        { $eq: ['$status', 'completed'] },
+                        { $eq: ['$status', bookingStatuses.confirmed] },
+                        { $eq: ['$status', bookingStatuses.completed] },
                       ],
                     },
                   ],

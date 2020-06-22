@@ -27,6 +27,7 @@ import {
   API_ACCEPT_BOOKING_URL,
 } from '../../../../constants/apiRoutes';
 import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import { formatPrice } from '../../../../helpers';
 
 const initialState = {
   bookingStatus: '',
@@ -172,10 +173,10 @@ const HostView = ({ bookingInfo, id: userId }) => {
     accepted: () => <AcceptedContent internName={intern.name} />,
     confirmed: () => <ConfirmedContent />,
     rejected: () => <RejectedContent />,
-    // toDo "When we get more about canceled bookings"
-    // maybe there should be a different view for canceled bookings?
+    // toDo "When we get more about cancelled bookings"
+    // maybe there should be a different view for cancelled bookings?
     // or the host shouldn't see them?
-    canceled: () => <RejectedContent />,
+    cancelled: () => <RejectedContent />,
     completed: () => (
       <CompletedContent
         internId={internId}
@@ -241,7 +242,7 @@ const HostView = ({ bookingInfo, id: userId }) => {
       <CancelBookingButton>cancel booking</CancelBookingButton>
 
       <BookingDates
-        price={price / 100}
+        price={formatPrice(price)}
         startDate={startDate}
         endDate={endDate}
         intern

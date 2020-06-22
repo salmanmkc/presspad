@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Booking = require('../../models/Booking');
+const { bookingStatuses } = require('../../../constants');
 
 const getNextPendingBooking = ({ internId, hostId }) =>
   Booking.aggregate([
@@ -7,7 +8,7 @@ const getNextPendingBooking = ({ internId, hostId }) =>
       $match: {
         intern: mongoose.Types.ObjectId(internId),
         host: mongoose.Types.ObjectId(hostId),
-        status: 'pending',
+        status: bookingStatuses.pending,
         startDate: { $gte: new Date() },
       },
     },

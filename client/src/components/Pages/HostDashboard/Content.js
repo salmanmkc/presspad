@@ -11,7 +11,7 @@ import {
   InputNumber,
   Input,
 } from 'antd';
-import { getStringTime } from '../../../helpers';
+import { getStringTime, formatPrice } from '../../../helpers';
 
 import Update from '../../Common/Update';
 import Button from '../../Common/Button';
@@ -227,15 +227,15 @@ const Content = ({
           <Col xl={8} lg={24} md={24} xs={24}>
             <SectionWrapperContent style={{ minHeight: 357 }}>
               <ListItem>How much you’ve earned so far</ListItem>
-              <Number blue>£{(income / 100).toFixed(2)}</Number>
+              <Number blue>£{formatPrice(income)}</Number>
               <ListItem>How much you’ve donated</ListItem>
-              <Number>£{(donation / 100).toFixed(2)}</Number>
+              <Number>£{formatPrice(donation)}</Number>
               <ListItem>How much you’ve withdrew</ListItem>
-              <Number>£{(withdrawal / 100).toFixed(2)}</Number>
+              <Number>£{formatPrice(withdrawal)}</Number>
               <ListItem>In process withdraw requests</ListItem>
-              <Number>£{(requestedAmount / 100).toFixed(2)}</Number>
+              <Number>£{formatPrice(requestedAmount)}</Number>
               <ListItem>How much you can withdraw</ListItem>
-              <Number>£{(canBeWithdraw / 100).toFixed(2) || 0}</Number>
+              <Number>£{formatPrice(canBeWithdraw) || 0}</Number>
               <ButtonsWrapper>
                 <Button
                   label="Withdraw funds"
@@ -299,15 +299,15 @@ const Content = ({
             <div>
               <ModalDescription bold>Funds available: </ModalDescription>
               <ModalDescription bold>
-                £{(canBeWithdraw / 100).toFixed(2)}
+                £{formatPrice(canBeWithdraw)}
               </ModalDescription>
             </div>
             <ErrorWrapper>
               <InputNumber
                 onBlur={handleBlurNumberInput}
                 onFocus={handleFocusNumberInput}
-                defaultValue={(canBeWithdraw / 100).toFixed(2) || 0}
-                max={(canBeWithdraw / 100).toFixed(2) || 0}
+                defaultValue={formatPrice(canBeWithdraw) || 0}
+                max={formatPrice(canBeWithdraw) || 0}
                 min={0}
                 size="large"
                 style={{
@@ -354,7 +354,7 @@ const Content = ({
           <div>
             <ModalDescription bold>Funds available: </ModalDescription>
             <ModalDescription bold>
-              £{(canBeWithdraw / 100).toFixed(2)}
+              £{formatPrice(canBeWithdraw)}
             </ModalDescription>
           </div>
 
@@ -452,8 +452,8 @@ const Content = ({
                 <InputNumber
                   onBlur={handleBlurNumberInput}
                   onFocus={handleFocusNumberInput}
-                  defaultValue={(canBeWithdraw / 100).toFixed(2) || 0}
-                  max={(canBeWithdraw / 100).toFixed(2)}
+                  defaultValue={formatPrice(canBeWithdraw) || 0}
+                  max={formatPrice(canBeWithdraw)}
                   min={0}
                   size="large"
                   style={{

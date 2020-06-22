@@ -48,7 +48,7 @@ const getHostProfile = async (req, res, next) => {
       city,
     };
 
-    if (!booking) {
+    if (!booking && hostProfile.listing) {
       hostProfile.listing.address = address;
     }
 

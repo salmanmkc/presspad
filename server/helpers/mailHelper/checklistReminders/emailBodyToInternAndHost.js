@@ -26,7 +26,7 @@ const emailBodyToInternAndHost = ({
 
 
     <p>
-      Make sure you've done them 7 days before your booking due date, otherwise the booking maybe got canceled. 
+      Make sure you've done them 7 days before your booking due date, otherwise the booking maybe got cancelled. 
     </p>
 
     <p>

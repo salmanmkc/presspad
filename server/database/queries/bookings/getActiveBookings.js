@@ -1,6 +1,7 @@
 // this gets all bookings that are active
 // (i.e. awaitingAdmin, pending, accepted, confirmed, live)
 const Booking = require('../../models/Booking');
+const { bookingStatuses } = require('../../../constants');
 
 module.exports = () =>
   Booking.aggregate([
@@ -8,16 +9,16 @@ module.exports = () =>
       $match: {
         $or: [
           {
-            status: 'awaiting admin',
+            status: bookingStatuses.awaitingAdmin,
           },
           {
-            status: 'pending',
+            status: bookingStatuses.pending,
           },
           {
-            status: 'accepted',
+            status: bookingStatuses.accepted,
           },
           {
-            status: 'confirmed',
+            status: bookingStatuses.confirmed,
           },
           {
             status: 'live',

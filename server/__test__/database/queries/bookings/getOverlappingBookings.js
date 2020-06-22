@@ -6,6 +6,7 @@ const {
 
 const buildDB = require('../../../../database/data/test/index');
 const Booking = require('../../../../database/models/Booking');
+const { bookingStatuses } = require('../../../../constants');
 
 const startDateAfter = n =>
   moment
@@ -45,7 +46,7 @@ describe('Tests for booking queries', () => {
         price: 1203333333333333333330,
         startDate: startDateAfter(210),
         endDate: endDateAfter(215),
-        status: 'pending',
+        status: bookingStatuses.pending,
       },
       {
         intern: internUser,
@@ -54,7 +55,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(214),
         endDate: endDateAfter(219),
-        status: 'pending',
+        status: bookingStatuses.pending,
       },
       {
         intern: internUser,
@@ -63,7 +64,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(212),
         endDate: endDateAfter(213),
-        status: 'accepted',
+        status: bookingStatuses.accepted,
       },
       {
         intern: internUser,
@@ -72,7 +73,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(207),
         endDate: endDateAfter(213),
-        status: 'pending',
+        status: bookingStatuses.pending,
       },
       {
         intern: internUser,
@@ -81,7 +82,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(205),
         endDate: endDateAfter(219),
-        status: 'confirmed',
+        status: bookingStatuses.confirmed,
       },
       {
         intern: internUser,
@@ -90,7 +91,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(205),
         endDate: endDateAfter(219),
-        status: 'confirmed',
+        status: bookingStatuses.confirmed,
       },
       {
         intern: internUser,
@@ -99,7 +100,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(205),
         endDate: endDateAfter(219),
-        status: 'canceled',
+        status: bookingStatuses.cancelled,
       },
       {
         // not overlapping
@@ -109,7 +110,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(205),
         endDate: endDateAfter(209),
-        status: 'pending',
+        status: bookingStatuses.pending,
       },
       {
         // not overlapping
@@ -119,7 +120,7 @@ describe('Tests for booking queries', () => {
         price: 1200,
         startDate: startDateAfter(216),
         endDate: endDateAfter(219),
-        status: 'pending',
+        status: bookingStatuses.pending,
       },
     ]);
 

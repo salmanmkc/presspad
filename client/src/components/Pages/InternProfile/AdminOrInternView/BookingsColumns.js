@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 
+import { formatPrice } from '../../../../helpers';
+
 export default windowWidth => {
   const columnsObject = [
     {
@@ -30,7 +32,7 @@ export default windowWidth => {
       title: 'Cost',
       dataIndex: 'price',
       key: 'price',
-      render: text => `£${(text / 100).toFixed(2)}`,
+      render: text => `£${formatPrice(text)}`,
     });
   }
 

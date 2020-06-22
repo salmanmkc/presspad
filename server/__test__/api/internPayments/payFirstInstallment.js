@@ -1,4 +1,5 @@
 const request = require('supertest');
+const moment = require('moment');
 
 const app = require('../../../app');
 const {
@@ -8,11 +9,11 @@ const {
   ExternalTransaction,
 } = require('../../../database/models');
 const buildDb = require('../../../database/data/test');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const { createInstallments } = require('../../../helpers/payments');
 const {
   API_INTERN_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
 describe('Testing Intern payemnts (Pay in 3 installments):', () => {
@@ -38,10 +39,21 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
 
     const token = `token=${createToken(internUser._id)}`;
 
-    const { _id, price, startDate, endDate } = bookings.confirmedNotPaid;
+    const {
+      _id,
+      startDate,
+      endDate,
+    } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
-    const paymentInfo = createInstallments(price, startDate, endDate, false);
+    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const paymentInfo = createInstallments({
+      couponInfo,
+      bookingDays,
+      startDate,
+      endDate,
+      upfront: false,
+    });
 
     const data = {
       bookingId,
@@ -94,25 +106,33 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(firstPay);
-        expect(oldHostCurrentBalance + firstPay).toBe(hostCurrentBalance);
+        expect(hostIncom - oldHostIncom).toBe(0.45 * firstPay);
+        expect(oldHostCurrentBalance + 0.45 * firstPay).toBe(
+          hostCurrentBalance,
+        );
 
         // Presspad account checks
         const {
           _id: presspadAccId,
           income: oldPresspadIncom,
           currentBalance: oldPresspadCurrentBalance,
+          bursaryFunds: oldPresspadBursaryFunds,
         } = accounts.presspadAccount;
 
         const {
           income: presspadIncom,
           currentBalance: presspadCurrentBalance,
+          bursaryFunds: presspadBursaryFunds,
         } = await Account.findById(presspadAccId);
 
         expect(presspadIncom - oldPresspadIncom).toBe(firstPay);
         expect(oldPresspadCurrentBalance + firstPay).toBe(
           presspadCurrentBalance,
         );
+        expect(presspadBursaryFunds - oldPresspadBursaryFunds).toBe(
+          0.1 * firstPay,
+        );
+        // Todo test hostingIncome
 
         // Installments check
         const [
@@ -149,7 +169,7 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 
   test('new installments pay first of 3 - invalid price', async done => {
     const {
@@ -162,12 +182,24 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
       replSet: true,
     });
 
-    const { _id, price, startDate, endDate } = bookings.confirmedNotPaid;
+    const {
+      _id,
+      startDate,
+      endDate,
+    } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
     const { internUser } = users;
     const token = `token=${createToken(internUser._id)}`;
-    const paymentInfo = createInstallments(price, startDate, endDate, false);
+
+    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const paymentInfo = createInstallments({
+      couponInfo,
+      bookingDays,
+      startDate,
+      endDate,
+      upfront: false,
+    });
 
     paymentInfo[0].amount = 0;
 
@@ -245,5 +277,5 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 });

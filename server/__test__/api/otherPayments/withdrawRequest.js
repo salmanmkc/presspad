@@ -1,15 +1,15 @@
 const request = require('supertest');
 
-const app = require('./../../../app');
+const app = require('../../../app');
 const buildDB = require('../../../database/data/test');
 
-const createToken = require('./../../../helpers/createToken');
-const { WithdrawRequest, Account } = require('./../../../database/models');
+const createToken = require('../../../helpers/createToken');
+const { WithdrawRequest, Account } = require('../../../database/models');
 
 const {
   API_WITHDRAW_REQUEST_URL,
   API_UPDATE_WITHDRAW_REQUEST_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 
 describe('Testing for host makeing withdraw request', () => {
   test('test with correct details', async done => {
@@ -196,7 +196,7 @@ describe('Testing for Admin transfered withdraw request', () => {
         await mongoServer.stop();
         done(error);
       });
-  }, 20000);
+  }, 40000);
 
   test('test with incorrect details', async done => {
     const {
@@ -251,5 +251,5 @@ describe('Testing for Admin transfered withdraw request', () => {
         await mongoServer.stop();
         done(error);
       });
-  }, 20000);
+  }, 40000);
 });
