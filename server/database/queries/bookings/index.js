@@ -58,8 +58,8 @@ module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
   );
 
 module.exports.getNextPendingBooking = getNextPendingBooking;
-// get all active bookings of user
 
+// get all active bookings of user
 module.exports.getUserBookings = async intern => {
   const bookings = await Booking.find({
     intern,
@@ -75,9 +75,6 @@ module.exports.getUserBookings = async intern => {
       },
       {
         status: 'confirmed',
-      },
-      {
-        status: 'live',
       },
     ],
   });
