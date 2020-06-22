@@ -31,19 +31,21 @@ describe('Testing for cancel booking route', () => {
 
   test('test to cancel booking with valid request BEFORE payment', async done => {
     const { internUser } = users;
-    const { confirmedNotPaid } = bookings;
+    const { acceptedNotPaidOnePayment } = bookings;
 
     const token = `token=${createToken(internUser._id)}`;
 
     const data = {
-      booking: confirmedNotPaid._id,
+      booking: acceptedNotPaidOnePayment._id,
       cancellingUserMessage:
         'this is a test to cancel a booking before payment',
-      cancellingUserId: confirmedNotPaid.intern._id,
+      cancellingUserId: acceptedNotPaidOnePayment.intern._id,
     };
 
     request(app)
-      .patch(API_CANCEL_BOOKING_URL.replace(':id', confirmedNotPaid._id))
+      .patch(
+        API_CANCEL_BOOKING_URL.replace(':id', acceptedNotPaidOnePayment._id),
+      )
       .send(data)
       .set('Cookie', [token])
       .expect('Content-Type', /json/)
