@@ -27,6 +27,7 @@ import Close from './icons/Close';
 import QuestionCircle from './icons/QuestionCircle';
 import QuestionMark from './icons/QuestionMark';
 import MoneyBag from './icons/MoneyBag';
+import CheckMark from './icons/CheckMark';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -61,6 +62,7 @@ const iconMap = {
   close: Close,
   questionCircle: QuestionCircle,
   moneyBag: MoneyBag,
+  checkMark: CheckMark,
   questionMark: QuestionMark,
 };
 

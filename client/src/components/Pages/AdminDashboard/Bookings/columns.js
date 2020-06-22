@@ -15,7 +15,7 @@ const tagColors = {
   confirmed: colors.yellow,
   rejected: colors.pink,
   'rejected by admin': colors.black,
-  canceled: colors.gray,
+  cancelled: colors.gray,
   completed: colors.blue,
 };
 

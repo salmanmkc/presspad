@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../../models/User');
 const Booking = require('../../models/Booking');
+const { bookingStatuses } = require('../../../constants');
 
 exports.hostProfileData = (hostId, isPrivate = false) => {
   const listingProject = {
@@ -161,5 +162,5 @@ exports.getConfirmedBooking = (internId, hostId) =>
   Booking.findOne({
     intern: internId,
     host: hostId,
-    status: { $in: ['confirmed', 'completed'] },
+    status: { $in: [bookingStatuses.confirmed, bookingStatuses.completed] },
   });

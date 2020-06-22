@@ -37,10 +37,10 @@ describe('Testing for create new booking route', () => {
       intern: internUser._id,
       host: hostUser._id,
       listing: LondonListing._id,
-      startDate: moment.utc().add(81, 'days'),
-      endDate: moment.utc().add(101, 'days'),
+      startDate: moment.utc().add(281, 'days'),
+      endDate: moment.utc().add(300, 'days'),
       //   days to pay for
-      price: 140,
+      price: 12000,
     };
 
     request(app)
@@ -51,7 +51,7 @@ describe('Testing for create new booking route', () => {
       .expect(200)
       .end((err, res) => {
         expect(res.body).toBeDefined();
-
+        expect(res.body.success).toBe(true);
         done(err);
       });
   });
@@ -66,8 +66,8 @@ describe('Testing for create new booking route', () => {
       intern: internUser._id,
       host: hostUser._id,
       listing: LondonListing._id,
-      startDate: moment.utc().add(140, 'days'),
-      endDate: moment.utc().add(145, 'days'),
+      startDate: moment.utc().add(340, 'days'),
+      endDate: moment.utc().add(345, 'days'),
       price: 1000,
     };
 
@@ -96,7 +96,7 @@ describe('Testing for create new booking route', () => {
       listing: LondonListing._id,
       startDate: moment.utc().add(10, 'days'),
       endDate: moment.utc().add(20, 'days'),
-      price: 220,
+      price: 0,
     };
 
     request(app)
@@ -127,8 +127,8 @@ describe('Testing for create new booking route', () => {
       host: hostUser._id,
       listing: LondonListing._id,
       startDate: moment.utc().add(6, 'days'),
-      endDate: moment.utc().add(20, 'days'),
-      price: 220,
+      endDate: moment.utc().add(14, 'days'),
+      price: 0,
     };
 
     request(app)

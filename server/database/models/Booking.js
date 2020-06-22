@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const { bookingStatuses } = require('../../constants');
+
 const { Schema, model } = mongoose;
 
 const bookingSchema = new Schema(
@@ -30,18 +32,19 @@ const bookingSchema = new Schema(
     confirmOrRejectDate: {
       type: Date,
     },
-    // bookings need to be confirmed or canceled by [host,intern,admin]
+    // bookings need to be confirmed or cancelled by [host,intern,admin]
     status: {
       type: String,
       enum: [
-        'awaiting admin',
-        'pending' /** ="awaiting host" */,
-        'accepted',
-        'confirmed',
-        'canceled',
-        'completed',
-        'rejected by admin',
-        'rejected',
+        // 'awaiting admin',
+        // 'pending' /** ="awaiting host" */,
+        // 'accepted',
+        // 'confirmed',
+        // 'cancelled',
+        // 'completed',
+        // 'rejected by admin',
+        // 'rejected',
+        ...Object.values(bookingStatuses),
       ],
       default: 'awaiting admin',
       required: true,
@@ -54,8 +57,9 @@ const bookingSchema = new Schema(
       type: Number,
       default: 0,
     },
-    // user's ID who canceled the booking
-    canceledBy: {
+    // user's ID who cancelled the booking
+    cancelledBy: {
+      // check all cancelledBy
       type: Schema.Types.ObjectId,
       ref: 'users',
     },

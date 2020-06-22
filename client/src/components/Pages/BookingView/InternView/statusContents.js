@@ -46,12 +46,17 @@ const WaitingContent = ({ hostRespondingTime, hostId }) => (
 
 const AcceptedContent = ({
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
+  handlePaymentMethod,
   handleCouponChange,
+  upfront,
+  bookingDays,
   paymentInfo,
   price,
   startDate,
   endDate,
   couponInfo,
+  usedCoupon,
   hostId,
 }) => (
   <>
@@ -68,13 +73,18 @@ const AcceptedContent = ({
     </PXSBold>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
+      handlePaymentMethod={handlePaymentMethod}
       handleCouponChange={handleCouponChange}
       data={{
+        upfront,
+        bookingDays,
         paymentInfo,
         fullPrice: price,
         startDate,
         endDate,
         couponInfo,
+        usedCoupon,
       }}
       isNew
     />
@@ -103,8 +113,47 @@ const RejectedContent = ({ rejectReason }) => {
     </>
   );
 };
-const ConfirmedContent = ({ hostInfo, isLoading, userRole, hostId }) => (
+const ConfirmedContent = ({
+  hostInfo,
+  isLoading,
+  userRole,
+  hostId,
+  handlePayNowClick,
+  handleConfirmWithoutPayClick,
+  handlePaymentMethod,
+  handleCouponChange,
+  upfront,
+  bookingDays,
+  paymentInfo,
+  installments,
+  updatedInstallments,
+  price,
+  startDate,
+  endDate,
+  couponInfo,
+  usedCoupon,
+}) => (
   <>
+    {!!price && (
+      <MakePayment
+        handlePayNowClick={handlePayNowClick}
+        handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
+        handlePaymentMethod={handlePaymentMethod}
+        handleCouponChange={handleCouponChange}
+        data={{
+          upfront,
+          bookingDays,
+          paymentInfo,
+          installments,
+          updatedInstallments,
+          fullPrice: price,
+          startDate,
+          endDate,
+          couponInfo,
+          usedCoupon,
+        }}
+      />
+    )}
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
     <ViewProfile hostId={hostId} />
     <TipsWrapper height="290px">
@@ -123,6 +172,7 @@ const PaymentDueContent = ({
   isLoading,
   userRole,
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
   handleCouponChange,
   paymentInfo,
   price,
@@ -130,20 +180,29 @@ const PaymentDueContent = ({
   endDate,
   couponInfo,
   hostId,
+  installments,
+  updatedInstallments,
+  usedCoupon,
+  bookingDays,
+  dueToday,
 }) => (
   <>
-    <P mt="5" mb="1">
-      Your next payment is due! Please complete your payment below:
-    </P>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
       handleCouponChange={handleCouponChange}
+      paymentDue={dueToday}
+      paymentOverdue={!dueToday}
       data={{
         paymentInfo,
         fullPrice: price,
         startDate,
         endDate,
         couponInfo,
+        installments,
+        updatedInstallments,
+        usedCoupon,
+        bookingDays,
       }}
     />
     <HostInternInfo info={hostInfo} isLoading={isLoading} />

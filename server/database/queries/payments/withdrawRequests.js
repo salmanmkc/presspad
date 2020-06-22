@@ -5,7 +5,7 @@ const { Account, User } = require('../../models');
  * Confirm or Cancel withdraw request,
  * must be in mongodb session
  * @param {string} withdrawId
- * @param {string} type [transfered, canceled]
+ * @param {string} type [transfered, cancelled]
  * @param {import session from mongoose} session
  */
 const confirmOrCancelWithdrawRequest = async (withdrawId, type, session) => {

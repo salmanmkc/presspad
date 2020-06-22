@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-const Organisation = require('./../../models/Organisation');
-const Coupon = require('./../../models/Coupon');
+const Organisation = require('../../models/Organisation');
+const Coupon = require('../../models/Coupon');
+const { bookingStatuses } = require('../../../constants');
 
 module.exports = id => {
   // Org details
@@ -161,7 +162,7 @@ module.exports = id => {
               cond: {
                 $and: [
                   { $gt: ['$$booking.startDate', new Date()] },
-                  { $eq: ['$$booking.status', 'pending'] },
+                  { $eq: ['$$booking.status', bookingStatuses.pending] },
                 ],
               },
             },
@@ -178,8 +179,8 @@ module.exports = id => {
                   { $gt: ['$$booking.startDate', new Date()] },
                   {
                     $or: [
-                      { $eq: ['$$booking.status', 'confirmed'] },
-                      { $eq: ['$$booking.status', 'completed'] },
+                      { $eq: ['$$booking.status', bookingStatuses.confirmed] },
+                      { $eq: ['$$booking.status', bookingStatuses.completed] },
                     ],
                   },
                 ],

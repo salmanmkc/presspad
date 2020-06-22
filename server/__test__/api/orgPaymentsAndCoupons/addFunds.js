@@ -2,11 +2,11 @@ const request = require('supertest');
 
 const app = require('../../../app');
 const { Account, ExternalTransaction } = require('../../../database/models');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const buildDb = require('../../../database/data/test');
 const {
   API_ORG_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('../internPayments/mockData');
 
 describe('Testing Organisation payemnts (add funds):', () => {
@@ -88,5 +88,5 @@ describe('Testing Organisation payemnts (add funds):', () => {
         await mongoServer.stop();
         done();
       });
-  }, 20000);
+  }, 40000);
 });

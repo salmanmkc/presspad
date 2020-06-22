@@ -8,11 +8,11 @@ const {
   InternalTransaction,
   ExternalTransaction,
 } = require('../../../database/models');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const buildDb = require('../../../database/data/test');
 const {
   API_INTERN_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
 describe('Testing Intern payemnts (Pay upfront):', () => {
@@ -36,12 +36,12 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
 
     const { internUser } = users;
     const token = `token=${createToken(internUser._id)}`;
-    const booking = bookings.confirmedNotPaid;
+    const booking = bookings.acceptedNotPaidOnePayment;
     const { _id: bookingId, price } = booking;
 
     const paymentInfo = {
       key: 1,
-      dueDate: moment(booking.startDate).subtract(7, 'day'),
+      dueDate: moment().toISOString(),
       amount: price,
     };
 
@@ -94,23 +94,29 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(price);
-        expect(oldHostCurrentBalance + price).toBe(hostCurrentBalance);
+        expect(hostIncom - oldHostIncom).toBe(price * 0.45);
+        expect(oldHostCurrentBalance + 0.45 * price).toBe(hostCurrentBalance);
 
         // Presspad account checks
         const {
           _id: presspadAccId,
           income: oldPresspadIncom,
           currentBalance: oldPresspadCurrentBalance,
+          bursaryFunds: oldPresspadBursaryFunds,
         } = accounts.presspadAccount;
 
         const {
           income: presspadIncom,
           currentBalance: presspadCurrentBalance,
+          bursaryFunds: presspadBursaryFunds,
         } = await Account.findById(presspadAccId);
 
         expect(presspadIncom - oldPresspadIncom).toBe(price);
         expect(oldPresspadCurrentBalance + price).toBe(presspadCurrentBalance);
+        expect(oldPresspadBursaryFunds + 0.1 * price).toBe(
+          presspadBursaryFunds,
+        );
+        // ToDo test hostingIncome
 
         // Installments check
         const [
@@ -147,7 +153,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 
   test('new installments pay up front - invalid price', async done => {
     const {
@@ -162,7 +168,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
 
     const { internUser } = users;
     const token = `token=${createToken(internUser._id)}`;
-    const booking = bookings.confirmedNotPaid;
+    const booking = bookings.acceptedNotPaidOnePayment;
     const bookingId = booking._id;
 
     const paymentInfo = {
@@ -245,5 +251,5 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 });

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Badge } from 'antd';
-
 import moment from 'moment';
+
 import { BlueLink } from './InternDashboard.style';
 import { bookingStatus } from '../../../theme';
+import { formatPrice } from '../../../helpers';
 
 const tidyStatusText = status => {
   switch (status) {
@@ -27,7 +28,7 @@ export const paymentsColumns = [
   {
     title: 'Amount due',
     dataIndex: 'amount',
-    render: (text, record) => <span>£{(record.amount / 100).toFixed(2)}</span>,
+    render: (text, record) => <span>£{formatPrice(record.amount)}</span>,
   },
   {
     title: 'Status',
@@ -77,14 +78,14 @@ export const bookingsColumns = windowWidth => {
     columns.push({
       title: 'Total Price',
       dataIndex: 'price',
-      render: price => <span>£{(price / 100).toFixed(2)}</span>,
+      render: price => <span>£{formatPrice(price)}</span>,
     });
   }
   if (windowWidth > 1000) {
     columns.push({
       title: 'Paid so far',
       dataIndex: 'payedAmount',
-      render: payedAmount => <span>£{(payedAmount / 100).toFixed(2)}</span>,
+      render: payedAmount => <span>£{formatPrice(payedAmount)}</span>,
     });
   }
 

@@ -134,7 +134,7 @@ export const tagColors = {
 export const bookingStatus = {
   pending: colors.orange,
   confirmed: colors.yellow,
-  canceled: colors.red,
+  cancelled: colors.red,
   completed: colors.blue,
   rejected: colors.pink,
   accepted: colors.lightBlue,

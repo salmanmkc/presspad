@@ -39,6 +39,17 @@ const accountSchema = new Schema(
       default: 0,
       min: 0,
     },
+    // the total amount that presspad get from hosting (when an intern pay or use coupon to pay for hosting)
+    hostingIncome: {
+      type: Number,
+      // required only for presspad
+      min: 0,
+    },
+    bursaryFunds: {
+      type: Number,
+      // required only for presspad
+      min: 0,
+    },
   },
   {
     timestamps: true,

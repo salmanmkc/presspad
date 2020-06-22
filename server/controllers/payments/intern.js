@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 const stripe = require('stripe')(process.env.stripeSK);
 const boom = require('boom');
+const moment = require('moment');
 
+const Sentry = require('../../sentry');
 const { getBookingById } = require('../../database/queries/bookings');
 const { getCoupons } = require('../../database/queries/coupon');
+const { discountStripeFees } = require('../../database/queries/payments');
 
 const generatePaymentResponse = require('./generatePaymentResponse');
 const internTransaction = require('./internTransaction');
 
-const { schedulePaymentReminders } = require('./../../services/mailing');
+const { schedulePaymentReminders } = require('../../services/mailing');
 
 const {
   getDiscountDays,
@@ -16,6 +19,7 @@ const {
   createInstallments,
   compareInstallments,
   getFirstUnpaidInstallment,
+  createUpdatedNewInstallments,
 } = require('../../helpers/payments');
 
 const internPayment = async (req, res, next) => {
@@ -25,6 +29,7 @@ const internPayment = async (req, res, next) => {
     paymentInfo,
     couponInfo,
     bookingId,
+    withoutPay,
   } = req.body;
 
   try {
@@ -49,6 +54,49 @@ const internPayment = async (req, res, next) => {
     let couponDiscountDays = 0;
     let couponOrganisationAccount;
     let couponId;
+    let updatedInstallments;
+
+    if (!couponInfo.couponCode && withoutPay)
+      return next(boom.badData('coupon must be used'));
+
+    // Coupon used
+    if (couponInfo.couponCode) {
+      const [coupon] = await getCoupons({
+        code: couponInfo.couponCode,
+      }).exec();
+
+      let installmentDate;
+      if (booking.installments[0]) {
+        const firstUnpaid = getFirstUnpaidInstallment(booking.installments);
+        installmentDate = firstUnpaid.dueDate;
+      }
+
+      // get coupon discount days that maches the booking dates
+      const { discountDays } = getDiscountDays({
+        bookingStart: booking.startDate,
+        installmentDate,
+        bookingEnd: booking.endDate,
+        couponStart: coupon.startDate,
+        couponEnd: coupon.endDate,
+        usedDays: coupon.usedDays,
+      });
+
+      // Validate discount days
+      if (discountDays !== couponInfo.discountDays)
+        return next(boom.badData('wrong coupon Info'));
+
+      // Calculate coupon discount amount
+      couponDiscount =
+        (calculatePrice(discountDays) * coupon.discountRate) / 100;
+
+      // Validate discount amount
+      if (couponDiscount !== couponInfo.couponDiscount)
+        return next(boom.badData('wrong coupon Info'));
+
+      couponDiscountDays = discountDays;
+      couponOrganisationAccount = coupon.organisationAccount;
+      couponId = coupon._id;
+    }
 
     // User ask to create new installments
     if (Array.isArray(paymentInfo) || !paymentInfo._id) {
@@ -56,61 +104,30 @@ const internPayment = async (req, res, next) => {
       if (booking.installments[0])
         return next(boom.badData('booking already have installments'));
 
-      // Coupon used
-      if (couponInfo.couponCode) {
-        const [coupon] = await getCoupons({
-          code: couponInfo.couponCode,
-        }).exec();
-
-        // get coupon discount days that maches the booking dates
-        const { discountDays } = getDiscountDays({
-          bookingStart: booking.startDate,
-          bookingEnd: booking.endDate,
-          couponStart: coupon.startDate,
-          couponEnd: coupon.endDate,
-          usedDays: coupon.usedDays,
-        });
-
-        // Validate discount days
-        if (discountDays !== couponInfo.discountDays)
-          return next(boom.badData('wrong coupon Info'));
-
-        // Calculate coupon discount amount
-        couponDiscount =
-          (calculatePrice(discountDays) * coupon.discountRate) / 100;
-
-        // Validate discount amount
-        if (couponDiscount !== couponInfo.couponDiscount)
-          return next(boom.badData('wrong coupon Info'));
-
-        couponDiscountDays = discountDays;
-        couponOrganisationAccount = coupon.organisationAccount;
-        couponId = coupon._id;
-      }
-
-      // calculate net booking price
-      const netPrice = booking.price - couponDiscount;
-
       // calculate installments and compare them
       let newInstallments;
+      const bookingDays =
+        moment(booking.endDate).diff(booking.startDate, 'd') + 1;
       // if 3 installments
       if (Array.isArray(paymentInfo)) {
-        newInstallments = createInstallments(
-          netPrice,
-          booking.startDate,
-          booking.endDate,
-          false,
-        );
+        newInstallments = createInstallments({
+          couponInfo,
+          bookingDays,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          upfront: false,
+        });
         // eslint-disable-next-line prefer-destructuring
         amount = newInstallments[0].amount;
       } else {
         // if paying upfront
-        newInstallments = createInstallments(
-          netPrice,
-          booking.startDate,
-          booking.endDate,
-          true,
-        );
+        newInstallments = createInstallments({
+          couponInfo,
+          bookingDays,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          upfront: true,
+        });
         // eslint-disable-next-line prefer-destructuring
         amount = newInstallments.amount;
       }
@@ -119,8 +136,22 @@ const internPayment = async (req, res, next) => {
         return next(boom.badData('wrong installments info'));
     } else {
       // old installment
+
+      // check coupon info
+      if (couponInfo.couponCode) {
+        if (booking.coupon)
+          return next(boom.badData('can only use coupon once per a booking'));
+
+        updatedInstallments = createUpdatedNewInstallments({
+          installments: booking.installments,
+          couponInfo,
+        });
+      }
+
+      const checkInstallment = updatedInstallments || booking.installments;
+
       const firstUnpaidInstallment = getFirstUnpaidInstallment(
-        booking.installments,
+        checkInstallment,
       );
 
       // eslint-disable-next-line prefer-destructuring
@@ -146,58 +177,82 @@ const internPayment = async (req, res, next) => {
       couponId,
     };
     try {
-      if (Array.isArray(paymentInfo)) {
-        // create payments reminders only in first payment if paying in installments
-        await schedulePaymentReminders({
-          bookingId,
-          startDate: booking.startDate,
-          endDate: booking.endDate,
-          internId: booking.intern,
-          // session,  // ToDo Debug it later
-        });
-      }
-
       // do all transaction queries
-      await internTransaction(
+      const { storedInstallments } = await internTransaction(
         session,
         paymentInfo,
         booking,
         stripeInfo,
         amount,
         coupon,
+        updatedInstallments,
+        withoutPay,
       );
 
-      // confirm stripe payments
-      let intent; // to store the stripe info respone then check if it require 3d secure
-      if (paymentMethod) {
-        intent = await stripe.paymentIntents.create({
-          payment_method: paymentMethod.id,
-          amount: Math.floor(amount * 100),
-          currency: 'gbp',
-          confirmation_method: 'manual',
-          confirm: true,
-        });
-      } else if (paymentIntent) {
-        intent = await stripe.paymentIntents.confirm(paymentIntent.id);
-      } else {
-        throw boom.badData('no payment object from the client');
-      }
-
-      const response = await generatePaymentResponse(intent);
-
-      // check if payment confirmed then commit transaction
-      if (response.success) {
+      let response;
+      if (withoutPay) {
+        response = { success: true };
         await session.commitTransaction();
-        // await session.endSession();
       } else {
-        await session.abortTransaction();
-        // await session.endSession();
+        // confirm stripe payments
+        let intent; // to store the stripe info respone then check if it require 3d secure
+        if (paymentMethod) {
+          intent = await stripe.paymentIntents.create({
+            payment_method: paymentMethod.id,
+            amount,
+            currency: 'gbp',
+            confirmation_method: 'manual',
+            confirm: true,
+          });
+        } else if (paymentIntent) {
+          intent = await stripe.paymentIntents.confirm(paymentIntent.id);
+        } else {
+          throw boom.badData('no payment object from the client');
+        }
+
+        response = await generatePaymentResponse(intent);
+
+        // check if payment confirmed then commit transaction
+        if (response.success) {
+          await session.commitTransaction();
+
+          try {
+            if (Array.isArray(paymentInfo)) {
+              // create payments reminders only once when paying in installments
+              // ToDo  modify to match 4week dates
+              await schedulePaymentReminders({
+                bookingId,
+                installments: storedInstallments,
+                startDate: booking.startDate,
+                endDate: booking.endDate,
+                internId: booking.intern,
+                // session,  // ToDo Debug it later then move it up
+              });
+            }
+
+            const { fee } = await stripe.balanceTransactions.retrieve(
+              intent.charges.data[0].balance_transaction,
+            );
+
+            await discountStripeFees(fee, 'installment');
+          } catch (error) {
+            // add logs on sentry for this failing errors
+            // should not throw an error because at this point
+            // the stripe payment has been successful and stored in db
+            Sentry.captureException(error);
+          }
+        } else {
+          await session.abortTransaction();
+          // await session.endSession();
+        }
       }
+
       return res.json(response);
     } catch (error) {
       await session.abortTransaction();
-      // await session.endSession();
       throw error;
+    } finally {
+      session.endSession();
     }
   } catch (error) {
     if (error.statusCode === 402) {

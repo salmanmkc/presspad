@@ -44,16 +44,16 @@ const defaultListingData = {
       endDate: Date.now() + 22 * 24 * 60 * 60 * 1000,
     },
     {
-      startDate: Date.now() + 40 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
+      startDate: Date.now() + 111 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 115 * 24 * 60 * 60 * 1000,
     },
     {
-      startDate: Date.now() + 60 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 125 * 24 * 60 * 60 * 1000,
+      startDate: Date.now() + 220 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 300 * 24 * 60 * 60 * 1000,
     },
     {
-      startDate: Date.now() + 135 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 150 * 24 * 60 * 60 * 1000,
+      startDate: Date.now() + 335 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 450 * 24 * 60 * 60 * 1000,
     },
   ],
 };
@@ -76,12 +76,15 @@ const createNew = async ({ fillMissedFields = true, listingData = {} }) => {
 };
 
 const createAll = async ({ users }) => {
-  const { hostUser } = users;
+  const { hostUser, hostUser2 } = users;
 
   await reset();
-  const listings = [{ ...defaultListingData, user: hostUser }];
-  const [LondonListing] = await Listing.create(listings);
-  return { LondonListing };
+  const listings = [
+    { ...defaultListingData, user: hostUser },
+    { ...defaultListingData, user: hostUser2 },
+  ];
+  const [LondonListing, LondonListing2] = await Listing.create(listings);
+  return { LondonListing, LondonListing2 };
 };
 
 module.exports = {

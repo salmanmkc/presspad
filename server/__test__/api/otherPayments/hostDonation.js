@@ -1,14 +1,14 @@
 const request = require('supertest');
 
-const app = require('./../../../app');
+const app = require('../../../app');
 const buildDB = require('../../../database/data/test');
 
-const createToken = require('./../../../helpers/createToken');
-const { InternalTransaction, Account } = require('./../../../database/models');
+const createToken = require('../../../helpers/createToken');
+const { InternalTransaction, Account } = require('../../../database/models');
 
 const {
   API_DONATION_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 
 describe('Testing for host donate to presspad account route', () => {
   test('test with correct details', async done => {
@@ -54,10 +54,10 @@ describe('Testing for host donate to presspad account route', () => {
         const hostAccountAfter = await Account.findById(hostAccount._id);
 
         expect(hostAccountAfter.currentBalance).toBe(
-          pendingWithdrawRequest.amount,
+          hostAccount.currentBalance - amount,
         );
-        expect(presspadAccountAfter.currentBalance).toBe(
-          presspadAccount.currentBalance + amount,
+        expect(presspadAccountAfter.donation).toBe(
+          presspadAccount.donation + amount,
         );
 
         // check transaction
@@ -73,7 +73,7 @@ describe('Testing for host donate to presspad account route', () => {
         await mongoServer.stop();
         return done(error);
       });
-  }, 20000);
+  }, 40000);
 
   test('test with incorrect details', async done => {
     const { connection, mongoServer, users, accounts } = await buildDB({
@@ -122,5 +122,5 @@ describe('Testing for host donate to presspad account route', () => {
         await mongoServer.stop();
         done(error);
       });
-  }, 20000);
+  }, 40000);
 });

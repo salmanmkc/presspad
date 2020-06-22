@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Table } from 'antd';
 
 import { SectionWrapperContent, SectionTitle } from '../../../Common/general';
+import { formatPrice } from '../../../../helpers';
 
 export default function PaymentsTable({ installments }) {
   const columns = [
@@ -16,7 +17,7 @@ export default function PaymentsTable({ installments }) {
     {
       title: 'Amount due',
       dataIndex: 'amount',
-      render: text => <span>£{(text / 100).toFixed(2)}</span>,
+      render: text => <span>£{formatPrice(text)}</span>,
     },
   ];
 

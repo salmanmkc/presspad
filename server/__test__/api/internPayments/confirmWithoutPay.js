@@ -1,52 +1,61 @@
 const request = require('supertest');
+const moment = require('moment');
 
 const app = require('../../../app');
-const {
-  Account,
-  Installment,
-  InternalTransaction,
-  ExternalTransaction,
-} = require('../../../database/models');
-
+const { Account, Installment } = require('../../../database/models');
 const buildDb = require('../../../database/data/test');
 const createToken = require('../../../helpers/createToken');
+const { createInstallments } = require('../../../helpers/payments');
 const {
   API_INTERN_PAYMENT_URL,
 } = require('../../../../client/src/constants/apiRoutes');
-const { paymentMethod } = require('./mockData');
 
-describe('Testing Intern payemnts (Pay old installment):', () => {
-  const couponInfo = {
-    couponCode: '',
-    discountDays: 0,
-    discountRate: 0,
-    couponDiscount: 0,
-  };
-
-  test('pay old installment', async done => {
+describe('Testing Intern confirming booking when the coupon cover all payments', () => {
+  test('new booking', async done => {
     const {
+      accounts,
       connection,
       mongoServer,
       bookings,
-      installments,
-      accounts,
+      coupons,
       users,
     } = await buildDb({
       replSet: true,
     });
 
     const { internUser } = users;
+
     const token = `token=${createToken(internUser._id)}`;
 
-    const { _id } = bookings.confirmedPaidFirst;
+    const {
+      _id,
+      startDate,
+      endDate,
+    } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
-    const paymentInfo = installments.secondUnpaidPayment;
+
+    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const couponDiscount = (bookingDays - 14) * 2000;
+    const couponInfo = {
+      couponCode: coupons.activeFull.code,
+      discountDays: bookingDays - 14,
+      discountRate: coupons.activeFull.discountRate,
+      couponDiscount,
+    };
+
+    const paymentInfo = createInstallments({
+      couponInfo,
+      bookingDays,
+      startDate,
+      endDate,
+      upfront: false,
+    });
 
     const data = {
       bookingId,
       couponInfo,
       paymentInfo,
-      paymentMethod,
+      withoutPay: true,
     };
 
     request(app)
@@ -65,7 +74,6 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         expect(res).toBeDefined();
         expect(res.body.success).toBeTruthy();
 
-        const payAmount = paymentInfo.amount;
         // Intern account checks
         const {
           _id: internAccountId,
@@ -78,7 +86,7 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
           currentBalance: internCurrentBalance,
         } = await Account.findById(internAccountId);
 
-        expect(internIncom - oldInternIncom).toBe(payAmount);
+        expect(internIncom).toBe(oldInternIncom);
         expect(oldInternCurrentBalance).toBe(internCurrentBalance);
 
         // Host account checks
@@ -93,8 +101,8 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(0.45 * payAmount);
-        expect(oldHostCurrentBalance + 0.45 * payAmount).toBe(
+        expect(hostIncom - oldHostIncom).toBe(0.45 * couponDiscount);
+        expect(oldHostCurrentBalance + 0.45 * couponDiscount).toBe(
           hostCurrentBalance,
         );
 
@@ -103,52 +111,33 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
           _id: presspadAccId,
           income: oldPresspadIncom,
           currentBalance: oldPresspadCurrentBalance,
-          bursaryFunds: oldPresspadBursaryFund,
-          // ToDo, test hostingIncome
+          bursaryFunds: oldPresspadBursaryFunds,
+          hostingIncome: oldPresspadHostingIncome,
         } = accounts.presspadAccount;
 
         const {
           income: presspadIncom,
           currentBalance: presspadCurrentBalance,
-          bursaryFunds: presspadBursaryFund,
+          bursaryFunds: presspadBursaryFunds,
+          hostingIncome: presspadHostingIncome,
         } = await Account.findById(presspadAccId);
 
-        expect(presspadIncom - oldPresspadIncom).toBe(payAmount);
-        expect(oldPresspadCurrentBalance + payAmount).toBe(
-          presspadCurrentBalance,
+        expect(presspadIncom).toBe(oldPresspadIncom);
+        expect(oldPresspadCurrentBalance).toBe(presspadCurrentBalance);
+        expect(presspadBursaryFunds - oldPresspadBursaryFunds).toBe(
+          0.1 * couponDiscount,
         );
-        expect(oldPresspadBursaryFund + 0.1 * payAmount).toBe(
-          presspadBursaryFund,
+
+        expect(presspadHostingIncome - oldPresspadHostingIncome).toBe(
+          0.45 * couponDiscount,
         );
 
         // Installments check
-        const {
-          amount: installmentAmount,
-          transaction,
-        } = await Installment.findById(paymentInfo._id);
+        const installments = await Installment.find({
+          booking: bookingId,
+        });
 
-        expect(installmentAmount).toBe(payAmount);
-
-        // InternalTransaction check
-        const {
-          amount: internalTransactionAmount,
-          type,
-        } = await InternalTransaction.findById(transaction);
-
-        expect(type).toBe('installment');
-        expect(internalTransactionAmount).toBe(payAmount);
-
-        // ExternalTransaction check
-        const [
-          { amount: exTransactionAmmount, type: exTransactionType },
-        ] = await ExternalTransaction.find({
-          account: internAccountId,
-        })
-          .limit(1)
-          .sort({ $natural: -1 });
-
-        expect(exTransactionAmmount).toBe(payAmount);
-        expect(exTransactionType).toBe('deposite');
+        expect(installments).toHaveLength(0);
 
         await connection.close();
         await mongoServer.stop();
@@ -156,31 +145,43 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
       });
   }, 40000);
 
-  test('pay old installment - invalid price', async done => {
+  test('old booking', async done => {
     const {
+      accounts,
       connection,
       mongoServer,
       bookings,
-      installments,
-      accounts,
+      coupons,
       users,
+      installments,
     } = await buildDb({
       replSet: true,
     });
 
     const { internUser } = users;
-    const token = `token=${createToken(internUser._id)}`;
-    const { _id } = bookings.confirmedPaidFirst;
-    const bookingId = _id;
-    const paymentInfo = installments.secondUnpaidPayment;
 
+    const token = `token=${createToken(internUser._id)}`;
+
+    const { _id, startDate, endDate } = bookings.confirmedPaidFirstNoCoupon;
+    const bookingId = _id;
+
+    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const couponDiscount = (bookingDays - 28) * 2000;
+    const couponInfo = {
+      couponCode: coupons.activeFull.code,
+      discountDays: bookingDays - 28,
+      discountRate: coupons.activeFull.discountRate,
+      couponDiscount,
+    };
+
+    const paymentInfo = installments.secondUnpaidPaymentNoCoupon;
     paymentInfo.amount = 0;
 
     const data = {
       bookingId,
       couponInfo,
       paymentInfo,
-      paymentMethod,
+      withoutPay: true,
     };
 
     request(app)
@@ -188,7 +189,7 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
       .send(data)
       .set('Cookie', [token])
       .expect('Content-Type', /json/)
-      .expect(422)
+      .expect(200)
       .end(async (err, res) => {
         if (err) {
           await connection.close();
@@ -197,21 +198,26 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         }
 
         expect(res).toBeDefined();
-        expect(res.body.error).toBe('bad amount info');
+        expect(res.body.success).toBeTruthy();
 
         // Intern account checks
         const {
           _id: internAccountId,
           income: oldInternIncom,
+          currentBalance: oldInternCurrentBalance,
         } = accounts.internAccount;
 
-        const { income: internIncom } = await Account.findById(internAccountId);
+        const {
+          income: internIncom,
+          currentBalance: internCurrentBalance,
+        } = await Account.findById(internAccountId);
 
         expect(internIncom).toBe(oldInternIncom);
+        expect(oldInternCurrentBalance).toBe(internCurrentBalance);
 
         // Host account checks
         const {
-          _id: hostAccountId,
+          _id: hostAccId,
           income: oldHostIncom,
           currentBalance: oldHostCurrentBalance,
         } = accounts.hostAccount;
@@ -219,30 +225,46 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         const {
           income: hostIncom,
           currentBalance: hostCurrentBalance,
-        } = await Account.findById(hostAccountId);
+        } = await Account.findById(hostAccId);
 
-        expect(hostIncom).toBe(oldHostIncom);
-        expect(oldHostCurrentBalance).toBe(hostCurrentBalance);
+        expect(hostIncom - oldHostIncom).toBe(0.45 * couponDiscount);
+        expect(oldHostCurrentBalance + 0.45 * couponDiscount).toBe(
+          hostCurrentBalance,
+        );
 
         // Presspad account checks
         const {
-          _id: presspadAccountId,
+          _id: presspadAccId,
           income: oldPresspadIncom,
           currentBalance: oldPresspadCurrentBalance,
+          bursaryFunds: oldPresspadBursaryFunds,
+          hostingIncome: oldPresspadHostingIncome,
         } = accounts.presspadAccount;
 
         const {
           income: presspadIncom,
           currentBalance: presspadCurrentBalance,
-        } = await Account.findById(presspadAccountId);
+          bursaryFunds: presspadBursaryFunds,
+          hostingIncome: presspadHostingIncome,
+        } = await Account.findById(presspadAccId);
 
         expect(presspadIncom).toBe(oldPresspadIncom);
         expect(oldPresspadCurrentBalance).toBe(presspadCurrentBalance);
+        expect(presspadBursaryFunds - oldPresspadBursaryFunds).toBe(
+          0.1 * couponDiscount,
+        );
+
+        expect(presspadHostingIncome - oldPresspadHostingIncome).toBe(
+          0.45 * couponDiscount,
+        );
 
         // Installments check
-        const { transaction } = await Installment.findById(paymentInfo._id);
+        const bookingInstallments = await Installment.find({
+          booking: bookingId,
+        });
 
-        expect(transaction).toBeUndefined();
+        // check that old paid installment not deleted
+        expect(bookingInstallments).toHaveLength(1);
 
         await connection.close();
         await mongoServer.stop();
