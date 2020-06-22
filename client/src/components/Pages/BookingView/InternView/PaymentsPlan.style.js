@@ -73,3 +73,10 @@ export const PaymentModalTitle = styled.h2`
   margin: 1rem 0 3rem 0;
   opacity: 0.8;
 `;
+
+export const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+`;

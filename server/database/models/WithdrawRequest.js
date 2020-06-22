@@ -40,7 +40,7 @@ const withdrawRequestSchema = new Schema(
     status: {
       type: String,
       default: 'pending',
-      enum: ['pending', 'transfered', 'rejected', 'canceled'],
+      enum: ['pending', 'transfered', 'rejected', 'cancelled'],
     },
     // the date when the money has transfered
     transfereDate: {

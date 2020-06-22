@@ -14,7 +14,7 @@ import File from '../../Common/ProfileComponents/Field/File';
 
 import Button from '../../Common/ButtonNew';
 import BookingDetailsBox from '../../Common/BookingDetailsBox';
-import { dateRender } from '../../../helpers';
+import { dateRender, formatPrice } from '../../../helpers';
 
 const Form = ({
   state,
@@ -226,7 +226,7 @@ const Form = ({
     </ContentWrapper>
 
     <BookingDetailsBox
-      price={bookingData.price}
+      price={formatPrice(bookingData.price)}
       startDate={bookingData.startDate}
       endDate={bookingData.endDate}
       intern

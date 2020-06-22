@@ -10,7 +10,8 @@ import {
   calculateHostRespondingTime,
   createDatesArray,
   getDateRangeFromArray,
-  calculatePrice,
+  calculatePriceByRange,
+  formatPrice,
 } from '../../../helpers';
 
 // Typography
@@ -55,6 +56,7 @@ class CalendarComponent extends Component {
   state = {
     isLoading: true,
     avDates: [],
+    listingActiveBookings: [],
     dates: new Date(),
     daysAmount: 0,
     isRangeSelected: false,
@@ -67,13 +69,17 @@ class CalendarComponent extends Component {
   };
 
   componentDidMount() {
-    const { availableDates, bookingSearchDates } = this.props;
+    const {
+      availableDates,
+      bookingSearchDates,
+      listingActiveBookings,
+    } = this.props;
 
     // if dates were selected in search set state accordingly
     if (bookingSearchDates) {
       this.setState({
         dates: bookingSearchDates,
-        price: calculatePrice(
+        price: calculatePriceByRange(
           moment.range(bookingSearchDates[0], bookingSearchDates[1]),
         ),
         daysAmount: createDatesArray(
@@ -84,12 +90,16 @@ class CalendarComponent extends Component {
       });
     }
     this.refreshAvailableDates(availableDates);
+    this.refreshlistingActiveBookings(listingActiveBookings);
   }
 
   // listens for prop changes to re-render calendar tiles
   componentDidUpdate(prevProps) {
     if (prevProps.availableDates !== this.props.availableDates) {
       this.refreshAvailableDates(this.props.availableDates);
+    }
+    if (prevProps.listingActiveBookings !== this.props.listingActiveBookings) {
+      this.refreshlistingActiveBookings(this.props.listingActiveBookings);
     }
   }
 
@@ -105,6 +115,22 @@ class CalendarComponent extends Component {
     });
   };
 
+  // adds and refreshes confirmed bookings for listing
+  refreshlistingActiveBookings = dates => {
+    let _listingActiveBookings;
+    if (dates) {
+      _listingActiveBookings = dates.reduce((acc, cur) => {
+        const _dates = createDatesArray(cur.startDate, cur.endDate);
+        acc.push(_dates);
+        return [].concat(...acc);
+      }, []);
+    }
+    this.setState({
+      listingActiveBookings: _listingActiveBookings,
+      loading: false,
+    });
+  };
+
   // to disable "Request Stay" button when the user starts to select a range
   onDayClick = () => {
     this.setState({ isRangeSelected: false, message: '' });
@@ -117,7 +143,7 @@ class CalendarComponent extends Component {
     this.setState({
       dates,
       isRangeSelected: true,
-      price: calculatePrice(moment.range(dates[0], dates[1])),
+      price: calculatePriceByRange(moment.range(dates[0], dates[1])),
       message: '',
       messageType: '',
       daysAmount:
@@ -131,11 +157,13 @@ class CalendarComponent extends Component {
 
   // disables calendar tiles (days)
   tileDisabled = ({ date }) => {
-    const { avDates } = this.state;
+    const { avDates, listingActiveBookings } = this.state;
+
     // return true if current date is not included in available dates => disable tile
     date = moment(date).format('YYYY-MM-DD');
     return (
       !avDates.includes(date) ||
+      (listingActiveBookings && listingActiveBookings.includes(date)) ||
       moment
         .utc()
         .startOf('day')
@@ -319,24 +347,22 @@ class CalendarComponent extends Component {
     const discountExists =
       (!couponError && couponId && couponDiscount > 0) || bursary;
     const validPrice = price > 0;
+    const _price = formatPrice(price);
+    const _newPrice = formatPrice(bursary ? 0 : price - couponDiscount);
 
     if (validPrice && discountExists) {
       return (
         <DiscountPriceDetails>
           {isMobile
-            ? pricingTypographies.priceMobile(
-                bursary ? 0 : price - couponDiscount,
-              )
-            : pricingTypographies.priceDesktop(
-                bursary ? 0 : price - couponDiscount,
-              )}
-          {pricingTypographies.formerPrice(price)}
+            ? pricingTypographies.priceMobile(_newPrice)
+            : pricingTypographies.priceDesktop(_newPrice)}
+          {pricingTypographies.formerPrice(_price)}
         </DiscountPriceDetails>
       );
     }
     return isMobile
-      ? pricingTypographies.priceMobile(price)
-      : pricingTypographies.priceDesktop(price);
+      ? pricingTypographies.priceMobile(_price)
+      : pricingTypographies.priceDesktop(_price);
   };
 
   renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
@@ -528,7 +554,8 @@ class CalendarComponent extends Component {
                   £
                   {bursary
                     ? 0
-                    : (!couponError && price - couponDiscount) || price}
+                    : formatPrice(!couponError && price - couponDiscount) ||
+                      formatPrice(price)}
                 </strong>
               </T.PS>
             ) : (
@@ -538,7 +565,8 @@ class CalendarComponent extends Component {
                   £
                   {bursary
                     ? 0
-                    : (!couponError && price - couponDiscount) || price}
+                    : formatPrice(!couponError && price - couponDiscount) ||
+                      formatPrice(price)}
                 </strong>
               </T.PL>
             )}

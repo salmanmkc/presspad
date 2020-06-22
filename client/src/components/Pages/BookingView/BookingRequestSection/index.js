@@ -16,6 +16,7 @@ import {
 } from './bookingRequestSection.style';
 import { SubHeadline, Paragraph } from '../../../Common/Profile/Profiles.style';
 import { ButtonSpinner } from '../../../Common/Button';
+import { formatPrice } from '../../../../helpers';
 
 const { confirm } = Modal;
 
@@ -78,8 +79,8 @@ export default class extends React.Component {
             content: `You successfully rejected ${
               bookingInfo.intern.name.split(' ')[0]
             }'s request`,
-            onOk: () => handleBooking('canceled'),
-            onCancel: () => handleBooking('canceled'),
+            onOk: () => handleBooking('cancelled'),
+            onCancel: () => handleBooking('cancelled'),
           });
         } catch (err) {
           this.setState({ apiLoading: false });
@@ -135,9 +136,7 @@ export default class extends React.Component {
             </BookingDetailsDiv>
             <BookingDetailsDiv>
               <BookingDetailsHeadline>Payment</BookingDetailsHeadline>
-              <BookingDetailsText>
-                £{Math.floor(price / 100).toFixed(2)}{' '}
-              </BookingDetailsText>
+              <BookingDetailsText>£{formatPrice(price)}</BookingDetailsText>
             </BookingDetailsDiv>
           </BookingDetailsContainer>
           <Paragraph>

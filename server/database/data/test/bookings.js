@@ -1,11 +1,13 @@
 const Booking = require('../../models/Booking');
 
+const { bookingStatuses } = require('../../../constants');
+
 const reset = () => Booking.deleteMany();
 
-const update = couponID =>
-  Booking.findOneAndUpdate({ status: 'pending' }, { coupon: couponID });
+const update = (couponID, bookingId) =>
+  Booking.findByIdAndUpdate(bookingId, { coupon: couponID }, { new: true });
 
-const createAll = async ({ users, listings }) => {
+const createAll = async ({ users, listings, couponDiscountRate }) => {
   const { internUser, hostUser, hostUser2 } = users;
   const { LondonListing } = listings;
 
@@ -18,9 +20,9 @@ const createAll = async ({ users, listings }) => {
       host: hostUser,
       startDate: Date.now() - 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 15 * 24 * 60 * 60 * 1000,
-      status: 'completed',
-      price: 12000,
-      payedAmount: 12000,
+      status: bookingStatuses.completed,
+      price: 0, // because first two weeks always free
+      payedAmount: 0,
       moneyGoTo: 'host',
     },
     // pending - awaiting host
@@ -30,34 +32,84 @@ const createAll = async ({ users, listings }) => {
       host: hostUser,
       startDate: Date.now() + 15 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
-      status: 'pending',
-      price: 12000,
+      status: bookingStatuses.pending,
+      price: 0, // because first two weeks always free
       payedAmount: 0,
       moneyGoTo: 'host',
     },
-    // accepted & not paid
+    // accepted & not paid one payment
     {
       listing: LondonListing._id,
       intern: internUser,
       host: hostUser,
       startDate: Date.now() + 25 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      status: 'accepted',
-      price: 12000,
+      endDate: Date.now() + 50 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.accepted,
+      price: 24000,
       payedAmount: 0,
       moneyGoTo: 'presspad',
     },
-    // confirmed & paid (first payment)
+    // accepted & not paid installments applicable
     {
       listing: LondonListing._id,
       intern: internUser,
       host: hostUser,
-      startDate: Date.now() + 31 * 24 * 60 * 60 * 1000,
-      endDate: Date.now() + 35 * 24 * 60 * 60 * 1000,
-      status: 'confirmed',
-      price: 10000,
-      payedAmount: 3333,
+      startDate: Date.now() + 51 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 110 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.accepted,
+      price: 92000,
+      payedAmount: 0,
       moneyGoTo: 'presspad',
+    },
+    // confirmed (less than two weeks, free)
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser,
+      startDate: Date.now() + 116 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 126 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.confirmed,
+      price: 0,
+      payedAmount: 0,
+      moneyGoTo: 'presspad',
+    },
+    // confirmed & paid (upfront)
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser,
+      startDate: Date.now() + 130 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 148 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.confirmed,
+      price: 10000,
+      payedAmount: 10000,
+      moneyGoTo: 'presspad',
+    },
+    // confirmed & paid (first payment)
+    // 140 + 280 + 40  // applied 50% coupon
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser,
+      startDate: Date.now() + 151 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 210 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.confirmed,
+      price: 92000,
+      payedAmount: 14000 + 46000,
+      moneyGoTo: 'host',
+    },
+    // confirmed & paid (first payment) no coupon
+    // 280 + 560 + 160
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser,
+      startDate: Date.now() + 151 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 214 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.confirmed,
+      price: 100000,
+      payedAmount: 28000,
+      moneyGoTo: 'host',
     },
     // cancelled
     {
@@ -66,7 +118,7 @@ const createAll = async ({ users, listings }) => {
       host: hostUser,
       startDate: Date.now() - 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 40 * 24 * 60 * 60 * 1000,
-      status: 'pending',
+      status: bookingStatuses.cancelled,
       price: 12000,
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -78,7 +130,7 @@ const createAll = async ({ users, listings }) => {
       host: hostUser,
       startDate: Date.now() - 35 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 30 * 24 * 60 * 60 * 1000,
-      status: 'rejected',
+      status: bookingStatuses.rejected,
       price: 12000,
       payedAmount: 0,
       moneyGoTo: 'host',
@@ -90,8 +142,8 @@ const createAll = async ({ users, listings }) => {
       host: hostUser,
       startDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
-      status: 'awaiting admin',
-      price: 12000,
+      status: bookingStatuses.awaitingAdmin,
+      price: 44000,
       payedAmount: 0,
       moneyGoTo: 'host',
     },
@@ -102,8 +154,8 @@ const createAll = async ({ users, listings }) => {
       host: hostUser2,
       startDate: Date.now() + 45 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
-      status: 'awaiting admin',
-      price: 12000,
+      status: bookingStatuses.awaitingAdmin,
+      price: 44000,
       payedAmount: 0,
       moneyGoTo: 'host',
     },
@@ -112,8 +164,12 @@ const createAll = async ({ users, listings }) => {
   const [
     completedBooking,
     pendingBooking,
-    confirmedNotPaid,
+    acceptedNotPaidOnePayment,
+    acceptedNotPaidInstallmentApplicable,
+    confirmedFree,
+    confirmedPaidUpfront,
     confirmedPaidFirst,
+    confirmedPaidFirstNoCoupon,
     cancelledBooking,
     rejectedBooking,
     awaitingAdminBooking,
@@ -123,8 +179,12 @@ const createAll = async ({ users, listings }) => {
   return {
     completedBooking,
     pendingBooking,
-    confirmedNotPaid,
+    acceptedNotPaidOnePayment,
+    acceptedNotPaidInstallmentApplicable,
+    confirmedFree,
+    confirmedPaidUpfront,
     confirmedPaidFirst,
+    confirmedPaidFirstNoCoupon,
     cancelledBooking,
     rejectedBooking,
     awaitingAdminBooking,

@@ -4,12 +4,14 @@ import moment from 'moment';
 import axios from 'axios';
 import { message } from 'antd';
 
+import { H4C } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 
 import BookingDates from '../../../Common/BookingDetailsBox';
 import HostInternInfo from '../HostInternInfo';
 import TipsCard from '../TipsCard';
 import CancelBookingButton from '../CancelBookingButton';
+import { formatPrice } from '../../../../helpers';
 
 import {
   PendingContent,
@@ -17,6 +19,7 @@ import {
   RejectedContent,
   ConfirmedContent,
   CompletedContent,
+  CancelledContent,
 } from './statusContents';
 import WarningModal from './WarningModal';
 import { Wrapper, ContentWrapper, TipsWrapper } from './HostView.style';
@@ -26,7 +29,10 @@ import {
   API_INTERN_PROFILE_URL,
   API_ACCEPT_BOOKING_URL,
 } from '../../../../constants/apiRoutes';
-import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import {
+  INTERN_PROFILE,
+  CANCELLATION_CONFIRM,
+} from '../../../../constants/navRoutes';
 
 const initialState = {
   bookingStatus: '',
@@ -38,7 +44,7 @@ const initialState = {
   error: '',
 };
 
-const HostView = ({ bookingInfo, id: userId }) => {
+const HostView = ({ bookingInfo, id: userId, ...props }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
@@ -172,10 +178,16 @@ const HostView = ({ bookingInfo, id: userId }) => {
     accepted: () => <AcceptedContent internName={intern.name} />,
     confirmed: () => <ConfirmedContent bookingInfo={bookingInfo} />,
     rejected: () => <RejectedContent />,
-    // toDo "When we get more about canceled bookings"
-    // maybe there should be a different view for canceled bookings?
-    // or the host shouldn't see them?
-    canceled: () => <RejectedContent />,
+    cancelled: () => (
+      <CancelledContent
+        cancellingUserMessage={
+          bookingInfo.cancellationDetails.cancellingUserMessage || 'N/A'
+        }
+        cancelledByHost={bookingInfo.cancellationDetails.cancelledBy === userId}
+        internName={intern.name}
+      />
+    ),
+
     completed: () => (
       <CompletedContent
         internId={internId}
@@ -201,8 +213,9 @@ const HostView = ({ bookingInfo, id: userId }) => {
         acceptError={error}
       />
       <ContentWrapper>
+        {status === 'cancelled' && <H4C mb="7">booking cancelled</H4C>}
         {statusContents[status]()}
-        {status !== 'completed' && (
+        {!['completed', 'cancelled'].includes(status) && (
           <>
             <HostInternInfo
               info={internInfo}
@@ -238,10 +251,27 @@ const HostView = ({ bookingInfo, id: userId }) => {
           </>
         )}
       </ContentWrapper>
-      <CancelBookingButton>cancel booking</CancelBookingButton>
+
+      {status !== 'cancelled' && status !== 'completed' && (
+        <CancelBookingButton
+          // this loads confirm cancellatiom page and sends user and booking infos
+          onClick={() => {
+            const { name, role } = props;
+            const cancellingUserInfo = { id: userId, name, role };
+            const url = CANCELLATION_CONFIRM.replace(':id', bookingId);
+
+            return history.push({
+              pathname: url,
+              state: { bookingInfo, cancellingUserInfo },
+            });
+          }}
+        >
+          cancel booking request
+        </CancelBookingButton>
+      )}
 
       <BookingDates
-        price={price / 100}
+        price={formatPrice(price)}
         startDate={startDate}
         endDate={endDate}
         intern

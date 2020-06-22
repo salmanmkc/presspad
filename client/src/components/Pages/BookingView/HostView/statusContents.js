@@ -1,8 +1,8 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Spin } from 'antd';
 import moment from 'moment';
 
-import { H4C, H6C, H5C, P } from '../../../Common/Typography';
 import * as T from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 import { getStringTime } from '../../../../helpers';
@@ -17,7 +17,11 @@ import {
   FireWorksImg,
 } from './HostView.style';
 
-import { INTERN_PROFILE } from '../../../../constants/navRoutes';
+import {
+  INTERN_PROFILE,
+  DASHBOARD_URL,
+  MYPROFILE_URL,
+} from '../../../../constants/navRoutes';
 import fireworks from '../../../../assets/fireworks.png';
 
 const PendingContent = ({
@@ -30,10 +34,10 @@ const PendingContent = ({
   error,
 }) => (
   <>
-    <H4C>booking request</H4C>
-    <H6C mt="5">
+    <T.H4C>booking request</T.H4C>
+    <T.H6C mt="5">
       Booking request made on {madeAt} <span>[{getStringTime(createdAt)}]</span>
-    </H6C>
+    </T.H6C>
     <ButtonsWrapper>
       <ButtonNew
         loading={isAcceptLoading}
@@ -57,13 +61,13 @@ const PendingContent = ({
 
 const AcceptedContent = ({ internName }) => (
   <>
-    <H4C>booking request</H4C>
-    <H6C mb="2" mt="4" color="lightGray">
+    <T.H4C>booking request</T.H4C>
+    <T.H6C mb="2" mt="4" color="lightGray">
       status
-    </H6C>
-    <H5C color="blue">
+    </T.H6C>
+    <T.H5C color="blue">
       PENDING - Awaiting deposit from {internName.split(' ')[0]}
-    </H5C>
+    </T.H5C>
   </>
 );
 const ConfirmedContent = ({ bookingInfo }) => {
@@ -90,14 +94,14 @@ const ConfirmedContent = ({ bookingInfo }) => {
   }
   return (
     <>
-      <H4C>
+      <T.H4C>
         booking details
         {!subTitle && <FireWorksImg src={fireworks} />}
-      </H4C>
-      <H6C mb="2" mt="4" color="lightGray">
+      </T.H4C>
+      <T.H6C mb="2" mt="4" color="lightGray">
         status
-      </H6C>
-      <H5C color={statusColor}>{status}</H5C>
+      </T.H6C>
+      <T.H5C color={statusColor}>{status}</T.H5C>
       {subTitle && <T.P>{subTitle}</T.P>}
     </>
   );
@@ -105,13 +109,48 @@ const ConfirmedContent = ({ bookingInfo }) => {
 
 const RejectedContent = () => (
   <>
-    <H4C>booking details</H4C>
-    <H6C mb="2" mt="4" color="lightGray">
+    <T.H4C>booking details</T.H4C>
+    <T.H6C mb="2" mt="4" color="lightGray">
       status
-    </H6C>
-    <H5C color="pink">rejected</H5C>
+    </T.H6C>
+    <T.H5C color="pink">rejected</T.H5C>
   </>
 );
+
+const CancelledContent = ({
+  internName,
+  cancellingUserMessage,
+  cancelledByHost,
+}) => {
+  const history = useHistory();
+  return (
+    <>
+      {cancelledByHost ? (
+        <T.P mt="5" mb="1">
+          {internName}’s stay with you has been successfully cancelled.
+          <br /> <br />
+          If you had to cancel due to no longer being available on the dates
+          listed in your profile, please make sure you{' '}
+          <T.Link to={MYPROFILE_URL}> update your listing now</T.Link>.
+        </T.P>
+      ) : (
+        <T.P mt="5" mb="1">
+          Sorry, your booking with {internName} has been cancelled. You will not
+          be charged anything for this booking. Here is the reason they
+          provided: <br /> <br /> {cancellingUserMessage}
+        </T.P>
+      )}
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
 
 const CompletedContent = ({
   internId,
@@ -122,19 +161,19 @@ const CompletedContent = ({
   isLoading,
 }) => (
   <>
-    <H4C>booking details</H4C>
-    <H6C mb="2" mt="4" color="lightGray">
+    <T.H4C>booking details</T.H4C>
+    <T.H6C mb="2" mt="4" color="lightGray">
       status
-    </H6C>
-    <H5C color="pink">complete</H5C>
-    <P mt="2" mb="5">
+    </T.H6C>
+    <T.H5C color="pink">complete</T.H5C>
+    <T.P mt="2" mb="5">
       <ProfileLink to={INTERN_PROFILE.replace(':id', internId)}>
         {internName}
       </ProfileLink>
       ’s stay with you is now complete. Thank you again for helping support our
       PressPad community! Any earnings you made can now be withdrawn from your
       account or donated to PressPad.
-    </P>
+    </T.P>
     {isLoading ? (
       <Spin />
     ) : (
@@ -155,4 +194,5 @@ export {
   RejectedContent,
   ConfirmedContent,
   CompletedContent,
+  CancelledContent,
 };

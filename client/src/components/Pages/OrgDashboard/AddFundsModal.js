@@ -21,6 +21,7 @@ import {
 import { Label } from './OrgDashboard.style';
 
 import { API_ORG_PAYMENT_URL } from '../../../constants/apiRoutes';
+import { formatPrice } from '../../../helpers';
 
 const initialState = {
   error: '',
@@ -71,6 +72,7 @@ class AddFundsModal extends Component {
     }
   };
 
+  // eslint-disable-next-line consistent-return
   handleSubmit = async () => {
     try {
       const { cardElement, amount } = this.state;
@@ -175,7 +177,7 @@ class AddFundsModal extends Component {
           onClick={this.handleSubmit}
           disabled={isLoading}
         >
-          Pay £{Number(amount).toFixed(2)}&nbsp;now
+          Pay £{amount}&nbsp;now
         </Button>
       </>
     );
@@ -226,10 +228,9 @@ class AddFundsModal extends Component {
           <Col span={9}>
             <InfoMessage>
               funds:&nbsp;
-              {(
-                (this.state.availableFunds ||
-                  this.props.account.currentBalance) / 100
-              ).toFixed(2)}
+              {formatPrice(
+                this.state.availableFunds || this.props.account.currentBalance,
+              )}
             </InfoMessage>
           </Col>
         </Row>

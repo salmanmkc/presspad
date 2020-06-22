@@ -1,6 +1,6 @@
 const moment = require('moment');
-const Booking = require('.//../../models/Booking');
-const Listing = require('./../../models/Listing');
+const Booking = require('../../models/Booking');
+const Listing = require('../../models/Listing');
 
 const createDatesArray = require('../../../helpers/createDatesArray');
 const getInternBookingsWithReviews = require('./getInternBookingsWithReviews');
@@ -17,13 +17,15 @@ const getBookingHistory = require('./getBookingHistory');
 const getOverlappingBookings = require('./getOverlappingBookings');
 const getBookingsDetails = require('./getBookingsDetails');
 
+const { bookingStatuses } = require('../../../constants');
+
 module.exports.hostAcceptBookingById = ({ bookingId, hostId, moneyGoTo }) =>
   Booking.findOneAndUpdate(
     //  filter
     { _id: bookingId, host: hostId },
     // update date
     {
-      status: 'accepted',
+      status: bookingStatuses.accepted,
       moneyGoTo,
       confirmOrRejectDate: moment.utc(),
     },
@@ -42,8 +44,8 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
     },
     // update date
     {
-      status: 'rejected',
-      // canceledBy: hostId,
+      status: bookingStatuses.rejected,
+      // cancelledBy: hostId,
       confirmOrRejectDate: moment.utc(),
       rejectReason,
     },
@@ -52,14 +54,32 @@ module.exports.hostRejectBookingsByIds = (bookingIds, hostId, rejectReason) =>
 module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
   Booking.findOneAndUpdate(
     { _id: bookingId },
-    { status: 'rejected by admin', rejectReason },
+    { status: bookingStatuses.rejectedByAdmin, rejectReason },
     { new: true },
   );
 
 module.exports.getNextPendingBooking = getNextPendingBooking;
-// get all bookings of user
+
+// get all active bookings of user
 module.exports.getUserBookings = async intern => {
-  const bookings = await Booking.find({ intern });
+  const bookings = await Booking.find({
+    intern,
+    $or: [
+      {
+        status: 'awaiting admin',
+      },
+      {
+        status: 'pending',
+      },
+      {
+        status: 'accepted',
+      },
+      {
+        status: 'confirmed',
+      },
+    ],
+  });
+
   const userBookingDates = bookings.reduce((acc, cur) => {
     const dates = createDatesArray(cur.startDate, cur.endDate);
     acc.push(dates);
@@ -113,8 +133,8 @@ module.exports.createNewBooking = async data => {
   return newBooking;
 };
 
-// 3)
-// updates listing
+// !UPDATE LISTING NOT USED ANYMORE
+
 module.exports.updateListingAvailability = async (listingId, bs, be) => {
   const listing = await Listing.findOne({ _id: listingId });
   const listingAvDates = listing.availableDates.reduce((acc, cur) => {
@@ -190,7 +210,7 @@ exports.getConfirmedBooking = (internId, hostId) =>
   Booking.findOne({
     intern: internId,
     host: hostId,
-    status: { $in: ['confirmed', 'completed'] },
+    status: { $in: [bookingStatuses.confirmed, bookingStatuses.completed] },
   });
 
 module.exports.findBookings = findBookings;
@@ -198,6 +218,25 @@ module.exports.updateBookingByID = (bookingID, newStatus) =>
   Booking.findByIdAndUpdate(
     bookingID,
     { status: newStatus },
+    {
+      new: true,
+    },
+  );
+
+module.exports.cancelBookingBeforePaymentQuery = ({
+  bookingId,
+  cancellingUserMessage,
+  cancellingUserId,
+}) =>
+  Booking.findOneAndUpdate(
+    { _id: bookingId },
+    {
+      status: 'cancelled',
+      cancellationDetails: {
+        cancelledBy: cancellingUserId,
+        cancellingUserMessage,
+      },
+    },
     {
       new: true,
     },

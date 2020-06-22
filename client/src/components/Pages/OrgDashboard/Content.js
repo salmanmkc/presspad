@@ -16,7 +16,7 @@ import { Elements } from 'react-stripe-elements';
 import Icon from '../../Common/Icon';
 
 import Button from '../../Common/Button';
-import { calculatePrice } from '../../../helpers';
+import { calculatePrice, formatPrice } from '../../../helpers';
 
 import Update from './Update';
 import CouponsColumns from './CouponsColumns';
@@ -259,8 +259,7 @@ class Content extends Component {
                         </TD>
                         <TD position="center" bold>
                           £
-                          {(account &&
-                            (account.currentBalance / 100).toFixed(2)) ||
+                          {(account && formatPrice(account.currentBalance)) ||
                             0}
                         </TD>
                         <TD position="right">
@@ -307,10 +306,7 @@ class Content extends Component {
                       <InfoTableRow>
                         <TD position="left">Your Codes values:</TD>
                         <TD position="center" bold>
-                          £
-                          {(account &&
-                            (account.couponsValue / 100).toFixed(2)) ||
-                            0}
+                          £{(account && formatPrice(account.couponsValue)) || 0}
                         </TD>
                       </InfoTableRow>
 
@@ -358,7 +354,7 @@ class Content extends Component {
             <div>
               <ModalDescription bold>Funds available: </ModalDescription>
               <ModalDescription bold>
-                £{(account.currentBalance / 100).toFixed(2)}{' '}
+                £{formatPrice(account.currentBalance)}{' '}
               </ModalDescription>
             </div>
 
@@ -368,7 +364,7 @@ class Content extends Component {
                 bold
                 red={account.currentBalance - potentialCost < 100}
               >
-                £{Number(potentialCost / 100).toFixed(2)}{' '}
+                £{formatPrice(potentialCost)}{' '}
               </ModalDescription>
             </div>
 
@@ -560,7 +556,7 @@ class Content extends Component {
                 <div>
                   <ModalDescription bold>Coupon cost: </ModalDescription>
                   <ModalDescription bold>
-                    £{(discountPrice / 100).toFixed(2)}{' '}
+                    £{formatPrice(discountPrice)}{' '}
                   </ModalDescription>
                 </div>
 

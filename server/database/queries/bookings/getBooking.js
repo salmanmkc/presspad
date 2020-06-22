@@ -66,9 +66,15 @@ module.exports = bookingId =>
     {
       $lookup: {
         from: 'coupons',
-        let: { internId: '$intern' },
-        pipeline: [{ $match: { $expr: { $eq: ['$$internId', '$intern'] } } }],
-        as: 'coupons',
+        let: { couponId: '$coupon' },
+        pipeline: [{ $match: { $expr: { $eq: ['$$couponId', '$_id'] } } }],
+        as: 'coupon',
+      },
+    },
+    {
+      $unwind: {
+        path: '$coupon',
+        preserveNullAndEmptyArrays: true,
       },
     },
   ]);

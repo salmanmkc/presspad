@@ -28,6 +28,7 @@ export default ({
       internBookings,
       price,
       bookingSearchDates,
+      listingActiveBookings,
     },
     respondedRequests,
     respondingTime,
@@ -51,6 +52,7 @@ export default ({
       bookingSearchDates={bookingSearchDates}
       respondedRequests={respondedRequests}
       respondingTime={respondingTime}
+      listingActiveBookings={listingActiveBookings}
     />
   );
 

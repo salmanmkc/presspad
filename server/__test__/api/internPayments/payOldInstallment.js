@@ -9,10 +9,10 @@ const {
 } = require('../../../database/models');
 
 const buildDb = require('../../../database/data/test');
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 const {
   API_INTERN_PAYMENT_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
 describe('Testing Intern payemnts (Pay old installment):', () => {
@@ -93,24 +93,32 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(payAmount);
-        expect(oldHostCurrentBalance + payAmount).toBe(hostCurrentBalance);
+        expect(hostIncom - oldHostIncom).toBe(0.45 * payAmount);
+        expect(oldHostCurrentBalance + 0.45 * payAmount).toBe(
+          hostCurrentBalance,
+        );
 
         // Presspad account checks
         const {
           _id: presspadAccId,
           income: oldPresspadIncom,
           currentBalance: oldPresspadCurrentBalance,
+          bursaryFunds: oldPresspadBursaryFund,
+          // ToDo, test hostingIncome
         } = accounts.presspadAccount;
 
         const {
           income: presspadIncom,
           currentBalance: presspadCurrentBalance,
+          bursaryFunds: presspadBursaryFund,
         } = await Account.findById(presspadAccId);
 
         expect(presspadIncom - oldPresspadIncom).toBe(payAmount);
         expect(oldPresspadCurrentBalance + payAmount).toBe(
           presspadCurrentBalance,
+        );
+        expect(oldPresspadBursaryFund + 0.1 * payAmount).toBe(
+          presspadBursaryFund,
         );
 
         // Installments check
@@ -146,7 +154,7 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 
   test('pay old installment - invalid price', async done => {
     const {
@@ -240,5 +248,5 @@ describe('Testing Intern payemnts (Pay old installment):', () => {
         await mongoServer.stop();
         return done();
       });
-  }, 20000);
+  }, 40000);
 });

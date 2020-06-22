@@ -1,5 +1,6 @@
-const getOldBookings = require('./../../../database/queries/bookings/getOldBookings');
+const getOldBookings = require('../../../database/queries/bookings/getOldBookings');
 const Booking = require('../../../database/models/Booking');
+const { bookingStatuses } = require('../../../constants');
 
 module.exports = async () => {
   const oldBookings = await getOldBookings();
@@ -11,8 +12,8 @@ module.exports = async () => {
   return Booking.updateMany(
     { _id: { $in: oldBookingsIds } },
     {
-      status: 'canceled',
-      canceledBy: null,
+      status: bookingStatuses.cancelled,
+      cancelledBy: null,
     },
   );
 };

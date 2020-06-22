@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { PXSBold, P, PS, PBold } from '../../../Common/Typography';
+import { PXSBold, P, PS, PBold, Link } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 import Icon from '../../../Common/Icon';
 
@@ -13,7 +13,12 @@ import MakePayment from './MakePayment';
 import ReportProblem from './ReportProblem';
 import { WarningWrapper, TipsWrapper, ProfileLink } from './InternView.style';
 
-import { HOST_PROFILE, HOSTS_URL } from '../../../../constants/navRoutes';
+import {
+  HOST_PROFILE,
+  HOSTS_URL,
+  MYPROFILE_URL,
+  DASHBOARD_URL,
+} from '../../../../constants/navRoutes';
 
 const ViewProfile = ({ hostId }) => {
   const history = useHistory();
@@ -46,12 +51,17 @@ const WaitingContent = ({ hostRespondingTime, hostId }) => (
 
 const AcceptedContent = ({
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
+  handlePaymentMethod,
   handleCouponChange,
+  upfront,
+  bookingDays,
   paymentInfo,
   price,
   startDate,
   endDate,
   couponInfo,
+  usedCoupon,
   hostId,
 }) => (
   <>
@@ -68,13 +78,18 @@ const AcceptedContent = ({
     </PXSBold>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
+      handlePaymentMethod={handlePaymentMethod}
       handleCouponChange={handleCouponChange}
       data={{
+        upfront,
+        bookingDays,
         paymentInfo,
         fullPrice: price,
         startDate,
         endDate,
         couponInfo,
+        usedCoupon,
       }}
       isNew
     />
@@ -103,8 +118,97 @@ const RejectedContent = ({ rejectReason }) => {
     </>
   );
 };
-const ConfirmedContent = ({ hostInfo, isLoading, userRole, hostId }) => (
+
+const CancelledContent = ({
+  hostName,
+  cancelledByIntern,
+  cancellingUserMessage,
+}) => {
+  const history = useHistory();
+
+  return (
+    <>
+      {cancelledByIntern ? (
+        <>
+          <P mt="5" mb="1">
+            Your stay with {hostName} has been successfully cancelled. To
+            confirm, you will not be charged anything for this cancellation.
+            <br /> <br /> If you had to cancel due to any changes in your
+            internship, please make sure you
+            <Link to={MYPROFILE_URL}> update your profile now</Link>.
+          </P>
+          <ButtonNew
+            small
+            type="primary"
+            mt="4"
+            onClick={() => history.push(DASHBOARD_URL)}
+          >
+            go to dashboard
+          </ButtonNew>
+        </>
+      ) : (
+        <>
+          <P mt="5" mb="1">
+            Sorry, your booking with {hostName} has been cancelled. You will not
+            be charged anything for this booking. Here is the reason they
+            provided: <br /> <br /> {cancellingUserMessage}
+          </P>
+          <ButtonNew
+            small
+            outline
+            type="tertiary"
+            mt="4"
+            onClick={() => history.push(HOSTS_URL)}
+          >
+            find another host
+          </ButtonNew>
+        </>
+      )}
+    </>
+  );
+};
+
+const ConfirmedContent = ({
+  hostInfo,
+  isLoading,
+  userRole,
+  hostId,
+  handlePayNowClick,
+  handleConfirmWithoutPayClick,
+  handlePaymentMethod,
+  handleCouponChange,
+  upfront,
+  bookingDays,
+  paymentInfo,
+  installments,
+  updatedInstallments,
+  price,
+  startDate,
+  endDate,
+  couponInfo,
+  usedCoupon,
+}) => (
   <>
+    {!!price && (
+      <MakePayment
+        handlePayNowClick={handlePayNowClick}
+        handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
+        handlePaymentMethod={handlePaymentMethod}
+        handleCouponChange={handleCouponChange}
+        data={{
+          upfront,
+          bookingDays,
+          paymentInfo,
+          installments,
+          updatedInstallments,
+          fullPrice: price,
+          startDate,
+          endDate,
+          couponInfo,
+          usedCoupon,
+        }}
+      />
+    )}
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
     <ViewProfile hostId={hostId} />
     <TipsWrapper height="290px">
@@ -123,6 +227,7 @@ const PaymentDueContent = ({
   isLoading,
   userRole,
   handlePayNowClick,
+  handleConfirmWithoutPayClick,
   handleCouponChange,
   paymentInfo,
   price,
@@ -130,20 +235,29 @@ const PaymentDueContent = ({
   endDate,
   couponInfo,
   hostId,
+  installments,
+  updatedInstallments,
+  usedCoupon,
+  bookingDays,
+  dueToday,
 }) => (
   <>
-    <P mt="5" mb="1">
-      Your next payment is due! Please complete your payment below:
-    </P>
     <MakePayment
       handlePayNowClick={handlePayNowClick}
+      handleConfirmWithoutPayClick={handleConfirmWithoutPayClick}
       handleCouponChange={handleCouponChange}
+      paymentDue={dueToday}
+      paymentOverdue={!dueToday}
       data={{
         paymentInfo,
         fullPrice: price,
         startDate,
         endDate,
         couponInfo,
+        installments,
+        updatedInstallments,
+        usedCoupon,
+        bookingDays,
       }}
     />
     <HostInternInfo info={hostInfo} isLoading={isLoading} />
@@ -186,4 +300,5 @@ export {
   ConfirmedContent,
   PaymentDueContent,
   CompletedContent,
+  CancelledContent,
 };
