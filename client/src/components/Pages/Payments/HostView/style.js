@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Collapse } from 'antd';
 
 export const Wrapper = styled.div`
   @media (max-width: ${({ theme: { size } }) => size.mobileXL}) {
@@ -35,5 +36,18 @@ export const CardsWrapper = styled.div`
         display: none;
       }
     }
+  }
+`;
+
+export const CollapseWrapper = styled(Collapse)`
+  background: none;
+  border-radius: 0;
+  margin-bottom: ${({ theme }) => theme.spacings[7]};
+  border: 0px;
+  overflow: hidden;
+  * {
+    border: none;
+    border-bottom: none !important;
+    background: none;
   }
 `;

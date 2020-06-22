@@ -1,4 +1,5 @@
 const orgPayment = require('./organisation');
+const getPaymentsInfo = require('./getPaymentsInfo');
 const internPayment = require('./intern');
 const {
   withdrawRequest,
@@ -10,4 +11,5 @@ module.exports = {
   orgPayment,
   withdrawRequest,
   confirmOrCancelWithdrawRequest,
+  getPaymentsInfo,
 };
