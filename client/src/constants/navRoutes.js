@@ -30,6 +30,9 @@ export const HOST_COMPLETE_PROFILE_URL = '/host-complete-profile';
 export const INTERN_COMPLETE_PROFILE_URL = '/intern-complete-profile';
 export const DBS_CHECK_PAGE = '/dbs-check';
 
+// booking cancellation type urls
+export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
+
 // sign in/out
 export const SIGNIN_URL = '/sign-in';
 export const SIGNOUT_URL = '/sign-out';

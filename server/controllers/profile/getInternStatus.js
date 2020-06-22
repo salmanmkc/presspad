@@ -47,6 +47,7 @@ module.exports = async (req, res, next) => {
     await validate(internCompleteProfileSchema, profile);
 
     isComplete = true;
+
     return res.send({ isComplete, verified, validInternshipDates });
   } catch (err) {
     if (err.name === 'ValidationError') {

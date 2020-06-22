@@ -57,12 +57,17 @@ const bookingSchema = new Schema(
       type: Number,
       default: 0,
     },
-    // user's ID who cancelled the booking
-    cancelledBy: {
-      // check all cancelledBy
-      type: Schema.Types.ObjectId,
-      ref: 'users',
+    cancellationDetails: {
+      // user's ID who canceled the booking
+      cancelledBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+      },
+      cancellingUserMessage: {
+        type: String,
+      },
     },
+
     // if the booking has been rejected by host/admin
     rejectReason: {
       type: String,

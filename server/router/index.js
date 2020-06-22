@@ -21,6 +21,7 @@ const {
   newBookingRequest,
   acceptBooking,
   rejectBooking,
+  cancelBooking,
   getBookingsWithUsers,
   getActiveBookingsApi,
   adminReviewsBooking,
@@ -99,6 +100,7 @@ const {
   UPDATE_WITHDRAW_REQUEST_URL,
   ACCEPT_BOOKING_URL,
   REJECT_BOOKING_URL,
+  CANCEL_BOOKING_URL,
   ORG_PAYMENT_URL,
   FIND_WITHDRAW_REQUESTS_URL,
   GET_ALL_CETIES_URL,
@@ -121,8 +123,11 @@ router.use(validation2);
 // accept booking by id
 router.patch(ACCEPT_BOOKING_URL, authentication, acceptBooking);
 
-// accept booking by id
+// reject booking by id
 router.patch(REJECT_BOOKING_URL, authentication, rejectBooking);
+
+// cancel booking by id
+router.patch(CANCEL_BOOKING_URL, authentication, cancelBooking);
 
 // Host view intern profile
 router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);

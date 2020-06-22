@@ -59,9 +59,27 @@ module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
   );
 
 module.exports.getNextPendingBooking = getNextPendingBooking;
-// get all bookings of user
+
+// get all active bookings of user
 module.exports.getUserBookings = async intern => {
-  const bookings = await Booking.find({ intern });
+  const bookings = await Booking.find({
+    intern,
+    $or: [
+      {
+        status: 'awaiting admin',
+      },
+      {
+        status: 'pending',
+      },
+      {
+        status: 'accepted',
+      },
+      {
+        status: 'confirmed',
+      },
+    ],
+  });
+
   const userBookingDates = bookings.reduce((acc, cur) => {
     const dates = createDatesArray(cur.startDate, cur.endDate);
     acc.push(dates);
@@ -115,8 +133,8 @@ module.exports.createNewBooking = async data => {
   return newBooking;
 };
 
-// 3)
-// updates listing
+// !UPDATE LISTING NOT USED ANYMORE
+
 module.exports.updateListingAvailability = async (listingId, bs, be) => {
   const listing = await Listing.findOne({ _id: listingId });
   const listingAvDates = listing.availableDates.reduce((acc, cur) => {
@@ -200,6 +218,25 @@ module.exports.updateBookingByID = (bookingID, newStatus) =>
   Booking.findByIdAndUpdate(
     bookingID,
     { status: newStatus },
+    {
+      new: true,
+    },
+  );
+
+module.exports.cancelBookingBeforePaymentQuery = ({
+  bookingId,
+  cancellingUserMessage,
+  cancellingUserId,
+}) =>
+  Booking.findOneAndUpdate(
+    { _id: bookingId },
+    {
+      status: 'cancelled',
+      cancellationDetails: {
+        cancelledBy: cancellingUserId,
+        cancellingUserMessage,
+      },
+    },
     {
       new: true,
     },
