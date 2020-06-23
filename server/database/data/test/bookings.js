@@ -47,7 +47,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       status: bookingStatuses.accepted,
       price: 24000,
       payedAmount: 0,
-      moneyGoTo: 'presspad',
+      moneyGoTo: 'host',
     },
     // accepted & not paid installments applicable
     {
@@ -59,7 +59,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       status: bookingStatuses.accepted,
       price: 92000,
       payedAmount: 0,
-      moneyGoTo: 'presspad',
+      moneyGoTo: 'host',
     },
     // confirmed (less than two weeks, free)
     {

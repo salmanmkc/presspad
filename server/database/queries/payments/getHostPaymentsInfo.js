@@ -1,7 +1,35 @@
 const mongoose = require('mongoose');
 
-const { User } = require('../../models');
+const { User, Booking } = require('../../models');
 // const { bookingStatuses } = require('../../../constants');
+
+const getHostPendingPayments = async id => {
+  const data = await Booking.aggregate([
+    {
+      $match: {
+        $expr: {
+          $and: [
+            { $eq: ['$host', id] },
+            { $eq: ['$status', 'confirmed'] },
+            { $gt: ['$payedAmount', 0] },
+            { $eq: ['$moneyGoTo', 'host'] },
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        hostRatioPayedAmount: { $multiply: ['$payedAmount', 0.45] },
+      },
+    },
+  ]);
+
+  const pendingPayments = data.reduce(
+    (acc, curr) => acc + curr.hostRatioPayedAmount,
+    0,
+  );
+  return pendingPayments;
+};
 
 const getHostPaymentsInfo = id =>
   User.aggregate([
@@ -75,7 +103,12 @@ const getHostPaymentsInfo = id =>
           },
           {
             $project: {
+              _id: 0,
               status: 1,
+              startDate: 1,
+              endDate: 1,
+              intern: 1,
+              bookingId: '$_id',
               installments: 1,
               couponTransactions: '$couponTransactions.transactions',
             },
@@ -130,6 +163,8 @@ const getHostPaymentsInfo = id =>
                 $and: [
                   { $eq: ['$$host', '$host'] },
                   { $eq: ['$status', 'confirmed'] },
+                  { $gt: ['$payedAmount', 0] },
+                  { $eq: ['$moneyGoTo', 'host'] },
                 ],
               },
             },
@@ -155,4 +190,4 @@ const getHostPaymentsInfo = id =>
     },
   ]);
 
-module.exports = getHostPaymentsInfo;
+module.exports = { getHostPaymentsInfo, getHostPendingPayments };

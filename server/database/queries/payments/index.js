@@ -9,7 +9,10 @@ const {
   confirmOrCancelWithdrawRequest,
   getWithdrawRequestById,
 } = require('./withdrawRequests');
-const getHostPaymentsInfo = require('./getHostPaymentsInfo');
+const {
+  getHostPaymentsInfo,
+  getHostPendingPayments,
+} = require('./getHostPaymentsInfo');
 const updateBooking = require('./updateBooking');
 const discountStripeFees = require('./discountStripeFees');
 const {
@@ -30,6 +33,7 @@ module.exports = {
   confirmOrCancelWithdrawRequest,
   getWithdrawRequestById,
   getHostPaymentsInfo,
+  getHostPendingPayments,
   updateBooking,
   discountStripeFees,
   updateUnpaidInstallments,

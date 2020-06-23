@@ -1,5 +1,6 @@
 const WithdrawRequest = require('../../models/WithdrawRequest');
 const Account = require('../../models/Account');
+const { getHostPendingPayments } = require('./getHostPaymentsInfo');
 
 const hostRequestToWithdrawMoney = async ({
   amount,
@@ -14,6 +15,7 @@ const hostRequestToWithdrawMoney = async ({
     account,
     status: 'pending',
   });
+  const pendingPayments = await getHostPendingPayments(user);
 
   const requestedAmount = withdrawRequests
     .filter(request => request && request.status === 'pending')
@@ -21,7 +23,7 @@ const hostRequestToWithdrawMoney = async ({
       return prev + cur.amount;
     }, 0);
 
-  if (account.currentBalance - requestedAmount < amount) {
+  if (account.currentBalance - requestedAmount - pendingPayments < amount) {
     return Promise.reject(
       new Error('current balance is less than what you have'),
     );
