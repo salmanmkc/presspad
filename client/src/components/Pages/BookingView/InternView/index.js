@@ -15,7 +15,6 @@ import {
 import {
   calculatePrice,
   calculateHostRespondingTime,
-  formatPrice,
 } from '../../../../helpers';
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
@@ -33,6 +32,7 @@ import {
   ConfirmedContent,
   PaymentDueContent,
   CompletedContent,
+  AwaitingCancellationContent,
   CancelledContent,
 } from './statusContents';
 
@@ -257,6 +257,7 @@ export default class BookingView extends Component {
     let newInstallments = [];
     const {
       price,
+      payedAmount,
       startDate,
       endDate,
       status,
@@ -313,6 +314,11 @@ export default class BookingView extends Component {
         statusContentsComponent: () => (
           <RejectedContent rejectReason={rejectReason} />
         ),
+      },
+      awaitingCancellation: {
+        status: 'under review',
+        statusColor: 'pink',
+        statusContentsComponent: () => <AwaitingCancellationContent />,
       },
       cancelled: {
         status: 'cancelled',
@@ -437,7 +443,20 @@ export default class BookingView extends Component {
       // toDo "is there a different wording for rejecting by admin?"
       bookingStatus = bookingStatuses.rejected;
     }
+    if (status === 'awaiting cancellation') {
+      bookingStatus = bookingStatuses.awaitingCancellation;
+    }
 
+    const decideHeadline = _status => {
+      switch (_status) {
+        case 'under review':
+          return 'cancellation request';
+        case 'cancelled':
+          return 'booking cancelled';
+        default:
+          return 'booking request';
+      }
+    };
     return (
       <Wrapper>
         {/* PayNowModal should be wrapped in an Elements component in order to stripe api to work */}
@@ -465,11 +484,7 @@ export default class BookingView extends Component {
         </Elements>
 
         <ContentWrapper>
-          <H4C mb="7">
-            {bookingStatus.status === 'cancelled'
-              ? 'booking cancelled'
-              : 'booking request'}
-          </H4C>
+          <H4C mb="7">{decideHeadline(bookingStatus.status)}</H4C>
           {bookingStatus.status !== 'cancelled' && (
             <>
               <H6C mb="2" color="lightGray">
@@ -482,7 +497,9 @@ export default class BookingView extends Component {
           )}
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
-        {status !== 'cancelled' && status !== 'completed' && (
+        {!['cancelled', 'completed', 'awaiting cancellation'].includes(
+          status,
+        ) && (
           <CancelBookingButton
             // this loads confirm cancellatiom page and sends user and booking infos
             onClick={() => {
@@ -500,7 +517,8 @@ export default class BookingView extends Component {
           </CancelBookingButton>
         )}
         <BookingDates
-          price={formatPrice(price)}
+          payedSoFar={payedAmount}
+          price={price}
           startDate={startDate}
           endDate={endDate}
           intern

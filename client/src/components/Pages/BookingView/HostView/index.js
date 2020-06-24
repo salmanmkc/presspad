@@ -4,14 +4,13 @@ import moment from 'moment';
 import axios from 'axios';
 import { message } from 'antd';
 
-import { H4C } from '../../../Common/Typography';
+import { H4C, H5C, H6C } from '../../../Common/Typography';
 import ButtonNew from '../../../Common/ButtonNew';
 
 import BookingDates from '../../../Common/BookingDetailsBox';
 import HostInternInfo from '../HostInternInfo';
 import { TipsCard } from '../../../Common/Cards';
 import CancelBookingButton from '../CancelBookingButton';
-import { formatPrice } from '../../../../helpers';
 
 import {
   PendingContent,
@@ -20,6 +19,7 @@ import {
   ConfirmedContent,
   CompletedContent,
   CancelledContent,
+  AwaitingCancellationContent,
 } from './statusContents';
 import WarningModal from './WarningModal';
 import { Wrapper, ContentWrapper, TipsWrapper } from './HostView.style';
@@ -58,6 +58,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
 
   const {
     _id: bookingId,
+    payedAmount,
     intern,
     price,
     startDate,
@@ -178,6 +179,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
     accepted: () => <AcceptedContent internName={intern.name} />,
     confirmed: () => <ConfirmedContent bookingInfo={bookingInfo} />,
     rejected: () => <RejectedContent />,
+    'awaiting cancellation': () => <AwaitingCancellationContent />,
     cancelled: () => (
       <CancelledContent
         cancellingUserMessage={
@@ -213,9 +215,21 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         acceptError={error}
       />
       <ContentWrapper>
+        {status === 'awaiting cancellation' && (
+          <>
+            <H4C mb="7">cancellation request</H4C>
+            <H6C mb="2" color="lightGray">
+              status
+            </H6C>
+            <H5C color="pink">under review</H5C>
+          </>
+        )}
         {status === 'cancelled' && <H4C mb="7">booking cancelled</H4C>}
+
         {statusContents[status]()}
-        {!['completed', 'cancelled'].includes(status) && (
+        {!['completed', 'cancelled', 'awaiting cancellation'].includes(
+          status,
+        ) && (
           <>
             <HostInternInfo
               info={internInfo}
@@ -252,7 +266,9 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         )}
       </ContentWrapper>
 
-      {status !== 'cancelled' && status !== 'completed' && (
+      {!['completed', 'cancelled', 'awaiting cancellation'].includes(
+        status,
+      ) && (
         <CancelBookingButton
           // this loads confirm cancellatiom page and sends user and booking infos
           onClick={() => {
@@ -271,7 +287,8 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
       )}
 
       <BookingDates
-        price={formatPrice(price)}
+        payedSoFar={payedAmount}
+        price={price}
         startDate={startDate}
         endDate={endDate}
         intern

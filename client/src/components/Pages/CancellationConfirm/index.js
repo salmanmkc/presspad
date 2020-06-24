@@ -56,11 +56,12 @@ const CancellationConfirm = ({ ...props }) => {
 
   // validates length of message input
   useEffect(() => {
+    const wordCount = message.trim().split(/\s+/).length;
     if (
-      (canCancelDirectly && message.length < 4) ||
-      (canCancelAfterPayment && cancelAfterPage === 2 && message.length < 4)
+      (canCancelDirectly && wordCount < 5) ||
+      (canCancelAfterPayment && cancelAfterPage === 2 && wordCount < 5)
     ) {
-      setError('Message must be at least 4 characters long.');
+      setError('Please write some words about why you want to cancel.');
     } else {
       setError(null);
     }

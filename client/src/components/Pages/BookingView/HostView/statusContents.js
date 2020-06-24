@@ -120,6 +120,28 @@ const RejectedContent = () => (
   </>
 );
 
+const AwaitingCancellationContent = () => {
+  const history = useHistory();
+  return (
+    <>
+      <T.P mt="5" mb="1">
+        Thank you for your request. At PressPad we take booking cancellations
+        very seriously. Our team will be looking at this and will be in touch to
+        personally resolve the issue as soon as possible.
+      </T.P>
+
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CancelledContent = ({
   internName,
   cancellingUserMessage,
@@ -198,4 +220,5 @@ export {
   ConfirmedContent,
   CompletedContent,
   CancelledContent,
+  AwaitingCancellationContent,
 };

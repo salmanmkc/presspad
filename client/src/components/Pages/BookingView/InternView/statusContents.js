@@ -119,6 +119,28 @@ const RejectedContent = ({ rejectReason }) => {
   );
 };
 
+const AwaitingCancellationContent = ({ hostName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <P mt="5" mb="1">
+        Thank you for your request. At PressPad we take booking cancellations
+        very seriously. Our team will be looking at this and will be in touch to
+        personally resolve the issue as soon as possible.
+      </P>
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CancelledContent = ({
   hostName,
   cancelledByIntern,
@@ -301,4 +323,5 @@ export {
   PaymentDueContent,
   CompletedContent,
   CancelledContent,
+  AwaitingCancellationContent,
 };
