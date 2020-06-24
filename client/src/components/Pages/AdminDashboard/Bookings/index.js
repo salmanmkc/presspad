@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Select } from 'antd';
 import moment from 'moment';
 import { H7C } from '../../../Common/Typography';
 import columns from './columns';
 import ExpandedDetails from './ExpandedDetails';
 import Icon from '../../../Common/Icon';
+import BookingView from './BookingView';
 
 const { Option } = Select;
 
@@ -17,7 +18,10 @@ export default function BookingsTable({
   triggerInternView,
   handleAction,
   adminAction,
+  toggleSearchBar,
 }) {
+  const [bookingView, setBookingView] = useState(false);
+
   const lengthOfStay = (startDate, endDate) =>
     moment(endDate).diff(moment(startDate), 'days');
 
@@ -48,8 +52,23 @@ export default function BookingsTable({
         );
       case 'awaiting cancellation':
         return (
-          <div style={{ display: 'flex' }}>
-            <H7C color="pink">Please Review</H7C>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <button
+              type="button"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                toggleSearchBar();
+                setBookingView(true);
+              }}
+            >
+              <H7C style={{ textDecoration: 'underline' }} color="pink">
+                Please Review
+              </H7C>
+            </button>
             <Icon icon="reviewExplanationMark" width="24px" />
           </div>
         );
@@ -60,25 +79,29 @@ export default function BookingsTable({
 
   return (
     <>
-      <Table
-        columns={columns(
-          getColumnSearchProps,
-          highlightVal,
-          triggerHostView,
-          triggerInternView,
-          renderActions,
-          lengthOfStay,
-        )}
-        dataSource={data}
-        pagination={{ pageSize: 5 }}
-        scroll={{ x: '100%' }}
-        loading={loading}
-        expandable={{
-          expandedRowRender: (record, index) => (
-            <ExpandedDetails record={record} />
-          ),
-        }}
-      />
+      {bookingView ? (
+        <BookingView toggleSearchBar={toggleSearchBar} />
+      ) : (
+        <Table
+          columns={columns(
+            getColumnSearchProps,
+            highlightVal,
+            triggerHostView,
+            triggerInternView,
+            renderActions,
+            lengthOfStay,
+          )}
+          dataSource={data}
+          pagination={{ pageSize: 5 }}
+          scroll={{ x: '100%' }}
+          loading={loading}
+          expandable={{
+            expandedRowRender: (record, index) => (
+              <ExpandedDetails record={record} />
+            ),
+          }}
+        />
+      )}
     </>
   );
 }

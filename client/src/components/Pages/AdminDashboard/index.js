@@ -70,6 +70,7 @@ export default class AdminDashboard extends Component {
     dbsDetails: { refNum: '', fileName: '' },
     userToUpdate: null,
     errors: { dbsDetails: { refNum: null, fileName: null } },
+    showSearchBar: true,
   };
 
   componentDidMount() {
@@ -399,6 +400,9 @@ export default class AdminDashboard extends Component {
     }
   };
 
+  toggleSearchBar = () =>
+    this.setState(prevSate => ({ showSearchBar: !prevSate.showSearchBar }));
+
   render() {
     const {
       activeLink,
@@ -414,8 +418,9 @@ export default class AdminDashboard extends Component {
       dbsDetails,
       userToUpdate,
       errors,
+      showSearchBar,
     } = this.state;
-
+    console.log('showwww', showSearchBar);
     return (
       <Wrapper>
         <TopSection>
@@ -480,11 +485,13 @@ export default class AdminDashboard extends Component {
                 ? 'Withdraw requests'
                 : `Your ${activeLink}`}
             </ContentTitle>
-            <SearchBar
-              data={filteredData}
-              handleSearchBar={this.handleSearchBar}
-              highlightVal={highlightVal}
-            />
+            {showSearchBar && (
+              <SearchBar
+                data={filteredData}
+                handleSearchBar={this.handleSearchBar}
+                highlightVal={highlightVal}
+              />
+            )}
             {activeLink === 'clients' && (
               <ClientTable
                 getColumnSearchProps={this.getColumnSearchProps}
@@ -534,6 +541,7 @@ export default class AdminDashboard extends Component {
             {activeLink === 'bookings' && (
               <HostWrapper>
                 <BookingsTable
+                  toggleSearchBar={this.toggleSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
                   data={filteredData}
@@ -549,6 +557,7 @@ export default class AdminDashboard extends Component {
             {activeLink === 'bookingHistory' && (
               <HostWrapper>
                 <BookingsTable
+                  toggleSearchBar={this.toggleSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
                   data={filteredData}
