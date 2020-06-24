@@ -75,6 +75,13 @@ const getHostPaymentsInfo = id =>
               let: { bookingId: '$_id' },
               pipeline: [
                 { $match: { $expr: { $eq: ['$$bookingId', '$booking'] } } },
+                {
+                  $project: {
+                    dueDate: 1,
+                    transaction: 1,
+                    hostRatioAmount: { $multiply: ['$amount', 0.45] },
+                  },
+                },
               ],
               as: 'installments',
             },
@@ -89,6 +96,7 @@ const getHostPaymentsInfo = id =>
                 {
                   $project: {
                     transactions: 1,
+                    hostRatioAmount: { $multiply: ['$amount', 0.45] },
                   },
                 },
               ],
@@ -101,16 +109,40 @@ const getHostPaymentsInfo = id =>
               preserveNullAndEmptyArrays: true,
             },
           },
+          // lookup intern name
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'intern',
+              foreignField: '_id',
+              as: 'intern',
+            },
+          },
+          {
+            $unwind: {
+              path: '$intern',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
           {
             $project: {
               _id: 0,
               status: 1,
               startDate: 1,
               endDate: 1,
-              intern: 1,
+              intern: '$intern.name',
               bookingId: '$_id',
               installments: 1,
-              couponTransactions: '$couponTransactions.transactions',
+              hostInstallmentsRatioAmount: {
+                $sum: '$installments.hostRatioAmount',
+              },
+              // couponTransactions: '$couponTransactions.transactions',
+              hostcouponTransactionsRatioAmount: {
+                $multiply: [
+                  { $sum: '$couponTransactions.transactions.amount' },
+                  0.45,
+                ],
+              },
             },
           },
         ],

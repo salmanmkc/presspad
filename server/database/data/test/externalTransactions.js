@@ -48,12 +48,21 @@ const createAll = async ({ users, accounts }) => {
       amount: 28000,
       createdAt: Date.now(),
     },
+    // intern paying the completed booking
+    {
+      user: internUser._id,
+      account: internAccount._id,
+      type: 'deposite',
+      amount: 12000,
+      createdAt: Date.now(),
+    },
   ];
   const [
     organisationTransaction,
     internPayingUpfrontTransaction,
     internPayingFirstTransaction,
     internPayingFirstTransactionNoCoupon,
+    internPayingCompletedBooking,
   ] = await ExternalTransaction.create(externalTransactions);
 
   return {
@@ -61,6 +70,7 @@ const createAll = async ({ users, accounts }) => {
     internPayingUpfrontTransaction,
     internPayingFirstTransaction,
     internPayingFirstTransactionNoCoupon,
+    internPayingCompletedBooking,
   };
 };
 

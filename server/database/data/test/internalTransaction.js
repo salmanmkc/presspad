@@ -9,6 +9,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
     confirmedPaidUpfront,
     confirmedPaidFirst,
     confirmedPaidFirstNoCoupon,
+    completedBooking,
   } = bookings;
 
   await reset();
@@ -47,12 +48,21 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       amount: confirmedPaidFirstNoCoupon.payedAmount,
       type: 'installment',
     },
+    // confirmedPaidFirstNoCoupon
+    {
+      user: internUser._id,
+      from: internAccount._id,
+      to: hostAccount._id,
+      amount: completedBooking.payedAmount,
+      type: 'installment',
+    },
   ];
   const [
     internalTransactionsPaidUpFrontIntern,
     internalTransactionsPaidUpFrontCoupon,
     internalTransactionsConfirmedPaidFirst,
     internalTransactionsConfirmedPaidFirstNoCoupon,
+    internalTransactionsCompletedBooking,
   ] = await InternalTransaction.create(internalTransactions);
 
   return {
@@ -60,6 +70,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
     internalTransactionsPaidUpFrontCoupon,
     internalTransactionsConfirmedPaidFirst,
     internalTransactionsConfirmedPaidFirstNoCoupon,
+    internalTransactionsCompletedBooking,
   };
 };
 

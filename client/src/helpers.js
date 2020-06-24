@@ -325,4 +325,5 @@ export const calculateHostRespondingTime = (
   return hostRespondingTime || 7;
 };
 
-export const formatPrice = price => (price / 100).toFixed();
+export const formatPrice = (price, fractionDigits) =>
+  (price / 100).toFixed(fractionDigits);

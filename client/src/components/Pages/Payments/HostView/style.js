@@ -45,9 +45,13 @@ export const CollapseWrapper = styled(Collapse)`
   margin-bottom: ${({ theme }) => theme.spacings[7]};
   border: 0px;
   overflow: hidden;
-  * {
+  > * {
     border: none;
     border-bottom: none !important;
     background: none;
   }
+`;
+
+export const TableWrapper = styled.div`
+  max-width: 500px;
 `;

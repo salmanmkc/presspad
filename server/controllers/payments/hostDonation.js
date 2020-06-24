@@ -5,6 +5,9 @@ const {
   getHostPendingPayments,
 } = require('../../database/queries/payments');
 const { getAccoutById } = require('../../database/queries/account');
+const {
+  getWithdrawRequestsByUserId,
+} = require('../../database/queries/withdrawRequest');
 
 const hostDonation = async (req, res, next) => {
   const { amount } = req.body;
@@ -14,11 +17,18 @@ const hostDonation = async (req, res, next) => {
   if (role !== 'host' && role !== 'superhost') {
     return next(boom.unauthorized());
   }
-  try {
-    const pendingPayments = await getHostPendingPayments(_id);
-    const { currentBalance } = await getAccoutById(account);
 
-    if (amount > currentBalance - pendingPayments) {
+  try {
+    const { currentBalance } = await getAccoutById(account);
+    const pendingPayments = await getHostPendingPayments(_id);
+    const withdrawRequests = await getWithdrawRequestsByUserId(_id);
+    const requestedAmount = withdrawRequests
+      .filter(request => request && request.status === 'pending')
+      .reduce((prev, cur) => {
+        return prev + cur.amount;
+      }, 0);
+
+    if (amount > currentBalance - pendingPayments - requestedAmount) {
       return next(boom.badData('Not enough balance'));
     }
 

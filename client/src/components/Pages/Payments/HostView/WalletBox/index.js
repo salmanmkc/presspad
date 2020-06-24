@@ -12,7 +12,7 @@ import * as S from './style';
 
 const WalletBox = ({ currentBalance, pendingPayments, pendingWithdrawn }) => {
   const [openModal, setOpenModal] = useState('');
-  const accessibleFunds = currentBalance - pendingPayments;
+  const accessibleFunds = currentBalance - pendingPayments - pendingWithdrawn;
 
   const handleCloseModals = () => {
     setOpenModal('');
@@ -39,7 +39,7 @@ const WalletBox = ({ currentBalance, pendingPayments, pendingWithdrawn }) => {
             <T.H3C color="blue">{formatPrice(accessibleFunds)}</T.H3C>
           </S.BallanceWrapper>
           <T.PSBold mt={1} color="gray">
-            Pending: {formatPrice(pendingPayments)}
+            Pending: {formatPrice(pendingPayments + pendingWithdrawn)}
           </T.PSBold>
           <S.ButtonsWrapper>
             <Button

@@ -58,12 +58,11 @@ const WithdrawDonateModal = ({
   currentBalance,
   pendingPayments,
   pendingWithdrawn,
-  refetchData,
+  // refetchData,
 }) => {
   const donateModalOpen = openModal === 'donate';
   const withdrawModalOpen = openModal === 'withdraw';
 
-  // const [isNumberInputActive, setIsNumberInputActive] = useState(false);
   const [attemptedToSubmit, setAttemptedToSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
   const canBeWithdraw = currentBalance - pendingPayments - pendingWithdrawn;
@@ -135,7 +134,7 @@ const WithdrawDonateModal = ({
             )
             .then(() => {
               handleCloseModals();
-              refetchData();
+              // refetchData();
             });
         } catch (error) {
           message.error(`Error!, something went wrong`);
@@ -166,7 +165,7 @@ const WithdrawDonateModal = ({
             )
             .then(() => {
               handleCloseModals();
-              refetchData();
+              // refetchData();
             });
         } catch (error) {
           message.error(`Error!, something went wrong`);

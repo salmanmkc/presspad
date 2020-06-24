@@ -3,22 +3,22 @@ const boom = require('boom');
 // IMPORT QUERIES
 const {
   getAllClientStats,
-} = require('./../../database/queries/stats/getAllClientStats');
+} = require('../../database/queries/stats/getAllClientStats');
 const {
   getAllInternStats,
-} = require('./../../database/queries/stats/getAllInternStats');
+} = require('../../database/queries/stats/getAllInternStats');
 const {
   getAllHostStats,
-} = require('./../../database/queries/stats/getAllHostStats');
+} = require('../../database/queries/stats/getAllHostStats');
 const {
   findAllWithdrawRequests,
 } = require('../../database/queries/withdrawRequest');
 const {
   getActiveBookings,
   getBookingHistory,
-} = require('../../database/queries/bookings/');
+} = require('../../database/queries/bookings');
 
-const generateUrl = require('./../../helpers/generateFileURL');
+const generateUrl = require('../../helpers/generateFileURL');
 
 module.exports = async (req, res, next) => {
   // get user data so we can check they are authorized

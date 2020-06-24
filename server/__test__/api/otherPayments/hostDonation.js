@@ -4,11 +4,16 @@ const app = require('../../../app');
 const buildDB = require('../../../database/data/test');
 
 const createToken = require('../../../helpers/createToken');
-const { InternalTransaction, Account } = require('../../../database/models');
+const {
+  InternalTransaction,
+  Account,
+  Booking,
+} = require('../../../database/models');
 
 const {
   API_DONATION_URL,
 } = require('../../../../client/src/constants/apiRoutes');
+const { bookingStatuses } = require('../../../constants');
 
 describe('Testing for host donate to presspad account route', () => {
   test('test with correct details', async done => {
@@ -18,6 +23,7 @@ describe('Testing for host donate to presspad account route', () => {
       users,
       accounts,
       withdrawRequests,
+      bookings,
     } = await buildDB({
       replSet: true,
     });
@@ -27,7 +33,13 @@ describe('Testing for host donate to presspad account route', () => {
     const { pendingWithdrawRequest } = withdrawRequests;
 
     const token = `token=${createToken(hostUser._id)}`;
-    const amount = hostAccount.currentBalance - pendingWithdrawRequest.amount;
+    await Booking.findOneAndUpdate(
+      { _id: bookings.confirmedPaidUpfront._id },
+      { status: bookingStatuses.completed },
+      { new: true },
+    );
+
+    const amount = 4500;
 
     const data = { amount };
 
@@ -93,7 +105,7 @@ describe('Testing for host donate to presspad account route', () => {
       .set('Cookie', [token])
       .send(data)
       .expect('Content-Type', /json/)
-      .expect(500)
+      .expect(422)
       .end(async error => {
         expect(error).toBeDefined();
         const presspadAccountAfter = await Account.findById(
