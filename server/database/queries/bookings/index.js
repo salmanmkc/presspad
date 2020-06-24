@@ -16,6 +16,10 @@ const getActiveBookings = require('./getActiveBookings');
 const getBookingHistory = require('./getBookingHistory');
 const getOverlappingBookings = require('./getOverlappingBookings');
 const getBookingsDetails = require('./getBookingsDetails');
+const getUpcomingBooking = require('./getUpcomingBooking');
+const getCurrentBooking = require('./getCurrentBooking');
+const getUserBookingRequests = require('./getUserBookingRequests');
+const getUserPreviousBookings = require('./getUserPreviousBookings');
 
 const { bookingStatuses } = require('../../../constants');
 
@@ -59,9 +63,27 @@ module.exports.adminRejectBookingById = (bookingId, rejectReason) =>
   );
 
 module.exports.getNextPendingBooking = getNextPendingBooking;
-// get all bookings of user
+
+// get all active bookings of user
 module.exports.getUserBookings = async intern => {
-  const bookings = await Booking.find({ intern });
+  const bookings = await Booking.find({
+    intern,
+    $or: [
+      {
+        status: 'awaiting admin',
+      },
+      {
+        status: 'pending',
+      },
+      {
+        status: 'accepted',
+      },
+      {
+        status: 'confirmed',
+      },
+    ],
+  });
+
   const userBookingDates = bookings.reduce((acc, cur) => {
     const dates = createDatesArray(cur.startDate, cur.endDate);
     acc.push(dates);
@@ -115,8 +137,8 @@ module.exports.createNewBooking = async data => {
   return newBooking;
 };
 
-// 3)
-// updates listing
+// !UPDATE LISTING NOT USED ANYMORE
+
 module.exports.updateListingAvailability = async (listingId, bs, be) => {
   const listing = await Listing.findOne({ _id: listingId });
   const listingAvDates = listing.availableDates.reduce((acc, cur) => {
@@ -205,6 +227,25 @@ module.exports.updateBookingByID = (bookingID, newStatus) =>
     },
   );
 
+module.exports.cancelBookingBeforePaymentQuery = ({
+  bookingId,
+  cancellingUserMessage,
+  cancellingUserId,
+}) =>
+  Booking.findOneAndUpdate(
+    { _id: bookingId },
+    {
+      status: 'cancelled',
+      cancellationDetails: {
+        cancelledBy: cancellingUserId,
+        cancellingUserMessage,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
 module.exports.getBooking = getBooking;
 module.exports.getInternBookingsWithReviews = getInternBookingsWithReviews;
 module.exports.getBookingById = getBookingById;
@@ -216,3 +257,7 @@ module.exports.getActiveBookings = getActiveBookings;
 module.exports.getBookingHistory = getBookingHistory;
 module.exports.getOverlappingBookings = getOverlappingBookings;
 module.exports.getBookingsDetails = getBookingsDetails;
+module.exports.getUpcomingBooking = getUpcomingBooking;
+module.exports.getCurrentBooking = getCurrentBooking;
+module.exports.getUserBookingRequests = getUserBookingRequests;
+module.exports.getUserPreviousBookings = getUserPreviousBookings;

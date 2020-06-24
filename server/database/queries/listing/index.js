@@ -43,4 +43,8 @@ const deleteListingPhotoQ = (userId, fileNameToBeDeleted) =>
     },
   );
 
-module.exports = { updateListing, deleteListingPhotoQ, getAllCities };
+module.exports = {
+  updateListing,
+  deleteListingPhotoQ,
+  getAllCities,
+};

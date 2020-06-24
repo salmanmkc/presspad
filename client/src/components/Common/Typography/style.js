@@ -62,6 +62,13 @@ export const Heading7 = styled.h6`
   letter-spacing: 0.03em;
 `;
 
+export const Heading8 = styled.h6`
+  ${CommonStyle};
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+`;
+
 const CommonParagraphStyle = css`
   ${CommonStyle};
   font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};

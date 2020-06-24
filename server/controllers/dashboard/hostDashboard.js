@@ -1,11 +1,11 @@
 const boom = require('boom');
 
-const { getHostNextBooking } = require('./../../database/queries/bookings');
+const { getHostNextBooking } = require('../../database/queries/bookings');
 
 const {
   hostDashboard: hostDashboardQuery,
 } = require('../../database/queries/dashboard');
-const generateFileURL = require('./../../helpers/generateFileURL');
+const generateFileURL = require('../../helpers/generateFileURL');
 
 const hostDashboard = async (req, res, next) => {
   const { _id: hostId, role } = req.user;

@@ -10,6 +10,7 @@ const moment = extendMoment(Moment);
 const calculatePrice = range => {
   if (!range) return 0;
   let days;
+
   if (typeof range === 'number') {
     if (range <= 0) return 0;
     days = range;

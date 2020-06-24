@@ -17,7 +17,7 @@ const {
 } = require('../../../../client/src/constants/apiRoutes');
 
 describe('Testing for host making withdraw request', () => {
-  test.only('test with correct details', async done => {
+  test('test with correct details', async done => {
     const {
       connection,
       mongoServer,

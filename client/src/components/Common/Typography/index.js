@@ -7,6 +7,7 @@ import {
   Heading5,
   Heading6,
   Heading7,
+  Heading8,
   BodyXL,
   BodyL,
   Body,
@@ -66,6 +67,12 @@ const H7C = ({ children, ...props }) => (
   </Heading7>
 );
 
+const H8C = ({ children, ...props }) => (
+  <Heading8 caps {...props}>
+    {children}
+  </Heading8>
+);
+
 const PXL = ({ children, ...props }) => <BodyXL {...props}>{children}</BodyXL>;
 const PL = ({ children, ...props }) => <BodyL {...props}>{children}</BodyL>;
 const P = ({ children, ...props }) => <Body {...props}>{children}</Body>;
@@ -120,6 +127,7 @@ export {
   H5C,
   H6C,
   H7C,
+  H8C,
   // Body
   PXL,
   PL,

@@ -21,10 +21,12 @@ const {
   newBookingRequest,
   acceptBooking,
   rejectBooking,
+  cancelBooking,
   getBookingsWithUsers,
   getActiveBookingsApi,
   adminReviewsBooking,
   getBookingHistoryApi,
+  bookingsApi,
 } = require('../controllers/booking');
 const adminStats = require('../controllers/stats/adminStats');
 const verifyProfile = require('../controllers/profile/verifyProfile');
@@ -79,6 +81,7 @@ const {
   BOOKING_REQUEST_URL,
   GET_USER_BOOKINGS_URL,
   GET_BOOKING_URL,
+  GET_BOOKINGS_URL,
   ADMIN_STATS_URL,
   INTERN_PROFILE_URL,
   VERIFY_PROFILE_URL,
@@ -101,6 +104,7 @@ const {
   UPDATE_WITHDRAW_REQUEST_URL,
   ACCEPT_BOOKING_URL,
   REJECT_BOOKING_URL,
+  CANCEL_BOOKING_URL,
   ORG_PAYMENT_URL,
   FIND_WITHDRAW_REQUESTS_URL,
   GET_ALL_CETIES_URL,
@@ -123,8 +127,11 @@ router.use(validation2);
 // accept booking by id
 router.patch(ACCEPT_BOOKING_URL, authentication, acceptBooking);
 
-// accept booking by id
+// reject booking by id
 router.patch(REJECT_BOOKING_URL, authentication, rejectBooking);
+
+// cancel booking by id
+router.patch(CANCEL_BOOKING_URL, authentication, cancelBooking);
 
 // Host view intern profile
 router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);
@@ -170,6 +177,9 @@ router.get(GET_BOOKING_URL, authentication, viewBooking);
 
 // get all user bookings
 router.get(GET_USER_BOOKINGS_URL, getUserBookings);
+
+// get user bookings for bookings page
+router.get(GET_BOOKINGS_URL, authentication, bookingsApi);
 
 // get all active bookings
 router.get(

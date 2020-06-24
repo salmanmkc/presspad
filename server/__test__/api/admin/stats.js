@@ -72,7 +72,7 @@ describe('Testing for get host profile route', () => {
         expect(result.body).toBeDefined();
         expect(result.body[0].key).toBe(1);
         expect(result.body[0].name).toBe(internUser.name);
-        expect(result.body[0].status).toBe('Pending request');
+        expect(result.body[0].status).toBe('At host');
         expect(result.body[0].organisation).toBe(
           financialTimeOrganisation.name,
         );

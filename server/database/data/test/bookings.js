@@ -123,6 +123,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       payedAmount: 28000,
       moneyGoTo: 'host',
     },
+
     // cancelled
     {
       listing: LondonListing._id,
@@ -171,6 +172,18 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       payedAmount: 0,
       moneyGoTo: 'host',
     },
+    // confirmed (less than two weeks, free) -> current booking
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser,
+      startDate: Date.now() - 5 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 5 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.confirmed,
+      price: 0,
+      payedAmount: 0,
+      moneyGoTo: 'presspad',
+    },
   ];
 
   const [
@@ -187,6 +200,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
     rejectedBooking,
     awaitingAdminBooking,
     awaitingAdminNotAutomaticBooking,
+    confirmedCurrentBooking,
   ] = await Booking.create(bookings);
 
   return {
@@ -203,6 +217,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
     rejectedBooking,
     awaitingAdminBooking,
     awaitingAdminNotAutomaticBooking,
+    confirmedCurrentBooking,
   };
 };
 

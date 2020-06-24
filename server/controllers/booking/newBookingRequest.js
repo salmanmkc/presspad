@@ -7,7 +7,6 @@ const {
   checkOtherBookingExists,
   checkIfListingAvailable,
   createNewBooking,
-  updateListingAvailability,
 } = require('../../database/queries/bookings');
 const { calculatePrice } = require('../../helpers/payments');
 
@@ -66,9 +65,14 @@ module.exports = async (req, res, next) => {
       );
     }
     // validate price
-    const calculatedPrice = calculatePrice(
-      moment.range(moment(startDate).add(14, 'd'), endDate),
-    );
+    let calculatedPrice;
+    const payingStartDate = moment(startDate).add(14, 'd');
+
+    if (payingStartDate.isSameOrAfter(endDate)) {
+      calculatedPrice = 0;
+    } else {
+      calculatedPrice = calculatePrice(moment.range(payingStartDate, endDate));
+    }
 
     if (calculatedPrice !== price) {
       return next(boom.badRequest("Price doesn't match!"));
@@ -83,10 +87,7 @@ module.exports = async (req, res, next) => {
       data.coupon = couponId;
     }
 
-    const [booking] = await Promise.all([
-      createNewBooking(data),
-      updateListingAvailability(listing, startDate, endDate),
-    ]);
+    const [booking] = await Promise.all([createNewBooking(data)]);
 
     pubSub.emit(pubSub.events.booking.REQUESTED, { bookingId: booking._id });
 

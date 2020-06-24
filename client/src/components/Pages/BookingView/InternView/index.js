@@ -33,13 +33,18 @@ import {
   ConfirmedContent,
   PaymentDueContent,
   CompletedContent,
+  CancelledContent,
 } from './statusContents';
 
 import {
   API_COUPON_URL,
   API_HOST_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
-import { Error404, Error500 } from '../../../../constants/navRoutes';
+import {
+  Error404,
+  Error500,
+  CANCELLATION_CONFIRM,
+} from '../../../../constants/navRoutes';
 
 export default class BookingView extends Component {
   state = {
@@ -309,14 +314,19 @@ export default class BookingView extends Component {
           <RejectedContent rejectReason={rejectReason} />
         ),
       },
-      // toDo "When we get more about cancelled bookings"
-      // maybe there should be a different view for cancelled bookings?
-      // or the intern shouldn't see them?
       cancelled: {
-        status: 'rejected',
+        status: 'cancelled',
         statusColor: 'pink',
         statusContentsComponent: () => (
-          <RejectedContent rejectReason={rejectReason} />
+          <CancelledContent
+            cancellingUserMessage={
+              bookingInfo.cancellationDetails.cancellingUserMessage || 'N/A'
+            }
+            cancelledByIntern={
+              bookingInfo.cancellationDetails.cancelledBy === id
+            }
+            hostName={host.name}
+          />
         ),
       },
       completed: {
@@ -453,20 +463,38 @@ export default class BookingView extends Component {
             handlePayNowClick={this.handlePayNowClick}
           />
         </Elements>
+
         <ContentWrapper>
-          <H4C mb="5">booking request</H4C>
-          <H6C mb="2" color="lightGray">
-            status
-          </H6C>
-          <H5C color={bookingStatus.statusColor || 'blue'}>
-            {bookingStatus.status}
-          </H5C>
+          <H4C mb="7">
+            {bookingStatus.status === 'cancelled'
+              ? 'booking cancelled'
+              : 'booking request'}
+          </H4C>
+          {bookingStatus.status !== 'cancelled' && (
+            <>
+              <H6C mb="2" color="lightGray">
+                status
+              </H6C>
+              <H5C color={bookingStatus.statusColor || 'blue'}>
+                {bookingStatus.status}
+              </H5C>
+            </>
+          )}
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
         {status !== 'cancelled' && status !== 'completed' && (
-          // toDo handle cancel booking button
           <CancelBookingButton
-            onClick={() => console.log('cancle booking query to go here')}
+            // this loads confirm cancellatiom page and sends user and booking infos
+            onClick={() => {
+              const { name } = this.props;
+              const cancellingUserInfo = { id, name, role };
+              const url = CANCELLATION_CONFIRM.replace(':id', bookingInfo._id);
+
+              return this.props.history.push({
+                pathname: url,
+                state: { bookingInfo, cancellingUserInfo },
+              });
+            }}
           >
             cancel booking request
           </CancelBookingButton>

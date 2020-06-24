@@ -109,6 +109,7 @@ export default class InternView extends Component {
           accommodationChecklist,
           neighbourhoodDescription,
         },
+        listingActiveBookings,
         profile: {
           bio,
           jobTitle,
@@ -162,6 +163,7 @@ export default class InternView extends Component {
       internBookings,
       price,
       bookingSearchDates,
+      listingActiveBookings,
     };
 
     const calendarData = {
