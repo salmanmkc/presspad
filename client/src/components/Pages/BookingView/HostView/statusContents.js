@@ -77,7 +77,10 @@ const ConfirmedContent = ({ bookingInfo }) => {
   let status = 'confirmed';
   let statusColor = 'blue';
   let subTitle;
-  if (moment().isSameOrAfter(firstUnpaidInstallment.dueDate, 'day')) {
+  if (
+    firstUnpaidInstallment &&
+    moment().isSameOrAfter(firstUnpaidInstallment.dueDate, 'day')
+  ) {
     statusColor = 'pink';
     const dueToday = moment()
       .subtract(6, 'd')
