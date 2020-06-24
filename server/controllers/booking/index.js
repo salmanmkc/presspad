@@ -8,6 +8,7 @@ const getBookingsWithUsers = require('./getBookingsWithUsers');
 const getActiveBookingsApi = require('./getActiveBookings');
 const adminReviewsBooking = require('./adminReviewsBooking');
 const getBookingHistoryApi = require('./getBookingHistory');
+const bookingsApi = require('./getBookings');
 
 module.exports = {
   newBookingRequest,
@@ -20,4 +21,5 @@ module.exports = {
   getActiveBookingsApi,
   adminReviewsBooking,
   getBookingHistoryApi,
+  bookingsApi,
 };

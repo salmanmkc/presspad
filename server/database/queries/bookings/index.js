@@ -16,6 +16,10 @@ const getActiveBookings = require('./getActiveBookings');
 const getBookingHistory = require('./getBookingHistory');
 const getOverlappingBookings = require('./getOverlappingBookings');
 const getBookingsDetails = require('./getBookingsDetails');
+const getUpcomingBooking = require('./getUpcomingBooking');
+const getCurrentBooking = require('./getCurrentBooking');
+const getUserBookingRequests = require('./getUserBookingRequests');
+const getUserPreviousBookings = require('./getUserPreviousBookings');
 
 const { bookingStatuses } = require('../../../constants');
 
@@ -253,3 +257,7 @@ module.exports.getActiveBookings = getActiveBookings;
 module.exports.getBookingHistory = getBookingHistory;
 module.exports.getOverlappingBookings = getOverlappingBookings;
 module.exports.getBookingsDetails = getBookingsDetails;
+module.exports.getUpcomingBooking = getUpcomingBooking;
+module.exports.getCurrentBooking = getCurrentBooking;
+module.exports.getUserBookingRequests = getUserBookingRequests;
+module.exports.getUserPreviousBookings = getUserPreviousBookings;

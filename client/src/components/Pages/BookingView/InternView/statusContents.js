@@ -6,7 +6,7 @@ import ButtonNew from '../../../Common/ButtonNew';
 import Icon from '../../../Common/Icon';
 
 import HostInternInfo from '../HostInternInfo';
-import TipsCard from '../TipsCard';
+import { TipsCard } from '../../../Common/Cards';
 import LeaveReview from '../LeaveReview';
 
 import MakePayment from './MakePayment';

@@ -9,7 +9,7 @@ import ButtonNew from '../../../Common/ButtonNew';
 
 import BookingDates from '../../../Common/BookingDetailsBox';
 import HostInternInfo from '../HostInternInfo';
-import TipsCard from '../TipsCard';
+import { TipsCard } from '../../../Common/Cards';
 import CancelBookingButton from '../CancelBookingButton';
 import { formatPrice } from '../../../../helpers';
 

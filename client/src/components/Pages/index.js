@@ -20,6 +20,7 @@ import AddReview from './AddReview';
 import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
+import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import CancellationConfirm from './CancellationConfirm';
 
@@ -43,6 +44,7 @@ import {
   DBS_CHECK_PAGE,
   HOST_PROFILE_SOFT,
   BOOKINGS_INTERNSHIP_URL,
+  BOOKINGS_URL,
   CANCELLATION_CONFIRM,
 } from '../../constants/navRoutes';
 
@@ -116,6 +118,16 @@ function Pages(props) {
           exact
           path={DASHBOARD_URL}
           Component={Dashboard}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          {...props}
+          layout="sideMenu"
+        />
+        <Route
+          isPrivate
+          exact
+          path={BOOKINGS_URL}
+          Component={Bookings}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}

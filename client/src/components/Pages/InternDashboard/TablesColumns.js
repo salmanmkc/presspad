@@ -5,17 +5,7 @@ import moment from 'moment';
 import { BlueLink } from './InternDashboard.style';
 import { bookingStatus } from '../../../theme';
 import { formatPrice } from '../../../helpers';
-
-const tidyStatusText = status => {
-  switch (status) {
-    case 'awaiting admin':
-      return 'pending';
-    case 'rejected by admin':
-      return 'rejected';
-    default:
-      return status;
-  }
-};
+import tidyStatusText from '../../../helpers/tidyStatusText';
 
 export const paymentsColumns = [
   {

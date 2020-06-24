@@ -45,6 +45,7 @@ export const newColors = {
   darkBlue: '#08294A',
   blue: '#0A3159',
   lightBlue: '#09C7E7',
+  lightBlueGray: '#08B9D7',
   yellow: '#FFDF59',
   pink: '#CF3475',
   lightPink: '#DE5991',

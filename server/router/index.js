@@ -26,6 +26,7 @@ const {
   getActiveBookingsApi,
   adminReviewsBooking,
   getBookingHistoryApi,
+  bookingsApi,
 } = require('../controllers/booking');
 const adminStats = require('../controllers/stats/adminStats');
 const verifyProfile = require('../controllers/profile/verifyProfile');
@@ -79,6 +80,7 @@ const {
   BOOKING_REQUEST_URL,
   GET_USER_BOOKINGS_URL,
   GET_BOOKING_URL,
+  GET_BOOKINGS_URL,
   ADMIN_STATS_URL,
   INTERN_PROFILE_URL,
   VERIFY_PROFILE_URL,
@@ -173,6 +175,9 @@ router.get(GET_BOOKING_URL, authentication, viewBooking);
 
 // get all user bookings
 router.get(GET_USER_BOOKINGS_URL, getUserBookings);
+
+// get user bookings for bookings page
+router.get(GET_BOOKINGS_URL, authentication, bookingsApi);
 
 // get all active bookings
 router.get(

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { H4C, PXS } from '../../../Common/Typography';
+import { H4C, PXS } from '../../Typography';
 import { ReactComponent as TipsStar } from '../../../../assets/tips-star.svg';
 import { Wrapper, TitleWrapper, ItemLi } from './TipsCard.style';
 
