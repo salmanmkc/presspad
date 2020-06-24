@@ -176,7 +176,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
       />
     ),
     accepted: () => <AcceptedContent internName={intern.name} />,
-    confirmed: () => <ConfirmedContent />,
+    confirmed: () => <ConfirmedContent bookingInfo={bookingInfo} />,
     rejected: () => <RejectedContent />,
     cancelled: () => (
       <CancelledContent
