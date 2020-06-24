@@ -235,7 +235,26 @@ module.exports.cancelBookingBeforePaymentQuery = ({
   Booking.findOneAndUpdate(
     { _id: bookingId },
     {
-      status: 'cancelled',
+      status: bookingStatuses.cancelled,
+      cancellationDetails: {
+        cancelledBy: cancellingUserId,
+        cancellingUserMessage,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+module.exports.makeCancellationRequest = ({
+  bookingId,
+  cancellingUserMessage,
+  cancellingUserId,
+}) =>
+  Booking.findOneAndUpdate(
+    { _id: bookingId },
+    {
+      status: bookingStatuses.awaitingCancellation,
       cancellationDetails: {
         cancelledBy: cancellingUserId,
         cancellingUserMessage,

@@ -3,6 +3,7 @@ const boom = require('boom');
 const {
   getBooking,
   cancelBookingBeforePaymentQuery,
+  makeCancellationRequest,
 } = require('../../database/queries/bookings');
 
 const cancelBooking = async (req, res, next) => {
@@ -33,6 +34,9 @@ const cancelBooking = async (req, res, next) => {
     const canCancelDirectly =
       ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(status) &&
       payedAmount === 0;
+
+    const canCancelAfterPayment =
+      payedAmount > 0 && ['accepted', 'confirmed'].includes(status);
     // run query to update booking
     if (canCancelDirectly) {
       cancelledBooking = await cancelBookingBeforePaymentQuery({
@@ -40,14 +44,19 @@ const cancelBooking = async (req, res, next) => {
         cancellingUserMessage,
         cancellingUserId,
       });
+    } else if (canCancelAfterPayment) {
+      cancelledBooking = await makeCancellationRequest({
+        bookingId,
+        cancellingUserMessage,
+        cancellingUserId,
+      });
     }
-    // TODO add logic to deal with cancellation after payment
 
     if (cancelledBooking) {
       return res.json(cancelledBooking);
     }
 
-    return next(boom.badImplementation());
+    return next(boom.badImplementation('booking cancellation error'));
   } catch (err) {
     return next(boom.badImplementation(err));
   }

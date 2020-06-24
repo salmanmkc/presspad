@@ -178,8 +178,10 @@ const CancellationConfirm = ({ ...props }) => {
           </S.ButtonContainer>
         </S.CancelContainer>
       </S.ContentWrapper>
+
       <BookingDates
         price={price}
+        payedSoFar={payedAmount}
         startDate={startDate}
         endDate={endDate}
         intern={cancellingUserRole === 'intern'}
