@@ -4,6 +4,7 @@ import moment from 'moment';
 import { H7C } from '../../../Common/Typography';
 import columns from './columns';
 import ExpandedDetails from './ExpandedDetails';
+import Icon from '../../../Common/Icon';
 
 const { Option } = Select;
 
@@ -44,6 +45,13 @@ export default function BookingsTable({
           >
             <Option value="cancelBooking">Cancel</Option>
           </Select>
+        );
+      case 'awaiting cancellation':
+        return (
+          <div style={{ display: 'flex' }}>
+            <H7C color="pink">Please Review</H7C>
+            <Icon icon="reviewExplanationMark" width="24px" />
+          </div>
         );
       default:
         return <H7C color="gray">N/A</H7C>;

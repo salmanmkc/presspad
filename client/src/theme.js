@@ -139,6 +139,7 @@ export const bookingStatus = {
   completed: colors.blue,
   rejected: colors.pink,
   accepted: colors.lightBlue,
+  reviewing: colors.pink,
 };
 
 const spacings = {
