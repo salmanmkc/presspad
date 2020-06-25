@@ -1,14 +1,17 @@
-import React from 'react';
-import moment from 'moment';
+import React, { useState } from 'react';
+
 import * as S from './style';
-import { PS, PBold, PXS, PXSBold, H7C } from '../../../../Common/Typography';
+import { PBold, PXS } from '../../../../Common/Typography';
 import { Select, Input } from '../../../../Common/AntdWrappers';
 import GoBackComponent from '../../../../Common/GoBack';
 import Icon from '../../../../Common/Icon';
-import FileDownload from '../../../../Common/Files/FileDownload';
+
 import ButtonNew from '../../../../Common/ButtonNew';
+import BookingCancellationDetails from './BookingCancellationDetails';
+import Policy from './Policy';
 
 import { formatPrice } from '../../../../../helpers';
+import { bookingStatus } from '../../../../../theme';
 
 const { Option } = Select;
 const selectStyles = {
@@ -16,13 +19,7 @@ const selectStyles = {
   height: '50px',
   marginTop: '1rem',
 };
-const detailsStyles = {
-  headline: {
-    marginBottom: '0.5rem',
-  },
-};
 
-// TODO ADD GO BACK BUTTON TO GO BACK AND TOGGLE SEARCH BAR
 const BookingReview = ({
   toggleSearchBar,
   toggleBookingView,
@@ -30,25 +27,32 @@ const BookingReview = ({
   reviewBooking,
   setReviewBooking,
 }) => {
-  console.log('props', details);
+  // console.log('props', details);
 
   const {
-    cancellationDetails = {},
-    host = {},
-    intern = {},
-    startDate = '',
-    endDate = '',
     payedAmount = '',
-    price = '',
+
     coupon = {},
   } = details;
-  const { internship } = intern;
 
-  const cancellingUserDetails =
-    cancellationDetails && cancellationDetails.cancelledBy === intern._id
-      ? { name: intern.name, role: 'intern' }
-      : { name: host.name, role: 'host' };
+  const [cancelBookingState, setCancelBookingState] = useState({
+    cancellationReason: '',
+    responsibleParty: '',
+    notes: '',
+  });
 
+  const handleInputChange = e => {
+    const {
+      target: { name, value },
+    } = e;
+    setCancelBookingState({ ...cancelBookingState, [name]: value });
+  };
+
+  const handleSelect = (value, option) => {
+    const { label } = option;
+    setCancelBookingState({ ...cancelBookingState, [label]: value });
+  };
+  console.log(cancelBookingState);
   return (
     <>
       <S.GoBackWrapper>
@@ -63,169 +67,7 @@ const BookingReview = ({
 
       {reviewBooking ? (
         <S.Wrapper>
-          <S.ReviewWrapper>
-            <S.Row mt="-0.2rem">
-              <H7C style={detailsStyles.headline} color="lightBlue">
-                cancel requested by
-              </H7C>
-              <PS>
-                {cancellingUserDetails.name} ({cancellingUserDetails.role})
-              </PS>
-            </S.Row>
-
-            <S.Row>
-              <H7C style={detailsStyles.headline} color="lightBlue">
-                reason provided
-              </H7C>
-              <PS>{cancellationDetails.cancellingUserMessage}</PS>
-            </S.Row>
-
-            {/* BOOKING DETAILS */}
-            <S.Row>
-              <H7C style={detailsStyles.headline} color="lightBlue">
-                booking details
-              </H7C>
-              <S.SubRow>
-                <S.Column>
-                  <PXSBold>Start Date of Stay</PXSBold>
-                  <PXS>{moment(startDate).format('DD/MM/YYYY')}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Length of Stay</PXSBold>
-                  <PXS>
-                    {moment(endDate).diff(moment(startDate), 'days')} days
-                  </PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Paid by Organisation</PXSBold>
-                  {coupon && coupon.discountRate ? (
-                    <PXS>
-                      {coupon.discountRate}% ({coupon.Organisation})
-                    </PXS>
-                  ) : (
-                    'N/A'
-                  )}
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Paid so far</PXSBold>
-                  <PXS>{formatPrice(payedAmount)}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Total cost</PXSBold>
-                  <PXS>{formatPrice(price)}</PXS>
-                </S.Column>
-              </S.SubRow>
-            </S.Row>
-
-            {/* INTERNSHIP DETAILS */}
-            <S.Row>
-              <H7C style={detailsStyles.headline} color="lightBlue">
-                internship details
-              </H7C>
-              <S.SubRow>
-                <S.Column>
-                  <PXSBold>Organisation</PXSBold>
-                  <PXS>{internship.Organisation}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Name</PXSBold>
-                  <PXS>{internship['Contact Details'].name}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Email</PXSBold>
-                  <PXS>
-                    {' '}
-                    <a
-                      href={`mailto:${internship['Contact Details'].email}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {internship['Contact Details'].email}
-                    </a>
-                  </PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Number</PXSBold>
-                  <PXS>{internship['Contact Details'].phoneNumber}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Proof of Internship</PXSBold>
-                  <PXS style={{ textDecoration: 'underline' }}>
-                    {internship['Proof of Internship'].fileName ? (
-                      <FileDownload
-                        style={{
-                          marginBottom: '10px',
-                          border: '1px red solid',
-                        }}
-                        url={internship['Proof of Internship'].fileName}
-                        fileName="Click to download"
-                      />
-                    ) : (
-                      <PXS>Missing file</PXS>
-                    )}
-                  </PXS>
-                </S.Column>
-              </S.SubRow>
-            </S.Row>
-
-            {/* HOST DETAILS */}
-            <S.Row>
-              <H7C style={detailsStyles.headline} color="lightBlue">
-                host details
-              </H7C>
-              <S.SubRow>
-                <S.Column>
-                  <PXSBold>Name</PXSBold>
-                  <PXS>{host.name}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Email</PXSBold>
-                  <PXS>
-                    <a
-                      href={`mailto:${host.email}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {host.email}
-                    </a>
-                  </PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Number</PXSBold>
-                  <PXS>{host.phone}</PXS>
-                </S.Column>
-              </S.SubRow>
-            </S.Row>
-
-            {/* INTERN DETAILS */}
-            <S.Row>
-              <H7C style={detailsStyles.headline} color="lightBlue">
-                intern details
-              </H7C>
-              <S.SubRow>
-                <S.Column>
-                  <PXSBold>Name</PXSBold>
-                  <PXS>{intern.name}</PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Email</PXSBold>
-                  <PXS>
-                    <a
-                      href={`mailto:${intern.email}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {intern.email}
-                    </a>
-                  </PXS>
-                </S.Column>
-                <S.Column>
-                  <PXSBold>Contact Number</PXSBold>
-                  <PXS>{intern.phone}</PXS>
-                </S.Column>
-              </S.SubRow>
-            </S.Row>
-          </S.ReviewWrapper>
+          <BookingCancellationDetails details={details} />
 
           {/* ADMIN ACTIONS */}
           <S.ActionsWrapper>
@@ -238,10 +80,22 @@ const BookingReview = ({
                 <Select
                   placeholder="Select"
                   style={selectStyles}
-                  // onSelect={value => handleAction(value, booking)}
+                  onSelect={(value, option) => handleSelect(value, option)}
                 >
-                  <Option value="legitimate">Legitimate</Option>
-                  <Option value="illegitimate">Illegitimate</Option>
+                  <Option
+                    label="cancellationReason"
+                    key="legitimate"
+                    value="legitimate"
+                  >
+                    Legitimate
+                  </Option>
+                  <Option
+                    label="cancellationReason"
+                    value="illegitimate"
+                    key="illegitimate"
+                  >
+                    Illegitimate
+                  </Option>
                 </Select>
               </S.Row>
 
@@ -251,12 +105,20 @@ const BookingReview = ({
                 <Select
                   style={selectStyles}
                   placeholder="Select"
-                  // onSelect={value => handleAction(value, booking)}
+                  onSelect={(value, option) => handleSelect(value, option)}
                 >
-                  <Option value="intern">Intern</Option>
-                  <Option value="host">Host</Option>
-                  <Option value="organisation">Organisation</Option>
-                  <Option value="presspad">PressPad</Option>
+                  <Option label="responsibleParty" value="intern">
+                    Intern
+                  </Option>
+                  <Option label="responsibleParty" value="host">
+                    Host
+                  </Option>
+                  <Option label="responsibleParty" value="organisation">
+                    Organisation
+                  </Option>
+                  <Option label="responsibleParty" value="presspad">
+                    PressPad
+                  </Option>
                 </Select>
               </S.Row>
 
@@ -347,6 +209,8 @@ const BookingReview = ({
                       style={{ width: '432px', height: 'auto' }}
                       textArea
                       placeholder="Write your reasons here..."
+                      name="notes"
+                      onChange={handleInputChange}
                     />
                   </S.TextArea>
                 </S.Column>
@@ -354,43 +218,7 @@ const BookingReview = ({
             </S.ActionsContainer>
 
             {/* POLICY SECTION */}
-            <S.PolicyContainer>
-              <S.IconWrapper>
-                <Icon icon="explanationMarkCircle" width="40px" height="40px" />
-              </S.IconWrapper>
-              <S.PolicyContent>
-                <PBold color="gray">
-                  Remember to check with PressPad internal policy on what makes
-                  a booking legitimate or illegitimate. Examples include:
-                </PBold>
-                <S.List>
-                  <S.ListItem>
-                    <PXS>
-                      - Example one. Lorem ipsum dolor sit amet, consectetur
-                      adipiscing elit, sed do eiusmod tempor
-                    </PXS>
-                  </S.ListItem>
-                  <S.ListItem>
-                    <PXS>
-                      - Example one. Lorem ipsum dolor sit amet, consectetur
-                      adipiscing elit, sed do eiusmod tempor
-                    </PXS>
-                  </S.ListItem>
-                  <S.ListItem>
-                    <PXS>
-                      - Example one. Lorem ipsum dolor sit amet, consectetur
-                      adipiscing elit, sed do eiusmod tempor
-                    </PXS>
-                  </S.ListItem>
-                  <S.ListItem>
-                    <PXS>
-                      - Example one. Lorem ipsum dolor sit amet, consectetur
-                      adipiscing elit, sed do eiusmod tempor
-                    </PXS>
-                  </S.ListItem>
-                </S.List>
-              </S.PolicyContent>
-            </S.PolicyContainer>
+            <Policy />
           </S.ActionsWrapper>
           <ButtonNew
             large

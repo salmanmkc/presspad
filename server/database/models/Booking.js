@@ -66,6 +66,17 @@ const bookingSchema = new Schema(
       cancellingUserMessage: {
         type: String,
       },
+      cancellationReason: {
+        type: String,
+        enum: ['legitimate', 'illegitimate'],
+      },
+      responsibleParty: {
+        type: String,
+        enum: ['organisation', 'pressPad', 'intern', 'host'],
+      },
+      notes: {
+        type: String,
+      },
     },
 
     // if the booking has been rejected by host/admin
