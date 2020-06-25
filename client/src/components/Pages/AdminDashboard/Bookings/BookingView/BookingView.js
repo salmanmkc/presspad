@@ -1,8 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import * as S from './style';
-import { PS, PXS, PXSBold, H7C } from '../../../../Common/Typography';
+import { PS, PBold, PXS, PXSBold, H7C } from '../../../../Common/Typography';
 import GoBackComponent from '../../../../Common/GoBack';
+import Icon from '../../../../Common/Icon';
 import FileDownload from '../../../../Common/Files/FileDownload';
 import { formatPrice } from '../../../../../helpers';
 
@@ -50,7 +51,7 @@ const BookingReview = ({
       {reviewBooking ? (
         <S.Wrapper>
           <S.ReviewWrapper>
-            <S.Row>
+            <S.Row mt="-0.2rem">
               <H7C color="lightBlue">cancel requested by</H7C>
               <PS>
                 {cancellingUserDetails.name} ({cancellingUserDetails.role})
@@ -175,6 +176,27 @@ const BookingReview = ({
               </S.SubRow>
             </S.Row>
           </S.ReviewWrapper>
+          <S.ActionsWrapper>
+            <PBold>ADMIN ACTIONS</PBold>
+            <S.ActionsContainer>
+              <h1>contentn</h1>
+            </S.ActionsContainer>
+            <S.PolicyContainer>
+              <S.PolicyTitleWrapper>
+                <S.IconWrapper>
+                  <Icon
+                    icon="explanationMarkCircle"
+                    width="40px"
+                    height="40px"
+                  />
+                </S.IconWrapper>
+                <PBold>
+                  Remember to check with PressPad internal policy on what makes
+                  a booking legitimate or illegitimate. Examples include:
+                </PBold>
+              </S.PolicyTitleWrapper>
+            </S.PolicyContainer>
+          </S.ActionsWrapper>
         </S.Wrapper>
       ) : (
         <h1>details mode</h1>
