@@ -3,22 +3,22 @@ const boom = require('boom');
 // IMPORT QUERIES
 const {
   getAllClientStats,
-} = require('./../../database/queries/stats/getAllClientStats');
+} = require('../../database/queries/stats/getAllClientStats');
 const {
   getAllInternStats,
-} = require('./../../database/queries/stats/getAllInternStats');
+} = require('../../database/queries/stats/getAllInternStats');
 const {
   getAllHostStats,
-} = require('./../../database/queries/stats/getAllHostStats');
+} = require('../../database/queries/stats/getAllHostStats');
 const {
   findAllWithdrawRequests,
 } = require('../../database/queries/withdrawRequest');
 const {
   getActiveBookings,
   getBookingHistory,
-} = require('../../database/queries/bookings/');
+} = require('../../database/queries/bookings');
 
-const generateUrl = require('./../../helpers/generateFileURL');
+const generateUrl = require('../../helpers/generateFileURL');
 
 module.exports = async (req, res, next) => {
   // get user data so we can check they are authorized
@@ -126,6 +126,7 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'bookings') {
     return getActiveBookings().then(data => {
+      console.log('data', data);
       const cleanData = data.map(booking => {
         const updatedBooking = { key: data.indexOf(booking) + 1, ...booking };
 

@@ -189,6 +189,7 @@ export default class AdminDashboard extends Component {
     ),
     filterIcon: filtered => (
       <button
+        type="button"
         style={{
           border: 'none',
           background: 'none',
@@ -437,6 +438,7 @@ export default class AdminDashboard extends Component {
       }
       return `Your ${activeLink}`;
     };
+
     return (
       <Wrapper>
         <TopSection>

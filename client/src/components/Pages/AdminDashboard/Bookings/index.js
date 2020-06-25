@@ -22,6 +22,9 @@ export default function BookingsTable({
   toggleBookingView,
   bookingView,
 }) {
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const [reviewBooking, setReviewBooking] = useState(false);
+
   const lengthOfStay = (startDate, endDate) =>
     moment(endDate).diff(moment(startDate), 'days');
 
@@ -61,6 +64,8 @@ export default function BookingsTable({
                 cursor: 'pointer',
               }}
               onClick={() => {
+                setBookingDetails(booking);
+                setReviewBooking(true);
                 toggleSearchBar();
                 toggleBookingView();
               }}
@@ -81,6 +86,9 @@ export default function BookingsTable({
     <>
       {bookingView ? (
         <BookingView
+          details={bookingDetails}
+          reviewBooking={reviewBooking}
+          setReviewBooking={setReviewBooking}
           toggleBookingView={toggleBookingView}
           toggleSearchBar={toggleSearchBar}
         />
