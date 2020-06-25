@@ -42,11 +42,12 @@ const {
   internPayment,
   withdrawRequest,
   confirmOrCancelWithdrawRequest,
+  orgPayment,
+  getPaymentsInfo,
 } = require('../controllers/payments');
 const { createCoupon } = require('../controllers/coupons');
 const getAllInterns = require('../controllers/user/getAllInterns');
 const hostDonation = require('../controllers/payments/hostDonation');
-const { orgPayment } = require('../controllers/payments/index');
 const { getAllCities } = require('../controllers/listing');
 const deletListingPhotos = require('../controllers/profile/deletListingPhotos');
 const {
@@ -96,6 +97,7 @@ const {
   INTERN_PAYMENT_URL,
   COUPONS_URL,
   INTERNS_URL,
+  PAYMENTS_URL,
   HOST_DASHBOARD_URL,
   DONATION_URL,
   WITHDRAW_REQUEST_URL,
@@ -234,6 +236,9 @@ router.get(
   authorization(['admin', 'organisation']),
   getAllInterns,
 );
+
+// get payments info
+router.get(PAYMENTS_URL, authentication, getPaymentsInfo);
 
 // host donate to presspad
 router.post(DONATION_URL, authentication, hostDonation);
