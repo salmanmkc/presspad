@@ -8,6 +8,7 @@ import * as S from './style';
 import { formatPrice } from '../../../../../helpers';
 
 import { API_INTERN_PAYMENT_URL } from '../../../../../constants/apiRoutes';
+import { BOOKING_VIEW_URL } from '../../../../../constants/navRoutes';
 
 class PayNowModal extends Component {
   state = {
@@ -175,7 +176,11 @@ class PayNowModal extends Component {
         {this.renderPaymentMethod()}
         {installment.amount && !installment.coupon && (
           <S.AddCoupon>
-            or go to <S.Link>booking page</S.Link> to add a coupon
+            or go to{' '}
+            <S.Link to={BOOKING_VIEW_URL.replace(':id', installment.booking)}>
+              booking page
+            </S.Link>{' '}
+            to add a coupon
           </S.AddCoupon>
         )}
       </Modal>

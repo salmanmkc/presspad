@@ -18,7 +18,6 @@ export const Wrapper = styled.div`
 export const CollapseWrapper = styled(Collapse)`
   background: none;
   border-radius: 0;
-  margin-bottom: ${({ theme }) => theme.spacings[7]};
   border: 0px;
   overflow: hidden;
   > * {
@@ -31,4 +30,20 @@ export const CollapseWrapper = styled(Collapse)`
 export const Link = styled(RouterLink)`
   font-size: 14px;
   display: block;
+`;
+
+export const ShowMore = styled.button`
+  margin-top: -${({ theme }) => theme.spacings[4]};
+  margin-bottom: ${({ theme }) => theme.spacings[6]};
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.lightBlue};
+  font-size: 14px;
+  display: block;
+  :focus,
+  :active {
+    border: none;
+    outline: none;
+  }
 `;

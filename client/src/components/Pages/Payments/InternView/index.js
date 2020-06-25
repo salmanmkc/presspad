@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Collapse, message, Spin, Table } from 'antd';
+import { Collapse, message, Spin } from 'antd';
 import { Elements } from 'react-stripe-elements';
 
 import * as T from '../../../Common/Typography';
@@ -102,7 +102,9 @@ const HostPayments = () => {
             />
           </div>
         ))}
-
+        {limit < unpaidPayments.length && (
+          <S.ShowMore onClick={() => setLimit(limit + 1)}>show more</S.ShowMore>
+        )}
         <S.CollapseWrapper
           bordered={false}
           defaultActiveKey={1}
