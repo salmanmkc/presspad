@@ -5,7 +5,7 @@ import { H7C } from '../../../Common/Typography';
 import columns from './columns';
 import ExpandedDetails from './ExpandedDetails';
 import Icon from '../../../Common/Icon';
-import BookingView from './BookingView';
+import BookingView from './BookingView/BookingView';
 
 const { Option } = Select;
 
@@ -19,9 +19,9 @@ export default function BookingsTable({
   handleAction,
   adminAction,
   toggleSearchBar,
+  toggleBookingView,
+  bookingView,
 }) {
-  const [bookingView, setBookingView] = useState(false);
-
   const lengthOfStay = (startDate, endDate) =>
     moment(endDate).diff(moment(startDate), 'days');
 
@@ -62,7 +62,7 @@ export default function BookingsTable({
               }}
               onClick={() => {
                 toggleSearchBar();
-                setBookingView(true);
+                toggleBookingView();
               }}
             >
               <H7C style={{ textDecoration: 'underline' }} color="pink">
@@ -80,7 +80,10 @@ export default function BookingsTable({
   return (
     <>
       {bookingView ? (
-        <BookingView toggleSearchBar={toggleSearchBar} />
+        <BookingView
+          toggleBookingView={toggleBookingView}
+          toggleSearchBar={toggleSearchBar}
+        />
       ) : (
         <Table
           columns={columns(

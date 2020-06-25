@@ -60,6 +60,7 @@ export default class AdminDashboard extends Component {
       hostName: '',
       email: '',
     },
+    bookingView: false,
     rejectMessage: null,
     updatingBooking: false,
     modalText: '',
@@ -74,7 +75,8 @@ export default class AdminDashboard extends Component {
   };
 
   componentDidMount() {
-    this.selectSection('clients');
+    // TODO change back to clients
+    this.selectSection('bookings');
   }
 
   triggerInternView = (internId = '') => {
@@ -96,6 +98,9 @@ export default class AdminDashboard extends Component {
       return newState;
     });
   };
+
+  toggleBookingView = () =>
+    this.setState(prevSate => ({ bookingView: !prevSate.bookingView }));
 
   selectSection = section => {
     const { axiosSource } = this.state;
@@ -419,8 +424,19 @@ export default class AdminDashboard extends Component {
       userToUpdate,
       errors,
       showSearchBar,
+      bookingView,
     } = this.state;
-    console.log('showwww', showSearchBar);
+
+    // returs sub titles for different sections
+    const decideContentTitle = () => {
+      if (bookingView) {
+        return 'Review booking';
+      }
+      if (activeLink.toLowerCase() === 'payments') {
+        return 'Withdraw requests';
+      }
+      return `Your ${activeLink}`;
+    };
     return (
       <Wrapper>
         <TopSection>
@@ -480,11 +496,7 @@ export default class AdminDashboard extends Component {
           />
         ) : (
           <MainSection>
-            <ContentTitle>
-              {activeLink.toLowerCase() === 'payments'
-                ? 'Withdraw requests'
-                : `Your ${activeLink}`}
-            </ContentTitle>
+            <ContentTitle>{decideContentTitle()}</ContentTitle>
             {showSearchBar && (
               <SearchBar
                 data={filteredData}
@@ -541,6 +553,8 @@ export default class AdminDashboard extends Component {
             {activeLink === 'bookings' && (
               <HostWrapper>
                 <BookingsTable
+                  bookingView={bookingView}
+                  toggleBookingView={this.toggleBookingView}
                   toggleSearchBar={this.toggleSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
@@ -557,6 +571,8 @@ export default class AdminDashboard extends Component {
             {activeLink === 'bookingHistory' && (
               <HostWrapper>
                 <BookingsTable
+                  bookingView={bookingView}
+                  toggleBookingView={this.toggleBookingView}
                   toggleSearchBar={this.toggleSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
