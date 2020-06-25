@@ -19,13 +19,14 @@ const BookingReview = ({
   console.log('props', details);
 
   const {
-    cancellationDetails,
-    host,
-    intern,
-    startDate,
-    endDate,
-    payedAmount,
-    price,
+    cancellationDetails = {},
+    host = {},
+    intern = {},
+    startDate = '',
+    endDate = '',
+    payedAmount = '',
+    price = '',
+    coupon = {},
   } = details;
   const { internship } = intern;
 
@@ -76,9 +77,14 @@ const BookingReview = ({
                   </PXS>
                 </S.Column>
                 <S.Column>
-                  {/* TODOOOO */}
                   <PXSBold>Paid by Organisation</PXSBold>
-                  <PXS>The Guardian</PXS>
+                  {coupon && coupon.discountRate ? (
+                    <PXS>
+                      {coupon.discountRate}% ({coupon.Organisation})
+                    </PXS>
+                  ) : (
+                    'N/A'
+                  )}
                 </S.Column>
                 <S.Column>
                   <PXSBold>Paid so far</PXSBold>

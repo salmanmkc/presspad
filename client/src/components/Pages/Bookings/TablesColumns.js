@@ -4,7 +4,7 @@ import moment from 'moment';
 import BookingStatus from '../../Common/BookingStatus';
 import * as T from '../../Common/Typography';
 import { formatPrice } from '../../../helpers';
-import tidyStatusText from '../../../helpers/tidyStatusText';
+import { tidyStatusText } from '../../../helpers/tidyStatusText';
 
 export const bookingsColumns = ({ windowWidth, role }) => {
   const columns = [];
