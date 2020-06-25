@@ -41,6 +41,14 @@ const BookingReview = ({
     notes: '',
   });
 
+  const [refundState, setRefundState] = useState({
+    hostRefund: 0,
+    internRefund: 0,
+    organisationRefund: 0,
+    pressPadRefund: 0,
+    sum: 0,
+  });
+
   const handleInputChange = e => {
     const {
       target: { name, value },
@@ -48,11 +56,33 @@ const BookingReview = ({
     setCancelBookingState({ ...cancelBookingState, [name]: value });
   };
 
+  const handleRefundChange = e => {
+    const {
+      target: { name, value },
+    } = e;
+
+    setRefundState({ ...refundState, [name]: parseInt(value) });
+  };
+
+  const handleRefundBlur = () => {
+    const {
+      hostRefund,
+      internRefund,
+      organisationRefund,
+      pressPadRefund,
+    } = refundState;
+    setRefundState({
+      ...refundState,
+      sum: hostRefund + internRefund + organisationRefund + pressPadRefund,
+    });
+    // let sum = hostRefund + internRefund + organisationRefund + pressPadRefund;
+  };
+
   const handleSelect = (value, option) => {
     const { label } = option;
     setCancelBookingState({ ...cancelBookingState, [label]: value });
   };
-  console.log(cancelBookingState);
+  console.log(refundState.sum);
   return (
     <>
       <S.GoBackWrapper>
@@ -135,10 +165,13 @@ const BookingReview = ({
                     <S.InputWrapper>
                       <Input
                         placeholder="Enter amount..."
-                        name="hostAmount"
+                        name="hostRefund"
+                        type="number"
+                        min="0"
+                        max={formatPrice(payedAmount)}
                         style={{ width: '100%' }}
-                        // value={state.organisation}
-                        // onChange={onInputChange}
+                        onChange={handleRefundChange}
+                        onBlur={handleRefundBlur}
                         // error={errors.organisation}
                       />
                     </S.InputWrapper>
@@ -149,10 +182,10 @@ const BookingReview = ({
                     <S.InputWrapper>
                       <Input
                         placeholder="Enter amount..."
-                        name="internAmount"
+                        name="internRefund"
                         style={{ width: '100%' }}
                         // value={state.organisation}
-                        // onChange={onInputChange}
+                        onChange={handleRefundChange}
                         // error={errors.organisation}
                       />
                     </S.InputWrapper>
@@ -167,11 +200,11 @@ const BookingReview = ({
                     <S.InputWrapper>
                       <Input
                         placeholder="Enter amount..."
-                        name="orgAmount"
+                        name="organisationRefund"
                         style={{ width: '100%' }}
                         disabled={!(coupon && coupon.discountRate)}
                         // value={state.organisation}
-                        // onChange={onInputChange}
+                        onChange={handleRefundChange}
                         // error={errors.organisation}
                       />
                     </S.InputWrapper>
@@ -182,10 +215,10 @@ const BookingReview = ({
                     <S.InputWrapper>
                       <Input
                         placeholder="Enter amount..."
-                        name="pressPadAmount"
+                        name="pressPadRefund"
                         style={{ width: '100%' }}
                         // value={state.organisation}
-                        // onChange={onInputChange}
+                        onChange={handleRefundChange}
                         // error={errors.organisation}
                       />
                     </S.InputWrapper>
