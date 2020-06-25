@@ -2,6 +2,8 @@ import React from 'react';
 import { Table } from 'antd';
 import moment from 'moment';
 
+import { formatPrice } from '../../../../../helpers';
+
 import * as S from './style';
 import * as T from '../../../../Common/Typography';
 
@@ -25,7 +27,7 @@ const WithdrawHistoryTable = ({ withdrawalRequests }) => {
       title: () => <T.H7C color="gray">AMOUNT</T.H7C>,
       dataIndex: 'amount',
       key: 'amount',
-      render: a => <T.PS color="black">£{a}</T.PS>,
+      render: a => <T.PS color="black">£{formatPrice(a)}</T.PS>,
     },
     {
       title: () => <T.H7C color="gray">Payment status</T.H7C>,

@@ -55,37 +55,38 @@ const HostPayments = () => {
     pendingPayment,
     withdrawn,
   } = state.data;
-  // console.log(state.data);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        dispatch({ type: 'loading' });
-        const { data } = await axios.get(API_PAYMENTS_URL);
-        const [_pendingWithdrawn, _withdrawn] = data.withdrawalRequests.reduce(
-          (acc, curr) => {
-            if (curr.status === 'pending') {
-              acc[0] += curr.amount;
-            } else if (curr.status === 'transfered') {
-              acc[1] += curr.amount;
-            }
-            return acc;
-          },
-          [0, 0],
-        );
-        dispatch({
-          type: 'success',
-          data: {
-            ...data,
-            pendingWithdrawn: _pendingWithdrawn,
-            withdrawn: _withdrawn,
-          },
-        });
-      } catch (error) {
-        message.error(SERVER_ERROR).then(() => {
-          history.push(Error500);
-        });
-      }
+
+  async function fetchData() {
+    try {
+      dispatch({ type: 'loading' });
+      const { data } = await axios.get(API_PAYMENTS_URL);
+      const [_pendingWithdrawn, _withdrawn] = data.withdrawalRequests.reduce(
+        (acc, curr) => {
+          if (curr.status === 'pending') {
+            acc[0] += curr.amount;
+          } else if (curr.status === 'transfered') {
+            acc[1] += curr.amount;
+          }
+          return acc;
+        },
+        [0, 0],
+      );
+      dispatch({
+        type: 'success',
+        data: {
+          ...data,
+          pendingWithdrawn: _pendingWithdrawn,
+          withdrawn: _withdrawn,
+        },
+      });
+    } catch (error) {
+      message.error(SERVER_ERROR).then(() => {
+        history.push(Error500);
+      });
     }
+  }
+
+  useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -111,6 +112,7 @@ const HostPayments = () => {
           currentBalance={account.currentBalance}
           pendingPayments={pendingPayment}
           pendingWithdrawn={pendingWithdrawn}
+          fetchData={fetchData}
         />
         <InfoBox
           pendingPayments={pendingPayment}

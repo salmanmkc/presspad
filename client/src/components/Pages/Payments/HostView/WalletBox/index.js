@@ -10,7 +10,12 @@ import { formatPrice } from '../../../../../helpers';
 import WithdrawDonateModal from '../WithdrawDonateModal';
 import * as S from './style';
 
-const WalletBox = ({ currentBalance, pendingPayments, pendingWithdrawn }) => {
+const WalletBox = ({
+  currentBalance,
+  pendingPayments,
+  pendingWithdrawn,
+  fetchData,
+}) => {
   const [openModal, setOpenModal] = useState('');
   const accessibleFunds = currentBalance - pendingPayments - pendingWithdrawn;
 
@@ -26,6 +31,7 @@ const WalletBox = ({ currentBalance, pendingPayments, pendingWithdrawn }) => {
         currentBalance={currentBalance}
         pendingPayments={pendingPayments}
         pendingWithdrawn={pendingWithdrawn}
+        fetchData={fetchData}
       />
       <Card
         hoverable
