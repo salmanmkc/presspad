@@ -4,7 +4,6 @@ import { colors, shadows, breakpoints } from '../../../theme';
 
 export const Wrapper = styled.div`
   padding-top: 6rem;
-
   height: 100%;
 `;
 
@@ -48,7 +47,8 @@ export const MenuItem = styled.div`
 `;
 
 export const MainSection = styled.div`
-  background-color: ${colors.blueGray};
+  background: ${colors.white};
+
   width: 100%;
   display: flex;
   padding: 4rem 3rem;

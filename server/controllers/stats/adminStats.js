@@ -126,7 +126,6 @@ module.exports = async (req, res, next) => {
   }
   if (userType === 'bookings') {
     return getActiveBookings().then(data => {
-      console.log('data', data);
       const cleanData = data.map(booking => {
         const updatedBooking = { key: data.indexOf(booking) + 1, ...booking };
 
