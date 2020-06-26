@@ -159,3 +159,23 @@ export const EditButton = styled.button`
   text-align: right;
   width: 100%;
 `;
+
+export const TopStatsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+export const TopStatsPaymentWrapper = styled.div`
+  width: 90%;
+  display: flex;
+`;
+
+export const Stat = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid;
+`;
