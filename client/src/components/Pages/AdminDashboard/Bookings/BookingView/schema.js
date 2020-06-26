@@ -21,13 +21,13 @@ const validateCancelBooking = payedAmount =>
     pressPadRefund: Yup.number()
       .typeError('must be a valid number')
       .required('Required'),
-    sum: Yup.number()
-      .min(1, 'Please (re)allocate the amount that has been payed.')
-      .test('Test allocated sum equals payed amount', 'Sum mo', function test(
-        value,
-      ) {
+    sum: Yup.number().test(
+      'Test allocated sum equals payed amount so it equals what has been payed',
+      'Please (re)allocate the amount that has been payed.',
+      function test(value) {
         return value === payedAmount;
-      }),
+      },
+    ),
   });
 
 export default validateCancelBooking;
