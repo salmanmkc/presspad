@@ -429,8 +429,8 @@ export default class AdminDashboard extends Component {
 
     // returs sub titles for different sections
     const decideContentTitle = () => {
-      if (bookingView) {
-        return 'Review booking';
+      if (['bookings', 'bookingHistory'].includes(activeLink) && bookingView) {
+        return '';
       }
       if (activeLink.toLowerCase() === 'payments') {
         return 'Payment requests';

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import * as S from './style';
+import { ContentTitle } from '../../AdminDashboard.style';
 
 import validateCancelBooking from './schema';
 
@@ -61,18 +62,19 @@ const BookingReview = ({
 
   return (
     <>
-      <S.GoBackWrapper>
-        <GoBackComponent
-          onClick={() => {
-            setReviewBooking(false);
-            setSearchBar(true);
-            setBookingView(false);
-          }}
-        />
-      </S.GoBackWrapper>
       {/* REVIEW MODE */}
       {reviewBooking ? (
         <S.Wrapper>
+          <S.GoBackWrapper>
+            <GoBackComponent
+              onClick={() => {
+                setReviewBooking(false);
+                setSearchBar(true);
+                setBookingView(false);
+              }}
+            />
+          </S.GoBackWrapper>
+          <ContentTitle>Review Booking</ContentTitle>
           {/* BOOKING DETAILS */}
           <BookingCancellationDetails details={details} />
           {/* ACTIONS FOR ADMIN REVIEW */}
@@ -107,14 +109,30 @@ const BookingReview = ({
           {/* VIEW MODE */}
           <S.Wrapper>
             <S.CancelSuccessWrapper>
-              <PBold mb={3}>ADMIN ACTIONS</PBold>
+              <PBold color="darkGray" mb={3}>
+                ADMIN ACTIONS
+              </PBold>
               <PL mb={2}>This booking has been successfully cancelled.</PL>
               <PL>
                 If you have selected to refund the intern, this has been added
-                to your Payments section. You must refund them manually. Please
-                make sure to get the intern’s bank details and mark as complete
-                once they have been refunded.
+                to your <strong>Payments</strong> section. You must refund them
+                manually. Please make sure to get the intern’s bank details and
+                mark as complete once they have been refunded.
               </PL>
+              <ButtonNew
+                style={{ width: '300px' }}
+                large
+                type="primary"
+                mt="6"
+                color="blue"
+                onClick={() => {
+                  setReviewBooking(false);
+                  setSearchBar(true);
+                  setBookingView(false);
+                }}
+              >
+                return to bookings
+              </ButtonNew>
             </S.CancelSuccessWrapper>
 
             <S.DetailsWrapper>

@@ -96,7 +96,7 @@ export const TextArea = styled.div`
 `;
 
 export const CancelSuccessWrapper = styled.div`
-  width: 100%;
+  width: 65%;
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid ${colors.lightGray};
