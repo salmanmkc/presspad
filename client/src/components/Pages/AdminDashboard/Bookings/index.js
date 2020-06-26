@@ -65,6 +65,7 @@ export default function BookingsTable({
               }}
               onClick={() => {
                 setBookingDetails(booking);
+                // TODO ADD ACTION TO VIEW CANCELLED BOOKING Details (after cancellation) WITH setReviewBooking(false)
                 setReviewBooking(true);
                 toggleSearchBar();
                 toggleBookingView();
