@@ -124,8 +124,7 @@ module.exports = async (req, res, next) => {
       const [stats] = await getPaymentsStats();
       const withdrawRequests = await findAllWithdrawRequests();
       const stripeBalance = await stripe.balance.retrieve();
-      const finalData = { ...stats, stripeBalance, withdrawRequests };
-      console.log('fi', finalData);
+
       return res.json({ ...stats, stripeBalance, withdrawRequests });
     }
     if (userType === 'bookings') {

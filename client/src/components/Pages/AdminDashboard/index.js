@@ -461,7 +461,9 @@ export default class AdminDashboard extends Component {
           </DashboardMenu>
         </TopSection>
 
-        {activeLink === 'payments' && <PaymentsTopStats />}
+        {activeLink === 'payments' && (
+          <PaymentsTopStats loading={loading} data={filteredData} />
+        )}
         {internView.on ? (
           <InternProfile
             {...this.props}
