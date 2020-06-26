@@ -26,6 +26,7 @@ import Tick from './icons/Tick';
 import Close from './icons/Close';
 import QuestionCircle from './icons/QuestionCircle';
 import QuestionMark from './icons/QuestionMark';
+import MoneyBag from './icons/MoneyBag';
 import CheckMark from './icons/CheckMark';
 import ReviewExplanationMark from './icons/ReviewExplanationMark';
 import ExplanationMarkCircle from './icons/ExplanationMarkCircle';
@@ -62,6 +63,7 @@ const iconMap = {
   download: Download,
   close: Close,
   questionCircle: QuestionCircle,
+  moneyBag: MoneyBag,
   checkMark: CheckMark,
   questionMark: QuestionMark,
   reviewExplanationMark: ReviewExplanationMark,

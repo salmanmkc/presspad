@@ -18,6 +18,18 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       listing: LondonListing._id,
       intern: internUser,
       host: hostUser,
+      startDate: Date.now() - 40 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() - 21 * 24 * 60 * 60 * 1000,
+      status: bookingStatuses.completed,
+      price: 12000, // first two weeks always free
+      payedAmount: 12000,
+      moneyGoTo: 'host',
+    },
+    // completed
+    {
+      listing: LondonListing._id,
+      intern: internUser,
+      host: hostUser,
       startDate: Date.now() - 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 15 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.completed,
@@ -47,7 +59,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       status: bookingStatuses.accepted,
       price: 24000,
       payedAmount: 0,
-      moneyGoTo: 'presspad',
+      moneyGoTo: 'host',
     },
     // accepted & not paid installments applicable
     {
@@ -59,7 +71,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       status: bookingStatuses.accepted,
       price: 92000,
       payedAmount: 0,
-      moneyGoTo: 'presspad',
+      moneyGoTo: 'host',
     },
     // confirmed (less than two weeks, free)
     {
@@ -83,7 +95,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       status: bookingStatuses.confirmed,
       price: 10000,
       payedAmount: 10000,
-      moneyGoTo: 'presspad',
+      moneyGoTo: 'host',
     },
     // confirmed & paid (first payment)
     // 140 + 280 + 40  // applied 50% coupon
@@ -176,6 +188,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
 
   const [
     completedBooking,
+    completedBookingFree,
     pendingBooking,
     acceptedNotPaidOnePayment,
     acceptedNotPaidInstallmentApplicable,
@@ -192,6 +205,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
 
   return {
     completedBooking,
+    completedBookingFree,
     pendingBooking,
     acceptedNotPaidOnePayment,
     acceptedNotPaidInstallmentApplicable,

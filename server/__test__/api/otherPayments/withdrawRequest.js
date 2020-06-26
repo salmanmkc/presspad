@@ -4,29 +4,40 @@ const app = require('../../../app');
 const buildDB = require('../../../database/data/test');
 
 const createToken = require('../../../helpers/createToken');
-const { WithdrawRequest, Account } = require('../../../database/models');
+const {
+  WithdrawRequest,
+  Account,
+  Booking,
+} = require('../../../database/models');
+const { bookingStatuses } = require('../../../constants');
 
 const {
   API_WITHDRAW_REQUEST_URL,
   API_UPDATE_WITHDRAW_REQUEST_URL,
 } = require('../../../../client/src/constants/apiRoutes');
 
-describe('Testing for host makeing withdraw request', () => {
+describe('Testing for host making withdraw request', () => {
   test('test with correct details', async done => {
     const {
       connection,
       mongoServer,
       users,
       accounts,
-      withdrawRequests,
+      bookings,
     } = await buildDB();
 
     const { hostUser } = users;
     const { hostAccount } = accounts;
-    const { pendingWithdrawRequest } = withdrawRequests;
+    const { confirmedPaidUpfront } = bookings;
 
     const token = `token=${createToken(hostUser._id)}`;
-    const amount = hostAccount.currentBalance - pendingWithdrawRequest.amount;
+
+    await Booking.findOneAndUpdate(
+      { _id: confirmedPaidUpfront._id },
+      { status: bookingStatuses.completed },
+      { new: true },
+    );
+    const amount = 4500;
 
     const data = {
       amount,
@@ -53,7 +64,7 @@ describe('Testing for host makeing withdraw request', () => {
 
         const hostAccountAfter = await Account.findById(hostAccount._id);
 
-        // withdraw requests doesn't change balance untill the admin approve it
+        // withdraw requests doesn't change balance until the admin approve it
         expect(hostAccountAfter.currentBalance).toBe(
           hostAccount.currentBalance,
         );

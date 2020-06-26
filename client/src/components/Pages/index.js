@@ -22,6 +22,7 @@ import UpdateInternship from './UpdateInternship';
 import ThemeTest from './ThemeTest';
 import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
+import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 
 import { withWindowWidth } from '../../HOCs';
@@ -43,6 +44,7 @@ import {
   INTERN_PROFILE,
   DBS_CHECK_PAGE,
   HOST_PROFILE_SOFT,
+  PAYMENTS_URL,
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
@@ -203,6 +205,16 @@ function Pages(props) {
             {...props}
           />
         )}
+
+        <Route
+          path={PAYMENTS_URL}
+          exact
+          isPrivate
+          Component={PaymentsPage}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
         <Route
           path={SIGNUP_INTERN}
           exact
