@@ -66,31 +66,23 @@ const BookingReview = ({
       ...cancelBookingState,
       ...refundState,
     };
-    const validAllocation = payedAmount - refundState.sum > 0;
 
-    if (!validAllocation) {
-      setErrors({
-        refundError: 'Please make sure you are (re)allocating money',
-      });
-    } else {
-      validateCancelBooking
-        .validate(data, { abortEarly: false })
-        .then(res => {
-          setErrors({});
-          // TODO HANDLE POST REQUEST
-          console.log('success');
-        })
-        .catch(err => {
-          const _errors = {};
-          err.inner.forEach(element => {
-            _errors[element.path.split('.')[0]] = element.message;
-          });
-          setErrors({ ...errors, ..._errors });
+    // check if allocation has started
+
+    validateCancelBooking(payedAmount)
+      .validate(data, { abortEarly: false })
+      .then(res => {
+        setErrors({});
+        // TODO HANDLE POST REQUEST
+      })
+      .catch(err => {
+        const _errors = {};
+        err.inner.forEach(element => {
+          _errors[element.path.split('.')[0]] = element.message;
         });
-    }
+        setErrors({ ...errors, ..._errors });
+      });
   };
-
-  console.log('errors', errors);
 
   return (
     <>
@@ -112,7 +104,6 @@ const BookingReview = ({
           <S.ActionsWrapper>
             <S.ActionsContainer>
               <PBold color="darkGray">ADMIN ACTIONS</PBold>
-
               {/* REASON SELECT */}
               <S.Row mt="2rem">
                 <PBold>Reason for cancelling</PBold>
@@ -140,7 +131,6 @@ const BookingReview = ({
                   {errors.cancellationReason}
                 </PXSBold>
               </S.Row>
-
               {/* RESPONSIBLE SELECT */}
               <S.Row>
                 <PBold>Who is responsible for the cancellation?</PBold>
@@ -166,7 +156,6 @@ const BookingReview = ({
                   {errors.responsibleParty}
                 </PXSBold>
               </S.Row>
-
               {/* ALLOCATION SECTION */}
               <Allocation
                 details={details}
@@ -174,8 +163,10 @@ const BookingReview = ({
                 refundState={refundState}
                 errors={errors}
                 setErrors={setErrors}
-              />
-
+              />{' '}
+              <PXSBold mt={2} color="red">
+                {errors.sum}
+              </PXSBold>
               {/* NOTES SECTION */}
               <S.Row>
                 <S.Column>
@@ -211,10 +202,7 @@ const BookingReview = ({
             type="primary"
             mt="8"
             color="blue"
-            onClick={
-              () => handleSubmit()
-              // history.push(INTERN_PROFILE.replace(':id', internId))
-            }
+            onClick={handleSubmit}
           >
             confirm cancellation
           </ButtonNew>

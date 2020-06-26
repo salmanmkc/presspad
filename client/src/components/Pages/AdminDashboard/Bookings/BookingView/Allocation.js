@@ -62,7 +62,8 @@ const Allocation = ({
 
   const inputStyle = {
     width: '300px',
-    border: errors.refundError ? '1px solid red' : '1px solid #d9d9d9',
+    border:
+      errors.refundError || errors.sum ? '1px solid red' : '1px solid #d9d9d9',
   };
 
   const {
