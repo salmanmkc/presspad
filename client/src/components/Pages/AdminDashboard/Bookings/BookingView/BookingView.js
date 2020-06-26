@@ -4,16 +4,15 @@ import * as S from './style';
 import { PBold, PXS } from '../../../../Common/Typography';
 import { Select, Input } from '../../../../Common/AntdWrappers';
 import GoBackComponent from '../../../../Common/GoBack';
-import Icon from '../../../../Common/Icon';
 
 import ButtonNew from '../../../../Common/ButtonNew';
 import BookingCancellationDetails from './BookingCancellationDetails';
 import Policy from './Policy';
 
 import { formatPrice } from '../../../../../helpers';
-import { bookingStatus } from '../../../../../theme';
 
 const { Option } = Select;
+
 const selectStyles = {
   width: '245px',
   height: '50px',
@@ -29,11 +28,7 @@ const BookingReview = ({
 }) => {
   // console.log('props', details);
 
-  const {
-    payedAmount = '',
-
-    coupon = {},
-  } = details;
+  const { payedAmount = '', coupon = {} } = details;
 
   const [cancelBookingState, setCancelBookingState] = useState({
     cancellationReason: '',
@@ -61,7 +56,7 @@ const BookingReview = ({
       target: { name, value },
     } = e;
 
-    setRefundState({ ...refundState, [name]: parseInt(value) });
+    setRefundState({ ...refundState, [name]: parseInt(value, 0) });
   };
 
   const handleRefundBlur = () => {
