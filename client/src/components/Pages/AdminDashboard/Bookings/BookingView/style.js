@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, shadows, breakpoints } from '../../../../../theme';
+import { colors, breakpoints } from '../../../../../theme';
 
 export const GoBackWrapper = styled.div`
   position: absolute;

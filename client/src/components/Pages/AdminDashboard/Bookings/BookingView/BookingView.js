@@ -31,8 +31,6 @@ const BookingReview = ({
 }) => {
   const { payedAmount = '' } = details;
 
-  const [loading, setLoading] = useState(false);
-
   const [cancelBookingState, setCancelBookingState] = useState({
     cancellationReason: '',
     responsibleParty: '',
