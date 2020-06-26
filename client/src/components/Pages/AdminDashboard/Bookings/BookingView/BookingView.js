@@ -208,7 +208,9 @@ const BookingReview = ({
           </ButtonNew>
         </S.Wrapper>
       ) : (
-        <h1>details mode</h1>
+        // TODO handle viewing cancelled booking after payment page
+
+        <h1>handle booking view</h1>
       )}
     </>
   );

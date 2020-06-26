@@ -434,7 +434,7 @@ export default class AdminDashboard extends Component {
         return 'Review booking';
       }
       if (activeLink.toLowerCase() === 'payments') {
-        return 'Withdraw requests';
+        return 'Payment requests';
       }
       return `Your ${activeLink}`;
     };
