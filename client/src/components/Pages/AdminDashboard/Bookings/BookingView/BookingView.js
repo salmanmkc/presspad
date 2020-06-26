@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 
 import * as S from './style';
-import { PBold, PXS } from '../../../../Common/Typography';
+
+import validateCancelBooking from './schema';
+
+import { PBold, PXS, PXSBold } from '../../../../Common/Typography';
 import { Select, Input } from '../../../../Common/AntdWrappers';
 import GoBackComponent from '../../../../Common/GoBack';
-
 import ButtonNew from '../../../../Common/ButtonNew';
+
 import BookingCancellationDetails from './BookingCancellationDetails';
 import Policy from './Policy';
-
-import { formatPrice } from '../../../../../helpers';
+import Allocation from './Allocation';
 
 const { Option } = Select;
 
-const selectStyles = {
+const selectStyles = error => ({
   width: '245px',
   height: '50px',
   marginTop: '1rem',
-};
+  border: error ? '1px solid red' : '1px solid #d9d9d9',
+});
 
 const BookingReview = ({
   toggleSearchBar,
@@ -26,9 +29,9 @@ const BookingReview = ({
   reviewBooking,
   setReviewBooking,
 }) => {
-  // console.log('props', details);
+  const { payedAmount = '' } = details;
 
-  const { payedAmount = '', coupon = {} } = details;
+  const [loading, setLoading] = useState(false);
 
   const [cancelBookingState, setCancelBookingState] = useState({
     cancellationReason: '',
@@ -44,6 +47,8 @@ const BookingReview = ({
     sum: 0,
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleInputChange = e => {
     const {
       target: { name, value },
@@ -51,33 +56,42 @@ const BookingReview = ({
     setCancelBookingState({ ...cancelBookingState, [name]: value });
   };
 
-  const handleRefundChange = e => {
-    const {
-      target: { name, value },
-    } = e;
-
-    setRefundState({ ...refundState, [name]: parseInt(value, 0) });
-  };
-
-  const handleRefundBlur = () => {
-    const {
-      hostRefund,
-      internRefund,
-      organisationRefund,
-      pressPadRefund,
-    } = refundState;
-    setRefundState({
-      ...refundState,
-      sum: hostRefund + internRefund + organisationRefund + pressPadRefund,
-    });
-    // let sum = hostRefund + internRefund + organisationRefund + pressPadRefund;
-  };
-
   const handleSelect = (value, option) => {
     const { label } = option;
     setCancelBookingState({ ...cancelBookingState, [label]: value });
   };
-  console.log(refundState.sum);
+
+  const handleSubmit = () => {
+    const data = {
+      ...cancelBookingState,
+      ...refundState,
+    };
+    const validAllocation = payedAmount - refundState.sum > 0;
+
+    if (!validAllocation) {
+      setErrors({
+        refundError: 'Please make sure you are (re)allocating money',
+      });
+    } else {
+      validateCancelBooking
+        .validate(data, { abortEarly: false })
+        .then(res => {
+          setErrors({});
+          // TODO HANDLE POST REQUEST
+          console.log('success');
+        })
+        .catch(err => {
+          const _errors = {};
+          err.inner.forEach(element => {
+            _errors[element.path.split('.')[0]] = element.message;
+          });
+          setErrors({ ...errors, ..._errors });
+        });
+    }
+  };
+
+  console.log('errors', errors);
+
   return (
     <>
       <S.GoBackWrapper>
@@ -104,7 +118,7 @@ const BookingReview = ({
                 <PBold>Reason for cancelling</PBold>
                 <Select
                   placeholder="Select"
-                  style={selectStyles}
+                  style={selectStyles(errors.cancellationReason)}
                   onSelect={(value, option) => handleSelect(value, option)}
                 >
                   <Option
@@ -122,13 +136,16 @@ const BookingReview = ({
                     Illegitimate
                   </Option>
                 </Select>
+                <PXSBold mt={2} color="red">
+                  {errors.cancellationReason}
+                </PXSBold>
               </S.Row>
 
               {/* RESPONSIBLE SELECT */}
               <S.Row>
                 <PBold>Who is responsible for the cancellation?</PBold>
                 <Select
-                  style={selectStyles}
+                  style={selectStyles(errors.responsibleParty)}
                   placeholder="Select"
                   onSelect={(value, option) => handleSelect(value, option)}
                 >
@@ -145,84 +162,20 @@ const BookingReview = ({
                     PressPad
                   </Option>
                 </Select>
+                <PXSBold mt={2} color="red">
+                  {errors.responsibleParty}
+                </PXSBold>
               </S.Row>
 
               {/* ALLOCATION SECTION */}
-              <S.Row>
-                <PBold>
-                  £{formatPrice(payedAmount)} has been paid so far. Please
-                  select how much to allocate to each user
-                </PBold>
-                <S.SubRow mt="2rem">
-                  {/* HOST AMOUNT */}
-                  <S.Column>
-                    <PBold>Host</PBold>
-                    <S.InputWrapper>
-                      <Input
-                        placeholder="Enter amount..."
-                        name="hostRefund"
-                        type="number"
-                        min="0"
-                        max={formatPrice(payedAmount)}
-                        style={{ width: '100%' }}
-                        onChange={handleRefundChange}
-                        onBlur={handleRefundBlur}
-                        // error={errors.organisation}
-                      />
-                    </S.InputWrapper>
-                  </S.Column>
-                  {/* INTERN AMOUNT */}
-                  <S.Column>
-                    <PBold>Intern</PBold>
-                    <S.InputWrapper>
-                      <Input
-                        placeholder="Enter amount..."
-                        name="internRefund"
-                        style={{ width: '100%' }}
-                        // value={state.organisation}
-                        onChange={handleRefundChange}
-                        // error={errors.organisation}
-                      />
-                    </S.InputWrapper>
-                  </S.Column>
-                </S.SubRow>
-              </S.Row>
-              <S.Row>
-                <S.SubRow mt="-2rem">
-                  {/* ORG AMOUNT */}
-                  <S.Column>
-                    <PBold>Organisation</PBold>
-                    <S.InputWrapper>
-                      <Input
-                        placeholder="Enter amount..."
-                        name="organisationRefund"
-                        style={{ width: '100%' }}
-                        disabled={!(coupon && coupon.discountRate)}
-                        // value={state.organisation}
-                        onChange={handleRefundChange}
-                        // error={errors.organisation}
-                      />
-                    </S.InputWrapper>
-                  </S.Column>
-                  {/* PressPad amount */}
-                  <S.Column>
-                    <PBold>PressPad</PBold>
-                    <S.InputWrapper>
-                      <Input
-                        placeholder="Enter amount..."
-                        name="pressPadRefund"
-                        style={{ width: '100%' }}
-                        // value={state.organisation}
-                        onChange={handleRefundChange}
-                        // error={errors.organisation}
-                      />
-                    </S.InputWrapper>
-                  </S.Column>
-                </S.SubRow>
-              </S.Row>
-              <PBold style={{ marginTop: '2rem' }} color="lightBlue">
-                £140 left to allocate
-              </PBold>
+              <Allocation
+                details={details}
+                setRefundState={setRefundState}
+                refundState={refundState}
+                errors={errors}
+                setErrors={setErrors}
+              />
+
               {/* NOTES SECTION */}
               <S.Row>
                 <S.Column>
@@ -248,14 +201,20 @@ const BookingReview = ({
             {/* POLICY SECTION */}
             <Policy />
           </S.ActionsWrapper>
+          <PBold mt={6} color="red">
+            {errors &&
+              Object.keys(errors).length > 0 &&
+              'Please make sure you fill in all relevant details'}
+          </PBold>
           <ButtonNew
             large
             type="primary"
             mt="8"
             color="blue"
-            // onClick={() =>
-            //   history.push(INTERN_PROFILE.replace(':id', internId))
-            // }
+            onClick={
+              () => handleSubmit()
+              // history.push(INTERN_PROFILE.replace(':id', internId))
+            }
           >
             confirm cancellation
           </ButtonNew>
