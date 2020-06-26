@@ -50,6 +50,67 @@ const BookingCancellationDetails = ({ details }) => {
           <PS>{cancellationDetails.cancellingUserMessage}</PS>
         </S.Row>
 
+        {/* REVIEW OF REASON */}
+        {cancellationDetails.cancellationReason && (
+          <S.Row>
+            <H7C style={detailsStyles.headline} color="lightBlue">
+              review of reason by presspad
+            </H7C>
+            <PS>{cancellationDetails.cancellationReason}</PS>
+          </S.Row>
+        )}
+
+        {/* RESPONSIBLE PARTY CANCELLING BOOKING */}
+        {cancellationDetails.responsibleParty && (
+          <S.Row>
+            <H7C style={detailsStyles.headline} color="lightBlue">
+              responsible for cancellation (in opinion of presspad)
+            </H7C>
+            <PS>
+              {cancellationDetails.responsibleParty === 'intern'
+                ? `${intern.name} (intern)`
+                : `${host.name} (host)`}
+            </PS>
+          </S.Row>
+        )}
+
+        {/* NOTES */}
+        {cancellationDetails.notes && (
+          <S.Row>
+            <H7C style={detailsStyles.headline} color="lightBlue">
+              presspad notes
+            </H7C>
+            <PS>{cancellationDetails.notes}</PS>
+          </S.Row>
+        )}
+
+        {/* REFUND DETAILS */}
+        {cancellationDetails.refunds && (
+          <S.Row>
+            <H7C style={detailsStyles.headline} color="lightBlue">
+              refund details
+            </H7C>
+            <S.SubRow>
+              <S.Column>
+                <PXSBold>Intern</PXSBold>
+                <PXS>£{cancellationDetails.refunds.internRefund}</PXS>
+              </S.Column>
+              <S.Column>
+                <PXSBold>Host</PXSBold>
+                <PXS>£{cancellationDetails.refunds.hostRefund}</PXS>
+              </S.Column>
+              <S.Column>
+                <PXSBold>Organisation</PXSBold>
+                <PXS>£{cancellationDetails.refunds.organisationRefund}</PXS>
+              </S.Column>
+              <S.Column>
+                <PXSBold>PressPad</PXSBold>
+                <PXS>£{cancellationDetails.refunds.pressPadRefund}</PXS>
+              </S.Column>
+            </S.SubRow>
+          </S.Row>
+        )}
+
         {/* BOOKING DETAILS */}
         <S.Row>
           <H7C style={detailsStyles.headline} color="lightBlue">

@@ -12,6 +12,7 @@ import { tidyStatusTextAdmin } from '../../../../helpers/tidyStatusText';
 const tagColors = {
   'awaiting admin': colors.pink,
   'awaiting cancellation': colors.pink,
+  'cancelled after payment': colors.pink,
   pending: colors.darkGray,
   accepted: colors.lightBlue,
   confirmed: colors.yellow,

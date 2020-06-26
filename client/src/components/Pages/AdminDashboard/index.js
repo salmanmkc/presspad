@@ -76,7 +76,7 @@ export default class AdminDashboard extends Component {
 
   componentDidMount() {
     // TODO change back to clients
-    this.selectSection('bookings');
+    this.selectSection('bookingHistory');
   }
 
   triggerInternView = (internId = '') => {
@@ -99,8 +99,7 @@ export default class AdminDashboard extends Component {
     });
   };
 
-  toggleBookingView = () =>
-    this.setState(prevSate => ({ bookingView: !prevSate.bookingView }));
+  setBookingView = bool => this.setState({ bookingView: bool });
 
   selectSection = section => {
     const { axiosSource } = this.state;
@@ -345,6 +344,7 @@ export default class AdminDashboard extends Component {
         return this.approveRequestConfirm(booking);
       case 'rejectRequest':
         return this.rejectRequestConfirm(booking);
+
       default:
         return null;
     }
@@ -406,8 +406,7 @@ export default class AdminDashboard extends Component {
     }
   };
 
-  toggleSearchBar = () =>
-    this.setState(prevSate => ({ showSearchBar: !prevSate.showSearchBar }));
+  setSearchBar = bool => this.setState({ showSearchBar: bool });
 
   render() {
     const {
@@ -469,13 +468,19 @@ export default class AdminDashboard extends Component {
               Payments
             </MenuItem>
             <MenuItem
-              onClick={() => this.selectSection('bookings')}
+              onClick={() => {
+                this.setBookingView(false);
+                this.selectSection('bookings');
+              }}
               active={activeLink === 'bookings'} // change here
             >
               Bookings
             </MenuItem>
             <MenuItem
-              onClick={() => this.selectSection('bookingHistory')}
+              onClick={() => {
+                this.setBookingView(false);
+                this.selectSection('bookingHistory');
+              }}
               active={activeLink === 'bookingHistory'} // change here
             >
               Booking History
@@ -556,8 +561,8 @@ export default class AdminDashboard extends Component {
               <HostWrapper>
                 <BookingsTable
                   bookingView={bookingView}
-                  toggleBookingView={this.toggleBookingView}
-                  toggleSearchBar={this.toggleSearchBar}
+                  setBookingView={this.setBookingView}
+                  setSearchBar={this.setSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
                   data={filteredData}
@@ -574,8 +579,8 @@ export default class AdminDashboard extends Component {
               <HostWrapper>
                 <BookingsTable
                   bookingView={bookingView}
-                  toggleBookingView={this.toggleBookingView}
-                  toggleSearchBar={this.toggleSearchBar}
+                  setBookingView={this.setBookingView}
+                  setSearchBar={this.setSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
                   data={filteredData}

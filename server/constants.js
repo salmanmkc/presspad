@@ -23,6 +23,7 @@ module.exports = {
     confirmed: 'confirmed',
     cancelled: 'cancelled',
     awaitingCancellation: 'awaiting cancellation',
+    cancelledAfterPayment: 'cancelled after payment',
     completed: 'completed',
     rejectedByAdmin: 'rejected by admin',
     rejected: 'rejected',

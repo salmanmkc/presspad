@@ -4,32 +4,21 @@ import * as S from './style';
 
 import validateCancelBooking from './schema';
 
-import { PBold, PXS, PXSBold } from '../../../../Common/Typography';
-import { Select, Input } from '../../../../Common/AntdWrappers';
+import { PBold, PL } from '../../../../Common/Typography';
 import GoBackComponent from '../../../../Common/GoBack';
 import ButtonNew from '../../../../Common/ButtonNew';
 
 import BookingCancellationDetails from './BookingCancellationDetails';
-import Policy from './Policy';
-import Allocation from './Allocation';
-
-const { Option } = Select;
-
-const selectStyles = error => ({
-  width: '245px',
-  height: '50px',
-  marginTop: '1rem',
-  border: error ? '1px solid red' : '1px solid #d9d9d9',
-});
+import AdminActions from './AdminActions';
 
 const BookingReview = ({
-  toggleSearchBar,
-  toggleBookingView,
+  setSearchBar,
+  setBookingView,
   details,
   reviewBooking,
   setReviewBooking,
 }) => {
-  const { payedAmount = '' } = details;
+  const { payedAmount } = details;
 
   const [cancelBookingState, setCancelBookingState] = useState({
     cancellationReason: '',
@@ -46,18 +35,6 @@ const BookingReview = ({
   });
 
   const [errors, setErrors] = useState({});
-
-  const handleInputChange = e => {
-    const {
-      target: { name, value },
-    } = e;
-    setCancelBookingState({ ...cancelBookingState, [name]: value });
-  };
-
-  const handleSelect = (value, option) => {
-    const { label } = option;
-    setCancelBookingState({ ...cancelBookingState, [label]: value });
-  };
 
   const handleSubmit = () => {
     const data = {
@@ -88,113 +65,33 @@ const BookingReview = ({
         <GoBackComponent
           onClick={() => {
             setReviewBooking(false);
-            toggleSearchBar();
-            toggleBookingView();
+            setSearchBar(true);
+            setBookingView(false);
           }}
         />
       </S.GoBackWrapper>
-
+      {/* REVIEW MODE */}
       {reviewBooking ? (
         <S.Wrapper>
+          {/* BOOKING DETAILS */}
           <BookingCancellationDetails details={details} />
-
-          {/* ADMIN ACTIONS */}
-          <S.ActionsWrapper>
-            <S.ActionsContainer>
-              <PBold color="darkGray">ADMIN ACTIONS</PBold>
-              {/* REASON SELECT */}
-              <S.Row mt="2rem">
-                <PBold>Reason for cancelling</PBold>
-                <Select
-                  placeholder="Select"
-                  style={selectStyles(errors.cancellationReason)}
-                  onSelect={(value, option) => handleSelect(value, option)}
-                >
-                  <Option
-                    label="cancellationReason"
-                    key="legitimate"
-                    value="legitimate"
-                  >
-                    Legitimate
-                  </Option>
-                  <Option
-                    label="cancellationReason"
-                    value="illegitimate"
-                    key="illegitimate"
-                  >
-                    Illegitimate
-                  </Option>
-                </Select>
-                <PXSBold mt={2} color="red">
-                  {errors.cancellationReason}
-                </PXSBold>
-              </S.Row>
-              {/* RESPONSIBLE SELECT */}
-              <S.Row>
-                <PBold>Who is responsible for the cancellation?</PBold>
-                <Select
-                  style={selectStyles(errors.responsibleParty)}
-                  placeholder="Select"
-                  onSelect={(value, option) => handleSelect(value, option)}
-                >
-                  <Option label="responsibleParty" value="intern">
-                    Intern
-                  </Option>
-                  <Option label="responsibleParty" value="host">
-                    Host
-                  </Option>
-                  <Option label="responsibleParty" value="organisation">
-                    Organisation
-                  </Option>
-                  <Option label="responsibleParty" value="presspad">
-                    PressPad
-                  </Option>
-                </Select>
-                <PXSBold mt={2} color="red">
-                  {errors.responsibleParty}
-                </PXSBold>
-              </S.Row>
-              {/* ALLOCATION SECTION */}
-              <Allocation
-                details={details}
-                setRefundState={setRefundState}
-                refundState={refundState}
-                errors={errors}
-                setErrors={setErrors}
-              />{' '}
-              <PXSBold mt={2} color="red">
-                {errors.sum}
-              </PXSBold>
-              {/* NOTES SECTION */}
-              <S.Row>
-                <S.Column>
-                  <PBold>PressPad Notes</PBold>
-                  <PXS style={{ marginTop: '1rem', width: '432px' }}>
-                    Add any notes that maybe useful for future reference (e.g.
-                    why you decided it was a legitimate / illegitimate
-                    cancellation or why you’ve allocated the money in this way).
-                  </PXS>
-                  <S.TextArea>
-                    <Input
-                      style={{ width: '432px', height: 'auto' }}
-                      textArea
-                      placeholder="Write your reasons here..."
-                      name="notes"
-                      onChange={handleInputChange}
-                    />
-                  </S.TextArea>
-                </S.Column>
-              </S.Row>
-            </S.ActionsContainer>
-
-            {/* POLICY SECTION */}
-            <Policy />
-          </S.ActionsWrapper>
+          {/* ACTIONS FOR ADMIN REVIEW */}
+          <AdminActions
+            details={details}
+            cancelBookingState={cancelBookingState}
+            setCancelBookingState={setCancelBookingState}
+            refundState={refundState}
+            setRefundState={setRefundState}
+            errors={errors}
+            setErrors={setErrors}
+          />
+          {/* ERROR */}
           <PBold mt={6} color="red">
             {errors &&
               Object.keys(errors).length > 0 &&
               'Please make sure you fill in all relevant details'}
           </PBold>
+          {/* SUBMIT BUTTOM */}
           <ButtonNew
             large
             type="primary"
@@ -206,9 +103,26 @@ const BookingReview = ({
           </ButtonNew>
         </S.Wrapper>
       ) : (
-        // TODO handle viewing cancelled booking after payment page
+        <>
+          {/* VIEW MODE */}
+          <S.Wrapper>
+            <S.CancelSuccessWrapper>
+              <PBold mb={3}>ADMIN ACTIONS</PBold>
+              <PL mb={2}>This booking has been successfully cancelled.</PL>
+              <PL>
+                If you have selected to refund the intern, this has been added
+                to your Payments section. You must refund them manually. Please
+                make sure to get the intern’s bank details and mark as complete
+                once they have been refunded.
+              </PL>
+            </S.CancelSuccessWrapper>
 
-        <h1>handle booking view</h1>
+            <S.DetailsWrapper>
+              <PBold mb={6}>CANCELLATION DETAILS</PBold>
+              <BookingCancellationDetails details={details} />
+            </S.DetailsWrapper>
+          </S.Wrapper>
+        </>
       )}
     </>
   );

@@ -94,3 +94,19 @@ export const InputWrapper = styled.div`
 export const TextArea = styled.div`
   width: 432px;
 `;
+
+export const CancelSuccessWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid ${colors.lightGray};
+  padding-bottom: 4rem;
+`;
+
+export const DetailsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 4rem;
+`;

@@ -14,6 +14,7 @@ const tidyStatusText = status => {
 const tidyStatusTextAdmin = status => {
   switch (status) {
     case 'awaiting cancellation':
+    case 'cancelled after payment':
       return 'cancelled after payment!';
     default:
       return status;

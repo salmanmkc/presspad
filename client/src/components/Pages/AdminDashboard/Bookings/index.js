@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Select } from 'antd';
 import moment from 'moment';
 import { H7C } from '../../../Common/Typography';
@@ -9,7 +9,7 @@ import BookingView from './BookingView/BookingView';
 
 const { Option } = Select;
 
-export default function BookingsTable({
+export default function BookingsSections({
   getColumnSearchProps,
   data,
   loading,
@@ -18,12 +18,17 @@ export default function BookingsTable({
   triggerInternView,
   handleAction,
   adminAction,
-  toggleSearchBar,
-  toggleBookingView,
+  setSearchBar,
+  setBookingView,
   bookingView,
 }) {
   const [bookingDetails, setBookingDetails] = useState(null);
   const [reviewBooking, setReviewBooking] = useState(false);
+
+  useEffect(() => {
+    setBookingView(false);
+    setSearchBar(true);
+  }, [setBookingView, setSearchBar]);
 
   const lengthOfStay = (startDate, endDate) =>
     moment(endDate).diff(moment(startDate), 'days');
@@ -53,6 +58,7 @@ export default function BookingsTable({
             <Option value="cancelBooking">Cancel</Option>
           </Select>
         );
+
       case 'awaiting cancellation':
         return (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -65,10 +71,9 @@ export default function BookingsTable({
               }}
               onClick={() => {
                 setBookingDetails(booking);
-                // TODO ADD ACTION TO VIEW CANCELLED BOOKING Details (after cancellation) WITH setReviewBooking(false)
                 setReviewBooking(true);
-                toggleSearchBar();
-                toggleBookingView();
+                setSearchBar(false);
+                setBookingView(true);
               }}
             >
               <H7C style={{ textDecoration: 'underline' }} color="pink">
@@ -78,6 +83,21 @@ export default function BookingsTable({
             <Icon icon="reviewExplanationMark" width="24px" />
           </div>
         );
+      case 'cancelled after payment':
+        return (
+          <Select
+            onChange={() => {
+              setBookingDetails(booking);
+              setBookingView(true);
+              setSearchBar(false);
+            }}
+            style={{ width: '100px' }}
+            placeholder="Select"
+          >
+            <Option value="cancelBooking">View Details</Option>
+          </Select>
+        );
+
       default:
         return <H7C color="gray">N/A</H7C>;
     }
@@ -90,8 +110,8 @@ export default function BookingsTable({
           details={bookingDetails}
           reviewBooking={reviewBooking}
           setReviewBooking={setReviewBooking}
-          toggleBookingView={toggleBookingView}
-          toggleSearchBar={toggleSearchBar}
+          setBookingView={setBookingView}
+          setSearchBar={setSearchBar}
         />
       ) : (
         <Table
