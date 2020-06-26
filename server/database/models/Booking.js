@@ -77,6 +77,24 @@ const bookingSchema = new Schema(
       notes: {
         type: String,
       },
+      refunds: {
+        internRefund: {
+          type: Number,
+          default: 0,
+        },
+        hostRefund: {
+          type: Number,
+          default: 0,
+        },
+        organisationRefund: {
+          type: Number,
+          default: 0,
+        },
+        pressPadRefund: {
+          type: Number,
+          default: 0,
+        },
+      },
     },
 
     // if the booking has been rejected by host/admin
