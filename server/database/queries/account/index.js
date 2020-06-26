@@ -15,3 +15,5 @@ module.exports.returnCouponsValueToOrg = ({ id, returnedAmount, session }) =>
       session,
     },
   );
+
+module.exports.getAccoutById = accountId => Account.findById(accountId);

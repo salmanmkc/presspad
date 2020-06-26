@@ -7,6 +7,7 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
     internalTransactionsPaidUpFrontIntern,
     internalTransactionsConfirmedPaidFirst,
     internalTransactionsConfirmedPaidFirstNoCoupon,
+    internalTransactionsCompletedBooking,
   } = internalTransactions;
   const { internUser, hostUser } = users;
   await reset();
@@ -15,6 +16,7 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
     confirmedPaidUpfront,
     confirmedPaidFirst,
     confirmedPaidFirstNoCoupon,
+    completedBooking,
   } = bookings;
 
   const installments = [
@@ -73,6 +75,15 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
       amount: 16000,
       dueDate: Date.now() + 207 * 24 * 60 * 60 * 1000,
     },
+    // completed booking
+    {
+      booking: completedBooking._id,
+      intern: internUser._id,
+      host: hostUser._id,
+      amount: 12000,
+      dueDate: Date.now() + 207 * 24 * 60 * 60 * 1000,
+      transaction: internalTransactionsCompletedBooking._id,
+    },
   ];
   const [
     upfrontPayment,
@@ -82,6 +93,7 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
     firstPaidPaymentNoCoupon,
     secondUnpaidPaymentNoCoupon,
     thirdUnpaidPaymentNoCoupon,
+    completedBookingPayment,
   ] = await Installment.create(installments);
 
   return {
@@ -92,6 +104,7 @@ const createAll = async ({ bookings, users, internalTransactions }) => {
     firstPaidPaymentNoCoupon,
     secondUnpaidPaymentNoCoupon,
     thirdUnpaidPaymentNoCoupon,
+    completedBookingPayment,
   };
 };
 

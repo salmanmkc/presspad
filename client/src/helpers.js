@@ -325,7 +325,8 @@ export const calculateHostRespondingTime = (
   return hostRespondingTime || 7;
 };
 
+export const formatPrice = (price, fractionDigits) =>
+  (price / 100).toFixed(fractionDigits);
+
 export const truncateString = (string, maxLength) =>
   string.length > maxLength ? `${string.slice(0, maxLength)}...` : string;
-
-export const formatPrice = price => (price / 100).toFixed();

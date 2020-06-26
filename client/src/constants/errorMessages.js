@@ -1,5 +1,5 @@
 module.exports = {
-  SERVER_ERROR: 'Gender is required',
+  SERVER_ERROR: 'Something went wrong, try again later',
   GENDER: 'Gender is required',
   HOMETOWN: 'Hometown is required',
   BIO: 'Please write a short bio about yourself',

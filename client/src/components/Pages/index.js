@@ -205,6 +205,7 @@ function Pages(props) {
             {...props}
           />
         )}
+
         <Route
           path={PAYMENTS_URL}
           exact

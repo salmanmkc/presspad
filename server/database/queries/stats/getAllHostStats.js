@@ -30,9 +30,31 @@ module.exports.getAllHostStats = () =>
     {
       $lookup: {
         from: 'bookings',
-        localField: 'listing._id',
-        foreignField: 'listing',
-        as: 'bookings',
+        let: { listingId: '$listing._id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$listing', '$$listingId'] },
+                  { $lte: ['$startDate', new Date()] },
+                  {
+                    $or: [
+                      { $eq: ['$status', 'confirmed'] },
+                      { $eq: ['$status', 'completed'] },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+          {
+            $group: {
+              _id: '$intern',
+            },
+          },
+        ],
+        as: 'uniqueInternBookings',
       },
     },
     {
@@ -43,6 +65,7 @@ module.exports.getAllHostStats = () =>
         as: 'account',
       },
     },
+
     {
       $project: {
         _id: 1,
@@ -57,25 +80,7 @@ module.exports.getAllHostStats = () =>
         // look up from bookings:
         // // any that were confirmed
         // // any that started before today's date
-        internsHosted: {
-          $size: {
-            $filter: {
-              input: '$bookings',
-              as: 'booking',
-              cond: {
-                $and: [
-                  { $lte: ['$$booking.startDate', new Date()] },
-                  {
-                    $or: [
-                      { $eq: ['$$booking.status', 'confirmed'] },
-                      { $eq: ['$$booking.status', 'completed'] },
-                    ],
-                  },
-                ],
-              },
-            },
-          },
-        },
+        internsHosted: { $size: '$uniqueInternBookings' },
       },
     },
   ]);

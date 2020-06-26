@@ -4,17 +4,17 @@ const Arrow = ({ width, height, color, direction, ...props }) => {
   let degree = '';
 
   switch (direction) {
-    case 'left':
-      degree = '-90';
+    case 'up':
+      degree = '0';
       break;
     case 'right':
       degree = '90';
       break;
-    case 'up':
+    case 'down':
       degree = '180';
       break;
-    case 'down':
-      degree = '-180';
+    case 'left':
+      degree = '270';
       break;
 
     default:
