@@ -31,6 +31,22 @@ const BookingCancellationDetails = ({ details }) => {
       ? { name: intern.name, role: 'intern' }
       : { name: host.name, role: 'host' };
 
+  // prints presspad selection for cancelling party
+  const printResponsibleParty = type => {
+    switch (type) {
+      case 'intern':
+        return `${intern.name} (intern)`;
+      case 'host':
+        return `${host.name} (host)`;
+      case 'organisation':
+        return `${coupon.Organisation} (organisation)`;
+      case 'pressPad':
+        return 'PressPad';
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <S.ReviewWrapper>
@@ -67,9 +83,7 @@ const BookingCancellationDetails = ({ details }) => {
               responsible for cancellation (in opinion of presspad)
             </H7C>
             <PS>
-              {cancellationDetails.responsibleParty === 'intern'
-                ? `${intern.name} (intern)`
-                : `${host.name} (host)`}
+              {printResponsibleParty(cancellationDetails.responsibleParty)}
             </PS>
           </S.Row>
         )}
