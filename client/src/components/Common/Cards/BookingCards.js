@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as S from './style';
 import * as T from '../Typography';
 import Icon from '../Icon';
-import { truncateString } from '../../../helpers';
+import { truncateString, formatPrice } from '../../../helpers';
 import tidyStatusText from '../../../helpers/tidyStatusText';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
@@ -103,7 +103,7 @@ const BookingCards = ({
                 {role === 'intern' ? 'Cost' : 'Earnings'}{' '}
               </S.SubTitle>
 
-              <S.Cost type={type}>£{price}</S.Cost>
+              <S.Cost type={type}>£{formatPrice(price)}</S.Cost>
             </S.InnerBottom>
             <S.InnerBottom>
               <S.SubTitle>Status:</S.SubTitle>
@@ -114,7 +114,7 @@ const BookingCards = ({
           </S.LeftBottom>
         ) : (
           <S.LeftBottom type={type}>
-            <S.Cost type={type}>£{price}</S.Cost>
+            <S.Cost type={type}>£{formatPrice(price)}</S.Cost>
           </S.LeftBottom>
         )}
       </S.LeftDiv>
