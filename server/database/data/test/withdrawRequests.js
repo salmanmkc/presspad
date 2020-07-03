@@ -15,6 +15,7 @@ const createAll = async ({ users, accounts }) => {
       bankName: 'bankName',
       bankSortCode: 'bankSortCode',
       accountNumber: 'accountNumber',
+      userType: 'host',
     },
     {
       user: hostUser._id,
@@ -24,6 +25,7 @@ const createAll = async ({ users, accounts }) => {
       bankName: 'bankName',
       bankSortCode: 'bankSortCode',
       accountNumber: 'accountNumber',
+      userType: 'host',
     },
   ];
 

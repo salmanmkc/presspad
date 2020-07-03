@@ -10,19 +10,13 @@ const {
 
 let connection;
 let users;
-let bookings;
 
 describe('Testing for user bookings page', () => {
   beforeEach(async () => {
     // build dummy data
-    const {
-      connection: _connection,
-      users: _users,
-      bookings: _bookings,
-    } = await buildDB();
+    const { connection: _connection, users: _users } = await buildDB();
     connection = _connection;
     users = _users;
-    bookings = _bookings;
   });
 
   afterAll(async () => {
@@ -77,12 +71,12 @@ describe('Testing for user bookings page', () => {
 
         // check if positon 2 are booking requests
         expect(
-          ['awaiting admin', 'pending'].includes(
+          ['awaiting admin', 'pending', 'accepted', 'confirmed'].includes(
             result.body.bookingRequests[0].status,
           ),
         ).toBeTruthy();
         expect(
-          ['awaiting admin', 'pending'].includes(
+          ['awaiting admin', 'pending', 'accepted', 'confirmed'].includes(
             result.body.bookingRequests[1].status,
           ),
         ).toBeTruthy();

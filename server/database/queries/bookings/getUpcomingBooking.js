@@ -10,7 +10,7 @@ const getUpcomingBooking = ({ userId, role }) =>
         status: {
           $in: [bookingStatuses.confirmed, bookingStatuses.accepted],
         },
-        startDate: { $gt: new Date() },
+        startDate: { $gte: new Date() },
       },
     },
     {
