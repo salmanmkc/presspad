@@ -16,12 +16,14 @@ const confirmOrCancelWithdrawRequest = async (withdrawId, type, session) => {
     { session, new: true, useFindAndModify: false },
   );
   if (type === 'transfered') {
-    const { account, amount } = withdrawRequest;
-    await Account.updateOne(
-      { _id: account },
-      { $inc: { currentBalance: -1 * amount, withdrawal: amount } },
-      { session },
-    );
+    const { account, amount, userType } = withdrawRequest;
+    if (userType === 'host') {
+      await Account.updateOne(
+        { _id: account },
+        { $inc: { currentBalance: -1 * amount, withdrawal: amount } },
+        { session },
+      );
+    }
     await Account.updateOne(
       { _id: presspadAdmin.account },
       { $inc: { currentBalance: -1 * amount } },

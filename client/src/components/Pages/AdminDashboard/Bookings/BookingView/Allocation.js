@@ -41,6 +41,7 @@ const Allocation = ({
       hostRefund + internRefund + organisationRefund + pressPadRefund;
 
     const nothingLeft = total * 100 > payedAmount;
+    const maxHostRefund = hostRefund * 100 > 0.45 * payedAmount;
 
     setRefundState({
       ...refundState,
@@ -48,7 +49,14 @@ const Allocation = ({
     });
 
     // error handling
-    if (nothingLeft) {
+    if (maxHostRefund) {
+      setErrors({
+        ...errors,
+        refundError: `Can't pay host more than his share (${formatPrice(
+          0.45 * payedAmount,
+        )})`,
+      });
+    } else if (nothingLeft) {
       setErrors({
         ...errors,
         refundError: `Re-allocation must not exceed total amount (${formatPrice(

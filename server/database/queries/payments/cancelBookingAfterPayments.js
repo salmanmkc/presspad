@@ -191,7 +191,9 @@ const updateAccounts = async ({
     });
   }
 
-  queriesArr.push(Account.bulkWrite(bulkWriteArr, { session }));
+  if (bulkWriteArr.length) {
+    queriesArr.push(Account.bulkWrite(bulkWriteArr, { session }));
+  }
 
   return Promise.all(queriesArr);
 };

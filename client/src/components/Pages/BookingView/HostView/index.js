@@ -226,7 +226,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         )}
         {status === 'cancelled' && <H4C mb="7">booking cancelled</H4C>}
 
-        {statusContents[status]()}
+        {statusContents[status] && statusContents[status]()}
         {!['completed', 'cancelled', 'awaiting cancellation'].includes(
           status,
         ) && (

@@ -590,6 +590,7 @@ export default class AdminDashboard extends Component {
                   handleAction={this.handleAction}
                   triggerHostView={this.triggerHostView}
                   triggerInternView={this.triggerInternView}
+                  selectSection={this.selectSection}
                 />
               </HostWrapper>
             )}

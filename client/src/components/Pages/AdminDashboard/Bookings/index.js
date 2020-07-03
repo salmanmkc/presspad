@@ -21,6 +21,7 @@ export default function BookingsSections({
   setSearchBar,
   setBookingView,
   bookingView,
+  selectSection,
 }) {
   const [bookingDetails, setBookingDetails] = useState(null);
   const [reviewBooking, setReviewBooking] = useState(false);
@@ -111,7 +112,9 @@ export default function BookingsSections({
           reviewBooking={reviewBooking}
           setReviewBooking={setReviewBooking}
           setBookingView={setBookingView}
+          setBookingDetails={setBookingDetails}
           setSearchBar={setSearchBar}
+          selectSection={selectSection}
         />
       ) : (
         <Table

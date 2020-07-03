@@ -57,7 +57,7 @@ const createDataSource = array =>
 
 const columns = (highlightVal, handleClick) => [
   {
-    title: 'Host',
+    title: 'Host/Intern',
     dataIndex: 'host',
     key: 'host',
     className: 'mainCol',
@@ -97,7 +97,7 @@ const columns = (highlightVal, handleClick) => [
         highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
         searchWords={[highlightVal]}
         autoEscape
-        textToHighlight={text.toString()}
+        textToHighlight={(text || 'N/A').toString()}
       />
     ),
   },
@@ -110,7 +110,7 @@ const columns = (highlightVal, handleClick) => [
         highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
         searchWords={[highlightVal]}
         autoEscape
-        textToHighlight={text.toString()}
+        textToHighlight={(text || 'N/A').toString()}
       />
     ),
   },
@@ -123,7 +123,7 @@ const columns = (highlightVal, handleClick) => [
         highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
         searchWords={[highlightVal]}
         autoEscape
-        textToHighlight={text.toString()}
+        textToHighlight={(text || 'N/A').toString()}
       />
     ),
   },

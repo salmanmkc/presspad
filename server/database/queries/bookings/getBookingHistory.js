@@ -131,6 +131,7 @@ module.exports = () =>
         from: 'coupons',
         let: {
           couponID: '$coupon',
+          bookingId: '$_id',
         },
         pipeline: [
           {
@@ -143,8 +144,8 @@ module.exports = () =>
           {
             $lookup: {
               from: 'organisations',
-              localField: 'organisation',
-              foreignField: '_id',
+              let: { orgId: '$organisation' },
+              pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$orgId'] } } }],
               as: 'organisation',
             },
           },
@@ -158,6 +159,18 @@ module.exports = () =>
             $project: {
               discountRate: 1.0,
               Organisation: '$organisation.name',
+              transactions: {
+                $filter: {
+                  input: '$transactions',
+                  as: 'transactions',
+                  cond: { $eq: ['$$transactions.booking', '$$bookingId'] },
+                },
+              },
+            },
+          },
+          {
+            $addFields: {
+              discountAmount: { $arrayElemAt: ['$transactions.amount', 0] },
             },
           },
         ],

@@ -107,19 +107,27 @@ const BookingCancellationDetails = ({ details }) => {
             <S.SubRow>
               <S.Column>
                 <PXSBold>Intern</PXSBold>
-                <PXS>£{cancellationDetails.refunds.internRefund}</PXS>
+                <PXS>
+                  £{formatPrice(cancellationDetails.refunds.internRefund)}
+                </PXS>
               </S.Column>
               <S.Column>
                 <PXSBold>Host</PXSBold>
-                <PXS>£{cancellationDetails.refunds.hostRefund}</PXS>
+                <PXS>
+                  £{formatPrice(cancellationDetails.refunds.hostRefund)}
+                </PXS>
               </S.Column>
               <S.Column>
                 <PXSBold>Organisation</PXSBold>
-                <PXS>£{cancellationDetails.refunds.organisationRefund}</PXS>
+                <PXS>
+                  £{formatPrice(cancellationDetails.refunds.organisationRefund)}
+                </PXS>
               </S.Column>
               <S.Column>
                 <PXSBold>PressPad</PXSBold>
-                <PXS>£{cancellationDetails.refunds.pressPadRefund}</PXS>
+                <PXS>
+                  £{formatPrice(cancellationDetails.refunds.pressPadRefund)}
+                </PXS>
               </S.Column>
             </S.SubRow>
           </S.Row>
@@ -143,7 +151,8 @@ const BookingCancellationDetails = ({ details }) => {
               <PXSBold>Paid by Organisation</PXSBold>
               {coupon && coupon.discountRate ? (
                 <PXS>
-                  {coupon.discountRate}% ({coupon.Organisation})
+                  £{formatPrice(coupon.discountAmount)} ({coupon.Organisation})
+                  {/* {coupon.discountRate}% ({coupon.Organisation}) */}
                 </PXS>
               ) : (
                 'N/A'
@@ -151,11 +160,11 @@ const BookingCancellationDetails = ({ details }) => {
             </S.Column>
             <S.Column>
               <PXSBold>Paid so far</PXSBold>
-              <PXS>{formatPrice(payedAmount)}</PXS>
+              <PXS>£{formatPrice(payedAmount)}</PXS>
             </S.Column>
             <S.Column>
               <PXSBold>Total cost</PXSBold>
-              <PXS>{formatPrice(price)}</PXS>
+              <PXS>£{formatPrice(price)}</PXS>
             </S.Column>
           </S.SubRow>
         </S.Row>

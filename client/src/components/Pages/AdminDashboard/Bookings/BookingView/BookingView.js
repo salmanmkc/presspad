@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { message } from 'antd';
 
 import * as S from './style';
 import { ContentTitle } from '../../AdminDashboard.style';
@@ -12,14 +14,18 @@ import ButtonNew from '../../../../Common/ButtonNew';
 import BookingCancellationDetails from './BookingCancellationDetails';
 import AdminActions from './AdminActions';
 
+import { API_CANCEL_BOOKING_AFTER_PAYMENT_URL } from '../../../../../constants/apiRoutes';
+import { SERVER_ERROR } from '../../../../../constants/errorMessages';
+
 const BookingReview = ({
   setSearchBar,
   setBookingView,
   details,
   reviewBooking,
   setReviewBooking,
+  selectSection,
 }) => {
-  const { payedAmount } = details;
+  const { payedAmount, _id: bookingId } = details;
 
   const [cancelBookingState, setCancelBookingState] = useState({
     cancellationReason: '',
@@ -35,6 +41,7 @@ const BookingReview = ({
     sum: 0,
   });
 
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const handleSubmit = () => {
@@ -47,16 +54,28 @@ const BookingReview = ({
 
     validateCancelBooking(payedAmount)
       .validate(data, { abortEarly: false })
-      .then(res => {
+      .then(async res => {
         setErrors({});
-        // TODO HANDLE POST REQUEST
+        setLoading(true);
+
+        await axios.post(
+          API_CANCEL_BOOKING_AFTER_PAYMENT_URL.replace(':id', bookingId),
+          res,
+        );
+        setReviewBooking(false);
+        selectSection('bookingHistory');
       })
       .catch(err => {
-        const _errors = {};
-        err.inner.forEach(element => {
-          _errors[element.path.split('.')[0]] = element.message;
-        });
-        setErrors({ ...errors, ..._errors });
+        if (err.name === 'ValidationError') {
+          const _errors = {};
+          err.inner.forEach(element => {
+            _errors[element.path.split('.')[0]] = element.message;
+          });
+          setErrors({ ...errors, ..._errors });
+        } else {
+          message.error(SERVER_ERROR);
+        }
+        setLoading(false);
       });
   };
 
@@ -100,6 +119,7 @@ const BookingReview = ({
             mt="8"
             color="blue"
             onClick={handleSubmit}
+            loading={loading}
           >
             confirm cancellation
           </ButtonNew>
