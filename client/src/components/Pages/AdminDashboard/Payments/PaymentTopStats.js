@@ -1,4 +1,5 @@
 import React from 'react';
+import { Popover } from 'antd';
 import * as S from '../AdminDashboard.style';
 import * as T from '../../../Common/Typography';
 import { formatPrice } from '../../../../helpers';
@@ -7,11 +8,11 @@ const PaymentTopStats = ({ data, loading }) => {
   if (loading) return <T.PBold align="center">loading top stats ... </T.PBold>;
 
   const {
-    account: { income = 0, bursaryFunds = 0 },
+    account: { hostingIncome = 0, bursaryFunds = 0 },
     hostsBalance = 0,
     orgsBalance = 0,
     presspadPendingIncome = 0,
-    stripeBalance: { available = {} },
+    stripeBalance: { available = {}, pending = {} },
     unusedCoupons = 0,
   } = data;
 
@@ -22,14 +23,20 @@ const PaymentTopStats = ({ data, loading }) => {
           <T.PBold align="center" color="blue">
             Current Stripe Account Balance
           </T.PBold>
-          <T.PXL color="lightBlue">£{formatPrice(available[0].amount)}</T.PXL>
+          <Popover
+            content={`available: £${formatPrice(
+              available[0].amount,
+            )} / pending £${formatPrice(pending[0].amount)}`}
+          >
+            <T.PXL color="lightBlue">£{formatPrice(available[0].amount)}</T.PXL>
+          </Popover>
         </S.Stat>
         <S.Stat>
           <T.PBold align="center" color="blue">
             Confirmed PressPad Income
           </T.PBold>
           <T.PXL color="lightBlue">
-            £{formatPrice(income + presspadPendingIncome + unusedCoupons)}
+            £{formatPrice(hostingIncome - presspadPendingIncome)}
           </T.PXL>
         </S.Stat>
         <S.Stat>
@@ -48,7 +55,9 @@ const PaymentTopStats = ({ data, loading }) => {
           <T.PBold align="center" color="blue">
             Currently in Organisation Wallets
           </T.PBold>
-          <T.PXL color="lightBlue">£{formatPrice(orgsBalance)}</T.PXL>
+          <Popover content={`unused coupons £${formatPrice(unusedCoupons)}`}>
+            <T.PXL color="lightBlue">£{formatPrice(orgsBalance)}</T.PXL>
+          </Popover>
         </S.Stat>
       </S.TopStatsPaymentWrapper>
     </S.TopStatsContainer>
