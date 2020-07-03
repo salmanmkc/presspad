@@ -44,6 +44,7 @@ const {
   confirmOrCancelWithdrawRequest,
   orgPayment,
   getPaymentsInfo,
+  cancelBookingAfterPayment,
 } = require('../controllers/payments');
 const { createCoupon } = require('../controllers/coupons');
 const getAllInterns = require('../controllers/user/getAllInterns');
@@ -105,6 +106,7 @@ const {
   ACCEPT_BOOKING_URL,
   REJECT_BOOKING_URL,
   CANCEL_BOOKING_URL,
+  CANCEL_BOOKING_AFTER_PAYMENT_URL,
   ORG_PAYMENT_URL,
   FIND_WITHDRAW_REQUESTS_URL,
   GET_ALL_CETIES_URL,
@@ -132,6 +134,13 @@ router.patch(REJECT_BOOKING_URL, authentication, rejectBooking);
 
 // cancel booking by id
 router.patch(CANCEL_BOOKING_URL, authentication, cancelBooking);
+
+// cancel booking by id
+router.post(
+  CANCEL_BOOKING_AFTER_PAYMENT_URL,
+  authentication,
+  cancelBookingAfterPayment,
+);
 
 // Host view intern profile
 router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);

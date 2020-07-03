@@ -4,17 +4,20 @@ const { Schema, model } = mongoose;
 
 const withdrawRequestSchema = new Schema(
   {
-    // the user who made the request
+    // the user who made the request or the intern who will receive it
     user: {
       type: Schema.Types.ObjectId,
       ref: 'users',
       required: true,
     },
-    // the account that money will be withdrawed from
+    userType: {
+      type: String,
+      enum: ['host', 'intern'],
+    },
+    // the account that money will be withdrawn from only if host
     account: {
       type: Schema.Types.ObjectId,
       ref: 'accounts',
-      required: true,
     },
     // money value
     amount: {
@@ -25,17 +28,14 @@ const withdrawRequestSchema = new Schema(
     bankName: {
       type: String,
       trim: true,
-      required: true,
     },
     bankSortCode: {
       type: String,
       trim: true,
-      required: true,
     },
     accountNumber: {
       type: String,
       trim: true,
-      required: true,
     },
     status: {
       type: String,

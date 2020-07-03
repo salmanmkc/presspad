@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { User, Booking } = require('../../models');
-// const { bookingStatuses } = require('../../../constants');
+const { bookingStatuses } = require('../../../constants');
 
 const getHostPendingPayments = async id => {
   const data = await Booking.aggregate([
@@ -10,7 +10,8 @@ const getHostPendingPayments = async id => {
         $expr: {
           $and: [
             { $eq: ['$host', id] },
-            { $eq: ['$status', 'confirmed'] },
+            { $eq: ['$status', bookingStatuses.confirmed] },
+            { $eq: ['$status', bookingStatuses.awaitingCancellation] },
             { $gt: ['$payedAmount', 0] },
             { $eq: ['$moneyGoTo', 'host'] },
           ],
@@ -194,7 +195,8 @@ const getHostPaymentsInfo = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$host', '$host'] },
-                  { $eq: ['$status', 'confirmed'] },
+                  { $eq: ['$status', bookingStatuses.confirmed] },
+                  { $eq: ['$status', bookingStatuses.awaitingCancellation] },
                   { $gt: ['$payedAmount', 0] },
                   { $eq: ['$moneyGoTo', 'host'] },
                 ],

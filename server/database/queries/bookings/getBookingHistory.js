@@ -15,6 +15,9 @@ module.exports = () =>
             status: bookingStatuses.cancelledAfterPayment,
           },
           {
+            status: bookingStatuses.awaitingCancellation,
+          },
+          {
             status: bookingStatuses.completed,
           },
           {
@@ -168,6 +171,7 @@ module.exports = () =>
       },
     },
     {
-      $sort: { startDate: 1 },
+      // $sort: { startDate: 1 },
+      $sort: { updatedAt: -1 },
     },
   ]);

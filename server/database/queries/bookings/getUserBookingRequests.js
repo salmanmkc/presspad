@@ -9,7 +9,10 @@ const getUserBookingRequests = ({ userId, role }) =>
       $match: {
         [role]: mongoose.Types.ObjectId(userId),
         status: {
-          $in: [bookingStatuses.pending, bookingStatuses.awaitingAdmin],
+          $in:
+            role === 'host'
+              ? [bookingStatuses.pending]
+              : [bookingStatuses.pending, bookingStatuses.awaitingAdmin],
         },
         // only get requests for future dates
         endDate: { $gte: new Date() },
