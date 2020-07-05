@@ -13,7 +13,8 @@ import Input from '../../Common/ProfileComponents/Field/Input';
 import ClientTable from './ClientTable';
 import InternTable from './InternTable';
 import HostTable from './HostTable';
-import PaymentsTable from './PaymentsTable';
+import PaymentsTable from './Payments/PaymentsTable';
+import PaymentsTopStats from './Payments/PaymentTopStats';
 import SearchBar from '../../Common/SearchBar';
 import InternProfile from '../InternProfile/AdminOrInternView';
 import HostProfile from '../HostProfile';
@@ -75,7 +76,7 @@ export default class AdminDashboard extends Component {
   };
 
   componentDidMount() {
-    this.selectSection('clients');
+    this.selectSection('payments');
   }
 
   triggerInternView = (internId = '') => {
@@ -486,6 +487,10 @@ export default class AdminDashboard extends Component {
             </MenuItem>
           </DashboardMenu>
         </TopSection>
+
+        {activeLink === 'payments' && (
+          <PaymentsTopStats loading={loading} data={filteredData} />
+        )}
         {internView.on ? (
           <InternProfile
             {...this.props}

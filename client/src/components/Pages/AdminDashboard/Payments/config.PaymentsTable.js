@@ -3,10 +3,10 @@ import React from 'react';
 import { Button, Popconfirm, Tooltip, Input } from 'antd';
 import Highlighter from 'react-highlight-words';
 
-import Icon from '../../Common/Icon';
+import Icon from '../../../Common/Icon';
 
-import { colors } from '../../../theme';
-import { formatPrice } from '../../../helpers';
+import { colors } from '../../../../theme';
+import { formatPrice } from '../../../../helpers';
 
 const CheckBoxJsx = ({ paymentStatus }) => {
   switch (paymentStatus) {
@@ -115,7 +115,7 @@ const columns = (
           type="text"
           style={{ width: '140px' }}
           onChange={onInputChange}
-          onBlur={() => onBlur(row.key)}
+          onBlur={e => onBlur(row.key, e)}
         />
       ),
   },
@@ -140,7 +140,7 @@ const columns = (
           type="number"
           style={{ width: '140px' }}
           onChange={onInputChange}
-          onBlur={() => onBlur(row.key)}
+          onBlur={e => onBlur(row.key, e)}
         />
       ),
   },
@@ -165,7 +165,7 @@ const columns = (
           type="text"
           style={{ width: '140px' }}
           onChange={onInputChange}
-          onBlur={() => onBlur(row.key)}
+          onBlur={e => onBlur(row.key, e)}
         />
       ),
   },
