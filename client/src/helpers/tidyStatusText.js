@@ -6,6 +6,8 @@ const tidyStatusText = status => {
       return 'rejected';
     case 'awaiting cancellation':
       return 'reviewing';
+    case 'cancelled after payment':
+      return 'cancelled';
     default:
       return status;
   }

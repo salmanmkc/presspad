@@ -190,6 +190,31 @@ const CancelledContent = ({
   );
 };
 
+const CancelledAfterPaymentContent = ({ hostName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <P mt="5" mb="1">
+        Your booking with {hostName} has been successfully cancelled.
+      </P>
+      <P mt="5" mb="1">
+        You should have been contacted by a member of our PressPad team who will
+        have advised you on next steps. If this has not happened, please{' '}
+        <a href="mailto:urgent@presspad.co.uk">contact us</a>.
+      </P>
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const ConfirmedContent = ({
   hostInfo,
   isLoading,
@@ -323,5 +348,6 @@ export {
   PaymentDueContent,
   CompletedContent,
   CancelledContent,
+  CancelledAfterPaymentContent,
   AwaitingCancellationContent,
 };

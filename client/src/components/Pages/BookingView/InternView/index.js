@@ -34,6 +34,7 @@ import {
   CompletedContent,
   AwaitingCancellationContent,
   CancelledContent,
+  CancelledAfterPaymentContent,
 } from './statusContents';
 
 import {
@@ -335,6 +336,13 @@ export default class BookingView extends Component {
           />
         ),
       },
+      cancelledAfterPayment: {
+        status: 'cancelled',
+        statusColor: 'pink',
+        statusContentsComponent: () => (
+          <CancelledAfterPaymentContent hostName={host.name} />
+        ),
+      },
       completed: {
         status: 'complete',
         statusContentsComponent: () => (
@@ -446,12 +454,16 @@ export default class BookingView extends Component {
     if (status === 'awaiting cancellation') {
       bookingStatus = bookingStatuses.awaitingCancellation;
     }
+    if (status === 'cancelled after payment') {
+      bookingStatus = bookingStatuses.cancelledAfterPayment;
+    }
 
     const decideHeadline = _status => {
       switch (_status) {
         case 'under review':
           return 'cancellation request';
         case 'cancelled':
+        case 'cancelled after payment':
           return 'booking cancelled';
         default:
           return 'booking request';
@@ -485,21 +497,22 @@ export default class BookingView extends Component {
 
         <ContentWrapper>
           <H4C mb="7">{decideHeadline(bookingStatus.status)}</H4C>
-          {bookingStatus.status !== 'cancelled' && (
-            <>
-              <H6C mb="2" color="lightGray">
-                status
-              </H6C>
-              <H5C color={bookingStatus.statusColor || 'blue'}>
-                {bookingStatus.status}
-              </H5C>
-            </>
-          )}
+
+          <H6C mb="2" color="lightGray">
+            status
+          </H6C>
+          <H5C color={bookingStatus.statusColor || 'blue'}>
+            {bookingStatus.status}
+          </H5C>
+
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
-        {!['cancelled', 'completed', 'awaiting cancellation'].includes(
-          status,
-        ) && (
+        {![
+          'cancelled',
+          'cancelled after payment',
+          'completed',
+          'awaiting cancellation',
+        ].includes(status) && (
           <CancelBookingButton
             // this loads confirm cancellatiom page and sends user and booking infos
             onClick={() => {

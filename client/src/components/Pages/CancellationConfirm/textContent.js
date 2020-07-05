@@ -27,7 +27,7 @@ const textContent = {
       If there is an issue with your{' '}
       {loggedInUserRole === 'host' ? 'guest' : 'host'} that you think we can
       help resolve without you needing to cancel your booking, please{' '}
-      <a href="mailto:someone@yoursite.com">contact us</a> here.
+      <a href="urgent@presspad.co.uk">contact us</a> here.
     </T.PS>
   ),
   cancelAfterPaymentTwoTop: role => (
