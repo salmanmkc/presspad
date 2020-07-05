@@ -553,6 +553,7 @@ export default class AdminDashboard extends Component {
                   showProfile={this.showProfile}
                   highlightVal={highlightVal}
                   handleConfirm={this.handleConfirm}
+                  selectSection={this.selectSection}
                 />
               </HostWrapper>
             )}

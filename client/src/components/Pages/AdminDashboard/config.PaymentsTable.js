@@ -55,7 +55,13 @@ const createDataSource = array =>
     return dataItem;
   });
 
-const columns = (highlightVal, handleClick, onInputChange) => [
+const columns = (
+  highlightVal,
+  handleClick,
+  onInputChange,
+  onBlur,
+  updateLoading,
+) => [
   {
     title: 'Host/Intern',
     dataIndex: 'host',
@@ -92,7 +98,7 @@ const columns = (highlightVal, handleClick, onInputChange) => [
     title: 'Bank Name',
     dataIndex: 'bank',
     key: 'bank',
-    render: text =>
+    render: (text, row) =>
       text ? (
         <Highlighter
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
@@ -102,21 +108,22 @@ const columns = (highlightVal, handleClick, onInputChange) => [
         />
       ) : (
         <Input
+          disabled={updateLoading}
           placeholder="Bank name..."
           name="bankName"
           id="bankName"
           type="text"
           style={{ width: '140px' }}
           onChange={onInputChange}
+          onBlur={() => onBlur(row.key)}
         />
-        // <ErrorMsg>{nameError}</ErrorMsg>
       ),
   },
   {
     title: 'Account Number',
     dataIndex: 'account',
     key: 'account',
-    render: text =>
+    render: (text, row) =>
       text ? (
         <Highlighter
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
@@ -126,12 +133,14 @@ const columns = (highlightVal, handleClick, onInputChange) => [
         />
       ) : (
         <Input
+          disabled={updateLoading}
           placeholder="Account number..."
           name="accountNumber"
           id="accountNumber"
           type="number"
           style={{ width: '140px' }}
           onChange={onInputChange}
+          onBlur={() => onBlur(row.key)}
         />
       ),
   },
@@ -139,7 +148,7 @@ const columns = (highlightVal, handleClick, onInputChange) => [
     title: 'Sort Code',
     dataIndex: 'sortCode',
     key: 'sortCode',
-    render: text =>
+    render: (text, row) =>
       text ? (
         <Highlighter
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
@@ -149,12 +158,14 @@ const columns = (highlightVal, handleClick, onInputChange) => [
         />
       ) : (
         <Input
+          disabled={updateLoading}
           placeholder="Sort code..."
           name="bankSortCode"
           id="bankSortCode"
           type="text"
           style={{ width: '140px' }}
           onChange={onInputChange}
+          onBlur={() => onBlur(row.key)}
         />
       ),
   },
