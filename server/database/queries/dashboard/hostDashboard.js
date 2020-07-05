@@ -72,7 +72,7 @@ const hostDashboard = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$host', '$host'] },
-                  { $ne: ['$status', bookingStatuses.cancelled] },
+                  // { $ne: ['$status', bookingStatuses.cancelled] },
                   { $ne: ['$status', bookingStatuses.rejectedByAdmin] },
                   { $ne: ['$status', bookingStatuses.awaitingAdmin] },
                 ],

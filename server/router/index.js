@@ -44,6 +44,7 @@ const {
   confirmOrCancelWithdrawRequest,
   orgPayment,
   getPaymentsInfo,
+  cancelBookingAfterPayment,
 } = require('../controllers/payments');
 const { createCoupon } = require('../controllers/coupons');
 const getAllInterns = require('../controllers/user/getAllInterns');
@@ -59,6 +60,7 @@ const { updateProfile } = require('../controllers/profile/updateProfile');
 
 // controller for admin to view all withdraw requests in presspad
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
+const updateBankDetails = require('../controllers/withdrawRequests/updateBankDetails');
 
 // IMPORT MIDDLEWARES
 const authentication = require('../middlewares/authentication');
@@ -105,6 +107,7 @@ const {
   ACCEPT_BOOKING_URL,
   REJECT_BOOKING_URL,
   CANCEL_BOOKING_URL,
+  CANCEL_BOOKING_AFTER_PAYMENT_URL,
   ORG_PAYMENT_URL,
   FIND_WITHDRAW_REQUESTS_URL,
   GET_ALL_CETIES_URL,
@@ -119,6 +122,7 @@ const {
   ADMIN_BOOKING_HISTORY,
   ADMIN_UPDATE_PROFILE,
   HOST_PROFILE_SOFT_URL,
+  ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -132,6 +136,13 @@ router.patch(REJECT_BOOKING_URL, authentication, rejectBooking);
 
 // cancel booking by id
 router.patch(CANCEL_BOOKING_URL, authentication, cancelBooking);
+
+// cancel booking by id
+router.post(
+  CANCEL_BOOKING_AFTER_PAYMENT_URL,
+  authentication,
+  cancelBookingAfterPayment,
+);
 
 // Host view intern profile
 router.get(INTERN_PROFILE_URL, authentication, hostViewInternProfile);
@@ -251,6 +262,15 @@ router.patch(
   UPDATE_WITHDRAW_REQUEST_URL,
   authentication,
   confirmOrCancelWithdrawRequest,
+);
+
+// admin updates withdraw / payment request bank details
+
+router.patch(
+  ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL,
+  authentication,
+  authorization(['admin']),
+  updateBankDetails,
 );
 
 // admin confirms or rejects booking request

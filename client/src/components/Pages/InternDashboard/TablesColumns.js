@@ -5,7 +5,7 @@ import moment from 'moment';
 import { BlueLink } from './InternDashboard.style';
 import { bookingStatus } from '../../../theme';
 import { formatPrice } from '../../../helpers';
-import tidyStatusText from '../../../helpers/tidyStatusText';
+import { tidyStatusText } from '../../../helpers/tidyStatusText';
 
 export const paymentsColumns = [
   {

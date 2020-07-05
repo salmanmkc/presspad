@@ -14,10 +14,9 @@ const getUserPreviousBookings = ({ userId, role }) =>
             bookingStatuses.rejected,
             bookingStatuses.rejectedByAdmin,
             bookingStatuses.cancelled,
+            bookingStatuses.cancelledAfterPayment,
           ],
         },
-        // only get requests for past dates
-        startDate: { $lt: new Date() },
       },
     },
     // newest on top

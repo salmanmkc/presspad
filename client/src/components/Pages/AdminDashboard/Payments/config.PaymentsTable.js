@@ -1,6 +1,6 @@
 // config file for the antd table "PaymentsTable"
 import React from 'react';
-import { Button, Popconfirm, Tooltip } from 'antd';
+import { Button, Popconfirm, Tooltip, Input } from 'antd';
 import Highlighter from 'react-highlight-words';
 
 import Icon from '../../../Common/Icon';
@@ -55,9 +55,15 @@ const createDataSource = array =>
     return dataItem;
   });
 
-const columns = (highlightVal, handleClick) => [
+const columns = (
+  highlightVal,
+  handleClick,
+  onInputChange,
+  onBlur,
+  updateLoading,
+) => [
   {
-    title: 'Host',
+    title: 'Host/Intern',
     dataIndex: 'host',
     key: 'host',
     className: 'mainCol',
@@ -92,40 +98,76 @@ const columns = (highlightVal, handleClick) => [
     title: 'Bank Name',
     dataIndex: 'bank',
     key: 'bank',
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
-        searchWords={[highlightVal]}
-        autoEscape
-        textToHighlight={text.toString()}
-      />
-    ),
+    render: (text, row) =>
+      text ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
+          searchWords={[highlightVal]}
+          autoEscape
+          textToHighlight={(text || 'N/A').toString()}
+        />
+      ) : (
+        <Input
+          disabled={updateLoading}
+          placeholder="Bank name..."
+          name="bankName"
+          id="bankName"
+          type="text"
+          style={{ width: '140px' }}
+          onChange={onInputChange}
+          onBlur={e => onBlur(row.key, e)}
+        />
+      ),
   },
   {
     title: 'Account Number',
     dataIndex: 'account',
     key: 'account',
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
-        searchWords={[highlightVal]}
-        autoEscape
-        textToHighlight={text.toString()}
-      />
-    ),
+    render: (text, row) =>
+      text ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
+          searchWords={[highlightVal]}
+          autoEscape
+          textToHighlight={(text || 'N/A').toString()}
+        />
+      ) : (
+        <Input
+          disabled={updateLoading}
+          placeholder="Account number..."
+          name="accountNumber"
+          id="accountNumber"
+          type="number"
+          style={{ width: '140px' }}
+          onChange={onInputChange}
+          onBlur={e => onBlur(row.key, e)}
+        />
+      ),
   },
   {
     title: 'Sort Code',
     dataIndex: 'sortCode',
     key: 'sortCode',
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
-        searchWords={[highlightVal]}
-        autoEscape
-        textToHighlight={text.toString()}
-      />
-    ),
+    render: (text, row) =>
+      text ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
+          searchWords={[highlightVal]}
+          autoEscape
+          textToHighlight={(text || 'N/A').toString()}
+        />
+      ) : (
+        <Input
+          disabled={updateLoading}
+          placeholder="Sort code..."
+          name="bankSortCode"
+          id="bankSortCode"
+          type="text"
+          style={{ width: '140px' }}
+          onChange={onInputChange}
+          onBlur={e => onBlur(row.key, e)}
+        />
+      ),
   },
   {
     dataIndex: 'key',
@@ -158,5 +200,4 @@ const columns = (highlightVal, handleClick) => [
     },
   },
 ];
-
 export { columns, createDataSource };

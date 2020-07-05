@@ -21,6 +21,9 @@ module.exports = () =>
             status: bookingStatuses.confirmed,
           },
           {
+            status: bookingStatuses.awaitingCancellation,
+          },
+          {
             status: 'live',
           },
         ],

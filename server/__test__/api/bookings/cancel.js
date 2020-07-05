@@ -63,25 +63,55 @@ describe('Testing for cancel booking route', () => {
 
   test('test to cancel booking with invalid request BEFORE payment', async done => {
     const { internUser } = users;
-    const { confirmedPaidFirst } = bookings;
+    const { rejectedBooking } = bookings;
 
     const token = `token=${createToken(internUser._id)}`;
 
     const data = {
-      booking: confirmedPaidFirst._id,
+      booking: rejectedBooking._id,
       cancellingUserMessage:
         'this is another test to cancel a booking before payment',
-      cancellingUserId: confirmedPaidFirst.intern._id,
+      cancellingUserId: rejectedBooking.intern._id,
     };
 
     request(app)
-      .patch(API_CANCEL_BOOKING_URL.replace(':id', confirmedPaidFirst._id))
+      .patch(API_CANCEL_BOOKING_URL.replace(':id', rejectedBooking._id))
       .send(data)
       .set('Cookie', [token])
       .expect('Content-Type', /json/)
       .expect(500)
       .end((err, res) => {
         expect(res.error).toBeDefined();
+        done(err);
+      });
+  });
+
+  test('test to request cancellation with valid request after payment', async done => {
+    const { internUser } = users;
+    const { confirmedPaidUpfront } = bookings;
+
+    const token = `token=${createToken(internUser._id)}`;
+
+    const data = {
+      booking: confirmedPaidUpfront._id,
+      cancellingUserMessage:
+        'this is another test requesting to cancel a booking after payment',
+      cancellingUserId: confirmedPaidUpfront.intern._id,
+    };
+
+    request(app)
+      .patch(API_CANCEL_BOOKING_URL.replace(':id', confirmedPaidUpfront._id))
+      .send(data)
+      .set('Cookie', [token])
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).toBeDefined();
+        expect(res.body.status).toBe('awaiting cancellation');
+        expect(res.body.cancellationDetails).toBeDefined();
+        expect(res.body.cancellationDetails.cancelledBy).toBe(
+          internUser._id.toString(),
+        );
         done(err);
       });
   });

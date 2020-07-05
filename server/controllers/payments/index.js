@@ -5,6 +5,7 @@ const {
   withdrawRequest,
   confirmOrCancelWithdrawRequest,
 } = require('./withdrawRequest');
+const cancelBookingAfterPayment = require('./cancelBookingAfterPayment');
 
 module.exports = {
   internPayment,
@@ -12,4 +13,5 @@ module.exports = {
   withdrawRequest,
   confirmOrCancelWithdrawRequest,
   getPaymentsInfo,
+  cancelBookingAfterPayment,
 };

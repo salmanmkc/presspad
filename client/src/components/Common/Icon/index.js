@@ -28,6 +28,8 @@ import QuestionCircle from './icons/QuestionCircle';
 import QuestionMark from './icons/QuestionMark';
 import MoneyBag from './icons/MoneyBag';
 import CheckMark from './icons/CheckMark';
+import ReviewExplanationMark from './icons/ReviewExplanationMark';
+import ExplanationMarkCircle from './icons/ExplanationMarkCircle';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -64,6 +66,8 @@ const iconMap = {
   moneyBag: MoneyBag,
   checkMark: CheckMark,
   questionMark: QuestionMark,
+  reviewExplanationMark: ReviewExplanationMark,
+  explanationMarkCircle: ExplanationMarkCircle,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {

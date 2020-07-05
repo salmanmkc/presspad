@@ -61,6 +61,7 @@ export default class AdminDashboard extends Component {
       hostName: '',
       email: '',
     },
+    bookingView: false,
     rejectMessage: null,
     updatingBooking: false,
     modalText: '',
@@ -71,6 +72,7 @@ export default class AdminDashboard extends Component {
     dbsDetails: { refNum: '', fileName: '' },
     userToUpdate: null,
     errors: { dbsDetails: { refNum: null, fileName: null } },
+    showSearchBar: true,
   };
 
   componentDidMount() {
@@ -96,6 +98,8 @@ export default class AdminDashboard extends Component {
       return newState;
     });
   };
+
+  setBookingView = bool => this.setState({ bookingView: bool });
 
   selectSection = section => {
     const { axiosSource } = this.state;
@@ -184,6 +188,7 @@ export default class AdminDashboard extends Component {
     ),
     filterIcon: filtered => (
       <button
+        type="button"
         style={{
           border: 'none',
           background: 'none',
@@ -339,6 +344,7 @@ export default class AdminDashboard extends Component {
         return this.approveRequestConfirm(booking);
       case 'rejectRequest':
         return this.rejectRequestConfirm(booking);
+
       default:
         return null;
     }
@@ -400,6 +406,8 @@ export default class AdminDashboard extends Component {
     }
   };
 
+  setSearchBar = bool => this.setState({ showSearchBar: bool });
+
   render() {
     const {
       activeLink,
@@ -415,7 +423,20 @@ export default class AdminDashboard extends Component {
       dbsDetails,
       userToUpdate,
       errors,
+      showSearchBar,
+      bookingView,
     } = this.state;
+
+    // returs sub titles for different sections
+    const decideContentTitle = () => {
+      if (['bookings', 'bookingHistory'].includes(activeLink) && bookingView) {
+        return '';
+      }
+      if (activeLink.toLowerCase() === 'payments') {
+        return 'Payment requests';
+      }
+      return `Your ${activeLink}`;
+    };
 
     return (
       <Wrapper>
@@ -447,13 +468,19 @@ export default class AdminDashboard extends Component {
               Payments
             </MenuItem>
             <MenuItem
-              onClick={() => this.selectSection('bookings')}
+              onClick={() => {
+                this.setBookingView(false);
+                this.selectSection('bookings');
+              }}
               active={activeLink === 'bookings'} // change here
             >
               Bookings
             </MenuItem>
             <MenuItem
-              onClick={() => this.selectSection('bookingHistory')}
+              onClick={() => {
+                this.setBookingView(false);
+                this.selectSection('bookingHistory');
+              }}
               active={activeLink === 'bookingHistory'} // change here
             >
               Booking History
@@ -480,16 +507,14 @@ export default class AdminDashboard extends Component {
           />
         ) : (
           <MainSection>
-            <ContentTitle>
-              {activeLink.toLowerCase() === 'payments'
-                ? 'Withdraw requests'
-                : `Your ${activeLink}`}
-            </ContentTitle>
-            <SearchBar
-              data={filteredData}
-              handleSearchBar={this.handleSearchBar}
-              highlightVal={highlightVal}
-            />
+            <ContentTitle>{decideContentTitle()}</ContentTitle>
+            {showSearchBar && (
+              <SearchBar
+                data={filteredData}
+                handleSearchBar={this.handleSearchBar}
+                highlightVal={highlightVal}
+              />
+            )}
             {activeLink === 'clients' && (
               <ClientTable
                 getColumnSearchProps={this.getColumnSearchProps}
@@ -533,12 +558,16 @@ export default class AdminDashboard extends Component {
                   showProfile={this.showProfile}
                   highlightVal={highlightVal}
                   handleConfirm={this.handleConfirm}
+                  selectSection={this.selectSection}
                 />
               </HostWrapper>
             )}
             {activeLink === 'bookings' && (
               <HostWrapper>
                 <BookingsTable
+                  bookingView={bookingView}
+                  setBookingView={this.setBookingView}
+                  setSearchBar={this.setSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
                   data={filteredData}
@@ -554,6 +583,9 @@ export default class AdminDashboard extends Component {
             {activeLink === 'bookingHistory' && (
               <HostWrapper>
                 <BookingsTable
+                  bookingView={bookingView}
+                  setBookingView={this.setBookingView}
+                  setSearchBar={this.setSearchBar}
                   getColumnSearchProps={this.getColumnSearchProps}
                   loading={loading}
                   data={filteredData}
@@ -563,6 +595,7 @@ export default class AdminDashboard extends Component {
                   handleAction={this.handleAction}
                   triggerHostView={this.triggerHostView}
                   triggerInternView={this.triggerInternView}
+                  selectSection={this.selectSection}
                 />
               </HostWrapper>
             )}

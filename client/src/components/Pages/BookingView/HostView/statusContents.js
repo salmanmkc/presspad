@@ -120,6 +120,28 @@ const RejectedContent = () => (
   </>
 );
 
+const AwaitingCancellationContent = () => {
+  const history = useHistory();
+  return (
+    <>
+      <T.P mt="5" mb="1">
+        Thank you for your request. At PressPad we take booking cancellations
+        very seriously. Our team will be looking at this and will be in touch to
+        personally resolve the issue as soon as possible.
+      </T.P>
+
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CancelledContent = ({
   internName,
   cancellingUserMessage,
@@ -143,6 +165,31 @@ const CancelledContent = ({
           provided: <br /> <br /> {cancellingUserMessage}
         </T.P>
       )}
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
+const CancelledAfterPaymentContent = ({ internName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <T.P mt="5" mb="1">
+        Your booking with {internName} has been successfully cancelled.
+      </T.P>
+      <T.P mt="5" mb="1">
+        You should have been contacted by a member of our PressPad team who will
+        have advised you on next steps. If this has not happened, please{' '}
+        <a href="mailto:urgent@presspad.co.uk">contact us</a>.
+      </T.P>
       <ButtonNew
         small
         type="primary"
@@ -198,4 +245,6 @@ export {
   ConfirmedContent,
   CompletedContent,
   CancelledContent,
+  AwaitingCancellationContent,
+  CancelledAfterPaymentContent,
 };

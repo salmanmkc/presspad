@@ -6,10 +6,13 @@ import Highlighter from 'react-highlight-words';
 import { PXS, PS } from '../../../Common/Typography';
 import { colors } from '../../../../theme';
 import * as S from '../AdminDashboard.style';
+import { tidyStatusTextAdmin } from '../../../../helpers/tidyStatusText';
 
 //  set colours for tags in the table
 const tagColors = {
   'awaiting admin': colors.pink,
+  'awaiting cancellation': colors.pink,
+  'cancelled after payment': colors.pink,
   pending: colors.darkGray,
   accepted: colors.lightBlue,
   confirmed: colors.yellow,
@@ -143,7 +146,9 @@ const columns = (
           highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
           searchWords={[highlightVal]}
           autoEscape
-          textToHighlight={status ? status.toUpperCase() : ''}
+          textToHighlight={
+            status ? tidyStatusTextAdmin(status).toUpperCase() : ''
+          }
         />
       </Tag>
     ),

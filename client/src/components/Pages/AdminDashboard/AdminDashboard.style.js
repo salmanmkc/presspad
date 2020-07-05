@@ -4,7 +4,6 @@ import { colors, shadows, breakpoints } from '../../../theme';
 
 export const Wrapper = styled.div`
   padding-top: 6rem;
-
   height: 100%;
 `;
 

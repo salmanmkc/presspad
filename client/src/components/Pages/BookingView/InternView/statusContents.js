@@ -119,6 +119,28 @@ const RejectedContent = ({ rejectReason }) => {
   );
 };
 
+const AwaitingCancellationContent = ({ hostName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <P mt="5" mb="1">
+        Thank you for your request. At PressPad we take booking cancellations
+        very seriously. Our team will be looking at this and will be in touch to
+        personally resolve the issue as soon as possible.
+      </P>
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CancelledContent = ({
   hostName,
   cancelledByIntern,
@@ -164,6 +186,31 @@ const CancelledContent = ({
           </ButtonNew>
         </>
       )}
+    </>
+  );
+};
+
+const CancelledAfterPaymentContent = ({ hostName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <P mt="5" mb="1">
+        Your booking with {hostName} has been successfully cancelled.
+      </P>
+      <P mt="5" mb="1">
+        You should have been contacted by a member of our PressPad team who will
+        have advised you on next steps. If this has not happened, please{' '}
+        <a href="mailto:urgent@presspad.co.uk">contact us</a>.
+      </P>
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
     </>
   );
 };
@@ -301,4 +348,6 @@ export {
   PaymentDueContent,
   CompletedContent,
   CancelledContent,
+  CancelledAfterPaymentContent,
+  AwaitingCancellationContent,
 };

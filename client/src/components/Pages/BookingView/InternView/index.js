@@ -15,7 +15,6 @@ import {
 import {
   calculatePrice,
   calculateHostRespondingTime,
-  formatPrice,
 } from '../../../../helpers';
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
@@ -33,7 +32,9 @@ import {
   ConfirmedContent,
   PaymentDueContent,
   CompletedContent,
+  AwaitingCancellationContent,
   CancelledContent,
+  CancelledAfterPaymentContent,
 } from './statusContents';
 
 import {
@@ -257,6 +258,7 @@ export default class BookingView extends Component {
     let newInstallments = [];
     const {
       price,
+      payedAmount,
       startDate,
       endDate,
       status,
@@ -314,6 +316,11 @@ export default class BookingView extends Component {
           <RejectedContent rejectReason={rejectReason} />
         ),
       },
+      awaitingCancellation: {
+        status: 'under review',
+        statusColor: 'pink',
+        statusContentsComponent: () => <AwaitingCancellationContent />,
+      },
       cancelled: {
         status: 'cancelled',
         statusColor: 'pink',
@@ -327,6 +334,13 @@ export default class BookingView extends Component {
             }
             hostName={host.name}
           />
+        ),
+      },
+      cancelledAfterPayment: {
+        status: 'cancelled',
+        statusColor: 'pink',
+        statusContentsComponent: () => (
+          <CancelledAfterPaymentContent hostName={host.name} />
         ),
       },
       completed: {
@@ -437,7 +451,24 @@ export default class BookingView extends Component {
       // toDo "is there a different wording for rejecting by admin?"
       bookingStatus = bookingStatuses.rejected;
     }
+    if (status === 'awaiting cancellation') {
+      bookingStatus = bookingStatuses.awaitingCancellation;
+    }
+    if (status === 'cancelled after payment') {
+      bookingStatus = bookingStatuses.cancelledAfterPayment;
+    }
 
+    const decideHeadline = _status => {
+      switch (_status) {
+        case 'under review':
+          return 'cancellation request';
+        case 'cancelled':
+        case 'cancelled after payment':
+          return 'booking cancelled';
+        default:
+          return 'booking request';
+      }
+    };
     return (
       <Wrapper>
         {/* PayNowModal should be wrapped in an Elements component in order to stripe api to work */}
@@ -465,24 +496,23 @@ export default class BookingView extends Component {
         </Elements>
 
         <ContentWrapper>
-          <H4C mb="7">
-            {bookingStatus.status === 'cancelled'
-              ? 'booking cancelled'
-              : 'booking request'}
-          </H4C>
-          {bookingStatus.status !== 'cancelled' && (
-            <>
-              <H6C mb="2" color="lightGray">
-                status
-              </H6C>
-              <H5C color={bookingStatus.statusColor || 'blue'}>
-                {bookingStatus.status}
-              </H5C>
-            </>
-          )}
+          <H4C mb="7">{decideHeadline(bookingStatus.status)}</H4C>
+
+          <H6C mb="2" color="lightGray">
+            status
+          </H6C>
+          <H5C color={bookingStatus.statusColor || 'blue'}>
+            {bookingStatus.status}
+          </H5C>
+
           {isLoading ? <Spin /> : bookingStatus.statusContentsComponent()}
         </ContentWrapper>
-        {status !== 'cancelled' && status !== 'completed' && (
+        {![
+          'cancelled',
+          'cancelled after payment',
+          'completed',
+          'awaiting cancellation',
+        ].includes(status) && (
           <CancelBookingButton
             // this loads confirm cancellatiom page and sends user and booking infos
             onClick={() => {
@@ -500,7 +530,8 @@ export default class BookingView extends Component {
           </CancelBookingButton>
         )}
         <BookingDates
-          price={formatPrice(price)}
+          payedSoFar={payedAmount}
+          price={price}
           startDate={startDate}
           endDate={endDate}
           intern

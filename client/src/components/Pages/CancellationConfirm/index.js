@@ -12,15 +12,21 @@ import ButtonNew from '../../Common/ButtonNew';
 import { BOOKING_VIEW_URL, Error500 } from '../../../constants/navRoutes';
 import { API_CANCEL_BOOKING_URL } from '../../../constants/apiRoutes';
 
+import textContent from './textContent';
+
 const { TextArea } = Input;
 
 const CancellationConfirm = ({ ...props }) => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState('');
+  const [cancelAfterPage, setCancelAfterPage] = useState(1);
 
+  // includes booking and cancellation details
   const {
     location: { state },
+    role: loggedInUserRole,
   } = props;
+
   const { bookingInfo, cancellingUserInfo } = state;
 
   const {
@@ -34,26 +40,36 @@ const CancellationConfirm = ({ ...props }) => {
     host,
   } = bookingInfo;
 
-  const { id: cancellingUserId, role } = cancellingUserInfo;
+  const { id: cancellingUserId, role: cancellingUserRole } = cancellingUserInfo;
 
-  const decideName = () => (role === 'host' ? intern.name : host.name);
+  const decideName = () =>
+    cancellingUserRole === 'host' ? intern.name : host.name;
   const nameCancelledUser = decideName();
 
-  useEffect(() => {
-    if (message.length < 4) {
-      setError('Message must be at least 4 characters long.');
-    } else {
-      setError(null);
-    }
-  }, [message]);
-
-  const onChange = e => setMessage(e.target.value);
-
-  // decide if booking is valid to be cancelled without involving admin
+  // decide if booking is valid to be cancelled before or after payment
   const canCancelDirectly =
     payedAmount === 0 &&
     ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(status);
 
+  const canCancelAfterPayment =
+    payedAmount > 0 && ['accepted', 'confirmed'].includes(status);
+
+  // validates length of message input
+  useEffect(() => {
+    const wordCount = message.trim().split(/\s+/).length;
+    if (
+      (canCancelDirectly && wordCount < 5) ||
+      (canCancelAfterPayment && cancelAfterPage === 2 && wordCount < 5)
+    ) {
+      setError('Please write some words about why you want to cancel.');
+    } else {
+      setError(null);
+    }
+  }, [canCancelAfterPayment, canCancelDirectly, cancelAfterPage, message]);
+
+  const onChange = e => setMessage(e.target.value);
+
+  // message input area
   const renderTextArea = () => (
     <>
       <TextArea
@@ -73,9 +89,11 @@ const CancellationConfirm = ({ ...props }) => {
 
   const handleCancellation = async () => {
     // update booking status and redirect to booking confirmation page
-    // case: booking before payment
     try {
-      if (canCancelDirectly) {
+      if (
+        canCancelDirectly ||
+        (canCancelAfterPayment && cancelAfterPage === 2)
+      ) {
         const { data } = await axios.patch(
           API_CANCEL_BOOKING_URL.replace(':id', bookingId),
           {
@@ -106,15 +124,21 @@ const CancellationConfirm = ({ ...props }) => {
           {/* TEXT Variations */}
           {canCancelDirectly && (
             <>
-              <T.PS mb="5">
-                This will immediately cancel your booking with
-                <strong> {nameCancelledUser}</strong> and cannot be undone.
-              </T.PS>
-              <T.PS mb="5">
-                Please include a message to let
-                <strong> {nameCancelledUser.split(' ')[0]} </strong>
-                know why you now need to cancel.
-              </T.PS>
+              {textContent.cancelBeforePaymentTop(nameCancelledUser)}
+              {textContent.cancelBeforePaymentBottom(nameCancelledUser)}
+              {renderTextArea()}
+            </>
+          )}
+          {canCancelAfterPayment && cancelAfterPage === 1 && (
+            <>
+              {textContent.cancelAfterPaymentOneTop()}
+              {textContent.cancelAfterPaymentOneBottom(loggedInUserRole)}
+            </>
+          )}
+          {canCancelAfterPayment && cancelAfterPage === 2 && (
+            <>
+              {textContent.cancelAfterPaymentTwoTop(loggedInUserRole)}
+              {textContent.cancelAfterPaymentTwoBottom()}
               {renderTextArea()}
             </>
           )}
@@ -124,29 +148,44 @@ const CancellationConfirm = ({ ...props }) => {
               small
               outline
               type="tertiary"
-              onClick={() =>
-                props.history.push(BOOKING_VIEW_URL.replace(':id', bookingId))
-              }
+              onClick={() => {
+                // reset page to 1
+                setCancelAfterPage(1);
+                props.history.push(BOOKING_VIEW_URL.replace(':id', bookingId));
+              }}
             >
               go back
             </ButtonNew>
-
             <ButtonNew
               small
-              disabled={error || !message.length}
+              disabled={
+                error ||
+                // invalid message input for direct cancel or page 2 after payment cancel
+                (canCancelDirectly && !message.length) ||
+                (canCancelAfterPayment &&
+                  cancelAfterPage === 2 &&
+                  !message.length)
+              }
               type="secondary"
-              onClick={() => handleCancellation()}
+              onClick={() =>
+                // check if on page 2 or can cancel directly
+                canCancelAfterPayment && cancelAfterPage === 1
+                  ? setCancelAfterPage(2)
+                  : handleCancellation()
+              }
             >
               cancel booking
             </ButtonNew>
           </S.ButtonContainer>
         </S.CancelContainer>
       </S.ContentWrapper>
+
       <BookingDates
         price={price}
+        payedSoFar={payedAmount}
         startDate={startDate}
         endDate={endDate}
-        intern={role === 'intern'}
+        intern={cancellingUserRole === 'intern'}
       />
     </S.Wrapper>
   );
