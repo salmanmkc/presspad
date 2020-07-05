@@ -20,6 +20,7 @@ import {
   CompletedContent,
   CancelledContent,
   AwaitingCancellationContent,
+  CancelledAfterPaymentContent,
 } from './statusContents';
 import WarningModal from './WarningModal';
 import { Wrapper, ContentWrapper, TipsWrapper } from './HostView.style';
@@ -189,7 +190,9 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         internName={intern.name}
       />
     ),
-
+    'cancelled after payment': () => (
+      <CancelledAfterPaymentContent internName={intern.name} />
+    ),
     completed: () => (
       <CompletedContent
         internId={internId}
@@ -224,12 +227,17 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
             <H5C color="pink">under review</H5C>
           </>
         )}
-        {status === 'cancelled' && <H4C mb="7">booking cancelled</H4C>}
+        {['cancelled', 'cancelled after payment'].includes(status) && (
+          <H4C mb="7">booking cancelled</H4C>
+        )}
 
         {statusContents[status] && statusContents[status]()}
-        {!['completed', 'cancelled', 'awaiting cancellation'].includes(
-          status,
-        ) && (
+        {![
+          'completed',
+          'cancelled',
+          'awaiting cancellation',
+          'cancelled after payment',
+        ].includes(status) && (
           <>
             <HostInternInfo
               info={internInfo}
@@ -266,9 +274,12 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         )}
       </ContentWrapper>
 
-      {!['completed', 'cancelled', 'awaiting cancellation'].includes(
-        status,
-      ) && (
+      {![
+        'completed',
+        'cancelled',
+        'awaiting cancellation',
+        'cancelled after payment',
+      ].includes(status) && (
         <CancelBookingButton
           // this loads confirm cancellatiom page and sends user and booking infos
           onClick={() => {

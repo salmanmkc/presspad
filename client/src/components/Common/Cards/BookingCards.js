@@ -4,7 +4,7 @@ import * as S from './style';
 import * as T from '../Typography';
 import Icon from '../Icon';
 import { truncateString, formatPrice } from '../../../helpers';
-import tidyStatusText from '../../../helpers/tidyStatusText';
+import { tidyStatusText } from '../../../helpers/tidyStatusText';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
 import { BOOKING_VIEW_URL } from '../../../constants/navRoutes';

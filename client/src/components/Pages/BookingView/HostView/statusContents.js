@@ -177,6 +177,31 @@ const CancelledContent = ({
   );
 };
 
+const CancelledAfterPaymentContent = ({ internName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <T.P mt="5" mb="1">
+        Your booking with {internName} has been successfully cancelled.
+      </T.P>
+      <T.P mt="5" mb="1">
+        You should have been contacted by a member of our PressPad team who will
+        have advised you on next steps. If this has not happened, please{' '}
+        <a href="mailto:urgent@presspad.co.uk">contact us</a>.
+      </T.P>
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CompletedContent = ({
   internId,
   internName,
@@ -221,4 +246,5 @@ export {
   CompletedContent,
   CancelledContent,
   AwaitingCancellationContent,
+  CancelledAfterPaymentContent,
 };

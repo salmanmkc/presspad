@@ -75,8 +75,7 @@ export default class AdminDashboard extends Component {
   };
 
   componentDidMount() {
-    // TODO change back to clients
-    this.selectSection('bookingHistory');
+    this.selectSection('clients');
   }
 
   triggerInternView = (internId = '') => {
