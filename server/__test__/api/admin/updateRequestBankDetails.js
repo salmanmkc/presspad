@@ -31,13 +31,12 @@ describe('Testing for updating bank details route', () => {
   });
 
   // tests user validation
-  test('Admin is able to view all withdrawal requests', async done => {
+  test('Admin is able to update a interns bank details', async done => {
     const { adminUser } = users;
-
     const { pendingInternWithdrawRequest } = withdrawRequests;
 
     const data = {
-      withdrawRequestId: pendingInternWithdrawRequest._id,
+      requestId: pendingInternWithdrawRequest._id,
       bankDetails: {
         bankName: 'Name of bank',
         bankSortCode: '12345678',
