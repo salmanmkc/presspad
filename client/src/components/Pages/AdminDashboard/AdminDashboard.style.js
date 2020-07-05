@@ -48,7 +48,7 @@ export const MenuItem = styled.div`
 `;
 
 export const MainSection = styled.div`
-  background-color: ${colors.blueGray};
+  background-color: ${colors.white};
   width: 100%;
   display: flex;
   padding: 4rem 3rem;
@@ -158,4 +158,25 @@ export const EditButton = styled.button`
   padding-top: 5px;
   text-align: right;
   width: 100%;
+`;
+
+export const TopStatsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+  margin-bottom: -1rem;
+`;
+
+export const TopStatsPaymentWrapper = styled.div`
+  width: 90%;
+  display: flex;
+`;
+
+export const Stat = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 `;

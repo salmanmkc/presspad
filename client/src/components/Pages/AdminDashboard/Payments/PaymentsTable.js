@@ -4,7 +4,7 @@ import { Table } from 'antd';
 import { columns, createDataSource } from './config.PaymentsTable';
 
 const PaymentsTable = ({ data, highlightVal, handleConfirm, loading }) => {
-  const dataSource = loading ? [] : createDataSource(data);
+  const dataSource = loading ? [] : createDataSource(data.withdrawRequests);
 
   return (
     <Table

@@ -3,10 +3,10 @@ import React from 'react';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import Highlighter from 'react-highlight-words';
 
-import Icon from '../../Common/Icon';
+import Icon from '../../../Common/Icon';
 
-import { colors } from '../../../theme';
-import { formatPrice } from '../../../helpers';
+import { colors } from '../../../../theme';
+import { formatPrice } from '../../../../helpers';
 
 const CheckBoxJsx = ({ paymentStatus }) => {
   switch (paymentStatus) {
