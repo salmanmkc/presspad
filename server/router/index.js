@@ -60,6 +60,7 @@ const { updateProfile } = require('../controllers/profile/updateProfile');
 
 // controller for admin to view all withdraw requests in presspad
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
+const updateBankDetails = require('../controllers/withdrawRequests/updateBankDetails');
 
 // IMPORT MIDDLEWARES
 const authentication = require('../middlewares/authentication');
@@ -121,6 +122,7 @@ const {
   ADMIN_BOOKING_HISTORY,
   ADMIN_UPDATE_PROFILE,
   HOST_PROFILE_SOFT_URL,
+  ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -260,6 +262,15 @@ router.patch(
   UPDATE_WITHDRAW_REQUEST_URL,
   authentication,
   confirmOrCancelWithdrawRequest,
+);
+
+// admin updates withdraw / payment request bank details
+
+router.patch(
+  ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL,
+  authentication,
+  authorization(['admin']),
+  updateBankDetails,
 );
 
 // admin confirms or rejects booking request

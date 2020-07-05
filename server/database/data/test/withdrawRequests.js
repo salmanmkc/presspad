@@ -3,8 +3,8 @@ const WithdrawRequest = require('../../models/WithdrawRequest');
 const reset = () => WithdrawRequest.deleteMany();
 
 const createAll = async ({ users, accounts }) => {
-  const { hostUser } = users;
-  const { hostAccount } = accounts;
+  const { hostUser, internUser } = users;
+  const { hostAccount, internAccount } = accounts;
 
   const withdrawRequests = [
     {
@@ -27,14 +27,26 @@ const createAll = async ({ users, accounts }) => {
       accountNumber: 'accountNumber',
       userType: 'host',
     },
+    {
+      user: internUser._id,
+      account: internAccount._id,
+      status: 'pending',
+      amount: 10000,
+      userType: 'intern',
+    },
   ];
 
   const [
     pendingWithdrawRequest,
     transferedWithdrawRequest,
+    pendingInternWithdrawRequest,
   ] = await WithdrawRequest.create(withdrawRequests);
 
-  return { pendingWithdrawRequest, transferedWithdrawRequest };
+  return {
+    pendingWithdrawRequest,
+    transferedWithdrawRequest,
+    pendingInternWithdrawRequest,
+  };
 };
 
 module.exports = {
