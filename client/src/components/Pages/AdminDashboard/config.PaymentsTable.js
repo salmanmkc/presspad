@@ -126,10 +126,10 @@ const columns = (highlightVal, handleClick, onInputChange) => [
         />
       ) : (
         <Input
-          placeholder="Sort code..."
-          name="bankSortCode"
-          id="bankSortCode"
-          type="text"
+          placeholder="Account number..."
+          name="accountNumber"
+          id="accountNumber"
+          type="number"
           style={{ width: '140px' }}
           onChange={onInputChange}
         />
@@ -139,14 +139,24 @@ const columns = (highlightVal, handleClick, onInputChange) => [
     title: 'Sort Code',
     dataIndex: 'sortCode',
     key: 'sortCode',
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
-        searchWords={[highlightVal]}
-        autoEscape
-        textToHighlight={(text || 'N/A').toString()}
-      />
-    ),
+    render: text =>
+      text ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: colors.yellow, padding: 0 }}
+          searchWords={[highlightVal]}
+          autoEscape
+          textToHighlight={(text || 'N/A').toString()}
+        />
+      ) : (
+        <Input
+          placeholder="Sort code..."
+          name="bankSortCode"
+          id="bankSortCode"
+          type="text"
+          style={{ width: '140px' }}
+          onChange={onInputChange}
+        />
+      ),
   },
   {
     dataIndex: 'key',

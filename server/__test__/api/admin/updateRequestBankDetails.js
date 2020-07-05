@@ -55,7 +55,10 @@ describe('Testing for updating bank details route', () => {
       .expect('Content-Type', /json/)
       .end(async (error, response) => {
         if (error) return done(error);
-        console.log(response.body);
+        expect(response.body).toBeDefined();
+        expect(response.body.accountNumber).toBeDefined();
+        expect(response.body.bankSortCode).toBeDefined();
+        expect(response.body.bankName).toBeDefined();
         return done();
       });
   });
