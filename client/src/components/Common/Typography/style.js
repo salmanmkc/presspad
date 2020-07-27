@@ -16,6 +16,12 @@ const CommonStyle = css`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'unset')};
 `;
 
+export const Heading0 = styled.h1`
+  ${CommonStyle};
+  font-size: 130px;
+  line-height: 150px;
+`;
+
 export const Heading1 = styled.h1`
   ${CommonStyle};
   font-size: 60px;

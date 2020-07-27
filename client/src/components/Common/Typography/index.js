@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Heading0,
   Heading1,
   Heading2,
   Heading3,
@@ -18,6 +19,10 @@ import {
   StyledSectionTitle,
   StyledSpan,
 } from './style';
+
+const H0 = ({ children, ...props }) => (
+  <Heading0 {...props}>{children}</Heading0>
+);
 
 const H1 = ({ children, ...props }) => (
   <Heading1 {...props}>{children}</Heading1>
@@ -39,11 +44,18 @@ const H5 = ({ children, ...props }) => (
   <Heading5 {...props}>{children}</Heading5>
 );
 
+const H0C = ({ children, ...props }) => (
+  <H0 caps {...props}>
+    {children}
+  </H0>
+);
+
 const H1C = ({ children, ...props }) => (
   <H1 caps {...props}>
     {children}
   </H1>
 );
+
 const H2C = ({ children, ...props }) => (
   <H2 caps {...props}>
     {children}
@@ -74,7 +86,7 @@ const H6C = ({ children, ...props }) => (
 );
 
 const H7C = ({ children, ...props }) => (
-  <Heading7 caps {...props}>
+  <Heading7 caps color={props.color || 'gray'} {...props}>
     {children}
   </Heading7>
 );
@@ -133,6 +145,7 @@ export {
   H3,
   H4,
   H5,
+  H0C,
   H1C,
   H2C,
   H3C,
