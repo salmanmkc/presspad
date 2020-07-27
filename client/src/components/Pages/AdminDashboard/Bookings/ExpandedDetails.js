@@ -29,7 +29,11 @@ const ExpandedDetails = ({ record }) => (
       </S.DetailsItem>
       <S.DetailsItem>
         <PXSBold>Proof of Internship</PXSBold>
-        <PXS>{record.intern.internship['Proof of Internship'].fileName}</PXS>
+        <a href={record.intern.internship['Proof of Internship'].url}>
+          <PXS color={colors.blue}>
+            {record.intern.internship['Proof of Internship'].fileName}
+          </PXS>
+        </a>
       </S.DetailsItem>
     </S.BookingDetailsRow>
     <H7C mb="2">Host Details</H7C>
