@@ -2,12 +2,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { Button, message, Modal, Input as antInput } from 'antd';
+import { Button, message, Modal, Input as antInput, Input } from 'antd';
 
 import Icon from '../../Common/Icon';
 
 import Field from '../../Common/ProfileComponents/Field';
-import Input from '../../Common/ProfileComponents/Field/Input';
 
 // SUB COMPONENTS
 import ClientTable from './ClientTable';
@@ -174,9 +173,7 @@ export default class AdminDashboard extends Component {
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
+        />
         <Button
           onClick={() => this.handleReset(clearFilters)}
           size="small"
@@ -211,7 +208,7 @@ export default class AdminDashboard extends Component {
         .includes(value.toLowerCase()),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
-        setTimeout(() => this.searchInput.select());
+        setTimeout(() => this.searchInput && this.searchInput.select());
       }
     },
   });
