@@ -36,7 +36,7 @@ export const Heading3 = styled.h3`
 
 export const Heading4 = styled.h4`
   ${CommonStyle};
-  font-size: 22px;
+  font-size: 24px;
   line-height: 26px;
 `;
 
