@@ -22,15 +22,23 @@ import {
 const H1 = ({ children, ...props }) => (
   <Heading1 {...props}>{children}</Heading1>
 );
+
 const H2 = ({ children, ...props }) => (
   <Heading2 {...props}>{children}</Heading2>
 );
+
 const H3 = ({ children, ...props }) => (
   <Heading3 {...props}>{children}</Heading3>
 );
+
 const H4 = ({ children, ...props }) => (
   <Heading4 {...props}>{children}</Heading4>
 );
+
+const H5 = ({ children, ...props }) => (
+  <Heading5 {...props}>{children}</Heading5>
+);
+
 const H1C = ({ children, ...props }) => (
   <H1 caps {...props}>
     {children}
@@ -46,21 +54,25 @@ const H3C = ({ children, ...props }) => (
     {children}
   </H3>
 );
+
 const H4C = ({ children, ...props }) => (
   <H4 caps {...props}>
     {children}
   </H4>
 );
+
 const H5C = ({ children, ...props }) => (
   <Heading5 caps {...props}>
     {children}
   </Heading5>
 );
+
 const H6C = ({ children, ...props }) => (
   <Heading6 caps {...props}>
     {children}
   </Heading6>
 );
+
 const H7C = ({ children, ...props }) => (
   <Heading7 caps {...props}>
     {children}
@@ -120,6 +132,7 @@ export {
   H2,
   H3,
   H4,
+  H5,
   H1C,
   H2C,
   H3C,
