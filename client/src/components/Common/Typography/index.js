@@ -99,6 +99,7 @@ const H8C = ({ children, ...props }) => (
 
 const PXL = ({ children, ...props }) => <BodyXL {...props}>{children}</BodyXL>;
 const PL = ({ children, ...props }) => <BodyL {...props}>{children}</BodyL>;
+const PLBold = ({ children, ...props }) => <BodyL {...props}>{children}</BodyL>;
 const P = ({ children, ...props }) => <Body {...props}>{children}</Body>;
 const PBold = ({ children, ...props }) => <BodyB {...props}>{children}</BodyB>;
 const PS = ({ children, ...props }) => <BodyS {...props}>{children}</BodyS>;
@@ -159,6 +160,7 @@ export {
   PL,
   P,
   PBold,
+  PLBold,
   PS,
   PSBold,
   PXS,

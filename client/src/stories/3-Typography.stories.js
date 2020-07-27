@@ -54,6 +54,13 @@ export const PExtraLarge = () => (
   </PXL>
 );
 
+export const PLargeBold = () => (
+  <PL bold>
+    Large body text (PL) <br />
+    {loremIpsum}
+  </PL>
+);
+
 export const PLarge = () => (
   <PL>
     Large body text (PL) <br />

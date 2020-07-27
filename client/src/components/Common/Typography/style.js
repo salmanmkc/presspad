@@ -94,19 +94,19 @@ export const BodyXL = styled.p`
 export const BodyL = styled.p`
   ${CommonParagraphStyle};
   font-size: 22px;
-  line-height: 33px;
+  fontline-height: 33px;
 `;
 
 export const Body = styled.p`
   ${CommonParagraphStyle};
-  font-size: 18px;
+  font-size: 16px;
   line-height: 27px;
 `;
 
 export const BodyB = styled.p`
   ${CommonParagraphStyle};
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 30px;
 `;
 
