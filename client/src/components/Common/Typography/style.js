@@ -124,7 +124,7 @@ export const BodyXS = styled.p`
 
 export const StyledLink = styled(Link)`
   ${CommonStyle};
-  font-size: ${({ fz }) => (fz ? `${fz}px` : '20px')};
+  font-size: ${({ fz }) => (fz ? `${fz}px` : '14px')};
   cursor: pointer;
   font-weight: ${({ light }) => (light ? 'normal' : 'bold')};
 `;
