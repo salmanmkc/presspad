@@ -18,7 +18,7 @@ export const Row = styled.div`
   }
 
   @media ${breakpoints.mobileM} {
-    justify-content: ${({ jcT, jc, jcM }) => jcM || jcT || jc || 'left'};
+    justify-content: ${({ jcT, jc, jcM }) => jcM || jcT || jc || 'flex-start'};
   }
 `;
 
