@@ -1,3 +1,9 @@
+describe('test', () => {
+  test('should be 1', () => {
+    expect(1).toBe(1);
+  });
+});
+
 // const request = require('supertest');
 // const moment = require('moment');
 
