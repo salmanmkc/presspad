@@ -14,7 +14,7 @@ export const Row = styled.div`
   align-items: ${({ ai }) => ai || 'flex-start'};
 
   @media ${breakpoints.TABLET_WIDTH} {
-    justify-content: ${({ jcT, jc }) => jcT || jc || 'left'};
+    justify-content: ${({ jcT, jc }) => jcT || jc || 'flex-start'};
   }
 
   @media ${breakpoints.mobileM} {
