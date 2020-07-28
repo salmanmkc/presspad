@@ -3,7 +3,10 @@ import styled, { css, withTheme } from 'styled-components';
 import * as T from '../Typography';
 
 const sharedStyles = css`
-  padding-left: 120px;
+  padding-left: 30px;
+  @media ${({ theme }) => theme.breakpoints.mobileXL} {
+    padding-left: 120px;
+  }
 `;
 
 const AlternateTitle = styled.div`
@@ -17,6 +20,7 @@ const AlternateTitle = styled.div`
     width: 100%;
     height: 50%;
     color: ${({ theme, bgColor2 }) => bgColor2 || theme.colors.blue};
+    padding-top: 20px;
   }
 
   & .bottom {
@@ -25,6 +29,7 @@ const AlternateTitle = styled.div`
     width: 100%;
     height: 50%;
     color: ${({ theme, bgColor1 }) => bgColor1 || theme.colors.white};
+    padding-bottom: 20px;
   }
 `;
 
