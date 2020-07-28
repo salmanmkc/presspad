@@ -104,7 +104,6 @@ const columns = (
     title: 'Length of Stay',
     dataIndex: 'lengthOfStay',
     key: 'lengthOfStay',
-    ...getColumnSearchProps('lengthOfStay'),
     sorter: (a, b) =>
       lengthOfStay(a.startDate, a.endDate) -
       lengthOfStay(b.startDate, b.endDate),
@@ -124,7 +123,6 @@ const columns = (
     title: 'Paid by Organisation',
     dataIndex: 'coupon',
     key: 'coupon',
-    ...getColumnSearchProps('coupon'),
     render: coupon =>
       coupon ? (
         <S.Discount>
