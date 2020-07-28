@@ -119,7 +119,7 @@ const RejectedContent = ({ rejectReason }) => {
   );
 };
 
-const AwaitingCancellationContent = ({ hostName }) => {
+const AwaitingCancellationContent = () => {
   const history = useHistory();
 
   return (
@@ -210,6 +210,38 @@ const CancelledAfterPaymentContent = ({ hostName }) => {
         onClick={() => history.push(DASHBOARD_URL)}
       >
         go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
+const AutomaticCancelledContent = () => {
+  const history = useHistory();
+
+  return (
+    <>
+      <PS mt="5" mb="1">
+        Unfortunately you did not pay within the required 48 hours and so your
+        booking has been cancelled.
+      </PS>
+      <PS mt="5" mb="1">
+        Please note that repeated failed bookings could result in your account
+        being frozen.
+      </PS>
+
+      <PS mt="5" mb="1">
+        If for any reason this does not look right, please{' '}
+        <a href="mailto:urgent@presspad.co.uk">contact us</a> so we can help
+        resolve the issue..
+      </PS>
+      <ButtonNew
+        small
+        type="tertiary"
+        mt="4"
+        outline
+        onClick={() => history.push(HOSTS_URL)}
+      >
+        find another host
       </ButtonNew>
     </>
   );
@@ -349,5 +381,6 @@ export {
   CompletedContent,
   CancelledContent,
   CancelledAfterPaymentContent,
+  AutomaticCancelledContent,
   AwaitingCancellationContent,
 };
