@@ -33,7 +33,14 @@ const AlternateTitle = styled.div`
   }
 `;
 
-const Title = withTheme(({ children }) => {
+const WithBackground = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+  background-color: ${({ theme, bgColor }) => bgColor || theme.colors.pink};
+`;
+
+const Title = withTheme(({ children, withBg }) => {
   let topText;
   let bottomText;
   if (typeof children === 'string') {
@@ -42,7 +49,11 @@ const Title = withTheme(({ children }) => {
     topText = splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
     bottomText = splittedText.slice(Math.ceil(limit / 2), limit + 1).join(' ');
   }
-  return (
+  return withBg ? (
+    <WithBackground>
+      <T.H2C color="white">{children}</T.H2C>
+    </WithBackground>
+  ) : (
     <AlternateTitle>
       <div className="top">
         <T.H3C style={{ color: 'inherit' }}>{topText}</T.H3C>
