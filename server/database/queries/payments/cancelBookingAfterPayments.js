@@ -40,16 +40,14 @@ const updateCanceledBooking = ({ bookingId, cancellationData, session }) => {
     { _id: mongoose.Types.ObjectId(bookingId) },
     {
       status: bookingStatuses.cancelledAfterPayment,
-      cancellationDetails: {
-        cancellationReason,
-        responsibleParty,
-        notes,
-        refunds: {
-          internRefund,
-          hostRefund,
-          organisationRefund,
-          pressPadRefund,
-        },
+      'cancellationDetails.cancellationReason': cancellationReason,
+      'cancellationDetails.responsibleParty': responsibleParty,
+      'cancellationDetails.notes': notes,
+      'cancellationDetails.refunds': {
+        internRefund,
+        hostRefund,
+        organisationRefund,
+        pressPadRefund,
       },
     },
     { session, new: true },

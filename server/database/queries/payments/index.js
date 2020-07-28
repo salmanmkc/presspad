@@ -1,4 +1,8 @@
-const { createInstallments, updatePaidInstallment } = require('./installments');
+const {
+  createInstallments,
+  updatePaidInstallment,
+  removeUnpaidInstallmentsForBookings,
+} = require('./installments');
 const { createExternalTransaction } = require('./externalTransactions');
 const { createInternalTransaction } = require('./internalTransactions');
 const { updateCouponTransaction } = require('./couponTransactions');
@@ -20,7 +24,10 @@ const {
   updateUnpaidInstallments,
   removeUnpaidInstallments,
 } = require('./updateUnpaidInstallments');
-const removePaymentsReminders = require('./removePaymentsReminders');
+const {
+  removePaymentsReminders,
+  removePaymentsRemindersForBookings,
+} = require('./removePaymentsReminders');
 const {
   updateCanceledBooking,
   updateAccounts,
@@ -29,6 +36,7 @@ const {
 module.exports = {
   createInstallments,
   updatePaidInstallment,
+  removeUnpaidInstallmentsForBookings,
   createExternalTransaction,
   createInternalTransaction,
   updateCouponTransaction,
@@ -45,6 +53,7 @@ module.exports = {
   updateUnpaidInstallments,
   removeUnpaidInstallments,
   removePaymentsReminders,
+  removePaymentsRemindersForBookings,
   updateCanceledBooking,
   updateAccounts,
 };
