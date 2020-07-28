@@ -20,6 +20,8 @@ const getUpcomingBooking = require('./getUpcomingBooking');
 const getCurrentBooking = require('./getCurrentBooking');
 const getUserBookingRequests = require('./getUserBookingRequests');
 const getUserPreviousBookings = require('./getUserPreviousBookings');
+const getUnpaidOverDueBookings = require('./getUnpaidOverDueBookings');
+const getPaidOverDueBookingsNDays = require('./getPaidOverDueBookings');
 
 const { bookingStatuses } = require('../../../constants');
 
@@ -280,3 +282,5 @@ module.exports.getUpcomingBooking = getUpcomingBooking;
 module.exports.getCurrentBooking = getCurrentBooking;
 module.exports.getUserBookingRequests = getUserBookingRequests;
 module.exports.getUserPreviousBookings = getUserPreviousBookings;
+module.exports.getUnpaidOverDueBookings = getUnpaidOverDueBookings;
+module.exports.getPaidOverDueBookingsNDays = getPaidOverDueBookingsNDays;
