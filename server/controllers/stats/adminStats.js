@@ -131,8 +131,6 @@ module.exports = async (req, res, next) => {
       const files = [];
       return getActiveBookings().then(async data => {
         const cleanData = data.map(booking => {
-          // console.log(booking);
-
           if (booking.intern.internship['Proof of Internship']) {
             files.push(
               generateUrl(booking.intern.internship['Proof of Internship']),
