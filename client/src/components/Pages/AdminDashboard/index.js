@@ -141,7 +141,7 @@ export default class AdminDashboard extends Component {
     );
   };
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = (dataIndex, child) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -201,11 +201,25 @@ export default class AdminDashboard extends Component {
         />
       </button>
     ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
+    onFilter: (value, record) => {
+      if (child) {
+        return (
+          record[dataIndex] &&
+          record[dataIndex][child] &&
+          record[dataIndex][child]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
+        );
+      }
+      return (
+        record[dataIndex] &&
+        record[dataIndex]
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      );
+    },
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => this.searchInput && this.searchInput.select());
