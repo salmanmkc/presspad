@@ -1,24 +1,30 @@
-import { notification } from 'antd';
+import React from 'react';
+import { message } from 'antd';
 
-const Notifiaction = ({ message, duration, open = false, setOpen }) => {
+import './style.css';
+
+const Notifiaction = ({ setOpen, open, content }) => {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(open);
-  return open
-    ? notification.open({
-        message: 'Notification Title',
-        onClose: handleClose,
-        duration: 500,
-        bottom: 0,
-        description:
-          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        className: 'custom-class',
-        style: {
-          width: '100vh',
-        },
-      }) || null
-    : notification.close(open) || null;
+  if (open) {
+    return (
+      <div>
+        {message.success({
+          icon: ' ',
+          onClose: () => handleClose(),
+          content,
+          className: 'custom-class',
+          style: {
+            width: '100%',
+            position: 'fixed',
+            bottom: 0,
+          },
+        })}
+      </div>
+    );
+  }
+  return null;
 };
 
 export default Notifiaction;

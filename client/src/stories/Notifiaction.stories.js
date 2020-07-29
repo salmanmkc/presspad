@@ -13,7 +13,7 @@ export const NotificationComponent = () => {
       <button onClick={() => setOpen(true)} type="button">
         click me !!!{' '}
       </button>
-      <Notification open={open} setOpen={setOpen} duration={500} />
+      <Notification open={open} setOpen={setOpen} content="Changes saved" />
     </div>
   );
 };

@@ -1,0 +1,40 @@
+.ant-message span{
+  color: #FFFFFF;
+  font-size: 22px;
+  line-height: 26px;
+  font-family: 'Glacial Indifference';
+  font-style: normal;
+  font-weight: bold;
+  padding-left: 60px;
+}
+
+.ant-message {
+  background-color: transparent;
+}
+
+.ant-message-notice {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #DE5991;
+
+}
+
+.ant-message-notice-content {
+  background-color: transparent;
+  box-shadow: none;
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width: 425px){
+  .ant-message-notice {
+    height: 60px;
+    
+  }
+
+  .ant-message span{
+    padding-left: 0;
+  }
+}
