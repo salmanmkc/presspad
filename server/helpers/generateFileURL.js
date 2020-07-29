@@ -1,4 +1,4 @@
-const { generateV4SignedUrl, getPublicFileUrl } = require('./storage');
+const { generateV4SignedUrl } = require('./storage');
 const { storageBucket: bucketName } = require('./../config');
 
 /**
@@ -11,17 +11,12 @@ const { storageBucket: bucketName } = require('./../config');
  */
 const generateUrl = async fileRef => {
   if (fileRef) {
-    const { fileName, isPrivate } = fileRef;
+    const { fileName } = fileRef;
     // check if the fileName is presented and not empty string
     if (fileName) {
-      if (isPrivate) {
-        // add url property to the reference
-        // eslint-disable-next-line no-param-reassign
-        fileRef.url = await generateV4SignedUrl(bucketName, fileName, 'read');
-        return;
-      }
+      // add url property to the reference
       // eslint-disable-next-line no-param-reassign
-      fileRef.url = getPublicFileUrl(bucketName, fileName);
+      fileRef.url = await generateV4SignedUrl(bucketName, fileName, 'read');
     }
   }
 };
