@@ -63,7 +63,11 @@ const BookingCancellationDetails = ({ details }) => {
           <H7C style={detailsStyles.headline} color="lightBlue">
             reason provided
           </H7C>
-          <PS>{cancellationDetails.cancellingUserMessage}</PS>
+          {cancellationDetails.automaticCancellation ? (
+            <PS>AUTOMATIC CANCELLED</PS>
+          ) : (
+            <PS>{cancellationDetails.cancellingUserMessage}</PS>
+          )}
         </S.Row>
 
         {/* REVIEW OF REASON */}

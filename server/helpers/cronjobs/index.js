@@ -5,6 +5,11 @@ const sendScheduledPaymentReminders = require('./sendScheduledPaymentReminders')
 const releaseExpiredCouponsValue = require('./releaseExpiredCouponsValue');
 const cancelOldBookings = require('./cancelOldBookings');
 const completeBookingsAndNotify = require('./completeBookingsAndNotify');
+const {
+  unpaidAutomaticCancellation,
+  paidAutomaticCancellation7DaysWarning,
+  paidAutomaticCancellation,
+} = require('./automaticCancellation');
 
 const cronJobs = async Sentry => {
   cron.schedule('1 1 1 * * *', async () => {
@@ -29,6 +34,18 @@ const cronJobs = async Sentry => {
 
   cron.schedule('1 1 4 * * *', async () => {
     await giveBadges(Sentry);
+  });
+
+  cron.schedule('1 1 5 * * *', async () => {
+    await unpaidAutomaticCancellation(Sentry);
+  });
+
+  cron.schedule('1 10 5 * * *', async () => {
+    await paidAutomaticCancellation7DaysWarning(Sentry);
+  });
+
+  cron.schedule('1 20 5 * * *', async () => {
+    await paidAutomaticCancellation(Sentry);
   });
 };
 

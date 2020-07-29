@@ -9,3 +9,15 @@ pubSub.listen(
   events.booking.ACCEPTED_BY_HOST,
   sendEmail.sendAcceptedBookingEmails,
 );
+pubSub.listen(
+  events.booking.UNPAID_AUTOMATIC_CANCELLED,
+  sendEmail.bookingCancelledUnpaid,
+);
+pubSub.listen(
+  events.booking.PAID_AUTOMATIC_CANCELLED,
+  sendEmail.bookingTerminated,
+);
+pubSub.listen(
+  events.booking.PAID_AUTOMATIC_CANCEL_WARNING,
+  sendEmail.bookingPaidOverDueWarning,
+);
