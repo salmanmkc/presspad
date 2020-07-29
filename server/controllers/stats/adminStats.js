@@ -128,12 +128,21 @@ module.exports = async (req, res, next) => {
       return res.json({ ...stats, stripeBalance, withdrawRequests });
     }
     if (userType === 'bookings') {
-      return getActiveBookings().then(data => {
+      const files = [];
+      return getActiveBookings().then(async data => {
         const cleanData = data.map(booking => {
+          if (booking.intern.internship['Proof of Internship']) {
+            files.push(
+              generateUrl(booking.intern.internship['Proof of Internship']),
+            );
+          }
+
           const updatedBooking = { key: data.indexOf(booking) + 1, ...booking };
 
           return updatedBooking;
         });
+
+        await Promise.all(files);
         res.json(cleanData);
       });
     }

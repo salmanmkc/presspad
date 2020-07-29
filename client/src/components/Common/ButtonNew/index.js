@@ -2,15 +2,18 @@ import React from 'react';
 import styled, { css, withTheme } from 'styled-components';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import Graphic from '../../../assets/graphic.svg';
+import Arrow2 from '../../../assets/Arrow2.svg';
+import CloseOutline from '../../../assets/closeOutline.svg';
 
 const sharedStyles = css`
   position: relative;
   text-align: center;
   text-decoration: none;
   outline: none;
+  height: ${({ small }) => (small ? 'auto' : '50px')};
   border: 2px solid ${({ theme }) => theme.colors.blue}; /* default */
-  padding: ${({ theme, small }) =>
-    small ? theme.spacings[2] : theme.spacings[3]};
+  padding: ${({ theme, small }) => (small ? theme.spacings[2] : '0px')};
   font-size: ${({ small }) => (small ? '14px' : '18px')};
   line-height: ${({ small }) => (small ? '14px' : '26px')};
   font-weight: bold;
@@ -27,78 +30,68 @@ const sharedStyles = css`
   margin-bottom: ${({ mb, theme }) => (mb ? theme.spacings[mb] : 0)};
   margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
   margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
+  transition: 0.1s;
 
-  &:hover::after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: none;
-    border-radius: 10px;
+  :hover {
+    opacity: 0.8;
   }
-  &:active::after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    box-shadow: none;
-    border-radius: 10px;
-    background: ${({ theme }) => theme.colors.transGray};
+  :active {
+    transform: translateY(1px);
   }
 `;
 
 export const primaryStyles = css`
-  background-color: ${({ theme, small, outline }) => {
-    if (small) return theme.colors.black;
-    if (outline) return theme.colors.white;
-    return theme.colors.blue;
+  background-color: ${({ theme, small, outline, bgColor }) => {
+    if (small) return theme.colors[bgColor] || theme.colors.black;
+    if (outline) return theme.colors[bgColor] || theme.colors.white;
+    return theme.colors[bgColor] || theme.colors.blue;
   }};
-  color: ${({ theme, outline }) =>
-    outline ? theme.colors.blue : theme.colors.white};
-
-  :hover {
-    color: ${({ theme, small }) =>
-      small ? theme.colors.black : theme.colors.white};
-    background-color: ${({ theme, outline, small }) => {
-      if (small) return theme.colors.white;
-      if (outline) return theme.colors.blue;
-      return theme.colors.lightBlue;
-    }};
-    border-color: ${({ theme, outline, small }) => {
-      if (small) return theme.colors.black;
-      if (outline) return theme.colors.blue;
-      return theme.colors.lightBlue;
-    }};
-  }
+  color: ${({ theme, outline, textColor }) =>
+    outline
+      ? theme.colors[textColor] || theme.colors.blue
+      : theme.colors[textColor] || theme.colors.white};
 `;
 
 export const secondaryStyles = css`
-  background-color: ${({ theme, outline }) =>
-    outline ? theme.colors.white : theme.colors.pink};
-  color: ${({ theme, outline }) =>
-    outline ? theme.colors.darkGray : theme.colors.white};
-  border-color: ${({ theme }) => theme.colors.pink};
-  :hover {
-    color: ${({ theme }) => theme.colors.white};
-    background-color: ${({ theme }) => theme.colors.pink};
-  }
+  background-color: ${({ theme, outline, bgColor }) =>
+    outline
+      ? theme.colors[bgColor] || theme.colors.white
+      : theme.colors[bgColor] || theme.colors.pink};
+  color: ${({ theme, outline, textColor }) =>
+    outline
+      ? theme.colors[textColor] || theme.colors.pink
+      : theme.colors[textColor] || theme.colors.white};
+  border-color: ${({ theme, bgColor }) =>
+    theme.colors[bgColor] || theme.colors.pink};
 `;
 
 export const tertiaryStyles = css`
-  background-color: ${({ theme, outline }) =>
-    outline ? theme.colors.white : theme.colors.lightBlue};
-  color: ${({ theme, outline }) =>
-    outline ? theme.colors.darkGray : theme.colors.white};
-  border-color: ${({ theme }) => theme.colors.lightBlue};
-  :hover {
-    color: ${({ theme }) => theme.colors.white};
-    background-color: ${({ theme }) => theme.colors.lightBlue};
-  }
+  background-color: ${({ theme, outline, bgColor }) =>
+    outline
+      ? theme.colors[bgColor] || theme.colors.white
+      : theme.colors[bgColor] || theme.colors.lightBlue};
+  color: ${({ theme, outline, textColor }) =>
+    outline
+      ? theme.colors[textColor] || theme.colors.darkGray
+      : theme.colors[textColor] || theme.colors.white};
+  border-color: ${({ theme, bgColor }) =>
+    theme.colors[bgColor] || theme.colors.lightBlue};
+`;
+
+export const linkStyles = css`
+  background-color: transparent;
+  color: ${({ theme, textColor }) =>
+    theme.colors[textColor] || theme.colors.black};
+  border: none;
+  font-size: 14px;
+`;
+
+export const deleteStyles = css`
+  background-color: transparent;
+  color: ${({ theme, textColor }) =>
+    theme.colors[textColor] || theme.colors.gray3};
+  border: none;
+  font-size: 14px;
 `;
 
 const StyledButton = styled.button`
@@ -106,6 +99,8 @@ const StyledButton = styled.button`
   ${props => props.type === 'primary' && primaryStyles}
   ${props => props.type === 'secondary' && secondaryStyles}
   ${props => props.type === 'tertiary' && tertiaryStyles}
+  ${props => props.type === 'link' && linkStyles}
+  ${props => props.type === 'delete' && deleteStyles}
 
 `;
 
@@ -124,17 +119,55 @@ export const ButtonSpinner = withTheme(({ outline, size, theme }) => {
   return <Spin indicator={antIcon} style={{ marginRight: '.5rem' }} />;
 });
 
+export const GraphicIcon = withTheme(() => {
+  // antd spinner for the submit button
+  const antIcon = (
+    <img src={Graphic} alt="graphic" style={{ width: 50, height: 40 }} />
+  );
+  return <Spin indicator={antIcon} style={{ marginRight: '.5rem' }} />;
+});
+
+export const ArrowIcon = withTheme(() => {
+  // antd spinner for the submit button
+  const antIcon = (
+    <img src={Arrow2} alt="Arrow" style={{ width: 20, height: 20 }} />
+  );
+  return <Spin indicator={antIcon} style={{ marginLeft: '.5rem' }} />;
+});
+
+export const CloseOutlineIcon = withTheme(() => {
+  // antd spinner for the submit button
+  const antIcon = (
+    <img
+      src={CloseOutline}
+      alt="CloseOutlineIcon"
+      style={{ width: 25, height: 25 }}
+    />
+  );
+  return <Spin indicator={antIcon} style={{ marginRight: '.5rem' }} />;
+});
+
 const Button = ({
   label,
   loading,
   disabled,
   spinnerColor,
   children,
+  withGraphic,
+  type,
   ...props
 }) => (
-  <StyledButton aria-label={label} {...props} disabled={disabled || loading}>
+  <StyledButton
+    aria-label={label}
+    type={type}
+    disabled={disabled || loading}
+    {...props}
+  >
     {loading && <ButtonSpinner outline={props.outline} />}
+    {withGraphic && <GraphicIcon />}
+    {type === 'delete' && <CloseOutlineIcon />}
     {label || children}
+    {type === 'link' && <ArrowIcon />}
   </StyledButton>
 );
 
