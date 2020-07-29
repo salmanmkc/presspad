@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Heading0,
   Heading1,
   Heading2,
   Heading3,
@@ -19,23 +20,42 @@ import {
   StyledSpan,
 } from './style';
 
+const H0 = ({ children, ...props }) => (
+  <Heading0 {...props}>{children}</Heading0>
+);
+
 const H1 = ({ children, ...props }) => (
   <Heading1 {...props}>{children}</Heading1>
 );
+
 const H2 = ({ children, ...props }) => (
   <Heading2 {...props}>{children}</Heading2>
 );
+
 const H3 = ({ children, ...props }) => (
   <Heading3 {...props}>{children}</Heading3>
 );
+
 const H4 = ({ children, ...props }) => (
   <Heading4 {...props}>{children}</Heading4>
 );
+
+const H5 = ({ children, ...props }) => (
+  <Heading5 {...props}>{children}</Heading5>
+);
+
+const H0C = ({ children, ...props }) => (
+  <H0 caps {...props}>
+    {children}
+  </H0>
+);
+
 const H1C = ({ children, ...props }) => (
   <H1 caps {...props}>
     {children}
   </H1>
 );
+
 const H2C = ({ children, ...props }) => (
   <H2 caps {...props}>
     {children}
@@ -46,23 +66,27 @@ const H3C = ({ children, ...props }) => (
     {children}
   </H3>
 );
+
 const H4C = ({ children, ...props }) => (
   <H4 caps {...props}>
     {children}
   </H4>
 );
+
 const H5C = ({ children, ...props }) => (
   <Heading5 caps {...props}>
     {children}
   </Heading5>
 );
+
 const H6C = ({ children, ...props }) => (
   <Heading6 caps {...props}>
     {children}
   </Heading6>
 );
+
 const H7C = ({ children, ...props }) => (
-  <Heading7 caps {...props}>
+  <Heading7 caps color={props.color || 'gray'} {...props}>
     {children}
   </Heading7>
 );
@@ -75,6 +99,7 @@ const H8C = ({ children, ...props }) => (
 
 const PXL = ({ children, ...props }) => <BodyXL {...props}>{children}</BodyXL>;
 const PL = ({ children, ...props }) => <BodyL {...props}>{children}</BodyL>;
+const PLBold = ({ children, ...props }) => <BodyL {...props}>{children}</BodyL>;
 const P = ({ children, ...props }) => <Body {...props}>{children}</Body>;
 const PBold = ({ children, ...props }) => <BodyB {...props}>{children}</BodyB>;
 const PS = ({ children, ...props }) => <BodyS {...props}>{children}</BodyS>;
@@ -120,6 +145,8 @@ export {
   H2,
   H3,
   H4,
+  H5,
+  H0C,
   H1C,
   H2C,
   H3C,
@@ -133,6 +160,7 @@ export {
   PL,
   P,
   PBold,
+  PLBold,
   PS,
   PSBold,
   PXS,

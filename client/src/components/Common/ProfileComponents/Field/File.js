@@ -15,7 +15,7 @@ export default class File extends Component {
   };
 
   directUploadToGoogle = async e => {
-    const { name, parent, userId, isPrivate } = this.props;
+    const { name, parent, userId } = this.props;
     try {
       const {
         files: [image],
@@ -44,22 +44,22 @@ export default class File extends Component {
         isLoading: true,
       });
 
-      const generatedName = encodeURI(`${userId}/${Date.now()}.${image.name}`);
+      const generatedName = `${userId}/${Date.now()}.${image.name}`;
 
       const {
-        data: { signedUrl, bucketName },
+        data: { signedUrl },
       } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
 
       const headers = {
         'Content-Type': 'application/octet-stream',
       };
 
-      let url = '';
+      // let url = '';
 
-      if (!isPrivate) {
-        headers['x-goog-acl'] = 'public-read';
-        url = `https://storage.googleapis.com/${bucketName}/${generatedName}`;
-      }
+      // if (!isPrivate) {
+      //   headers['x-goog-acl'] = 'public-read';
+      //   url = `https://storage.googleapis.com/${bucketName}/${generatedName}`;
+      // }
       await axios.put(signedUrl, image, {
         headers,
         onUploadProgress: progressEvent => {
@@ -83,7 +83,6 @@ export default class File extends Component {
       });
 
       return this.setState({
-        url,
         fileName: generatedName,
         loading: 100,
         isLoading: false,

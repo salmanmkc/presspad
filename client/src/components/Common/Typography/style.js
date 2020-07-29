@@ -16,28 +16,34 @@ const CommonStyle = css`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'unset')};
 `;
 
+export const Heading0 = styled.h1`
+  ${CommonStyle};
+  font-size: 130px;
+  line-height: 150px;
+`;
+
 export const Heading1 = styled.h1`
   ${CommonStyle};
   font-size: 60px;
-  line-height: 78px;
+  line-height: 80px;
 `;
 
 export const Heading2 = styled.h2`
   ${CommonStyle};
   font-size: 40px;
-  line-height: 52px;
+  line-height: ${({ caps }) => (caps ? '40px' : '50px')};
 `;
 
 export const Heading3 = styled.h3`
   ${CommonStyle};
   font-size: 30px;
-  line-height: 39px;
+  line-height: 40px;
 `;
 
 export const Heading4 = styled.h4`
   ${CommonStyle};
-  font-size: 22px;
-  line-height: 26px;
+  font-size: 24px;
+  line-height: 30px;
 `;
 
 export const Heading5 = styled.h5`
@@ -49,7 +55,7 @@ export const Heading5 = styled.h5`
 export const Heading6 = styled.h6`
   ${CommonStyle};
   font-size: 18px;
-  line-height: 23px;
+  line-height: 25px;
   color: ${({ theme, color }) =>
     color ? theme.colors[color] : theme.colors.gray};
 `;
@@ -87,19 +93,19 @@ export const BodyXL = styled.p`
 export const BodyL = styled.p`
   ${CommonParagraphStyle};
   font-size: 22px;
-  line-height: 33px;
+  fontline-height: 33px;
 `;
 
 export const Body = styled.p`
   ${CommonParagraphStyle};
-  font-size: 18px;
+  font-size: 16px;
   line-height: 27px;
 `;
 
 export const BodyB = styled.p`
   ${CommonParagraphStyle};
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 30px;
 `;
 
@@ -117,7 +123,7 @@ export const BodyXS = styled.p`
 
 export const StyledLink = styled(Link)`
   ${CommonStyle};
-  font-size: ${({ fz }) => (fz ? `${fz}px` : '20px')};
+  font-size: ${({ fz }) => (fz ? `${fz}px` : '14px')};
   cursor: pointer;
   font-weight: ${({ light }) => (light ? 'normal' : 'bold')};
 `;

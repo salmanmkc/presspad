@@ -17,6 +17,25 @@ export const Primary = () => (
     </Button>
   </Wrapper>
 );
+export const PrimaryWithBgColor = () => (
+  <Wrapper>
+    <Button type="primary" bgColor="yellow" onClick={action('clicked')}>
+      Large Button
+    </Button>
+  </Wrapper>
+);
+export const PrimaryWithBgColorAndTextColor = () => (
+  <Wrapper>
+    <Button
+      type="primary"
+      bgColor="yellow"
+      textColor="darkerGray"
+      onClick={action('clicked')}
+    >
+      Large Button
+    </Button>
+  </Wrapper>
+);
 
 export const PrimarySmall = () => (
   <Wrapper>
@@ -54,6 +73,14 @@ export const Secondary = () => (
   <Wrapper>
     <Button onClick={action('clicked')} type="secondary">
       Secondary
+    </Button>
+  </Wrapper>
+);
+
+export const Tertiary = () => (
+  <Wrapper>
+    <Button onClick={action('clicked')} type="tertiary">
+      Tertiary
     </Button>
   </Wrapper>
 );
@@ -101,6 +128,30 @@ export const WithMargins = () => (
   <Wrapper>
     <Button onClick={action('clicked')} type="tertiary" mt="6">
       small
+    </Button>
+  </Wrapper>
+);
+
+export const withGraphic = () => (
+  <Wrapper>
+    <Button onClick={action('clicked')} type="tertiary" withGraphic>
+      APPLY FOR BURSARY
+    </Button>
+  </Wrapper>
+);
+
+export const LinkButton = () => (
+  <Wrapper>
+    <Button onClick={action('clicked')} type="link">
+      APPLY FOR BURSARY
+    </Button>
+  </Wrapper>
+);
+
+export const DeleteButton = () => (
+  <Wrapper>
+    <Button onClick={action('clicked')} type="delete">
+      APPLY FOR BURSARY
     </Button>
   </Wrapper>
 );
