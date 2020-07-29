@@ -6,4 +6,6 @@ export default {
   title: 'Tabs',
 };
 const items = ['my account', 'about me', 'my listing', 'verifications'];
-export const TabsComponent = () => <Tabs items={items} />;
+const items1 = ['about me', 'my account'];
+export const Tabs4ItemsComponent = () => <Tabs items={items} />;
+export const Tabs2ItemsComponent = () => <Tabs items={items1} />;
