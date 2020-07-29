@@ -35,7 +35,7 @@ const columns = (
     dataIndex: 'intern',
     key: 'intern',
     className: 'nameCol',
-    ...getColumnSearchProps('intern'),
+    ...getColumnSearchProps('intern', 'name'),
     sorter: (a, b) => a.intern.name.localeCompare(b.intern.name),
     render: (text, record) => (
       <span
@@ -61,7 +61,7 @@ const columns = (
     dataIndex: 'host',
     key: 'host',
     className: 'nameCol',
-    ...getColumnSearchProps('host'),
+    ...getColumnSearchProps('host', 'name'),
     sorter: (a, b) => (a.host.name || '').localeCompare(b.host.name || ''),
     render: (text, record) => (
       <span
@@ -104,7 +104,6 @@ const columns = (
     title: 'Length of Stay',
     dataIndex: 'lengthOfStay',
     key: 'lengthOfStay',
-    ...getColumnSearchProps('lengthOfStay'),
     sorter: (a, b) =>
       lengthOfStay(a.startDate, a.endDate) -
       lengthOfStay(b.startDate, b.endDate),
@@ -124,7 +123,6 @@ const columns = (
     title: 'Paid by Organisation',
     dataIndex: 'coupon',
     key: 'coupon',
-    ...getColumnSearchProps('coupon'),
     render: coupon =>
       coupon ? (
         <S.Discount>
