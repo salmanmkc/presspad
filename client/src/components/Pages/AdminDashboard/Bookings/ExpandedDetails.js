@@ -36,32 +36,38 @@ const ExpandedDetails = ({ record }) => (
         </a>
       </S.DetailsItem>
     </S.BookingDetailsRow>
-    <H7C mb="2">Host Details</H7C>
-    <S.BookingDetailsRow>
-      <S.DetailsItem>
-        <PXSBold>Email</PXSBold>
-        <a href={`mailto:${record.host.email}`}>
-          <PXS color={colors.blue}>{record.host.email}</PXS>
-        </a>
-      </S.DetailsItem>
-      <S.DetailsItem>
-        <PXSBold>Phone Number</PXSBold>
-        <PXS>{record.host.phone}</PXS>
-      </S.DetailsItem>
-    </S.BookingDetailsRow>
-    <H7C mb="2">Intern Details</H7C>
-    <S.BookingDetailsRow>
-      <S.DetailsItem>
-        <PXSBold>Email</PXSBold>
-        <a href={`mailto:${record.intern.email}`}>
-          <PXS color={colors.blue}>{record.intern.email}</PXS>
-        </a>
-      </S.DetailsItem>
-      <S.DetailsItem>
-        <PXSBold>Phone Number</PXSBold>
-        <PXS>{record.intern.phone}</PXS>
-      </S.DetailsItem>
-    </S.BookingDetailsRow>
+    <div style={{ display: 'flex' }}>
+      <div>
+        <H7C mb="2">Host Details</H7C>
+        <S.BookingDetailsRow>
+          <S.DetailsItem>
+            <PXSBold>Email</PXSBold>
+            <a href={`mailto:${record.host.email}`}>
+              <PXS color={colors.blue}>{record.host.email}</PXS>
+            </a>
+          </S.DetailsItem>
+          <S.DetailsItem>
+            <PXSBold>Phone Number</PXSBold>
+            <PXS>{record.host.phone}</PXS>
+          </S.DetailsItem>
+        </S.BookingDetailsRow>
+      </div>
+      <div>
+        <H7C mb="2">Intern Details</H7C>
+        <S.BookingDetailsRow>
+          <S.DetailsItem>
+            <PXSBold>Email</PXSBold>
+            <a href={`mailto:${record.intern.email}`}>
+              <PXS color={colors.blue}>{record.intern.email}</PXS>
+            </a>
+          </S.DetailsItem>
+          <S.DetailsItem>
+            <PXSBold>Phone Number</PXSBold>
+            <PXS>{record.intern.phone}</PXS>
+          </S.DetailsItem>
+        </S.BookingDetailsRow>
+      </div>
+    </div>
   </S.BookingDetails>
 );
 

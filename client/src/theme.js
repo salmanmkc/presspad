@@ -49,6 +49,7 @@ export const newColors = {
   yellow: '#FFDF59',
   pink: '#CF3475',
   lightPink: '#DE5991',
+  gray3: '#585858',
 };
 
 const colorCodes = {
@@ -167,6 +168,14 @@ const spacings = {
   innerMargin: '140px',
 };
 
+export const vars = {
+  gridGutter: 20,
+  columns: {
+    desktop: 12,
+    tablet: 12,
+    mobile: 4,
+  },
+};
 export default {
   size,
   breakpoints,
@@ -176,4 +185,5 @@ export default {
   tagColors,
   bookingStatus,
   spacings,
+  vars,
 };

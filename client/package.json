@@ -32,7 +32,7 @@
     "test": "react-app-rewired test --runInBand --detectOpenHandles --forceExit",
     "test:coverage": "react-app-rewired test --coverage --runInBand --detectOpenHandles --forceExit",
     "eject": "react-app-rewired eject",
-    "storybook": "start-storybook -p 9009 -s public",
+    "storybook": "start-storybook -p 9009 -c .storybook watch-css -s ./src",
     "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
