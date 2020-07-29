@@ -5,8 +5,24 @@ export default {
   title: 'FAQ',
 };
 
+const inputs = {
+  title: 'What if I don’t fulfill that criteria but am still in need?',
+  content:
+    'When a candidate completes our bursary application and scores less than 500 points they will not be eligible for a bursary award. However, we will always take into account unique circumstances that require further review and welcome candidates to appeal should they feel a decision is unfair.',
+};
+
 export const Default = () => (
-  <div style={{ width: '460px' }}>
-    <FAQ title="If I get awarded a bursary, what happens next? Are there any extra obligations I have? " />
-  </div>
+  <FAQ title={inputs.title} content={inputs.content} />
+);
+
+export const BlueChevro = () => (
+  <FAQ title={inputs.title} content={inputs.content} colorChevron="lightBlue" />
+);
+
+export const MobileSize = () => (
+  <FAQ title={inputs.title} content={inputs.content} size="mobile" />
+);
+
+export const MobileSmallSize = () => (
+  <FAQ title={inputs.title} content={inputs.content} size="mobileSmall" />
 );

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Collapse } from 'antd';
-import { H5C, H7C, H6C } from '../Typography';
-import { FAQWrapper, HeaderLine } from './style';
+import { H5C, H7C, H6C, P } from '../Typography';
+import Icon from '../Icon';
+import { FAQWrapper, HeaderLine, HeaderWrapper } from './style';
 import { MOBILE_XL_WIDTH } from '../../../constants/screenWidths';
 
 const { Panel } = Collapse;
@@ -12,20 +13,39 @@ const FAQ = props => {
   const [open, setOpen] = useState(false);
   const isMobile = window.innerWidth <= MOBILE_XL_WIDTH;
 
-  const decideHeaderColor = () => (open ? 'lightBlue' : 'blue');
+  const setTitleColor = () => (open ? 'lightBlue' : 'blue');
+
+  const setTChevronColor = () => (open ? 'lightBlue' : colorChevron || 'blue');
 
   const HeaderComponent = {
+    desktop: H5C,
     mobile: H6C,
     mobileSmall: H7C,
-    desktop: H5C,
   };
   const Header = HeaderComponent[size];
 
+  const chevronSizes = {
+    desktop: 40,
+    mobile: 30,
+    mobileSmall: 20,
+  };
+
   const renderHeader = () => (
     <>
-      <Header style={{ marginLeft: '0.5rem' }} color={decideHeaderColor()}>
-        {title}
-      </Header>
+      <HeaderWrapper>
+        <Header
+          style={{ marginLeft: '0.5rem', marginRight: '0.5rem' }}
+          color={setTitleColor()}
+        >
+          {title}
+        </Header>
+        <Icon
+          icon="arrow"
+          direction={open ? 'up' : 'down'}
+          color={setTChevronColor()}
+          width={chevronSizes[size]}
+        />
+      </HeaderWrapper>
       {!open && <HeaderLine />}
     </>
   );
@@ -42,11 +62,7 @@ const FAQ = props => {
           header={renderHeader()}
           showArrow={false}
         >
-          <p>
-            A dog is a type of domesticated animal. Known for its loyalty and
-            faithfulness, it can be found:a welcome guest in many households
-            across the world.
-          </p>
+          <P>{content}</P>
         </Panel>
       </Collapse>
     </FAQWrapper>

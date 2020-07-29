@@ -13,17 +13,22 @@ export const FAQWrapper = styled.div`
   .ant-collapse-item {
     border: none;
   }
-  // .ant-collapse-arrow {
-  //   margin-top: -3rem;
-  //   width: 40px;
-  //   height: 40px;
-  //   transition: rotate(180deg) !important;
-  //   transform: rotate(90deg) !important;
-  // }
+  .ant-collapse-arrow {
+    margin-top: -3rem;
+    width: 4rem;
+
+    transition: rotate(180deg) !important;
+    transform: rotate(90deg) !important;
+  }
 `;
 
 export const HeaderLine = styled.div`
   width: 100%;
   border-top: 1px solid #dcdcdc;
   margin-top: 0.7rem;
+`;
+
+export const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
