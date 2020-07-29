@@ -220,14 +220,25 @@ exports.getConfirmedBooking = (internId, hostId) =>
   });
 
 module.exports.findBookings = findBookings;
-module.exports.updateBookingByID = (bookingID, newStatus) =>
-  Booking.findByIdAndUpdate(
-    bookingID,
-    { status: newStatus },
-    {
-      new: true,
-    },
-  );
+module.exports.updateBookingByID = (
+  bookingID,
+  newStatus,
+  automaticAccepted,
+) => {
+  let fieldsToUpdate;
+  if (automaticAccepted) {
+    fieldsToUpdate = {
+      status: newStatus,
+      confirmOrRejectDate: moment.utc(),
+    };
+  } else {
+    fieldsToUpdate = { status: newStatus };
+  }
+
+  return Booking.findByIdAndUpdate(bookingID, fieldsToUpdate, {
+    new: true,
+  });
+};
 
 module.exports.cancelBookingBeforePaymentQuery = ({
   bookingId,

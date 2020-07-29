@@ -232,7 +232,7 @@ const AutomaticCancelledContent = () => {
       <PS mt="5" mb="1">
         If for any reason this does not look right, please{' '}
         <a href="mailto:urgent@presspad.co.uk">contact us</a> so we can help
-        resolve the issue..
+        resolve the issue.
       </PS>
       <ButtonNew
         small
