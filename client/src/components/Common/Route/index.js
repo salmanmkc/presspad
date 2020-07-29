@@ -14,12 +14,18 @@ const Route = ({
   render,
   resetState,
   layout,
+  image,
   ...rest
 }) => {
   const navbarProps = { userType: rest.role, resetState };
 
   return (
-    <Layout layout={layout} navbarProps={navbarProps} isLoggedIn={isLoggedIn}>
+    <Layout
+      layout={layout}
+      navbarProps={navbarProps}
+      isLoggedIn={isLoggedIn}
+      image={image}
+    >
       {isMounted ? (
         <>
           {isPrivate ? (
