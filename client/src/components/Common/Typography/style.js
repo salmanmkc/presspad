@@ -25,25 +25,25 @@ export const Heading0 = styled.h1`
 export const Heading1 = styled.h1`
   ${CommonStyle};
   font-size: 60px;
-  line-height: 78px;
+  line-height: 80px;
 `;
 
 export const Heading2 = styled.h2`
   ${CommonStyle};
   font-size: 40px;
-  line-height: 52px;
+  line-height: ${({ caps }) => (caps ? '40px' : '50px')};
 `;
 
 export const Heading3 = styled.h3`
   ${CommonStyle};
   font-size: 30px;
-  line-height: 39px;
+  line-height: 40px;
 `;
 
 export const Heading4 = styled.h4`
   ${CommonStyle};
   font-size: 24px;
-  line-height: 26px;
+  line-height: 30px;
 `;
 
 export const Heading5 = styled.h5`
@@ -55,7 +55,7 @@ export const Heading5 = styled.h5`
 export const Heading6 = styled.h6`
   ${CommonStyle};
   font-size: 18px;
-  line-height: 23px;
+  line-height: 25px;
   color: ${({ theme, color }) =>
     color ? theme.colors[color] : theme.colors.gray};
   color: ${({ caps, theme }) => caps && theme.colors.gray};
