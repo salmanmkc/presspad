@@ -34,7 +34,11 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
     } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
-    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const bookingDays =
+      moment(endDate)
+        .startOf('d')
+        .diff(moment(startDate).startOf('d'), 'days') + 1;
+
     const couponDiscount = (bookingDays - 14) * 2000;
     const couponInfo = {
       couponCode: coupons.activeFull.code,
