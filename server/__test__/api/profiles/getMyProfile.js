@@ -49,7 +49,6 @@ describe('Tests get profile data with the image urls form google cloud', () => {
 
             const { url } = res.body.profile.profileImage;
             expect(url).toBeTruthy();
-            expect(url).toMatch(/https:\/\/storage.googleapis.com\/*\/*.*/);
 
             return done();
           });
