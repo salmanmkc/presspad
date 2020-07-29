@@ -8,8 +8,10 @@ const Button = styled.button`
   border: none;
   box-shadow: none;
   outline: none;
+  padding: 5px 10px;
   cursor: pointer;
-  background-color: ${({ theme, selected }) => (selected ? 'red' : 'green')};
+  background-color: ${({ theme, selected }) =>
+    selected ? theme.colors.pink : 'transparent'};
 `;
 
 const TabButton = withTheme(({ index, handleClick, children, selected }) => (
@@ -18,9 +20,9 @@ const TabButton = withTheme(({ index, handleClick, children, selected }) => (
   </Button>
 ));
 
-const Tabs = () => {
+const Tabs = ({ items }) => {
   const [selected, setSelected] = useState(null);
-  const items = ['my account', 'about me', 'my listing', 'verifications'];
+
   const handleClick = e => {
     setSelected(e);
   };
