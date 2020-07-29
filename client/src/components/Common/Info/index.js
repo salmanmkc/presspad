@@ -18,8 +18,9 @@ const Info = withTheme(({ icon, iconW, iconH, textColor, children }) => (
     <div>
       <Icon
         icon={icon || 'money'}
-        width={iconW || '60'}
-        height={iconH || '70'}
+        width={iconW || '60px'}
+        height={iconH || '50px'}
+        style={{ marginTop: 10, marginRight: 5 }}
       />
     </div>
     <div style={{ display: 'flex', alignItems: 'center' }}>
