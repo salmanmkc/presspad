@@ -45,7 +45,7 @@ const Title = withTheme(({ children, withBg }) => {
   let bottomText;
   if (typeof children === 'string') {
     const splittedText = children.split(' ');
-    const limit = splittedText.length - 1;
+    const limit = splittedText.length;
     topText = splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
     bottomText = splittedText.slice(Math.ceil(limit / 2), limit + 1).join(' ');
   }
