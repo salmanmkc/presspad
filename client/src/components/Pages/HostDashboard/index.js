@@ -51,36 +51,6 @@ class HostProfile extends Component {
 
   async componentDidMount() {
     this.fetchData();
-    document.addEventListener('keypress', e => {
-      const { isNumberInputActive } = this.state;
-      const numbers = [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        0,
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '0',
-        '.',
-        ',',
-      ];
-      if (!numbers.includes(e.key) && isNumberInputActive) {
-        e.preventDefault();
-      }
-    });
   }
 
   componentWillUnmount() {
@@ -89,15 +59,12 @@ class HostProfile extends Component {
 
   fetchData = async () => {
     const { data } = await axios.get(API_HOST_DASHBOARD_URL);
+    console.log('DATA', data);
     const {
-      name,
-      notifications,
-      bookings = [],
+      userData: { name = '' },
+      notifications = [],
       profile = {},
-      account = {},
-      withdrawRequests,
       nextBookingWithDetails: nextBooking = {},
-      requestedAmount,
     } = data;
     const nextGuest = (nextBooking && nextBooking.intern) || {};
     const { profile: nextGuestProfile = {} } = nextGuest;
@@ -113,16 +80,11 @@ class HostProfile extends Component {
       name,
       updates: sortedNotification,
       slicedUpdates: sortedNotification.slice(0, viewNotificationNum),
-      bookings,
+
       profile,
       nextGuest,
       nextGuestProfile,
       nextBooking,
-      account,
-      donateValue: account.currentBalance,
-      withdrawValue: account.currentBalance,
-      withdrawRequests,
-      requestedAmount,
     }));
   };
 

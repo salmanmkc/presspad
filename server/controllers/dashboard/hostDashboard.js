@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 const boom = require('boom');
 
 const { getHostNextBooking } = require('../../database/queries/bookings');
@@ -5,8 +6,6 @@ const {
   hostDashboard: hostDashboardQuery,
 } = require('../../database/queries/dashboard');
 const { getHostPaymentsInfo } = require('../../database/queries/payments');
-
-const generateFileURL = require('../../helpers/generateFileURL');
 
 const hostDashboard = async (req, res, next) => {
   const { _id: hostId, role } = req.user;
@@ -27,6 +26,7 @@ const hostDashboard = async (req, res, next) => {
     let nextBookingWithDetails;
     let accessibleFunds;
     let pending;
+    let lastPayments;
 
     const {
       _id,
@@ -43,9 +43,8 @@ const hostDashboard = async (req, res, next) => {
       withdrawalRequests,
       account: { currentBalance },
       pendingPayment,
+      paymentHistory,
     } = paymentInfo;
-
-    // console.log('ppp', currentBalance, pendingPayment, withdrawalRequests);
 
     if (withdrawalRequests && withdrawalRequests.length) {
       const [_pendingWithdrawn] = withdrawalRequests.reduce(
@@ -59,9 +58,21 @@ const hostDashboard = async (req, res, next) => {
         },
         [0, 0],
       );
-      console.log('ppp', currentBalance, pendingPayment, _pendingWithdrawn);
       accessibleFunds = currentBalance - pendingPayment - _pendingWithdrawn;
       pending = pendingPayment + _pendingWithdrawn;
+    }
+
+    if (paymentHistory && paymentHistory.length) {
+      lastPayments = paymentHistory.sort((a, b) =>
+        a.startDate > b.startDate
+          ? 1
+          : a.startDate === b.startDate
+          ? a.endDate > b.endDate
+            ? 1
+            : -1
+          : -1,
+      );
+      lastPayments = lastPayments.splice(0, 3);
     }
 
     if (nextBooking && nextBooking._id && bookings && bookings.length) {
@@ -69,19 +80,7 @@ const hostDashboard = async (req, res, next) => {
       nextBookingWithDetails = bookings.find(
         _item => _item._id.toString() === nextBooking._id.toString(),
       );
-
-      if (nextBookingWithDetails) {
-        const {
-          intern: { profile: internProfile },
-        } = nextBookingWithDetails;
-        if (internProfile && internProfile.profileImage) {
-          // get intern's profile image of next booking
-          generateFileURL(internProfile.profileImage);
-        }
-      }
     }
-
-    if (profile && profile.profileImage) generateFileURL(profile.profileImage);
 
     const output = {
       userData: { _id, email, name },
@@ -92,9 +91,9 @@ const hostDashboard = async (req, res, next) => {
       nextBookingWithDetails,
       currentBalance: accessibleFunds,
       pending,
+      lastPayments,
     };
 
-    console.log(output);
     return res.json(output);
   } catch (err) {
     return next(boom.badImplementation(err));

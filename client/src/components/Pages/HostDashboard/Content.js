@@ -1,17 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import {
-  Col,
-  Row,
-  Avatar,
-  Empty,
-  Table,
-  Modal,
-  InputNumber,
-  Input,
-} from 'antd';
-import { getStringTime, formatPrice } from '../../../helpers';
+import { Col, Row, Empty, Table, Modal, InputNumber, Input } from 'antd';
+import { formatPrice } from '../../../helpers';
 
 import Update from '../../Common/Update';
 import Button from '../../Common/Button';
@@ -44,6 +35,8 @@ import {
 } from '../../Common/general/index';
 
 import BookingSection from '../../Common/BookingSection';
+import * as T from '../../Common/Typography';
+
 import { bookingsColumns, withdrawRequestsColumns } from './TablesColumns';
 
 const Content = ({
@@ -104,39 +97,8 @@ const Content = ({
       <ContentWrapper className="child">
         <HeaderWrapper>
           <Row gutter={20} type="flex" justify="start">
-            <Col xs={24} sm={4} lg={3}>
-              <AvatarWrapper>
-                <Avatar
-                  size="large"
-                  icon="user"
-                  src={(profile.profileImage && profile.profileImage.url) || ''}
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    margin: '0 auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '42px',
-                    border: '1px solid rgba(0, 0, 0, 0.15)',
-                  }}
-                />
-              </AvatarWrapper>
-            </Col>
             <Col flex xs={24} sm={20}>
-              <HiText>
-                Hi {name.split(' ')[0]}
-                {Object.keys(nextBooking).length > 0 && (
-                  <>
-                    , your next guest is arriving
-                    <BoldTitle>
-                      {' '}
-                      {getStringTime(nextBooking.startDate)}
-                    </BoldTitle>
-                    .
-                  </>
-                )}
-              </HiText>
+              <HiText>Welcome back, {name.split(' ')[0]}</HiText>
             </Col>
           </Row>
         </HeaderWrapper>
