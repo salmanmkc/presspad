@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 import { colors } from '../../../theme';
 
+// NEW STYLES
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+`;
+
+// OLD STYLES
+
 export const PageWrapper = styled.div`
   padding-top: 4rem;
   padding-bottom: 8rem;

@@ -98,65 +98,6 @@ const hostDashboard = id =>
       },
     },
 
-    // host bookings
-    {
-      $lookup: {
-        from: 'bookings',
-        let: { host: '$_id' },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ['$$host', '$host'] },
-                  // { $ne: ['$status', bookingStatuses.cancelled] },
-                  { $ne: ['$status', bookingStatuses.rejectedByAdmin] },
-                  { $ne: ['$status', bookingStatuses.awaitingAdmin] },
-                ],
-              },
-            },
-          },
-          // intern name
-          {
-            $lookup: {
-              from: 'users',
-              let: { intern: '$intern' },
-              pipeline: [
-                { $match: { $expr: { $eq: ['$$intern', '$_id'] } } },
-                // host profile
-                {
-                  $lookup: {
-                    from: 'profiles',
-                    let: { intern: '$_id' },
-                    pipeline: [
-                      { $match: { $expr: { $eq: ['$$intern', '$user'] } } },
-                    ],
-                    as: 'profile',
-                  },
-                },
-                {
-                  $unwind: {
-                    path: '$profile',
-                    preserveNullAndEmptyArrays: true,
-                  },
-                },
-
-                {
-                  $project: {
-                    password: 0,
-                  },
-                },
-              ],
-              as: 'intern',
-            },
-          },
-          {
-            $unwind: { path: '$intern', preserveNullAndEmptyArrays: true },
-          },
-        ],
-        as: 'bookings',
-      },
-    },
     {
       $lookup: {
         from: 'accounts',

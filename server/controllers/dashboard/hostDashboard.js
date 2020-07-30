@@ -1,7 +1,8 @@
 /* eslint-disable no-nested-ternary */
 const boom = require('boom');
 
-const { getHostNextBooking } = require('../../database/queries/bookings');
+const { getUpcomingBooking } = require('../../database/queries/bookings');
+
 const {
   hostDashboard: hostDashboardQuery,
 } = require('../../database/queries/dashboard');
@@ -18,12 +19,11 @@ const hostDashboard = async (req, res, next) => {
       // get full host dashboard data
       hostDashboardQuery(hostId),
       // get the next booking
-      getHostNextBooking(hostId),
+      getUpcomingBooking({ userId: hostId, role }),
       // get payment infos
       getHostPaymentsInfo(hostId),
     ]);
 
-    let nextBookingWithDetails;
     let accessibleFunds;
     let pending;
     let lastPayments;
@@ -75,20 +75,13 @@ const hostDashboard = async (req, res, next) => {
       lastPayments = lastPayments.splice(0, 3);
     }
 
-    if (nextBooking && nextBooking._id && bookings && bookings.length) {
-      // get the next booking details
-      nextBookingWithDetails = bookings.find(
-        _item => _item._id.toString() === nextBooking._id.toString(),
-      );
-    }
-
     const output = {
       userData: { _id, email, name },
       profile,
       listing,
       reviews,
       notifications,
-      nextBookingWithDetails,
+      nextBooking,
       currentBalance: accessibleFunds,
       pending,
       lastPayments,

@@ -64,7 +64,7 @@ class HostProfile extends Component {
       userData: { name = '' },
       notifications = [],
       profile = {},
-      nextBookingWithDetails: nextBooking = {},
+      nextBooking = {},
     } = data;
     const nextGuest = (nextBooking && nextBooking.intern) || {};
     const { profile: nextGuestProfile = {} } = nextGuest;
