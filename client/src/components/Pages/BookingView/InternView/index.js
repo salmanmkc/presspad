@@ -35,6 +35,7 @@ import {
   AwaitingCancellationContent,
   CancelledContent,
   CancelledAfterPaymentContent,
+  AutomaticCancelledContent,
 } from './statusContents';
 
 import {
@@ -264,6 +265,7 @@ export default class BookingView extends Component {
       status,
       rejectReason,
       _id: bookingId,
+      cancellationDetails,
     } = bookingInfo;
 
     const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
@@ -334,6 +336,13 @@ export default class BookingView extends Component {
             }
             hostName={host.name}
           />
+        ),
+      },
+      automaticCancelled: {
+        status: 'cancelled',
+        statusColor: 'pink',
+        statusContentsComponent: () => (
+          <AutomaticCancelledContent hostName={host.name} />
         ),
       },
       cancelledAfterPayment: {
@@ -444,17 +453,23 @@ export default class BookingView extends Component {
     }
 
     let bookingStatus = bookingStatuses[status];
-    if (status === 'awaiting admin') {
+    if (
+      [
+        'cancelled',
+        'cancelled after payment',
+        'awaiting cancellation',
+      ].includes(status) &&
+      cancellationDetails.automaticCancellation
+    ) {
+      bookingStatus = bookingStatuses.automaticCancelled;
+    } else if (status === 'awaiting admin') {
       bookingStatus = bookingStatuses.awaitingAdmin;
-    }
-    if (status === 'rejected by admin') {
+    } else if (status === 'rejected by admin') {
       // toDo "is there a different wording for rejecting by admin?"
       bookingStatus = bookingStatuses.rejected;
-    }
-    if (status === 'awaiting cancellation') {
+    } else if (status === 'awaiting cancellation') {
       bookingStatus = bookingStatuses.awaitingCancellation;
-    }
-    if (status === 'cancelled after payment') {
+    } else if (status === 'cancelled after payment') {
       bookingStatus = bookingStatuses.cancelledAfterPayment;
     }
 

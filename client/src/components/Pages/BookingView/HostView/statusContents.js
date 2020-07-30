@@ -202,6 +202,28 @@ const CancelledAfterPaymentContent = ({ internName }) => {
   );
 };
 
+const AutomaticCancelledContent = ({ internName }) => {
+  const history = useHistory();
+
+  return (
+    <>
+      <T.PS mt="5" mb="1">
+        Unfortunately {internName} did not pay within the required 48 hours and
+        so their booking with you has now been cancelled. Apologies for any
+        inconvenience.
+      </T.PS>
+      <ButtonNew
+        small
+        type="primary"
+        mt="4"
+        onClick={() => history.push(DASHBOARD_URL)}
+      >
+        go to dashboard
+      </ButtonNew>
+    </>
+  );
+};
+
 const CompletedContent = ({
   internId,
   internName,
@@ -247,4 +269,5 @@ export {
   CancelledContent,
   AwaitingCancellationContent,
   CancelledAfterPaymentContent,
+  AutomaticCancelledContent,
 };

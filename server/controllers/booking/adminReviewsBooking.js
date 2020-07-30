@@ -50,7 +50,7 @@ const adminReviewsBooking = async (req, res, next) => {
     }
 
     if (acceptAutomatically) {
-      await updateBookingByID(bookingID, 'accepted');
+      await updateBookingByID(bookingID, 'accepted', true);
 
       // Notification to let host know they have a confirmed request
       const hostNotification = {
