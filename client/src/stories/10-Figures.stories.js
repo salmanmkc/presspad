@@ -6,7 +6,15 @@ export default {
 };
 
 export const FigureComponent = () => (
-  <div style={{ width: 600 }}>
+  <div
+    style={{
+      display: 'flex',
+      width: 500,
+      height: 200,
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
     <Figure stats="442" title="interns" />
   </div>
 );
