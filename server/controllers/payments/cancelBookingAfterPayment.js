@@ -4,6 +4,8 @@ const boom = require('boom');
 const {
   updateCanceledBooking,
   updateAccounts,
+  removeUnpaidInstallmentsForBookings,
+  removePaymentsRemindersForBookings,
 } = require('../../database/queries/payments');
 
 const cancelBookingAfterPayment = async (req, res, next) => {
@@ -42,12 +44,16 @@ const cancelBookingAfterPayment = async (req, res, next) => {
         ),
       );
 
-    await updateAccounts({
-      updatedBooking,
-      cancellationData,
-      adminId,
-      session,
-    });
+    await Promise.all([
+      updateAccounts({
+        updatedBooking,
+        cancellationData,
+        adminId,
+        session,
+      }),
+      removeUnpaidInstallmentsForBookings(bookingId, session),
+      removePaymentsRemindersForBookings(bookingId, session),
+    ]);
 
     await session.commitTransaction();
     session.endSession();

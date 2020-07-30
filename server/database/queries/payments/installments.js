@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Installment = require('../../models/Installment');
 
 /**
@@ -53,4 +54,27 @@ const updatePaidInstallment = (installmentId, transactionId, session) =>
     { session },
   );
 
-module.exports = { createInstallments, updatePaidInstallment };
+/**
+ * Remove unpaid installment for a booking when it cancelled after payment, This should work inside a transaction session
+ * @param {string} bookingId string or Array of Ids
+ * @param {session} session
+ */
+const removeUnpaidInstallmentsForBookings = (bookingId, session) => {
+  let bookingIds;
+  if (Array.isArray(bookingId)) {
+    bookingIds = bookingId.map(id => mongoose.Types.ObjectId(id));
+  } else {
+    bookingIds = [mongoose.Types.ObjectId(bookingId)];
+  }
+
+  return Installment.deleteMany(
+    { booking: { $in: bookingIds }, transaction: { $lte: null } },
+    { session },
+  );
+};
+
+module.exports = {
+  createInstallments,
+  updatePaidInstallment,
+  removeUnpaidInstallmentsForBookings,
+};

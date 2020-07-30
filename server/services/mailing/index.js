@@ -9,6 +9,9 @@ const sendNewBookingEmails = require('./sendNewBookingEmails');
 const sendAcceptedBookingEmails = require('./sendAcceptedBookingEmails');
 const profileApproved = require('./profileApproved');
 const profileCompleted = require('./profileCompleted');
+const bookingTerminated = require('./bookingTerminated');
+const bookingCancelledUnpaid = require('./bookingCancelledUnpaid');
+const bookingPaidOverDueWarning = require('./bookingPaidOverDueWarning');
 
 module.exports = {
   scheduleReminderEmails,
@@ -22,4 +25,7 @@ module.exports = {
   sendAcceptedBookingEmails,
   profileApproved,
   profileCompleted,
+  bookingTerminated,
+  bookingCancelledUnpaid,
+  bookingPaidOverDueWarning,
 };

@@ -2,11 +2,16 @@ import React from 'react';
 import styled, { css, withTheme } from 'styled-components';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import Graphic from '../../../assets/graphic.svg';
-import Arrow2 from '../../../assets/Arrow2.svg';
-import CloseOutline from '../../../assets/closeOutline.svg';
+
+import Icon from '../Icon';
 
 const sharedStyles = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Glacial Indifference;
+  font-style: normal;
+  font-weight: bold;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -18,8 +23,7 @@ const sharedStyles = css`
   line-height: ${({ small }) => (small ? '14px' : '26px')};
   font-weight: bold;
   text-transform: uppercase;
-  /* TODO change the 150 to get it from the theme */
-  min-width: ${({ theme, small }) => (small ? '150px' : theme.spacings[12])};
+  width: 100%;
   border-radius: 10px;
   text-transform: uppercase;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
@@ -119,34 +123,6 @@ export const ButtonSpinner = withTheme(({ outline, size, theme }) => {
   return <Spin indicator={antIcon} style={{ marginRight: '.5rem' }} />;
 });
 
-export const GraphicIcon = withTheme(() => {
-  // antd spinner for the submit button
-  const antIcon = (
-    <img src={Graphic} alt="graphic" style={{ width: 50, height: 40 }} />
-  );
-  return <Spin indicator={antIcon} style={{ marginRight: '.5rem' }} />;
-});
-
-export const ArrowIcon = withTheme(() => {
-  // antd spinner for the submit button
-  const antIcon = (
-    <img src={Arrow2} alt="Arrow" style={{ width: 20, height: 20 }} />
-  );
-  return <Spin indicator={antIcon} style={{ marginLeft: '.5rem' }} />;
-});
-
-export const CloseOutlineIcon = withTheme(() => {
-  // antd spinner for the submit button
-  const antIcon = (
-    <img
-      src={CloseOutline}
-      alt="CloseOutlineIcon"
-      style={{ width: 25, height: 25 }}
-    />
-  );
-  return <Spin indicator={antIcon} style={{ marginRight: '.5rem' }} />;
-});
-
 const Button = ({
   label,
   loading,
@@ -157,18 +133,27 @@ const Button = ({
   type,
   ...props
 }) => (
-  <StyledButton
-    aria-label={label}
-    type={type}
-    disabled={disabled || loading}
-    {...props}
-  >
-    {loading && <ButtonSpinner outline={props.outline} />}
-    {withGraphic && <GraphicIcon />}
-    {type === 'delete' && <CloseOutlineIcon />}
-    {label || children}
-    {type === 'link' && <ArrowIcon />}
-  </StyledButton>
+  <>
+    <StyledButton
+      aria-label={label}
+      type={type}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {loading && <ButtonSpinner outline={props.outline} />}
+      {withGraphic && (
+        <Icon icon="money" width="40" height="35" style={{ marginRight: 10 }} />
+      )}
+      {type === 'delete' && (
+        <Icon icon="close" width="22" style={{ marginRight: 9 }} />
+      )}
+
+      {label || children}
+      {type === 'link' && (
+        <Icon icon="arrow2" width="20" style={{ marginLeft: 9 }} />
+      )}
+    </StyledButton>
+  </>
 );
 
 export default Button;

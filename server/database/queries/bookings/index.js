@@ -20,6 +20,8 @@ const getUpcomingBooking = require('./getUpcomingBooking');
 const getCurrentBooking = require('./getCurrentBooking');
 const getUserBookingRequests = require('./getUserBookingRequests');
 const getUserPreviousBookings = require('./getUserPreviousBookings');
+const getUnpaidOverDueBookings = require('./getUnpaidOverDueBookings');
+const getPaidOverDueBookingsNDays = require('./getPaidOverDueBookings');
 
 const { bookingStatuses } = require('../../../constants');
 
@@ -218,14 +220,25 @@ exports.getConfirmedBooking = (internId, hostId) =>
   });
 
 module.exports.findBookings = findBookings;
-module.exports.updateBookingByID = (bookingID, newStatus) =>
-  Booking.findByIdAndUpdate(
-    bookingID,
-    { status: newStatus },
-    {
-      new: true,
-    },
-  );
+module.exports.updateBookingByID = (
+  bookingID,
+  newStatus,
+  automaticAccepted,
+) => {
+  let fieldsToUpdate;
+  if (automaticAccepted) {
+    fieldsToUpdate = {
+      status: newStatus,
+      confirmOrRejectDate: moment.utc(),
+    };
+  } else {
+    fieldsToUpdate = { status: newStatus };
+  }
+
+  return Booking.findByIdAndUpdate(bookingID, fieldsToUpdate, {
+    new: true,
+  });
+};
 
 module.exports.cancelBookingBeforePaymentQuery = ({
   bookingId,
@@ -280,3 +293,5 @@ module.exports.getUpcomingBooking = getUpcomingBooking;
 module.exports.getCurrentBooking = getCurrentBooking;
 module.exports.getUserBookingRequests = getUserBookingRequests;
 module.exports.getUserPreviousBookings = getUserPreviousBookings;
+module.exports.getUnpaidOverDueBookings = getUnpaidOverDueBookings;
+module.exports.getPaidOverDueBookingsNDays = getPaidOverDueBookingsNDays;

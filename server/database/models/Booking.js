@@ -41,6 +41,8 @@ const bookingSchema = new Schema(
         // 'accepted',
         // 'confirmed',
         // 'cancelled',
+        // 'awaiting cancellation',
+        // 'cancelled after payment',
         // 'completed',
         // 'rejected by admin',
         // 'rejected',
@@ -58,6 +60,10 @@ const bookingSchema = new Schema(
       default: 0,
     },
     cancellationDetails: {
+      automaticCancellation: {
+        type: Boolean,
+        default: false,
+      },
       // user's ID who canceled the booking
       cancelledBy: {
         type: Schema.Types.ObjectId,

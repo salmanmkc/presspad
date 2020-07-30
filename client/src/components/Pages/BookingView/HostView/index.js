@@ -21,6 +21,7 @@ import {
   CancelledContent,
   AwaitingCancellationContent,
   CancelledAfterPaymentContent,
+  AutomaticCancelledContent,
 } from './statusContents';
 import WarningModal from './WarningModal';
 import { Wrapper, ContentWrapper, TipsWrapper } from './HostView.style';
@@ -65,6 +66,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
     startDate,
     endDate,
     createdAt,
+    cancellationDetails,
   } = bookingInfo;
   const { _id: internId } = intern;
 
@@ -163,7 +165,15 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
   };
 
   const madeAt = moment(createdAt).format('Do MMM');
-  const status = bookingStatus || bookingInfo.status;
+  let status = bookingStatus || bookingInfo.status;
+  if (
+    ['cancelled', 'cancelled after payment', 'awaiting cancellation'].includes(
+      bookingInfo.status,
+    ) &&
+    cancellationDetails.automaticCancellation
+  ) {
+    status = 'automaticCancelled';
+  }
 
   const statusContents = {
     pending: () => (
@@ -203,6 +213,9 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
         isLoading={isLoading.internData}
       />
     ),
+    automaticCancelled: () => (
+      <AutomaticCancelledContent internName={intern.name} />
+    ),
   };
 
   return (
@@ -227,12 +240,23 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
             <H5C color="pink">under review</H5C>
           </>
         )}
-        {['cancelled', 'cancelled after payment'].includes(status) && (
-          <H4C mb="7">booking cancelled</H4C>
+        {[
+          'cancelled',
+          'cancelled after payment',
+          'automaticCancelled',
+        ].includes(status) && <H4C mb="7">booking cancelled</H4C>}
+        {status === 'automaticCancelled' && (
+          <>
+            <H6C mb="2" color="lightGray">
+              status
+            </H6C>
+            <H5C color="pink">cancelled</H5C>
+          </>
         )}
 
         {statusContents[status] && statusContents[status]()}
         {![
+          'automaticCancelled',
           'completed',
           'cancelled',
           'awaiting cancellation',
@@ -275,6 +299,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
       </ContentWrapper>
 
       {![
+        'automaticCancelled',
         'completed',
         'cancelled',
         'awaiting cancellation',
