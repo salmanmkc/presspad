@@ -12,14 +12,6 @@ const { bookingStatuses } = require('../../../constants');
 const hostDashboard = id =>
   User.aggregate([
     { $match: { _id: mongoose.Types.ObjectId(id) } },
-    {
-      $lookup: {
-        from: 'withdrawrequests',
-        localField: '_id',
-        foreignField: 'user',
-        as: 'withdrawRequests',
-      },
-    },
     // Host profile
     {
       $lookup: {
@@ -32,6 +24,45 @@ const hostDashboard = id =>
     {
       $unwind: { path: '$profile', preserveNullAndEmptyArrays: true },
     },
+    // listing
+    {
+      $lookup: {
+        from: 'listings',
+        let: { host: '$_id' },
+        pipeline: [{ $match: { $expr: { $eq: ['$$host', '$user'] } } }],
+        as: 'listing',
+      },
+    },
+    {
+      $unwind: { path: '$listing', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $lookup: {
+        from: 'withdrawrequests',
+        localField: '_id',
+        foreignField: 'user',
+        as: 'withdrawRequests',
+      },
+    },
+    // reviews
+    {
+      $lookup: {
+        from: 'reviews',
+        let: { host: '$_id' },
+        pipeline: [
+          {
+            $match: { $expr: { $eq: ['$$host', '$to'] } },
+          },
+          {
+            $sort: {
+              createdAt: 1,
+            },
+          },
+          { $limit: 2 },
+        ],
+        as: 'reviews',
+      },
+    },
     // host notification
     {
       $lookup: {
@@ -39,6 +70,12 @@ const hostDashboard = id =>
         let: { host: '$_id' },
         pipeline: [
           { $match: { $expr: { $eq: ['$$host', '$user'] } } },
+          {
+            $sort: {
+              createdAt: 1,
+            },
+          },
+          { $limit: 3 },
           // SecondParty name
           {
             $lookup: {
