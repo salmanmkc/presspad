@@ -11,6 +11,12 @@ export const TitleComponent = () => (
   </div>
 );
 
+export const Title2Component = () => (
+  <div style={{ width: 600 }}>
+    <Title>this is just to test Title component</Title>
+  </div>
+);
+
 export const TitleWithBackground = () => (
   <div style={{ width: 600 }}>
     <Title withBg>GET VERIFIED</Title>
