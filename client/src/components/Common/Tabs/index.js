@@ -14,13 +14,19 @@ const Button = styled.button`
     selected ? theme.colors.pink : 'transparent'};
 `;
 
-const TabButton = withTheme(({ index, handleClick, children, selected }) => (
-  <Button selected={selected} onClick={() => handleClick(index)}>
-    <T.H4 color={selected ? 'white' : 'gray'}>{children}</T.H4>
-  </Button>
-));
+const TabButton = withTheme(
+  ({ index, handleClick, children, selected, caps }) => (
+    <Button selected={selected} onClick={() => handleClick(index)}>
+      {caps ? (
+        <T.H5C color={selected ? 'white' : 'gray'}>{children}</T.H5C>
+      ) : (
+        <T.H5 color={selected ? 'white' : 'gray'}>{children}</T.H5>
+      )}
+    </Button>
+  ),
+);
 
-const Tabs = ({ items }) => {
+const Tabs = ({ items, caps }) => {
   const [selected, setSelected] = useState(null);
 
   const handleClick = e => {
@@ -35,6 +41,7 @@ const Tabs = ({ items }) => {
         return (
           <Col w={[2, 2, 2]} key={index}>
             <TabButton
+              caps={caps}
               index={index}
               handleClick={handleClick}
               selected={isSelected}
