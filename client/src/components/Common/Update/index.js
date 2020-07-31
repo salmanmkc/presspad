@@ -112,7 +112,7 @@ const Update = ({ item, userRole }) => {
                 <Link to={`/interns/${secondParty._id}`}>
                   <T.PXSBold>{secondParty.name}</T.PXSBold>
                 </Link>
-                <T.PXS>&nbsp;requested to stay with you</T.PXS>
+                <T.PXS>requested to stay with you</T.PXS>
               </ContentWrapper>
               {loading && !seen && <LoadingBallPulseSync />}
             </UpdatesContainer>
@@ -130,7 +130,7 @@ const Update = ({ item, userRole }) => {
                 <Link to={`/interns/${secondParty._id}`}>
                   <T.PXSBold>{secondParty.name}</T.PXSBold>
                 </Link>
-                <T.PXS>&nbsp;has completed their stay with you</T.PXS>
+                <T.PXS>has completed their stay with you</T.PXS>
               </ContentWrapper>
               {loading && !seen && <LoadingBallPulseSync />}
             </UpdatesContainer>

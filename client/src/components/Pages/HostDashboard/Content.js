@@ -33,7 +33,7 @@ const Content = ({
 
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
-  console.log('up', updates);
+
   return (
     <>
       {/* HEADER */}
@@ -108,22 +108,21 @@ const Content = ({
           </div>
         </Col>
         <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>
-          <div style={{ border: '1px solid' }}>
+          <Container style={{ width: '300px' }}>
             <SectionTitle
               style={{ marginBottom: bottomMargins.sectionTitle[device] }}
             >
               Updates
             </SectionTitle>
-            <UpdateList>
-              {updates.length > 0 ? (
-                updates.map(item => (
-                  <Update item={item} key={item._id} userRole="host" />
-                ))
-              ) : (
-                <T.PXL color={colors.lightestGray}>No updates</T.PXL>
-              )}
-            </UpdateList>
-          </div>
+
+            {updates.length > 0 ? (
+              updates.map(item => (
+                <Update item={item} key={item._id} userRole="host" />
+              ))
+            ) : (
+              <T.PXL color={colors.lightestGray}>No updates</T.PXL>
+            )}
+          </Container>
         </Col>
       </Row>
       {/* REVIEWS / PAYMENTS / SOCIAL */}

@@ -17,11 +17,9 @@ export const WalletContainer = styled.div`
   background-image: url(${({ src }) => src});
   background-repeat: no-repeat;
   background-position: right top 30px;
-  margin-left: 1rem;
 
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
     background-position: left 80px top 30px;
-    margin-left: 0.5rem;
   }
 `;
 

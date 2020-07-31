@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 
 export const UpdatesContainer = styled.div`
-  border: 1px solid;
-  width: 300px;
   display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 `;
 
 export const DateWrapper = styled.div`
-  border: 1px solid;
-  width: 120px;
+  width: 60px;
+  margin-right: 0.5rem;
 `;
 
 export const ContentWrapper = styled.div`
-  border: 1px solid;
+  width: 220px;
 `;
