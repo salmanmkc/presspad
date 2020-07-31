@@ -47,6 +47,10 @@ class HostProfile extends Component {
     donateModalOpen: false,
     apiLoading: false,
     profile: {},
+
+    // new stuff
+    accessibleFunds: null,
+    pending: null,
   };
 
   async componentDidMount() {
@@ -65,6 +69,8 @@ class HostProfile extends Component {
       notifications = [],
       profile = {},
       nextBooking = {},
+      accessibleFunds,
+      pending,
     } = data;
     const nextGuest = (nextBooking && nextBooking.intern) || {};
     const { profile: nextGuestProfile = {} } = nextGuest;
@@ -85,6 +91,8 @@ class HostProfile extends Component {
       nextGuest,
       nextGuestProfile,
       nextBooking,
+      accessibleFunds,
+      pending,
     }));
   };
 
@@ -300,6 +308,9 @@ class HostProfile extends Component {
       viewNumber,
       viewNotificationNum,
       requestedAmount,
+      // new stuff
+      pending,
+      accessibleFunds,
     } = this.state;
     return (
       <Content
@@ -337,6 +348,9 @@ class HostProfile extends Component {
         handleSubmitWithdrawRequest={this.handleSubmitWithdrawRequest}
         markAsSeen={this.markAsSeen}
         requestedAmount={requestedAmount}
+        // new stuff
+        accessibleFunds={accessibleFunds}
+        pending={pending}
       />
     );
   }

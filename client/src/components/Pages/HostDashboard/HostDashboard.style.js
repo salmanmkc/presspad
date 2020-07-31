@@ -12,20 +12,21 @@ export const Container = styled.div`
 export const WalletContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 238px;
+  min-height: 238px;
   background-image: url(${({ src }) => src});
   background-repeat: no-repeat;
-  background-position: left 80px top 30px;
-  margin-left: 0.5rem;
+  background-position: right top 30px;
+  margin-left: 1rem;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    background-position: left 80px top 30px;
+    margin-left: 0.5rem;
+  }
 `;
 
 export const WalletFooter = styled.div`
   position: absolute;
   bottom: 1rem;
-`;
-
-export const ImageContainer = styled.div`
-  border: 1px solid red;
 `;
 
 // OLD STYLES

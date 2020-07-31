@@ -1,20 +1,29 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
-import Icon from '../../Common/Icon';
+
 import {
   Container,
   WalletContainer,
   WalletFooter,
-  ImageContainer,
 } from './HostDashboard.style';
+
+import { formatPrice } from '../../../helpers';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
+import { PAYMENTS_URL } from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
 import WalletFlower from '../../../assets/wallet-flower.svg';
 
-const Content = ({ name, windowWidth, nextBooking, role }) => {
+const Content = ({
+  name,
+  windowWidth,
+  nextBooking,
+  role,
+  accessibleFunds,
+  pending,
+}) => {
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
 
@@ -94,10 +103,13 @@ const Content = ({ name, windowWidth, nextBooking, role }) => {
               <T.H7C mb={2} color="gray">
                 My Wallet
               </T.H7C>
-              <T.H2 mb={2}>£200.00</T.H2>
-              <T.H5 color="darkerGray">£50 pending</T.H5>
+
+              <T.H2 mb={2}>£{formatPrice(accessibleFunds)}</T.H2>
+              <T.H5 color="darkerGray">£{formatPrice(pending)} pending</T.H5>
               <WalletFooter>
-                <T.H7C>View Wallet</T.H7C>
+                <Link to={PAYMENTS_URL}>
+                  <T.H7C>View Wallet</T.H7C>
+                </Link>
               </WalletFooter>
             </WalletContainer>
           </div>
