@@ -13,6 +13,7 @@ export const WalletContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 238px;
+  width: 300px;
   background-image: url(${({ src }) => src});
   background-repeat: no-repeat;
   background-position: right top 30px;

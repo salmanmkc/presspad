@@ -3,12 +3,15 @@ import { Link } from 'react-router-dom';
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
+import Update from '../../Common/Update';
 
 import {
   Container,
   WalletContainer,
   WalletFooter,
+  UpdateList,
 } from './HostDashboard.style';
+import { bottomMargins, typographies } from './styleProperties';
 
 import { formatPrice } from '../../../helpers';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
@@ -23,38 +26,14 @@ const Content = ({
   role,
   accessibleFunds,
   pending,
+  updates,
 }) => {
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
 
-  const bottomMargins = {
-    row: {
-      desktop: 5,
-      mobile: 0,
-    },
-    col: {
-      desktop: 0,
-      mobile: 2,
-    },
-    sectionTitle: {
-      desktop: '1rem',
-      mobile: '1rem',
-    },
-  };
-
-  const typographies = {
-    headerTitle: {
-      desktop: T.H2,
-      mobile: T.H3,
-    },
-    sectionTitle: {
-      desktop: T.H4C,
-      mobile: T.H6C,
-    },
-  };
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
-
+  console.log('up', updates);
   return (
     <>
       {/* HEADER */}
@@ -121,13 +100,29 @@ const Content = ({
         <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
           <div style={{ border: '1px solid' }}>
             {' '}
-            <SectionTitle>Booking Details</SectionTitle>
+            <SectionTitle
+              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+            >
+              Booking Details
+            </SectionTitle>
           </div>
         </Col>
         <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>
           <div style={{ border: '1px solid' }}>
-            {' '}
-            <SectionTitle>Updates</SectionTitle>
+            <SectionTitle
+              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+            >
+              Updates
+            </SectionTitle>
+            <UpdateList>
+              {updates.length > 0 ? (
+                updates.map(item => (
+                  <Update item={item} key={item._id} userRole="host" />
+                ))
+              ) : (
+                <T.PXL color={colors.lightestGray}>No updates</T.PXL>
+              )}
+            </UpdateList>
           </div>
         </Col>
       </Row>
