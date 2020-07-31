@@ -9,6 +9,25 @@ export const Container = styled.div`
   border: 1px solid;
 `;
 
+export const WalletContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 238px;
+  background-image: url(${({ src }) => src});
+  background-repeat: no-repeat;
+  background-position: left 80px top 30px;
+  margin-left: 0.5rem;
+`;
+
+export const WalletFooter = styled.div`
+  position: absolute;
+  bottom: 1rem;
+`;
+
+export const ImageContainer = styled.div`
+  border: 1px solid red;
+`;
+
 // OLD STYLES
 
 export const PageWrapper = styled.div`

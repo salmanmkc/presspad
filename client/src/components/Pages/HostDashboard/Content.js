@@ -3,10 +3,16 @@ import React from 'react';
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
-
-import { Container } from './HostDashboard.style';
+import Icon from '../../Common/Icon';
+import {
+  Container,
+  WalletContainer,
+  WalletFooter,
+  ImageContainer,
+} from './HostDashboard.style';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { colors } from '../../../theme';
+import WalletFlower from '../../../assets/wallet-flower.svg';
 
 const Content = ({ name, windowWidth, nextBooking, role }) => {
   const firstName = name.split(' ')[0];
@@ -20,6 +26,10 @@ const Content = ({ name, windowWidth, nextBooking, role }) => {
     col: {
       desktop: 0,
       mobile: 2,
+    },
+    sectionTitle: {
+      desktop: '1rem',
+      mobile: '1rem',
     },
   };
 
@@ -48,8 +58,12 @@ const Content = ({ name, windowWidth, nextBooking, role }) => {
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
           <Container>
-            <SectionTitle>Upcoming Booking</SectionTitle>
-            {console.log('next', nextBooking)}
+            <SectionTitle
+              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+            >
+              Upcoming Booking
+            </SectionTitle>
+
             {nextBooking ? (
               <BookingCards
                 role={role}
@@ -73,10 +87,23 @@ const Content = ({ name, windowWidth, nextBooking, role }) => {
         <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>
           <div style={{ border: '1px solid' }}>
             {' '}
-            <SectionTitle>My Wallet</SectionTitle>
+            <WalletContainer
+              style={{ marginTop: device === 'desktop' ? '2rem' : '1rem' }}
+              src={WalletFlower}
+            >
+              <T.H7C mb={2} color="gray">
+                My Wallet
+              </T.H7C>
+              <T.H2 mb={2}>£200.00</T.H2>
+              <T.H5 color="darkerGray">£50 pending</T.H5>
+              <WalletFooter>
+                <T.H7C>View Wallet</T.H7C>
+              </WalletFooter>
+            </WalletContainer>
           </div>
         </Col>
       </Row>
+
       {/* BOOKING DATES / UPDATES */}
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
