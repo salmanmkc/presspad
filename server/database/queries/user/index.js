@@ -11,13 +11,16 @@ const { bookingStatuses } = require('../../../constants');
 module.exports.findByEmail = email =>
   User.findOne({ email: email.toLowerCase() });
 
+module.exports.findByReferralToken = token =>
+  User.findOne({ referralToken: token.toLowerCase() });
+
 module.exports.getUserById = (id, withoutPassword = true) =>
   withoutPassword
     ? User.findById(id, { password: 0 }).exec()
     : User.findById(id).exec();
 
 module.exports.addNewUser = async userInfo => {
-  const { email, name, password, role } = userInfo;
+  const { email, name, password, role, referralToken, referredBy } = userInfo;
 
   const newAccount = await createNewAccount();
 
@@ -41,8 +44,11 @@ module.exports.addNewUser = async userInfo => {
       password,
       role,
       account: newAccount._id,
+      referralToken,
+      referredBy,
     });
   }
+
   // assume it's intern at this point
   return User.create({
     email: email.toLowerCase(),
