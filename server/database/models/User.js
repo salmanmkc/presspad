@@ -56,6 +56,17 @@ const userSchema = new Schema({
   respondedRequests: {
     type: Number,
   },
+
+  referralToken: {
+    type: String,
+    maxlength: 8,
+    sparse: true,
+  },
+
+  referredBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  },
 });
 
 userSchema.pre('save', async function hashPassword() {
