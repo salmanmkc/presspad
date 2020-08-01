@@ -2,7 +2,7 @@ import React from 'react';
 
 import ProgressBar from '../../Common/ProgressBar';
 
-const Welcome = () => {
+const Welcome = ({ title, subTitle, contnet, number, current }) => {
   console.log('get started');
 
   return (
