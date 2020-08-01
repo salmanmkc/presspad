@@ -1,3 +1,6 @@
+const bookingCancelledByInternBeforePayment = require('./bookingCancelledByInternBeforePayment');
+const bookingCancelledByHostBeforePayment = require('./bookingCancelledByHostBeforePayment');
+const bookingCancelledByUserAfterPayment = require('./bookingCancelledByUserAfterPayment');
 const bookingApprovedPaymentNeeded = require('./bookingApprovedPaymentNeeded');
 const bookingCancelledByHost = require('./bookingCancelledByHost');
 const bookingRejected = require('./bookingRejected');
@@ -12,6 +15,9 @@ const profileRejected = require('./profileRejected');
 const welcome = require('./welcome');
 
 module.exports = {
+  bookingCancelledByHostBeforePayment,
+  bookingCancelledByInternBeforePayment,
+  bookingCancelledByUserAfterPayment,
   bookingApprovedPaymentNeeded,
   bookingCancelledByHost,
   bookingRejected,

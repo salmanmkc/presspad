@@ -23,6 +23,23 @@ const types = {
       subject: 'Cancellation request',
       params: [],
     },
+    // CANCELLED BY USER BEFORE PAYMENT -> done
+    BOOKING_CANCELLED_BY_HOST_BEFORE_PAYMENT: {
+      createBody: host.bookingCancelledByHostBeforePayment,
+      subject: 'Cancellation',
+      params: ['internName'],
+    },
+    BOOKING_CANCELLED_BY_INTERN_BEFORE_PAYMENT: {
+      createBody: host.bookingCancelledByInternBeforePayment,
+      subject: 'Cancellation',
+      params: ['internName'],
+    },
+    // CANCELLED BY USER AFTER PAYMENT -> done
+    BOOKING_CANCELLED_BY_USER_AFTER_PAYMENT: {
+      createBody: host.bookingCancelledByUserAfterPayment,
+      subject: 'Cancellation',
+      params: ['internName'],
+    },
     // done
     BOOKIN_REQUEST: {
       createBody: host.bookingRequest,
@@ -91,6 +108,23 @@ const types = {
       createBody: intern.bookingCancelledByHost,
       subject: 'Cancellation',
       params: [],
+    },
+    // CANCELLED BY USER BEFORE PAYMENT
+    BOOKING_CANCELLED_BY_HOST_BEFORE_PAYMENT: {
+      createBody: intern.bookingCancelledByHostBeforePayment,
+      subject: 'Cancellation',
+      params: ['hostName'],
+    },
+    BOOKING_CANCELLED_BY_INTERN_BEFORE_PAYMENT: {
+      createBody: intern.bookingCancelledByInternBeforePayment,
+      subject: 'Cancellation',
+      params: ['hostName'],
+    },
+    // CANCELLED BY USER AFTER PAYMENT
+    BOOKING_CANCELLED_BY_USER_AFTER_PAYMENT: {
+      createBody: intern.bookingCancelledByUserAfterPayment,
+      subject: 'Cancellation',
+      params: ['internName'],
     },
     // done
     BOOKING_REJECTED: {

@@ -4,7 +4,7 @@ module.exports = params => {
   return `
   ${greeting('Hi there,')}
   ${content(
-    `This is confirming that you have rejected a booking request from ${params.internName}.`,
+    `This is confirming that you have cancelled your booking with ${params.hostName}. We confirm we have not taken any payment.`,
   )}
   ${content(`If you have any questions, please get in touch!`)}
  `;
