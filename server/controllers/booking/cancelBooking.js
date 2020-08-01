@@ -1,4 +1,5 @@
 const boom = require('boom');
+const pubSub = require('../../pubSub');
 
 const {
   getBooking,
@@ -44,11 +45,25 @@ const cancelBooking = async (req, res, next) => {
         cancellingUserMessage,
         cancellingUserId,
       });
+
+      // emails for booking before payment
+      pubSub.emit(pubSub.events.booking.CANCELLED_BY_USER, {
+        bookingId,
+        role,
+        type: 'beforePayment',
+      });
     } else if (canCancelAfterPayment) {
       cancelledBooking = await makeCancellationRequest({
         bookingId,
         cancellingUserMessage,
         cancellingUserId,
+      });
+
+      // emails for booking cancellation request after payment
+      pubSub.emit(pubSub.events.booking.CANCELLED_BY_USER, {
+        bookingId,
+        role,
+        type: 'afterPayment',
       });
     }
 

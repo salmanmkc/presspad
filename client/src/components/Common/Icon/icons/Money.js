@@ -5,10 +5,10 @@ const Money = ({ width, height, color, ...props }) => (
   <svg
     width={width}
     height={height}
-    viewBox="0 0 40 34"
-    fill={'none' || color}
-    xmlns="http://www.w3.org/2000/svg"
     {...props}
+    viewBox="0 0 40 34"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <g clipPath="url(#clip0)">
       <path
