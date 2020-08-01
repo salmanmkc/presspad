@@ -1,5 +1,8 @@
 import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
+// // to be deleted /////
+import IllustrationsLayout from '../Layouts/IllustrationsLayout';
+import ProgressBar from '../Common/ProgressBar';
 
 //  COMMON COMPONENTS
 import Route from '../Common/Route';
@@ -25,6 +28,7 @@ import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import ResetPassword from './ResetPassword';
+import WelcomePages from './WelcomePages';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -300,6 +304,18 @@ function Pages(props) {
           isLoggedIn={isLoggedIn}
           {...props}
           layout="sideMenu"
+        />
+        {/* ///////////ttttt//////////// */}
+        {/* control the images using the rote as condition */}
+        {console.log(role)}
+        <Route
+          path="/test1"
+          Component={() => <WelcomePages />}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          {...props}
+          layout="illustrations"
+          image="community"
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>
