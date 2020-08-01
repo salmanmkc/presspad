@@ -25,6 +25,7 @@ import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import ResetPassword from './ResetPassword';
+import ReferralSchema from './ReferralSchema';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -49,6 +50,7 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
+  REFERRAL_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -59,6 +61,17 @@ function Pages(props) {
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
         {/* protected host profile */}
+
+        <Route
+          exact
+          isPrivate
+          path={REFERRAL_URL}
+          Component={ReferralSchema}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
         <Route
           exact
           path="/reset-password"
