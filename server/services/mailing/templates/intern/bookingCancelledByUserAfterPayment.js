@@ -4,7 +4,7 @@ module.exports = params => {
   return `
   ${greeting('Hi there,')}
   ${content(
-    `This is confirming that you have rejected a booking request from ${params.internName}.`,
+    `IMPORTANT! Your booking with ${params.hostName} has been cancelled. PressPad will be in touch shortly to resolve this personally.`,
   )}
   ${content(`If you have any questions, please get in touch!`)}
  `;
