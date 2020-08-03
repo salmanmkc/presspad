@@ -33,14 +33,23 @@ const ProgressBar = withTheme(
                 index={i}
                 current={current}
                 color={color}
-                onClick={event => handleClick(event, i)}
+                onClick={() => {
+                  setCurrent(i);
+                  handleClick(i + 1);
+                }}
                 clickable={handleClick}
               />
             ))}
           </S.Wrapper>
         </Col>
         <Col w={[4, 4, 4]}>
-          <Button type="secondary" onClick={() => setCurrent(old => old + 1)}>
+          <Button
+            type="secondary"
+            onClick={() => {
+              handleClick();
+              setCurrent(old => old + 1);
+            }}
+          >
             asd
           </Button>
         </Col>
