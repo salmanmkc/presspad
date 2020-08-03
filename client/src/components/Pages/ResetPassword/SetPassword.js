@@ -1,38 +1,43 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Input } from 'antd';
-import * as Yup from 'yup';
+
 import axios from 'axios';
 import * as S from './style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
-import { API_RESET_PASSWORD } from '../../../constants/apiRoutes';
+import { API_SET_PASSWORD } from '../../../constants/apiRoutes';
 import { SIGNIN_URL } from '../../../constants/navRoutes';
-import SetPassword from './SetPassword';
 
-const errMsgs = require('../../../constants/errorMessages');
-
-const emailSchema = Yup.string()
-  .email(errMsgs.EMAIL)
-  .required('This field is required');
-
-function ResetPassword() {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState();
+function SetPassword() {
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState();
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const history = useHistory();
+  const { token } = useParams();
 
   const validate = () => {
     try {
-      emailSchema.validateSync(email);
-      setEmailError('');
+      const passwordPattern = new RegExp(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/g,
+      );
+
+      if (password && password.length < 8) {
+        throw new Error('Password is too short.');
+      } else if (!passwordPattern.test(password)) {
+        throw new Error(
+          'Password requires 8 characters including at least 1 uppercase character and 1 number.',
+        );
+      } else {
+        setPasswordError('');
+      }
       setError('');
     } catch (e) {
-      setEmailError(e.message);
+      setPasswordError(e.message);
       setError('');
-      e.emailError = true;
+      e.passwordError = true;
       throw e;
     }
   };
@@ -41,8 +46,8 @@ function ResetPassword() {
     try {
       validate();
       setLoading(true);
-      await axios.post(API_RESET_PASSWORD, { email });
-      setEmailError('');
+      await axios.post(API_SET_PASSWORD, { password, token });
+      setPasswordError('');
       setError('');
       setSuccess(true);
     } catch (e) {
@@ -60,36 +65,37 @@ function ResetPassword() {
         <T.H2C color="blue">FORGOT PASSWORD?</T.H2C>
         <T.P mt={4}>
           {success
-            ? 'Success! Please check your email for a reset password link.'
-            : 'Please enter your email address linked to your account and we will send you a link to reset your password.'}
+            ? 'Success! Your password has been reset. Let’s login.'
+            : 'Please enter your new password:'}
         </T.P>
         {!success && (
           <>
-            <S.Label htmlFor="email" error={emailError}>
-              Email
+            <S.Label htmlFor="password" error={passwordError}>
+              New password
             </S.Label>
-            <Input
-              name="email"
-              id="email"
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Email..."
-              value={email}
+            <Input.Password
+              name="password"
+              id="password"
+              onChange={e => setPassword(e.target.value)}
+              placeholder="New password..."
+              value={password}
               size="large"
+              type="password"
             />
-            {emailError && <S.Error block>{emailError}</S.Error>}
+            {passwordError && <S.Error block>{passwordError}</S.Error>}
           </>
         )}
         {success ? (
           <S.ButtonWrapper>
             <Button type="secondary" onClick={() => history.push(SIGNIN_URL)}>
-              RETURN TO LOG IN
+              LOG IN
             </Button>
           </S.ButtonWrapper>
         ) : (
           <S.ButtonWrapper>
             {error && <S.Error block>{error}</S.Error>}
             <Button type="secondary" onClick={handleSubmit} loading={loading}>
-              Send Email
+              RESET PASSWORD
             </Button>
           </S.ButtonWrapper>
         )}
@@ -98,5 +104,4 @@ function ResetPassword() {
   );
 }
 
-export { SetPassword };
-export default ResetPassword;
+export default SetPassword;

@@ -20,6 +20,7 @@ const Arrow = ({ width, height, color, direction, ...props }) => {
     default:
       break;
   }
+
   // eslint-disable-next-line consistent-return
   return (
     <svg

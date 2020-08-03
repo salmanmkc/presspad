@@ -44,6 +44,17 @@ const Update = ({ item }) => {
         </UpdateItem>
       );
 
+    case 'bookingTerminated':
+      return (
+        <UpdateItem key={_id}>
+          Unfortunately due to lack of payment this booking has been terminated.
+          View booking -&nbsp;
+          <UpdateDate>{timeString}</UpdateDate>
+          {!seenForOrg && !loading && <Badge>new</Badge>}
+          {loading && !seenForOrg && <LoadingBallPulseSync />}
+        </UpdateItem>
+      );
+
     default:
       return null;
   }

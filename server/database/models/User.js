@@ -67,6 +67,12 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users',
   },
+
+  // for reset password
+  resetToken: {
+    value: String,
+    expiresIn: Date,
+  },
 });
 
 userSchema.pre('save', async function hashPassword() {

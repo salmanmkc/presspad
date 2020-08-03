@@ -32,6 +32,8 @@ import MoneyBag from './icons/MoneyBag';
 import CheckMark from './icons/CheckMark';
 import ReviewExplanationMark from './icons/ReviewExplanationMark';
 import ExplanationMarkCircle from './icons/ExplanationMarkCircle';
+import Copy from './icons/Copy';
+import AlertTriangle from './icons/AlertTriangle';
 import Money from './icons/Money';
 import Arrow2 from './icons/Arrow2';
 
@@ -72,6 +74,8 @@ const iconMap = {
   questionMark: QuestionMark,
   reviewExplanationMark: ReviewExplanationMark,
   explanationMarkCircle: ExplanationMarkCircle,
+  copy: Copy,
+  alertTriangle: AlertTriangle,
   money: Money,
   arrow2: Arrow2,
   whatsapp: Whatsapp,

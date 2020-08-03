@@ -90,6 +90,88 @@ const Update = ({ item, userRole }) => {
             </Link>
           );
 
+        case 'cancelledBeforePayments':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Booking with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;cancelled. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'requestCancelAfterPayments':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Cancel request received. We are reviewing your request now. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'cancelledAfterPayments':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Booking with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;cancelled. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'paymentIsDue':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Payment with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;is due. Pay here
+                -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'paymentOverDue':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                URGENT! Payment with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;is now 7 days
+                overdue. Pay here to avoid your stay being terminated. -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'bookingTerminated':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Unfortunately due to lack of payment this booking has been
+                terminated. View booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
         default:
           return null;
       }
@@ -152,6 +234,88 @@ const Update = ({ item, userRole }) => {
               <UpdateItem>
                 Please leave a review for&nbsp;
                 <BlueSpan>{secondParty.name}</BlueSpan>&nbsp; -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'cancelledBeforePayments':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Booking with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;cancelled. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'requestCancelAfterPayments':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Cancel request received. We are reviewing your request now. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'cancelledAfterPayments':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Booking with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;cancelled. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'paymentIsDue':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Payment with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;is due. View
+                booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'paymentOverDue':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                URGENT! Payment with&nbsp;
+                <BlueSpan>{secondParty.name}</BlueSpan>&nbsp;is now 7 days
+                overdue. View booking -&nbsp;
+                <UpdateDate>{timeString}</UpdateDate>
+                {!seen && !loading && <Badge>new</Badge>}
+                {loading && !seen && <LoadingBallPulseSync />}
+              </UpdateItem>
+            </Link>
+          );
+
+        case 'bookingTerminated':
+          return (
+            <Link to={`/booking/${booking}`}>
+              <UpdateItem>
+                Unfortunately due to lack of payment this booking has been
+                terminated. View booking -&nbsp;
                 <UpdateDate>{timeString}</UpdateDate>
                 {!seen && !loading && <Badge>new</Badge>}
                 {loading && !seen && <LoadingBallPulseSync />}
