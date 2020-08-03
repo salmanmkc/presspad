@@ -15,14 +15,6 @@ const ProgressBar = withTheme(
     endFunc,
   }) => {
     const [current, setCurrent] = useState(initialCurrent || 0);
-    if (current === number) {
-      // should direct the user to the correct path after get start section
-      if (endFunc && typeof endFunc === 'function') {
-        endFunc();
-      } else {
-        setCurrent(0);
-      }
-    }
     return (
       <Row>
         <Col w={[4, 6, 6]}>
@@ -45,10 +37,15 @@ const ProgressBar = withTheme(
         <Col w={[4, 4, 4]}>
           <Button
             type="secondary"
-            onClick={() => {
-              handleClick();
-              setCurrent(old => old + 1);
-            }}
+            onClick={
+              typeof endFunc === 'function'
+                ? endFunc()
+                : () => {
+                    console.log('eeeeeeeeeee');
+                    handleClick();
+                    setCurrent(current + 1);
+                  }
+            }
           >
             asd
           </Button>

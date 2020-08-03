@@ -1,8 +1,9 @@
 import React from 'react';
-import { Redirect, Switch, useParams } from 'react-router-dom';
+import { Redirect, Switch, useLocation } from 'react-router-dom';
 // // to be deleted /////
 import IllustrationsLayout from '../Layouts/IllustrationsLayout';
 import ProgressBar from '../Common/ProgressBar';
+import welcomeImage from './WelcomePages/wlcomeImage';
 
 //  COMMON COMPONENTS
 import Route from '../Common/Route';
@@ -58,7 +59,7 @@ import {
 
 function Pages(props) {
   const { handleChangeState, isLoggedIn, role, windowWidth } = props;
-  const { id } = useParams();
+  const location = useLocation();
   return (
     <>
       <Switch>
@@ -316,7 +317,8 @@ function Pages(props) {
           isLoggedIn={isLoggedIn}
           {...props}
           layout="illustrations"
-          image="community"
+          // image="presspadMovement"
+          image={welcomeImage(location, 'intern')}
           // still need to create this function
           // image={wlecomeImages(id, role)}
         />
