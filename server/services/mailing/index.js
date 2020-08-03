@@ -9,6 +9,7 @@ const sendNewBookingEmails = require('./sendNewBookingEmails');
 const sendAcceptedBookingEmails = require('./sendAcceptedBookingEmails');
 const profileApproved = require('./profileApproved');
 const profileCompleted = require('./profileCompleted');
+const accountDeleted = require('./accountDeleted');
 const resetPassword = require('./resetPassword');
 const bookingCancelledByUser = require('./bookingCancelledByUser');
 const bookingTerminated = require('./bookingTerminated');
@@ -27,6 +28,7 @@ module.exports = {
   sendAcceptedBookingEmails,
   profileApproved,
   profileCompleted,
+  accountDeleted,
   resetPassword,
   bookingCancelledByUser,
   bookingTerminated,

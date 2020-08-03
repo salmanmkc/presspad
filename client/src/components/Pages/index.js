@@ -24,6 +24,8 @@ import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
+
+import Settings, { DeleteAccountSuccess } from './Settings';
 import ResetPassword, { SetPassword } from './ResetPassword';
 
 import { withWindowWidth } from '../../HOCs';
@@ -49,17 +51,47 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
+  SETTINGS_URL,
+  DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
-  const { handleChangeState, isLoggedIn, role, windowWidth } = props;
+  const {
+    handleChangeState,
+    isLoggedIn,
+    role,
+    windowWidth,
+    resetState,
+  } = props;
 
   return (
     <>
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        <Route
+          isPrivate
+          exact
+          path={SETTINGS_URL}
+          Component={Settings}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          resetState={resetState}
+          layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          exact
+          path={DELETE_ACCOUNT_SUCCESS}
+          Component={DeleteAccountSuccess}
+          layout="illustrations"
+          mobileText="WE HOPE TO SEE YOU AGAIN!"
+          {...props}
+        />
+
+        {/* protected host profile */}
         <Route
           exact
           path={RESET_PASSWORD}

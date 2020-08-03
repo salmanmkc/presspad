@@ -35,3 +35,9 @@ export const PresspadMovement = () => (
     Content goes here
   </IllustrationsLayout>
 );
+
+export const WithText = () => (
+  <IllustrationsLayout mobileText="WE HOPE TO SEE YOU AGAIN!">
+    Content goes here
+  </IllustrationsLayout>
+);

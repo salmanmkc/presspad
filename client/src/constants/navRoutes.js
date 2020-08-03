@@ -12,6 +12,7 @@ export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
+export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
 
 // admin routes
