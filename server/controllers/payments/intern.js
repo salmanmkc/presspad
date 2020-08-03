@@ -226,6 +226,7 @@ const internPayment = async (req, res, next) => {
                 startDate: booking.startDate,
                 endDate: booking.endDate,
                 internId: booking.intern,
+                hostId: booking.host,
                 // session,  // ToDo Debug it later then move it up
               });
             }
