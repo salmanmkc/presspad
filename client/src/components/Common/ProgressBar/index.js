@@ -5,15 +5,7 @@ import Button from '../ButtonNew';
 import { Col, Row } from '../Grid';
 
 const ProgressBar = withTheme(
-  ({
-    theme,
-    number,
-    current: initialCurrent,
-    color,
-    handleClick,
-    margin,
-    endFunc,
-  }) => {
+  ({ theme, number, current: initialCurrent, color, handleClick, margin }) => {
     const [current, setCurrent] = useState(initialCurrent || 0);
     return (
       <Row>
@@ -37,15 +29,10 @@ const ProgressBar = withTheme(
         <Col w={[4, 4, 4]}>
           <Button
             type="secondary"
-            onClick={
-              typeof endFunc === 'function'
-                ? endFunc()
-                : () => {
-                    console.log('eeeeeeeeeee');
-                    handleClick();
-                    setCurrent(current + 1);
-                  }
-            }
+            onClick={() => {
+              handleClick();
+              setCurrent(current + 1);
+            }}
           >
             asd
           </Button>
