@@ -14,6 +14,7 @@ const CommonStyle = css`
   margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
   text-align: ${({ align }) => align || 'left'};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'unset')};
+  width: auto;
 `;
 
 export const Heading0 = styled.h1`
