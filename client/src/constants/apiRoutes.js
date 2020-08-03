@@ -166,6 +166,9 @@ const API_RESET_PASSWORD = `${API_PREFIX}${RESET_PASSWORD}`;
 const SET_PASSWORD = '/user/set-password';
 const API_SET_PASSWORD = `${API_PREFIX}${SET_PASSWORD}`;
 
+const SETTINGS_MY_ACCOUNT = '/settings/my-account';
+const API_SETTINGS_MY_ACCOUNT = `${API_PREFIX}${SETTINGS_MY_ACCOUNT}`;
+
 module.exports = {
   // CLIENT
   API_LOGIN_URL,
@@ -223,6 +226,7 @@ module.exports = {
   API_USER_BASE,
   API_SET_PASSWORD,
   API_RESET_PASSWORD,
+  API_SETTINGS_MY_ACCOUNT,
 
   // SERVER
   LOGIN_URL,
@@ -280,4 +284,5 @@ module.exports = {
   USER_BASE,
   RESET_PASSWORD,
   SET_PASSWORD,
+  SETTINGS_MY_ACCOUNT,
 };

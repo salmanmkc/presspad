@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import * as T from '../../Common/Typography';
 import * as routes from '../../../constants/navRoutes';
@@ -55,4 +50,3 @@ function Settings({ windowWidth }) {
 }
 
 export default withWindowWidth(Settings);
-// export { MyAccount, DeleteAccount, DeleteAccountSuccess };
