@@ -8,6 +8,7 @@ export const TitleContainer = styled.div`
     width: 37%;
     min-width: 450px;
     left: 0;
+    top: 100px;
   }
 `;
 
@@ -15,6 +16,6 @@ export const SubTitleContainer = styled.div`
 margin-top: 30px;
 margin-bottom: 10px;
 @media ${({ theme }) => theme.breakpoints.tablet} {
-  padding-top: 170px;
+  padding-top: 230px;
 
 `;
