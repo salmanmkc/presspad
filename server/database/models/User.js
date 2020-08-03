@@ -56,6 +56,12 @@ const userSchema = new Schema({
   respondedRequests: {
     type: Number,
   },
+
+  // for reset password
+  resetToken: {
+    value: String,
+    expiresIn: Date,
+  },
 });
 
 userSchema.pre('save', async function hashPassword() {

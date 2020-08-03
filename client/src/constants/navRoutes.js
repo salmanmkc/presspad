@@ -37,6 +37,10 @@ export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
 export const SIGNIN_URL = '/sign-in';
 export const SIGNOUT_URL = '/sign-out';
 
+// reset/set password
+export const RESET_PASSWORD = '/reset-password';
+export const SET_PASSWORD = '/set-password/:token';
+
 // errors
 export const Error404 = '/404';
 export const Error500 = '/500';

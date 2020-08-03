@@ -15,6 +15,7 @@ const Route = ({
   resetState,
   layout,
   image,
+  color,
   ...rest
 }) => {
   const navbarProps = { userType: rest.role, resetState };
@@ -25,6 +26,7 @@ const Route = ({
       navbarProps={navbarProps}
       isLoggedIn={isLoggedIn}
       image={image}
+      color={color}
     >
       {isMounted ? (
         <>

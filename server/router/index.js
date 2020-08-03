@@ -48,6 +48,8 @@ const {
 } = require('../controllers/payments');
 const { createCoupon } = require('../controllers/coupons');
 const getAllInterns = require('../controllers/user/getAllInterns');
+const resetPassword = require('../controllers/user/resetPassword');
+const setPassword = require('../controllers/user/setPassword');
 const hostDonation = require('../controllers/payments/hostDonation');
 const { getAllCities } = require('../controllers/listing');
 const deletListingPhotos = require('../controllers/profile/deletListingPhotos');
@@ -123,6 +125,8 @@ const {
   ADMIN_UPDATE_PROFILE,
   HOST_PROFILE_SOFT_URL,
   ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL,
+  RESET_PASSWORD,
+  SET_PASSWORD,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -328,5 +332,8 @@ router.get(REVIEWS, getReviews);
 
 router.get(INTERNSHIP, authentication, getInternshipDetails);
 router.put(INTERNSHIP, authentication, updateInternshipDetails);
+
+router.post(RESET_PASSWORD, resetPassword);
+router.post(SET_PASSWORD, setPassword);
 
 module.exports = router;

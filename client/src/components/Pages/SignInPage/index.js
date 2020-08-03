@@ -11,6 +11,7 @@ import { API_LOGIN_URL } from '../../../constants/apiRoutes';
 import {
   DASHBOARD_URL,
   ADMIN_DASHBOARD_URL,
+  RESET_PASSWORD,
 } from '../../../constants/navRoutes';
 
 // STYLING
@@ -152,6 +153,9 @@ export default class SignInPage extends Component {
             }
           />
         </SignInForm>
+        <p>
+          <Link to={RESET_PASSWORD}>Forgot password?</Link>
+        </p>
         <p>
           Already have an account?
           <Link
