@@ -19,12 +19,13 @@ const welcomeImage = (location, role) => {
       case '5':
         image = 'community';
         break;
+      case '6':
+        image = 'getStarted';
+        break;
       default:
         break;
     }
   }
-  console.log('image', image, id);
-
   return image;
 };
 
