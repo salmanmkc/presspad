@@ -3,7 +3,7 @@ import moment from 'moment';
 import axios from 'axios';
 
 import * as T from '../../Common/Typography';
-import { Modal } from '../../Common/AntdWrappers';
+import Modal from '../../Common/Modal';
 
 import {
   API_SEARCH_PROFILES_URL,

@@ -116,10 +116,10 @@ export const shadows = {
 
 // borders
 export const borders = {
-  inputBox: `1px solid ${colors.graySecondary}`,
+  inputBox: `1px solid ${colors.lighterGray}`,
   divider: `1px solid ${colors.lightGray}`,
   stripeBorder: `1px solid ${colors.borderGray}`,
-  error: `1px solid ${colors.red}`,
+  error: `1px solid ${colors.pink}`,
   lightDivider: '1px solid rgba(0, 0, 0, 0.1)',
   newInputBox: '1px solid rgba(224, 224, 224, 0.5)',
 };

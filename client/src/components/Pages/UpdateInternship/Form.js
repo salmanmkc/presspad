@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Input, DatePicker } from '../../Common/AntdWrappers';
+import { Input, DatePicker } from '../../Common/Inputs';
 import * as T from '../../Common/Typography';
 import {
   Row,

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
 import sendBookingRequest from '../../../helpers/sendBookingRequest';
 
-import { Modal } from '../../Common/AntdWrappers';
+import Modal from '../../Common/Modal';
 import * as T from '../../Common/Typography';
 
 export const updateInternship = async internshipData => {

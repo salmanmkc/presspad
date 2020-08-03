@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 
-import Modal from '../Common/AntdWrappers/Modal';
+import Modal from '../Common/Modal';
 
 const { Option } = Select;
 const { Title } = Typography;
