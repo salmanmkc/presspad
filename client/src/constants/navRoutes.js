@@ -13,6 +13,7 @@ export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
 export const PAYMENTS_URL = '/payments';
+export const WELCOME_PAGES = '/welcome/:id';
 
 // admin routes
 export const ADMIN_DASHBOARD_URL = '/admin/dashboard';
