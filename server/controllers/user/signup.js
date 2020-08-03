@@ -69,7 +69,7 @@ module.exports = async (req, res, next) => {
       role,
       organisation,
       referralToken: newReferralToken,
-      referredBy,
+      referredBy: (referredBy && referredBy._id) || null,
     });
 
     const token = createToken(user._id);

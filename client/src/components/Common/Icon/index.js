@@ -7,6 +7,8 @@ import Instagram from './icons/Instagram';
 import Linkedin from './icons/Linkedin';
 import Twitter from './icons/Twitter';
 import Youtube from './icons/Youtube';
+import Whatsapp from './icons/Whatsapp';
+import Email from './icons/Email';
 
 // general icons
 import Arrow from './icons/Arrow';
@@ -72,6 +74,8 @@ const iconMap = {
   explanationMarkCircle: ExplanationMarkCircle,
   money: Money,
   arrow2: Arrow2,
+  whatsapp: Whatsapp,
+  email: Email,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {

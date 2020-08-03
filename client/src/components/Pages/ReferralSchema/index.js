@@ -5,11 +5,15 @@ import { SIGNUP_HOST } from '../../../constants/navRoutes';
 import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
 import referralImage from '../../../assets/referral.png';
+import SocialShare from './SocialShare';
 
 function ReferralSchema({ windowWidth, referralToken }) {
   const isMobile = windowWidth < TABLET_WIDTH;
 
   const TitleComponent = isMobile ? T.H3 : T.H2;
+
+  const link = `${window.location.origin}${SIGNUP_HOST}/?referral=${referralToken}`;
+
   return (
     <S.Wrapper>
       <S.Content>
@@ -17,13 +21,12 @@ function ReferralSchema({ windowWidth, referralToken }) {
           Spread the word
         </TitleComponent>
         <T.H5 color="blue">Refer other hosts with a unique invite link</T.H5>
-        <a
-          href={`${window.location.origin}${SIGNUP_HOST}/?referral=${referralToken}`}
-        >{`${window.location.origin}${SIGNUP_HOST}/?referral=${referralToken}`}</a>
+        <a href={link}>{link}</a>
         <T.H5 mb={5} color="blue">
           Successfully refer 5 hosts to become celebrated as a PressPad
           Ambassador
         </T.H5>
+        <SocialShare shareLink={link} />
         <T.P mb={4} color="gray3">
           PressPad&apos;s referral scheme allows us to keep our host-mentor
           matches even safer, as we call upon pre-existing, already vetted,

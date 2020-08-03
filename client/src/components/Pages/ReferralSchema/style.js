@@ -42,3 +42,12 @@ export const Image = styled.img`
     position: absolute;
   }
 `;
+
+export const Container = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const ShareWrapper = styled.div`
+  margin-right: 25px;
+`;
