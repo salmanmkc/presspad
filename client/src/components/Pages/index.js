@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
+import { Redirect, Switch, useParams } from 'react-router-dom';
 // // to be deleted /////
 import IllustrationsLayout from '../Layouts/IllustrationsLayout';
 import ProgressBar from '../Common/ProgressBar';
@@ -53,11 +53,12 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
+  WELCOME_PAGES,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
   const { handleChangeState, isLoggedIn, role, windowWidth } = props;
-
+  const { id } = useParams();
   return (
     <>
       <Switch>
@@ -306,16 +307,18 @@ function Pages(props) {
           layout="sideMenu"
         />
         {/* ///////////ttttt//////////// */}
-        {/* control the images using the rote as condition */}
-        {console.log(role)}
+        {/* control the images using the role as condition */}
+        {console.log('wwwwwwww', WELCOME_PAGES)}
         <Route
-          path="/test1"
+          path={WELCOME_PAGES}
           Component={() => <WelcomePages />}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}
           layout="illustrations"
           image="community"
+          // still need to create this function
+          // image={wlecomeImages(id, role)}
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>
