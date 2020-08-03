@@ -1,78 +1,58 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Switch,
+  Route,
+} from 'react-router-dom';
 
-import { Input } from 'antd';
-import axios from 'axios';
 import * as T from '../../Common/Typography';
+import * as routes from '../../../constants/navRoutes';
 import * as S from './style';
-import { Col, Row } from '../../Common/Grid';
-import { API_USER_BASE } from '../../../constants/apiRoutes';
+
+import MyAccount from './MyAccount';
+import MyProfile from './MyProfile';
+import AboutMe from './AboutMe';
+import Verifications from './Verifications';
+import { withWindowWidth } from '../../../HOCs';
+import { MOBILE_M_WIDTH } from '../../../constants/screenWidths';
+
+import DeleteAccount from './DeleteAccount';
 import DeleteAccountSuccess from './DeleteAccountSuccess';
-import { DELETE_ACCOUNT_SUCCESS } from '../../../constants/navRoutes';
-import Button from '../../Common/ButtonNew';
 
-function Settings({ resetState, role }) {
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
-  const [reason, setReason] = useState('');
+function Settings({ windowWidth }) {
+  const Heading = windowWidth > MOBILE_M_WIDTH ? T.H2 : T.H3;
 
-  const history = useHistory();
-
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(API_USER_BASE, { data: { reason } });
-      setError('');
-
-      resetState();
-      history.push({
-        pathname: DELETE_ACCOUNT_SUCCESS,
-        state: { role },
-      });
-    } catch (e) {
-      if (e.response && e.response.data && e.response.data.error) {
-        setError(e.response.data.error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
   return (
-    <div>
-      <Row>
-        <Col w={[4, 8, 8]}>
-          <T.H2 color="blue">YOUR ACCOUNT HAS BEEN DELETED</T.H2>
-        </Col>
-      </Row>
-      <Row>
-        <Col w={[4, 8, 8]}>
-          <S.Label htmlFor="reason">
-            We’re sad to see you go! Could you let us know why?
-          </S.Label>
-          <Input.TextArea
-            rows={6}
-            id="reason"
-            onChange={e => setReason(e.target.value)}
-          />
-        </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 8, 8]}>
-          {error && <S.Error block>{error}</S.Error>}
-          <Button
-            type="secondary"
-            onClick={handleSubmit}
-            loading={loading}
-            mt={5}
-          >
-            DELETE ACCOUNT
-          </Button>
-        </Col>
-      </Row>
-    </div>
+    <Router>
+      <Heading>Settings</Heading>
+      <S.TabsWrapper>
+        <S.Tabs to={routes.SETTINGS_MY_ACCOUNT}>
+          <T.H5C color="inherit">MY ACCOUNT</T.H5C>
+        </S.Tabs>
+        <S.Tabs to={routes.SETTINGS_ABOUT_ME}>
+          <T.H5C color="inherit">ABOUT ME</T.H5C>
+        </S.Tabs>
+        <S.Tabs to={routes.SETTINGS_MY_PROFILE}>
+          <T.H5C color="inherit">MY PROFILE</T.H5C>
+        </S.Tabs>
+        <S.Tabs to={routes.SETTINGS_VERIFICATIONS}>
+          <T.H5C color="inherit">VERIFICATIONS</T.H5C>
+        </S.Tabs>
+      </S.TabsWrapper>
+      <Switch>
+        <Route path={routes.SETTINGS_MY_ACCOUNT} component={MyAccount} exact />
+        <Route path={routes.SETTINGS_ABOUT_ME} render={AboutMe} exact />
+        <Route path={routes.SETTINGS_MY_PROFILE} render={MyProfile} exact />
+        <Route
+          path={routes.SETTINGS_VERIFICATIONS}
+          render={Verifications}
+          exact
+        />
+      </Switch>
+    </Router>
   );
 }
 
-export { DeleteAccountSuccess };
-export default Settings;
+export default withWindowWidth(Settings);
+// export { MyAccount, DeleteAccount, DeleteAccountSuccess };

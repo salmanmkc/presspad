@@ -11,7 +11,16 @@ export const BOOKING_VIEW_URL = '/booking/:id';
 export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
-export const SETTINGS_URL = '/settings';
+
+export const SETTINGS = '/settings';
+export const SETTINGS_MY_ACCOUNT = `${SETTINGS}/my-account`;
+export const SETTINGS_ABOUT_ME = `${SETTINGS}/about-me`;
+export const SETTINGS_MY_PROFILE = `${SETTINGS}/my-profile`;
+export const SETTINGS_VERIFICATIONS = `${SETTINGS}/verifications`;
+export const SETTINGS_DELETE_ACCOUNT = `${SETTINGS}/delete-account`;
+export const SETTINGS_DELETE_ACCOUNT_SUCCESS =
+  '/settings/delete-account-success';
+
 export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
 
