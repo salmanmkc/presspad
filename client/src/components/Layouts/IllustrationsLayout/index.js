@@ -11,6 +11,7 @@ import presspadMovement from '../../../assets/Illustrations/presspad_movement.sv
 // import referralSchema from '../../../assets/Illustrations/referral_schema.svg';
 
 import * as S from './style';
+import * as T from '../../Common/Typography';
 
 const images = {
   community,
@@ -25,20 +26,34 @@ const IllustrationsLayout = ({ windowWidth, children, image, color }) => {
   const topHeaderRendered = !largerThanTablet;
 
   const imageFile = images[image];
-
   return (
     <>
       <S.Wrapper>
         {topHeaderRendered && (
           <S.ColouredTopDiv color={color}>
-            <S.TopImage src={imageFile} />
+            {!imageFile && image === 'getStarted' ? (
+              <T.H1C
+                color="white"
+                style={{ paddingRight: '0%', textAlign: 'center' }}
+              >
+                LET’S GET STARTED!
+              </T.H1C>
+            ) : (
+              <S.TopImage src={imageFile} />
+            )}
           </S.ColouredTopDiv>
         )}
         <S.ContentWrapper>{children}</S.ContentWrapper>
 
         {!topHeaderRendered && (
-          <S.ColouredSideDiv color={color}>
-            <S.Image src={imageFile} />
+          <S.ColouredSideDiv color={color} imageName={image}>
+            {!imageFile && image === 'getStarted' ? (
+              <T.H0C color="blue" style={{ padding: '15%' }}>
+                LET’S GET STARTED!
+              </T.H0C>
+            ) : (
+              <S.Image src={imageFile} />
+            )}
           </S.ColouredSideDiv>
         )}
       </S.Wrapper>
