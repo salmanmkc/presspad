@@ -134,7 +134,12 @@ export default class InternView extends Component {
       showFullData,
       expandDateSection,
       bookingSearchDates,
+      referred,
+      referredBy,
     } = this.state;
+
+    // TODO show the badges based on these
+    console.log({ referred, referredBy });
 
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
