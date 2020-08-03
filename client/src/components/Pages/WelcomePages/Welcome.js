@@ -12,7 +12,6 @@ const Welcome = ({
   number,
   current,
   handleClick,
-  endFunc,
 }) => (
   <div style={{ display: 'flex', flexDirection: 'column' }}>
     <S.TitleContainer>
@@ -28,7 +27,6 @@ const Welcome = ({
         current={current}
         color="pink"
         handleClick={handleClick}
-        endFunc={endFunc}
       />
     </div>
   </div>
