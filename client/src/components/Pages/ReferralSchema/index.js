@@ -2,10 +2,12 @@ import React from 'react';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import * as T from '../../Common/Typography';
 import { SIGNUP_HOST } from '../../../constants/navRoutes';
-import { Col, Row } from '../../Common/Grid';
+
 import * as S from './style';
 import referralImage from '../../../assets/referral.png';
 import SocialShare from './SocialShare';
+
+import LinkCopy from '../../Common/LinkCopy';
 
 function ReferralSchema({ windowWidth, referralToken }) {
   const isMobile = windowWidth < TABLET_WIDTH;
@@ -20,9 +22,13 @@ function ReferralSchema({ windowWidth, referralToken }) {
         <TitleComponent color="blue" mb={5} mbT={4}>
           Spread the word
         </TitleComponent>
-        <T.H5 color="blue">Refer other hosts with a unique invite link</T.H5>
-        <a href={link}>{link}</a>
-        <T.H5 mb={5} color="blue">
+        <T.H5 color="blue" mb={3}>
+          Refer other hosts with a unique invite link
+        </T.H5>
+
+        <LinkCopy strToCopy={link} />
+
+        <T.H5 mt={4} mb={5} color="blue">
           Successfully refer 5 hosts to become celebrated as a PressPad
           Ambassador
         </T.H5>
@@ -52,11 +58,8 @@ function ReferralSchema({ windowWidth, referralToken }) {
         </T.P>
       </S.Content>
 
-      {/* </Col> */}
-      {/* <Col w={[0, 0, 5]}>45</Col> */}
-      <S.SideDiv>ddd</S.SideDiv>
+      <S.SideDiv />
       <S.Image src={referralImage} />
-      {/*  </Row> */}
     </S.Wrapper>
   );
 }

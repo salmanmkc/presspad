@@ -4,6 +4,15 @@ import styled from 'styled-components';
 import Icon from '../Icon';
 import * as T from '../Typography';
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background: #fffbfd;
+  align-items: center;
+  padding: 25px 20px;
+  border-radius: 5px;
+`;
+
 const PopContainer = styled.div`
   display: flex;
 `;
@@ -45,8 +54,12 @@ const LinkCopy = ({ showText, strToCopy }) => {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <T.H5 color="pink">{strToCopy}</T.H5>
+    <Wrapper>
+      <a href={strToCopy} target="_blank" rel="noopener noreferrer">
+        <T.H5 color="pink" m={0}>
+          {strToCopy}
+        </T.H5>
+      </a>
       <Popover
         content={
           success ? (
@@ -70,7 +83,7 @@ const LinkCopy = ({ showText, strToCopy }) => {
           <Icon icon="copy" color="blue" width="24px" height="24px" />
         </Button>
       </Popover>
-    </div>
+    </Wrapper>
   );
 };
 
