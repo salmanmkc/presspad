@@ -1,31 +1,49 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import Welcome from './Welcome';
-import { internData } from './welcomeContent';
+import { internData, hostData, orgData } from './welcomeContent';
 import {
   WELCOME_PAGES,
   DASHBOARD_URL,
-  ADMIN_DASHBOARD_URL,
+  HOST_COMPLETE_PROFILE_URL,
+  INTERN_COMPLETE_PROFILE_URL,
 } from '../../../constants/navRoutes';
 
 const WelcomePages = ({ role }) => {
   const history = useHistory();
   const { id } = useParams();
-  const number = internData.length;
+  let data;
+  if (role === 'intern') {
+    data = internData;
+  } else if (role === 'host') {
+    data = hostData;
+  } else if (role === 'organisation') {
+    data = orgData;
+  }
+  const number = data && data.length;
   const endFunc = () => {
-    if (role === 'admin') history.push(ADMIN_DASHBOARD_URL);
-    else history.push(DASHBOARD_URL);
+    if (role === 'organisation') {
+      return history.push(DASHBOARD_URL);
+    }
+    if (['host', 'superhost'].includes(role)) {
+      return history.push(HOST_COMPLETE_PROFILE_URL);
+    }
+    if (role === 'intern') {
+      return history.push(INTERN_COMPLETE_PROFILE_URL);
+    }
+    return history.push(DASHBOARD_URL);
   };
-
   return (
     <div>
       {number < Number(id) ? (
         endFunc()
       ) : (
         <Welcome
-          title={internData[id - 1].title}
-          subTitle={internData[id - 1].subTitle}
-          content={internData[id - 1].content}
+          title={data[id - 1].title}
+          topTitle={data[id - 1].topTitle}
+          bottomTitle={data[id - 1].bottomTitle}
+          subTitle={data[id - 1].subTitle}
+          content={data[id - 1].content}
           number={number}
           current={id - 1}
           handleClick={index =>

@@ -7,14 +7,8 @@ import {
   API_GET_ORGS_URL,
   DASHBOARD_URL,
 } from '../../../constants/apiRoutes';
-
+import { WELCOME_PAGES, Error500 } from '../../../constants/navRoutes';
 import USER_TYPES from '../../../constants/userTypes';
-
-import {
-  HOST_COMPLETE_PROFILE_URL,
-  INTERN_COMPLETE_PROFILE_URL,
-  Error500,
-} from '../../../constants/navRoutes';
 
 import SignUp from './SignUp';
 
@@ -201,12 +195,15 @@ export default class SignUpPage extends Component {
         if (['admin', 'organisation'].includes(data.role)) {
           this.setState({ isLoading: false });
           history.push(DASHBOARD_URL);
+        } else if (data.role === 'organisation') {
+          this.setState({ isLoading: false });
+          history.push(WELCOME_PAGES.replace(':id', 1));
         } else if (data.role === 'intern') {
           this.setState({ isLoading: false });
-          history.push(INTERN_COMPLETE_PROFILE_URL);
+          history.push(WELCOME_PAGES.replace(':id', 1));
         } else if (['host', 'superhost'].includes(data.role)) {
           this.setState({ isLoading: false });
-          history.push(HOST_COMPLETE_PROFILE_URL);
+          history.push(WELCOME_PAGES.replace(':id', 1));
         }
       } catch (err) {
         if (err.response) {
