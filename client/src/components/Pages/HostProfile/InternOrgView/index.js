@@ -23,7 +23,6 @@ import {
   Row,
   Col,
   WhyHereDiv,
-  ReviewsPart,
   GalleryContainer,
 } from '../Profile.style';
 
@@ -137,9 +136,6 @@ export default class InternView extends Component {
       expandDateSection,
       bookingSearchDates,
     } = this.state;
-
-    // TODO show the badges based on these
-    console.log({ referred, referredBy });
 
     const { match, id: currentUserId, role, windowWidth } = this.props;
     const { id: hostId } = match.params;
