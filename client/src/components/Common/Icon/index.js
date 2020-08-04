@@ -37,6 +37,11 @@ import Copy from './icons/Copy';
 import AlertTriangle from './icons/AlertTriangle';
 import Money from './icons/Money';
 import Arrow2 from './icons/Arrow2';
+import Flower from './icons/Flower';
+import Hearts from './icons/Hearts';
+import Star from './icons/Star';
+import Ambassador from './icons/Ambassador';
+import Community from './icons/Community';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -82,6 +87,11 @@ const iconMap = {
   alertTriangle: AlertTriangle,
   money: Money,
   arrow2: Arrow2,
+  flower: Flower,
+  hearts: Hearts,
+  star: Star,
+  ambassador: Ambassador,
+  community: Community,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {
