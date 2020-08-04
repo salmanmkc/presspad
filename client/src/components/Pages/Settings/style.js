@@ -54,3 +54,13 @@ export const ChangePassword = styled.div`
 
   color: ${({ theme }) => theme.colors.blue};
 `;
+
+export const IllCareWrapper = styled.div`
+  label,
+  .helper {
+    width: 100%;
+    @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+      width: 200%;
+    }
+  }
+`;

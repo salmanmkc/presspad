@@ -30,15 +30,16 @@ const Select = ({
   onChange,
   error,
   style,
+  value,
 }) => (
   <SelectWrapper error={!!error} mt={mt} mb={mb} ml={ml} mr={mr}>
     {label && (
-      <T.PBold as="label" color="primary" ml={2}>
+      <T.PBold as="label" color="primary" ml={2} style={{ display: 'block' }}>
         {label}
       </T.PBold>
     )}
     {helperText && (
-      <T.PXS color="gray3" ml={2} mb={2}>
+      <T.PXS color="gray3" ml={2} mb={2} className="helper">
         {helperText}
       </T.PXS>
     )}
@@ -51,9 +52,10 @@ const Select = ({
       mode={multi && 'multiple'}
       onChange={onChange}
       style={style}
+      value={value || undefined}
     >
-      {options.map(({ value, label: _label }) => (
-        <Option value={value}>{_label}</Option>
+      {options.map(({ value: _value, label: _label }) => (
+        <Option value={_value}>{_label}</Option>
       ))}
     </AntdSelect>
     {error && <Error>{error}</Error>}

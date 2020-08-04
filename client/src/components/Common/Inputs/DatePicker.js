@@ -31,6 +31,7 @@ const DatePicker = ({
   handleAdd,
   arrayLength,
   extraInfo,
+  label,
   ...props
 }) => {
   if (type === 'dateRange') {
@@ -91,6 +92,11 @@ const DatePicker = ({
 
   return (
     <S.DatePickerWrapper mt={mt} mb={mb} ml={ml} mr={mr} error={!!error}>
+      {label && (
+        <T.PBold as="label" color="primary" ml={2}>
+          {label}
+        </T.PBold>
+      )}
       <AntdDatePicker
         format={customFormat || format}
         placeholder={customPlaceholder || placeholder}
