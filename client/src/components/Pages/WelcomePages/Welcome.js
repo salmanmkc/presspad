@@ -8,6 +8,8 @@ import { Row, Col } from '../../Common/Grid';
 
 const Welcome = ({
   title,
+  topTitle,
+  bottomTitle,
   subTitle,
   content,
   number,
@@ -22,21 +24,26 @@ const Welcome = ({
       height: '100vh',
     }}
   >
-    <S.TitleWrapper>
-      <S.TitleContainer>
-        <Title>{title}</Title>
-      </S.TitleContainer>
-    </S.TitleWrapper>
-    <Row>
-      <Col w={[4, 12, 10]}>
-        <S.SubTitleContainer>
-          <T.H5 color="pink"> {subTitle}</T.H5>
-        </S.SubTitleContainer>
-        <S.ContentContainer>
-          <T.P>{content}</T.P>
-        </S.ContentContainer>
-      </Col>
-    </Row>
+    <div>
+      <S.TitleWrapper>
+        <S.TitleContainer>
+          <Title topTitle={topTitle} bottomTitle={bottomTitle}>
+            {title}
+          </Title>
+        </S.TitleContainer>
+      </S.TitleWrapper>
+      <Row>
+        <Col w={[4, 12, 10]}>
+          <S.SubTitleContainer>
+            <T.H5 color="pink"> {subTitle}</T.H5>
+          </S.SubTitleContainer>
+          <S.ContentContainer>
+            <T.P>{content}</T.P>
+          </S.ContentContainer>
+        </Col>
+      </Row>
+    </div>
+
     <div>
       <ProgressBar
         number={number}
