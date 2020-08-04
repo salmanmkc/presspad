@@ -39,9 +39,10 @@ const menuLinks = {
     { title: 'Bookings', route: N.ADMIN_BOOKINGS_URL },
     { title: 'Bursary', route: N.ADMIN_BURSARY },
   ],
+
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'List your Pad', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_HOST },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };
@@ -59,7 +60,7 @@ const horizontalMenuLinks = {
   ],
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'List your Pad', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_HOST },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };
