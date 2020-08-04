@@ -51,6 +51,7 @@ class HostProfile extends Component {
     // new stuff
     accessibleFunds: null,
     pending: null,
+    reviews: [],
   };
 
   async componentDidMount() {
@@ -71,6 +72,7 @@ class HostProfile extends Component {
       nextBooking = {},
       accessibleFunds,
       pending,
+      reviews,
     } = data;
     const nextGuest = (nextBooking && nextBooking.intern) || {};
     const { profile: nextGuestProfile = {} } = nextGuest;
@@ -93,6 +95,7 @@ class HostProfile extends Component {
       nextBooking,
       accessibleFunds,
       pending,
+      reviews,
     }));
   };
 
@@ -311,6 +314,7 @@ class HostProfile extends Component {
       // new stuff
       pending,
       accessibleFunds,
+      reviews,
     } = this.state;
     return (
       <Content
@@ -351,6 +355,7 @@ class HostProfile extends Component {
         // new stuff
         accessibleFunds={accessibleFunds}
         pending={pending}
+        reviews={reviews}
       />
     );
   }

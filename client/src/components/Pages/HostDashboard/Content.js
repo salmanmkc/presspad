@@ -4,12 +4,12 @@ import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
 import Update from '../../Common/Update';
+import Review from '../../Common/SingleReview';
 
 import {
   Container,
   WalletContainer,
   WalletFooter,
-  UpdateList,
 } from './HostDashboard.style';
 import { bottomMargins, typographies } from './styleProperties';
 
@@ -27,7 +27,9 @@ const Content = ({
   accessibleFunds,
   pending,
   updates,
+  reviews,
 }) => {
+  console.log('rev', reviews);
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
 
@@ -127,13 +129,26 @@ const Content = ({
       </Row>
       {/* REVIEWS / PAYMENTS / SOCIAL */}
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
+        <Col w={[4, 12, 5]} mb={bottomMargins.col[device]}>
           <div style={{ border: '1px solid' }}>
             {' '}
             <SectionTitle>Recent Reviews</SectionTitle>
+            {reviews.length > 0 ? (
+              reviews.map(r => {
+                const {
+                  rate,
+                  user: { name: reviewer = '' },
+                  message,
+                } = r;
+
+                return <Review name={reviewer} rate={rate} message={message} />;
+              })
+            ) : (
+              <T.PXL color={colors.lightestGray}>No reviews</T.PXL>
+            )}
           </div>
         </Col>
-        <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>
+        <Col w={[4, 12, 7]} mb={bottomMargins.col[device]}>
           <div
             style={{
               border: '1px solid',

@@ -49,9 +49,21 @@ const hostDashboard = id =>
       $lookup: {
         from: 'reviews',
         let: { host: '$_id' },
+
         pipeline: [
           {
             $match: { $expr: { $eq: ['$$host', '$to'] } },
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'from',
+              foreignField: '_id',
+              as: 'user',
+            },
+          },
+          {
+            $unwind: '$user',
           },
           {
             $sort: {

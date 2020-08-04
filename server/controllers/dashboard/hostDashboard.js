@@ -82,7 +82,7 @@ const hostDashboard = async (req, res, next) => {
       reviews,
       notifications,
       nextBooking,
-      currentBalance: accessibleFunds,
+      accessibleFunds,
       pending,
       lastPayments,
     };
