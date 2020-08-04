@@ -6,6 +6,7 @@ import * as S from './style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
 import { API_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
+import Notification from '../../Common/Notification';
 
 const { validate, settingsMyAccountSchema } = require('../../../validation');
 
@@ -22,6 +23,8 @@ const MyAccount = props => {
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+
   const _validate = async () => {
     const { errors: _errors } = await validate({
       schema: settingsMyAccountSchema,
@@ -50,6 +53,8 @@ const MyAccount = props => {
 
       setLoading(true);
       await axios.patch(API_SETTINGS_MY_ACCOUNT, state);
+      setNotificationOpen(true);
+      props.handleChangeState({ email: state.email, name: state.name });
     } catch (e) {
       setError(e.response.data.error);
     } finally {
@@ -122,6 +127,11 @@ const MyAccount = props => {
           </Button>
         </Col>
       </Row>
+      <Notification
+        open={notificationOpen}
+        setOpen={setNotificationOpen}
+        content="Changes saved"
+      />
     </div>
   );
 };
