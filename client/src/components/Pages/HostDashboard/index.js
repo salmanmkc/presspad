@@ -1,84 +1,88 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Spin } from 'antd';
 
 import Content from './Content';
 import { API_HOST_DASHBOARD_URL } from '../../../constants/apiRoutes';
 
-class HostProfile extends Component {
-  state = {
-    name: '',
-    nextBooking: {},
-    updates: [],
-    apiLoading: false,
-    accessibleFunds: null,
-    pending: null,
-    reviews: [],
-    lastPayments: [],
-    listingAvailableDates: [],
-  };
+const initState = {
+  name: '',
+  nextBooking: {},
+  updates: [],
+  accessibleFunds: null,
+  pending: null,
+  reviews: [],
+  lastPayments: [],
+  listingAvailableDates: [],
+};
 
-  async componentDidMount() {
-    this.fetchData();
-  }
+const HostProfile = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useState({ ...initState });
+  const { windowWidth, role } = props;
 
-  fetchData = async () => {
-    const { data } = await axios.get(API_HOST_DASHBOARD_URL);
-    console.log('DATA', data);
-    const {
-      userData: { name = '', acceptAutomatically },
-      notifications = [],
+  useEffect(() => {
+    setIsLoading(true);
 
-      nextBooking = {},
-      accessibleFunds,
-      pending,
-      reviews,
-      lastPayments,
-      listing: { availableDates = [] },
-    } = data;
+    const fetchData = async () => {
+      const { data } = await axios.get(API_HOST_DASHBOARD_URL);
 
-    this.setState(() => ({
-      name,
-      acceptAutomatically,
-      updates: notifications,
-      nextBooking,
-      accessibleFunds,
-      pending,
-      reviews,
-      lastPayments,
-      listingAvailableDates: availableDates,
-    }));
-  };
+      const {
+        userData: { name = '', acceptAutomatically = false },
+        notifications = [],
+        nextBooking = {},
+        accessibleFunds = null,
+        pending = null,
+        reviews = [],
+        lastPayments = [],
+        listing: { availableDates = [] },
+      } = data;
 
-  render() {
-    const { windowWidth, role } = this.props;
-    const {
-      name,
-      updates,
-      nextBooking,
-      pending,
-      accessibleFunds,
-      reviews,
-      lastPayments,
-      listingAvailableDates,
-      acceptAutomatically,
-    } = this.state;
-    return (
-      <Content
-        // Props & state\
-        windowWidth={windowWidth}
-        name={name}
-        role={role}
-        updates={updates}
-        nextBooking={nextBooking}
-        accessibleFunds={accessibleFunds}
-        pending={pending}
-        reviews={reviews}
-        lastPayments={lastPayments}
-        listingAvailableDates={listingAvailableDates}
-        acceptAutomatically={acceptAutomatically}
-      />
-    );
-  }
-}
+      setState({
+        name,
+        acceptAutomatically,
+        updates: notifications,
+        nextBooking,
+        accessibleFunds,
+        pending,
+        reviews,
+        lastPayments,
+        listingAvailableDates: availableDates,
+      });
+    };
+    fetchData();
+    setIsLoading(false);
+  }, []);
+
+  const {
+    name,
+    updates,
+    nextBooking,
+    pending,
+    accessibleFunds,
+    reviews,
+    lastPayments,
+    listingAvailableDates,
+    acceptAutomatically,
+  } = state;
+
+  if (isLoading) return <Spin />;
+
+  return (
+    <Content
+      windowWidth={windowWidth}
+      name={name}
+      role={role}
+      updates={updates}
+      nextBooking={nextBooking}
+      accessibleFunds={accessibleFunds}
+      pending={pending}
+      reviews={reviews}
+      lastPayments={lastPayments}
+      listingAvailableDates={listingAvailableDates}
+      acceptAutomatically={acceptAutomatically}
+    />
+  );
+};
 
 export default HostProfile;

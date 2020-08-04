@@ -75,7 +75,6 @@ const hostDashboard = async (req, res, next) => {
 
     const output = {
       userData: { _id, email, name, acceptAutomatically },
-
       listing,
       reviews,
       notifications,
