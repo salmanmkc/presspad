@@ -28,4 +28,5 @@ module.exports = {
     rejectedByAdmin: 'rejected by admin',
     rejected: 'rejected',
   },
+  resetTokenMaxAge: 3600000,
 };

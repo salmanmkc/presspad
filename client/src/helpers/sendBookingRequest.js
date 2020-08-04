@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_BOOKING_REQUEST_URL } from '../constants/apiRoutes';
-import Modal from '../components/Common/AntdWrappers/Modal';
+import Modal from '../components/Common/Modal';
 
 const postBooking = async data => {
   try {

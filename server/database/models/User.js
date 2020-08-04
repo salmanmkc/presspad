@@ -6,10 +6,10 @@ const { Schema, model } = mongoose;
 const userSchema = new Schema({
   email: {
     type: String,
-    unique: true,
     required: true,
     trim: true,
     lowercase: true,
+    sparse: true,
   },
 
   name: {
@@ -55,6 +55,14 @@ const userSchema = new Schema({
   // for hosts - the total requests that been respond to
   respondedRequests: {
     type: Number,
+  },
+  deleted: Boolean,
+  deleteReason: String,
+
+  // for reset password
+  resetToken: {
+    value: String,
+    expiresIn: Date,
   },
 });
 

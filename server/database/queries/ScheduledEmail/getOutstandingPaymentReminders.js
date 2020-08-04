@@ -31,8 +31,18 @@ const getOutstandingPaymentReminders = () =>
     },
     { $unwind: '$intern' },
     {
+      $lookup: {
+        from: 'users',
+        localField: 'data.hostId',
+        foreignField: '_id',
+        as: 'host',
+      },
+    },
+    { $unwind: '$host' },
+    {
       $project: {
         'intern.password': 0,
+        'host.password': 0,
       },
     },
   ]);

@@ -36,6 +36,9 @@ const installmentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'internalTransactions',
     },
+    key: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

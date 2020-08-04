@@ -5,6 +5,7 @@ const {
 } = require('../../../database/queries/bookings');
 const Booking = require('../../../database/models/Booking');
 const { bookingStatuses } = require('../../../constants');
+const { registerNotification } = require('../../../services/notifications');
 
 const unpaidAutomaticCancellation = async Sentry => {
   try {
@@ -29,6 +30,30 @@ const unpaidAutomaticCancellation = async Sentry => {
         'cancellationDetails.automaticCancellation': true,
       },
     );
+
+    const notifications = [];
+    unpaidOverDueBookings.forEach(booking => {
+      notifications.push(
+        // notify Intern
+        {
+          user: booking.intern,
+          secondParty: booking.host,
+          type: 'cancelledBeforePayments',
+          booking: booking._id,
+          private: true,
+        },
+        // notify Host
+        {
+          user: booking.host,
+          secondParty: booking.intern,
+          type: 'cancelledBeforePayments',
+          booking: booking._id,
+          private: true,
+        },
+      );
+    });
+
+    await registerNotification(notifications);
   } catch (error) {
     Sentry.captureException(error);
   }
@@ -47,6 +72,29 @@ const paidAutomaticCancellation7DaysWarning = async Sentry => {
         bookingId: booking._id,
       });
     });
+
+    const notifications = [];
+    paidOverDueBookings7Days.forEach(booking => {
+      notifications.push(
+        // notify Intern
+        {
+          user: booking.intern,
+          secondParty: booking.host,
+          type: 'paymentOverDue',
+          booking: booking._id,
+          private: true,
+        },
+        // notify Host
+        {
+          user: booking.host,
+          secondParty: booking.intern,
+          type: 'paymentOverDue',
+          booking: booking._id,
+          private: true,
+        },
+      );
+    });
+    await registerNotification(notifications);
   } catch (error) {
     Sentry.captureException(error);
   }
@@ -79,6 +127,29 @@ const paidAutomaticCancellation = async Sentry => {
         'cancellationDetails.automaticCancellation': true,
       },
     );
+
+    const notifications = [];
+    paidOverDueBookings9Days.forEach(booking => {
+      notifications.push(
+        // notify Intern
+        {
+          user: booking.intern,
+          secondParty: booking.host,
+          type: 'bookingTerminated',
+          booking: booking._id,
+          private: false,
+        },
+        // notify Host
+        {
+          user: booking.host,
+          secondParty: booking.intern,
+          type: 'bookingTerminated',
+          booking: booking._id,
+          private: true,
+        },
+      );
+    });
+    await registerNotification(notifications);
   } catch (error) {
     Sentry.captureException(error);
   }

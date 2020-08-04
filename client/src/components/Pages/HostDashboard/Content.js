@@ -13,7 +13,8 @@ import {
 } from 'antd';
 import { getStringTime, formatPrice } from '../../../helpers';
 
-import Update from '../../Common/Update';
+import Updates from '../../Common/Section/Updates';
+
 import Button from '../../Common/Button';
 import randomProfile from '../../../assets/random-profile.jpg';
 
@@ -22,7 +23,6 @@ import {
   ContentWrapper,
   SectionWrapperContent,
   SectionTitle,
-  UpdateList,
   BookingsTableWrapper,
   BlueLink,
   ListItem,
@@ -52,13 +52,11 @@ const Content = ({
   name,
   role,
   viewNumber,
-  viewNotificationNum,
   bankName,
   bankSortCode,
   accountNumber,
   bookings,
   updates,
-  slicedUpdates,
   withdrawModalOpen,
   donateModalOpen,
   nextGuest,
@@ -82,7 +80,6 @@ const Content = ({
   handleCloseModals,
   handleSubmitDonate,
   handleSubmitWithdrawRequest,
-  markAsSeen,
 }) => {
   const {
     income = 0,
@@ -165,33 +162,9 @@ const Content = ({
             <Empty description="No upcoming guests" />
           </SectionWrapperContent>
         )}
-        <section>
-          <SectionWrapperContent
-            onMouseEnter={markAsSeen}
-            onTouchStart={markAsSeen}
-            style={{ minHeight: 200 }}
-          >
-            <SectionTitle>Your updates</SectionTitle>
-            <UpdateList>
-              {slicedUpdates.length > 0 ? (
-                slicedUpdates.map(item => (
-                  <Update item={item} key={item._id} userRole="host" />
-                ))
-              ) : (
-                <Empty description="No updates, chill out :)" />
-              )}
-            </UpdateList>
-            {updates.length > 3 && (
-              <BlueLink
-                data-name="updates"
-                onClick={handleViewMoreToggle}
-                style={{ marginTop: '2rem', textAlign: 'center' }}
-              >
-                {viewNotificationNum ? 'View more' : 'View less'}
-              </BlueLink>
-            )}
-          </SectionWrapperContent>
-        </section>
+
+        <Updates updates={updates} userRole="host" />
+
         <Row gutter={20} style={{ width: '100%' }} type="flex" justify="start">
           <Col lg={24} xl={16} xs={24} sm={24}>
             <SectionWrapperContent

@@ -25,7 +25,9 @@ import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
-import ResetPassword from './ResetPassword';
+
+import Settings, { DeleteAccountSuccess } from './Settings';
+import ResetPassword, { SetPassword } from './ResetPassword';
 import WelcomePages from './WelcomePages';
 
 import { withWindowWidth } from '../../HOCs';
@@ -51,26 +53,70 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
+  SETTINGS_URL,
+  DELETE_ACCOUNT_SUCCESS,
+  RESET_PASSWORD,
+  SET_PASSWORD,
   WELCOME_PAGES,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
-  const { handleChangeState, isLoggedIn, role, windowWidth } = props;
+  const {
+    handleChangeState,
+    isLoggedIn,
+    role,
+    windowWidth,
+    resetState,
+  } = props;
   const location = useLocation();
   return (
     <>
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        <Route
+          isPrivate
+          exact
+          path={SETTINGS_URL}
+          Component={Settings}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          resetState={resetState}
+          layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          exact
+          path={DELETE_ACCOUNT_SUCCESS}
+          Component={DeleteAccountSuccess}
+          layout="illustrations"
+          mobileText="WE HOPE TO SEE YOU AGAIN!"
+          {...props}
+        />
+
         {/* protected host profile */}
         <Route
           exact
-          path="/reset-password"
+          path={RESET_PASSWORD}
           Component={ResetPassword}
           isLoggedIn={isLoggedIn}
           layout="illustrations"
-          image="community"
+          image="email"
+          color="lightBlue"
           {...props}
         />
+        <Route
+          exact
+          path={SET_PASSWORD}
+          Component={SetPassword}
+          isLoggedIn={isLoggedIn}
+          layout="illustrations"
+          image="email"
+          color="lightBlue"
+          {...props}
+        />
+
+        {/* protected host profile */}
         <Route
           isPrivate
           exact

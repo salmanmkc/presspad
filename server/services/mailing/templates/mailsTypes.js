@@ -2,6 +2,8 @@ const intern = require('./intern');
 const organisation = require('./organisation');
 const host = require('./host');
 const internAndHost = require('./internAndHost');
+const admin = require('./admin');
+const all = require('./all');
 
 const types = {
   host: {
@@ -209,6 +211,22 @@ const types = {
       createBody: organisation.bookingOverdue,
       subject: ' IMPORTANT! Intern’s booking has been terminated ',
       params: ['internName'],
+    },
+  },
+
+  admin: {
+    DELETE_ACCOUNT: {
+      createBody: admin.userDeletedAccount,
+      subject: 'User account deleted',
+      params: ['reason'],
+    },
+  },
+
+  all: {
+    RESET_PASSWORD: {
+      createBody: all.resetPassword,
+      subject: 'Reset Password',
+      params: ['token', 'name'],
     },
   },
 };

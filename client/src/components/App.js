@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ThemeProvider } from 'styled-components';
 
 import { API_USER_URL } from '../constants/apiRoutes';
+import Cookies from './Common/CookiesBannar';
 
 import theme from '../theme';
 import Pages from './Pages';
@@ -80,6 +81,7 @@ class App extends Component {
               />
             </ThemeProvider>
           </div>
+          <Cookies />
         </Router>
       </StripeProvider>
     );

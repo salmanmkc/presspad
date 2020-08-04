@@ -9,7 +9,6 @@ import homeStay from '../../../assets/Illustrations/home_stay.svg';
 import listing from '../../../assets/Illustrations/listing.svg';
 import presspadMovement from '../../../assets/Illustrations/presspad_movement.svg';
 // import referralSchema from '../../../assets/Illustrations/referral_schema.svg';
-
 import * as S from './style';
 import * as T from '../../Common/Typography';
 
@@ -21,7 +20,13 @@ const images = {
   presspadMovement,
 };
 
-const IllustrationsLayout = ({ windowWidth, children, image, color }) => {
+const IllustrationsLayout = ({
+  windowWidth,
+  children,
+  image,
+  color,
+  mobileText,
+}) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet;
 
@@ -30,7 +35,7 @@ const IllustrationsLayout = ({ windowWidth, children, image, color }) => {
     <>
       <S.Wrapper>
         {topHeaderRendered && (
-          <S.ColouredTopDiv color={color}>
+          <S.ColouredTopDiv color={color} isImage={!!imageFile}>
             {!imageFile && image === 'getStarted' ? (
               <T.H1C
                 color="white"
@@ -39,7 +44,10 @@ const IllustrationsLayout = ({ windowWidth, children, image, color }) => {
                 LET’S GET STARTED!
               </T.H1C>
             ) : (
-              <S.TopImage src={imageFile} />
+              <>
+                {imageFile && <S.TopImage src={imageFile} />}
+                {mobileText && <T.H2C color="white">{mobileText}</T.H2C>}
+              </>
             )}
           </S.ColouredTopDiv>
         )}
@@ -52,7 +60,7 @@ const IllustrationsLayout = ({ windowWidth, children, image, color }) => {
                 LET’S GET STARTED!
               </T.H0C>
             ) : (
-              <S.Image src={imageFile} />
+              imageFile && <S.Image src={imageFile} />
             )}
           </S.ColouredSideDiv>
         )}
