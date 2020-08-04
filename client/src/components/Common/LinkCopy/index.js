@@ -7,7 +7,7 @@ import * as T from '../Typography';
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  background: #fffbfd;
+  background: ${({ theme }) => theme.colors.transPink};
   align-items: center;
   padding: 25px 20px;
   border-radius: 5px;

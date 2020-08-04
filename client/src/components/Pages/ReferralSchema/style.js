@@ -50,4 +50,14 @@ export const Container = styled.div`
 
 export const ShareWrapper = styled.div`
   margin-right: 25px;
+
+  button {
+    outline: none;
+    border: none;
+    &::focus,
+    &::active {
+      outline: none;
+      border: none;
+    }
+  }
 `;

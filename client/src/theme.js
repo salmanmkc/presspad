@@ -49,6 +49,7 @@ export const newColors = {
   yellow: '#FFDF59',
   pink: '#CF3475',
   lightPink: '#DE5991',
+  transPink: '#FFFBFD',
   gray3: '#585858',
 };
 

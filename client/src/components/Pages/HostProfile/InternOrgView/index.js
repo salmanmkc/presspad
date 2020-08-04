@@ -380,11 +380,11 @@ export default class InternView extends Component {
 
         {/* Reviews */}
         <RowGrid>
-          <ColGrid w={[4, 8, 6]}>
+          <ColGrid w={[4, 8, 8]}>
             <Reviews userId={userId} name={name} userRole="host" />
           </ColGrid>
           {((referred && referred > 5) || !!referredBy) && (
-            <ColGrid w={[4, 4, 6]} mt="1.5rem">
+            <ColGrid w={[4, 4, 4]} mt="1.5rem">
               <Badges
                 ambassador={!!referred && referred >= 5}
                 community={!!referredBy}

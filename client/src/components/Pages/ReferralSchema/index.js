@@ -33,7 +33,7 @@ function ReferralSchema({ windowWidth, referralToken }) {
           Ambassador
         </T.H5>
         <SocialShare shareLink={link} />
-        <T.P mb={4} color="gray3">
+        <T.P mb={4} mt={3} color="gray3">
           PressPad&apos;s referral scheme allows us to keep our host-mentor
           matches even safer, as we call upon pre-existing, already vetted,
           hosts to suggest others within the media community who they think
