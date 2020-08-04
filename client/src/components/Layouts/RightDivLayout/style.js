@@ -16,7 +16,7 @@ export const ContentWrapper = styled.div`
   width: 100%;
   padding: ${({ theme }) => `${theme.spacings[8]} 3% ${theme.spacings[8]} `};
 
-  @media ${breakpoints.mobileM} {
+  @media ${breakpoints.mobileL} {
     padding: ${({ theme }) => `${theme.spacings[8]}  7% ${theme.spacings[8]} `};
   }
 

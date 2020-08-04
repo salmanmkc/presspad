@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { text } from 'body-parser';
+
 import * as S from './style';
 import * as T from '../Typography';
 import Icon from '../Icon';
@@ -34,14 +34,14 @@ const Badges = ({ ambassador, community }) => {
 
   return (
     <>
-      <Row mb={5}>
-        <Col w={[4, 8, 8]} style={{ backgroundColor: colors.lightestGray }}>
+      <Row mb={5} inner>
+        <Col w={[4, 12, 12]} style={{ backgroundColor: colors.lightestGray }}>
           <S.Title mt={2} mb={2}>
             Badges
           </S.Title>
         </Col>
       </Row>
-      <Row>
+      <Row inner>
         {ambassador && (
           <Col w={[4, 12, 6]} style={{ marginBottom: '20px' }}>
             <Icon
