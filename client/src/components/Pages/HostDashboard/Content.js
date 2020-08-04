@@ -1,19 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
 import Update from '../../Common/Update';
 import Review from '../../Common/SingleReview';
+import Icon from '../../Common/Icon';
+
+import LatestPaymentsTable from './LatestPaymentsTable';
 
 import {
   Container,
   WalletContainer,
   WalletFooter,
+  ViewLink,
 } from './HostDashboard.style';
 import { bottomMargins, typographies } from './styleProperties';
 
 import { formatPrice } from '../../../helpers';
+
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { PAYMENTS_URL } from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
@@ -28,8 +34,9 @@ const Content = ({
   pending,
   updates,
   reviews,
+  lastPayments,
 }) => {
-  console.log('rev', reviews);
+  // console.log('rev', reformatPaymentsHistory(lastPayments));
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
 
@@ -132,7 +139,11 @@ const Content = ({
         <Col w={[4, 12, 5]} mb={bottomMargins.col[device]}>
           <div style={{ border: '1px solid' }}>
             {' '}
-            <SectionTitle>Recent Reviews</SectionTitle>
+            <SectionTitle
+              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+            >
+              Recent Reviews
+            </SectionTitle>
             {reviews.length > 0 ? (
               reviews.map(r => {
                 const {
@@ -162,7 +173,29 @@ const Content = ({
                 marginBottom: '10px',
               }}
             >
-              <SectionTitle>Recent Payments</SectionTitle>
+              <SectionTitle
+                style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+              >
+                Recent Payments
+              </SectionTitle>
+              {lastPayments.length > 0 ? (
+                <>
+                  <LatestPaymentsTable payments={lastPayments} />
+                  <Link to={PAYMENTS_URL}>
+                    <ViewLink>
+                      view all payments
+                      <Icon
+                        icon="arrow"
+                        direction="right"
+                        width="15px"
+                        height="15px"
+                      />
+                    </ViewLink>
+                  </Link>
+                </>
+              ) : (
+                <T.PXL color={colors.lightestGray}>No payments</T.PXL>
+              )}
             </div>
             <div style={{ border: '1px solid' }}>
               {' '}

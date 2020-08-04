@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { colors } from '../../../theme';
-
+import { H7C } from '../../Common/Typography';
 // NEW STYLES
 
 export const Container = styled.div`
@@ -26,6 +26,23 @@ export const WalletContainer = styled.div`
 export const WalletFooter = styled.div`
   position: absolute;
   bottom: 1rem;
+`;
+
+export const ViewLink = styled(H7C)`
+  margin-top: 1rem;
+  color: ${({ theme }) => theme.colors.black};
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+export const TableWrapper = styled.div`
+  width: 100%;
+
+  thead[class*='ant-table-thead'] th {
+    background-color: white !important;
+  }
 `;
 
 // OLD STYLES

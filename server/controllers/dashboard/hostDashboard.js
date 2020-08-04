@@ -22,11 +22,12 @@ const hostDashboard = async (req, res, next) => {
       getUpcomingBooking({ userId: hostId, role }),
       // get payment infos
       getHostPaymentsInfo(hostId),
+      // get recent payments
     ]);
 
     let accessibleFunds;
     let pending;
-    let lastPayments;
+    let recentPayments;
 
     const {
       _id,
@@ -35,7 +36,6 @@ const hostDashboard = async (req, res, next) => {
       profile,
       listing,
       reviews,
-      bookings,
       notifications,
     } = dashboardData;
 
@@ -61,18 +61,15 @@ const hostDashboard = async (req, res, next) => {
       accessibleFunds = currentBalance - pendingPayment - _pendingWithdrawn;
       pending = pendingPayment + _pendingWithdrawn;
     }
-
-    if (paymentHistory && paymentHistory.length) {
-      lastPayments = paymentHistory.sort((a, b) =>
-        a.startDate > b.startDate
-          ? 1
-          : a.startDate === b.startDate
-          ? a.endDate > b.endDate
-            ? 1
-            : -1
-          : -1,
-      );
-      lastPayments = lastPayments.splice(0, 3);
+    if (paymentHistory && paymentHistory.length > 0) {
+      recentPayments = paymentHistory
+        .sort((a, b) =>
+          a.transactionDates[a.transactionDates.length - 1] >
+          b.transactionDates[b.transactionDates.length - 1]
+            ? -1
+            : 1,
+        )
+        .splice(0, 3);
     }
 
     const output = {
@@ -84,7 +81,7 @@ const hostDashboard = async (req, res, next) => {
       nextBooking,
       accessibleFunds,
       pending,
-      lastPayments,
+      lastPayments: recentPayments,
     };
 
     return res.json(output);
