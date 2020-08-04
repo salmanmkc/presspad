@@ -25,6 +25,46 @@ const welcomeImage = (location, role) => {
       default:
         break;
     }
+  } else if (role === 'host') {
+    switch (id) {
+      case '1':
+        image = 'presspadMovement';
+        break;
+      case '2':
+        image = 'email';
+        break;
+      case '3':
+        image = 'listing';
+        break;
+      case '4':
+        image = 'community';
+        break;
+      case '5':
+        image = 'getStarted';
+        break;
+      default:
+        break;
+    }
+  } else if (role === 'organisation') {
+    switch (id) {
+      case '1':
+        image = 'presspadMovement';
+        break;
+      case '2':
+        image = 'email';
+        break;
+      case '3':
+        image = 'listing';
+        break;
+      case '4':
+        image = 'community';
+        break;
+      case '5':
+        image = 'getStarted';
+        break;
+      default:
+        break;
+    }
   }
   return image;
 };
