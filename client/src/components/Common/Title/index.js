@@ -4,6 +4,7 @@ import * as T from '../Typography';
 
 const sharedStyles = css`
   padding-left: 30px;
+  min-width: 380px;
   @media ${({ theme }) => theme.breakpoints.mobileXL} {
     padding-left: 120px;
   }
@@ -40,14 +41,17 @@ const WithBackground = styled.div`
   background-color: ${({ theme, bgColor }) => bgColor || theme.colors.pink};
 `;
 
-const Title = withTheme(({ children, withBg }) => {
-  let topText;
-  let bottomText;
+const Title = withTheme(({ children, withBg, topTitle, bottomTitle }) => {
+  let _topText;
+  let _bottomText;
   if (typeof children === 'string') {
     const splittedText = children.split(' ');
     const limit = splittedText.length;
-    topText = splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
-    bottomText = splittedText.slice(Math.ceil(limit / 2), limit + 1).join(' ');
+    _topText =
+      topTitle || splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
+    _bottomText =
+      bottomTitle ||
+      splittedText.slice(Math.ceil(limit / 2), limit + 1).join(' ');
   }
   return withBg ? (
     <WithBackground>
@@ -56,10 +60,10 @@ const Title = withTheme(({ children, withBg }) => {
   ) : (
     <AlternateTitle>
       <div className="top">
-        <T.H3C style={{ color: 'inherit' }}>{topText}</T.H3C>
+        <T.H3C style={{ color: 'inherit' }}>{_topText}</T.H3C>
       </div>
       <div className="bottom">
-        <T.H3C style={{ color: 'inherit' }}>{bottomText}</T.H3C>
+        <T.H3C style={{ color: 'inherit' }}>{_bottomText}</T.H3C>
       </div>
     </AlternateTitle>
   );
