@@ -12,8 +12,17 @@ export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
+export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
 export const REFERRAL_URL = '/refer';
+
+// editing details
+export const SETTINGS = {
+  ACCOUNT: `${SETTINGS_URL}/my-account`,
+  ABOUT_ME: `${SETTINGS_URL}/about-me`,
+  EDIT_PROFILE: `${SETTINGS_URL}/edit-profile`,
+  VERIFY: `${SETTINGS_URL}/verify`,
+};
 
 // admin routes
 export const ADMIN_DASHBOARD_URL = '/admin/dashboard';

@@ -15,6 +15,7 @@ const Route = ({
   resetState,
   layout,
   image,
+  mobileText,
   color,
   ...rest
 }) => {
@@ -26,6 +27,7 @@ const Route = ({
       navbarProps={navbarProps}
       isLoggedIn={isLoggedIn}
       image={image}
+      mobileText={mobileText}
       color={color}
     >
       {isMounted ? (
@@ -37,7 +39,7 @@ const Route = ({
               render={LinkProps =>
                 render ||
                 (isLoggedIn ? (
-                  <Component {...LinkProps} {...rest} />
+                  <Component {...LinkProps} {...rest} resetState={resetState} />
                 ) : (
                   <Redirect to={SIGNIN_URL} />
                 ))

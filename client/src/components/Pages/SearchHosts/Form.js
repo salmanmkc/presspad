@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form as StyledForm, Row, SubRow, ErrorMessage } from './style';
 import * as T from '../../Common/Typography';
-import { Select, DatePicker, Switch } from '../../Common/AntdWrappers';
+import { Select, DatePicker, Switch } from '../../Common/Inputs';
 import Button from '../../Common/ButtonNew';
 import { titleCase, newId, dateRender } from '../../../helpers';
 
@@ -44,22 +44,21 @@ const Form = ({
         autoComplete="off"
         autoFocus
         style={{ width: 215 }}
-        onSelect={onInputCityChange}
+        onChange={onInputCityChange}
         disabled={within7Days}
-      >
-        {cities.map(city => (
-          <Select.Option value={city} key={city}>
-            {titleCase(city)}
-          </Select.Option>
-        ))}
-      </Select>
+        options={cities.map(city => ({
+          value: city,
+          key: city,
+          label: titleCase(city),
+        }))}
+      />
     </Row>
     <Row mt="3">
       <SubRow mr="4">
         <T.PL mb="1" mr="4">
           between
         </T.PL>
-        <div>
+        <div style={{ width: '215px' }}>
           <DatePicker
             mt="1"
             mb="1"
@@ -74,7 +73,7 @@ const Form = ({
         <T.PL mt="1" mb="1" mr="4">
           and
         </T.PL>
-        <div>
+        <div style={{ width: '215px' }}>
           <DatePicker
             disabledDate={disabledEndDate}
             mt="1"

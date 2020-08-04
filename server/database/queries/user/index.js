@@ -189,6 +189,15 @@ module.exports.getUserOrg = userId =>
 module.exports.getAllInterns = () =>
   User.find({ role: 'intern' }, { password: 0 });
 
+module.exports.deleteUser = ({ id, deleteReason }) =>
+  User.findByIdAndUpdate(id, {
+    email: null,
+    name: 'Deleted User',
+    password: null,
+    deleteReason,
+    deleted: true,
+  });
+
 module.exports.updateUserById = (userId, data) =>
   User.findByIdAndUpdate(
     userId,

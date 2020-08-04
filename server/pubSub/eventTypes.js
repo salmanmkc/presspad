@@ -4,6 +4,7 @@ const events = {
     INTERN_SIGNUP: 'user.signup.intern',
     HOST_SIGNUP: 'user.signup.host',
     ORGANISATION_SIGNUP: 'user.signup.organisation',
+    DELETE_ACCOUNT: 'user.delete_account',
     RESET_PASSWORD: 'user.reset_password',
   },
   profile: {

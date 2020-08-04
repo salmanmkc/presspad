@@ -41,3 +41,9 @@ module.exports.links = {
   whatsapp: process.env.WHATSAPP_GROUP_LINK,
   calendly: process.env.CALENDLY_LINK,
 };
+
+module.exports.adminEmails = {
+  info: process.env.ADMIN_INFO_EMAIL,
+  urgent: process.env.ADMIN_URGENT_EMAIL,
+  report: process.env.ADMIN_REPORT_EMAIL,
+};

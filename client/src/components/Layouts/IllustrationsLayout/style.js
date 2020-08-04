@@ -46,12 +46,14 @@ export const ContentWrapper = styled.div`
 
 export const ColouredTopDiv = styled.div`
   background: ${({ theme, color = 'pink' }) => theme.colors[color]};
-  min-height: 140px;
+  min-height: fit-content;
   height: 30vw;
   overflow: hidden;
   display: flex;
-  justify-content: flex-end;
-  padding-right: 10%;
+  justify-content: ${({ isImage }) => (isImage ? 'flex-end' : 'center')};
+  align-items: ${({ isImage }) => (isImage ? 'flex-start' : 'center')};
+  padding: ${({ isImage, theme }) =>
+    isImage ? '0 10% 0 0' : theme.spacings[5]};
 `;
 
 export const Image = styled.img`

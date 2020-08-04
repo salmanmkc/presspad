@@ -32,10 +32,18 @@ import MoneyBag from './icons/MoneyBag';
 import CheckMark from './icons/CheckMark';
 import ReviewExplanationMark from './icons/ReviewExplanationMark';
 import ExplanationMarkCircle from './icons/ExplanationMarkCircle';
+import Calendar from './icons/Calendar';
+import Chevron from './icons/Chevron';
+import UploadFile from './icons/UploadFile';
 import Copy from './icons/Copy';
 import AlertTriangle from './icons/AlertTriangle';
 import Money from './icons/Money';
 import Arrow2 from './icons/Arrow2';
+import Flower from './icons/Flower';
+import Hearts from './icons/Hearts';
+import Star from './icons/Star';
+import Ambassador from './icons/Ambassador';
+import Community from './icons/Community';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -74,12 +82,20 @@ const iconMap = {
   questionMark: QuestionMark,
   reviewExplanationMark: ReviewExplanationMark,
   explanationMarkCircle: ExplanationMarkCircle,
+  calendar: Calendar,
+  chevron: Chevron,
+  uploadFile: UploadFile,
   copy: Copy,
   alertTriangle: AlertTriangle,
   money: Money,
   arrow2: Arrow2,
   whatsapp: Whatsapp,
   email: Email,
+  flower: Flower,
+  hearts: Hearts,
+  star: Star,
+  ambassador: Ambassador,
+  community: Community,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {
