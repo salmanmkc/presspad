@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import moment from 'moment';
-import {
-  Input,
-  DatePicker,
-  Select,
-  Switch,
-  Checkbox,
-  UploadFile,
-} from './index';
+import { Input, DatePicker, Select, Checkbox, UploadFile } from './index';
 
 export default {
   title: 'Inputs',
@@ -44,6 +36,16 @@ export const Dates = () => {
         />
         <p>STATE: {JSON.stringify(dateVal)}</p>
       </div>
+      <h2>Date with disabled past</h2>
+      <div style={{ marginBottpm: '20px ' }}>
+        <DatePicker onChange={onChange} value={dateVal} disablePast />
+        <p>STATE: {JSON.stringify(dateVal)}</p>
+      </div>
+      <h2>Date with disabled future</h2>
+      <div style={{ marginBottpm: '20px ' }}>
+        <DatePicker onChange={onChange} value={dateVal} disableFuture />
+        <p>STATE: {JSON.stringify(dateVal)}</p>
+      </div>
       <h2>Date Range</h2>
       <div style={{ marginBottpm: '20px ' }}>
         <DatePicker
@@ -63,12 +65,21 @@ export const Dates = () => {
         />
         <p>STATE: {JSON.stringify(dateRange)}</p>
       </div>
+      <h2>Date Range with past disabled</h2>
+      <div style={{ marginBottpm: '20px ' }}>
+        <DatePicker
+          onChange={onRangeChange}
+          type="dateRange"
+          value={dateRange}
+          disablePast
+        />
+        <p>STATE: {JSON.stringify(dateRange)}</p>
+      </div>
     </>
   );
 };
 
 export const MultiDates = () => {
-  const [dateVal, setDateVal] = useState('');
   const [multiDateRange, setMultiDateRange] = useState([
     {
       startDate: '',

@@ -131,6 +131,10 @@ const Button = ({
   children,
   withGraphic,
   type,
+  ml,
+  mr,
+  mt,
+  mb,
   ...props
 }) => (
   <>
@@ -138,6 +142,10 @@ const Button = ({
       aria-label={label}
       type={type}
       disabled={disabled || loading}
+      mt={mt}
+      mb={mb}
+      ml={ml}
+      mr={mr}
       {...props}
     >
       {loading && <ButtonSpinner outline={props.outline} />}
