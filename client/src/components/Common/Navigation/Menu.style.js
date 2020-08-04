@@ -5,7 +5,7 @@ import { H5C } from '../Typography';
 export const Header = styled(H5C)`
   color: ${({ theme }) => theme.colors.white};
   min-width: auto;
-  max-width: ${({ isMobile }) => (isMobile ? '300px' : '155px')};
+  max-width: ${({ isMobile }) => (isMobile ? '300px' : '195px')};
   text-align: ${({ horizontal }) => horizontal && 'right'};
   position: ${({ horizontal }) => (horizontal ? 'relative' : 'absolute')};
   margin-left: ${({ horizontal, theme }) => horizontal && theme.spacings[4]};
