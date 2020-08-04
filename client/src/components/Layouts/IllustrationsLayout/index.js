@@ -48,7 +48,7 @@ const IllustrationsLayout = ({ windowWidth, children, image, color }) => {
         {!topHeaderRendered && (
           <S.ColouredSideDiv color={color} imageName={image}>
             {!imageFile && image === 'getStarted' ? (
-              <T.H0C color="blue" style={{ padding: '15%' }}>
+              <T.H0C color="white" style={{ padding: '15%' }}>
                 LET’S GET STARTED!
               </T.H0C>
             ) : (
