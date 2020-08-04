@@ -35,8 +35,7 @@ export const SideWrapper = styled.div`
 `;
 
 export const Card = styled.div`
-  box-shadow: ${({ noShadow }) =>
-    noShadow ? 'none' : shadows.hostProfileCard};
+  box-shadow: ${({ noShadow }) => (noShadow ? 'none' : shadows.card)};
   padding-top: 2rem;
   margin-top: 2rem;
   width: 100%;

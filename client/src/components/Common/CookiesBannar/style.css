@@ -1,0 +1,22 @@
+/* @media (max-width: 450px) {
+  .CookieConsent {
+    padding: 2px 20px !important;
+  }
+} */
+.CookieConsent {
+  display: flex !important;
+}
+
+.CookieConsent div {
+  flex: none !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 450px) {
+  
+
+  .CookieConsent div {
+    width: 100%;
+    margin: 10px 0 !important;
+  }
+}

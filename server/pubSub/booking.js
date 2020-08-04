@@ -10,6 +10,10 @@ pubSub.listen(
   sendEmail.sendAcceptedBookingEmails,
 );
 pubSub.listen(
+  events.booking.CANCELLED_BY_USER,
+  sendEmail.bookingCancelledByUser,
+);
+pubSub.listen(
   events.booking.UNPAID_AUTOMATIC_CANCELLED,
   sendEmail.bookingCancelledUnpaid,
 );

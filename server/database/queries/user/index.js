@@ -183,4 +183,27 @@ module.exports.getUserOrg = userId =>
 module.exports.getAllInterns = () =>
   User.find({ role: 'intern' }, { password: 0 });
 
+module.exports.deleteUser = ({ id, deleteReason }) =>
+  User.findByIdAndUpdate(id, {
+    email: null,
+    name: 'Deleted User',
+    password: null,
+    deleteReason,
+    deleted: true,
+  });
+
+module.exports.updateUserById = (userId, data) =>
+  User.findByIdAndUpdate(
+    userId,
+    { $set: data },
+    // return the updated document
+    { new: true },
+  );
+
+module.exports.findUserByToken = token =>
+  User.findOne({
+    'resetToken.value': token,
+    'resetToken.expiresIn': { $gt: Date.now() },
+  });
+
 module.exports.updateRespondingData = updateRespondingData;

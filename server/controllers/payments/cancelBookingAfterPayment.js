@@ -7,6 +7,7 @@ const {
   removeUnpaidInstallmentsForBookings,
   removePaymentsRemindersForBookings,
 } = require('../../database/queries/payments');
+const { registerNotification } = require('../../services/notifications');
 
 const cancelBookingAfterPayment = async (req, res, next) => {
   const { id: bookingId } = req.params;
@@ -54,6 +55,27 @@ const cancelBookingAfterPayment = async (req, res, next) => {
       removeUnpaidInstallmentsForBookings(bookingId, session),
       removePaymentsRemindersForBookings(bookingId, session),
     ]);
+
+    const notifications = [
+      // notify Intern
+      {
+        user: updatedBooking.intern,
+        secondParty: updatedBooking.host,
+        type: 'cancelledAfterPayments',
+        booking: bookingId,
+        private: true,
+      },
+      // notify Host
+      {
+        user: updatedBooking.host,
+        secondParty: updatedBooking.intern,
+        type: 'cancelledAfterPayments',
+        booking: bookingId,
+        private: true,
+      },
+    ];
+
+    await registerNotification(notifications);
 
     await session.commitTransaction();
     session.endSession();

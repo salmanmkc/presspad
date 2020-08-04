@@ -3,12 +3,10 @@ import React from 'react';
 import * as S from './style';
 
 import { PBold, PXS, PXSBold } from '../../../../Common/Typography';
-import { Select, Input } from '../../../../Common/AntdWrappers';
+import { Select, Input } from '../../../../Common/Inputs';
 
 import Allocation from './Allocation';
 import Policy from './Policy';
-
-const { Option } = Select;
 
 const selectStyles = error => ({
   width: '245px',
@@ -16,6 +14,18 @@ const selectStyles = error => ({
   marginTop: '1rem',
   border: error ? '1px solid red' : '1px solid #d9d9d9',
 });
+
+const cancelReasonOptions = [
+  { label: 'cancellationReason', key: 'legitimate', value: 'legitimate' },
+  { label: 'cancellationReason', value: 'illegitimate', key: 'illegitimate' },
+];
+
+const responsibleOptions = [
+  { label: 'responsibleParty', value: 'intern' },
+  { label: 'responsibleParty', value: 'host' },
+  { label: 'responsibleParty', value: 'organisation' },
+  { label: 'responsibleParty', value: 'presspad' },
+];
 
 const AdminActions = ({
   details,
@@ -48,23 +58,9 @@ const AdminActions = ({
           <Select
             placeholder="Select"
             style={selectStyles(errors.cancellationReason)}
-            onSelect={(value, option) => handleSelect(value, option)}
-          >
-            <Option
-              label="cancellationReason"
-              key="legitimate"
-              value="legitimate"
-            >
-              Legitimate
-            </Option>
-            <Option
-              label="cancellationReason"
-              value="illegitimate"
-              key="illegitimate"
-            >
-              Illegitimate
-            </Option>
-          </Select>
+            onChange={(value, option) => handleSelect(value, option)}
+            options={cancelReasonOptions}
+          />
           <PXSBold mt={2} color="red">
             {errors.cancellationReason}
           </PXSBold>
@@ -75,21 +71,9 @@ const AdminActions = ({
           <Select
             style={selectStyles(errors.responsibleParty)}
             placeholder="Select"
-            onSelect={(value, option) => handleSelect(value, option)}
-          >
-            <Option label="responsibleParty" value="intern">
-              Intern
-            </Option>
-            <Option label="responsibleParty" value="host">
-              Host
-            </Option>
-            <Option label="responsibleParty" value="organisation">
-              Organisation
-            </Option>
-            <Option label="responsibleParty" value="presspad">
-              PressPad
-            </Option>
-          </Select>
+            onChange={(value, option) => handleSelect(value, option)}
+            options={responsibleOptions}
+          />
           <PXSBold mt={2} color="red">
             {errors.responsibleParty}
           </PXSBold>

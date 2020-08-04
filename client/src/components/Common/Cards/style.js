@@ -4,7 +4,7 @@ import { H3, H7C, PBold, PXS } from '../Typography';
 import { breakpoints } from '../../../theme';
 
 export const SmallCardWrapper = styled(Link)`
-  box-shadow: ${({ theme }) => theme.shadows.hostProfileCard};
+  box-shadow: ${({ theme }) => theme.shadows.card};
   // min-width: 250px;
   display: flex;
   position: relative;

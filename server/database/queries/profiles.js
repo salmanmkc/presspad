@@ -17,5 +17,8 @@ module.exports.createNewProfile = async (data, session) => {
   return profiles[0];
 };
 
+module.exports.deleteProfileByUserId = id =>
+  Profile.findOneAndDelete({ user: id });
+
 module.exports.newUpdateUserProfile = (userId, data) =>
   Profile.findOneAndUpdate({ user: userId }, data, { new: true });

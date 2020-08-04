@@ -33,7 +33,8 @@ const hostDashboard = async (req, res, next) => {
       _id,
       email,
       name,
-      profile,
+      acceptAutomatically,
+
       listing,
       reviews,
       notifications,
@@ -73,8 +74,8 @@ const hostDashboard = async (req, res, next) => {
     }
 
     const output = {
-      userData: { _id, email, name },
-      profile,
+      userData: { _id, email, name, acceptAutomatically },
+
       listing,
       reviews,
       notifications,

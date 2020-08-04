@@ -1,10 +1,12 @@
 const boom = require('boom');
+const pubSub = require('../../pubSub');
 
 const {
   getBooking,
   cancelBookingBeforePaymentQuery,
   makeCancellationRequest,
 } = require('../../database/queries/bookings');
+const { registerNotification } = require('../../services/notifications');
 
 const cancelBooking = async (req, res, next) => {
   const { id: bookingId } = req.params;
@@ -26,6 +28,7 @@ const cancelBooking = async (req, res, next) => {
     }
 
     let cancelledBooking;
+    let notification;
     // check if booking is valid and if cancellation before payment
 
     const booking = await getBooking(bookingId);
@@ -44,15 +47,57 @@ const cancelBooking = async (req, res, next) => {
         cancellingUserMessage,
         cancellingUserId,
       });
+
+      notification = [
+        // notify Intern
+        {
+          user: cancelledBooking.intern,
+          secondParty: cancelledBooking.host,
+          type: 'cancelledBeforePayments',
+          booking: bookingId,
+        },
+        // notify Host
+        {
+          user: cancelledBooking.host,
+          secondParty: cancelledBooking.intern,
+          type: 'cancelledBeforePayments',
+          booking: bookingId,
+        },
+      ];
+      // emails for booking before payment
+      pubSub.emit(pubSub.events.booking.CANCELLED_BY_USER, {
+        bookingId,
+        role,
+        type: 'beforePayment',
+      });
     } else if (canCancelAfterPayment) {
       cancelledBooking = await makeCancellationRequest({
         bookingId,
         cancellingUserMessage,
         cancellingUserId,
       });
+
+      notification = [
+        // notify the user who request the cancellation
+        {
+          user: userId,
+          type: 'requestCancelAfterPayments',
+          booking: bookingId,
+          private: true,
+        },
+      ];
+      // emails for booking cancellation request after payment
+      pubSub.emit(pubSub.events.booking.CANCELLED_BY_USER, {
+        bookingId,
+        role,
+        type: 'afterPayment',
+      });
     }
 
     if (cancelledBooking) {
+      if (notification) {
+        await registerNotification(notification);
+      }
       return res.json(cancelledBooking);
     }
 

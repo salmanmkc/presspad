@@ -133,7 +133,13 @@ const BookingCards = ({
         )}
         <S.ViewBooking>
           VIEW BOOKING{' '}
-          <Icon icon="arrow" direction="right" width="15px" height="15px" />
+          <Icon
+            icon="arrow2"
+            direction="right"
+            width="15px"
+            height="15px"
+            margin="0 0 0 10px"
+          />
         </S.ViewBooking>
       </S.RightDiv>
     </S.SmallCardWrapper>

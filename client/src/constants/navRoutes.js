@@ -12,7 +12,16 @@ export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
+export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
+
+// editing details
+export const SETTINGS = {
+  ACCOUNT: `${SETTINGS_URL}/my-account`,
+  ABOUT_ME: `${SETTINGS_URL}/about-me`,
+  EDIT_PROFILE: `${SETTINGS_URL}/edit-profile`,
+  VERIFY: `${SETTINGS_URL}/verify`,
+};
 
 // admin routes
 export const ADMIN_DASHBOARD_URL = '/admin/dashboard';
@@ -36,6 +45,10 @@ export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
 // sign in/out
 export const SIGNIN_URL = '/sign-in';
 export const SIGNOUT_URL = '/sign-out';
+
+// reset/set password
+export const RESET_PASSWORD = '/reset-password';
+export const SET_PASSWORD = '/set-password/:token';
 
 // errors
 export const Error404 = '/404';

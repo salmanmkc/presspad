@@ -26,6 +26,12 @@ const notificationSchema = new Schema(
         'giveReviewReminder',
         'getReview',
         'completeProfileRemind',
+        'cancelledBeforePayments',
+        'requestCancelAfterPayments',
+        'cancelledAfterPayments',
+        'paymentIsDue',
+        'paymentOverDue',
+        'bookingTerminated',
         // unused
         'message',
         'receivedCredits',

@@ -24,7 +24,7 @@ module.exports = {
   PHONE_NUMBER: 'You must provide a phone number',
   ORGANISATION: 'Organisation is required',
   WORKING_AREA: 'Working area is required',
-  EMAIL: 'INVALID email',
+  EMAIL: 'Invalid email',
   INVALID_DATE: 'please select valid date',
   INVALID_END_DATE: 'please select an end date greater than your start date',
   // sign up fields

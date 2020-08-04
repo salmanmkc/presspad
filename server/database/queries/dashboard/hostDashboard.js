@@ -12,18 +12,6 @@ const { bookingStatuses } = require('../../../constants');
 const hostDashboard = id =>
   User.aggregate([
     { $match: { _id: mongoose.Types.ObjectId(id) } },
-    // Host profile
-    {
-      $lookup: {
-        from: 'profiles',
-        let: { host: '$_id' },
-        pipeline: [{ $match: { $expr: { $eq: ['$$host', '$user'] } } }],
-        as: 'profile',
-      },
-    },
-    {
-      $unwind: { path: '$profile', preserveNullAndEmptyArrays: true },
-    },
     // listing
     {
       $lookup: {

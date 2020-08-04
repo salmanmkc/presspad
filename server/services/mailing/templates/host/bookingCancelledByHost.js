@@ -1,4 +1,4 @@
-const { greeting, content } = require('./../htmlTags');
+const { greeting, content } = require('../htmlTags');
 
 module.exports = params => {
   return `

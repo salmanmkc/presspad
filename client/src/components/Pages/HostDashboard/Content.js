@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
@@ -7,6 +8,7 @@ import { BookingCards } from '../../Common/Cards';
 import Update from '../../Common/Update';
 import Review from '../../Common/SingleReview';
 import Icon from '../../Common/Icon';
+import BookingDates from '../../Common/DashboardBookingDates';
 
 import LatestPaymentsTable from './LatestPaymentsTable';
 
@@ -29,6 +31,7 @@ import NotesPayments from '../../../assets/notes-payments.svg';
 
 const Content = ({
   name,
+  acceptAutomatically,
   windowWidth,
   nextBooking,
   role,
@@ -37,13 +40,18 @@ const Content = ({
   updates,
   reviews,
   lastPayments,
+  listingAvailableDates,
 }) => {
-  // console.log('rev', reformatPaymentsHistory(lastPayments));
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
 
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
+  const createReadableDates = () =>
+    listingAvailableDates.map(el => ({
+      startDate: moment(el.startDate),
+      endDate: moment(el.endDate),
+    }));
 
   return (
     <>
@@ -110,12 +118,10 @@ const Content = ({
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
           <div style={{ border: '1px solid' }}>
-            {' '}
-            <SectionTitle
-              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
-            >
-              Booking Details
-            </SectionTitle>
+            <BookingDates
+              currentDates={createReadableDates()}
+              autoAccept={acceptAutomatically}
+            />
           </div>
         </Col>
         <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>

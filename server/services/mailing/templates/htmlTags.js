@@ -16,6 +16,7 @@ const link = (page, text, data = {}) => {
     HOST_LOGIN: `${domain}/sign-in`,
     INTERN_LOGIN: `${domain}/sign-in`,
     HOSTS_LINK: `${domain}/hosts`,
+    SET_PASSWORD: `${domain}/set-password/${data.token}`,
   };
   const href = hrefs[page];
   return `<a href="${href}">${text}</a>`;
