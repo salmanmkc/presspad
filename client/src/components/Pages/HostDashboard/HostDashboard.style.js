@@ -28,6 +28,15 @@ export const WalletFooter = styled.div`
   bottom: 1rem;
 `;
 
+export const PaymentsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-image: url(${({ src }) => src});
+  background-repeat: no-repeat;
+  background-position: right 15px top -2px;
+`;
+
 export const ViewLink = styled(H7C)`
   margin-top: 1rem;
   color: ${({ theme }) => theme.colors.black};
@@ -39,7 +48,8 @@ export const ViewLink = styled(H7C)`
 
 export const TableWrapper = styled.div`
   width: 100%;
-
+  margin-top: 1rem;
+  z-index: -1;
   thead[class*='ant-table-thead'] th {
     background-color: white !important;
   }

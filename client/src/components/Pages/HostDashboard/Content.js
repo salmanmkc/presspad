@@ -15,6 +15,7 @@ import {
   WalletContainer,
   WalletFooter,
   ViewLink,
+  PaymentsContainer,
 } from './HostDashboard.style';
 import { bottomMargins, typographies } from './styleProperties';
 
@@ -24,6 +25,7 @@ import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { PAYMENTS_URL } from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
 import WalletFlower from '../../../assets/wallet-flower.svg';
+import NotesPayments from '../../../assets/notes-payments.svg';
 
 const Content = ({
   name,
@@ -167,14 +169,18 @@ const Content = ({
               flexDirection: 'column',
             }}
           >
-            <div
+            <PaymentsContainer
               style={{
                 border: '1px solid',
                 marginBottom: '10px',
               }}
+              src={NotesPayments}
             >
               <SectionTitle
-                style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+                style={{
+                  marginTop: '1rem',
+                  marginBottom: bottomMargins.sectionTitle[device],
+                }}
               >
                 Recent Payments
               </SectionTitle>
@@ -196,7 +202,7 @@ const Content = ({
               ) : (
                 <T.PXL color={colors.lightestGray}>No payments</T.PXL>
               )}
-            </div>
+            </PaymentsContainer>
             <div style={{ border: '1px solid' }}>
               {' '}
               <SectionTitle>Join the Presspad Community</SectionTitle>
