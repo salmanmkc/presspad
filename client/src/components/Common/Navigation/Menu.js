@@ -13,7 +13,7 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'refer others', route: '/refere-others' },
+    { title: 'Refer Others', route: '/refere-others' },
     { title: 'Settings', route: N.SETTINGS_URL },
   ],
   intern: [
@@ -35,8 +35,9 @@ const menuLinks = {
     { title: 'Clients', route: N.ADMIN_ORGS_URL },
     { title: 'Interns', route: N.ADMIN_INTERNS_URL },
     { title: 'Hosts', route: N.ADMIN_HOSTS_URL },
-    { title: 'Bookings', route: N.ADMIN_BOOKINGS_URL },
     { title: 'Payments', route: N.ADMIN_PAYMENTS_URL },
+    { title: 'Bookings', route: N.ADMIN_BOOKINGS_URL },
+    { title: 'Bursary', route: '/bursary' },
   ],
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
