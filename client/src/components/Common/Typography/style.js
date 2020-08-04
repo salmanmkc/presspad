@@ -14,6 +14,7 @@ const CommonStyle = css`
 
   text-align: ${({ align }) => align || 'left'};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'unset')};
+  width: auto;
 `;
 
 export const Heading0 = styled.h1`
