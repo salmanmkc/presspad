@@ -3,15 +3,16 @@ import axios from 'axios';
 import { Input } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
+import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
-import { SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
+import { API_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
 
 const { validate, settingsMyAccountSchema } = require('../../../validation');
 
-const MyAccount = () => {
+const MyAccount = props => {
   const [state, setState] = useState({
-    name: '',
-    email: '',
+    name: props.name,
+    email: props.email,
     oldPassword: '',
     newPassword: '',
   });
@@ -20,7 +21,7 @@ const MyAccount = () => {
 
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
-
+  const [loading, setLoading] = useState(false);
   const _validate = async () => {
     const { errors: _errors } = await validate({
       schema: settingsMyAccountSchema,
@@ -46,12 +47,13 @@ const MyAccount = () => {
       if (_errors) {
         return;
       }
-      await axios.patch(SETTINGS_MY_ACCOUNT, state);
+
+      setLoading(true);
+      await axios.patch(API_SETTINGS_MY_ACCOUNT, state);
     } catch (e) {
-      setError({
-        error: e.response.data.error,
-        isLoading: false,
-      });
+      setError(e.response.data.error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,7 +115,9 @@ const MyAccount = () => {
       )}
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          <Button type="secondary" onClick={onSubmit}>
+          {error && <T.PXS color="pink">{error}</T.PXS>}
+
+          <Button type="secondary" onClick={onSubmit} loading={loading}>
             SAVE CHANGES
           </Button>
         </Col>

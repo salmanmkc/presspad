@@ -15,7 +15,7 @@ import { MOBILE_M_WIDTH } from '../../../constants/screenWidths';
 import DeleteAccount from './DeleteAccount';
 import DeleteAccountSuccess from './DeleteAccountSuccess';
 
-function Settings({ windowWidth }) {
+function Settings({ windowWidth, ...props }) {
   const Heading = windowWidth > MOBILE_M_WIDTH ? T.H2 : T.H3;
 
   return (
@@ -36,12 +36,24 @@ function Settings({ windowWidth }) {
         </S.Tabs>
       </S.TabsWrapper>
       <Switch>
-        <Route path={routes.SETTINGS_MY_ACCOUNT} component={MyAccount} exact />
-        <Route path={routes.SETTINGS_ABOUT_ME} render={AboutMe} exact />
-        <Route path={routes.SETTINGS_MY_PROFILE} render={MyProfile} exact />
+        <Route
+          path={routes.SETTINGS_MY_ACCOUNT}
+          render={() => <MyAccount {...props} />}
+          exact
+        />
+        <Route
+          path={routes.SETTINGS_ABOUT_ME}
+          render={() => <AboutMe {...props} />}
+          exact
+        />
+        <Route
+          path={routes.SETTINGS_MY_PROFILE}
+          render={() => <MyProfile {...props} />}
+          exact
+        />
         <Route
           path={routes.SETTINGS_VERIFICATIONS}
-          render={Verifications}
+          render={() => <Verifications {...props} />}
           exact
         />
       </Switch>

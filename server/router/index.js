@@ -15,6 +15,7 @@ const searchProfiles = require('../controllers/profile/searchProfiles');
 const getInternshipDetails = require('../controllers/profile/getInternshipDetails');
 const updateInternshipDetails = require('../controllers/profile/updateInternshipDetails');
 const deleteAccount = require('../controllers/user/deleteAccount');
+const updateSettings = require('../controllers/user/updateSettings');
 
 const {
   viewBooking,
@@ -129,6 +130,7 @@ const {
   USER_BASE,
   RESET_PASSWORD,
   SET_PASSWORD,
+  SETTINGS_MY_ACCOUNT,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -340,4 +342,5 @@ router.delete(USER_BASE, authentication, deleteAccount);
 router.post(RESET_PASSWORD, resetPassword);
 router.post(SET_PASSWORD, setPassword);
 
+router.patch(SETTINGS_MY_ACCOUNT, authentication, updateSettings);
 module.exports = router;
