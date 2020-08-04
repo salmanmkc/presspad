@@ -9,6 +9,17 @@ export const Header = styled(H5C)`
   text-align: ${({ horizontal }) => horizontal && 'right'};
   position: ${({ horizontal }) => (horizontal ? 'relative' : 'absolute')};
   margin-left: ${({ horizontal, theme }) => horizontal && theme.spacings[4]};
+  background: ${({ isLogIn, isLogInActive, theme }) => {
+    if (isLogIn) {
+      return isLogInActive ? theme.colors.white : theme.colors.pink;
+    }
+    return 'inherit';
+  }};
+  height: ${({ isLogIn }) => isLogIn && '45px'};
+  line-height: ${({ isLogIn }) => isLogIn && '45px'};
+  width: ${({ isLogIn }) => isLogIn && '120px'};
+  text-align: ${({ isLogIn }) => isLogIn && 'center'};
+  border-radius: ${({ isLogIn }) => isLogIn && '10px'};
 `;
 
 export const Link = styled(NavLink)`

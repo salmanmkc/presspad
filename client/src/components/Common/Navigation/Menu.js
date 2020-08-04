@@ -83,7 +83,7 @@ const Menu = ({
       })
       .catch(err => message.error(err));
   };
-
+  const isLogInActive = history.location.pathname === '/sign-in';
   return (
     <>
       {/* HORIZONTAL VIEW */}
@@ -125,7 +125,12 @@ const Menu = ({
             isMobile={isMobile}
             onClick={resetMenu}
           >
-            <S.Header isMobile={isMobile} horizontal={horizontal}>
+            <S.Header
+              isMobile={isMobile}
+              horizontal={horizontal}
+              isLogIn={menuLink.title === 'Log In' && !isMobile}
+              isLogInActive={isLogInActive}
+            >
               {menuLink.title}
             </S.Header>
           </S.Link>
