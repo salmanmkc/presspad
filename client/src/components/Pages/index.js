@@ -1,8 +1,6 @@
 import React from 'react';
 import { Redirect, Switch, useLocation } from 'react-router-dom';
-// // to be deleted /////
-import IllustrationsLayout from '../Layouts/IllustrationsLayout';
-import ProgressBar from '../Common/ProgressBar';
+
 import welcomeImage from './WelcomePages/wlcomeImage';
 
 //  COMMON COMPONENTS
@@ -23,7 +21,6 @@ import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
-import ThemeTest from './ThemeTest';
 import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
@@ -298,29 +295,14 @@ function Pages(props) {
           }
           {...props}
         />
-        {/* To be deleted */}
-        <Route
-          path="/test"
-          Component={ThemeTest}
-          handleChangeState={handleChangeState}
-          isLoggedIn={isLoggedIn}
-          {...props}
-          layout="sideMenu"
-        />
-        {/* ///////////ttttt//////////// */}
-        {/* control the images using the role as condition */}
-        {console.log('wwwwwwww', WELCOME_PAGES)}
         <Route
           path={WELCOME_PAGES}
-          Component={() => <WelcomePages />}
+          Component={() => <WelcomePages role={role} />}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}
           layout="illustrations"
-          // image="presspadMovement"
-          image={welcomeImage(location, 'intern')}
-          // still need to create this function
-          // image={wlecomeImages(id, role)}
+          image={welcomeImage(location, role)}
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>
