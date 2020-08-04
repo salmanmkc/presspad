@@ -13,6 +13,7 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
+    { title: 'refer others', route: '/refere-others' },
     { title: 'Settings', route: N.SETTINGS_URL },
   ],
   intern: [
@@ -20,7 +21,7 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'bursary', route: '/bursary' },
+    { title: 'Bursary', route: '/bursary' },
     { title: 'Settings', route: N.SETTINGS_URL },
   ],
   organisation: [
