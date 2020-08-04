@@ -26,6 +26,7 @@ const menuLinks = {
   ],
   organisation: [
     { title: 'Dashboard', route: N.DASHBOARD_URL },
+    { title: 'Invoices', route: '/invoices' },
     { title: 'Profile', route: N.MYPROFILE_URL },
     { title: 'Settings', route: N.SETTINGS_URL },
   ],
