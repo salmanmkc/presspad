@@ -310,7 +310,6 @@ export const Preview = () => {
       <Table
         columns={columns}
         data={data}
-        showSearch
         tableHeader="table header"
         expandedSection={renderExpandSection}
         previewLink="/previewLinkGoesHere"
