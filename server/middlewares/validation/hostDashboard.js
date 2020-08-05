@@ -25,7 +25,7 @@ const updateAvailabilitySchema = Joi.object({
       }),
     )
     .required(),
-  acceptAutomatically: Joi.boolean().default(true),
+  acceptAutomatically: Joi.boolean().default(false),
 });
 
 module.exports = {

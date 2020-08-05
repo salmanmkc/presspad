@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { message } from 'antd';
 import Title from '../Title';
 import { Switch, DatePicker } from '../Inputs';
 import ButtonNew from '../ButtonNew';
 import LinkButton from '../LinkButton';
+import validateRequest from './validateAvailabiltySchema';
+import { PXSBold } from '../Typography';
 
 import * as S from './style';
 
 import { Row, Col } from '../Grid';
 
 import { BOOKINGS_URL } from '../../../constants/navRoutes';
+import { API_HOST_UPDATE_AVAILABILITY } from '../../../constants/apiRoutes';
 
 const BookingDates = ({ currentDates = [], autoAccept }) => {
   const [multiDateRange, setMultiDateRange] = useState([
@@ -18,6 +23,8 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     },
   ]);
   const [acceptBookings, setAcceptBookings] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
@@ -45,16 +52,43 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     ]);
   };
 
-  //   FUNCTION HAS TO BE UPDATED HERE TO UPDATE THE DATES IN DATABASE
-  const handleSubmit = () => {
-    console.log('dates', multiDateRange);
-    console.log('accept', acceptBookings);
+  const handleSubmit = async () => {
+    try {
+      const requestData = {
+        availableDates: multiDateRange,
+        acceptAutomatically: acceptBookings,
+      };
+      const valid = await validateRequest().validate(requestData, {
+        abortEarly: false,
+      });
+
+      if (valid) {
+        setErrors({});
+        setUpdateLoading(true);
+        await axios.patch(API_HOST_UPDATE_AVAILABILITY, requestData);
+        setUpdateLoading(false);
+        message.success('updated!');
+      } else {
+        setUpdateLoading(false);
+        return null;
+      }
+    } catch (err) {
+      if (err.name === 'ValidationError') {
+        const _errors = {};
+        err.inner.forEach(element => {
+          _errors[element.path.split('.')[0]] = element.message;
+        });
+        setErrors({ ...errors, ..._errors });
+        setUpdateLoading(false);
+      }
+    }
   };
 
   useEffect(() => {
     setMultiDateRange(currentDates);
     setAcceptBookings(autoAccept);
   }, [autoAccept, currentDates]);
+
   return (
     <S.Wrapper>
       <Title section bgColor="primary" small mb={4}>
@@ -87,6 +121,8 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
             type="tertiary"
             bgColor="secondary"
             onClick={handleSubmit}
+            loading={updateLoading}
+            disabled={updateLoading}
           >
             Save changes
           </ButtonNew>
@@ -105,6 +141,11 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
             />
           </S.LinkWrapper>
         </Col>
+        {errors &&
+          Object.values(errors).length > 0 &&
+          Object.values(errors).map(err => (
+            <PXSBold color="pink">{err}</PXSBold>
+          ))}
       </Row>
     </S.Wrapper>
   );
