@@ -34,7 +34,6 @@ const hostDashboard = async (req, res, next) => {
       email,
       name,
       acceptAutomatically,
-
       listing,
       reviews,
       notifications,

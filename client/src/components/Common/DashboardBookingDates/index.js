@@ -47,14 +47,14 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
 
   //   FUNCTION HAS TO BE UPDATED HERE TO UPDATE THE DATES IN DATABASE
   const handleSubmit = () => {
-    console.log('function to go here to update new dates on the back end');
+    console.log('dates', multiDateRange);
+    console.log('accept', acceptBookings);
   };
 
   useEffect(() => {
     setMultiDateRange(currentDates);
     setAcceptBookings(autoAccept);
   }, [autoAccept, currentDates]);
-
   return (
     <S.Wrapper>
       <Title section bgColor="primary" small mb={4}>
