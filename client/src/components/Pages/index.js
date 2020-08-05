@@ -5,7 +5,6 @@ import { Redirect, Switch } from 'react-router-dom';
 import Route from '../Common/Route';
 import NotFound from '../Common/NotFound';
 
-import LandingPage from './LandingPage';
 import HostCreateProfile from './HostCreateProfile';
 import SignInPage from './SignInPage';
 import SignUpPage from './SignUpPage';
@@ -31,7 +30,6 @@ import ResetPassword, { SetPassword } from './ResetPassword';
 
 import { withWindowWidth } from '../../HOCs';
 import {
-  HOME_URL,
   SIGNIN_URL,
   SIGNUP_INTERN,
   SIGNUP_HOST,
@@ -70,7 +68,6 @@ function Pages(props) {
   return (
     <>
       <Switch>
-        <Route path={HOME_URL} exact Component={LandingPage} {...props} />
         <Route
           isPrivate
           exact
