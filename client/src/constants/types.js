@@ -47,7 +47,7 @@ export default {
     'Prefer not to self-identify',
     'Transgender female',
     'Transgender male',
-    'Other/not listed *(this then gives them input to enter)*',
+    'Other/not listed',
     'I’d prefer not to say',
   ],
 
@@ -67,7 +67,7 @@ export default {
     'Reduced physical capacity',
     'Speech',
     'Visual',
-    'Other (text box)',
+    'Other',
     'I’d prefer not to say',
   ],
   interests: [

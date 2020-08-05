@@ -103,6 +103,7 @@ const profileSchema = new Schema(
       type: String,
       enum: types.ethnicity,
     },
+    ethnicityOther: String,
     parentProfession: {
       type: String,
       required: false,
@@ -113,6 +114,7 @@ const profileSchema = new Schema(
       enum: types.disability,
       required: false,
     },
+    disabilityYes: String,
     parentsWorkInPress: {
       type: String,
       enum: types.parentsWorkInPress,
@@ -307,6 +309,20 @@ const profileSchema = new Schema(
     isNotifiedAfter3Weeks: {
       type: Boolean,
       default: false,
+    },
+    lastStudySubject: String,
+    lastStudyUniversity: String,
+    religion: String,
+    genderOther: String,
+    neurodivergent: String,
+    neurodivergentYes: String,
+    childCare: {
+      type: String,
+      enum: types.childCare,
+    },
+    illCare: {
+      type: String,
+      enum: types.illCare,
     },
   },
   {

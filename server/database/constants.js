@@ -48,7 +48,7 @@ module.exports = {
       'Prefer not to self-identify',
       'Transgender female',
       'Transgender male',
-      'Other/not listed *(this then gives them input to enter)*',
+      'Other/not listed',
       'I’d prefer not to say',
     ],
     disability: [
@@ -67,7 +67,7 @@ module.exports = {
       'Reduced physical capacity',
       'Speech',
       'Visual',
-      'Other (text box)',
+      'Other',
       'I’d prefer not to say',
     ],
 

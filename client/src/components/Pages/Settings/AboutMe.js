@@ -5,43 +5,53 @@ import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
-import { API_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
+import {
+  API_SETTINGS_MY_ACCOUNT,
+  API_INTERN_COMPLETE_PROFILE,
+  API_MY_PROFILE_URL,
+} from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 import { CLASSES_DEFINITIONS } from '../../../constants/externalLinks';
 import types from '../../../constants/types';
 
-const { validate, settingsMyAccountSchema } = require('../../../validation');
+const { validate, internSettings } = require('../../../validation');
+
+const getCleanData = (d = {}) => ({
+  birthDate: d.birthDate || null,
+  phoneNumber: d.phoneNumber || '',
+  hometown: d.hometown || '',
+  lastStudySubject: d.lastStudySubject || '', // new
+  lastStudyUniversity: d.lastStudyUniversity || '', // new
+  hearAboutPressPadAnswer: d.hearAboutPressPadAnswer || '',
+  gender: d.gender || '',
+  genderOther: d.genderOther || '',
+  sexualOrientation: d.sexualOrientation || '',
+  ethnicity: d.ethnicity || '',
+  ethnicityOther: d.ethnicityOther || '',
+  religion: d.religion || '', // new
+  neurodivergent: d.neurodivergent || '', // new
+  neurodivergentYes: d.neurodivergentYes || '', // new
+  disability: d.disability || '',
+  disabilityYes: d.disabilityYes || '', // new
+  disabilityYesOther: d.disabilityYesOther || '', // new
+  childCare: d.childCare || '', // new
+  illCare: d.illCare || '', // new
+  degreeLevel: d.degreeLevel || '',
+  class: d.class || '', // new
+});
 
 const AboutMe = props => {
-  const [state, setState] = useState({
-    birthDate: null,
-    phoneNumber: '',
-    hometown: '',
-    lastStudySubject: '', // new
-    lastStudyUniversity: '', // new
-    hearAboutPressPadAnswer: '',
-    gender: '',
-    sexualOrientation: '',
-    ethnicity: '',
-    religion: '', // new
-    neurodivergent: '', // new
-    neurodivergentYes: '', // new
-    disability: '',
-    disabilityYes: '', // new
-    childCare: '', // new
-    illCare: '', // new
-    degreeLevel: '',
-    class: '', // new
-  });
+  const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [prevData, setPrevData] = useState({});
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: settingsMyAccountSchema,
+      schema: internSettings.aboutMeSchema(prevData),
       data: { ...state },
     });
 
@@ -66,7 +76,7 @@ const AboutMe = props => {
       }
 
       setLoading(true);
-      await axios.patch(API_SETTINGS_MY_ACCOUNT, state);
+      // await axios.patch(API_SETTINGS_MY_ACCOUNT, state);
       setNotificationOpen(true);
       props.handleChangeState({ email: state.email, name: state.name });
     } catch (e) {
@@ -78,15 +88,51 @@ const AboutMe = props => {
 
   useEffect(() => {
     if (!state.neurodivergent || !state.neurodivergent.includes('Yes')) {
-      setState(_state => ({ ..._state, neurodivergentYes: null }));
+      setState(_state => ({ ..._state, neurodivergentYes: '' }));
     }
   }, [state.neurodivergent]);
 
   useEffect(() => {
     if (!state.disability || !state.disability.includes('Yes')) {
-      setState(_state => ({ ..._state, disabilityYes: null }));
+      setState(_state => ({
+        ..._state,
+        disabilityYes: '',
+        disabilityYesOther: '',
+      }));
     }
   }, [state.disability]);
+
+  useEffect(() => {
+    if (!state.disabilityYes || !state.disabilityYes.includes('Other')) {
+      setState(_state => ({
+        ..._state,
+        disabilityYesOther: '',
+      }));
+    }
+  }, [state.disabilityYes]);
+
+  useEffect(() => {
+    if (!state.gender || !state.gender.includes('Other')) {
+      setState(_state => ({ ..._state, genderOther: '' }));
+    }
+  }, [state.gender]);
+
+  useEffect(() => {
+    if (!state.ethnicity || !state.ethnicity.includes('Other')) {
+      setState(_state => ({ ..._state, ethnicityOther: '' }));
+    }
+  }, [state.ethnicity]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const {
+        data: { profile },
+      } = await axios.get(API_MY_PROFILE_URL);
+      setState(getCleanData(profile));
+      setPrevData(getCleanData(profile));
+    };
+    getData();
+  }, []);
 
   return (
     <div>
@@ -98,6 +144,7 @@ const AboutMe = props => {
             }
             value={state.birthDate}
             label="Date of birth"
+            error={errors.birthDate}
           />
         </Col>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
@@ -178,10 +225,21 @@ const AboutMe = props => {
             label="Gender"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, gender: value }))
+              setState(_state => ({ ..._state, gender: value || '' }))
             }
             value={state.gender}
+            error={errors.gender}
           />
+
+          {state.gender && state.gender.includes('Other') && (
+            <Input
+              onChange={onInputChange}
+              value={state.genderOther}
+              label="Please specify"
+              name="genderOther"
+              error={errors.genderOther}
+            />
+          )}
         </Col>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
@@ -192,6 +250,7 @@ const AboutMe = props => {
               setState(_state => ({ ..._state, sexualOrientation: value }))
             }
             value={state.sexualOrientation}
+            error={errors.sexualOrientation}
           />
         </Col>
       </Row>
@@ -206,7 +265,18 @@ const AboutMe = props => {
               setState(_state => ({ ..._state, ethnicity: value }))
             }
             value={state.ethnicity}
+            error={errors.ethnicity}
           />
+
+          {state.ethnicity && state.ethnicity.includes('Other') && (
+            <Input
+              onChange={onInputChange}
+              value={state.ethnicityOther}
+              label="Please specify"
+              name="ethnicityOther"
+              error={errors.ethnicityOther}
+            />
+          )}
         </Col>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
@@ -214,9 +284,10 @@ const AboutMe = props => {
             label="Religion"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, religion: value }))
+              setState(_state => ({ ..._state, religion: value || '' }))
             }
             value={state.religion}
+            error={errors.religion}
           />
         </Col>
       </Row>
@@ -228,9 +299,10 @@ const AboutMe = props => {
             label="Disability"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, disability: value }))
+              setState(_state => ({ ..._state, disability: value || '' }))
             }
             value={state.disability}
+            error={errors.disability}
           />
 
           {state.disability && state.disability.includes('Yes') && (
@@ -239,9 +311,20 @@ const AboutMe = props => {
               label="Please specify"
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, disabilityYes: value }))
+                setState(_state => ({ ..._state, disabilityYes: value || '' }))
               }
               value={state.disabilityYes}
+              error={errors.disabilityYes}
+            />
+          )}
+
+          {state.disabilityYes && state.disabilityYes.includes('Other') && (
+            <Input
+              onChange={onInputChange}
+              value={state.disabilityYesOther}
+              label="Please specify"
+              name="disabilityYesOther"
+              error={errors.disabilityYesOther}
             />
           )}
         </Col>
@@ -252,9 +335,10 @@ const AboutMe = props => {
             label="Neurodivergent condition"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, neurodivergent: value }))
+              setState(_state => ({ ..._state, neurodivergent: value || '' }))
             }
             value={state.neurodivergent}
+            error={errors.neurodivergent}
           />
 
           {state.neurodivergent && state.neurodivergent.includes('Yes') && (
@@ -266,9 +350,13 @@ const AboutMe = props => {
               label="Please specify"
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, neurodivergentYes: value }))
+                setState(_state => ({
+                  ..._state,
+                  neurodivergentYes: value || '',
+                }))
               }
               value={state.neurodivergentYes}
+              error={errors.neurodivergentYes}
             />
           )}
         </Col>
@@ -281,9 +369,10 @@ const AboutMe = props => {
             label="Are you a primary carer for a child or children under 18?"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, childCare: value }))
+              setState(_state => ({ ..._state, childCare: value || '' }))
             }
             value={state.childCare}
+            error={errors.childCare}
           />
         </Col>
       </Row>
@@ -296,9 +385,10 @@ const AboutMe = props => {
               label="Do you look after or care for someone with long term physical or mental ill health caused by disability or age (not in a paid capacity)?"
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, illCare: value }))
+                setState(_state => ({ ..._state, illCare: value || '' }))
               }
               value={state.illCare}
+              error={errors.illCare}
             />
           </Col>
         </S.IllCareWrapper>
@@ -311,9 +401,10 @@ const AboutMe = props => {
             label="Degree level"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, class: value }))
+              setState(_state => ({ ..._state, degreeLevel: value }))
             }
-            value={state.class}
+            value={state.degreeLevel}
+            error={errors.degreeLevel}
           />
         </Col>
       </Row>
@@ -338,6 +429,7 @@ const AboutMe = props => {
                 setState(_state => ({ ..._state, class: value }))
               }
               value={state.class}
+              error={errors.class}
             />
           </S.IllCareWrapper>
         </Col>

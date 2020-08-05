@@ -8,7 +8,7 @@ import Button from '../../Common/ButtonNew';
 import { API_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 
-const { validate, settingsMyAccountSchema } = require('../../../validation');
+const { validate, internSettings } = require('../../../validation');
 
 const MyAccount = props => {
   const [state, setState] = useState({
@@ -27,7 +27,7 @@ const MyAccount = props => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: settingsMyAccountSchema,
+      schema: internSettings.myAccountSchema,
       data: { ...state, changePasswordActive },
     });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { DatePicker as AntdDatePicker } from 'antd';
+import moment from 'moment';
 import Icon from '../Icon';
 import * as S from './style';
 import * as T from '../Typography';
@@ -90,6 +91,10 @@ const DatePicker = ({
     );
   }
 
+  let _value = value;
+  if (typeof _value === 'string') {
+    _value = moment(_value);
+  }
   return (
     <S.DatePickerWrapper mt={mt} mb={mb} ml={ml} mr={mr} error={!!error}>
       {label && (
@@ -103,7 +108,7 @@ const DatePicker = ({
         type="date"
         suffixIcon={renderIcon}
         onChange={onChange}
-        value={value}
+        value={_value}
         {...props}
       >
         {children}
