@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { H5C } from '../Typography';
 
 export const Header = styled(H5C)`
+  font-size: ${({ isMobile }) => !isMobile && '18px'};
   color: ${({ theme }) => theme.colors.white};
   min-width: auto;
   max-width: ${({ isMobile }) => (isMobile ? '300px' : '195px')};
