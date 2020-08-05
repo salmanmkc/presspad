@@ -11,13 +11,7 @@ import {
 } from '../../../constants/navRoutes';
 
 // STYLING
-import {
-  ErrorMsg,
-  ForgetLink,
-  TitleWrapper,
-  TitleContainer,
-  TabletTitle,
-} from './SignInPage.style';
+import * as S from './SignInPage.style';
 
 // COMMON COMPONENTS
 import Button from '../../Common/ButtonNew';
@@ -116,8 +110,8 @@ export default class SignInPage extends Component {
     const { onInputChange, onFormSubmit } = this;
     return (
       <>
-        <TitleWrapper>
-          <TitleContainer>
+        <S.TitleWrapper>
+          <S.TitleContainer>
             <Title
               withBg
               bgColor="pink"
@@ -125,11 +119,11 @@ export default class SignInPage extends Component {
             >
               Log In
             </Title>
-          </TitleContainer>
-        </TitleWrapper>
+          </S.TitleContainer>
+        </S.TitleWrapper>
         <Row>
           <Col w={[4, 12, 12]}>
-            <TabletTitle>
+            <S.TabletTitle>
               <Title
                 withBg
                 bgColor="white"
@@ -142,7 +136,7 @@ export default class SignInPage extends Component {
               >
                 Log In
               </Title>
-            </TabletTitle>
+            </S.TabletTitle>
           </Col>
           <Col w={[4, 12, 6]}>
             <Input
@@ -169,9 +163,9 @@ export default class SignInPage extends Component {
               mt={4}
             />
             <p style={{ marginTop: 10, marginLeft: 5 }}>
-              <ForgetLink to={RESET_PASSWORD}>Forgot password?</ForgetLink>
+              <S.ForgetLink to={RESET_PASSWORD}>Forgot password?</S.ForgetLink>
             </p>
-            {msg && <ErrorMsg>{msg}</ErrorMsg>}
+            {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
             <Button type="secondary" onClick={onFormSubmit}>
               Sign in
             </Button>
