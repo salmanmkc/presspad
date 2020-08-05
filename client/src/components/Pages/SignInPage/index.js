@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { Input } from 'antd';
+// import { Input } from 'antd';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
-// COMMON COMPONENTS
-import Button from '../../Common/Button';
 
 // CONSTANTS
 import { API_LOGIN_URL } from '../../../constants/apiRoutes';
@@ -22,7 +19,17 @@ import {
   InputLabel,
   InputDiv,
   ErrorMsg,
+  ForgetLink,
+  TitleWrapper,
+  TitleContainer,
+  TabletTitle,
 } from './SignInPage.style';
+
+// COMMON COMPONENTS
+import Button from '../../Common/ButtonNew';
+import Title from '../../Common/Title';
+import { Row, Col } from '../../Common/Grid';
+import { Input } from '../../Common/Inputs/index';
 
 export default class SignInPage extends Component {
   state = {
@@ -114,21 +121,76 @@ export default class SignInPage extends Component {
     const { emailError, passwordError } = errors;
     const { onInputChange, onFormSubmit } = this;
     return (
-      <Wrapper>
-        <HeaderText>Sign In</HeaderText>
-        <SignInForm>
-          <InputDiv>
-            <InputLabel htmlFor="email">Email</InputLabel>
+      <>
+        <TitleWrapper>
+          <TitleContainer>
+            <Title
+              withBg
+              bgColor="pink"
+              style={{ justifyContent: 'flex-start', paddingLeft: 120 }}
+            >
+              Log In
+            </Title>
+          </TitleContainer>
+        </TitleWrapper>
+        <Row>
+          <Col w={[4, 12, 12]}>
+            <TabletTitle>
+              <Title
+                withBg
+                bgColor="white"
+                textColor="pink"
+                style={{
+                  justifyContent: 'flex-start',
+                  marginTop: 40,
+                  marginBottom: -30,
+                }}
+              >
+                Log In
+              </Title>
+            </TabletTitle>
+          </Col>
+          <Col w={[4, 12, 6]}>
             <Input
+              label="Email"
               placeholder="Enter your email"
               name="email"
               id="email"
               type="text"
-              size="large"
               onChange={onInputChange}
               value={email}
+              error={emailError}
+              mt={6}
             />
-            <ErrorMsg>{emailError}</ErrorMsg>
+
+            <Input
+              label="Password"
+              placeholder="Enter your password"
+              name="password"
+              id="password"
+              type="text"
+              onChange={onInputChange}
+              value={password}
+              error={passwordError}
+              mt={4}
+            />
+            <p style={{ marginTop: 10, marginLeft: 5 }}>
+              <ForgetLink to={RESET_PASSWORD}>Forgot password?</ForgetLink>
+            </p>
+            {msg && <ErrorMsg>{msg}</ErrorMsg>}
+            <Button type="secondary" onClick={onFormSubmit}>
+              Sign in
+            </Button>
+          </Col>
+        </Row>
+      </>
+    );
+    return (
+      <Wrapper>
+        <HeaderText>Sign Innnnn</HeaderText>
+        <SignInForm>
+          <InputDiv>
+            <InputLabel htmlFor="email">Email</InputLabel>
           </InputDiv>
           <InputDiv>
             <InputLabel htmlFor="password">Password</InputLabel>
