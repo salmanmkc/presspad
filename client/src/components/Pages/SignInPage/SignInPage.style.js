@@ -13,6 +13,11 @@ export const ForgetLink = styled(Link)`
   color: ${({ theme }) => theme.colors.gray3};
 `;
 
+export const signupLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.pink};
+  text-decoration: underline;
+`;
+
 export const TitleContainer = styled.div`
   position: absolute;
   left: 0;

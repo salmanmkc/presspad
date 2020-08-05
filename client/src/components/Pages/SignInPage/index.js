@@ -8,6 +8,7 @@ import {
   DASHBOARD_URL,
   ADMIN_DASHBOARD_URL,
   RESET_PASSWORD,
+  SIGNUP_URL,
 } from '../../../constants/navRoutes';
 
 // STYLING
@@ -18,6 +19,7 @@ import Button from '../../Common/ButtonNew';
 import Title from '../../Common/Title';
 import { Row, Col } from '../../Common/Grid';
 import { Input } from '../../Common/Inputs/index';
+import * as T from '../../Common/Typography';
 
 export default class SignInPage extends Component {
   state = {
@@ -169,6 +171,10 @@ export default class SignInPage extends Component {
             <Button type="secondary" onClick={onFormSubmit}>
               Sign in
             </Button>
+            <T.P style={{ textAlign: 'center' }}>
+              dont have an account{' '}
+              <S.signupLink to={SIGNUP_URL}>sign up</S.signupLink>
+            </T.P>
           </Col>
         </Row>
       </>
