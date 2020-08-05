@@ -14,6 +14,7 @@ export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
 export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
+export const REFERRAL_URL = '/refer';
 
 // editing details
 export const SETTINGS = {
