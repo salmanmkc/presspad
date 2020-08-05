@@ -18,7 +18,7 @@ const StandardCol = (colTitle, type, customSort) => ({
   dataIndex: colTitle,
   key: colTitle,
   sorter: (a, b) => customSort || a[colTitle].localeCompare(b[colTitle]),
-  className: 'linkCol',
+  className: 'standardCol',
   render: (text, rowData) => (
     <T.PXS color="black">{formatText(text, type)}</T.PXS>
   ),

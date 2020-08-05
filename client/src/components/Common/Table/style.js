@@ -9,18 +9,13 @@ export const Wrapper = styled.div`
   position: relative;
   background-color: white;
 
-  .ant-table-thead {
-    span {
-      font-family: Glacial Indifference !important;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      color: ${({ theme }) => theme.colors.darkBlue};
-      font-weight: bold;
-    }
-  }
-
   .ant-table-thead > tr > th {
     background: ${({ theme }) => theme.colors.white};
+    font-family: Glacial Indifference !important;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: ${({ theme }) => theme.colors.darkBlue};
+    font-weight: bold;
   }
 `;
 

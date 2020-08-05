@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import Table from './index';
-import { LinkCol, StandardCol } from './Common';
+import { LinkCol, StandardCol, DropdownCol } from './Common';
 
 import { ADMIN_USER_DETAILS } from '../../../constants/navRoutes';
 
@@ -51,20 +51,13 @@ export const UsingColumnComponents = () => {
 };
 
 export const ExpandableContent = () => {
-  const columns = [
-    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
-    StandardCol('requestDate', 'date'),
-    StandardCol('type'),
-  ];
+  const selectOptions = [
+    'Approve',
+    'Reject',
+    'Request Changes',
+  ].map(option => ({ label: option, value: option }));
 
-  const data = [
-    {
-      name: 'Test Name',
-      requestDate: moment(),
-      id: 1,
-      type: 'Updated address',
-    },
-  ];
+  const onChange = () => console.log('changeFunc to pass down');
 
   const renderExpandSection = (rowData, index) => (
     <div>
@@ -75,6 +68,23 @@ export const ExpandableContent = () => {
       <p>User Id: {rowData.id}</p>
     </div>
   );
+
+  const columns = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('requestDate', 'date'),
+    StandardCol('type'),
+    DropdownCol('approvalAction', null, selectOptions),
+  ];
+
+  const data = [
+    {
+      name: 'Test Name',
+      requestDate: moment(),
+      id: 1,
+      type: 'Updated address',
+      approvalAction: '',
+    },
+  ];
 
   return (
     <div style={{ padding: '20px' }}>
