@@ -115,6 +115,7 @@ const profileSchema = new Schema(
       required: false,
     },
     disabilityYes: String,
+    disabilityYesOther: String,
     parentsWorkInPress: {
       type: String,
       enum: types.parentsWorkInPress,
@@ -324,6 +325,7 @@ const profileSchema = new Schema(
       type: String,
       enum: types.illCare,
     },
+    belongToClass: String,
   },
   {
     timestamps: true,

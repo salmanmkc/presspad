@@ -5,7 +5,7 @@ import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
-import { API_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
+import { API_INTERN_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 
 const { validate, internSettings } = require('../../../validation');
@@ -52,7 +52,7 @@ const MyAccount = props => {
       }
 
       setLoading(true);
-      await axios.patch(API_SETTINGS_MY_ACCOUNT, state);
+      await axios.patch(API_INTERN_SETTINGS_MY_ACCOUNT, state);
       setNotificationOpen(true);
       props.handleChangeState({ email: state.email, name: state.name });
     } catch (e) {

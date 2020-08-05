@@ -2,7 +2,10 @@ const boom = require('boom');
 const { compare } = require('bcryptjs');
 const { hash } = require('bcryptjs');
 
-const { updateUserById, getUserById } = require('../../database/queries/user');
+const {
+  updateUserById,
+  getUserById,
+} = require('../../../database/queries/user');
 
 module.exports = async (req, res, next) => {
   const { name, email, oldPassword, newPassword } = req.body;

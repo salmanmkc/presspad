@@ -6,8 +6,7 @@ import * as S from './style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
 import {
-  API_SETTINGS_MY_ACCOUNT,
-  API_INTERN_COMPLETE_PROFILE,
+  API_INTERN_SETTINGS_ABOUT_ME,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
@@ -37,7 +36,7 @@ const getCleanData = (d = {}) => ({
   childCare: d.childCare || '', // new
   illCare: d.illCare || '', // new
   degreeLevel: d.degreeLevel || '',
-  class: d.class || '', // new
+  belongToClass: d.belongToClass || '', // new
 });
 
 const AboutMe = props => {
@@ -72,11 +71,12 @@ const AboutMe = props => {
       setErrors(_errors || {});
 
       if (_errors) {
+        setError('Must fill all required fields');
         return;
       }
 
       setLoading(true);
-      // await axios.patch(API_SETTINGS_MY_ACCOUNT, state);
+      await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
       props.handleChangeState({ email: state.email, name: state.name });
     } catch (e) {
@@ -397,7 +397,7 @@ const AboutMe = props => {
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
-            options={types.class.map(e => ({ label: e, value: e }))}
+            options={types.degreeLevel.map(e => ({ label: e, value: e }))}
             label="Degree level"
             allowClear
             onChange={value =>
@@ -413,7 +413,7 @@ const AboutMe = props => {
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
-              options={types.class.map(e => ({ label: e, value: e }))}
+              options={types.belongToClass.map(e => ({ label: e, value: e }))}
               label="Which class fo you self-identify as belonging to?"
               helperText={
                 <span>
@@ -426,10 +426,10 @@ const AboutMe = props => {
               }
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, class: value }))
+                setState(_state => ({ ..._state, belongToClass: value || '' }))
               }
-              value={state.class}
-              error={errors.class}
+              value={state.belongToClass}
+              error={errors.belongToClass}
             />
           </S.IllCareWrapper>
         </Col>

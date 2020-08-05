@@ -163,7 +163,7 @@ export default {
     'No',
     'I’d prefer not to say',
   ],
-  class: [
+  belongToClass: [
     'Precariat i.e. deprived',
     'Traditional Working Class',
     'Emergent Service Workers',

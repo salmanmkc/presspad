@@ -59,7 +59,7 @@ const aboutMeSchema = prevValues =>
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
     genderOther: string().when('gender', {
-      is: gender => gender.includes('Other'),
+      is: gender => gender && gender.includes('Other'),
       then: string().required(DEFAULT_REQUIRED),
       otherwise: string().nullable(),
     }),
@@ -70,7 +70,7 @@ const aboutMeSchema = prevValues =>
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
     ethnicityOther: string().when('ethnicity', {
-      is: ethnicity => ethnicity.includes('Other'),
+      is: ethnicity => ethnicity && ethnicity.includes('Other'),
       then: string().required(DEFAULT_REQUIRED),
       otherwise: string().nullable(),
     }),
@@ -81,7 +81,7 @@ const aboutMeSchema = prevValues =>
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
     neurodivergentYes: string().when('neurodivergent', {
-      is: neurodivergent => neurodivergent.includes('Yes'),
+      is: neurodivergent => neurodivergent && neurodivergent.includes('Yes'),
       then: string().required(DEFAULT_REQUIRED),
       otherwise: string().nullable(),
     }),
@@ -89,12 +89,12 @@ const aboutMeSchema = prevValues =>
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
     disabilityYes: string().when('disability', {
-      is: disability => disability.includes('Yes'),
+      is: disability => disability && disability.includes('Yes'),
       then: string().required(DEFAULT_REQUIRED),
       otherwise: string().nullable(),
     }),
     disabilityYesOther: string().when('disabilityYes', {
-      is: disabilityYes => disabilityYes.includes('Other'),
+      is: disabilityYes => disabilityYes && disabilityYes.includes('Other'),
       then: string().required(DEFAULT_REQUIRED),
       otherwise: string().nullable(),
     }),
@@ -107,7 +107,7 @@ const aboutMeSchema = prevValues =>
     degreeLevel: prevValues.degreeLevel
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
-    class: prevValues.class
+    belongToClass: prevValues.belongToClass
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
   });
