@@ -24,6 +24,7 @@ import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
+import SignUpFunnelPage from './SignUpFunnelPage';
 
 import Settings, { DeleteAccountSuccess } from './Settings';
 import ResetPassword, { SetPassword } from './ResetPassword';
@@ -316,6 +317,18 @@ function Pages(props) {
                 {...linkProps}
                 {...props}
               />
+            ) : (
+              <Redirect to={DASHBOARD_URL} />
+            )
+          }
+          {...props}
+        />
+        <Route
+          path="/funnel"
+          exact
+          render={linkProps =>
+            !isLoggedIn ? (
+              <SignUpFunnelPage {...linkProps} {...props} />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
