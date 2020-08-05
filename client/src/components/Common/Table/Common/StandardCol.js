@@ -27,14 +27,21 @@ const decideSort = (a, b, colTitle, type) => {
   }
 };
 
-const StandardCol = (colTitle, type, customSort) => ({
+const StandardCol = (colTitle, type, customSort, subtitle, subtitleType) => ({
   title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
   sorter: (a, b) => customSort || decideSort(a, b, colTitle, type),
   className: 'standardCol',
   render: (text, rowData) => (
-    <T.PXS color="black">{formatText(text, type)}</T.PXS>
+    <>
+      <T.PXS color="black">{formatText(text, type)}</T.PXS>
+      {subtitle && (
+        <T.PXS color="lightGray">
+          {formatText(rowData[subtitle], subtitleType)}
+        </T.PXS>
+      )}
+    </>
   ),
 });
 

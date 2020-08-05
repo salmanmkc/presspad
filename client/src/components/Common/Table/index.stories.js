@@ -2,7 +2,15 @@ import React from 'react';
 import moment from 'moment';
 
 import Table from './index';
-import { LinkCol, StandardCol, DropdownCol, DBSCol } from './Common';
+import {
+  LinkCol,
+  StandardCol,
+  DropdownCol,
+  DBSCol,
+  TagCol,
+  PayButtonCol,
+  InputCol,
+} from './Common';
 
 import { ADMIN_USER_DETAILS } from '../../../constants/navRoutes';
 
@@ -10,13 +18,46 @@ export default {
   title: 'Tables',
 };
 
-export const BasicTable = () => {
-  const columns = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Hometown', dataIndex: 'hometown', key: 'hometown' },
+export const ColumnComponents1 = () => {
+  const btnOptions = [
+    { label: 'cancel', color: 'pink', icon: 'crossCircle' },
+    { label: 'paid', color: 'lightBlue', icon: 'circleTick' },
   ];
 
-  const data = [{ name: 'Test Name', hometown: 'Test Hometown' }];
+  const onClick = (rowData, action) =>
+    console.log(
+      'button function passed down bringing back the row data and action of button clicked',
+      rowData,
+      action,
+    );
+
+  const onInputChange = (rowData, e) => console.log('input function');
+
+  const columns = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('amount', 'price'),
+    { title: 'Standard', dataIndex: 'standard', key: 'standard' },
+    InputCol('bankName', onInputChange),
+    PayButtonCol('actions', onClick),
+  ];
+
+  const data = [
+    {
+      name: 'Test Name',
+      hometown: 'Test Hometown',
+      amount: 400,
+      standard: 'standard col type',
+    },
+    {
+      name: 'Test Name',
+      hometown: 'Test Hometown',
+      amount: 400,
+      bankName: 'Santander',
+      accountNumber: '123123',
+      sortCode: '20-23-23',
+      standard: 'standard col type',
+    },
+  ];
 
   return (
     <div style={{ padding: '20px' }}>
@@ -30,11 +71,13 @@ export const BasicTable = () => {
   );
 };
 
-export const UsingColumnComponents = () => {
+export const ColumnComponents2 = () => {
   const columns = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('hometown'),
     StandardCol('totalPayments', 'price'),
+    TagCol('bookingStatus', 'booking'),
+    StandardCol('nextPayment', 'price', null, 'newPaymentDate', 'date'),
   ];
 
   const data = [
@@ -43,12 +86,18 @@ export const UsingColumnComponents = () => {
       hometown: 'Test Hometown',
       id: 1,
       totalPayments: 3700,
+      bookingStatus: 'pending',
+      nextPayment: 300,
+      nextPaymentDate: moment(),
     },
     {
       name: 'Other Name',
       hometown: 'Other Hometown',
       id: 1,
       totalPayments: 5890,
+      bookingStatus: 'accepted',
+      nextPayment: 300,
+      nextPaymentDate: moment(),
     },
   ];
 

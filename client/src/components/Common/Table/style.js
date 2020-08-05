@@ -35,3 +35,20 @@ export const EditButton = styled.button`
   text-align: right;
   width: 100%;
 `;
+
+export const Tag = styled.div`
+  display: inline-flex;
+  background: ${({ type, theme }) => type || theme.colors.black};
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+`;
+
+export const StyledBtn = styled.button`
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: none;
+  display: inline-flex;
+  margin-right: ${({ theme }) => theme.spacings[3]};
+`;
