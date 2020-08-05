@@ -22,7 +22,6 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     },
   ]);
   const [acceptBookings, setAcceptBookings] = useState(false);
-  const [errors, setErrors] = useState({});
   const [updateLoading, setUpdateLoading] = useState(false);
 
   const onRangeChange = (date, type, index) => {
@@ -63,17 +62,12 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
       });
 
       if (valid) {
-        setErrors({});
         setUpdateLoading(true);
         await axios.patch(API_HOST_UPDATE_AVAILABILITY, requestData);
         setUpdateLoading(false);
         message.success('updated!');
-      } else {
-        setUpdateLoading(false);
-        return null;
       }
     } catch (err) {
-      setErrors({ ...errors, ...err });
       setUpdateLoading(false);
       message.error(
         'There was an error updating your settings! Please try again.',
@@ -86,7 +80,6 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     setAcceptBookings(autoAccept);
   }, [autoAccept, currentDates]);
 
-  console.log('errrr', errors);
   return (
     <S.Wrapper>
       <Title section bgColor="primary" small mb={4}>

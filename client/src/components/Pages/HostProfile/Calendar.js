@@ -127,7 +127,7 @@ class CalendarComponent extends Component {
     }
     this.setState({
       listingActiveBookings: _listingActiveBookings,
-      loading: false,
+      isLoading: false,
     });
   };
 
@@ -158,7 +158,7 @@ class CalendarComponent extends Component {
   // disables calendar tiles (days)
   tileDisabled = ({ date }) => {
     const { avDates, listingActiveBookings } = this.state;
-
+    console.log('avD', avDates);
     // return true if current date is not included in available dates => disable tile
     date = moment(date).format('YYYY-MM-DD');
     return (
