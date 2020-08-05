@@ -31,6 +31,9 @@ export const ADMIN_ORGS_URL = '/admin/clients';
 export const ADMIN_BOOKINGS_URL = '/admin/bookings';
 export const ADMIN_PAYMENTS_URL = '/admin/payments';
 
+// url to view all the data the user has entered in sign up
+export const ADMIN_USER_DETAILS = '/admin/user-details/:id';
+
 // signing up process
 export const SIGNUP_INTERN = '/sign-up/intern';
 export const SIGNUP_HOST = '/sign-up/host';
