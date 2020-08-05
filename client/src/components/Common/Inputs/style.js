@@ -147,6 +147,9 @@ export const InputWrapper = styled.div`
   position: relative;
   width: 100%;
   margin-bottom: ${({ error, theme }) => (error ? theme.spacings[2] : 0)};
+  margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
+  margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
+  margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
 
   input {
     ${commonInputStyles}
