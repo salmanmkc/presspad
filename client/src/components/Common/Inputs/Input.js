@@ -21,6 +21,8 @@ const Input = ({
   onChange,
   value,
   extraInfo,
+  type,
+  name,
 }) => (
   <InputWrapper error={!!error} mt={mt} mb={mb} mr={mr} ml={ml}>
     {label && (
@@ -40,12 +42,15 @@ const Input = ({
         placeholder={placeholder || 'Type here...'}
         rows={4}
         style={{ paddingTop: '10px' }}
+        name={name}
       />
     ) : (
       <AntdInput
         onChange={onChange}
         value={value}
         placeholder={placeholder || 'Type here...'}
+        type={type}
+        name={name}
       />
     )}
     {limit && (

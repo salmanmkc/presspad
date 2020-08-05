@@ -156,7 +156,7 @@ export default class SignInPage extends Component {
               placeholder="Enter your password"
               name="password"
               id="password"
-              type="text"
+              type="password"
               onChange={onInputChange}
               value={password}
               error={passwordError}
