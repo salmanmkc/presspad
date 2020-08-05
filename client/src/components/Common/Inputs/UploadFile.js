@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Dropzone from 'react-dropzone';
+import axios from 'axios';
 import Icon from '../Icon';
 import * as T from '../Typography';
 import InfoSection from './InfoSection';
@@ -14,13 +15,51 @@ const UploadFile = ({
   mainText,
   secondaryText,
   error: validationError,
-  multiple,
+  multiple = false,
   profile,
   type,
   extraInfo,
+  userId,
+  startUpload,
+  setImageInfo,
+  setUploading,
 }) => {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const upload = async () => {
+      const promises = files.map(async file => {
+        const generatedName = `${userId}/${Date.now()}.${file.name}`;
+        const {
+          data: { signedUrl },
+        } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
+        const headers = {
+          'Content-Type': 'application/octet-stream',
+        };
+
+        await axios.put(signedUrl, file, {
+          headers,
+        });
+
+        return { value: generatedName, key: file.name };
+      });
+      try {
+        setUploading(true);
+        const data = await Promise.all(promises);
+        setImageInfo(data);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setUploading(false);
+      }
+    };
+
+    if (startUpload && files && files[0]) {
+      upload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files, startUpload, userId]);
 
   const onDropRejected = errors => {
     if (
