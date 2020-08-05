@@ -24,3 +24,14 @@ export const StyledLink = styled(Link)`
   font-size: 0.875rem;
   font-weight: bold;
 `;
+
+export const EditButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.pink};
+  font-weight: bold;
+  padding-top: 5px;
+  text-align: right;
+  width: 100%;
+`;

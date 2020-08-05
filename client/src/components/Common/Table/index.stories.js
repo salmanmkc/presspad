@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 import Table from './index';
-import { LinkCol, StandardCol, DropdownCol } from './Common';
+import { LinkCol, StandardCol, DropdownCol, DBSCol } from './Common';
 
 import { ADMIN_USER_DETAILS } from '../../../constants/navRoutes';
 
@@ -59,6 +59,8 @@ export const ExpandableContent = () => {
 
   const onChange = () => console.log('changeFunc to pass down');
 
+  const updateDBS = record => console.log('refer to dbs functions that exist');
+
   const renderExpandSection = (rowData, index) => (
     <div>
       <p>
@@ -72,6 +74,7 @@ export const ExpandableContent = () => {
   const columns = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('requestDate', 'date'),
+    DBSCol('dbs', updateDBS),
     StandardCol('type'),
     DropdownCol('approvalAction', null, selectOptions),
   ];
@@ -83,6 +86,7 @@ export const ExpandableContent = () => {
       id: 1,
       type: 'Updated address',
       approvalAction: '',
+      dbsCheck: { refNum: 123123, url: 'file.pdf' },
     },
   ];
 
