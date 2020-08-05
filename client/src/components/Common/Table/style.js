@@ -26,14 +26,17 @@ export const StyledLink = styled(Link)`
 `;
 
 export const EditButton = styled.button`
+  font-family: Glacial Indifference !important;
   border: none;
   background: none;
   cursor: pointer;
+  outline: none;
   color: ${({ theme }) => theme.colors.pink};
   font-weight: bold;
   padding-top: 5px;
-  text-align: right;
+  text-align: left;
   width: 100%;
+  font-size: 0.875rem;
 `;
 
 export const Tag = styled.div`
@@ -50,5 +53,10 @@ export const StyledBtn = styled.button`
   cursor: pointer;
   background: none;
   display: inline-flex;
-  margin-right: ${({ theme }) => theme.spacings[3]};
+  margin-right: ${({ theme, noMargin }) => (noMargin ? 0 : theme.spacings[3])};
+`;
+
+export const HouseViewing = styled.div`
+  display: flex;
+  align-items: center;
 `;

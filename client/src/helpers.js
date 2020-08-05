@@ -107,6 +107,7 @@ const filterFields = {
   status: 1,
   totalPayments: 1,
   currentBalance: 1,
+  bookingStatus: 1,
 
   // clients
   numberOfInterns: 1,
@@ -140,7 +141,11 @@ const filterFields = {
  */
 const _filterObj = (obj, searchVal) =>
   Object.keys(obj).some(key => {
-    const _val = obj[key];
+    const _val = obj[key] || '';
+    if (typeof _val === 'object' && _val !== null && _val._isAMomentObject) {
+      const formattedDate = createSingleDate(_val);
+      return formattedDate.includes(searchVal);
+    }
     if (typeof _val === 'object') {
       return _filterObj(_val, searchVal);
     }

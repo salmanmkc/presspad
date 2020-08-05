@@ -10,6 +10,7 @@ import {
   TagCol,
   PayButtonCol,
   InputCol,
+  HouseViewingCol,
 } from './Common';
 
 import { ADMIN_USER_DETAILS } from '../../../constants/navRoutes';
@@ -113,6 +114,52 @@ export const ColumnComponents2 = () => {
   );
 };
 
+export const ColumnComponents3 = () => {
+  const updateDBS = record => console.log('refer to dbs functions that exist');
+
+  const onCancel = rowData =>
+    console.log('cancel function for the house viewing', rowData);
+
+  const onAdd = rowData =>
+    console.log('add function to open modal to input date', rowData);
+
+  const columns = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('requestDate', 'date'),
+    DBSCol('dbs', updateDBS),
+    HouseViewingCol('houseViewing', onAdd, onCancel),
+    StandardCol('status'),
+  ];
+
+  const data = [
+    {
+      name: 'Test Name',
+      requestDate: moment(),
+      dbs: null,
+      houseViewing: moment(),
+      status: 'Sign up',
+    },
+    {
+      name: 'Test Name',
+      requestDate: moment(),
+      dbs: { refNum: 123123, url: 'file.pdf' },
+      houseViewing: null,
+      status: 'Sign up',
+    },
+  ];
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <Table
+        columns={columns}
+        data={data}
+        showSearch
+        tableHeader="table header"
+      />
+    </div>
+  );
+};
+
 export const ExpandableContent = () => {
   const selectOptions = [
     'Approve',
@@ -169,6 +216,69 @@ export const ExpandableContent = () => {
         showSearch
         tableHeader="table header"
         expandedSection={renderExpandSection}
+      />
+    </div>
+  );
+};
+
+export const Preview = () => {
+  const selectOptions = [
+    'Approve',
+    'Reject',
+    'Request Changes',
+  ].map(option => ({ label: option, value: option }));
+
+  const onChange = () => console.log('changeFunc to pass down');
+
+  const updateDBS = record => console.log('refer to dbs functions that exist');
+
+  const renderExpandSection = (rowData, index) => (
+    <div>
+      <p>
+        Render all your expandable data here. Just make sure the data is in your
+        data obj
+      </p>
+      <p>User Id: {rowData.id}</p>
+    </div>
+  );
+
+  const columns = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('requestDate', 'date'),
+    DBSCol('dbs', updateDBS),
+    StandardCol('type'),
+    DropdownCol('approvalAction', null, selectOptions),
+  ];
+
+  const data = [
+    {
+      name: 'Test Name',
+      requestDate: moment(),
+      id: 1,
+      type: 'Updated address',
+      approvalAction: '',
+      dbsCheck: { refNum: 123123, url: 'file.pdf' },
+    },
+    {
+      name: 'Test Name',
+      requestDate: moment().add(5, 'days'),
+      id: 1,
+      type: 'Updated address',
+      approvalAction: '',
+      dbsCheck: { refNum: 123123, url: 'file.pdf' },
+    },
+  ];
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <Table
+        columns={columns}
+        data={data}
+        showSearch
+        tableHeader="table header"
+        expandedSection={renderExpandSection}
+        previewLink="/previewLinkGoesHere"
+        previewLinkText="View all intern approval requests"
       />
     </div>
   );

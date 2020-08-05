@@ -5,6 +5,7 @@ import DBSCol from './DBSCol';
 import TagCol from './TagCol';
 import PayButtonCol from './PayButtonCol';
 import InputCol from './InputCol';
+import HouseViewingCol from './HouseViewingCol';
 
 export {
   LinkCol,
@@ -14,4 +15,5 @@ export {
   TagCol,
   PayButtonCol,
   InputCol,
+  HouseViewingCol,
 };

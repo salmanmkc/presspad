@@ -18,11 +18,15 @@ const Table = ({
   loading,
   tableHeader,
   expandedSection,
+  previewLink,
+  previewLinkText,
 }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const handleSearchBar = ({ target: { value } }) => {
+    console.log('taget', value);
     const filtered = filterArray(data, value);
+
     setFilteredData(filtered);
   };
 
@@ -53,7 +57,7 @@ const Table = ({
           <AntdTable
             columns={columns}
             dataSource={filteredData}
-            pagination={{ pageSize }}
+            pagination={previewLink ? false : { pageSize }}
             scroll={{ x: '100% ' }}
             loading={loading}
             onHeaderRow={() => 'hello'}
@@ -66,6 +70,19 @@ const Table = ({
           />
         </Col>
       </Row>
+
+      {previewLink && (
+        <Row jc="center" mt={5}>
+          <Col
+            w={[4, 12, 12]}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <T.Link to={previewLink} style={{ textDecoration: 'underline' }}>
+              {previewLinkText}
+            </T.Link>
+          </Col>
+        </Row>
+      )}
     </S.Wrapper>
   );
 };

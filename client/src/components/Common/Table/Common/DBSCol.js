@@ -20,9 +20,7 @@ const DBSCol = (colTitle, updateDBS) => ({
       ) : (
         <T.PXS>No certificate</T.PXS>
       )}
-      <S.EditButton type="button" onClick={() => updateDBS(record)}>
-        Edit
-      </S.EditButton>
+      <S.EditButton onClick={() => updateDBS(record)}>Edit</S.EditButton>
     </>
   ),
 });
