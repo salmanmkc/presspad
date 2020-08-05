@@ -14,6 +14,7 @@ const initState = {
   reviews: [],
   lastPayments: [],
   listingAvailableDates: [],
+  profileCompleted: false,
 };
 
 const HostProfile = props => {
@@ -36,6 +37,7 @@ const HostProfile = props => {
         reviews = [],
         lastPayments = [],
         listing: { availableDates = [] },
+        profileCompleted = false,
       } = data;
 
       setState({
@@ -48,6 +50,7 @@ const HostProfile = props => {
         reviews,
         lastPayments,
         listingAvailableDates: availableDates,
+        profileCompleted,
       });
     };
     fetchData();
@@ -64,6 +67,7 @@ const HostProfile = props => {
     lastPayments,
     listingAvailableDates,
     acceptAutomatically,
+    profileCompleted,
   } = state;
 
   if (isLoading) return <Spin />;
@@ -81,6 +85,7 @@ const HostProfile = props => {
       lastPayments={lastPayments}
       listingAvailableDates={listingAvailableDates}
       acceptAutomatically={acceptAutomatically}
+      profileCompleted={profileCompleted}
     />
   );
 };

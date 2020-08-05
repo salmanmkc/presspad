@@ -18,13 +18,17 @@ import {
   WalletFooter,
   ViewLink,
   PaymentsContainer,
+  CompleteProfileWrapper,
 } from './HostDashboard.style';
 import { bottomMargins, typographies } from './styleProperties';
 
 import { formatPrice } from '../../../helpers';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
-import { PAYMENTS_URL } from '../../../constants/navRoutes';
+import {
+  PAYMENTS_URL,
+  HOST_COMPLETE_PROFILE_URL,
+} from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
 import WalletFlower from '../../../assets/wallet-flower.svg';
 import NotesPayments from '../../../assets/notes-payments.svg';
@@ -41,6 +45,7 @@ const Content = ({
   reviews,
   lastPayments,
   listingAvailableDates,
+  profileCompleted,
 }) => {
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
@@ -60,6 +65,29 @@ const Content = ({
         <Col w={[4, 12, 12]}>
           <HeaderTitle>Welcome back, {firstName}</HeaderTitle>
         </Col>
+        {!profileCompleted && (
+          <Col w={[4, 12, 12]}>
+            <CompleteProfileWrapper>
+              {device !== 'mobile' && (
+                <Icon icon="reviewExplanationMark" width="35px" height="35px" />
+              )}
+
+              <T.PLBold style={{ marginLeft: '0.8rem' }} color="darkerGray">
+                Your profile is not complete. <br />
+                <Link
+                  style={{
+                    textDecoration: 'underline',
+                    textUnderlinePosition: 'under',
+                  }}
+                  to={HOST_COMPLETE_PROFILE_URL}
+                >
+                  Finish signing up here
+                </Link>
+                &nbsp;to start using PressPad
+              </T.PLBold>
+            </CompleteProfileWrapper>
+          </Col>
+        )}
       </Row>
       {/* NEXT BOOKING / WALLET */}
       <Row mb={bottomMargins.row[device]}>

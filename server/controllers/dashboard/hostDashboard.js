@@ -37,6 +37,7 @@ const hostDashboard = async (req, res, next) => {
       listing,
       reviews,
       notifications,
+      profileCompleted,
     } = dashboardData;
 
     const {
@@ -76,6 +77,7 @@ const hostDashboard = async (req, res, next) => {
       userData: { _id, email, name, acceptAutomatically },
       listing,
       reviews,
+      profileCompleted,
       notifications,
       nextBooking,
       accessibleFunds,
