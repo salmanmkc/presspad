@@ -7,6 +7,7 @@ import ButtonNew from '../ButtonNew';
 import LinkButton from '../LinkButton';
 import validateRequest from './validateAvailabiltySchema';
 
+import { H7C, PBold } from '../Typography';
 import * as S from './style';
 
 import { Row, Col } from '../Grid';
@@ -23,6 +24,7 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
   ]);
   const [acceptBookings, setAcceptBookings] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [datesError, setDatesError] = useState(null);
 
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
@@ -63,12 +65,17 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
 
       if (valid) {
         setUpdateLoading(true);
+        setDatesError(null);
         await axios.patch(API_HOST_UPDATE_AVAILABILITY, requestData);
         setUpdateLoading(false);
         message.success('updated!');
       }
     } catch (err) {
+      if (err.name === 'ValidationError') {
+        setDatesError('You need to enter some dates!');
+      }
       setUpdateLoading(false);
+
       message.error(
         'There was an error updating your settings! Please try again.',
       );
@@ -91,6 +98,14 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
         onChange={() => setAcceptBookings(!acceptBookings)}
         mb={4}
       />
+      <H7C color="gray" mb={3}>
+        Available Dates
+      </H7C>
+      {datesError && (
+        <PBold mb={3} color="pink">
+          {datesError}
+        </PBold>
+      )}
       {multiDateRange.length > 0 &&
         multiDateRange.map((date, index) => (
           <DatePicker

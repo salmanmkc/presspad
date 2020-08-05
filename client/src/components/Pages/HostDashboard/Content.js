@@ -9,6 +9,7 @@ import Update from '../../Common/Update';
 import Review from '../../Common/SingleReview';
 import Icon from '../../Common/Icon';
 import BookingDates from '../../Common/DashboardBookingDates';
+import SocialNetwork from '../../Common/SocialNetwork';
 
 import LatestPaymentsTable from './LatestPaymentsTable';
 
@@ -234,12 +235,11 @@ const Content = ({
                   </Link>
                 </>
               ) : (
-                <T.PXL color={colors.lightestGray}>No payments</T.PXL>
+                <T.PXL color={colors.lightestGray}>No records to show</T.PXL>
               )}
             </PaymentsContainer>
             <div style={{ border: '1px solid' }}>
-              {' '}
-              <SectionTitle>Join the Presspad Community</SectionTitle>
+              <SocialNetwork mobile={device === 'mobile'} />
             </div>
           </div>
         </Col>
