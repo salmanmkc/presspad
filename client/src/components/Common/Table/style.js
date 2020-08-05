@@ -8,6 +8,16 @@ export const Wrapper = styled.div`
   color: ${({ theme }) => theme.colors.darkerGray};
   position: relative;
   background-color: white;
+
+  .ant-table-thead {
+    span {
+      font-family: Glacial Indifference !important;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      color: ${({ theme }) => theme.colors.darkBlue};
+      font-weight: bold;
+    }
+  }
 `;
 
 export const StyledLink = styled(Link)`

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Table from './index';
-import renderLinkCol from './Common/LinkCol';
+import { LinkCol, StandardCol } from './Common';
 
 import { ADMIN_USER_DETAILS } from '../../../constants/navRoutes';
 
@@ -29,10 +29,10 @@ export const BasicTable = () => {
   );
 };
 
-export const SearchingTable = () => {
+export const UsingColumnComponents = () => {
   const columns = [
-    renderLinkCol('name', ADMIN_USER_DETAILS, 'id'),
-    { title: 'Hometown', dataIndex: 'hometown', key: 'hometown' },
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('hometown'),
   ];
 
   const data = [{ name: 'Test Name', hometown: 'Test Hometown', id: 1 }];
@@ -44,6 +44,37 @@ export const SearchingTable = () => {
         data={data}
         showSearch
         tableHeader="table header"
+      />
+    </div>
+  );
+};
+
+export const ExpandableContent = () => {
+  const columns = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('hometown'),
+  ];
+
+  const data = [{ name: 'Test Name', hometown: 'Test Hometown', id: 1 }];
+
+  const renderExpandSection = (rowData, index) => (
+    <div>
+      <p>
+        Render all your expandable data here. Just make sure the data is in your
+        data obj
+      </p>
+      <p>User Id: {rowData.id}</p>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <Table
+        columns={columns}
+        data={data}
+        showSearch
+        tableHeader="table header"
+        expandedSection={renderExpandSection}
       />
     </div>
   );

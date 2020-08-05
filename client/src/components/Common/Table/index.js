@@ -17,6 +17,7 @@ const Table = ({
   pageSize = 20,
   loading,
   tableHeader,
+  expandedSection,
 }) => {
   const [filteredData, setFilteredData] = useState([]);
 
@@ -55,6 +56,13 @@ const Table = ({
             pagination={{ pageSize }}
             scroll={{ x: '100% ' }}
             loading={loading}
+            onHeaderRow={() => 'hello'}
+            expandable={
+              expandedSection && {
+                expandedRowRender: (rowData, index) =>
+                  expandedSection(rowData, index),
+              }
+            }
           />
         </Col>
       </Row>

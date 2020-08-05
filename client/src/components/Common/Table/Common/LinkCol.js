@@ -14,7 +14,8 @@ const processLink = (url, replace, data) => {
   return url;
 };
 
-const renderLinkCol = (colTitle, link, linkReplace) => ({
+const LinkCol = (colTitle, link, linkReplace) => ({
+  // title: () => <T.H7C color="darkBlue">{colTitle}</T.H7C>,
   title: colTitle,
   dataIndex: colTitle,
   key: colTitle,
@@ -27,4 +28,4 @@ const renderLinkCol = (colTitle, link, linkReplace) => ({
   ),
 });
 
-export default renderLinkCol;
+export default LinkCol;
