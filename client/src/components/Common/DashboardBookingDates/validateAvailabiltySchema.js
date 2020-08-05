@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const validateBankDetails = () =>
+const validateAvailabilitySchema = () =>
   Yup.object().shape({
     availableDates: Yup.array()
       .of(
@@ -13,4 +13,4 @@ const validateBankDetails = () =>
     acceptAutomatically: Yup.boolean().default(false),
   });
 
-export default validateBankDetails;
+export default validateAvailabilitySchema;

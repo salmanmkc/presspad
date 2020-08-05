@@ -24,6 +24,36 @@ describe('Testing for host dashboard route', () => {
     await connection.close();
   });
 
+  test("test with an host user's role to update availability settings", done => {
+    const { hostUser } = users;
+    const token = `token=${createToken(hostUser._id)}`;
+    const data = {
+      availableDates: [
+        {
+          startDate: '2021-02-01T14:11:03.780Z',
+          endDate: '2021-05-28T11:25:45.903Z',
+        },
+      ],
+      acceptAutomatically: true,
+    };
+    request(app)
+      .patch(API_HOST_UPDATE_AVAILABILITY)
+      .set('Cookie', [token])
+      .send(data)
+      .expect(200)
+      .end((error, result) => {
+        const { updatedListing, updatedHostAcceptBookings } = result.body;
+        expect(result.body).toBeDefined();
+        expect(updatedListing).toBeDefined();
+        expect(updatedListing.nModified).toBe(1);
+        expect(updatedHostAcceptBookings).toBeDefined();
+        expect(updatedHostAcceptBookings.acceptAutomatically).toBe(
+          data.acceptAutomatically,
+        );
+        done();
+      });
+  });
+
   test("test with an host user's role", done => {
     const { hostUser } = users;
     const token = `token=${createToken(hostUser._id)}`;
@@ -62,36 +92,6 @@ describe('Testing for host dashboard route', () => {
         expect(accessibleFunds).toBe(44500);
         expect(reviews).toBeDefined();
         expect(reviews[0].rating).toBe(5);
-        done();
-      });
-  });
-
-  test("test with an host user's role to update availability settings", done => {
-    const { hostUser } = users;
-    const token = `token=${createToken(hostUser._id)}`;
-    const data = {
-      availableDates: [
-        {
-          startDate: '2021-02-01T14:11:03.780Z',
-          endDate: '2021-05-28T11:25:45.903Z',
-        },
-      ],
-      acceptAutomatically: true,
-    };
-    request(app)
-      .patch(API_HOST_UPDATE_AVAILABILITY)
-      .set('Cookie', [token])
-      .send(data)
-      .expect(200)
-      .end((error, result) => {
-        const { updatedListing, updatedHostAcceptBookings } = result.body;
-        expect(result.body).toBeDefined();
-        expect(updatedListing).toBeDefined();
-        expect(updatedListing.nModified).toBe(1);
-        expect(updatedHostAcceptBookings).toBeDefined();
-        expect(updatedHostAcceptBookings.acceptAutomatically).toBe(
-          data.acceptAutomatically,
-        );
         done();
       });
   });

@@ -16,7 +16,7 @@ const updateHostAvailability = async (req, res, next) => {
     const { user, body } = req;
     const { _id, role } = user;
     const { availableDates, acceptAutomatically } = body;
-    console.log('bod', body);
+
     if (role !== 'host') {
       return next(boom.forbidden());
     }

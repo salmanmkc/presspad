@@ -31,6 +31,7 @@ const hostDashboard = id =>
       $project: {
         profileCompleted: '$profile.isCompleted',
         name: 1,
+        acceptAutomatically: 1,
       },
     },
     // listing
