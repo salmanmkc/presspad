@@ -18,6 +18,10 @@ export const Wrapper = styled.div`
       font-weight: bold;
     }
   }
+
+  .ant-table-thead > tr > th {
+    background: ${({ theme }) => theme.colors.white};
+  }
 `;
 
 export const StyledLink = styled(Link)`

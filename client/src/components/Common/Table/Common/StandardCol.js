@@ -1,16 +1,27 @@
 import React from 'react';
-import Highlighter from 'react-highlight-words';
-import * as S from '../style';
 import * as T from '../../Typography';
-import { colors } from '../../../../theme';
+import camelToWords from '../../../../helpers/camelToWords';
 
-const StandardCol = (colTitle, customSort) => ({
-  title: colTitle,
+import { createSingleDate } from '../../../../helpers';
+
+const formatText = (text, type) => {
+  switch (type) {
+    case 'date':
+      return createSingleDate(text);
+    default:
+      return text;
+  }
+};
+
+const StandardCol = (colTitle, type, customSort) => ({
+  title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
   sorter: (a, b) => customSort || a[colTitle].localeCompare(b[colTitle]),
   className: 'linkCol',
-  render: (text, rowData) => <T.PXS color="black">{text}</T.PXS>,
+  render: (text, rowData) => (
+    <T.PXS color="black">{formatText(text, type)}</T.PXS>
+  ),
 });
 
 export default StandardCol;

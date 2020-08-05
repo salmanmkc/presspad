@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import Table from './index';
 import { LinkCol, StandardCol } from './Common';
@@ -52,10 +53,18 @@ export const UsingColumnComponents = () => {
 export const ExpandableContent = () => {
   const columns = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
-    StandardCol('hometown'),
+    StandardCol('requestDate', 'date'),
+    StandardCol('type'),
   ];
 
-  const data = [{ name: 'Test Name', hometown: 'Test Hometown', id: 1 }];
+  const data = [
+    {
+      name: 'Test Name',
+      requestDate: moment(),
+      id: 1,
+      type: 'Updated address',
+    },
+  ];
 
   const renderExpandSection = (rowData, index) => (
     <div>
