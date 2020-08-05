@@ -323,8 +323,8 @@ function Pages(props) {
           {...props}
         />
         <Route
-          path={SIGNIN_URL}
           exact
+          path={SIGNIN_URL}
           render={linkProps =>
             !isLoggedIn ? (
               <SignInPage
@@ -336,6 +336,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         {/* To be deleted */}
