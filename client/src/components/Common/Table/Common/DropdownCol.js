@@ -1,5 +1,4 @@
 import React from 'react';
-import * as T from '../../Typography';
 import camelToWords from '../../../../helpers/camelToWords';
 import { Select } from '../../Inputs';
 

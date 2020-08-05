@@ -19,12 +19,50 @@ export default {
   title: 'Tables',
 };
 
-export const ColumnComponents1 = () => {
-  const btnOptions = [
-    { label: 'cancel', color: 'pink', icon: 'crossCircle' },
-    { label: 'paid', color: 'lightBlue', icon: 'circleTick' },
+export const HideSearchAndTitle = () => {
+  const onClick = (rowData, action) =>
+    console.log(
+      'button function passed down bringing back the row data and action of button clicked',
+      rowData,
+      action,
+    );
+
+  const onInputChange = (rowData, e) => console.log('input function');
+
+  const columns = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('amount', 'price'),
+    { title: 'Standard', dataIndex: 'standard', key: 'standard' },
+    InputCol('bankName', onInputChange),
+    PayButtonCol('actions', onClick),
   ];
 
+  const data = [
+    {
+      name: 'Test Name',
+      hometown: 'Test Hometown',
+      amount: 400,
+      standard: 'standard col type',
+    },
+    {
+      name: 'Test Name',
+      hometown: 'Test Hometown',
+      amount: 400,
+      bankName: 'Santander',
+      accountNumber: '123123',
+      sortCode: '20-23-23',
+      standard: 'standard col type',
+    },
+  ];
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <Table columns={columns} data={data} />
+    </div>
+  );
+};
+
+export const ColumnComponents1 = () => {
   const onClick = (rowData, action) =>
     console.log(
       'button function passed down bringing back the row data and action of button clicked',
@@ -167,8 +205,6 @@ export const ExpandableContent = () => {
     'Request Changes',
   ].map(option => ({ label: option, value: option }));
 
-  const onChange = () => console.log('changeFunc to pass down');
-
   const updateDBS = record => console.log('refer to dbs functions that exist');
 
   const renderExpandSection = (rowData, index) => (
@@ -247,7 +283,7 @@ export const Preview = () => {
     StandardCol('requestDate', 'date'),
     DBSCol('dbs', updateDBS),
     StandardCol('type'),
-    DropdownCol('approvalAction', null, selectOptions),
+    DropdownCol('approvalAction', onChange, selectOptions),
   ];
 
   const data = [

@@ -3,7 +3,6 @@ import * as T from '../../Typography';
 import * as S from '../style';
 import camelToWords from '../../../../helpers/camelToWords';
 import { createSingleDate } from '../../../../helpers';
-import { DatePicker } from '../../Inputs';
 import Icon from '../../Icon';
 
 const HouseViewingCol = (colTitle, onAdd, onCancel) => ({

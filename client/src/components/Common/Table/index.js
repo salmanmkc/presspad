@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table as AntdTable, Button } from 'antd';
+import { Table as AntdTable } from 'antd';
 import SearchBar from '../SearchBar';
 import * as S from './style';
 import * as T from '../Typography';
-import Icon from '../Icon';
-import { Input } from '../Inputs';
 
 import { Row, Col } from '../Grid';
 
@@ -24,7 +22,6 @@ const Table = ({
   const [filteredData, setFilteredData] = useState([]);
 
   const handleSearchBar = ({ target: { value } }) => {
-    console.log('taget', value);
     const filtered = filterArray(data, value);
 
     setFilteredData(filtered);
@@ -45,13 +42,13 @@ const Table = ({
           </Col>
         </Row>
       )}
-      <Row mb={6}>
-        <Col w={[4, 8, 6]}>
-          {showSearch && (
+      {showSearch && (
+        <Row mb={6}>
+          <Col w={[4, 8, 6]}>
             <SearchBar data={filteredData} handleSearchBar={handleSearchBar} />
-          )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
       <Row mb={4}>
         <Col w={[4, 12, 12]}>
           <AntdTable
