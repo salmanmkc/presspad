@@ -91,6 +91,7 @@ export default class InternView extends Component {
 
   render() {
     if (this.state.isLoading) return <Spin tip="Loading Profile" />;
+
     const {
       profileData: {
         _id: userId,

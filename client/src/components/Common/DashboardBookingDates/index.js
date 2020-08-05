@@ -103,6 +103,7 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
             arrayLength={multiDateRange.length}
             mb={3}
             value={date}
+            disabledDate={d => !d || d.isBefore(new Date())}
           />
         ))}
       <Row mt={5}>
