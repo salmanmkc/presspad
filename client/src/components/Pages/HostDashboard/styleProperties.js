@@ -24,4 +24,8 @@ export const typographies = {
     desktop: T.H4C,
     mobile: T.H6C,
   },
+  completeProfile: {
+    desktop: T.PLBold,
+    mobile: T.PXSBold,
+  },
 };

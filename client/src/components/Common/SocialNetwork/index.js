@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
 import Icon from '../Icon';
 import { H4C, H5C, PXS } from '../Typography';
 import { SOCIAL } from '../../../constants/externalLinks';
@@ -8,8 +8,8 @@ import { Wrapper, InnerWrapper, SocialIcons } from './style';
 import Heart from '../../../assets/heart.svg';
 
 const SocialNetwork = ({ mobile }) => (
-  <Wrapper mobile={mobile} src={Heart}>
-    <InnerWrapper mobile={mobile}>
+  <Wrapper src={Heart}>
+    <InnerWrapper>
       {!mobile ? (
         <H4C>JOIN THE PRESSPAD COMMUNITY!</H4C>
       ) : (

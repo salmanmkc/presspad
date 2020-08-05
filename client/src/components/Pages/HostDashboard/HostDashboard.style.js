@@ -1,40 +1,57 @@
 import styled from 'styled-components';
 import { colors } from '../../../theme';
 import { H7C } from '../../Common/Typography';
-// NEW STYLES
+
+export const Wrapper = styled.div`
+  width: 100%;
+  margin-top: ${({ mobile }) => mobile && '-2rem'};
+`;
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid;
+  box-shadow: ${({ theme }) => theme.shadows.card};
+  padding: ${({ theme }) => theme.spacings[4]};
+  width: 100%;
 `;
 
 export const WalletContainer = styled.div`
+  box-shadow: ${({ theme }) => theme.shadows.card};
   display: flex;
   flex-direction: column;
-  min-height: 238px;
-  width: 300px;
+  min-height: 232px;
+  padding: ${({ theme }) => theme.spacings[4]};
   background-image: url(${({ src }) => src});
   background-repeat: no-repeat;
-  background-position: right top 30px;
+  background-position: right -20px top 30px;
+  background-size: auto;
 
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
-    background-position: left 80px top 30px;
+    background-position: left 90px top 70px;
+    background-size: 160px 190px;
   }
 `;
 
 export const WalletFooter = styled.div`
   position: absolute;
-  bottom: 1rem;
+  bottom: ${({ mobile }) => (mobile ? '3rem' : '1rem')};
 `;
 
 export const PaymentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-shadow: ${({ theme }) => theme.shadows.card};
+  padding: ${({ theme }) => theme.spacings[4]};
   background-image: url(${({ src }) => src});
   background-repeat: no-repeat;
-  background-position: right 15px top -2px;
+  background-position: right 15px top 20px;
+  background-size: 70px;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    background-size: auto;
+    background-position: right 15px top;
+  }
 `;
 
 export const ViewLink = styled(H7C)`
@@ -59,7 +76,6 @@ export const CompleteProfileWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1rem;
-  border: 1px solid;
 `;
 
 // OLD STYLES

@@ -14,6 +14,7 @@ import SocialNetwork from '../../Common/SocialNetwork';
 import LatestPaymentsTable from './LatestPaymentsTable';
 
 import {
+  Wrapper,
   Container,
   WalletContainer,
   WalletFooter,
@@ -53,27 +54,54 @@ const Content = ({
 
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
+  const CompleteProfileText = typographies.completeProfile[device];
+
   const createReadableDates = () =>
     listingAvailableDates.map(el => ({
       startDate: moment(el.startDate),
       endDate: moment(el.endDate),
     }));
 
+  const renderReviewsSection = () => (
+    <Container>
+      <SectionTitle
+        style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+      >
+        Recent Reviews
+      </SectionTitle>
+      {reviews.length > 0 ? (
+        reviews.map(r => {
+          const {
+            rate,
+            user: { name: reviewer = '' },
+            message,
+          } = r;
+
+          return <Review name={reviewer} rate={rate} message={message} />;
+        })
+      ) : (
+        <T.PXL color={colors.lightestGray}>No reviews</T.PXL>
+      )}
+    </Container>
+  );
+
   return (
-    <>
+    <Wrapper mobile={device === 'mobile'}>
       {/* HEADER */}
       <Row mb={5}>
         <Col w={[4, 12, 12]}>
-          <HeaderTitle>Welcome back, {firstName}</HeaderTitle>
+          <HeaderTitle color="blue">
+            Welcome{device !== 'mobile' && ' back'}, {firstName}!
+          </HeaderTitle>
         </Col>
         {!profileCompleted && (
           <Col w={[4, 12, 12]}>
             <CompleteProfileWrapper>
-              {device !== 'mobile' && (
-                <Icon icon="reviewExplanationMark" width="35px" height="35px" />
-              )}
-
-              <T.PLBold style={{ marginLeft: '0.8rem' }} color="darkerGray">
+              <Icon icon="reviewExplanationMark" width="35px" height="35px" />
+              <CompleteProfileText
+                style={{ marginLeft: '0.8rem' }}
+                color="darkerGray"
+              >
                 Your profile is not complete. <br />
                 <Link
                   style={{
@@ -85,76 +113,72 @@ const Content = ({
                   Finish signing up here
                 </Link>
                 &nbsp;to start using PressPad
-              </T.PLBold>
+              </CompleteProfileText>
             </CompleteProfileWrapper>
           </Col>
         )}
       </Row>
       {/* NEXT BOOKING / WALLET */}
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
-          <Container>
-            <SectionTitle
-              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
-            >
-              Upcoming Booking
-            </SectionTitle>
+        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+          <SectionTitle
+            style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+          >
+            Upcoming Booking
+          </SectionTitle>
 
-            {nextBooking ? (
-              <BookingCards
-                role={role}
-                windowWidth={windowWidth}
-                type="big"
-                startDate={nextBooking.startDate}
-                endDate={nextBooking.endDate}
-                price={nextBooking.price}
-                withUser={nextBooking.withUser}
-                bookingID={nextBooking._id}
-                withUserType={nextBooking.withUserRole}
-                bio={nextBooking.withUserBio}
-                interests={nextBooking && nextBooking.withUserInterests}
-                status={nextBooking.status}
-              />
-            ) : (
-              <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
-            )}
-          </Container>
+          {nextBooking ? (
+            <BookingCards
+              width="100%"
+              role={role}
+              windowWidth={windowWidth}
+              type="big"
+              startDate={nextBooking.startDate}
+              endDate={nextBooking.endDate}
+              price={nextBooking.price}
+              withUser={nextBooking.withUser}
+              bookingID={nextBooking._id}
+              withUserType={nextBooking.withUserRole}
+              bio={nextBooking.withUserBio}
+              interests={nextBooking && nextBooking.withUserInterests}
+              status={nextBooking.status}
+            />
+          ) : (
+            <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
+          )}
         </Col>
-        <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>
-          <div style={{ border: '1px solid' }}>
-            {' '}
-            <WalletContainer
-              style={{ marginTop: device === 'desktop' ? '2rem' : '1rem' }}
-              src={WalletFlower}
-            >
-              <T.H7C mb={2} color="gray">
-                My Wallet
-              </T.H7C>
-
-              <T.H2 mb={2}>£{formatPrice(accessibleFunds)}</T.H2>
-              <T.H5 color="darkerGray">£{formatPrice(pending)} pending</T.H5>
-              <WalletFooter>
-                <Link to={PAYMENTS_URL}>
-                  <T.H7C>View Wallet</T.H7C>
-                </Link>
-              </WalletFooter>
-            </WalletContainer>
-          </div>
+        <Col w={[4, 10, 4]}>
+          <WalletContainer
+            style={{
+              marginTop: device === 'desktop' ? '3rem' : '1rem',
+              marginBottom: device === 'mobile' && '2rem',
+            }}
+            src={WalletFlower}
+          >
+            <T.H7C mb={2} color="gray">
+              My Wallet
+            </T.H7C>
+            <T.H2 mb={2}>£{formatPrice(accessibleFunds)}</T.H2>
+            <T.H5 color="darkerGray">£{formatPrice(pending)} pending</T.H5>
+            <WalletFooter mobile={device === 'mobile'}>
+              <Link to={PAYMENTS_URL}>
+                <T.H7C>View Wallet</T.H7C>
+              </Link>
+            </WalletFooter>
+          </WalletContainer>
         </Col>
       </Row>
 
       {/* BOOKING DATES / UPDATES */}
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 12, 8]} mb={bottomMargins.col[device]}>
-          <div style={{ border: '1px solid' }}>
-            <BookingDates
-              currentDates={createReadableDates()}
-              autoAccept={acceptAutomatically}
-            />
-          </div>
+        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+          <BookingDates
+            currentDates={createReadableDates()}
+            autoAccept={acceptAutomatically}
+          />
         </Col>
-        <Col w={[4, 12, 4]} mb={bottomMargins.col[device]}>
-          <Container style={{ width: '300px' }}>
+        <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
+          <Container>
             <SectionTitle
               style={{ marginBottom: bottomMargins.sectionTitle[device] }}
             >
@@ -173,44 +197,19 @@ const Content = ({
       </Row>
       {/* REVIEWS / PAYMENTS / SOCIAL */}
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 12, 5]} mb={bottomMargins.col[device]}>
-          <div style={{ border: '1px solid' }}>
-            {' '}
-            <SectionTitle
-              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
-            >
-              Recent Reviews
-            </SectionTitle>
-            {reviews.length > 0 ? (
-              reviews.map(r => {
-                const {
-                  rate,
-                  user: { name: reviewer = '' },
-                  message,
-                } = r;
-
-                return <Review name={reviewer} rate={rate} message={message} />;
-              })
-            ) : (
-              <T.PXL color={colors.lightestGray}>No reviews</T.PXL>
-            )}
-          </div>
-        </Col>
-        <Col w={[4, 12, 7]} mb={bottomMargins.col[device]}>
+        {device !== 'mobile' && (
+          <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+            {renderReviewsSection()}
+          </Col>
+        )}
+        <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
           <div
             style={{
-              border: '1px solid',
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            <PaymentsContainer
-              style={{
-                border: '1px solid',
-                marginBottom: '10px',
-              }}
-              src={NotesPayments}
-            >
+            <PaymentsContainer src={NotesPayments}>
               <SectionTitle
                 style={{
                   marginTop: '1rem',
@@ -238,13 +237,18 @@ const Content = ({
                 <T.PXL color={colors.lightestGray}>No records to show</T.PXL>
               )}
             </PaymentsContainer>
-            <div style={{ border: '1px solid' }}>
+            <Container style={{ marginTop: '1rem' }}>
               <SocialNetwork mobile={device === 'mobile'} />
-            </div>
+            </Container>
           </div>
         </Col>
+        {device === 'mobile' && (
+          <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+            {renderReviewsSection()}
+          </Col>
+        )}
       </Row>
-    </>
+    </Wrapper>
   );
 };
 
