@@ -34,9 +34,23 @@ export const UsingColumnComponents = () => {
   const columns = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('hometown'),
+    StandardCol('totalPayments', 'price'),
   ];
 
-  const data = [{ name: 'Test Name', hometown: 'Test Hometown', id: 1 }];
+  const data = [
+    {
+      name: 'Test Name',
+      hometown: 'Test Hometown',
+      id: 1,
+      totalPayments: 3700,
+    },
+    {
+      name: 'Other Name',
+      hometown: 'Other Hometown',
+      id: 1,
+      totalPayments: 5890,
+    },
+  ];
 
   return (
     <div style={{ padding: '20px' }}>
@@ -83,6 +97,14 @@ export const ExpandableContent = () => {
     {
       name: 'Test Name',
       requestDate: moment(),
+      id: 1,
+      type: 'Updated address',
+      approvalAction: '',
+      dbsCheck: { refNum: 123123, url: 'file.pdf' },
+    },
+    {
+      name: 'Test Name',
+      requestDate: moment().add(5, 'days'),
       id: 1,
       type: 'Updated address',
       approvalAction: '',
