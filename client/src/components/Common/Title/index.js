@@ -53,7 +53,7 @@ const Section = styled(T.H4C)`
 `;
 
 const Title = withTheme(
-  ({ children, withBg, bgColor, section, mt, mb, ml, mr }) => {
+  ({ children, withBg, bgColor, textColor, section, mt, mb, ml, mr }) => {
     let topText;
     let bottomText;
     if (typeof children === 'string') {
@@ -73,7 +73,7 @@ const Title = withTheme(
 
     if (section)
       return (
-        <Section color="white" mt={mt} mb={mb} ml={ml} mr={mr}>
+        <Section color={textColor || 'white'} mt={mt} mb={mb} ml={ml} mr={mr}>
           {children}
         </Section>
       );
