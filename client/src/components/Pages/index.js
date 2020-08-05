@@ -321,7 +321,7 @@ function Pages(props) {
           {...props}
         />
         <Route
-          path="/funnel"
+          path="/sign-up"
           exact
           render={linkProps =>
             !isLoggedIn ? (
