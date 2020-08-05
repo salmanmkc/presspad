@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 // import { Input } from 'antd';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 // CONSTANTS
 import { API_LOGIN_URL } from '../../../constants/apiRoutes';
@@ -13,11 +12,6 @@ import {
 
 // STYLING
 import {
-  Wrapper,
-  HeaderText,
-  SignInForm,
-  InputLabel,
-  InputDiv,
   ErrorMsg,
   ForgetLink,
   TitleWrapper,
@@ -184,52 +178,6 @@ export default class SignInPage extends Component {
           </Col>
         </Row>
       </>
-    );
-    return (
-      <Wrapper>
-        <HeaderText>Sign Innnnn</HeaderText>
-        <SignInForm>
-          <InputDiv>
-            <InputLabel htmlFor="email">Email</InputLabel>
-          </InputDiv>
-          <InputDiv>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input.Password
-              placeholder="Enter your password"
-              name="password"
-              id="password"
-              type="text"
-              size="large"
-              onChange={onInputChange}
-              value={password}
-            />
-            <ErrorMsg>{passwordError}</ErrorMsg>
-          </InputDiv>
-          {msg && <ErrorMsg>{msg}</ErrorMsg>}
-          <Button
-            label="Sign in"
-            type="primary"
-            onClick={onFormSubmit}
-            style={
-              msg ? { marginTop: '0.5rem', margin: '1rem' } : { margin: '1rem' }
-            }
-          />
-        </SignInForm>
-        <p>
-          <Link to={RESET_PASSWORD}>Forgot password?</Link>
-        </p>
-        <p>
-          Already have an account?
-          <Link
-            to={{
-              pathname: '/',
-              hash: 'findMoreSection',
-            }}
-          >
-            &nbsp;Sign Up
-          </Link>
-        </p>
-      </Wrapper>
     );
   }
 }
