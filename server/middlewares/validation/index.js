@@ -36,7 +36,10 @@ const methods = {
 
 // Validate function
 const validate = (schema, dataObj) =>
-  schema.validateAsync(dataObj, { abortEarly: false, stripUnknown: true });
+  schema.validateAsync(dataObj, {
+    abortEarly: false,
+    stripUnknown: true,
+  });
 
 // validation middleware
 const validation = (req, res, next) => {

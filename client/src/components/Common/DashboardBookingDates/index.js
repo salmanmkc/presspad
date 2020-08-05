@@ -6,7 +6,6 @@ import { Switch, DatePicker } from '../Inputs';
 import ButtonNew from '../ButtonNew';
 import LinkButton from '../LinkButton';
 import validateRequest from './validateAvailabiltySchema';
-import { PXSBold } from '../Typography';
 
 import * as S from './style';
 
@@ -58,6 +57,7 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
         availableDates: multiDateRange,
         acceptAutomatically: acceptBookings,
       };
+
       const valid = await validateRequest().validate(requestData, {
         abortEarly: false,
       });
@@ -73,14 +73,11 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
         return null;
       }
     } catch (err) {
-      if (err.name === 'ValidationError') {
-        const _errors = {};
-        err.inner.forEach(element => {
-          _errors[element.path.split('.')[0]] = element.message;
-        });
-        setErrors({ ...errors, ..._errors });
-        setUpdateLoading(false);
-      }
+      setErrors({ ...errors, ...err });
+      setUpdateLoading(false);
+      message.error(
+        'There was an error updating your settings! Please try again.',
+      );
     }
   };
 
@@ -89,6 +86,7 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     setAcceptBookings(autoAccept);
   }, [autoAccept, currentDates]);
 
+  console.log('errrr', errors);
   return (
     <S.Wrapper>
       <Title section bgColor="primary" small mb={4}>
@@ -141,11 +139,6 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
             />
           </S.LinkWrapper>
         </Col>
-        {errors &&
-          Object.values(errors).length > 0 &&
-          Object.values(errors).map(err => (
-            <PXSBold color="pink">{err}</PXSBold>
-          ))}
       </Row>
     </S.Wrapper>
   );
