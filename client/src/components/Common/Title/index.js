@@ -67,7 +67,7 @@ const Title = withTheme(
     if (withBg)
       return (
         <WithBackground bgColor={bgColor} mt={mt} mb={mb} ml={ml} mr={mr}>
-          <T.H2C color="white">{children}</T.H2C>
+          <T.H2C color={textColor || 'white'}>{children}</T.H2C>
         </WithBackground>
       );
 
