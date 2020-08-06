@@ -9,12 +9,14 @@ import CompleteProfilePrompt from '../../Common/CompleteProfilePrompt';
 
 import PaymentsSection from './PaymentsSection';
 import { PageWrapper } from '../../Common/general';
-import Updates from '../../Common/Section/Updates';
+
+import { Updates } from '../../Common/Section';
 
 import { API_INTERN_DASHBOARD_URL } from '../../../constants/apiRoutes';
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { bottomMargins, typographies } from './styleProperties';
+import { colors } from '../../../theme';
 
 const initState = {
   name: '',
@@ -89,6 +91,40 @@ const InternDashboard = props => {
             />
           </Col>
         )}
+      </Row>
+      {/* NEXT BOOKING */}
+      <Row mb={bottomMargins.row[device]}>
+        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+          <SectionTitle
+            style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+          >
+            Upcoming Booking
+          </SectionTitle>
+          {nextBooking ? (
+            <BookingCards
+              width="100%"
+              role={role}
+              windowWidth={windowWidth}
+              type="big"
+              startDate={nextBooking.startDate}
+              endDate={nextBooking.endDate}
+              price={nextBooking.price}
+              withUser={nextBooking.withUser}
+              bookingID={nextBooking._id}
+              withUserType={nextBooking.withUserRole}
+              bio={nextBooking.withUserBio}
+              interests={nextBooking && nextBooking.withUserInterests}
+              status={nextBooking.status}
+            />
+          ) : (
+            <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
+          )}
+        </Col>
+      </Row>
+      <Row mb={bottomMargins.row[device]}>
+        <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
+          <Updates updates={notifications} userRole="intern" />
+        </Col>
       </Row>
       {/*
         <Updates updates={notifications} userRole="intern" />
