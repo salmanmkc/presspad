@@ -60,7 +60,6 @@ export const HeartWrapper = styled.div`
     position: absolute;
     right: ${({ right }) => right || 0};
     bottom: ${({ bottom }) => bottom || 0};
-    z-index: -1;
   }
 `;
 
