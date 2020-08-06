@@ -12,7 +12,10 @@ export const Container = styled.div`
   }
 `;
 export const Wrapper = styled.div`
-  padding-left: 30px;
+  padding: 0 20px;
+  @media ${({ theme }) => theme.breakpoints.mobileL} {
+    padding: 0 30px;
+  }
   @media ${({ theme }) => theme.breakpoints.tablet} {
     padding-left: 120px;
   }
