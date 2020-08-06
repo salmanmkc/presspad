@@ -192,7 +192,7 @@ export default class SignUpPage extends Component {
         this.setState({ isLoading: true });
         const { data } = await axios.post(API_SIGNUP_URL, { ...userInfo });
         handleChangeState({ ...data, isLoggedIn: true });
-        if (['admin', 'organisation'].includes(data.role)) {
+        if (data.role === 'admin') {
           this.setState({ isLoading: false });
           history.push(DASHBOARD_URL);
         } else if (data.role === 'organisation') {
