@@ -13,7 +13,7 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'Refer Others', route: N.REFER_OTHERS },
+    { title: 'Refer Others', route: N.REFERRAL_URL },
     { title: 'Settings', route: N.SETTINGS_URL },
   ],
   intern: [
