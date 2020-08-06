@@ -8,33 +8,13 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  box-shadow: ${({ theme }) => theme.shadows.card};
-  padding: ${({ theme }) => theme.spacings[4]};
-  width: 100%;
-`;
-
-export const WalletContainer = styled.div`
-  box-shadow: ${({ theme }) => theme.shadows.card};
-  display: flex;
-  flex-direction: column;
-  min-height: 232px;
-  padding: ${({ theme }) => theme.spacings[4]};
-  background-image: url(${({ src }) => src});
-  background-repeat: no-repeat;
-  background-position: right -20px top 30px;
-  background-size: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
-    background-position: left 90px top 70px;
-    background-size: 160px 190px;
+    margin-top: 3rem;
+    margin-bottom: 0;
   }
-`;
-
-export const WalletFooter = styled.div`
-  position: absolute;
-  bottom: ${({ mobile }) => (mobile ? '3rem' : '1rem')};
 `;
 
 export const PaymentsContainer = styled.div`

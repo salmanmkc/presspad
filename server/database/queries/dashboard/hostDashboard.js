@@ -39,7 +39,15 @@ const hostDashboard = id =>
       $lookup: {
         from: 'listings',
         let: { host: '$_id' },
-        pipeline: [{ $match: { $expr: { $eq: ['$$host', '$user'] } } }],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$$host', '$user'] } } },
+
+          {
+            $project: {
+              availableDates: '$availableDates',
+            },
+          },
+        ],
         as: 'listing',
       },
     },
@@ -74,6 +82,25 @@ const hostDashboard = id =>
           },
           {
             $unwind: '$user',
+          },
+          {
+            $lookup: {
+              from: 'profiles',
+              localField: 'from',
+              foreignField: 'user',
+              as: 'profile',
+            },
+          },
+          {
+            $unwind: '$profile',
+          },
+          {
+            $project: {
+              name: '$user.name',
+              rate: '$rating',
+              jobTitle: '$profile.jobTitle',
+              message: '$message',
+            },
           },
           {
             $sort: {

@@ -5,19 +5,16 @@ import moment from 'moment';
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
-import Update from '../../Common/Update';
-import Review from '../../Common/SingleReview';
+
 import Icon from '../../Common/Icon';
 import BookingDates from '../../Common/DashboardBookingDates';
-import SocialNetwork from '../../Common/SocialNetwork';
+import { Wallet, Updates, Reviews, Community } from '../../Common/Section';
 
 import LatestPaymentsTable from './LatestPaymentsTable';
 
 import {
   Wrapper,
   Container,
-  WalletContainer,
-  WalletFooter,
   ViewLink,
   PaymentsContainer,
   CompleteProfileWrapper,
@@ -32,7 +29,7 @@ import {
   HOST_COMPLETE_PROFILE_URL,
 } from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
-import WalletFlower from '../../../assets/wallet-flower.svg';
+
 import NotesPayments from '../../../assets/notes-payments.svg';
 
 const Content = ({
@@ -61,29 +58,6 @@ const Content = ({
       startDate: moment(el.startDate),
       endDate: moment(el.endDate),
     }));
-
-  const renderReviewsSection = () => (
-    <Container>
-      <SectionTitle
-        style={{ marginBottom: bottomMargins.sectionTitle[device] }}
-      >
-        Recent Reviews
-      </SectionTitle>
-      {reviews.length > 0 ? (
-        reviews.map(r => {
-          const {
-            rate,
-            user: { name: reviewer = '' },
-            message,
-          } = r;
-
-          return <Review name={reviewer} rate={rate} message={message} />;
-        })
-      ) : (
-        <T.PXL color={colors.lightestGray}>No reviews</T.PXL>
-      )}
-    </Container>
-  );
 
   return (
     <Wrapper mobile={device === 'mobile'}>
@@ -148,24 +122,12 @@ const Content = ({
           )}
         </Col>
         <Col w={[4, 10, 4]}>
-          <WalletContainer
-            style={{
-              marginTop: device === 'desktop' ? '3rem' : '1rem',
-              marginBottom: device === 'mobile' && '2rem',
-            }}
-            src={WalletFlower}
-          >
-            <T.H7C mb={2} color="gray">
-              My Wallet
-            </T.H7C>
-            <T.H2 mb={2}>£{formatPrice(accessibleFunds)}</T.H2>
-            <T.H5 color="darkerGray">£{formatPrice(pending)} pending</T.H5>
-            <WalletFooter mobile={device === 'mobile'}>
-              <Link to={PAYMENTS_URL}>
-                <T.H7C>View Wallet</T.H7C>
-              </Link>
-            </WalletFooter>
-          </WalletContainer>
+          <Container>
+            <Wallet
+              balance={accessibleFunds / 100}
+              pending={formatPrice(pending)}
+            />
+          </Container>
         </Col>
       </Row>
 
@@ -178,28 +140,15 @@ const Content = ({
           />
         </Col>
         <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
-          <Container>
-            <SectionTitle
-              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
-            >
-              Updates
-            </SectionTitle>
-
-            {updates.length > 0 ? (
-              updates.map(item => (
-                <Update item={item} key={item._id} userRole="host" />
-              ))
-            ) : (
-              <T.PXL color={colors.lightestGray}>No updates</T.PXL>
-            )}
-          </Container>
+          <Updates updates={updates} userRole="host" />
         </Col>
       </Row>
       {/* REVIEWS / PAYMENTS / SOCIAL */}
+
       <Row mb={bottomMargins.row[device]}>
         {device !== 'mobile' && (
           <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
-            {renderReviewsSection()}
+            <Reviews reviews={reviews} />
           </Col>
         )}
         <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
@@ -237,14 +186,14 @@ const Content = ({
                 <T.PXL color={colors.lightestGray}>No records to show</T.PXL>
               )}
             </PaymentsContainer>
-            <Container style={{ marginTop: '1rem' }}>
-              <SocialNetwork mobile={device === 'mobile'} />
+            <Container>
+              <Community />
             </Container>
           </div>
         </Col>
         {device === 'mobile' && (
           <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
-            {renderReviewsSection()}
+            <Reviews reviews={reviews} />
           </Col>
         )}
       </Row>

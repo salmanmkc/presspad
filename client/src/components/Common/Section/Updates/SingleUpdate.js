@@ -10,8 +10,8 @@ import LoadingBallPulseSync from '../../LoadingBallPulseSync';
 
 import { createSingleDate } from '../../../../helpers';
 
-const timeCol = [1, 2, 4];
-const updateCol = [3, 8, 8];
+const timeCol = [1, 2, 6];
+const updateCol = [3, 8, 6];
 
 const Update = ({ item, userRole }) => {
   const { type, secondParty, createdAt, seen, booking, loading } = item;
