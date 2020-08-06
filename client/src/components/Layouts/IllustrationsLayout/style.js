@@ -65,3 +65,12 @@ export const TopImage = styled.img`
   max-width: 100%;
   height: 150%;
 `;
+
+export const TitleContainer = styled.div`
+  h1 {
+    font-size: 130px;
+    @media (max-width: 1070px) {
+      font-size: 110px;
+    }
+  }
+`;

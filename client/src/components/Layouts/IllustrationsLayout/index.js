@@ -56,9 +56,9 @@ const IllustrationsLayout = ({
         {!topHeaderRendered && (
           <S.ColouredSideDiv color={color} imageName={image}>
             {!imageFile && image === 'getStarted' ? (
-              <T.H0C color="white" style={{ padding: '15%' }}>
-                LET’S GET STARTED!
-              </T.H0C>
+              <S.TitleContainer>
+                <T.H0C color="white">LET’S GET STARTED!</T.H0C>
+              </S.TitleContainer>
             ) : (
               imageFile && <S.Image src={imageFile} />
             )}
