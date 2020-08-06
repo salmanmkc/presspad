@@ -5,6 +5,7 @@ import * as S from './style';
 import * as T from '../Typography';
 
 import { Row, Col } from '../Grid';
+import Icon from '../Icon';
 
 import { filterArray } from '../../../helpers';
 
@@ -18,6 +19,9 @@ const Table = ({
   expandedSection,
   previewLink,
   previewLinkText,
+  previewAlign,
+  embed,
+  showImage,
 }) => {
   const [filteredData, setFilteredData] = useState([]);
 
@@ -34,11 +38,22 @@ const Table = ({
   }, [columns, data, loading]);
 
   return (
-    <S.Wrapper>
+    <S.Wrapper embed={embed}>
       {tableHeader && (
         <Row mb={6}>
-          <Col w={[4, 8, 6]}>
+          <Col w={[4, 8, 8]}>
             <T.H4C color="black">{tableHeader}</T.H4C>
+          </Col>
+          <Col
+            w={[0, 4, 4]}
+            style={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <Icon
+              icon="money"
+              width="78px"
+              height="auto"
+              style={{ position: 'absolute' }}
+            />
           </Col>
         </Row>
       )}
@@ -69,13 +84,26 @@ const Table = ({
       </Row>
 
       {previewLink && (
-        <Row jc="center" mt={5}>
+        <Row jc="center" mt={6}>
           <Col
             w={[4, 12, 12]}
-            style={{ display: 'flex', justifyContent: 'center' }}
+            style={{
+              display: 'flex',
+              justifyContent: previewAlign === 'right' ? 'flex-end' : 'center',
+              alignItems: 'center',
+            }}
           >
-            <T.Link to={previewLink} style={{ textDecoration: 'underline' }}>
+            <T.Link
+              to={previewLink}
+              style={{
+                textDecoration: previewAlign !== 'right' && 'underline',
+                textTransform: previewAlign === 'right' && 'uppercase',
+              }}
+            >
               {previewLinkText}
+              {previewAlign === 'right' && (
+                <Icon icon="arrow2" width="12px" margin="0 0 0 10px" />
+              )}
             </T.Link>
           </Col>
         </Row>
