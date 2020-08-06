@@ -91,7 +91,7 @@ describe('Testing for host dashboard route', () => {
         expect(pending).toBe(5000);
         expect(accessibleFunds).toBe(44500);
         expect(reviews).toBeDefined();
-        expect(reviews[0].rating).toBe(5);
+        expect(reviews[0].rate).toBe(5);
         done();
       });
   });
