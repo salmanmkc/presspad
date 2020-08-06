@@ -73,7 +73,7 @@ const UploadFile = ({
   };
 
   const thumbs = files
-    .filter(file => !file.deleted)
+    .filter(file => file && !file.deleted && (file.name || file.fileName))
     .map((file, index) => (
       <Col w={profile ? [4, 12, 12] : [4, 4, 4]}>
         {type === 'file' ? (
@@ -132,7 +132,9 @@ const UploadFile = ({
       {({ getRootProps, getInputProps }) => (
         <Row>
           <S.UploadContainer profile={profile}>
-            {files.filter(file => !file.deleted).length > 0 && (
+            {files.filter(
+              file => file && !file.deleted && (file.name || file.fileName),
+            ).length > 0 && (
               <Col w={profile ? [4, 4, 3] : [4, 12, 12]}>
                 <S.ThumbsContainer profile={profile}>
                   {thumbs}

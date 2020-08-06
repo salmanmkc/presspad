@@ -29,7 +29,9 @@ module.exports = async (req, res, next) => {
     };
 
     await updateUserProfile(user._id, profileData);
-    await deleteFile(bucketName, prevImageFileNameToDelete);
+    if (prevImageFileNameToDelete) {
+      await deleteFile(bucketName, prevImageFileNameToDelete);
+    }
 
     res.json();
   } catch (error) {
