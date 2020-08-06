@@ -4,7 +4,6 @@ import * as T from '../Typography';
 
 const sharedStyles = css`
   padding-left: 30px;
-  min-width: 380px;
   @media ${({ theme }) => theme.breakpoints.mobileXL} {
     padding-left: 120px;
   }

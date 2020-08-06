@@ -13,14 +13,16 @@ export const TitleContainer = styled.div`
 `;
 
 export const TitleWrapper = styled.div`
-  min-height: 200px;
+  min-height: fit-content;
+  margin-bottom: 50px;
+  @media ${({ theme }) => theme.breakpoints.tablet} {
+    min-height: 200px;
+    margin-bottom: 0px;
+  }
 `;
 
 export const SubTitleContainer = styled.div`
-  margin-top: -50px;
-  @media ${({ theme }) => theme.breakpoints.mobileXL} {
-    margin-top: -50px;
-  }
+  margin-top: 0px;
   @media ${({ theme }) => theme.breakpoints.tablet} {
     margin-top: 50px;
   }
