@@ -26,7 +26,7 @@ export default class SignUpPage extends Component {
     const { userType } = this.props;
     this.setState({ userType });
 
-    if (userType === 'organisation') this.getAllOrgs();
+    if (userType === USER_TYPES.organisation) this.getAllOrgs();
 
     window.scrollTo(0, 0);
   }
@@ -167,7 +167,10 @@ export default class SignUpPage extends Component {
     }
 
     // for hosts make sure they've ticked the disclaimer
-    if ((userType === 'host' || userType === 'intern') && !fields.checkbox) {
+    if (
+      [USER_TYPES.host, USER_TYPES.intern].includes(userType) &&
+      !fields.checkbox
+    ) {
       formIsValid = false;
       errors.disclaimerError =
         'You need to agree with the Terms & Conditions and PressPad Privacy Policy in order to complete the signup';
@@ -192,16 +195,18 @@ export default class SignUpPage extends Component {
         this.setState({ isLoading: true });
         const { data } = await axios.post(API_SIGNUP_URL, { ...userInfo });
         handleChangeState({ ...data, isLoggedIn: true });
-        if (data.role === 'admin') {
+        if (data.role === USER_TYPES.admin) {
           this.setState({ isLoading: false });
           history.push(DASHBOARD_URL);
-        } else if (data.role === 'organisation') {
+        } else if (data.role === USER_TYPES.organisation) {
           this.setState({ isLoading: false });
           history.push(WELCOME_PAGES.replace(':id', 1));
-        } else if (data.role === 'intern') {
+        } else if (data.role === USER_TYPES.intern) {
           this.setState({ isLoading: false });
           history.push(WELCOME_PAGES.replace(':id', 1));
-        } else if (['host', 'superhost'].includes(data.role)) {
+        } else if (
+          [USER_TYPES.host, USER_TYPES.superhost].includes(data.role)
+        ) {
           this.setState({ isLoading: false });
           history.push(WELCOME_PAGES.replace(':id', 1));
         }
