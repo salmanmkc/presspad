@@ -7,21 +7,12 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: ${({ theme: { spacings } }) => spacings[3]};
+  margin-bottom: ${({ theme: { spacings } }) => spacings[3]};
 
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
-    margin-top: 3rem;
+    margin-top: ${({ theme: { spacings } }) => spacings[6]};
     margin-bottom: 0;
-  }
-`;
-
-export const TableWrapper = styled.div`
-  width: 100%;
-  margin-top: 1rem;
-  z-index: -1;
-  thead[class*='ant-table-thead'] th {
-    background-color: white !important;
   }
 `;
 
