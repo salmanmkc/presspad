@@ -6,7 +6,7 @@ const Flower = ({ width, height, color, ...props }) => (
   <svg
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="25 10 150 192"
+    viewBox="30 5 150 192"
     width={width}
     height={height}
     {...props}
