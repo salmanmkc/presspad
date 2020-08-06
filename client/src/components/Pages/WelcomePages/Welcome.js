@@ -44,7 +44,7 @@ const Welcome = ({
       </Row>
     </div>
 
-    <div>
+    <div style={{ marginBottom: 50 }}>
       <ProgressBar
         number={number}
         current={current}
