@@ -33,6 +33,9 @@ const createAll = async ({ accounts, organisations }) => {
   const {
     presspadAccount,
     internAccount,
+    intern2Account,
+    intern3Account,
+    intern4Account,
     hostAccount,
     organisationAccount,
   } = accounts;
@@ -86,13 +89,52 @@ const createAll = async ({ accounts, organisations }) => {
     account: internAccount._id,
   };
 
+  const intern2 = {
+    email: 'intern2@test.com',
+    name: 'intern2 Dupree',
+    password: '123456',
+    role: 'intern',
+    organisation: financialTimeOrganisation._id,
+    account: intern2Account._id,
+  };
+
+  const intern3 = {
+    email: 'intern3@test.com',
+    name: 'intern3 Dupree',
+    password: '123456',
+    role: 'intern',
+    organisation: financialTimeOrganisation._id,
+    account: intern3Account._id,
+  };
+
+  const intern4 = {
+    email: 'intern4@test.com',
+    name: 'intern4 Dupree',
+    password: '123456',
+    role: 'intern',
+    organisation: financialTimeOrganisation._id,
+    account: intern4Account._id,
+  };
+
   const [
     adminUser,
     createdOrganisationUser,
     hostUser,
     hostUser2,
     internUser,
-  ] = await User.create([admin, organisationUser, host, host2, intern]);
+    internUser2,
+    internUser3,
+    internUser4,
+  ] = await User.create([
+    admin,
+    organisationUser,
+    host,
+    host2,
+    intern,
+    intern2,
+    intern3,
+    intern4,
+  ]);
 
   return {
     adminUser,
@@ -100,6 +142,9 @@ const createAll = async ({ accounts, organisations }) => {
     hostUser,
     hostUser2,
     internUser,
+    internUser2,
+    internUser3,
+    internUser4,
   };
 };
 

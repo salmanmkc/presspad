@@ -55,7 +55,7 @@ describe('Testing for get host profile route', () => {
 
   test('test with correct user id and intern', done => {
     // must be an admin user
-    const { adminUser, internUser } = users;
+    const { adminUser, internUser4 } = users;
     const { financialTimeOrganisation } = organisations;
 
     const token = `token=${createToken(adminUser._id)}`;
@@ -71,7 +71,7 @@ describe('Testing for get host profile route', () => {
         expect(result).toBeDefined();
         expect(result.body).toBeDefined();
         expect(result.body[0].key).toBe(1);
-        expect(result.body[0].name).toBe(internUser.name);
+        expect(result.body[0].name).toBe(internUser4.name);
         expect(result.body[0].status).toBe('At host');
         expect(result.body[0].organisation).toBe(
           financialTimeOrganisation.name,

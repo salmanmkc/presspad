@@ -65,6 +65,11 @@ const { updateProfile } = require('../controllers/profile/updateProfile');
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
 const updateBankDetails = require('../controllers/withdrawRequests/updateBankDetails');
 
+const {
+  getBursaryWindows,
+  upsertBursaryWindows,
+} = require('../controllers/bursary');
+
 // IMPORT MIDDLEWARES
 const authentication = require('../middlewares/authentication');
 const authorization = require('../middlewares/authorization');
@@ -129,6 +134,9 @@ const {
   USER_BASE,
   RESET_PASSWORD,
   SET_PASSWORD,
+  BURSARY,
+  BURSARY_WINDOWS,
+  BURSARY_APPLICATIONS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -339,5 +347,18 @@ router.delete(USER_BASE, authentication, deleteAccount);
 
 router.post(RESET_PASSWORD, resetPassword);
 router.post(SET_PASSWORD, setPassword);
+
+router.get(
+  BURSARY_WINDOWS,
+  authentication,
+  authorization(['admin']),
+  getBursaryWindows,
+);
+router.put(
+  BURSARY_WINDOWS,
+  authentication,
+  authorization(['admin']),
+  upsertBursaryWindows,
+);
 
 module.exports = router;
