@@ -7,9 +7,11 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-top: ${({ index }) => index && '30px'};
   @media ${({ theme }) => theme.breakpoints.tablet} {
     width: 80%;
     min-height: 470px;
+    margin-top: 0;
   }
   @media ${({ theme }) => theme.breakpoints.laptop} {
     min-height: 430px;
@@ -32,5 +34,12 @@ export const Wrapper = styled.div`
   }
   @media ${({ theme }) => theme.breakpoints.tablet} {
     padding-left: 120px;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  margin-top: 20px;
+  @media ${({ theme }) => theme.breakpoints.tablet} {
+    margin-top: auto;
   }
 `;

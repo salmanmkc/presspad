@@ -39,20 +39,18 @@ const SignUpFunnel = ({ history }) => {
       <Row>
         {FunnelPageDate.map((e, i) => (
           <Col w={[4, 12, 4]}>
-            <S.Container>
+            <S.Container index={i}>
               <T.H3C color={e.color} mt={3}>
                 {e.title}
               </T.H3C>
               <T.P mt={3} style={{ fontSize: 18 }}>
                 {e.content}
               </T.P>
-              <Button
-                type={e.buttonType}
-                style={{ marginTop: 'auto' }}
-                onClick={() => handleClick(i)}
-              >
-                create account
-              </Button>
+              <S.ButtonContainer>
+                <Button type={e.buttonType} onClick={() => handleClick(i)}>
+                  create account
+                </Button>
+              </S.ButtonContainer>
             </S.Container>
           </Col>
         ))}
