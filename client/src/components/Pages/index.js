@@ -26,6 +26,7 @@ import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 
 import Settings from './Settings';
+import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
 
 import { withWindowWidth } from '../../HOCs';
@@ -51,7 +52,9 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
-  SETTINGS,
+  SETTINGS_URL,
+  REFERRAL_URL,
+  // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
 } from '../../constants/navRoutes';
@@ -69,9 +72,21 @@ function Pages(props) {
     <>
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        {/* protected host profile */}
+
+        <Route
+          exact
+          isPrivate
+          path={REFERRAL_URL}
+          Component={ReferralSchema}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
         <Route
           isPrivate
-          path={SETTINGS}
+          path={SETTINGS_URL}
           Component={Settings}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}

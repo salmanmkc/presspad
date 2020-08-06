@@ -49,6 +49,8 @@ export const TitleDiv = styled.div`
 
   h4 {
     padding-left: 1.5rem;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   @media (max-width: 775.98px) {

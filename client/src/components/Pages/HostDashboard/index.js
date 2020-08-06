@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { message } from 'antd';
-import moment from 'moment';
 
 import Content from './Content';
 import {
   API_HOST_DASHBOARD_URL,
   API_DONATION_URL,
   API_WITHDRAW_REQUEST_URL,
-  API_NOTIFICATION_URL,
 } from '../../../constants/apiRoutes';
 
 import { withdrawSchema, donateSchema } from './schemas';
@@ -25,7 +23,6 @@ class HostProfile extends Component {
     attemptedToSubmit: false,
     // number of rows to be visible in the bookings table
     viewNumber: 3,
-    viewNotificationNum: 3,
     // the amount of money that user want to donate
     donateValue: null,
     // the amount of money that user want to withdraw
@@ -38,8 +35,6 @@ class HostProfile extends Component {
     // Values came from api request
     bookings: [],
     updates: [],
-    slicedUpdates: [],
-    markAsSeen: false,
     withdrawRequests: [],
 
     // MODALS
@@ -102,17 +97,9 @@ class HostProfile extends Component {
     const nextGuest = (nextBooking && nextBooking.intern) || {};
     const { profile: nextGuestProfile = {} } = nextGuest;
 
-    const sortedNotification = notifications.sort((a, b) => {
-      if (moment(a.createdAt).isAfter(b.createdAt)) {
-        return -1;
-      }
-      return 1;
-    });
-
-    this.setState(({ viewNotificationNum }) => ({
+    this.setState(() => ({
       name,
-      updates: sortedNotification,
-      slicedUpdates: sortedNotification.slice(0, viewNotificationNum),
+      updates: notifications,
       bookings,
       profile,
       nextGuest,
@@ -169,16 +156,8 @@ class HostProfile extends Component {
       dataset: { name },
     },
   }) => {
-    if (name === 'updates') {
-      this.setState(({ viewNotificationNum, updates }) => ({
-        viewNotificationNum: viewNotificationNum ? undefined : 3,
-        slicedUpdates: viewNotificationNum ? updates : updates.slice(0, 3),
-        markAsSeen: false,
-      }));
-    } else {
-      const { viewNumber } = this.state;
-      this.setState({ viewNumber: viewNumber ? undefined : 3 });
-    }
+    const { viewNumber } = this.state;
+    this.setState({ viewNumber: viewNumber ? undefined : 3 });
   };
 
   handleOpenModal = e => {
@@ -271,50 +250,6 @@ class HostProfile extends Component {
       });
   };
 
-  markAsSeen = async () => {
-    const { slicedUpdates, updates, markAsSeen } = this.state;
-    if (!markAsSeen) {
-      try {
-        const newUpdates = slicedUpdates.map(ele => ({ ...ele }));
-        const notificationsIds = slicedUpdates.reduce((acc, curr, i) => {
-          if (!curr.seen) {
-            acc.push(curr._id);
-            newUpdates[i].loading = true;
-          }
-          return acc;
-        }, []);
-
-        this.setState({ markAsSeen: true, slicedUpdates: newUpdates });
-
-        if (notificationsIds[0]) {
-          this.setState({ updates: newUpdates });
-          await axios.patch(`${API_NOTIFICATION_URL}/seen`, notificationsIds);
-
-          const updatedNotifications = updates.map(update => {
-            if (notificationsIds.includes(update._id)) {
-              return {
-                ...update,
-                seen: true,
-                loading: false,
-              };
-            }
-            return update;
-          });
-
-          this.setState(({ viewNotificationNum }) => ({
-            updates: updatedNotifications,
-            slicedUpdates: viewNotificationNum
-              ? updatedNotifications.slice(0, viewNotificationNum)
-              : updatedNotifications,
-          }));
-        }
-      } catch (error) {
-        this.setState({ markAsSeen: false, slicedUpdates });
-        message.error('Something went wrong');
-      }
-    }
-  };
-
   render() {
     const { windowWidth, role } = this.props;
     const {
@@ -326,7 +261,6 @@ class HostProfile extends Component {
       accountNumber,
       bookings,
       updates,
-      slicedUpdates,
       withdrawModalOpen,
       donateModalOpen,
       nextBooking,
@@ -336,7 +270,6 @@ class HostProfile extends Component {
       withdrawRequests,
       profile,
       viewNumber,
-      viewNotificationNum,
       requestedAmount,
     } = this.state;
     return (
@@ -350,9 +283,7 @@ class HostProfile extends Component {
         accountNumber={accountNumber}
         bookings={bookings}
         viewNumber={viewNumber}
-        viewNotificationNum={viewNotificationNum}
         updates={updates}
-        slicedUpdates={slicedUpdates}
         withdrawModalOpen={withdrawModalOpen}
         donateModalOpen={donateModalOpen}
         nextGuest={nextGuest}
@@ -373,7 +304,6 @@ class HostProfile extends Component {
         handleCloseModals={this.handleCloseModals}
         handleSubmitDonate={this.handleSubmitDonate}
         handleSubmitWithdrawRequest={this.handleSubmitWithdrawRequest}
-        markAsSeen={this.markAsSeen}
         requestedAmount={requestedAmount}
       />
     );

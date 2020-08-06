@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import * as T from '../../Common/Typography';
-import * as routes from '../../../constants/navRoutes';
+import { SETTINGS } from '../../../constants/navRoutes';
 import * as S from './style';
 
 import MyAccount from './MyAccount';
@@ -22,37 +22,45 @@ function Settings({ windowWidth, ...props }) {
     <Router>
       <Heading>Settings</Heading>
       <S.TabsWrapper>
-        <S.Tabs to={routes.SETTINGS_MY_ACCOUNT}>
-          <T.H5C color="inherit">MY ACCOUNT</T.H5C>
+        <S.Tabs to={SETTINGS.ACCOUNT}>
+          <T.H5C color="inherit" mb={0}>
+            MY ACCOUNT
+          </T.H5C>
         </S.Tabs>
-        <S.Tabs to={routes.SETTINGS_ABOUT_ME}>
-          <T.H5C color="inherit">ABOUT ME</T.H5C>
+        <S.Tabs to={SETTINGS.ABOUT_ME}>
+          <T.H5C color="inherit" mb={0}>
+            ABOUT ME
+          </T.H5C>
         </S.Tabs>
-        <S.Tabs to={routes.SETTINGS_MY_PROFILE}>
-          <T.H5C color="inherit">MY PROFILE</T.H5C>
+        <S.Tabs to={SETTINGS.EDIT_PROFILE}>
+          <T.H5C color="inherit" mb={0}>
+            MY PROFILE
+          </T.H5C>
         </S.Tabs>
-        <S.Tabs to={routes.SETTINGS_VERIFICATIONS}>
-          <T.H5C color="inherit">VERIFICATIONS</T.H5C>
+        <S.Tabs to={SETTINGS.VERIFY}>
+          <T.H5C color="inherit" mb={0}>
+            VERIFICATIONS
+          </T.H5C>
         </S.Tabs>
       </S.TabsWrapper>
       <Switch>
         <Route
-          path={routes.SETTINGS_MY_ACCOUNT}
+          path={SETTINGS.ACCOUNT}
           render={() => <MyAccount {...props} />}
           exact
         />
         <Route
-          path={routes.SETTINGS_ABOUT_ME}
+          path={SETTINGS.ABOUT_ME}
           render={() => <AboutMe {...props} />}
           exact
         />
         <Route
-          path={routes.SETTINGS_MY_PROFILE}
+          path={SETTINGS.EDIT_PROFILE}
           render={() => <MyProfile {...props} />}
           exact
         />
         <Route
-          path={routes.SETTINGS_VERIFICATIONS}
+          path={SETTINGS.VERIFY}
           render={() => <Verifications {...props} />}
           exact
         />

@@ -16,6 +16,8 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
     reviews: 1,
     respondingTime: 1,
     respondedRequests: 1,
+    referred: { $size: '$referred' },
+    referredBy: 1,
   };
 
   const profileProject = {
@@ -149,6 +151,14 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
           },
         ],
         as: 'reviews',
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: 'referredBy',
+        as: 'referred',
       },
     },
     {

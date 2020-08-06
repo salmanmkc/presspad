@@ -12,6 +12,8 @@ export const Tabs = styled(NavLink)`
   margin-right: ${({ theme }) => theme.spacings[5]};
   padding: 0 ${({ theme }) => theme.spacings[1]};
   margin-top: ${({ theme }) => theme.spacings[3]};
+  display: flex;
+  align-items: center;
 
   &.active {
     color: ${({ theme }) => theme.colors.white};

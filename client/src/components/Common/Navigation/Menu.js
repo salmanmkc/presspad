@@ -13,19 +13,19 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'Settings', route: N.SETTINGS_MY_ACCOUNT },
+    { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   intern: [
     { title: 'Dashboard', route: N.DASHBOARD_URL },
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'Settings', route: N.SETTINGS_MY_ACCOUNT },
+    { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   organisation: [
     { title: 'Dashboard', route: N.DASHBOARD_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'Settings', route: N.SETTINGS_MY_ACCOUNT },
+    { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   admin: [
     { title: 'Dashboard', route: N.ADMIN_DASHBOARD_URL },
