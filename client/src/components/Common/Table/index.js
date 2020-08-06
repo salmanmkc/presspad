@@ -41,20 +41,22 @@ const Table = ({
     <S.Wrapper embed={embed}>
       {tableHeader && (
         <Row mb={6}>
-          <Col w={[4, 8, 8]}>
+          <Col w={[3, 8, 8]}>
             <T.H4C color="black">{tableHeader}</T.H4C>
           </Col>
-          <Col
-            w={[0, 4, 4]}
-            style={{ display: 'flex', justifyContent: 'flex-end' }}
-          >
-            <Icon
-              icon="money"
-              width="78px"
-              height="auto"
-              style={{ position: 'absolute' }}
-            />
-          </Col>
+          {showImage && (
+            <Col
+              w={[1, 4, 4]}
+              style={{ display: 'flex', justifyContent: 'flex-end' }}
+            >
+              <Icon
+                icon="money"
+                width="100%"
+                height="auto"
+                style={{ position: 'absolute', maxWidth: '78px' }}
+              />
+            </Col>
+          )}
         </Row>
       )}
       {showSearch && (
