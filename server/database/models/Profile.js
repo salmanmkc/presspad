@@ -195,6 +195,11 @@ const profileSchema = new Schema(
       default: false,
       required: true,
     },
+    // for interns
+    awaitingReview: {
+      type: Boolean,
+      default: false,
+    },
     bio: {
       type: String,
       validate: wordLengthValidator(250, 'bio'),

@@ -1,27 +1,39 @@
 const boom = require('boom');
-
-const { updateUserProfile } = require('../../../database/queries/profiles');
+const { internSettings } = require('../../../../client/src/validation');
+const {
+  updateUserProfile,
+  findProfile,
+} = require('../../../database/queries/profiles');
 const { deleteFile } = require('../../../helpers/storage');
 const { storageBucket: bucketName } = require('../../../config');
 
 module.exports = async (req, res, next) => {
-  const { user } = req;
-  const {
-    organisation,
-    internshipContact,
-    internshipStartDate,
-    internshipEndDate,
-    internshipOfficeAddress,
-    reference1,
-    reference2,
-    photoID,
-    DBSCheck,
-    refNum,
-    prevPhotoIDToDelete,
-    prevDBSCheckToDelete,
-  } = req.body;
-
   try {
+    const { user } = req;
+    let fullData = false;
+    const {
+      verified: prevVerified,
+      DBSCheck: { fileName: prevFileName, refNum: prevRefNum } = {
+        fileName: '',
+        refNum: '',
+      },
+    } = await findProfile(user._id);
+
+    const {
+      organisation,
+      internshipContact,
+      internshipStartDate,
+      internshipEndDate,
+      internshipOfficeAddress,
+      reference1,
+      reference2,
+      photoID,
+      DBSCheck = {},
+      refNum,
+      prevPhotoIDToDelete,
+      prevDBSCheckToDelete,
+    } = req.body;
+
     const profileData = {
       organisation,
       internshipContact,
@@ -33,6 +45,25 @@ module.exports = async (req, res, next) => {
       photoID,
       DBSCheck: { ...DBSCheck, refNum },
     };
+
+    if (
+      (DBSCheck && DBSCheck.fileName !== prevFileName) ||
+      prevRefNum !== refNum
+    ) {
+      if (prevVerified) {
+        profileData.awaitingReview = true;
+        profileData.verified = false;
+      } else {
+        try {
+          await internSettings.verificationsAllRequired.validate(profileData);
+          fullData = true;
+        } catch (error) {
+          fullData = false;
+        }
+      }
+
+      profileData.awaitingReview = fullData;
+    }
 
     await updateUserProfile(user._id, profileData);
     if (prevPhotoIDToDelete) {

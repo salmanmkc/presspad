@@ -11,8 +11,6 @@ import {
 } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 
-const { validate, internSettings } = require('../../../validation');
-
 const getCleanData = (d = {}) => ({
   organisation: d.organisation || '',
   internshipContact: d.internshipContact || {
@@ -139,25 +137,22 @@ const Verifications = props => {
   };
 
   const _validate = async () => {
-    const { errors: _errors } = await validate({
-      schema: internSettings.verifications(prevData),
-      data: { ...state },
-    });
-    let e = _errors;
-
-    if (prevData.photoID && state.photoID.deleted) {
-      e = e
-        ? { ...e, photoID: 'identity proof is required' }
-        : { photoID: 'identity proof is required' };
-    }
-
-    if (prevData.DBSCheck && state.DBSCheck.deleted) {
-      e = e
-        ? { ...e, DBSCheck: 'DBS file is required' }
-        : { DBSCheck: 'DBS file is required' };
-    }
-
-    return e;
+    // const { errors: _errors } = await validate({
+    //   schema: internSettings.verifications(prevData),
+    //   data: { ...state },
+    // });
+    // let e = _errors;
+    // if (prevData.photoID && state.photoID.deleted) {
+    //   e = e
+    //     ? { ...e, photoID: 'identity proof is required' }
+    //     : { photoID: 'identity proof is required' };
+    // }
+    // if (prevData.DBSCheck && state.DBSCheck.deleted) {
+    //   e = e
+    //     ? { ...e, DBSCheck: 'DBS file is required' }
+    //     : { DBSCheck: 'DBS file is required' };
+    // }
+    // return e;
   };
 
   const onInputChange = e => {
@@ -205,12 +200,11 @@ const Verifications = props => {
       return;
     }
     setError();
+    setLoading(true);
     if (
       (state.DBSCheck && state.DBSCheck.new && !state.DBSCheck.uploaded) ||
       (state.photoID && state.photoID.new && !state.photoID.uploaded)
     ) {
-      setLoading(true);
-
       const promiseArr = [];
       if (state.DBSCheck && state.DBSCheck.new) {
         promiseArr.push(

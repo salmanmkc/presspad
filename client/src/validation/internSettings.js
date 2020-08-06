@@ -202,9 +202,42 @@ const verifications = prevValues =>
             : string().nullable(),
         }).required()
       : object().nullable(),
-    refNum: prevValues.DBSCheck.refNum
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
+    refNum:
+      prevValues.DBSCheck && prevValues.DBSCheck.refNum
+        ? string().required(DEFAULT_REQUIRED)
+        : string().nullable(),
   });
 
-module.exports = { myAccountSchema, aboutMeSchema, myProfile, verifications };
+const verificationsAllRequired = object({
+  organisation: string().required(DEFAULT_REQUIRED),
+  internshipContact: object({
+    name: string().required(DEFAULT_REQUIRED),
+    email: string().required(DEFAULT_REQUIRED),
+    phoneNumber: string().required(DEFAULT_REQUIRED),
+  }).required(),
+  internshipStartDate: mixed().required(DEFAULT_REQUIRED),
+  internshipEndDate: mixed().required(DEFAULT_REQUIRED),
+  internshipOfficeAddress: object({
+    addressline1: string().required(DEFAULT_REQUIRED),
+    addressline2: string().required(DEFAULT_REQUIRED),
+    city: string().required(DEFAULT_REQUIRED),
+    postcode: string().required(DEFAULT_REQUIRED),
+  }).required(),
+  reference1: object({
+    name: string().required(DEFAULT_REQUIRED),
+    email: string().required(DEFAULT_REQUIRED),
+  }).required(),
+  reference2: object({
+    name: string().required(DEFAULT_REQUIRED),
+    email: string().required(DEFAULT_REQUIRED),
+  }).required(),
+  refNum: string().required(DEFAULT_REQUIRED),
+});
+
+module.exports = {
+  myAccountSchema,
+  aboutMeSchema,
+  myProfile,
+  verifications,
+  verificationsAllRequired,
+};
