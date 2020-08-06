@@ -25,7 +25,7 @@ export const StyledLink = styled(Link)`
 
 export const UpdateLink = styled(Link)`
   color: ${({ theme }) => theme.colors.darkerGray};
-  font-size: 16px;
+  font-size: 1rem;
 `;
 
 export const WalletLink = styled(Link)`
