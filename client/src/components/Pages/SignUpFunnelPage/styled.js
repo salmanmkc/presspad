@@ -39,7 +39,9 @@ export const Wrapper = styled.div`
 
 export const ButtonContainer = styled.div`
   margin-top: 20px;
+  margin-bottom: ${({ lastButton }) => lastButton && '50px'};
   @media ${({ theme }) => theme.breakpoints.tablet} {
     margin-top: auto;
+    margin-bottom: 0px;
   }
 `;

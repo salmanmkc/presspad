@@ -46,7 +46,7 @@ const SignUpFunnel = ({ history }) => {
               <T.P mt={3} style={{ fontSize: 18 }}>
                 {e.content}
               </T.P>
-              <S.ButtonContainer>
+              <S.ButtonContainer lastButton={FunnelPageDate.length - 1 === i}>
                 <Button type={e.buttonType} onClick={() => handleClick(i)}>
                   create account
                 </Button>
