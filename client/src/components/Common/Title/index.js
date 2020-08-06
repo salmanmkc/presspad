@@ -4,6 +4,10 @@ import * as T from '../Typography';
 
 const sharedStyles = css`
   padding-left: 30px;
+  margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
+  margin-bottom: ${({ mb, theme }) => (mb ? theme.spacings[mb] : 0)};
+  margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
+  margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
   @media ${({ theme }) => theme.breakpoints.mobileXL} {
     padding-left: 120px;
   }
@@ -37,35 +41,54 @@ const WithBackground = styled.div`
   display: flex;
   justify-content: center;
   padding: 15px 0;
-  background-color: ${({ theme, bgColor }) => bgColor || theme.colors.pink};
+  background-color: ${({ theme, bgColor }) =>
+    theme.colors[bgColor] || theme.colors.pink};
 `;
 
-const Title = withTheme(({ children, withBg, topTitle, bottomTitle }) => {
-  let _topText;
-  let _bottomText;
-  if (typeof children === 'string') {
-    const splittedText = children.split(' ');
-    const limit = splittedText.length;
-    _topText =
-      topTitle || splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
-    _bottomText =
-      bottomTitle ||
-      splittedText.slice(Math.ceil(limit / 2), limit + 1).join(' ');
-  }
-  return withBg ? (
-    <WithBackground>
-      <T.H2C color="white">{children}</T.H2C>
-    </WithBackground>
-  ) : (
-    <AlternateTitle>
-      <div className="top">
-        <T.H3C style={{ color: 'inherit' }}>{_topText}</T.H3C>
-      </div>
-      <div className="bottom">
-        <T.H3C style={{ color: 'inherit' }}>{_bottomText}</T.H3C>
-      </div>
-    </AlternateTitle>
-  );
-});
+const Section = styled(T.H4C)`
+  display: inline-flex;
+  background-color: ${({ theme, bgColor }) =>
+    theme.colors[bgColor] || theme.colors.primary};
+  padding: ${({ theme }) => `${theme.spacings[1]} ${theme.spacings[3]}`};
+`;
+
+const Title = withTheme(
+  ({ children, withBg, bgColor, section, mt, mb, ml, mr }) => {
+    let topText;
+    let bottomText;
+    if (typeof children === 'string') {
+      const splittedText = children.split(' ');
+      const limit = splittedText.length;
+      topText = splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
+      bottomText = splittedText
+        .slice(Math.ceil(limit / 2), limit + 1)
+        .join(' ');
+    }
+    if (withBg)
+      return (
+        <WithBackground bgColor={bgColor} mt={mt} mb={mb} ml={ml} mr={mr}>
+          <T.H2C color="white">{children}</T.H2C>
+        </WithBackground>
+      );
+
+    if (section)
+      return (
+        <Section color="white" mt={mt} mb={mb} ml={ml} mr={mr}>
+          {children}
+        </Section>
+      );
+
+    return (
+      <AlternateTitle mt={mt} mb={mb} ml={ml} mr={mr}>
+        <div className="top">
+          <T.H3C style={{ color: 'inherit' }}>{topText}</T.H3C>
+        </div>
+        <div className="bottom">
+          <T.H3C style={{ color: 'inherit' }}>{bottomText}</T.H3C>
+        </div>
+      </AlternateTitle>
+    );
+  },
+);
 
 export default Title;

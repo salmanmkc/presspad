@@ -1,19 +1,20 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
+import margins from '../../../helpers/margins';
 
 const CommonStyle = css`
+  ${margins};
+
   font-family: Glacial Indifference;
   font-style: normal;
   font-weight: bold;
   color: ${({ theme, color }) =>
     color ? theme.colors[color] : theme.colors.black};
   text-transform: ${({ caps }) => (caps ? 'uppercase' : 'none')};
-  margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
-  margin-bottom: ${({ mb, theme }) => (mb ? theme.spacings[mb] : 0)};
-  margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
-  margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
+
   text-align: ${({ align }) => align || 'left'};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'unset')};
+  width: auto;
 `;
 
 export const Heading0 = styled.h1`

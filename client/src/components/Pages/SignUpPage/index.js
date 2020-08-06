@@ -187,7 +187,11 @@ export default class SignUpPage extends Component {
 
   onFormSubmit = async e => {
     const { fields, userType } = this.state;
-    const { handleChangeState, history } = this.props;
+    const { handleChangeState, history, location } = this.props;
+    const useQuery = () => new URLSearchParams(location.search);
+    const query = useQuery();
+    const referralToken = query.get('referral');
+
     fields.role = userType;
     e.preventDefault();
     const isValid = this.validateForm();
@@ -195,7 +199,11 @@ export default class SignUpPage extends Component {
       const userInfo = { ...fields };
       try {
         this.setState({ isLoading: true });
-        const { data } = await axios.post(API_SIGNUP_URL, { ...userInfo });
+
+        const { data } = await axios.post(API_SIGNUP_URL, {
+          ...userInfo,
+          referralToken,
+        });
         handleChangeState({ ...data, isLoggedIn: true });
         if (data.role === USER_TYPES.admin) {
           this.setState({ isLoading: false });

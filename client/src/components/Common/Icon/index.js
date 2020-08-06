@@ -7,6 +7,8 @@ import Instagram from './icons/Instagram';
 import Linkedin from './icons/Linkedin';
 import Twitter from './icons/Twitter';
 import Youtube from './icons/Youtube';
+import Whatsapp from './icons/Whatsapp';
+import Email from './icons/Email';
 
 // general icons
 import Arrow from './icons/Arrow';
@@ -87,6 +89,8 @@ const iconMap = {
   alertTriangle: AlertTriangle,
   money: Money,
   arrow2: Arrow2,
+  whatsapp: Whatsapp,
+  email: Email,
   flower: Flower,
   hearts: Hearts,
   star: Star,

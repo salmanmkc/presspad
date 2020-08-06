@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { DatePicker as AntdDatePicker } from 'antd';
 import Icon from '../Icon';
 import * as S from './style';
@@ -31,8 +32,26 @@ const DatePicker = ({
   handleAdd,
   arrayLength,
   extraInfo,
+  disablePast,
+  disableFuture,
   ...props
 }) => {
+  const singleDatePickerDisabled = current => {
+    if (disablePast) return current && current < moment();
+    if (disableFuture) return current && current > moment();
+    return false;
+  };
+
+  const disabledDate = (current, dateType, dates) => {
+    if (dateType === 'start' && dates && dates.endDate) {
+      return current && current > dates.endDate;
+    }
+    if (dateType === 'end' && dates && dates.startDate) {
+      return current && current < dates.startDate;
+    }
+    return singleDatePickerDisabled(current);
+  };
+
   if (type === 'dateRange') {
     return (
       <>
@@ -45,6 +64,7 @@ const DatePicker = ({
               suffixIcon={renderIcon}
               onChange={e => onChange(e, 'startDate', index)}
               value={value && value.startDate}
+              disabledDate={current => disabledDate(current, 'start', value)}
               {...props}
             />
           </>
@@ -59,6 +79,7 @@ const DatePicker = ({
               suffixIcon={renderIcon}
               onChange={e => onChange(e, 'endDate', index)}
               value={value && value.endDate}
+              disabledDate={current => disabledDate(current, 'end', value)}
               {...props}
             >
               {children}
@@ -98,6 +119,7 @@ const DatePicker = ({
         suffixIcon={renderIcon}
         onChange={onChange}
         value={value}
+        disabledDate={singleDatePickerDisabled}
         {...props}
       >
         {children}
