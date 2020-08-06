@@ -15,8 +15,9 @@ export const SETTINGS_URL = '/settings';
 export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
 export const BURSARY = '/bursary';
+export const REFERRAL_URL = '/refer';
 export const INVOICES = '/invoices';
-export const REFER_OTHERS = '/refer-others';
+// export const REFER_OTHERS = '/refer-others';
 
 // editing details
 export const SETTINGS = {
