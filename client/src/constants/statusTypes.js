@@ -18,3 +18,11 @@ export const APPROVAL = {
   approved: colors.green,
   rejected: colors.black,
 };
+
+export const PAYMENT = {
+  upcoming: colors.primary,
+  due: colors.secondary,
+  paid: colors.gray,
+  overdue: colors.pink,
+  processing: colors.primary,
+};

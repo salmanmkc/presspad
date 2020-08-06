@@ -2,8 +2,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export const Wrapper = styled.div`
-  padding: ${({ theme }) => `${theme.spacings[6]} ${theme.spacings[4]}`};
-  box-shadow: ${({ theme }) => theme.shadows.card};
+  padding: ${({ theme, embed }) =>
+    embed
+      ? `${theme.spacings[6]} ${theme.spacings[0]}`
+      : `${theme.spacings[6]} ${theme.spacings[4]}`};
+  box-shadow: ${({ theme, embed }) => (embed ? 0 : theme.shadows.card)};
   width: 100%;
   color: ${({ theme }) => theme.colors.darkerGray};
   position: relative;

@@ -3,13 +3,29 @@ import * as T from '../../Typography';
 import * as S from '../style';
 import camelToWords from '../../../../helpers/camelToWords';
 import Icon from '../../Icon';
+import ButtonNew from '../../ButtonNew';
 
-const PayButtonCol = (colTitle, handleClick) => ({
+const PayButtonCol = (colTitle, handleClick, type) => ({
   title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
   className: 'buttonCol',
   render: (text, rowData) => {
+    // SINGLE PAY BUTTON
+    if (type === 'pay') {
+      return (
+        <ButtonNew
+          type="tertiary"
+          bgColor="pink"
+          onClick={handleClick(rowData)}
+          style={{ minWidth: '60px', height: '30px', fontSize: '14px' }}
+        >
+          Pay
+        </ButtonNew>
+      );
+    }
+
+    // PAID CANCELLED BUTTONS
     const { bankName, accountNumber, sortCode } = rowData;
     if (text === 'paid')
       return (

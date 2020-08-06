@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { colors } from '../../../theme';
-import { H7C } from '../../Common/Typography';
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -15,32 +14,6 @@ export const Container = styled.div`
     margin-top: 3rem;
     margin-bottom: 0;
   }
-`;
-
-export const PaymentsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-shadow: ${({ theme }) => theme.shadows.card};
-  padding: ${({ theme }) => theme.spacings[4]};
-  background-image: url(${({ src }) => src});
-  background-repeat: no-repeat;
-  background-position: right 15px top 20px;
-  background-size: 70px;
-
-  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
-    background-size: auto;
-    background-position: right 15px top;
-  }
-`;
-
-export const ViewLink = styled(H7C)`
-  margin-top: 1rem;
-  color: ${({ theme }) => theme.colors.black};
-  text-align: right;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
 `;
 
 export const TableWrapper = styled.div`

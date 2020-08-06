@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from '../style';
 import * as T from '../../Typography';
 import camelToWords from '../../../../helpers/camelToWords';
-import { BOOKING, APPROVAL } from '../../../../constants/statusTypes';
+import { BOOKING, APPROVAL, PAYMENT } from '../../../../constants/statusTypes';
 
 const decideStatusType = (type, text) => {
   switch (type) {
@@ -10,6 +10,8 @@ const decideStatusType = (type, text) => {
       return BOOKING[text];
     case 'profileApproval':
       return APPROVAL[text];
+    case 'payment':
+      return PAYMENT[text];
     default:
       return null;
   }

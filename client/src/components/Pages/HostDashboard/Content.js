@@ -8,15 +8,17 @@ import { BookingCards } from '../../Common/Cards';
 
 import Icon from '../../Common/Icon';
 import BookingDates from '../../Common/DashboardBookingDates';
-import { Wallet, Updates, Reviews, Community } from '../../Common/Section';
-
-import LatestPaymentsTable from './LatestPaymentsTable';
+import {
+  Wallet,
+  Updates,
+  Reviews,
+  Community,
+  Payments,
+} from '../../Common/Section';
 
 import {
   Wrapper,
   Container,
-  ViewLink,
-  PaymentsContainer,
   CompleteProfileWrapper,
 } from './HostDashboard.style';
 import { bottomMargins, typographies } from './styleProperties';
@@ -24,13 +26,8 @@ import { bottomMargins, typographies } from './styleProperties';
 import { formatPrice } from '../../../helpers';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
-import {
-  PAYMENTS_URL,
-  HOST_COMPLETE_PROFILE_URL,
-} from '../../../constants/navRoutes';
+import { HOST_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
-
-import NotesPayments from '../../../assets/notes-payments.svg';
 
 const Content = ({
   name,
@@ -58,6 +55,24 @@ const Content = ({
       startDate: moment(el.startDate),
       endDate: moment(el.endDate),
     }));
+
+  const updatedPayments = () =>
+    lastPayments.map(el => {
+      const {
+        transactionDates,
+        intern,
+        hostInstallmentsRatioAmount,
+        hostcouponTransactionsRatioAmount,
+      } = el;
+      return {
+        date: transactionDates[transactionDates.length - 1],
+        intern,
+        earnings: formatPrice(
+          hostcouponTransactionsRatioAmount + hostInstallmentsRatioAmount,
+          2,
+        ),
+      };
+    });
 
   return (
     <Wrapper mobile={device === 'mobile'}>
@@ -123,10 +138,12 @@ const Content = ({
         </Col>
         <Col w={[4, 10, 4]}>
           <Container>
-            <Wallet
-              balance={accessibleFunds / 100}
-              pending={formatPrice(pending)}
-            />
+            {accessibleFunds && pending && (
+              <Wallet
+                balance={accessibleFunds / 100}
+                pending={formatPrice(pending)}
+              />
+            )}
           </Container>
         </Col>
       </Row>
@@ -144,7 +161,6 @@ const Content = ({
         </Col>
       </Row>
       {/* REVIEWS / PAYMENTS / SOCIAL */}
-
       <Row mb={bottomMargins.row[device]}>
         {device !== 'mobile' && (
           <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
@@ -152,44 +168,14 @@ const Content = ({
           </Col>
         )}
         <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <PaymentsContainer src={NotesPayments}>
-              <SectionTitle
-                style={{
-                  marginTop: '1rem',
-                  marginBottom: bottomMargins.sectionTitle[device],
-                }}
-              >
-                Recent Payments
-              </SectionTitle>
-              {lastPayments.length > 0 ? (
-                <>
-                  <LatestPaymentsTable payments={lastPayments} />
-                  <Link to={PAYMENTS_URL}>
-                    <ViewLink>
-                      view all payments
-                      <Icon
-                        icon="arrow"
-                        direction="right"
-                        width="15px"
-                        height="15px"
-                      />
-                    </ViewLink>
-                  </Link>
-                </>
-              ) : (
-                <T.PXL color={colors.lightestGray}>No records to show</T.PXL>
-              )}
-            </PaymentsContainer>
-            <Container>
-              <Community />
-            </Container>
-          </div>
+          <Payments
+            type="recent"
+            payments={lastPayments && updatedPayments(lastPayments)}
+          />
+
+          <Container>
+            <Community />
+          </Container>
         </Col>
         {device === 'mobile' && (
           <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
