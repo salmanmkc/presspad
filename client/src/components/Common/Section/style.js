@@ -23,6 +23,11 @@ export const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.colors.darkerGray};
 `;
 
+export const UpdateLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.darkerGray};
+  font-size: 16px;
+`;
+
 export const WalletLink = styled(Link)`
   position: absolute;
   bottom: ${({ theme }) => theme.spacings[3]};
