@@ -75,115 +75,116 @@ const Content = ({
     });
 
   return (
-    <Wrapper mobile={device === 'mobile'}>
-      {/* HEADER */}
-      <Row mb={5}>
-        <Col w={[4, 12, 12]}>
-          <HeaderTitle color="blue">
-            Welcome{device !== 'mobile' && ' back'}, {firstName}!
-          </HeaderTitle>
-        </Col>
-        {!profileCompleted && (
+    <>
+      <Wrapper mobile={device === 'mobile'}>
+        {/* HEADER */}
+        <Row mb={5}>
           <Col w={[4, 12, 12]}>
-            <CompleteProfileWrapper>
-              <Icon icon="reviewExplanationMark" width="35px" height="35px" />
-              <CompleteProfileText
-                style={{ marginLeft: '0.8rem' }}
-                color="darkerGray"
-              >
-                Your profile is not complete. <br />
-                <Link
-                  style={{
-                    textDecoration: 'underline',
-                    textUnderlinePosition: 'under',
-                  }}
-                  to={HOST_COMPLETE_PROFILE_URL}
+            <HeaderTitle color="blue">
+              Welcome{device !== 'mobile' && ' back'}, {firstName}!
+            </HeaderTitle>
+          </Col>
+          {!profileCompleted && (
+            <Col w={[4, 12, 12]}>
+              <CompleteProfileWrapper>
+                <Icon icon="reviewExplanationMark" width="35px" height="35px" />
+                <CompleteProfileText
+                  style={{ marginLeft: '0.8rem' }}
+                  color="darkerGray"
                 >
-                  Finish signing up here
-                </Link>
-                &nbsp;to start using PressPad
-              </CompleteProfileText>
-            </CompleteProfileWrapper>
-          </Col>
-        )}
-      </Row>
-      {/* NEXT BOOKING / WALLET */}
-      <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
-          <SectionTitle
-            style={{ marginBottom: bottomMargins.sectionTitle[device] }}
-          >
-            Upcoming Booking
-          </SectionTitle>
-
-          {nextBooking ? (
-            <BookingCards
-              width="100%"
-              role={role}
-              windowWidth={windowWidth}
-              type="big"
-              startDate={nextBooking.startDate}
-              endDate={nextBooking.endDate}
-              price={nextBooking.price}
-              withUser={nextBooking.withUser}
-              bookingID={nextBooking._id}
-              withUserType={nextBooking.withUserRole}
-              bio={nextBooking.withUserBio}
-              interests={nextBooking && nextBooking.withUserInterests}
-              status={nextBooking.status}
-            />
-          ) : (
-            <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
+                  Your profile is not complete. <br />
+                  <Link
+                    style={{
+                      textDecoration: 'underline',
+                      textUnderlinePosition: 'under',
+                    }}
+                    to={HOST_COMPLETE_PROFILE_URL}
+                  >
+                    Finish signing up here
+                  </Link>
+                  &nbsp;to start using PressPad
+                </CompleteProfileText>
+              </CompleteProfileWrapper>
+            </Col>
           )}
-        </Col>
-        <Col w={[4, 10, 4]}>
-          <Container>
-            {accessibleFunds && pending && (
-              <Wallet
-                balance={accessibleFunds / 100}
-                pending={formatPrice(pending)}
+        </Row>
+        {/* NEXT BOOKING / WALLET */}
+        <Row mb={bottomMargins.row[device]}>
+          <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+            <SectionTitle
+              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+            >
+              Upcoming Booking
+            </SectionTitle>
+
+            {nextBooking ? (
+              <BookingCards
+                width="100%"
+                role={role}
+                windowWidth={windowWidth}
+                type="big"
+                startDate={nextBooking.startDate}
+                endDate={nextBooking.endDate}
+                price={nextBooking.price}
+                withUser={nextBooking.withUser}
+                bookingID={nextBooking._id}
+                withUserType={nextBooking.withUserRole}
+                bio={nextBooking.withUserBio}
+                interests={nextBooking && nextBooking.withUserInterests}
+                status={nextBooking.status}
               />
+            ) : (
+              <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
             )}
-          </Container>
-        </Col>
-      </Row>
-
-      {/* BOOKING DATES / UPDATES */}
-      <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
-          <BookingDates
-            currentDates={createReadableDates()}
-            autoAccept={acceptAutomatically}
-          />
-        </Col>
-        <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
-          <Updates updates={updates} userRole="host" />
-        </Col>
-      </Row>
-      {/* REVIEWS / PAYMENTS / SOCIAL */}
-      <Row mb={bottomMargins.row[device]}>
-        {device !== 'mobile' && (
-          <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
-            <Reviews reviews={reviews} />
           </Col>
-        )}
-        <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
-          <Payments
-            type="recent"
-            payments={lastPayments && updatedPayments(lastPayments)}
-          />
-
-          <Container>
-            <Community />
-          </Container>
-        </Col>
-        {device === 'mobile' && (
-          <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
-            <Reviews reviews={reviews} />
+          <Col w={[4, 10, 4]}>
+            <Container>
+              {accessibleFunds && pending && (
+                <Wallet
+                  balance={accessibleFunds / 100}
+                  pending={formatPrice(pending)}
+                />
+              )}
+            </Container>
           </Col>
-        )}
-      </Row>
-    </Wrapper>
+        </Row>
+        {/* BOOKING DATES / UPDATES */}
+        <Row mb={bottomMargins.row[device]}>
+          <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+            <BookingDates
+              currentDates={createReadableDates()}
+              autoAccept={acceptAutomatically}
+            />
+          </Col>
+          <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
+            <Updates updates={updates} userRole="host" />
+          </Col>
+        </Row>
+        {/* REVIEWS / PAYMENTS / SOCIAL */}
+        <Row mb={bottomMargins.row[device]}>
+          {device !== 'mobile' && (
+            <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+              <Reviews reviews={reviews} />
+            </Col>
+          )}
+          <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+            <Payments
+              type="recent"
+              payments={lastPayments && updatedPayments(lastPayments)}
+            />
+
+            <Container>
+              <Community />
+            </Container>
+          </Col>
+          {device === 'mobile' && (
+            <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+              <Reviews reviews={reviews} />
+            </Col>
+          )}
+        </Row>
+      </Wrapper>
+    </>
   );
 };
 
