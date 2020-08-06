@@ -59,6 +59,17 @@ const userSchema = new Schema({
   deleted: Boolean,
   deleteReason: String,
 
+  referralToken: {
+    type: String,
+    maxlength: 8,
+    sparse: true,
+  },
+
+  referredBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  },
+
   // for reset password
   resetToken: {
     value: String,

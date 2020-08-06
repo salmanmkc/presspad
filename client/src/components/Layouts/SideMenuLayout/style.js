@@ -17,7 +17,7 @@ export const ContentWrapper = styled.div`
   padding: ${({ theme }) =>
     `${theme.spacings.sideMenuLayout.top} 3% ${theme.spacings.sideMenuLayout.bottom}`};
 
-  @media ${breakpoints.mobileM} {
+  @media ${breakpoints.mobileL} {
     padding: ${({ theme }) =>
       `${theme.spacings.sideMenuLayout.top} 7% ${theme.spacings.sideMenuLayout.bottom}`};
   }
