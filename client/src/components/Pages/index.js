@@ -25,6 +25,7 @@ import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import SignUpFunnelPage from './SignUpFunnelPage';
 
+import ReferralSchema from './ReferralSchema';
 import Settings, { DeleteAccountSuccess } from './Settings';
 import ResetPassword, { SetPassword } from './ResetPassword';
 
@@ -50,6 +51,7 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
+  REFERRAL_URL,
   SETTINGS_URL,
   DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
@@ -68,6 +70,16 @@ function Pages(props) {
   return (
     <>
       <Switch>
+        <Route
+          exact
+          isPrivate
+          path={REFERRAL_URL}
+          Component={ReferralSchema}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
         <Route
           isPrivate
           exact

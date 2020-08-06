@@ -42,6 +42,7 @@ const schema = object({
   role: string()
     .oneOf(['intern', 'host', 'organisation'], ROLE_INVALID)
     .required(ROLE_REQUIRED),
+  referralToken: string().nullable(),
 });
 
 module.exports = schema;
