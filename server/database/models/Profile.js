@@ -146,11 +146,13 @@ const profileSchema = new Schema(
       enum: types.workingArea,
       required: false, // required for hosts
     },
-    areasOfInterest: {
-      type: String,
-      enum: types.areasOfInterest,
-      required: false, // required for hosts
-    },
+    interests: [
+      {
+        type: String,
+        // enum: types.interests,
+        required: false, // required for hosts
+      },
+    ],
     hostingReasonAnswer: {
       type: String,
       validate: wordLengthValidator(250, 'hostingReasonAnswer'),
@@ -187,12 +189,6 @@ const profileSchema = new Schema(
         validate: wordLengthValidator(10, 'postcode'),
         required: false, // required for intern
       },
-    },
-    interests: {
-      type: String,
-      trim: true,
-      enum: types.interests,
-      required: false, // required for Interns
     },
     verified: {
       type: Boolean,

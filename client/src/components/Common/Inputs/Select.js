@@ -31,8 +31,17 @@ const Select = ({
   error,
   style,
   value,
+  mode,
+  height,
 }) => (
-  <SelectWrapper error={!!error} mt={mt} mb={mb} ml={ml} mr={mr}>
+  <SelectWrapper
+    error={!!error}
+    mt={mt}
+    mb={mb}
+    ml={ml}
+    mr={mr}
+    height={height}
+  >
     {label && (
       <T.PBold as="label" color="primary" ml={2} style={{ display: 'block' }}>
         {label}
@@ -49,7 +58,7 @@ const Select = ({
       suffixIcon={renderIcon}
       removeIcon={renderClearIcon}
       clearIcon={renderClearIcon}
-      mode={multi && 'multiple'}
+      mode={mode || (multi && 'multiple')}
       onChange={onChange}
       style={style}
       value={value || undefined}

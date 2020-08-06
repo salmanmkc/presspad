@@ -13,6 +13,7 @@ const Wrapper = styled.div`
 const commonInputStyles = props => css`
   width: ${props.width || '100%'};
   height: ${props.height || '50px'};
+  min-height: 50px;
   color: ${({ theme }) => props.color || theme.colors.gray3};
   margin: ${props.margin || '0 0 0 0'};
   border-radius: 10px;

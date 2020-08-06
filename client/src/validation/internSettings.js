@@ -1,4 +1,4 @@
-const { object, string, boolean, date, mixed } = require('yup');
+const { object, string, boolean, mixed, array } = require('yup');
 const { signup, DEFAULT_REQUIRED } = require('../constants/errorMessages');
 
 const {
@@ -112,4 +112,33 @@ const aboutMeSchema = prevValues =>
       : string().nullable(),
   });
 
-module.exports = { myAccountSchema, aboutMeSchema };
+const myProfile = prevValues =>
+  object({
+    profileImage: prevValues.profileImage
+      ? mixed({
+          fileName: string(DEFAULT_REQUIRED).required(DEFAULT_REQUIRED),
+          deleted: boolean().notOneOf([true]),
+        }).required(DEFAULT_REQUIRED)
+      : mixed().nullable(),
+    interests:
+      prevValues.interests && prevValues.interests.length
+        ? array().required(DEFAULT_REQUIRED)
+        : array().nullable(),
+    bio: prevValues.bio
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    useReasonAnswer: prevValues.useReasonAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    storyAnswer: prevValues.storyAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    mentorDescribeAnswer: prevValues.mentorDescribeAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    issueAnswer: prevValues.issueAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+  });
+
+module.exports = { myAccountSchema, aboutMeSchema, myProfile };

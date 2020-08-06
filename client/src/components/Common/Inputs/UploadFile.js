@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
-import axios from 'axios';
 import Icon from '../Icon';
 import * as T from '../Typography';
 import InfoSection from './InfoSection';
@@ -19,47 +18,12 @@ const UploadFile = ({
   profile,
   type,
   extraInfo,
-  userId,
-  startUpload,
-  setImageInfo,
-  setUploading,
+  files,
+  setFiles,
+  error: _error,
 }) => {
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    const upload = async () => {
-      const promises = files.map(async file => {
-        const generatedName = `${userId}/${Date.now()}.${file.name}`;
-        const {
-          data: { signedUrl },
-        } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
-        const headers = {
-          'Content-Type': 'application/octet-stream',
-        };
-
-        await axios.put(signedUrl, file, {
-          headers,
-        });
-
-        return { value: generatedName, key: file.name };
-      });
-      try {
-        setUploading(true);
-        const data = await Promise.all(promises);
-        setImageInfo(data);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setUploading(false);
-      }
-    };
-
-    if (startUpload && files && files[0]) {
-      upload();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files, startUpload, userId]);
 
   const onDropRejected = errors => {
     if (
@@ -83,6 +47,7 @@ const UploadFile = ({
       acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
+          new: true,
         }),
       ),
     ].reduce((acc, val) => acc.concat(val), []);
@@ -93,6 +58,7 @@ const UploadFile = ({
     const fileToUpload = acceptedFiles.map(file =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
+        new: true,
       }),
     );
 
@@ -100,34 +66,28 @@ const UploadFile = ({
   };
 
   const removeFile = index => {
-    const updatedFiles = files.filter((file, i) => index !== i);
+    const updatedFiles = files.map((file, i) =>
+      index !== i ? file : { ...file, deleted: true },
+    );
     setFiles(updatedFiles);
   };
 
-  const thumbs = files.map((file, index) => (
-    <Col w={profile ? [4, 12, 12] : [4, 4, 4]}>
-      {type === 'file' ? (
-        <S.FileWrapper>
-          <T.Link
-            color="pink"
-            isExternal
-            href={file.preview}
-            download={file.path}
-            mr={2}
-            style={{ textDecoration: 'underline' }}
-          >
-            {file.path}
-          </T.Link>
-          <S.DeleteBtn onClick={() => removeFile(index)}>
-            <Icon icon="crossCircle" color="pink" width="21px" height="21px" />
-          </S.DeleteBtn>
-        </S.FileWrapper>
-      ) : (
-        <S.Thumb key={file.name} profile={profile}>
-          <S.ThumbInner image={file.preview}>
-            <S.ImageWrap profile={profile}>
-              <S.StyledImage src={file.preview} />
-            </S.ImageWrap>
+  const thumbs = files
+    .filter(file => !file.deleted)
+    .map((file, index) => (
+      <Col w={profile ? [4, 12, 12] : [4, 4, 4]}>
+        {type === 'file' ? (
+          <S.FileWrapper>
+            <T.Link
+              color="pink"
+              isExternal
+              href={file.preview}
+              download={file.path}
+              mr={2}
+              style={{ textDecoration: 'underline' }}
+            >
+              {file.path}
+            </T.Link>
             <S.DeleteBtn onClick={() => removeFile(index)}>
               <Icon
                 icon="crossCircle"
@@ -135,15 +95,30 @@ const UploadFile = ({
                 width="21px"
                 height="21px"
               />
-              <T.PXSBold color="pink" ml="1">
-                DELETE
-              </T.PXSBold>
             </S.DeleteBtn>
-          </S.ThumbInner>
-        </S.Thumb>
-      )}
-    </Col>
-  ));
+          </S.FileWrapper>
+        ) : (
+          <S.Thumb key={file.name} profile={profile}>
+            <S.ThumbInner image={file.preview}>
+              <S.ImageWrap profile={profile}>
+                <S.StyledImage src={file.preview || file.url} />
+              </S.ImageWrap>
+              <S.DeleteBtn onClick={() => removeFile(index)}>
+                <Icon
+                  icon="crossCircle"
+                  color="pink"
+                  width="21px"
+                  height="21px"
+                />
+                <T.PXSBold color="pink" ml="1">
+                  DELETE
+                </T.PXSBold>
+              </S.DeleteBtn>
+            </S.ThumbInner>
+          </S.Thumb>
+        )}
+      </Col>
+    ));
 
   return (
     <Dropzone
@@ -157,7 +132,7 @@ const UploadFile = ({
       {({ getRootProps, getInputProps }) => (
         <Row>
           <S.UploadContainer profile={profile}>
-            {files.length > 0 && (
+            {files.filter(file => !file.deleted).length > 0 && (
               <Col w={profile ? [4, 4, 3] : [4, 12, 12]}>
                 <S.ThumbsContainer profile={profile}>
                   {thumbs}
@@ -195,7 +170,7 @@ const UploadFile = ({
             {/* <aside>{renderFileName}</aside> */}
           </S.UploadContainer>
           {(error || validationError) && (
-            <S.Error>{error || validationError}</S.Error>
+            <S.Error>{_error || error || validationError}</S.Error>
           )}
           {extraInfo && <InfoSection text={extraInfo} />}
         </Row>

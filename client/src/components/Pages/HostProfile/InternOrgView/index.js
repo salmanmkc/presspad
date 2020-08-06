@@ -124,7 +124,7 @@ export default class InternView extends Component {
           gender,
           school,
           workingArea,
-          areasOfInterest,
+          interests,
         },
         name,
         respondedRequests,
@@ -184,7 +184,7 @@ export default class InternView extends Component {
       'University / School': school && school,
       Hometown: hometown && hometown,
       'Media I work in': workingArea && workingArea,
-      'Areas of Interest': areasOfInterest && areasOfInterest,
+      'Areas of Interest': interests && interests,
     };
     const keyDetailsArr = Object.entries(keyInfoTable);
 

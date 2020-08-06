@@ -70,7 +70,6 @@ module.exports = {
       'Other',
       'I’d prefer not to say',
     ],
-
     interests: [
       'Broadcast',
       'Radio',
@@ -82,7 +81,16 @@ module.exports = {
       'Social Media',
       'Publishing',
       'PR',
-      'Other',
+      'Multimedia',
+      'Sports',
+      'International',
+      'Arts',
+      'Breaking News',
+      'Opinion writing',
+      'Video',
+      'Commissioning',
+      'Investigative',
+      'Photo-journalism',
     ],
     workingArea: [
       'Broadcast',
@@ -97,7 +105,7 @@ module.exports = {
       'PR',
       'Other',
     ],
-    areasOfInterest: ['Foreign Affairs'],
+
     accommodationChecklist: [
       'Lock on the bathroom door',
       'Lock on the bedroom door',

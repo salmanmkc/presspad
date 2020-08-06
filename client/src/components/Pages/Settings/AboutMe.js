@@ -74,11 +74,11 @@ const AboutMe = props => {
         setError('Must fill all required fields');
         return;
       }
+      setError();
 
       setLoading(true);
       await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
-      props.handleChangeState({ email: state.email, name: state.name });
     } catch (e) {
       setError(e.response.data.error);
     } finally {
