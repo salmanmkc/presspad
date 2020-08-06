@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 // CONSTANTS
+import { API_SIGNUP_URL, API_GET_ORGS_URL } from '../../../constants/apiRoutes';
 import {
-  API_SIGNUP_URL,
-  API_GET_ORGS_URL,
+  WELCOME_PAGES,
+  Error500,
+  INTERN_COMPLETE_PROFILE_URL,
+  HOST_COMPLETE_PROFILE_URL,
   DASHBOARD_URL,
-} from '../../../constants/apiRoutes';
-import { WELCOME_PAGES, Error500 } from '../../../constants/navRoutes';
+} from '../../../constants/navRoutes';
 import USER_TYPES from '../../../constants/userTypes';
 
 import SignUp from './SignUp';
@@ -203,12 +205,12 @@ export default class SignUpPage extends Component {
           history.push(WELCOME_PAGES.replace(':id', 1));
         } else if (data.role === USER_TYPES.intern) {
           this.setState({ isLoading: false });
-          history.push(WELCOME_PAGES.replace(':id', 1));
+          history.push(INTERN_COMPLETE_PROFILE_URL);
         } else if (
           [USER_TYPES.host, USER_TYPES.superhost].includes(data.role)
         ) {
           this.setState({ isLoading: false });
-          history.push(WELCOME_PAGES.replace(':id', 1));
+          history.push(HOST_COMPLETE_PROFILE_URL);
         }
       } catch (err) {
         if (err.response) {
