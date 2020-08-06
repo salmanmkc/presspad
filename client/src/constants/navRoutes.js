@@ -18,7 +18,6 @@ export const WELCOME_PAGES = '/welcome/:id';
 export const BURSARY = '/bursary';
 export const REFERRAL_URL = '/refer';
 export const INVOICES = '/invoices';
-// export const REFER_OTHERS = '/refer-others';
 
 // editing details
 export const SETTINGS = {
