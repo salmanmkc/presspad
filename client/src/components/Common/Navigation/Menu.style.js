@@ -43,6 +43,7 @@ export const MenuButton = styled.button`
 `;
 
 export const ButtonHeader = styled(H5C)`
+  font-size: ${({ isMobile }) => !isMobile && '18px'};
   color: ${({ theme }) => theme.colors.white};
   text-align: ${({ horizontal }) => (horizontal ? 'right' : 'left')};
 `;
