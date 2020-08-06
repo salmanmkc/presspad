@@ -43,8 +43,14 @@ const SignUpFunnel = ({ history }) => {
               <T.H3C color={e.color} mt={3}>
                 {e.title}
               </T.H3C>
-              <T.PL mt={3}>{e.content}</T.PL>
-              <Button type={e.buttonType} mt={2} onClick={() => handleClick(i)}>
+              <T.P mt={3} style={{ fontSize: 18 }}>
+                {e.content}
+              </T.P>
+              <Button
+                type={e.buttonType}
+                style={{ marginTop: 'auto' }}
+                onClick={() => handleClick(i)}
+              >
                 create account
               </Button>
             </S.Container>
