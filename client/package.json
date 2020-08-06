@@ -30,6 +30,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --runInBand --detectOpenHandles --forceExit",
@@ -37,6 +38,9 @@
     "eject": "react-app-rewired eject",
     "storybook": "start-storybook -p 9009 -c .storybook watch-css -s ./src",
     "build-storybook": "build-storybook -s public"
+  },
+  "resolutions": {
+    "yargs-parser": "15.0.1"
   },
   "eslintConfig": {
     "extends": "react-app"
