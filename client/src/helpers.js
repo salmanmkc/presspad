@@ -4,6 +4,8 @@ import * as yup from 'yup';
 
 export const createSingleDate = date => moment(date).format('DD-MM-YYYY');
 
+export const createSingleUpdateDate = date => moment(date).format('DD MMM YY');
+
 export const createStartEndDate = (start, end) => {
   // get all available dates in range
   const currentDate = new Date(start);

@@ -8,7 +8,7 @@ import { Row, Col } from '../../Grid';
 import { Badge, BlueSpan } from '../../general';
 import LoadingBallPulseSync from '../../LoadingBallPulseSync';
 
-import { createSingleDate } from '../../../../helpers';
+import { createSingleUpdateDate } from '../../../../helpers';
 
 const timeCol = [1, 2, 4];
 const updateCol = [3, 8, 8];
@@ -16,7 +16,7 @@ const updateCol = [3, 8, 8];
 const Update = ({ item, userRole }) => {
   const { type, secondParty, createdAt, seen, booking, loading } = item;
 
-  const timeString = createSingleDate(createdAt);
+  const timeString = createSingleUpdateDate(createdAt);
 
   switch (userRole) {
     case 'intern':

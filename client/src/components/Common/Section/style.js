@@ -42,7 +42,6 @@ export const ImageWrapper = styled.div`
   position: absolute;
   right: ${({ right }) => right || 0};
   bottom: ${({ bottom }) => bottom || 0};
-  z-index: -1;
 `;
 
 export const SocialLinkWrapper = styled.div`
