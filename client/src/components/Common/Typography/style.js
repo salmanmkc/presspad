@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import margins from '../../../helpers/margins';
 
 const CommonStyle = css`
+  margin: 0;
   ${margins};
 
   font-family: Glacial Indifference;

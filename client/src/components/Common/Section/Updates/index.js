@@ -103,7 +103,7 @@ const Updates = ({ updates = [], userRole }) => {
           {updates.length > viewUpdateNum && (
             <S.StyledBtn
               onClick={handleViewMoreToggle}
-              style={{ marginTop: '2rem', marginLeft: 0 }}
+              style={{ marginTop: '1rem', marginLeft: 0 }}
             >
               <T.PXS color="pink">View more</T.PXS>
             </S.StyledBtn>
