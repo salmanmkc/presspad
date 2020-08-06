@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { CloseOutlined } from '@ant-design/icons';
 import { Input, DatePicker, Select } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
@@ -12,6 +13,7 @@ import {
 import Notification from '../../Common/Notification';
 import { CLASSES_DEFINITIONS } from '../../../constants/externalLinks';
 import types from '../../../constants/types';
+import { SETTINGS } from '../../../constants/navRoutes';
 
 const { validate, internSettings } = require('../../../validation');
 
@@ -39,7 +41,7 @@ const getCleanData = (d = {}) => ({
   belongToClass: d.belongToClass || '', // new
 });
 
-const AboutMe = props => {
+const AboutMe = () => {
   const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
@@ -135,7 +137,7 @@ const AboutMe = props => {
   }, []);
 
   return (
-    <div>
+    <div style={{ marginTop: '4rem' }}>
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <DatePicker
@@ -449,6 +451,13 @@ const AboutMe = props => {
         setOpen={setNotificationOpen}
         content="Changes saved"
       />
+      <S.DeleteLink position="static">
+        <T.Link to={SETTINGS.DELETE_ACCOUNT} mt={5}>
+          <T.H7C mt={5} color="gray">
+            <CloseOutlined /> DELETE ACCOUNT
+          </T.H7C>
+        </T.Link>
+      </S.DeleteLink>
     </div>
   );
 };

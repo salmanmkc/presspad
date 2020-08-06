@@ -250,7 +250,7 @@ const Verifications = props => {
   }, [fetchData]);
 
   return (
-    <div>
+    <div style={{ marginTop: '4rem' }}>
       <Row>
         <Col w={[4, 4, 4]}>
           <T.H5 color="blue">Internship Details</T.H5>

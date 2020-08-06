@@ -181,7 +181,7 @@ const MyProfile = props => {
   }, []);
 
   return (
-    <div>
+    <div style={{ marginTop: '4rem' }}>
       <UploadFile
         profile
         mainText="Upload more photos by dragging new photos here"

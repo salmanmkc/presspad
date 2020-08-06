@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { CloseOutlined } from '@ant-design/icons';
 import { Input } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
@@ -7,6 +8,7 @@ import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
 import { API_INTERN_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
+import { SETTINGS } from '../../../constants/navRoutes';
 
 const { validate, internSettings } = require('../../../validation');
 
@@ -63,7 +65,7 @@ const MyAccount = props => {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: '4rem', marginBottom: '4rem' }}>
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
@@ -132,6 +134,13 @@ const MyAccount = props => {
         setOpen={setNotificationOpen}
         content="Changes saved"
       />
+      <S.DeleteLink>
+        <T.Link to={SETTINGS.DELETE_ACCOUNT} mt={5}>
+          <T.H7C mt={5} color="gray">
+            <CloseOutlined /> DELETE ACCOUNT
+          </T.H7C>
+        </T.Link>
+      </S.DeleteLink>
     </div>
   );
 };

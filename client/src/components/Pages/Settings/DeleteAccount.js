@@ -7,11 +7,11 @@ import * as T from '../../Common/Typography';
 import * as S from './style';
 import { Col, Row } from '../../Common/Grid';
 import { API_USER_BASE } from '../../../constants/apiRoutes';
-import DeleteAccountSuccess from './DeleteAccountSuccess';
-import { DELETE_ACCOUNT_SUCCESS } from '../../../constants/navRoutes';
+
+import { SETTINGS } from '../../../constants/navRoutes';
 import Button from '../../Common/ButtonNew';
 
-function Settings({ resetState, role }) {
+function DeletedAccount({ resetState, role }) {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [reason, setReason] = useState('');
@@ -26,7 +26,7 @@ function Settings({ resetState, role }) {
 
       resetState();
       history.push({
-        pathname: DELETE_ACCOUNT_SUCCESS,
+        pathname: SETTINGS.DELETE_ACCOUNT_SUCCESS,
         state: { role },
       });
     } catch (e) {
@@ -76,5 +76,4 @@ function Settings({ resetState, role }) {
   );
 }
 
-export { DeleteAccountSuccess };
-export default Settings;
+export default DeletedAccount;

@@ -57,7 +57,10 @@ import {
   // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  SETTINGS,
 } from '../../constants/navRoutes';
+
+import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 
 function Pages(props) {
   const {
@@ -85,6 +88,14 @@ function Pages(props) {
         />
 
         <Route
+          exact
+          path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
+          Component={DeleteAccountSuccess}
+          layout="illustrations"
+          mobileText="WE HOPE TO SEE YOU AGAIN!"
+          {...props}
+        />
+        <Route
           isPrivate
           path={SETTINGS_URL}
           Component={Settings}
@@ -94,15 +105,6 @@ function Pages(props) {
           layout="sideMenu"
           {...props}
         />
-
-        {/* <Route
-          exact
-          path={DELETE_ACCOUNT_SUCCESS}
-          Component={DeleteAccountSuccess}
-          layout="illustrations"
-          mobileText="WE HOPE TO SEE YOU AGAIN!"
-          {...props}
-        /> */}
 
         {/* protected host profile */}
         <Route

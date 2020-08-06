@@ -66,3 +66,15 @@ export const IllCareWrapper = styled.div`
     }
   }
 `;
+
+export const PageWrapper = styled.div`
+  min-height: 80vh;
+  position: relative;
+`;
+
+export const DeleteLink = styled.div`
+  position: ${({ position }) => position || 'absolute'};
+  bottom: 0;
+  left: 0;
+  margin-top: ${({ theme }) => theme.spacings[6]};
+`;
