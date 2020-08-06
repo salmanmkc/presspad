@@ -13,6 +13,7 @@ export const SAFEGUARDING_POLICY =
   'https://drive.google.com/file/d/1sUhxT-GU9WIzDf7aQ07ZXE3HKWY8AuNr/view?usp=sharing';
 export const MEDIA_RELEASE =
   'https://drive.google.com/file/d/15o7r2gWcrPyFrRFxrUA4_9w3xkB9V_EC/view?usp=sharing';
+export const COOKIE_POLICY = 'http://cookies.com';
 
 export const SOCIAL = {
   facebook: 'https://www.facebook.com/PressPadUK/',
