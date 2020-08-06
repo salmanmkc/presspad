@@ -3,9 +3,10 @@ import { message } from 'antd';
 
 import './style.css';
 
-const Notifiaction = ({ setOpen, open, content }) => {
+const Notifiaction = ({ setOpen, open, content, cb }) => {
   const handleClose = () => {
     setOpen(false);
+    cb();
   };
   if (open) {
     return (

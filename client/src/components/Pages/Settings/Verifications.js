@@ -1,115 +1,163 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Input, UploadFile, Select, DatePicker } from '../../Common/Inputs';
+import { Input, UploadFile, DatePicker } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
 
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
 import {
-  API_INTERN_SETTINGS_MY_PROFILE,
+  API_INTERN_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
-import types from '../../../constants/types';
 
 const { validate, internSettings } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
-  profileImage: d.profileImage || {
-    fileName: '',
-    url: '',
+  organisation: d.organisation || '',
+  internshipContact: d.internshipContact || {
+    name: '',
+    email: '',
+    phoneNumber: '',
   },
-  interests: d.interests || [],
-  bio: d.bio || '',
-  useReasonAnswer: d.useReasonAnswer || '',
-  storyAnswer: d.storyAnswer || '',
-  mentorDescribeAnswer: d.mentorDescribeAnswer || '',
-  issueAnswer: d.issueAnswer || '',
+  internshipStartDate: d.internshipStartDate || null,
+  internshipEndDate: d.internshipEndDate || null,
+  internshipOfficeAddress: d.internshipOfficeAddress || {
+    addressline1: '',
+    addressline2: '',
+    city: '',
+    postcode: '',
+  },
+  reference1: d.reference1 || {
+    name: '',
+    email: '',
+  },
+  reference2: d.reference2 || {
+    name: '',
+    email: '',
+  },
+  photoID: d.photoID || {
+    fileName: '',
+  },
+  DBSCheck: d.DBSCheck || {
+    fileName: '',
+  },
+  refNum: d.refNum || (d.DBSCheck && d.DBSCheck.refNum) || '',
 });
 
 const Verifications = props => {
   const [state, setState] = useState({
-    profileImage: {
-      fileName: '',
-      url: '',
+    organisation: '',
+    internshipContact: {
+      name: '',
+      email: '',
+      phoneNumber: '',
     },
-    interests: [],
-    bio: '',
-    useReasonAnswer: '',
-    storyAnswer: '',
-    mentorDescribeAnswer: '',
-    issueAnswer: '',
+    internshipStartDate: null,
+    internshipEndDate: null,
+    internshipOfficeAddress: {
+      addressline1: '',
+      addressline2: '',
+      city: '',
+      postcode: '',
+    },
+    reference1: {
+      name: '',
+      email: '',
+    },
+    reference2: {
+      name: '',
+      email: '',
+    },
+    photoID: {
+      fileName: '',
+    },
+    DBSCheck: {
+      fileName: '',
+    },
+    refNum: '',
   });
 
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [startUpload, setStartUpload] = useState(false);
+
   const [prevData, setPrevData] = useState({});
+  const [fetchData, setFetchData] = useState(0);
 
   // for images
-  const [uploading, setUploading] = useState(false);
-  const [uploadingDone, setUploadingDone] = useState(false);
 
-  useEffect(() => {
-    const upload = async () => {
-      try {
-        setUploading(true);
-        const generatedName = `${props.id}/${Date.now()}.${
-          state.profileImage.name
-        }`;
-        const {
-          data: { signedUrl },
-        } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
-        const headers = {
-          'Content-Type': 'application/octet-stream',
-        };
+  const uploadPhotoID = async () => {
+    try {
+      const generatedName = `${props.id}/${Date.now()}.${state.photoID.name}`;
+      const {
+        data: { signedUrl },
+      } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
+      const headers = {
+        'Content-Type': 'application/octet-stream',
+      };
 
-        await axios.put(signedUrl, state.profileImage, {
-          headers,
-        });
+      await axios.put(signedUrl, state.photoID, {
+        headers,
+      });
 
-        setState(_state => ({
-          ..._state,
-          profileImage: {
-            fileName: generatedName,
-            new: true,
-            uploaded: true,
-            preview: _state.profileImage.preview,
-          },
-        }));
-        setUploadingDone(true);
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setUploading(false);
-      }
-    };
-
-    if (
-      startUpload &&
-      state.profileImage.new &&
-      !state.profileImage.uploaded &&
-      !state.profileImage.deleted
-    ) {
-      upload();
+      return {
+        fileName: generatedName,
+        new: true,
+        uploaded: true,
+        preview: state.photoID.preview,
+      };
+    } catch (e) {
+      return setError(e.message);
     }
-  }, [props.id, startUpload, state.profileImage]);
+  };
+
+  const uploadDBSCheck = async () => {
+    try {
+      const generatedName = `${props.id}/${Date.now()}.${state.DBSCheck.name}`;
+      const {
+        data: { signedUrl },
+      } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
+      const headers = {
+        'Content-Type': 'application/octet-stream',
+      };
+
+      await axios.put(signedUrl, state.DBSCheck, {
+        headers,
+      });
+
+      return {
+        fileName: generatedName,
+        new: true,
+        uploaded: true,
+        preview: state.DBSCheck.preview,
+      };
+    } catch (e) {
+      return setError(e.message);
+    }
+  };
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
       schema: internSettings.myProfile(prevData),
       data: { ...state },
     });
+    let e = _errors;
 
-    if (prevData.profileImage && state.profileImage.deleted) {
-      return _errors
-        ? { ..._errors, profileImage: 'Profile image is required' }
-        : { profileImage: 'Profile image is required' };
+    if (prevData.photoID && state.photoID.deleted) {
+      e = e
+        ? { ...e, photoID: 'identity proof is required' }
+        : { photoID: 'identity proof is required' };
     }
 
-    return _errors;
+    if (prevData.DBSCheck && state.DBSCheck.deleted) {
+      e = e
+        ? { ...e, DBSCheck: 'DBS file is required' }
+        : { DBSCheck: 'DBS file is required' };
+    }
+
+    return e;
   };
 
   const onInputChange = e => {
@@ -119,28 +167,35 @@ const Verifications = props => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const update = async () => {
+  const update = async (_DBSCheck, _photoID) => {
     try {
-      setLoading(true);
-      await axios.patch(API_INTERN_SETTINGS_MY_PROFILE, {
+      await axios.patch(API_INTERN_SETTINGS_VERIFICATIONS, {
         ...state,
-        prevImageFileNameToDelete:
-          state.profileImage &&
-          state.profileImage.new &&
-          prevData.profileImage &&
-          prevData.profileImage.fileName &&
-          prevData.profileImage.fileName,
+        DBSCheck: _DBSCheck || state.DBSCheck,
+        photoID: _photoID || state.photoID,
+        prevPhotoIDToDelete:
+          state.photoID &&
+          state.photoID.new &&
+          prevData.photoID &&
+          prevData.photoID.fileName &&
+          prevData.photoID.fileName,
+        prevDBSCheckToDelete:
+          state.DBSCheck &&
+          state.DBSCheck.new &&
+          prevData.DBSCheck &&
+          prevData.DBSCheck.fileName &&
+          prevData.DBSCheck.fileName,
       });
-      setNotificationOpen(true);
     } catch (e) {
       setError(e.response.data.error);
     } finally {
       setLoading(false);
-      setUploadingDone(false);
     }
   };
 
   const onSubmit = async () => {
+    let _DBSCheck;
+    let _photoID;
     const _errors = await _validate();
 
     setErrors(_errors || {});
@@ -151,22 +206,36 @@ const Verifications = props => {
     }
     setError();
     if (
-      state.profileImage &&
-      state.profileImage.new &&
-      !state.profileImage.uploaded
+      (state.DBSCheck && state.DBSCheck.new && !state.DBSCheck.uploaded) ||
+      (state.photoID && state.photoID.new && !state.photoID.uploaded)
     ) {
-      setStartUpload(true);
-    } else {
-      update();
-    }
-  };
+      setLoading(true);
 
-  useEffect(() => {
-    if (uploadingDone) {
-      update();
+      const promiseArr = [];
+      if (state.DBSCheck && state.DBSCheck.new) {
+        promiseArr.push(
+          uploadDBSCheck().catch(err =>
+            setErrors(e => ({ ...e, DBSCheck: err.message })),
+          ),
+        );
+      } else {
+        promiseArr.push(Promise.resolve());
+      }
+      if (state.photoID && state.photoID.new) {
+        promiseArr.push(
+          uploadPhotoID().catch(err =>
+            setErrors(e => ({ ...e, DBSCheck: err.message })),
+          ),
+        );
+      } else {
+        promiseArr.push(Promise.resolve());
+      }
+
+      [_DBSCheck, _photoID] = await Promise.all(promiseArr);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uploadingDone]);
+    await update(_DBSCheck, _photoID);
+    setNotificationOpen(true);
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -178,26 +247,10 @@ const Verifications = props => {
       setPrevData(getCleanData(profile));
     };
     getData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <div>
-      {/* <UploadFile
-        profile
-        mainText="Upload more photos by dragging new photos here"
-        secondaryText="file size max 2mb"
-        userId={props.id}
-        files={[state.profileImage]}
-        setFiles={([profileImage]) =>
-          setState(_state => ({ ..._state, profileImage }))
-        }
-        error={
-          prevData.profileImage &&
-          state.profileImage.deleted &&
-          'Profile image is required'
-        }
-      /> */}
-
       <Row>
         <Col w={[4, 4, 4]}>
           <T.H5 color="blue">Internship Details</T.H5>
@@ -264,15 +317,19 @@ const Verifications = props => {
                 ..._state,
                 internshipContact: {
                   ...state.internshipContact,
-                  number: e.target.value,
+                  phoneNumber: e.target.value,
                 },
               }));
             }}
-            value={state.internshipContact && state.internshipContact.number}
+            value={
+              state.internshipContact && state.internshipContact.phoneNumber
+            }
             label="Contact number"
             placeholder="Contact number..."
-            name="number"
-            error={errors.internshipContact && errors.internshipContact.number}
+            name="phoneNumber"
+            error={
+              errors.internshipContact && errors.internshipContact.phoneNumber
+            }
           />
         </Col>
       </Row>
@@ -554,32 +611,20 @@ const Verifications = props => {
           setFiles={([DBSCheck]) =>
             setState(_state => ({
               ..._state,
-              DBSCheck: {
-                ...DBSCheck,
-                refNum: _state.DBSCheck && _state.DBSCheck.refNum,
-              },
+              DBSCheck,
             }))
           }
-          error={errors.DBSCheck && errors.DBSCheck.file}
+          error={errors.DBSCheck}
         />
       </div>
       <Row>
         <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
           <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                DBSCheck: {
-                  ..._state.DBSCheck,
-                  refNum: _state.DBSCheck && _state.DBSCheck.refNum,
-                },
-              }));
-            }}
-            value={state.DBSCheck && state.DBSCheck.refNum}
+            onChange={onInputChange}
+            value={state.refNum}
             label="DBS number"
             name="refNum"
-            error={errors.DBSCheck && errors.DBSCheck.refNum}
+            error={errors.refNum}
           />
         </Col>
       </Row>
@@ -587,11 +632,7 @@ const Verifications = props => {
         <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
           {error && <T.PXS color="pink">{error}</T.PXS>}
 
-          <Button
-            type="secondary"
-            onClick={onSubmit}
-            loading={loading || uploading}
-          >
+          <Button type="secondary" onClick={onSubmit} loading={loading}>
             SAVE CHANGES
           </Button>
         </Col>
@@ -600,6 +641,7 @@ const Verifications = props => {
         open={notificationOpen}
         setOpen={setNotificationOpen}
         content="Changes saved"
+        cb={() => setFetchData(e => e + 1)}
       />
     </div>
   );

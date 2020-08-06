@@ -133,6 +133,7 @@ const {
   INTERN_SETTINGS_MY_ACCOUNT,
   INTERN_SETTINGS_ABOUT_ME,
   INTERN_SETTINGS_MY_PROFILE,
+  INTERN_SETTINGS_VERIFICATIONS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -356,6 +357,12 @@ router.patch(
   INTERN_SETTINGS_MY_PROFILE,
   authentication,
   internSettings.myProfile,
+);
+
+router.patch(
+  INTERN_SETTINGS_VERIFICATIONS,
+  authentication,
+  internSettings.verifications,
 );
 
 module.exports = router;

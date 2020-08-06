@@ -82,11 +82,11 @@ const UploadFile = ({
               color="pink"
               isExternal
               href={file.preview}
-              download={file.path}
+              download={file.path || file.url}
               mr={2}
               style={{ textDecoration: 'underline' }}
             >
-              {file.path}
+              {file.path || file.fileName}
             </T.Link>
             <S.DeleteBtn onClick={() => removeFile(index)}>
               <Icon
