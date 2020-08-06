@@ -140,7 +140,7 @@ const Verifications = props => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: internSettings.myProfile(prevData),
+      schema: internSettings.verifications(prevData),
       data: { ...state },
     });
     let e = _errors;

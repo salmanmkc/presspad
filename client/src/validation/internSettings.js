@@ -141,4 +141,70 @@ const myProfile = prevValues =>
       : string().nullable(),
   });
 
-module.exports = { myAccountSchema, aboutMeSchema, myProfile };
+const verifications = prevValues =>
+  object({
+    organisation: prevValues.organisation
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    internshipContact: prevValues.internshipContact
+      ? object({
+          name: prevValues.internshipContact.name
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          email: prevValues.internshipContact.email
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          phoneNumber: prevValues.internshipContact.phoneNumber
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+        }).required()
+      : object().nullable(),
+    internshipStartDate: prevValues.internshipStartDate
+      ? mixed().required(DEFAULT_REQUIRED)
+      : mixed().nullable(),
+    internshipEndDate: prevValues.internshipEndDate
+      ? mixed().required(DEFAULT_REQUIRED)
+      : mixed().nullable(),
+    internshipOfficeAddress: prevValues.internshipOfficeAddress
+      ? object({
+          addressline1: prevValues.internshipOfficeAddress.addressline1
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          addressline2: prevValues.internshipOfficeAddress.addressline2
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          city: prevValues.internshipOfficeAddress.city
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          postcode: prevValues.internshipOfficeAddress.postcode
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+        }).required()
+      : object().nullable(),
+
+    reference1: prevValues.reference1
+      ? object({
+          name: prevValues.reference1.name
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          email: prevValues.reference1.email
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+        }).required()
+      : object().nullable(),
+    reference2: prevValues.reference2
+      ? object({
+          name: prevValues.reference2.name
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          email: prevValues.reference2.email
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+        }).required()
+      : object().nullable(),
+    refNum: prevValues.DBSCheck.refNum
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+  });
+
+module.exports = { myAccountSchema, aboutMeSchema, myProfile, verifications };
