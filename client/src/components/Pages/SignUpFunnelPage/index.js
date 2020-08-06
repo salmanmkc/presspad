@@ -1,5 +1,4 @@
 import React from 'react';
-// import { history } from 'react-router-dom';
 import { withTheme } from 'styled-components';
 
 import FunnelPageDate from './FunnelPageData';
@@ -27,9 +26,13 @@ const SignUpFunnel = ({ history }) => {
             withBg
             bgColor="white"
             textColor="blue"
-            style={{ justifyContent: 'flex-start', marginTop: 55 }}
+            style={{
+              justifyContent: 'flex-start',
+              marginTop: 55,
+            }}
+            caps={false}
           >
-            I am:
+            I am... :
           </Title>
         </Col>
       </Row>
