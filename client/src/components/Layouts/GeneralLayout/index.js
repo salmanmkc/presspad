@@ -5,7 +5,7 @@ import Footer from '../../Common/Footer';
 import * as S from './style';
 import { withWindowWidth } from '../../../HOCs';
 
-const GeneralLayout = ({ children, isLoggedIn, navbarProps }) => (
+const GeneralLayout = ({ children, isLoggedIn, navbarProps, footer }) => (
   <S.Wrapper>
     <TopMenu
       isLoggedIn={isLoggedIn}
@@ -14,7 +14,7 @@ const GeneralLayout = ({ children, isLoggedIn, navbarProps }) => (
     />
     <S.ContentWrapper>
       {children}
-      <Footer />
+      {footer && <Footer />}
     </S.ContentWrapper>
   </S.Wrapper>
 );

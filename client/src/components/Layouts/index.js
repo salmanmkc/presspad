@@ -5,6 +5,7 @@ import RightDivLayout from './RightDivLayout';
 import IllustrationsLayout from './IllustrationsLayout';
 
 const Layout = ({ layout, ...props }) => {
+  console.log('props', props);
   switch (layout) {
     case 'sideMenu':
       return <SideMenuLayout {...props} />;
