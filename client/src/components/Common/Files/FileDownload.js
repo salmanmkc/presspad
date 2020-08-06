@@ -7,7 +7,13 @@ const Wrapper = styled.div`
   margin: ${({ margin }) => margin || '0 0 0 0'};
 `;
 
-export const Link = styled.a``;
+export const Link = styled.a`
+  outline: none;
+
+  :active {
+    outline: none;
+  }
+`;
 
 const FileDownload = ({ url, fileName, showIcon, margin }) => (
   <Wrapper margin={margin}>

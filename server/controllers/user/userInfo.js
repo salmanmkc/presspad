@@ -8,6 +8,7 @@ module.exports = (req, res) => {
       email: user.email,
       role: user.role,
       organisation: user.organisation,
+      referralToken: user.referralToken,
     });
   }
 

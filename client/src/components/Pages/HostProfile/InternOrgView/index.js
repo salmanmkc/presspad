@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Spin } from 'antd';
-
+import { Badges } from '../../../Common/Section';
 import Reviews from '../../../Common/Reviews';
 import ListingGallery from '../../../Common/Profile/ListingGallery';
-
+import { Col as ColGrid, Row as RowGrid } from '../../../Common/Grid';
 // Sub Components
 import Header from './Header';
 import ProfileCard from './Card';
@@ -23,7 +23,6 @@ import {
   Row,
   Col,
   WhyHereDiv,
-  ReviewsPart,
   GalleryContainer,
 } from '../Profile.style';
 
@@ -130,6 +129,8 @@ export default class InternView extends Component {
         name,
         respondedRequests,
         respondingTime,
+        referred,
+        referredBy,
       },
       internBookings,
       showFullData,
@@ -379,15 +380,19 @@ export default class InternView extends Component {
         </PageDivider>
 
         {/* Reviews */}
-        <ReviewsPart>
-          <SideWrapper left>
-            <Card left noShadow>
-              <InfoCard>
-                <Reviews userId={userId} name={name} userRole="host" />
-              </InfoCard>
-            </Card>
-          </SideWrapper>
-        </ReviewsPart>
+        <RowGrid>
+          <ColGrid w={[4, 8, 8]}>
+            <Reviews userId={userId} name={name} userRole="host" />
+          </ColGrid>
+          {((referred && referred > 5) || !!referredBy) && (
+            <ColGrid w={[4, 4, 4]} mt="1.5rem">
+              <Badges
+                ambassador={!!referred && referred >= 5}
+                community={!!referredBy}
+              />
+            </ColGrid>
+          )}
+        </RowGrid>
 
         {/* Calendar on Mobile */}
         {isMobile && (

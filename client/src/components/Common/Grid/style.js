@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import { breakpoints } from '../../../theme';
+import margins from '../../../helpers/margins';
 
 export const Row = styled.div`
+  ${margins};
+
   display: flex;
   flex-wrap: wrap;
   margin-left: -${({ inner, theme }) => (inner ? theme.vars.gridGutter / 2 : 0)}px !important;
@@ -14,7 +17,7 @@ export const Row = styled.div`
 
   justify-content: ${({ jcT, jc, jcM }) => jcM || jcT || jc || 'flex-start'};
 
-  @media ${breakpoints.mobileM} {
+  @media ${breakpoints.mobileL} {
     justify-content: ${({ jcT, jc }) => jcT || jc || 'flex-start'};
   }
 
@@ -24,6 +27,8 @@ export const Row = styled.div`
 `;
 
 export const Col = styled.div`
+  ${margins};
+
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
@@ -41,7 +46,7 @@ export const Col = styled.div`
     `calc(${(c1 / theme.vars.columns.mobile) * 100}%)`};
   display: ${({ c1 }) => (c1 ? 'block' : 'none')};
 
-  @media ${breakpoints.mobileM} {
+  @media ${breakpoints.mobileL} {
     flex-basis: ${({ c2, theme }) =>
       `calc(${(c2 / theme.vars.columns.tablet) * 100}%)`};
     max-width: ${({ c2, theme }) =>
