@@ -67,9 +67,16 @@ export const TopImage = styled.img`
 `;
 
 export const TitleContainer = styled.div`
+  padding: 15%;
+  @media (max-width: 1300px) {
+    padding: 12%;
+  }
+  @media (max-width: 1220px) {
+    padding: 11.3%;
+  }
   h1 {
     font-size: 130px;
-    @media (max-width: 1070px) {
+    @media (max-width: 1200px) {
       font-size: 110px;
     }
   }
