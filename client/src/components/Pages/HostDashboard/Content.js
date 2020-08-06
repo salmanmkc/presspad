@@ -42,7 +42,6 @@ const Content = ({
 
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
-  const CompleteProfileText = typographies.completeProfile[device];
 
   const createReadableDates = () =>
     listingAvailableDates.map(el => ({

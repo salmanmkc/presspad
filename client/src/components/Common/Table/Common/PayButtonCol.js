@@ -13,16 +13,21 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
   render: (text, rowData) => {
     // SINGLE PAY BUTTON
     if (type === 'pay') {
-      return (
-        <ButtonNew
-          type="tertiary"
-          bgColor="pink"
-          onClick={handleClick(rowData)}
-          style={{ minWidth: '60px', height: '30px', fontSize: '14px' }}
-        >
-          Pay
-        </ButtonNew>
-      );
+      const { status } = rowData;
+
+      if (status !== 'paid') {
+        return (
+          <ButtonNew
+            type="tertiary"
+            bgColor="pink"
+            onClick={handleClick(rowData)}
+            style={{ minWidth: '60px', height: '30px', fontSize: '14px' }}
+          >
+            Pay
+          </ButtonNew>
+        );
+      }
+      return null;
     }
 
     // PAID CANCELLED BUTTONS

@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Spin } from 'antd';
+import moment from 'moment';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
 import CompleteProfilePrompt from '../../Common/CompleteProfilePrompt';
-
-import PaymentsSection from './PaymentsSection';
-import { PageWrapper } from '../../Common/general';
-
-import { Updates } from '../../Common/Section';
+import { Updates, Payments } from '../../Common/Section';
 
 import { API_INTERN_DASHBOARD_URL } from '../../../constants/apiRoutes';
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { bottomMargins, typographies } from './styleProperties';
 import { colors } from '../../../theme';
+import { formatPrice, decidePaymentStatus } from '../../../helpers';
+import { PageWrapper } from './InternDashboard.style';
 
 const initState = {
   name: '',
@@ -24,6 +23,16 @@ const initState = {
   notifications: [],
   reviews: [],
 };
+
+const updatedPayments = arr =>
+  arr.map(el => {
+    const { dueDate, amount, transaction } = el;
+    return {
+      dueDate,
+      status: transaction ? 'paid' : decidePaymentStatus(dueDate),
+      amount: formatPrice(amount),
+    };
+  });
 
 const InternDashboard = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +82,7 @@ const InternDashboard = props => {
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
 
+  // console.log(installments && updatedPayments());
   if (isLoading) return <Spin />;
 
   return (
@@ -124,6 +134,12 @@ const InternDashboard = props => {
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
           <Updates updates={notifications} userRole="intern" />
+        </Col>
+        <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+          <Payments
+            handleClick={() => console.log('CLICK')}
+            payments={installments && updatedPayments(installments)}
+          />
         </Col>
       </Row>
       {/*

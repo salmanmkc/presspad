@@ -112,7 +112,16 @@ const internDashboard = id =>
       $lookup: {
         from: 'installments',
         let: { intern: '$_id' },
-        pipeline: [{ $match: { $expr: { $eq: ['$$intern', '$intern'] } } }],
+        pipeline: [
+          { $match: { $expr: { $eq: ['$$intern', '$intern'] } } },
+
+          {
+            $sort: {
+              dueDate: 1,
+            },
+          },
+          { $limit: 3 },
+        ],
         as: 'installments',
       },
     },

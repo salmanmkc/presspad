@@ -2,12 +2,17 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { colors } from '../../../theme';
 
-export const PageWrapper = styled.div`
-  width: 100%;
-  margin-top: ${({ mobile }) => mobile && '-2rem'};
-`;
+export const PageWrapper = styled.main`
+  padding-top: 4rem;
+  padding-bottom: 8rem;
 
-// OLD STYLES
+  max-width: 1140px;
+  width: 90%;
+  margin: 0 auto;
+  @media (max-width: 575.98px) {
+    width: 95%;
+  }
+`;
 
 export const HeaderWrapper = styled.div`
   margin: 3rem 0;
