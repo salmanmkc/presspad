@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 
 import * as S from '../style';
@@ -8,15 +9,13 @@ import { Row, Col } from '../../Grid';
 import { Badge, BlueSpan } from '../../general';
 import LoadingBallPulseSync from '../../LoadingBallPulseSync';
 
-import { createSingleDate } from '../../../../helpers';
-
 const timeCol = [1, 2, 4];
 const updateCol = [3, 8, 8];
 
 const Update = ({ item, userRole }) => {
   const { type, secondParty, createdAt, seen, booking, loading } = item;
 
-  const timeString = createSingleDate(createdAt);
+  const timeString = createdAt ? moment(createdAt).format('DD MMM YY') : 'N/A';
 
   switch (userRole) {
     case 'intern':
