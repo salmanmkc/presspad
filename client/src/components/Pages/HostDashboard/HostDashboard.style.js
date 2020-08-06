@@ -25,12 +25,6 @@ export const TableWrapper = styled.div`
   }
 `;
 
-export const CompleteProfileWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-`;
-
 // OLD STYLES
 
 export const PageWrapper = styled.div`

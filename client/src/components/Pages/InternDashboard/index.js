@@ -1,68 +1,101 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Spin } from 'antd';
 
-import BookingSection from './BookingSection';
-import BookingsTableSection from './BookingsTableSection';
+import { Row, Col } from '../../Common/Grid';
+import * as T from '../../Common/Typography';
+import { BookingCards } from '../../Common/Cards';
+import CompleteProfilePrompt from '../../Common/CompleteProfilePrompt';
+
 import PaymentsSection from './PaymentsSection';
 import { PageWrapper } from '../../Common/general';
 import Updates from '../../Common/Section/Updates';
 
 import { API_INTERN_DASHBOARD_URL } from '../../../constants/apiRoutes';
+import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
+import { TABLET_WIDTH } from '../../../constants/screenWidths';
+import { bottomMargins, typographies } from './styleProperties';
 
-export default class InternDashboard extends Component {
-  state = {
-    bookings: [],
-    installments: [],
-    notifications: [],
-    name: '',
-    profileImage: '',
-  };
+const initState = {
+  name: '',
+  installments: [],
+  notifications: [],
+  reviews: [],
+};
 
-  async componentDidMount() {
-    const {
-      data: {
-        data: {
-          bookings,
-          installments,
-          notifications,
-          name,
-          profile,
-          nextBookingWithDetails,
-        },
-      },
-    } = await axios.get(API_INTERN_DASHBOARD_URL);
+const InternDashboard = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useState({ ...initState });
+  const { windowWidth, role } = props;
 
-    this.setState(() => ({
-      bookings,
-      installments,
-      notifications,
-      name,
-      profileImage: profile && profile.profileImage,
-      nextBookingWithDetails,
-    }));
-  }
+  useEffect(() => {
+    setIsLoading(true);
 
-  render() {
-    const {
-      notifications,
-      name,
-      profileImage,
-      bookings,
-      installments,
-      nextBookingWithDetails,
-    } = this.state;
-    const { windowWidth, role } = this.props;
+    const fetchData = async () => {
+      const { data } = await axios.get(API_INTERN_DASHBOARD_URL);
 
-    return (
-      <PageWrapper>
-        <BookingSection
-          data={{ name, profileImage, nextBookingWithDetails }}
-          role={role}
-        />
+      const {
+        name = '',
+        notifications = [],
+        nextBooking = {},
+        reviews = [],
+        installments = [],
+        profileCompleted = false,
+      } = data;
+
+      setState({
+        name,
+        notifications,
+        nextBooking,
+        reviews,
+        installments,
+        profileCompleted,
+      });
+    };
+
+    fetchData();
+    setIsLoading(false);
+  }, []);
+
+  const {
+    notifications,
+    name,
+    installments,
+    nextBooking,
+    reviews,
+    profileCompleted,
+  } = state;
+
+  const firstName = name.split(' ')[0];
+  const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
+  const HeaderTitle = typographies.headerTitle[device];
+  const SectionTitle = typographies.sectionTitle[device];
+
+  if (isLoading) return <Spin />;
+
+  return (
+    <PageWrapper>
+      <Row mb={5}>
+        <Col w={[4, 12, 12]}>
+          <HeaderTitle color="blue">
+            Welcome{device !== 'mobile' && ' back'}, {firstName}!
+          </HeaderTitle>
+        </Col>
+        {!profileCompleted && (
+          <Col w={[4, 12, 12]}>
+            <CompleteProfilePrompt
+              device={device}
+              url={INTERN_COMPLETE_PROFILE_URL}
+            />
+          </Col>
+        )}
+      </Row>
+      {/*
         <Updates updates={notifications} userRole="intern" />
         <BookingsTableSection data={bookings} windowWidth={windowWidth} />
-        <PaymentsSection data={installments} />
-      </PageWrapper>
-    );
-  }
-}
+        <PaymentsSection data={installments} /> */}
+    </PageWrapper>
+  );
+};
+
+export default InternDashboard;

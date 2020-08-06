@@ -1,13 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
-
-import Icon from '../../Common/Icon';
 import BookingDates from '../../Common/DashboardBookingDates';
+import CompleteProfilePrompt from '../../Common/CompleteProfilePrompt';
 import {
   Wallet,
   Updates,
@@ -16,11 +14,7 @@ import {
   Payments,
 } from '../../Common/Section';
 
-import {
-  Wrapper,
-  Container,
-  CompleteProfileWrapper,
-} from './HostDashboard.style';
+import { Wrapper, Container } from './HostDashboard.style';
 import { bottomMargins, typographies } from './styleProperties';
 
 import { formatPrice } from '../../../helpers';
@@ -85,25 +79,10 @@ const Content = ({
         </Col>
         {!profileCompleted && (
           <Col w={[4, 12, 12]}>
-            <CompleteProfileWrapper>
-              <Icon icon="reviewExplanationMark" width="35px" height="35px" />
-              <CompleteProfileText
-                style={{ marginLeft: '0.8rem' }}
-                color="darkerGray"
-              >
-                Your profile is not complete. <br />
-                <Link
-                  style={{
-                    textDecoration: 'underline',
-                    textUnderlinePosition: 'under',
-                  }}
-                  to={HOST_COMPLETE_PROFILE_URL}
-                >
-                  Finish signing up here
-                </Link>
-                &nbsp;to start using PressPad
-              </CompleteProfileText>
-            </CompleteProfileWrapper>
+            <CompleteProfilePrompt
+              device={device}
+              url={HOST_COMPLETE_PROFILE_URL}
+            />
           </Col>
         )}
       </Row>

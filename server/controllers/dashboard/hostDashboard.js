@@ -2,7 +2,6 @@
 const boom = require('boom');
 
 const { getUpcomingBooking } = require('../../database/queries/bookings');
-
 const {
   hostDashboard: hostDashboardQuery,
 } = require('../../database/queries/dashboard');
