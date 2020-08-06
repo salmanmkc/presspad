@@ -3,12 +3,24 @@ import { NavLink } from 'react-router-dom';
 import { H5C } from '../Typography';
 
 export const Header = styled(H5C)`
+  font-size: ${({ isMobile }) => !isMobile && '18px'};
   color: ${({ theme }) => theme.colors.white};
   min-width: auto;
-  max-width: ${({ isMobile }) => (isMobile ? '300px' : '155px')};
+  max-width: ${({ isMobile }) => (isMobile ? '300px' : '195px')};
   text-align: ${({ horizontal }) => horizontal && 'right'};
   position: ${({ horizontal }) => (horizontal ? 'relative' : 'absolute')};
   margin-left: ${({ horizontal, theme }) => horizontal && theme.spacings[4]};
+  background: ${({ isLogIn, isLogInActive, theme }) => {
+    if (isLogIn) {
+      return isLogInActive ? theme.colors.white : theme.colors.pink;
+    }
+    return 'inherit';
+  }};
+  height: ${({ isLogIn }) => isLogIn && '45px'};
+  line-height: ${({ isLogIn }) => isLogIn && '45px'};
+  width: ${({ isLogIn }) => isLogIn && '120px'};
+  text-align: ${({ isLogIn }) => isLogIn && 'center'};
+  border-radius: ${({ isLogIn }) => isLogIn && '10px'};
 `;
 
 export const Link = styled(NavLink)`
@@ -31,6 +43,7 @@ export const MenuButton = styled.button`
 `;
 
 export const ButtonHeader = styled(H5C)`
+  font-size: 18px;
   color: ${({ theme }) => theme.colors.white};
   text-align: ${({ horizontal }) => (horizontal ? 'right' : 'left')};
 `;

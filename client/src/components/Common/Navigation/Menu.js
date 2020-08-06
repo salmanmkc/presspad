@@ -13,6 +13,7 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
+    { title: 'Refer Others', route: N.REFERRAL_URL },
     { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   intern: [
@@ -20,10 +21,12 @@ const menuLinks = {
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
+    { title: 'Bursary', route: N.BURSARY },
     { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   organisation: [
     { title: 'Dashboard', route: N.DASHBOARD_URL },
+    { title: 'Invoices', route: N.INVOICES },
     { title: 'Profile', route: N.MYPROFILE_URL },
     { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
@@ -32,12 +35,14 @@ const menuLinks = {
     { title: 'Clients', route: N.ADMIN_ORGS_URL },
     { title: 'Interns', route: N.ADMIN_INTERNS_URL },
     { title: 'Hosts', route: N.ADMIN_HOSTS_URL },
-    { title: 'Bookings', route: N.ADMIN_BOOKINGS_URL },
     { title: 'Payments', route: N.ADMIN_PAYMENTS_URL },
+    { title: 'Bookings', route: N.ADMIN_BOOKINGS_URL },
+    { title: 'Bursary', route: N.ADMIN_BURSARY },
   ],
+
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'List your Pad', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_HOST },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };
@@ -55,7 +60,7 @@ const horizontalMenuLinks = {
   ],
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'List your Pad', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_HOST },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };
@@ -78,7 +83,7 @@ const Menu = ({
       })
       .catch(err => message.error(err));
   };
-
+  const isLogInActive = history.location.pathname === '/sign-in';
   return (
     <>
       {/* HORIZONTAL VIEW */}
@@ -120,7 +125,12 @@ const Menu = ({
             isMobile={isMobile}
             onClick={resetMenu}
           >
-            <S.Header isMobile={isMobile} horizontal={horizontal}>
+            <S.Header
+              isMobile={isMobile}
+              horizontal={horizontal}
+              isLogIn={menuLink.title === 'Log In' && !isMobile}
+              isLogInActive={isLogInActive}
+            >
               {menuLink.title}
             </S.Header>
           </S.Link>
@@ -128,6 +138,5 @@ const Menu = ({
     </>
   );
 };
-// )}
-// </>
+
 export default withRouter(Menu);
