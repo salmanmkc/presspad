@@ -131,7 +131,7 @@ const internDashboard = id =>
               dueDate: 1,
             },
           },
-          // { $limit: 3 },
+          { $limit: 3 },
         ],
         as: 'installments',
       },
