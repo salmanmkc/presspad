@@ -7,7 +7,7 @@ import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
 import CompleteProfilePrompt from '../../Common/CompleteProfilePrompt';
-import { Updates, Payments } from '../../Common/Section';
+import { Updates, Payments, Reviews, Community } from '../../Common/Section';
 import PayNowModal from '../../Common/PayNowModal';
 
 import { API_INTERN_DASHBOARD_URL } from '../../../constants/apiRoutes';
@@ -151,7 +151,12 @@ const InternDashboard = props => {
               bookingID={nextBooking._id}
               withUserType={nextBooking.withUserRole}
               bio={nextBooking.withUserBio}
-              interests={nextBooking && nextBooking.withUserInterests}
+              interests={
+                nextBooking.withUserInterestsIntern &&
+                nextBooking.withUserInterestsIntern.length > 0
+                  ? nextBooking.withUserInterestsIntern
+                  : nextBooking.withUserInterestsHost
+              }
               status={nextBooking.status}
             />
           ) : (
@@ -163,7 +168,7 @@ const InternDashboard = props => {
         <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
           <Updates updates={notifications} userRole="intern" />
         </Col>
-        <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
           <Payments
             handleClick={rowData =>
               setPayNow({ openModal: true, installment: rowData.installment })
@@ -171,6 +176,28 @@ const InternDashboard = props => {
             payments={installments && updatedPayments(installments)}
           />
         </Col>
+      </Row>
+
+      <Row mb={bottomMargins.row[device]}>
+        {device === 'mobile' ? (
+          <>
+            <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+              <Community />
+            </Col>{' '}
+            <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+              <Reviews reviews={reviews} />
+            </Col>
+          </>
+        ) : (
+          <>
+            <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+              <Reviews reviews={reviews} />
+            </Col>
+            <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+              <Community />
+            </Col>
+          </>
+        )}
       </Row>
       {/*
         <Updates updates={notifications} userRole="intern" />

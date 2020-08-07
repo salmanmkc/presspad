@@ -30,7 +30,7 @@ const Payments = ({ type, payments, handleClick }) => {
       previewLink={PAYMENTS_URL}
       previewLinkText="View all payments"
       previewAlign="right"
-      tableHeader="Recent Payments"
+      tableHeader={type === 'recent' ? 'Recent Payments' : 'Your Payments'}
       showImage="money"
     />
   );
