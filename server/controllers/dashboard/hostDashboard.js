@@ -28,7 +28,7 @@ const hostDashboard = async (req, res, next) => {
     let accessibleFunds;
     let pending;
     let recentPayments;
-
+    console.log('next', nextBooking);
     const {
       _id,
       email,
