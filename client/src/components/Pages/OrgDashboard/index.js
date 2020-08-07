@@ -18,7 +18,7 @@ import Content from './Content';
 const moment = extendMoment(Moment);
 
 const initState = {
-  details: {},
+  orgName: '',
   notifications: [],
   slicedNotifications: [],
   viewNotificationNum: 3,
@@ -45,40 +45,46 @@ const OrganisationDashboard = props => {
   const { windowWidth, role, name, stripe } = props;
 
   const fetchOrgData = async () => {
-    axios
-      .get(API_ORGS_DASHBOARD_URL)
-      .then(res => {
-        const [details, notifications, coupons] = res.data;
+    setIsLoading(true);
 
-        const sortedNotification = notifications.sort((a, b) => {
-          if (Moment(a.createdAt).isAfter(b.createdAt)) {
-            return -1;
-          }
-          return 1;
-        });
-        const { account } = details[0];
+    try {
+      const { data } = await axios.get(API_ORGS_DASHBOARD_URL);
+      console.log('data', data);
+      setIsLoading(false);
+      const [details, notifications, coupons] = data;
 
-        setState(({ viewNotificationNum }) => ({
-          details: details[0] || {},
-          notifications: sortedNotification,
-          slicedNotifications: sortedNotification.slice(
-            0,
-            viewNotificationNum + 1,
-          ),
-          account,
-          coupons,
-          loaded: true,
-        }));
-      })
-      .catch(err => {
-        const error =
-          err.response && err.response.data && err.response.data.error;
-        message.error(error || 'Something went wrong');
+      const { account, name: orgName } = details[0];
+
+      // new setState
+      setState({ orgName, account });
+
+      const sortedNotification = notifications.sort((a, b) => {
+        if (Moment(a.createdAt).isAfter(b.createdAt)) {
+          return -1;
+        }
+        return 1;
       });
+
+      // setState(({ viewNotificationNum }) => ({
+      //   details: details[0] || {},
+      //   notifications: sortedNotification,
+      //   slicedNotifications: sortedNotification.slice(
+      //     0,
+      //     viewNotificationNum + 1,
+      //   ),
+      //   account,
+      //   coupons,
+      //   loaded: true,
+      // }));
+    } catch (err) {
+      setIsLoading(false);
+      const error =
+        err.response && err.response.data && err.response.data.error;
+      message.error(error || 'Something went wrong');
+    }
   };
 
   useEffect(() => {
-    setIsLoading(true);
     fetchOrgData();
   }, []);
 
@@ -379,10 +385,13 @@ const OrganisationDashboard = props => {
     }
   };
 
+  const { orgName } = state;
+
   if (isLoading) return <Spin />;
 
   return (
     <Content
+      orgName={orgName}
       name={name}
       windowWidth={windowWidth}
       stripe={stripe}
@@ -392,7 +401,7 @@ const OrganisationDashboard = props => {
       handleEndOpenChange={handleEndOpenChange}
       disabledEndDate={disabledEndDate}
       onStartChange={onStartChange}
-      dateRender={dateRender}
+      // dateRender={dateRender}
       disabledStartDate={disabledStartDate}
       onSelectInternChange={onSelectInternChange}
       handleOpenModal={handleOpenModal}

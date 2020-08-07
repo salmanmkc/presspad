@@ -16,12 +16,9 @@ module.exports = async (req, res, next) => {
 
   try {
     const results = await orgDashboardQuery(organisation);
-    const [orgDetails] = results;
 
     // console.log(results);
-    if (orgDetails && orgDetails[0] && orgDetails[0].logo) {
-      await generateFileURL(orgDetails[0].logo);
-    }
+
     return res.json(results);
   } catch (error) {
     return next(boom.badImplementation(error));
