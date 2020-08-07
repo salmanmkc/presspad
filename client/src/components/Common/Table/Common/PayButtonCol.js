@@ -20,7 +20,12 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
           <ButtonNew
             type="tertiary"
             bgColor="pink"
-            onClick={handleClick(rowData)}
+            onClick={() => {
+              // recalculate price to cents
+              // eslint-disable-next-line no-param-reassign
+              rowData.amount *= 100;
+              handleClick({ openModal: true, installment: rowData });
+            }}
             style={{ minWidth: '60px', height: '30px', fontSize: '14px' }}
           >
             Pay

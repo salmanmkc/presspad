@@ -19,7 +19,10 @@ const internDashboard = async (req, res, next) => {
       getUpcomingBooking({ userId: internId, role }),
     ]);
 
-    return res.json({ ...dashboardData, nextBooking });
+    return res.json({
+      ...dashboardData,
+      nextBooking,
+    });
   } catch (err) {
     return next(boom.badImplementation(err));
   }

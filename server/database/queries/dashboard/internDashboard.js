@@ -107,6 +107,17 @@ const internDashboard = id =>
         as: 'notifications',
       },
     },
+    {
+      $lookup: {
+        from: 'accounts',
+        localField: 'account',
+        foreignField: '_id',
+        as: 'account',
+      },
+    },
+    {
+      $unwind: { path: '$account', preserveNullAndEmptyArrays: true },
+    },
     // Intern installments
     {
       $lookup: {
@@ -131,11 +142,7 @@ const internDashboard = id =>
         reviews: 1,
         notifications: 1,
         profileCompleted: '$profile.isCompleted',
-        'installments._id': 1,
-        'installments.booking': 1,
-        'installments.amount': 1,
-        'installments.dueDate': 1,
-        'installments.transaction': 1,
+        installments: 1,
       },
     },
   ]);

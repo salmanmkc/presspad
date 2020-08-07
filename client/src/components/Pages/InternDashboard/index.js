@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Spin } from 'antd';
-import moment from 'moment';
+import { Elements } from 'react-stripe-elements';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import { BookingCards } from '../../Common/Cards';
 import CompleteProfilePrompt from '../../Common/CompleteProfilePrompt';
 import { Updates, Payments } from '../../Common/Section';
+import PayNowModal from '../../Common/PayNowModal';
 
 import { API_INTERN_DASHBOARD_URL } from '../../../constants/apiRoutes';
 import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -26,25 +27,41 @@ const initState = {
 
 const updatedPayments = arr =>
   arr.map(el => {
-    const { dueDate, amount, transaction } = el;
+    const {
+      _id,
+      booking,
+      createdAt,
+      host,
+      intern,
+      transaction,
+      dueDate,
+      amount,
+    } = el;
+
     return {
+      _id,
       dueDate,
       status: transaction ? 'paid' : decidePaymentStatus(dueDate),
       amount: formatPrice(amount),
+      booking,
+      intern,
+      host,
+      transaction,
+      createdAt,
     };
   });
 
 const InternDashboard = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useState({ ...initState });
+  const [payNow, setPayNow] = useState({ openModal: false, installment: {} });
   const { windowWidth, role } = props;
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    const fetchData = async () => {
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
       const { data } = await axios.get(API_INTERN_DASHBOARD_URL);
-
+      setIsLoading(false);
       const {
         name = '',
         notifications = [],
@@ -62,10 +79,14 @@ const InternDashboard = props => {
         installments,
         profileCompleted,
       });
-    };
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
-    setIsLoading(false);
   }, []);
 
   const {
@@ -87,6 +108,13 @@ const InternDashboard = props => {
 
   return (
     <PageWrapper>
+      <Elements>
+        <PayNowModal
+          payNow={payNow}
+          setPayNow={setPayNow}
+          fetchData={fetchData}
+        />
+      </Elements>
       <Row mb={5}>
         <Col w={[4, 12, 12]}>
           <HeaderTitle color="blue">
@@ -137,7 +165,9 @@ const InternDashboard = props => {
         </Col>
         <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
           <Payments
-            handleClick={() => console.log('CLICK')}
+            handleClick={rowData =>
+              setPayNow({ openModal: true, installment: rowData.installment })
+            }
             payments={installments && updatedPayments(installments)}
           />
         </Col>
