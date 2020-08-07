@@ -22,7 +22,7 @@ import { H4C, H5C, H6C } from '../../../Common/Typography';
 import BookingDates from '../../../Common/BookingDetailsBox';
 import CancelBookingButton from '../CancelBookingButton';
 
-import PayNowModal from '../../../Common/PayNowModal';
+import PayNowModal from './PayNowModal';
 import ConfirmWithoutPayModal from './ConfirmWithoutPayModal';
 import { Wrapper, ContentWrapper } from './InternView.style';
 import {

@@ -103,7 +103,6 @@ const InternDashboard = props => {
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
 
-  // console.log(installments && updatedPayments());
   if (isLoading) return <Spin />;
 
   return (
@@ -138,7 +137,7 @@ const InternDashboard = props => {
           >
             Upcoming Booking
           </SectionTitle>
-          {nextBooking ? (
+          {nextBooking && Object.keys(nextBooking).length > 0 ? (
             <BookingCards
               width="100%"
               role={role}

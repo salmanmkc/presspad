@@ -94,7 +94,7 @@ const Content = ({
             Upcoming Booking
           </SectionTitle>
 
-          {nextBooking ? (
+          {nextBooking && Object.keys(nextBooking).length > 0 ? (
             <BookingCards
               width="100%"
               role={role}
@@ -133,12 +133,14 @@ const Content = ({
 
       {/* BOOKING DATES / UPDATES */}
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
-          <BookingDates
-            currentDates={createReadableDates()}
-            autoAccept={acceptAutomatically}
-          />
-        </Col>
+        {listingAvailableDates && (
+          <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+            <BookingDates
+              currentDates={createReadableDates()}
+              autoAccept={acceptAutomatically}
+            />
+          </Col>
+        )}
         <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
           <Updates updates={updates} userRole="host" />
         </Col>

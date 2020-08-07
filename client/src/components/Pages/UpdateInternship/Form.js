@@ -226,7 +226,7 @@ const Form = ({
     </ContentWrapper>
 
     <BookingDetailsBox
-      price={formatPrice(bookingData.price)}
+      price={bookingData.price}
       startDate={bookingData.startDate}
       endDate={bookingData.endDate}
       intern

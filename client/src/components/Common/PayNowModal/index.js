@@ -164,6 +164,7 @@ class PayNowModal extends Component {
   render() {
     const { payNow, setPayNow } = this.props;
     const { installment } = payNow;
+
     return (
       <Modal
         visible={payNow.openModal}
