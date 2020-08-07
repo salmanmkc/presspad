@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { message } from 'antd';
 import Title from '../Title';
 import { Switch, DatePicker } from '../Inputs';
 import ButtonNew from '../ButtonNew';
 import LinkButton from '../LinkButton';
 import validateRequest from './validateAvailabiltySchema';
+import Notification from '../Notification';
 
 import { H7C, PBold } from '../Typography';
 import * as S from './style';
@@ -25,6 +25,8 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
   const [acceptBookings, setAcceptBookings] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [datesError, setDatesError] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationText, setNotificationText] = useState(false);
 
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
@@ -68,17 +70,18 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
         setDatesError(null);
         await axios.patch(API_HOST_UPDATE_AVAILABILITY, requestData);
         setUpdateLoading(false);
-        message.success('updated!');
+        setNotificationText('All saved!');
+        setShowNotification(true);
       }
     } catch (err) {
       if (err.name === 'ValidationError') {
         setDatesError('You need to enter some dates!');
       }
       setUpdateLoading(false);
-
-      message.error(
+      setNotificationText(
         'There was an error updating your settings! Please try again.',
       );
+      setShowNotification(true);
     }
   };
 
@@ -149,6 +152,13 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
           </S.LinkWrapper>
         </Col>
       </Row>
+      {showNotification && (
+        <Notification
+          open={showNotification}
+          setOpen={setShowNotification}
+          content={notificationText}
+        />
+      )}
     </S.Wrapper>
   );
 };

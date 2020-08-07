@@ -114,7 +114,10 @@ const Bookings = props => {
               withUserType={upcomingBooking[0].withUserRole}
               bio={upcomingBooking[0].withUserBio}
               interests={
-                upcomingBooking[0] && upcomingBooking[0].withUserInterests
+                upcomingBooking[0] &&
+                upcomingBooking[0].withUserInterestsIntern.length > 0
+                  ? upcomingBooking[0].withUserInterestsIntern
+                  : upcomingBooking[0].withUserInterestsHost
               }
               status={upcomingBooking[0].status}
             />

@@ -109,7 +109,7 @@ export default class InternView extends Component {
           accommodationChecklist,
           neighbourhoodDescription,
         },
-        listingActiveBookings,
+        listingConfirmedBookings: listingActiveBookings = [],
         profile: {
           bio,
           jobTitle,
