@@ -6,10 +6,15 @@ const {
   INTERN_COMPLETE_PROFILE,
   DONATION_URL,
   WITHDRAW_REQUEST_URL,
+  HOST_UPDATE_AVAILABILITY,
 } = require('../../../client/src/constants/apiRoutes');
 const hostProfileSchema = require('./hostProfileSchema');
 const internProfileSchema = require('./internProfileSchema');
-const { withdrawSchema, donateSchema } = require('./hostDashboard');
+const {
+  withdrawSchema,
+  donateSchema,
+  updateAvailabilitySchema,
+} = require('./hostDashboard');
 
 // Schemas for each route
 const schemas = {
@@ -17,6 +22,7 @@ const schemas = {
   [INTERN_COMPLETE_PROFILE]: internProfileSchema,
   [DONATION_URL]: donateSchema,
   [WITHDRAW_REQUEST_URL]: withdrawSchema,
+  [HOST_UPDATE_AVAILABILITY]: updateAvailabilitySchema,
 };
 
 // The supported methods for each route
@@ -25,11 +31,15 @@ const methods = {
   [INTERN_COMPLETE_PROFILE]: ['POST'],
   [DONATION_URL]: ['POST'],
   [WITHDRAW_REQUEST_URL]: ['POST'],
+  [HOST_UPDATE_AVAILABILITY]: ['PATCH'],
 };
 
 // Validate function
 const validate = (schema, dataObj) =>
-  schema.validateAsync(dataObj, { abortEarly: false, stripUnknown: true });
+  schema.validateAsync(dataObj, {
+    abortEarly: false,
+    stripUnknown: true,
+  });
 
 // validation middleware
 const validation = (req, res, next) => {

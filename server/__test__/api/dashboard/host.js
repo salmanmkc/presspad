@@ -6,6 +6,7 @@ const createToken = require('../../../helpers/createToken');
 
 const {
   API_HOST_DASHBOARD_URL,
+  API_HOST_UPDATE_AVAILABILITY,
 } = require('../../../../client/src/constants/apiRoutes');
 
 let connection;
@@ -23,6 +24,36 @@ describe('Testing for host dashboard route', () => {
     await connection.close();
   });
 
+  test("test with an host user's role to update availability settings", done => {
+    const { hostUser } = users;
+    const token = `token=${createToken(hostUser._id)}`;
+    const data = {
+      availableDates: [
+        {
+          startDate: '2021-02-01T14:11:03.780Z',
+          endDate: '2021-05-28T11:25:45.903Z',
+        },
+      ],
+      acceptAutomatically: true,
+    };
+    request(app)
+      .patch(API_HOST_UPDATE_AVAILABILITY)
+      .set('Cookie', [token])
+      .send(data)
+      .expect(200)
+      .end((error, result) => {
+        const { updatedListing, updatedHostAcceptBookings } = result.body;
+        expect(result.body).toBeDefined();
+        expect(updatedListing).toBeDefined();
+        expect(updatedListing.nModified).toBe(1);
+        expect(updatedHostAcceptBookings).toBeDefined();
+        expect(updatedHostAcceptBookings.acceptAutomatically).toBe(
+          data.acceptAutomatically,
+        );
+        done();
+      });
+  });
+
   test("test with an host user's role", done => {
     const { hostUser } = users;
     const token = `token=${createToken(hostUser._id)}`;
@@ -33,46 +64,34 @@ describe('Testing for host dashboard route', () => {
       .expect(200)
       .end((error, result) => {
         expect(result).toBeDefined();
+
         const {
-          name,
-          profile,
+          userData: { name, acceptAutomatically },
+          listing,
+          reviews,
           notifications,
-          bookings,
-          account,
-          withdrawRequests,
-          nextBookingWithDetails,
-          requestedAmount,
+          nextBooking,
+          accessibleFunds,
+          pending,
+          lastPayments,
         } = result.body;
 
         expect(name).toBe(hostUser.name);
-        expect(profile).toBeDefined();
-
+        expect(acceptAutomatically).toBe(true);
         expect(notifications).toBeDefined();
-        expect(notifications).toHaveLength(1);
         expect(notifications[0].secondParty).toBeDefined();
         expect(notifications[0].user).toBeDefined();
         expect(notifications[0].user.toString()).toBe(hostUser._id.toString());
-
-        expect(account).toBeDefined();
-        expect(account.withdrawal).toBeDefined();
-
-        expect(withdrawRequests).toBeDefined();
-        expect(withdrawRequests).toHaveLength(2);
-        expect(withdrawRequests[0].status).toBe('pending');
-
-        expect(nextBookingWithDetails).toBeDefined();
-        expect(nextBookingWithDetails.status).toBe('confirmed');
-
-        expect(requestedAmount).toBe(5000);
-
-        expect(bookings).toBeDefined();
-        expect(bookings).toHaveLength(12);
-        expect(bookings[0].status).toBeDefined();
-        expect(bookings[0].startDate).toBeDefined();
-        expect(bookings[0].endDate).toBeDefined();
-        expect(bookings[0].intern).toBeDefined();
-        expect(bookings[0].intern.name).toBeDefined();
-        expect(bookings[0].intern.profile).toBeDefined();
+        expect(listing).toBeDefined();
+        expect(listing.availableDates).toBeDefined();
+        expect(lastPayments).toBeDefined();
+        expect(lastPayments[0].status).toBeDefined();
+        expect(nextBooking).toBeDefined();
+        expect(nextBooking.status).toBe('accepted');
+        expect(pending).toBe(5000);
+        expect(accessibleFunds).toBe(44500);
+        expect(reviews).toBeDefined();
+        expect(reviews[0].rate).toBe(5);
         done();
       });
   });

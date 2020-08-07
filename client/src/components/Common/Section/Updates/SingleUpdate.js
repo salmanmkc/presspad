@@ -22,7 +22,7 @@ const Update = ({ item, userRole }) => {
       switch (type) {
         case 'stayRejected':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -37,12 +37,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'stayApproved':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -57,12 +57,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'stayCompleted':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -77,12 +77,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'completeProfileRemind':
           return (
-            <S.StyledLink to="/my-profile">
+            <S.UpdateLink to="/my-profile">
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -94,12 +94,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'getReview':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -111,12 +111,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'giveReviewReminder':
           return (
-            <S.StyledLink to={`/review-info/${booking}`}>
+            <S.UpdateLink to={`/review-info/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -128,12 +128,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'cancelledBeforePayments':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -146,12 +146,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'requestCancelAfterPayments':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -163,12 +163,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'cancelledAfterPayments':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -181,12 +181,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'paymentIsDue':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -198,12 +198,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'paymentOverDue':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -216,12 +216,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'bookingTerminated':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -233,7 +233,7 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         default:
@@ -243,7 +243,7 @@ const Update = ({ item, userRole }) => {
       switch (type) {
         case 'stayRequest':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -257,12 +257,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'stayCompleted':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -276,12 +276,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'completeProfileRemind':
           return (
-            <S.StyledLink to="/my-profile">
+            <S.UpdateLink to="/my-profile">
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -293,12 +293,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'getReview':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -310,12 +310,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'giveReviewReminder':
           return (
-            <S.StyledLink to={`/review-info/${booking}`}>
+            <S.UpdateLink to={`/review-info/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -327,12 +327,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'cancelledBeforePayments':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -345,12 +345,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'requestCancelAfterPayments':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -362,12 +362,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'cancelledAfterPayments':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -380,12 +380,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'paymentIsDue':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -398,12 +398,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'paymentOverDue':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -416,12 +416,12 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         case 'bookingTerminated':
           return (
-            <S.StyledLink to={`/booking/${booking}`}>
+            <S.UpdateLink to={`/booking/${booking}`}>
               <Row mb={3}>
                 <Col w={timeCol}>
                   <i>{timeString}</i>
@@ -433,7 +433,7 @@ const Update = ({ item, userRole }) => {
                   {loading && !seen && <LoadingBallPulseSync />}
                 </Col>
               </Row>
-            </S.StyledLink>
+            </S.UpdateLink>
           );
 
         default:
