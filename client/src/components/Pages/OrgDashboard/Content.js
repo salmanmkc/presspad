@@ -82,7 +82,7 @@ const Content = props => {
       </Row>
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
-          <Updates updates={updates} />
+          <Updates updates={updates} userRole="org" />
         </Col>
       </Row>
     </Wrapper>
