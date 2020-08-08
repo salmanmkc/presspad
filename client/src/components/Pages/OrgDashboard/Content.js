@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
+import { MyAccount, AccountDetails, Updates } from '../../Common/Section';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
@@ -13,6 +14,7 @@ const Content = props => {
   const {
     name = '',
     orgName = '',
+    updates,
     state,
     windowWidth,
     onEndChange,
@@ -35,7 +37,7 @@ const Content = props => {
     stripe,
   } = props;
 
-  console.log('props', props);
+  // console.log('props', props);
 
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
@@ -51,6 +53,36 @@ const Content = props => {
         </Col>
         <Col w={[4, 6, 5]}>
           <HeaderTitle color="pink">{orgName.toUpperCase()}</HeaderTitle>
+        </Col>
+      </Row>
+      <Row mb={bottomMargins.row[device]}>
+        <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+          <MyAccount
+            funds={4400}
+            liveCodes={3}
+            liveCodesCost={600}
+            liveBookings={1}
+            // addFunds={addFunds}
+            // addCodes={addCodes}
+          />
+        </Col>
+        <Col w={[4, 10, 5]}>
+          <AccountDetails
+            firstName="Abbie"
+            lastName="Harper"
+            email="abbie@test.com"
+            phone="078328828882"
+          />
+        </Col>
+      </Row>
+      <Row mb={bottomMargins.row[device]}>
+        <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+          CURRENT INTERN DISCOUNT CODES
+        </Col>
+      </Row>
+      <Row mb={bottomMargins.row[device]}>
+        <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
+          <Updates updates={updates} />
         </Col>
       </Row>
     </Wrapper>

@@ -19,6 +19,7 @@ const moment = extendMoment(Moment);
 
 const initState = {
   orgName: '',
+  updates: [],
   notifications: [],
   slicedNotifications: [],
   viewNotificationNum: 3,
@@ -56,7 +57,7 @@ const OrganisationDashboard = props => {
       const { account, name: orgName } = details[0];
 
       // new setState
-      setState({ orgName, account });
+      setState({ orgName, account, updates: notifications });
 
       const sortedNotification = notifications.sort((a, b) => {
         if (Moment(a.createdAt).isAfter(b.createdAt)) {
@@ -385,7 +386,7 @@ const OrganisationDashboard = props => {
     }
   };
 
-  const { orgName } = state;
+  const { orgName, updates } = state;
 
   if (isLoading) return <Spin />;
 
@@ -393,6 +394,7 @@ const OrganisationDashboard = props => {
     <Content
       orgName={orgName}
       name={name}
+      updates={updates}
       windowWidth={windowWidth}
       stripe={stripe}
       state={state}
