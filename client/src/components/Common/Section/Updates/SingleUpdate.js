@@ -461,7 +461,7 @@ const Update = ({ item, userRole }) => {
               </Col>
               <Col w={updateCol}>
                 <T.PXS>
-                  {user.name} has matched with
+                  <strong>{user.name}</strong> has matched with
                   <Link to={`/host/${secondParty._id}`}>
                     <BlueSpan> {secondParty.name}</BlueSpan>
                   </Link>
@@ -483,7 +483,9 @@ const Update = ({ item, userRole }) => {
               </Col>
 
               <Col w={updateCol}>
-                <T.PXS>{user.name} has received a new review</T.PXS>
+                <T.PXS>
+                  <strong>{user.name}</strong> has received a new review
+                </T.PXS>
                 {!seenForOrg && !loading && <Badge>new</Badge>}
                 {loading && !seenForOrg && <LoadingBallPulseSync />}
               </Col>
@@ -500,7 +502,9 @@ const Update = ({ item, userRole }) => {
               </Col>
 
               <Col w={updateCol}>
-                <T.PXS>{user.name} has completed their stay </T.PXS>
+                <T.PXS>
+                  <strong>{user.name}</strong> has completed their stay{' '}
+                </T.PXS>
                 {!seenForOrg && !loading && <Badge>new</Badge>}
                 {loading && !seenForOrg && <LoadingBallPulseSync />}
               </Col>
@@ -509,22 +513,23 @@ const Update = ({ item, userRole }) => {
 
         case 'bookingTerminated':
           return (
-            <Row mb={3}>
-              <Col w={timeCol}>
-                <T.PXS>
-                  <i>{timeString}</i>
-                </T.PXS>
-              </Col>
-
-              <Col w={updateCol}>
-                <T.PXS>
-                  Unfortunately due to lack of payment this booking has been
-                  terminated.{' '}
-                </T.PXS>
-                {!seenForOrg && !loading && <Badge>new</Badge>}
-                {loading && !seenForOrg && <LoadingBallPulseSync />}
-              </Col>
-            </Row>
+            <S.UpdateLink to={`/booking/${booking}`}>
+              <Row mb={3}>
+                <Col w={timeCol}>
+                  <T.PXS>
+                    <i>{timeString}</i>
+                  </T.PXS>
+                </Col>
+                <Col w={updateCol}>
+                  <T.PXS>
+                    Unfortunately due to lack of payment this booking has been
+                    terminated.{' '}
+                  </T.PXS>
+                  {!seenForOrg && !loading && <Badge>new</Badge>}
+                  {loading && !seenForOrg && <LoadingBallPulseSync />}
+                </Col>
+              </Row>
+            </S.UpdateLink>
           );
         default:
           return null;

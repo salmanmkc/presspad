@@ -19,7 +19,7 @@ const moment = extendMoment(Moment);
 
 const initState = {
   orgName: '',
-  updates: [],
+
   notifications: [],
   slicedNotifications: [],
   viewNotificationNum: 3,
@@ -57,26 +57,7 @@ const OrganisationDashboard = props => {
       const { account, name: orgName } = details[0];
 
       // new setState
-      setState({ orgName, account, updates: notifications });
-
-      const sortedNotification = notifications.sort((a, b) => {
-        if (Moment(a.createdAt).isAfter(b.createdAt)) {
-          return -1;
-        }
-        return 1;
-      });
-
-      // setState(({ viewNotificationNum }) => ({
-      //   details: details[0] || {},
-      //   notifications: sortedNotification,
-      //   slicedNotifications: sortedNotification.slice(
-      //     0,
-      //     viewNotificationNum + 1,
-      //   ),
-      //   account,
-      //   coupons,
-      //   loaded: true,
-      // }));
+      setState({ orgName, account, notifications });
     } catch (err) {
       setIsLoading(false);
       const error =
@@ -326,11 +307,11 @@ const OrganisationDashboard = props => {
     setState({ account, showAddFunds: false });
 
   const markAsSeen = async () => {
-    const { notifications, slicedNotifications, markAsSeen } = state;
+    const { notifications, markAsSeen } = state;
     if (!markAsSeen) {
       try {
-        const newNotifications = slicedNotifications.map(ele => ({ ...ele }));
-        const notificationsIds = slicedNotifications.reduce((acc, curr, i) => {
+        const newNotifications = notifications.map(ele => ({ ...ele }));
+        const notificationsIds = notifications.reduce((acc, curr, i) => {
           if (!curr.seenForOrg) {
             acc.push(curr._id);
             newNotifications[i].loading = true;
@@ -364,7 +345,7 @@ const OrganisationDashboard = props => {
           }));
         }
       } catch (error) {
-        setState({ markAsSeen: false, slicedNotifications });
+        setState({ markAsSeen: false, notifications });
         message.error('Something went wrong');
       }
     }
@@ -386,7 +367,7 @@ const OrganisationDashboard = props => {
     }
   };
 
-  const { orgName, updates } = state;
+  const { orgName, notifications } = state;
 
   if (isLoading) return <Spin />;
 
@@ -394,7 +375,7 @@ const OrganisationDashboard = props => {
     <Content
       orgName={orgName}
       name={name}
-      updates={updates}
+      notifications={notifications}
       windowWidth={windowWidth}
       stripe={stripe}
       state={state}

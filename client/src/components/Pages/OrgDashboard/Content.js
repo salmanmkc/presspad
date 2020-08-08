@@ -14,7 +14,7 @@ const Content = props => {
   const {
     name = '',
     orgName = '',
-    updates,
+    notifications,
     state,
     windowWidth,
     onEndChange,
@@ -82,7 +82,11 @@ const Content = props => {
       </Row>
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
-          <Updates updates={updates} userRole="org" />
+          <Updates
+            markAsSeen={markAsSeen}
+            updates={notifications}
+            userRole="org"
+          />
         </Col>
       </Row>
     </Wrapper>
