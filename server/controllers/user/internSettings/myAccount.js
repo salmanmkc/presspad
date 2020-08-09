@@ -20,6 +20,8 @@ module.exports = async (req, res, next) => {
       if (matched) {
         const hashedPassword = await hash(newPassword, 8);
         data.password = hashedPassword;
+      } else {
+        return next(boom.badData("Password doesn't match"));
       }
     }
     await updateUserById(_id, data);

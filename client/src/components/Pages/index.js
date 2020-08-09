@@ -28,6 +28,8 @@ import CancellationConfirm from './CancellationConfirm';
 import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
+import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
+import UnderReview from './Settings/UnderReview';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -59,8 +61,6 @@ import {
   SET_PASSWORD,
   SETTINGS,
 } from '../../constants/navRoutes';
-
-import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 
 function Pages(props) {
   const {
@@ -95,6 +95,15 @@ function Pages(props) {
           mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
         />
+
+        <Route
+          exact
+          path={SETTINGS.UNDER_REVIEW}
+          Component={UnderReview}
+          layout="illustrations"
+          {...props}
+        />
+
         <Route
           isPrivate
           path={SETTINGS_URL}

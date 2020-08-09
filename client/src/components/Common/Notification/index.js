@@ -6,7 +6,9 @@ import './style.css';
 const Notifiaction = ({ setOpen, open, content, cb }) => {
   const handleClose = () => {
     setOpen(false);
-    cb();
+    if (cb && typeof cb === 'function') {
+      cb();
+    }
   };
   if (open) {
     return (

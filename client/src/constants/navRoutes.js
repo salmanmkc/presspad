@@ -27,6 +27,7 @@ export const SETTINGS = {
   VERIFY: `${SETTINGS_URL}/verify`,
   DELETE_ACCOUNT: `${SETTINGS_URL}/delete-account`,
   DELETE_ACCOUNT_SUCCESS: `/delete-account-success`,
+  UNDER_REVIEW: `/under-review`,
 };
 
 // admin routes

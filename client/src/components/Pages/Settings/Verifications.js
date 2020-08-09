@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Input, UploadFile, DatePicker } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
@@ -9,7 +10,11 @@ import {
   API_INTERN_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
+import { SETTINGS } from '../../../constants/navRoutes';
+
 import Notification from '../../Common/Notification';
+
+const { validate, internSettings } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
   organisation: d.organisation || '',
@@ -84,7 +89,7 @@ const Verifications = props => {
   const [prevData, setPrevData] = useState({});
   const [fetchData, setFetchData] = useState(0);
 
-  // for images
+  const history = useHistory();
 
   const uploadPhotoID = async () => {
     try {
@@ -137,22 +142,22 @@ const Verifications = props => {
   };
 
   const _validate = async () => {
-    // const { errors: _errors } = await validate({
-    //   schema: internSettings.verifications(prevData),
-    //   data: { ...state },
-    // });
-    // let e = _errors;
-    // if (prevData.photoID && state.photoID.deleted) {
-    //   e = e
-    //     ? { ...e, photoID: 'identity proof is required' }
-    //     : { photoID: 'identity proof is required' };
-    // }
-    // if (prevData.DBSCheck && state.DBSCheck.deleted) {
-    //   e = e
-    //     ? { ...e, DBSCheck: 'DBS file is required' }
-    //     : { DBSCheck: 'DBS file is required' };
-    // }
-    // return e;
+    const { errors: _errors } = await validate({
+      schema: internSettings.verifications(prevData),
+      data: { ...state },
+    });
+    let e = _errors;
+    if (prevData.photoID && state.photoID.deleted) {
+      e = e
+        ? { ...e, photoID: 'identity proof is required' }
+        : { photoID: 'identity proof is required' };
+    }
+    if (prevData.DBSCheck && state.DBSCheck.deleted) {
+      e = e
+        ? { ...e, DBSCheck: 'DBS file is required' }
+        : { DBSCheck: 'DBS file is required' };
+    }
+    return e;
   };
 
   const onInputChange = e => {
@@ -243,6 +248,22 @@ const Verifications = props => {
     getData();
   }, [fetchData]);
 
+  const done = () => {
+    if (
+      (prevData.DBSCheck &&
+        state.refNum &&
+        prevData.DBSCheck.refNum !== state.refNum) ||
+      (prevData.DBSCheck &&
+        prevData.DBSCheck.fileName &&
+        state.DBSCheck &&
+        state.DBSCheck.fileName &&
+        prevData.DBSCheck.fileName !== state.DBSCheck.fileName)
+    ) {
+      history.push(SETTINGS.UNDER_REVIEW);
+    } else {
+      setFetchData(e => e + 1);
+    }
+  };
   return (
     <div style={{ marginTop: '4rem' }}>
       <Row>
@@ -635,7 +656,7 @@ const Verifications = props => {
         open={notificationOpen}
         setOpen={setNotificationOpen}
         content="Changes saved"
-        cb={() => setFetchData(e => e + 1)}
+        cb={done}
       />
     </div>
   );
