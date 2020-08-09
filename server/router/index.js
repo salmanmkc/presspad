@@ -67,6 +67,7 @@ const updateBankDetails = require('../controllers/withdrawRequests/updateBankDet
 
 const {
   getBursaryWindows,
+  getBursaryApplications,
   upsertBursaryWindows,
 } = require('../controllers/bursary');
 
@@ -360,5 +361,19 @@ router.put(
   authorization(['admin']),
   upsertBursaryWindows,
 );
+
+router.get(
+  BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  getBursaryApplications,
+);
+
+// router.put(
+//   BURSARY_APPLICATIONS,
+//   authentication,
+//   authorization(['admin']),
+//   upsertBursaryBURSARY_APPLICATIONS,
+// );
 
 module.exports = router;
