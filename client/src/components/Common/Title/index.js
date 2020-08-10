@@ -36,7 +36,7 @@ const AlternateTitle = styled.div`
     padding-bottom: 20px;
   }
   & h3 {
-    min-width: 300px;
+    min-width: 330px;
   }
 `;
 
@@ -57,6 +57,8 @@ const Section = styled(T.H4C)`
 
 const Title = withTheme(
   ({
+    topTitle,
+    bottomTitle,
     children,
     withBg,
     bgColor,
@@ -69,15 +71,16 @@ const Title = withTheme(
     caps = false,
     ...rest
   }) => {
-    let topText;
-    let bottomText;
+    let _topText;
+    let _bottomText;
     if (typeof children === 'string') {
       const splittedText = children.split(' ');
       const limit = splittedText.length;
-      topText = splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
-      bottomText = splittedText
-        .slice(Math.ceil(limit / 2), limit + 1)
-        .join(' ');
+      _topText =
+        topTitle || splittedText.slice(0, Math.ceil(limit / 2)).join(' ');
+      _bottomText =
+        bottomTitle ||
+        splittedText.slice(Math.ceil(limit / 2), limit + 1).join(' ');
     }
     if (withBg)
       return (
@@ -115,16 +118,16 @@ const Title = withTheme(
       <AlternateTitle mt={mt} mb={mb} ml={ml} mr={mr} {...rest}>
         <div className="top">
           {caps ? (
-            <T.H3C color="white">{topText}</T.H3C>
+            <T.H3C color="blue">{_topText}</T.H3C>
           ) : (
-            <T.H3 color="blue">{topText}</T.H3>
+            <T.H3 color="blue">{_topText}</T.H3>
           )}
         </div>
         <div className="bottom">
           {caps ? (
-            <T.H3C color="white">{bottomText}</T.H3C>
+            <T.H3C color="white">{_bottomText}</T.H3C>
           ) : (
-            <T.H3 color="blue">{bottomText}</T.H3>
+            <T.H3 color="white">{_bottomText}</T.H3>
           )}
         </div>
       </AlternateTitle>
