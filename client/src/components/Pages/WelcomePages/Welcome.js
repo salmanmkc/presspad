@@ -16,14 +16,7 @@ const Welcome = ({
   current,
   handleClick,
 }) => (
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      height: '100vh',
-    }}
-  >
+  <S.PageWrapper>
     <div>
       <S.TitleWrapper>
         <S.TitleContainer>
@@ -44,15 +37,13 @@ const Welcome = ({
       </Row>
     </div>
 
-    <div style={{ marginBottom: 50 }}>
-      <ProgressBar
-        number={number}
-        current={current}
-        color="pink"
-        handleClick={handleClick}
-      />
-    </div>
-  </div>
+    <ProgressBar
+      number={number}
+      current={current}
+      color="pink"
+      handleClick={handleClick}
+    />
+  </S.PageWrapper>
 );
 
 export default withTheme(Welcome);
