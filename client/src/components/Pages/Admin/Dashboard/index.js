@@ -102,6 +102,7 @@ export default class AdminDashboard extends Component {
 
   selectSection = section => {
     const { axiosSource } = this.state;
+    console.log('ax', axiosSource);
 
     if (axiosSource) axiosSource.cancel('Cancel axios request');
 
