@@ -23,6 +23,7 @@ const Coupons = ({ coupons }) => {
     <Table
       columns={columns}
       data={coupons}
+      previewLink="/previewLinkGoesHere"
       previewLinkText="View all previous discount codes"
       previewAlign="right"
       tableHeader="Current Intern Discount Codes"
