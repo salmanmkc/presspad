@@ -4,9 +4,9 @@ import * as T from '../../Typography';
 import FileDownload from '../../Files/FileDownload';
 
 const DBSCol = (colTitle, updateDBS) => ({
-  title: 'DBS Details',
-  dataIndex: 'dbsCheck',
-  key: 'dbsCheck',
+  title: 'DBS',
+  dataIndex: colTitle,
+  key: colTitle,
   className: 'dbsCol',
   render: (dbs, record) => (
     <>

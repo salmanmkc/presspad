@@ -100,6 +100,7 @@ module.exports.getAllInternStats = () =>
         _id: {
           _id: '$_id',
           name: '$name',
+          email: '$email',
           totalPayments: { $arrayElemAt: ['$account.income', 0] },
           // org name from org collection
           organisationName: { $arrayElemAt: ['$organisation.name', 0] },
@@ -108,6 +109,19 @@ module.exports.getAllInternStats = () =>
           DBSCheck: { $arrayElemAt: ['$profile.DBSCheck', 0] },
           internshipStart: {
             $arrayElemAt: ['$profile.internshipStartDate', 0],
+          },
+          verified: {
+            $arrayElemAt: ['$profile.verified', 0],
+          },
+          firstVerified: { $arrayElemAt: ['$profile.firstVerified', 0] },
+          awaitingReview: {
+            $arrayElemAt: ['$profile.awaitingReview', 0],
+          },
+          awaitingReviewDate: {
+            $arrayElemAt: ['$profile.awaitingReviewDate', 0],
+          },
+          contactNumber: {
+            $arrayElemAt: ['$profile.phoneNumber', 0],
           },
         },
         account: { $push: '$account' },
@@ -125,7 +139,19 @@ module.exports.getAllInternStats = () =>
         totalPayments: '$_id.totalPayments',
         orgName: '$_id.orgName',
         DBSCheck: '$_id.DBSCheck',
+        verified: '$_id.verified',
+        awaitingReview: '$_id.awaitingReview',
+        awaitingReviewDate: '$_id.awaitingReviewDate',
+        firstVerified: '$_id.firstVerified',
         internshipStart: '$_id.internshipStart',
+        contactNumber: '$_id.contactNumber',
+        email: '$_id.email',
+      },
+    },
+    // only get interns that are approved or requesting approval
+    {
+      $match: {
+        $or: [{ verified: true }, { awaitingReview: true }],
       },
     },
     {
@@ -135,6 +161,12 @@ module.exports.getAllInternStats = () =>
         organisation: 1,
         orgName: 1,
         DBSCheck: 1,
+        contactNumber: 1,
+        email: 1,
+        verified: 1,
+        awaitingReview: 1,
+        awaitingReviewDate: 1,
+        firstVerified: 1,
         internshipStart: 1,
         nextPaymentDueDate: '$nextInstallment.dueDate',
         nextPaymentPaid: {

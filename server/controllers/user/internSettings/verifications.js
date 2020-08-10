@@ -60,7 +60,7 @@ module.exports = async (req, res, next) => {
           await internSettings.verificationsAllRequired.validate(profileData);
           fullData = true;
         } catch (error) {
-          console.log('REF', error);
+          console.log('error', error);
           fullData = false;
         }
       }

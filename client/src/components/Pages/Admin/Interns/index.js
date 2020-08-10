@@ -3,21 +3,41 @@ import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
 import Table from '../../../Common/Table';
-import { LinkCol, StandardCol, TagCol } from '../../../Common/Table/Common';
+import {
+  LinkCol,
+  StandardCol,
+  TagCol,
+  DBSCol,
+  DropdownCol,
+} from '../../../Common/Table/Common';
 import * as T from '../../../Common/Typography';
 import Tabs from '../../../Common/Tabs';
 
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
+import renderExpandedSection from './renderExpandedSection';
+
 const tabs = ['approved', 'approval requests'];
 
 const AdminInterns = () => {
-  console.log('hey');
-  const [interns, setInterns] = useState([]);
+  const [internRequests, setInternRequests] = useState([]);
+  const [approvedInterns, setApprovedInterns] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [selected, setSelected] = useState(0);
+
+  const handleTab = e => {
+    setSelected(e);
+  };
+
+  const updateDBS = rowData => {
+    console.log('function to update DBS', rowData);
+  };
+
+  const approveProfile = rowData => {
+    console.log('action to approve the profile');
+  };
 
   const approvedCols = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
@@ -27,9 +47,15 @@ const AdminInterns = () => {
     TagCol('bookingStatus', 'booking'),
   ];
 
-  const handleTab = e => {
-    setSelected(e);
-  };
+  const requestCols = [
+    LinkCol('name', ADMIN_USER_DETAILS, 'id'),
+    StandardCol('requestDate', 'date'),
+    DBSCol('dbsCheck', updateDBS),
+    StandardCol('status'),
+    DropdownCol('actions', approveProfile, [
+      { label: 'Approve', value: 'approve' },
+    ]),
+  ];
 
   useEffect(() => {
     setLoading(true);
@@ -38,8 +64,20 @@ const AdminInterns = () => {
         const data = await axios.post(API_ADMIN_STATS_URL, {
           userType: 'interns',
         });
-        console.log('da', data.data);
-        setInterns(data.data);
+        const totalInterns = data.data;
+        const requests = [];
+        const approved = [];
+        if (totalInterns && totalInterns.length > 0) {
+          totalInterns.forEach(intern => {
+            if (intern.verified) {
+              approved.push(intern);
+            } else if (intern.awaitingReview) {
+              requests.push(intern);
+            }
+          });
+        }
+        setInternRequests(requests);
+        setApprovedInterns(approved);
       } catch (err) {
         let errorMsg = 'Something went wrong';
         if (err.response && err.response.status !== 500) {
@@ -55,9 +93,25 @@ const AdminInterns = () => {
   const renderTable = () => {
     switch (selected) {
       case 0:
-        return <Table data={interns} columns={approvedCols} showSearch />;
-      //   case 1:
-      //     return <Requests data={interns} />;
+        return (
+          <Table
+            data={approvedInterns}
+            columns={approvedCols}
+            showSearch
+            loading={loading}
+            expandedSection={renderExpandedSection}
+          />
+        );
+      case 1:
+        return (
+          <Table
+            data={internRequests}
+            columns={requestCols}
+            showSearch
+            loading={loading}
+            expandedSection={renderExpandedSection}
+          />
+        );
       default:
         return null;
     }

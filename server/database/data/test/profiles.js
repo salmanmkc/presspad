@@ -49,6 +49,7 @@ const hostProfileData = {
   caringResponsibilities: 'no caring responsibilities',
   consentedOnPressPadTerms: true,
   verified: true,
+  firstVerified: Date.now(),
 };
 
 const internProfileData = {
@@ -120,6 +121,7 @@ const internProfileData = {
     phoneNumber: '004400011001100',
   },
   verified: true,
+  firstVerified: Date.now(),
 };
 
 const reset = () => Profile.deleteMany();

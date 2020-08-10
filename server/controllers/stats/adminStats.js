@@ -69,6 +69,16 @@ module.exports = async (req, res, next) => {
                 nextPayment: intern.nextPayment,
                 dbsCheck: intern.DBSCheck,
                 internshipStart: intern.internshipStart,
+                verified: intern.verified,
+                awaitingReview: intern.awaitingReview,
+                requestDate: intern.awaitingReviewDate,
+                firstVerified: intern.firstVerified,
+                email: intern.email,
+                contactNumber: intern.contactNumber,
+                status:
+                  intern.firstVerified && intern.awaitingReview
+                    ? 'Updated DBS'
+                    : 'Signed up',
               };
 
               const { dbsCheck } = internObj;
