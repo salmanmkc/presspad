@@ -76,10 +76,26 @@ const getHostPaymentsInfo = id =>
               let: { bookingId: '$_id' },
               pipeline: [
                 { $match: { $expr: { $eq: ['$$bookingId', '$booking'] } } },
+                // look up transaction date for installment
+                {
+                  $lookup: {
+                    from: 'internaltransactions',
+                    localField: 'transaction',
+                    foreignField: '_id',
+                    as: 'transactionDate',
+                  },
+                },
+                {
+                  $unwind: {
+                    path: '$transactionDate',
+                    preserveNullAndEmptyArrays: true,
+                  },
+                },
                 {
                   $project: {
                     dueDate: 1,
                     transaction: 1,
+                    transactionDate: '$transactionDate.createdAt',
                     hostRatioAmount: { $multiply: ['$amount', 0.45] },
                   },
                 },
@@ -137,6 +153,7 @@ const getHostPaymentsInfo = id =>
               hostInstallmentsRatioAmount: {
                 $sum: '$installments.hostRatioAmount',
               },
+              transactionDates: '$installments.transactionDate',
               // couponTransactions: '$couponTransactions.transactions',
               hostcouponTransactionsRatioAmount: {
                 $multiply: [
@@ -224,4 +241,7 @@ const getHostPaymentsInfo = id =>
     },
   ]);
 
-module.exports = { getHostPaymentsInfo, getHostPendingPayments };
+module.exports = {
+  getHostPaymentsInfo,
+  getHostPendingPayments,
+};

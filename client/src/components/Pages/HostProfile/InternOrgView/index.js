@@ -90,6 +90,7 @@ export default class InternView extends Component {
 
   render() {
     if (this.state.isLoading) return <Spin tip="Loading Profile" />;
+
     const {
       profileData: {
         _id: userId,
@@ -108,7 +109,7 @@ export default class InternView extends Component {
           accommodationChecklist,
           neighbourhoodDescription,
         },
-        listingActiveBookings,
+        listingConfirmedBookings: listingActiveBookings = [],
         profile: {
           bio,
           jobTitle,
@@ -185,7 +186,7 @@ export default class InternView extends Component {
       'University / School': school && school,
       Hometown: hometown && hometown,
       'Media I work in': workingArea && workingArea,
-      'Areas of Interest': interests && interests,
+      'Areas of Interest': interests,
     };
     const keyDetailsArr = Object.entries(keyInfoTable);
 

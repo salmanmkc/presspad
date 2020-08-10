@@ -113,9 +113,7 @@ const Bookings = props => {
               bookingID={upcomingBooking[0]._id}
               withUserType={upcomingBooking[0].withUserRole}
               bio={upcomingBooking[0].withUserBio}
-              interests={
-                upcomingBooking[0] && upcomingBooking[0].withUserInterests
-              }
+              interests={upcomingBooking[0].interests}
               status={upcomingBooking[0].status}
             />
           ) : (

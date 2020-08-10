@@ -32,6 +32,8 @@ export const Col = styled.div`
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
+  margin-top: ${({ theme, mt }) => theme.spacings[mt] || 0};
+  margin-bottom: ${({ theme, mb }) => theme.spacings[mb] || 0};
   flex-shrink: 0;
   position: relative;
   width: 100%;

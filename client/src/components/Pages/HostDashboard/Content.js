@@ -1,469 +1,191 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+
+import { Row, Col } from '../../Common/Grid';
+import * as T from '../../Common/Typography';
+import { BookingCards } from '../../Common/Cards';
+
+import Icon from '../../Common/Icon';
+import BookingDates from '../../Common/DashboardBookingDates';
+import {
+  Wallet,
+  Updates,
+  Reviews,
+  Community,
+  Payments,
+} from '../../Common/Section';
 
 import {
-  Col,
-  Row,
-  Avatar,
-  Empty,
-  Table,
-  Modal,
-  InputNumber,
-  Input,
-} from 'antd';
-import { getStringTime, formatPrice } from '../../../helpers';
-
-import Updates from '../../Common/Section/Updates';
-
-import Button from '../../Common/Button';
-import randomProfile from '../../../assets/random-profile.jpg';
-
-import {
-  PageWrapper,
-  ContentWrapper,
-  SectionWrapperContent,
-  SectionTitle,
-  BookingsTableWrapper,
-  BlueLink,
-  ListItem,
-  Number,
-  ButtonsWrapper,
-  ModalTitle,
-  ModalContentWrapper,
-  ModalDescription,
-  Label,
-  BoldTitle,
-  Error,
-  ErrorWrapper,
+  Wrapper,
+  Container,
+  CompleteProfileWrapper,
 } from './HostDashboard.style';
+import { bottomMargins, typographies } from './styleProperties';
 
-import {
-  HiText,
-  HeaderWrapper,
-  AvatarWrapper,
-} from '../../Common/general/index';
+import { formatPrice } from '../../../helpers';
 
-import BookingSection from '../../Common/BookingSection';
-import { bookingsColumns, withdrawRequestsColumns } from './TablesColumns';
+import { TABLET_WIDTH } from '../../../constants/screenWidths';
+import { HOST_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
+import { colors } from '../../../theme';
 
 const Content = ({
-  // props and state
-  windowWidth,
   name,
-  role,
-  viewNumber,
-  bankName,
-  bankSortCode,
-  accountNumber,
-  bookings,
-  updates,
-  withdrawModalOpen,
-  donateModalOpen,
-  nextGuest,
-  nextGuestProfile,
+  acceptAutomatically,
+  windowWidth,
   nextBooking,
-  account = {},
-  profile,
-  apiLoading,
-  withdrawRequests,
-  errors,
-  history,
-  requestedAmount,
-
-  // functions
-  handleViewMoreToggle,
-  handleBlurNumberInput,
-  handleFocusNumberInput,
-  handleNumberChange,
-  handleInpuChange,
-  handleOpenModal,
-  handleCloseModals,
-  handleSubmitDonate,
-  handleSubmitWithdrawRequest,
+  role,
+  accessibleFunds,
+  pending,
+  updates,
+  reviews,
+  lastPayments,
+  listingAvailableDates,
+  profileCompleted,
 }) => {
-  const {
-    income = 0,
-    donation = 0,
-    withdrawal = 0,
-    currentBalance = 0,
-  } = account;
+  const firstName = name.split(' ')[0];
+  const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
 
-  const canBeWithdraw = window
-    .Number(
-      currentBalance - requestedAmount >= 0
-        ? currentBalance - requestedAmount
-        : 0,
-    )
-    .toFixed(2);
+  const HeaderTitle = typographies.headerTitle[device];
+  const SectionTitle = typographies.sectionTitle[device];
+  const CompleteProfileText = typographies.completeProfile[device];
+
+  const createReadableDates = () =>
+    listingAvailableDates.map(el => ({
+      startDate: moment(el.startDate),
+      endDate: moment(el.endDate),
+    }));
+
+  const updatedPayments = () =>
+    lastPayments.map(el => {
+      const {
+        transactionDates,
+        intern,
+        hostInstallmentsRatioAmount,
+        hostcouponTransactionsRatioAmount,
+      } = el;
+      return {
+        date: transactionDates[transactionDates.length - 1],
+        intern,
+        earnings: formatPrice(
+          hostcouponTransactionsRatioAmount + hostInstallmentsRatioAmount,
+          2,
+        ),
+      };
+    });
 
   return (
-    <PageWrapper className="wrapper">
-      <ContentWrapper className="child">
-        <HeaderWrapper>
-          <Row gutter={20} type="flex" justify="start">
-            <Col xs={24} sm={4} lg={3}>
-              <AvatarWrapper>
-                <Avatar
-                  size="large"
-                  icon="user"
-                  src={(profile.profileImage && profile.profileImage.url) || ''}
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    margin: '0 auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '42px',
-                    border: '1px solid rgba(0, 0, 0, 0.15)',
-                  }}
-                />
-              </AvatarWrapper>
-            </Col>
-            <Col flex xs={24} sm={20}>
-              <HiText>
-                Hi {name.split(' ')[0]}
-                {Object.keys(nextBooking).length > 0 && (
-                  <>
-                    , your next guest is arriving
-                    <BoldTitle>
-                      {' '}
-                      {getStringTime(nextBooking.startDate)}
-                    </BoldTitle>
-                    .
-                  </>
-                )}
-              </HiText>
-            </Col>
-          </Row>
-        </HeaderWrapper>
-        {Object.keys(nextBooking).length > 0 ? (
-          <BookingSection
-            jobTitle={nextGuestProfile.jobTitle}
-            bio={nextGuestProfile.bio}
-            name={nextGuest.name}
-            userId={nextGuest._id}
-            organisationName={nextGuestProfile.organisation || 'N/A'}
-            bookingId={nextBooking._id}
-            startDate={nextBooking.startDate}
-            endDate={nextBooking.endDate}
-            profileImage={
-              (nextGuestProfile.profileImage &&
-                nextGuestProfile.profileImage.url) ||
-              randomProfile
-            }
-            title="Your next guest"
-            userRole="intern"
-            role={role}
-          />
-        ) : (
-          <SectionWrapperContent style={{ minHeight: 200 }}>
-            <SectionTitle>Your next guest</SectionTitle>
-            <Empty description="No upcoming guests" />
-          </SectionWrapperContent>
-        )}
-
-        <Updates updates={updates} userRole="host" />
-
-        <Row gutter={20} style={{ width: '100%' }} type="flex" justify="start">
-          <Col lg={24} xl={16} xs={24} sm={24}>
-            <SectionWrapperContent
-              style={{ minHeight: 357, height: 'calc(100% - 20px)' }}
-            >
-              <SectionTitle>Your bookings</SectionTitle>
-              {bookings.length > 0 ? (
-                <BookingsTableWrapper>
-                  <Table
-                    columns={bookingsColumns(windowWidth)}
-                    dataSource={bookings.slice(0, viewNumber)}
-                    rowKey="_id"
-                    pagination={false}
-                    onRow={record => ({
-                      onClick: () => history.push(`booking/${record._id}`),
-                      style: { cursor: 'pointer' },
-                    })}
-                  />
-                  {bookings.length > 3 && (
-                    <BlueLink
-                      onClick={handleViewMoreToggle}
-                      style={{ marginTop: '2rem', textAlign: 'center' }}
-                    >
-                      {viewNumber ? 'View more' : 'View less'}
-                    </BlueLink>
-                  )}
-                </BookingsTableWrapper>
-              ) : (
-                <Empty description="You have no bookings yet" />
-              )}
-            </SectionWrapperContent>
+    <>
+      <Wrapper mobile={device === 'mobile'}>
+        {/* HEADER */}
+        <Row mb={5}>
+          <Col w={[4, 12, 12]}>
+            <HeaderTitle color="blue">
+              Welcome{device !== 'mobile' && ' back'}, {firstName}!
+            </HeaderTitle>
           </Col>
-          <Col xl={8} lg={24} md={24} xs={24}>
-            <SectionWrapperContent style={{ minHeight: 357 }}>
-              <ListItem>How much you’ve earned so far</ListItem>
-              <Number blue>£{formatPrice(income)}</Number>
-              <ListItem>How much you’ve donated</ListItem>
-              <Number>£{formatPrice(donation)}</Number>
-              <ListItem>How much you’ve withdrew</ListItem>
-              <Number>£{formatPrice(withdrawal)}</Number>
-              <ListItem>In process withdraw requests</ListItem>
-              <Number>£{formatPrice(requestedAmount)}</Number>
-              <ListItem>How much you can withdraw</ListItem>
-              <Number>£{formatPrice(canBeWithdraw) || 0}</Number>
-              <ButtonsWrapper>
-                <Button
-                  label="Withdraw funds"
-                  type="secondary"
-                  style={{ width: '145px' }}
-                  onClick={handleOpenModal}
-                  name="withdrawModalOpen"
-                  disabled={!canBeWithdraw || canBeWithdraw < 100}
+          {!profileCompleted && (
+            <Col w={[4, 12, 12]}>
+              <CompleteProfileWrapper>
+                <Icon icon="reviewExplanationMark" width="35px" height="35px" />
+                <CompleteProfileText
+                  style={{ marginLeft: '0.8rem' }}
+                  color="darkerGray"
+                >
+                  Your profile is not complete. <br />
+                  <Link
+                    style={{
+                      textDecoration: 'underline',
+                      textUnderlinePosition: 'under',
+                    }}
+                    to={HOST_COMPLETE_PROFILE_URL}
+                  >
+                    Finish signing up here
+                  </Link>
+                  &nbsp;to start using PressPad
+                </CompleteProfileText>
+              </CompleteProfileWrapper>
+            </Col>
+          )}
+        </Row>
+        {/* NEXT BOOKING / WALLET */}
+        <Row mb={bottomMargins.row[device]}>
+          <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+            <SectionTitle
+              style={{ marginBottom: bottomMargins.sectionTitle[device] }}
+            >
+              Upcoming Booking
+            </SectionTitle>
+
+            {nextBooking ? (
+              <BookingCards
+                width="100%"
+                role={role}
+                windowWidth={windowWidth}
+                type="big"
+                startDate={nextBooking.startDate}
+                endDate={nextBooking.endDate}
+                price={nextBooking.price}
+                withUser={nextBooking.withUser}
+                bookingID={nextBooking._id}
+                withUserType={nextBooking.withUserRole}
+                bio={nextBooking.withUserBio}
+                interests={nextBooking.interests}
+                status={nextBooking.status}
+              />
+            ) : (
+              <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
+            )}
+          </Col>
+          <Col w={[4, 10, 4]}>
+            <Container>
+              {accessibleFunds && pending && (
+                <Wallet
+                  balance={accessibleFunds / 100}
+                  pending={formatPrice(pending)}
                 />
-                <Button
-                  label="Donate funds"
-                  type="secondary"
-                  style={{ width: '135px' }}
-                  onClick={handleOpenModal}
-                  name="donateModalOpen"
-                  disabled={!canBeWithdraw || canBeWithdraw < 100}
-                />
-              </ButtonsWrapper>
-            </SectionWrapperContent>
+              )}
+            </Container>
           </Col>
         </Row>
-        <Col sm={24} xs={24}>
-          <SectionWrapperContent
-            style={{ minHeight: 357, height: 'calc(100% - 20px)' }}
-          >
-            <SectionTitle>Your Withdraw Requests</SectionTitle>
-            {withdrawRequests.length > 0 ? (
-              <BookingsTableWrapper>
-                <Table
-                  columns={withdrawRequestsColumns(windowWidth)}
-                  dataSource={withdrawRequests.slice(0, viewNumber)}
-                  rowKey="_id"
-                  pagination={false}
-                />
-                {bookings.length > 3 && (
-                  <BlueLink
-                    onClick={handleViewMoreToggle}
-                    style={{ marginTop: '2rem', textAlign: 'center' }}
-                  >
-                    {viewNumber ? 'View more' : 'View less'}
-                  </BlueLink>
-                )}
-              </BookingsTableWrapper>
-            ) : (
-              <Empty description="You didn't make any withdraw request" />
-            )}
-          </SectionWrapperContent>
-        </Col>
-      </ContentWrapper>
-      <div>
-        <Modal
-          footer={false}
-          visible={donateModalOpen}
-          onCancel={handleCloseModals}
-        >
-          <ModalContentWrapper>
-            <ModalTitle>Donate funds</ModalTitle>
-            <ModalDescription>
-              How much would you like to donate to the PressPad fund?
-            </ModalDescription>
-            <div>
-              <ModalDescription bold>Funds available: </ModalDescription>
-              <ModalDescription bold>
-                £{formatPrice(canBeWithdraw)}
-              </ModalDescription>
-            </div>
-            <ErrorWrapper>
-              <InputNumber
-                onBlur={handleBlurNumberInput}
-                onFocus={handleFocusNumberInput}
-                defaultValue={formatPrice(canBeWithdraw) || 0}
-                max={formatPrice(canBeWithdraw) || 0}
-                min={0}
-                size="large"
-                style={{
-                  width: '140px',
-                  border: errors.donateValue
-                    ? '1px solid red'
-                    : '1px solid #d9d9d9',
-                }}
-                formatter={value =>
-                  `£ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                }
-                parser={value => value.replace(/£\s?|(,*)/g, '')}
-                onChange={value => handleNumberChange('donateValue', value)}
-              />
-              <Error>{errors.donateValue}</Error>
-            </ErrorWrapper>
-            <Button
-              label="Donate funds"
-              type="secondary"
-              style={{ width: '135px' }}
-              onClick={handleSubmitDonate}
-              loading={apiLoading}
+        {/* BOOKING DATES / UPDATES */}
+        <Row mb={bottomMargins.row[device]}>
+          <Col w={[4, 10, 8]} mb={bottomMargins.col[device]}>
+            <BookingDates
+              currentDates={createReadableDates()}
+              autoAccept={acceptAutomatically}
             />
-            <Button
-              label="Cancel"
-              type="cancel"
-              nobgc
-              style={{ width: '135px' }}
-              onClick={handleCloseModals}
+          </Col>
+          <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
+            <Updates updates={updates} userRole="host" />
+          </Col>
+        </Row>
+        {/* REVIEWS / PAYMENTS / SOCIAL */}
+        <Row mb={bottomMargins.row[device]}>
+          {device !== 'mobile' && (
+            <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+              <Reviews reviews={reviews} />
+            </Col>
+          )}
+          <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+            <Payments
+              type="recent"
+              payments={lastPayments && updatedPayments(lastPayments)}
             />
-          </ModalContentWrapper>
-        </Modal>
-      </div>
-      <Modal
-        visible={withdrawModalOpen}
-        footer={false}
-        onCancel={handleCloseModals}
-      >
-        <ModalContentWrapper>
-          <ModalTitle>Withdraw funds</ModalTitle>
-          <ModalDescription>
-            Please input your bank details and the amount you’d like to withdraw{' '}
-          </ModalDescription>
-          <div>
-            <ModalDescription bold>Funds available: </ModalDescription>
-            <ModalDescription bold>
-              £{formatPrice(canBeWithdraw)}
-            </ModalDescription>
-          </div>
 
-          <Row
-            gutter={8}
-            type="flex"
-            justify="center"
-            align="middle"
-            style={{
-              width: '100%',
-              marginBottom: errors.bankName ? '20px' : 0,
-            }}
-          >
-            <Col span={10}>
-              <Label>Bank name</Label>
+            <Container>
+              <Community />
+            </Container>
+          </Col>
+          {device === 'mobile' && (
+            <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
+              <Reviews reviews={reviews} />
             </Col>
-            <Col span={12}>
-              <ErrorWrapper error={errors.bankName}>
-                <Input
-                  size="large"
-                  name="bankName"
-                  value={bankName}
-                  onChange={handleInpuChange}
-                />
-                <Error>{errors.bankName}</Error>
-              </ErrorWrapper>
-            </Col>
-          </Row>
-          <Row
-            gutter={8}
-            type="flex"
-            justify="center"
-            align="middle"
-            style={{
-              width: '100%',
-              marginBottom: errors.bankSortCode ? '20px' : 0,
-            }}
-          >
-            <Col span={10}>
-              <Label>Account sort code</Label>
-            </Col>
-            <Col span={12}>
-              <ErrorWrapper error={errors.bankSortCode}>
-                <Input
-                  size="large"
-                  name="bankSortCode"
-                  value={bankSortCode}
-                  onChange={handleInpuChange}
-                />
-                <Error>{errors.bankSortCode}</Error>
-              </ErrorWrapper>
-            </Col>
-          </Row>
-          <Row
-            gutter={8}
-            type="flex"
-            justify="center"
-            align="middle"
-            style={{
-              width: '100%',
-              marginBottom: errors.accountNumber ? '20px' : 0,
-            }}
-          >
-            <Col span={10}>
-              <Label>Account number</Label>
-            </Col>
-            <Col span={12}>
-              <ErrorWrapper error={errors.accountNumber}>
-                <Input
-                  size="large"
-                  name="accountNumber"
-                  value={accountNumber}
-                  onChange={handleInpuChange}
-                />
-                <Error>{errors.accountNumber}</Error>
-              </ErrorWrapper>
-            </Col>
-          </Row>
-
-          <Row
-            gutter={8}
-            type="flex"
-            justify="center"
-            align="middle"
-            style={{
-              width: '100%',
-              marginBottom: errors.withdrawValue ? '20px' : 0,
-            }}
-          >
-            <Col span={10}>
-              <Label>Amount</Label>
-            </Col>
-            <Col span={12}>
-              <ErrorWrapper>
-                <InputNumber
-                  onBlur={handleBlurNumberInput}
-                  onFocus={handleFocusNumberInput}
-                  defaultValue={formatPrice(canBeWithdraw) || 0}
-                  max={formatPrice(canBeWithdraw)}
-                  min={0}
-                  size="large"
-                  style={{
-                    width: '140px',
-                    border: errors.withdrawValue
-                      ? '1px solid red'
-                      : '1px solid #d9d9d9',
-                  }}
-                  formatter={value =>
-                    `£ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  }
-                  parser={value => value.replace(/£\s?|(,*)/g, '')}
-                  onChange={value => handleNumberChange('withdrawValue', value)}
-                />
-                <Error>{errors.withdrawValue}</Error>
-              </ErrorWrapper>
-            </Col>
-          </Row>
-
-          <Button
-            label="withdraw funds"
-            type="secondary"
-            style={{ width: '135px' }}
-            onClick={handleSubmitWithdrawRequest}
-            loading={apiLoading}
-          />
-          <Button
-            label="Cancel"
-            type="cancel"
-            nobgc
-            style={{ width: '135px' }}
-            onClick={handleCloseModals}
-          />
-        </ModalContentWrapper>
-      </Modal>
-    </PageWrapper>
+          )}
+        </Row>
+      </Wrapper>
+    </>
   );
 };
 
-export default withRouter(Content);
+export default Content;

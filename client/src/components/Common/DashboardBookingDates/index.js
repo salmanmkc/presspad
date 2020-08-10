@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Title from '../Title';
 import { Switch, DatePicker } from '../Inputs';
 import ButtonNew from '../ButtonNew';
 import LinkButton from '../LinkButton';
+import validateRequest from './validateAvailabiltySchema';
+import Notification from '../Notification';
 
+import { H7C, PBold } from '../Typography';
 import * as S from './style';
 
 import { Row, Col } from '../Grid';
 
 import { BOOKINGS_URL } from '../../../constants/navRoutes';
+import { API_HOST_UPDATE_AVAILABILITY } from '../../../constants/apiRoutes';
 
 const BookingDates = ({ currentDates = [], autoAccept }) => {
   const [multiDateRange, setMultiDateRange] = useState([
@@ -18,6 +23,10 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     },
   ]);
   const [acceptBookings, setAcceptBookings] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [datesError, setDatesError] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationText, setNotificationText] = useState(false);
 
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
@@ -45,9 +54,35 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
     ]);
   };
 
-  //   FUNCTION HAS TO BE UPDATED HERE TO UPDATE THE DATES IN DATABASE
-  const handleSubmit = () => {
-    console.log('function to go here to update new dates on the back end');
+  const handleSubmit = async () => {
+    try {
+      const requestData = {
+        availableDates: multiDateRange,
+        acceptAutomatically: acceptBookings,
+      };
+
+      const valid = await validateRequest().validate(requestData, {
+        abortEarly: false,
+      });
+
+      if (valid) {
+        setUpdateLoading(true);
+        setDatesError(null);
+        await axios.patch(API_HOST_UPDATE_AVAILABILITY, requestData);
+        setUpdateLoading(false);
+        setNotificationText('All saved!');
+        setShowNotification(true);
+      }
+    } catch (err) {
+      if (err.name === 'ValidationError') {
+        setDatesError('You need to enter some dates!');
+      }
+      setUpdateLoading(false);
+      setNotificationText(
+        'There was an error updating your settings! Please try again.',
+      );
+      setShowNotification(true);
+    }
   };
 
   useEffect(() => {
@@ -66,6 +101,14 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
         onChange={() => setAcceptBookings(!acceptBookings)}
         mb={4}
       />
+      <H7C color="gray" mb={3}>
+        Available Dates
+      </H7C>
+      {datesError && (
+        <PBold mb={3} color="pink">
+          {datesError}
+        </PBold>
+      )}
       {multiDateRange.length > 0 &&
         multiDateRange.map((date, index) => (
           <DatePicker
@@ -78,6 +121,7 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
             arrayLength={multiDateRange.length}
             mb={3}
             value={date}
+            disabledDate={d => !d || d.isBefore(new Date())}
           />
         ))}
       <Row mt={5}>
@@ -87,6 +131,8 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
             type="tertiary"
             bgColor="secondary"
             onClick={handleSubmit}
+            loading={updateLoading}
+            disabled={updateLoading}
           >
             Save changes
           </ButtonNew>
@@ -106,6 +152,13 @@ const BookingDates = ({ currentDates = [], autoAccept }) => {
           </S.LinkWrapper>
         </Col>
       </Row>
+      {showNotification && (
+        <Notification
+          open={showNotification}
+          setOpen={setShowNotification}
+          content={notificationText}
+        />
+      )}
     </S.Wrapper>
   );
 };

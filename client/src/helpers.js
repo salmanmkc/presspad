@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import * as yup from 'yup';
 
-export const createSingleDate = date => moment(date).format('DD-MM-YYYY');
+export const createSingleDate = date => moment(date).format('DD/MM/YYYY');
 
 export const createStartEndDate = (start, end) => {
   // get all available dates in range
@@ -10,8 +10,8 @@ export const createStartEndDate = (start, end) => {
   const stopDate = new Date(end);
 
   return [
-    moment(currentDate).format('DD-MM-YYYY'),
-    moment(stopDate).format('DD-MM-YYYY'),
+    moment(currentDate).format('DD/MM/YYYY'),
+    moment(stopDate).format('DD/MM/YYYY'),
   ];
 };
 
@@ -23,7 +23,7 @@ export const createDatesArray = (start, end) => {
   const stopDate = new Date(end);
 
   while (currentDate <= stopDate) {
-    datesArray.push(moment(currentDate).format('DD-MM-YYYY'));
+    datesArray.push(moment(currentDate).format('DD/MM/YYYY'));
     currentDate = moment(currentDate).add(1, 'days');
   }
 
@@ -39,7 +39,7 @@ export const getDateRangeFromArray = datesArray => {
     const stopDate = moment(el.endDate);
 
     while (currentDate <= stopDate) {
-      avDatesArray.push(moment(currentDate).format('DD-MM-YYYY'));
+      avDatesArray.push(moment(currentDate).format('DD/MM/YYYY'));
       currentDate = moment(currentDate).add(1, 'days');
     }
   });
@@ -107,6 +107,7 @@ const filterFields = {
   status: 1,
   totalPayments: 1,
   currentBalance: 1,
+  bookingStatus: 1,
 
   // clients
   numberOfInterns: 1,
@@ -140,7 +141,11 @@ const filterFields = {
  */
 const _filterObj = (obj, searchVal) =>
   Object.keys(obj).some(key => {
-    const _val = obj[key];
+    const _val = obj[key] || '';
+    if (typeof _val === 'object' && _val !== null && _val._isAMomentObject) {
+      const formattedDate = createSingleDate(_val);
+      return formattedDate.includes(searchVal);
+    }
     if (typeof _val === 'object') {
       return _filterObj(_val, searchVal);
     }
@@ -179,12 +184,21 @@ export const filterArray = (array, searchVal) => _filterArray(array, searchVal);
 export const capitalizeFirstLetter = str =>
   str && str[0].toUpperCase() + str.substr(1, str.length).toLowerCase();
 
-export const titleCase = str =>
-  str &&
-  str
-    .split(' ')
-    .map(capitalizeFirstLetter)
-    .join(' ');
+export const titleCase = str => {
+  let _str = str;
+
+  if (str instanceof Array) {
+    _str = str.join(', ');
+  }
+
+  return (
+    _str &&
+    _str
+      .split(' ')
+      .map(capitalizeFirstLetter)
+      .join(' ')
+  );
+};
 
 yup.addMethod(yup.string, 'wordLengthValidator', function wordLengthValidator(
   length,
