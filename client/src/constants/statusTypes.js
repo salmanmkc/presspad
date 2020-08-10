@@ -13,6 +13,8 @@ export const BOOKING = {
   completed: colors.blue,
   'looking for host': colors.blue,
   'at host': colors.yellow,
+  hosting: colors.yellow,
+  'not hosting': colors.gray,
 };
 
 export const APPROVAL = {

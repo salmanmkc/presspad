@@ -59,6 +59,34 @@ module.exports.getAllHostStats = () =>
     },
     {
       $lookup: {
+        from: 'bookings',
+        let: { listingId: '$listing._id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$listing', '$$listingId'] },
+                  {
+                    $or: [
+                      { $eq: ['$status', 'accepted'] },
+                      { $eq: ['$status', 'confirmed'] },
+                      { $eq: ['$status', 'pending'] },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+          {
+            $sort: { startDate: 1 },
+          },
+        ],
+        as: 'liveBookings',
+      },
+    },
+    {
+      $lookup: {
         from: 'accounts',
         localField: 'account',
         foreignField: '_id',
@@ -71,7 +99,7 @@ module.exports.getAllHostStats = () =>
         _id: 1,
         name: 1,
         email: 1,
-        'listing.hometown': 1,
+        'listing.address': 1,
         'profile.verified': 1,
         'profile._id': 1,
         'profile.DBSCheck': 1,
@@ -81,6 +109,7 @@ module.exports.getAllHostStats = () =>
         // // any that were confirmed
         // // any that started before today's date
         internsHosted: { $size: '$uniqueInternBookings' },
+        nextLiveBooking: { $arrayElemAt: ['$liveBookings', 0] },
       },
     },
   ]);

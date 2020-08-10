@@ -535,7 +535,7 @@ export default class AdminDashboard extends Component {
                 highlightVal={highlightVal}
               />
             )}
-            {activeLink === 'interns' && (
+            {/* {activeLink === 'interns' && (
               <InternTable
                 getColumnSearchProps={this.getColumnSearchProps}
                 loading={loading}
@@ -546,7 +546,7 @@ export default class AdminDashboard extends Component {
                 updateDBS={this.updateDBS}
                 handleDBSChange={this.handleDBSChange}
               />
-            )}
+            )} */}
             {activeLink === 'hosts' && (
               <HostWrapper>
                 <HostTable

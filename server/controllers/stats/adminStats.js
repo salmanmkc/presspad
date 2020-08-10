@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.stripeSK);
 const boom = require('boom');
+const moment = require('moment');
 
 // IMPORT QUERIES
 const {
@@ -102,20 +103,29 @@ module.exports = async (req, res, next) => {
 
           const cleanStats = await Promise.all(
             stats.map(async host => {
+              let bookingStatus = 'not hosting';
+
+              if (host.nextLiveBooking) {
+                const { status, startDate } = host.nextLiveBooking;
+                const current = moment().diff(startDate, 'days') >= 0;
+                if (status === 'confirmed') {
+                  bookingStatus = current ? 'hosting' : 'confirmed';
+                } else bookingStatus = host.nextLiveBooking;
+              }
+
               const hostObj = {
                 key: stats.indexOf(host) + 1,
                 name: host.name,
                 email: host.email,
-                hometown: host.listing.hometown,
-                hosted: host.internsHosted,
-                approvalStatus: host.profile[0].verified
-                  ? 'Approved'
-                  : 'Waiting for approval',
+                location: host.listing.address && host.listing.address.city,
+                internsHosted: host.internsHosted,
+                verified: host.profile[0].verified,
                 profileId: host.profile[0]._id,
                 dbsCheck: host.profile[0].DBSCheck,
-                userId: host._id,
-                totalIncome: host.totalIncome,
-                currentBalance: host.currentBalance,
+                id: host._id,
+                earnings: host.totalIncome,
+                wallet: host.currentBalance,
+                bookingStatus,
               };
 
               const { dbsCheck } = hostObj;
