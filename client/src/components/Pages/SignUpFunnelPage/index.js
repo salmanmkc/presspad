@@ -24,9 +24,9 @@ const SignUpFunnel = ({ history }) => {
           <S.Title>I am...</S.Title>
         </Col>
       </Row>
-      <Row>
+      <Row style={{ marginBottom: 40 }}>
         {FunnelPageDate.map((e, i) => (
-          <Col w={[4, 12, 4]}>
+          <Col w={[4, 8, 4]}>
             <S.Container index={i}>
               <T.H3C color={e.color} mt={3}>
                 {e.title}
