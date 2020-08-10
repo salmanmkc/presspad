@@ -15,7 +15,7 @@ const hostProfileData = {
   jobTitle: 'Journalist',
   organisation: 'Financial Times',
   workingArea: types.workingArea[0],
-  areasOfInterest: types.areasOfInterest[0],
+  interests: types.interests[0],
   hostingReasonAnswer:
     'I have worked in a similar capacity for four years. I enjoy meeting new people every day. Nothing makes my day contended than knowing that the patrons are happy because of my direct and indirect service.',
   mentoringExperienceAnswer:

@@ -9,7 +9,7 @@ const CommonStyle = css`
   font-style: normal;
   font-weight: bold;
   color: ${({ theme, color }) =>
-    color ? theme.colors[color] : theme.colors.black};
+    (color && (theme.colors[color] || color)) || theme.colors.black};
   text-transform: ${({ caps }) => (caps ? 'uppercase' : 'none')};
 
   text-align: ${({ align }) => align || 'left'};
