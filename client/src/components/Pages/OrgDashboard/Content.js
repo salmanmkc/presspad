@@ -8,6 +8,7 @@ import {
   AccountDetails,
   Updates,
   Coupons,
+  MyImpact,
 } from '../../Common/Section';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
@@ -44,6 +45,8 @@ const createCodesTableData = arr =>
       internName: intern.name,
     };
   });
+const calculateTotalCouponsValue = arr =>
+  arr.map(el => el.reservedAmount).reduce((a, b) => a + b, 0);
 
 const Content = props => {
   const {
@@ -79,9 +82,6 @@ const Content = props => {
   const { currentBalance = 0 } = account;
   const [liveCouponsSrc, setLiveCouponsSrc] = useState(true);
 
-  console.log('coupons', coupons);
-  console.log('account', account);
-
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const HeaderTitle = typographies.headerTitle[device];
@@ -99,12 +99,12 @@ const Content = props => {
   const currentlyHosted = coupons.filter(item => item.status === 'At host')
     .length;
 
-  console.log('live', liveCoupons);
-  console.log('prev', previousCoupons);
-
-  const liveCouponsTotalValue = liveCoupons
-    .map(el => el.reservedAmount)
-    .reduce((a, b) => a + b, 0);
+  // My Impact
+  const totalInternsSupported = [
+    ...new Set(
+      coupons.filter(el => el.usedAmount > 0).map(el => el.intern._id),
+    ),
+  ].length;
 
   return (
     <Wrapper mobile={device === 'mobile'}>
@@ -122,7 +122,9 @@ const Content = props => {
             <MyAccount
               funds={currentBalance / 100}
               liveCodes={liveCoupons.length}
-              liveCodesCost={liveCouponsTotalValue / 100}
+              liveCodesCost={
+                liveCoupons && calculateTotalCouponsValue(liveCoupons) / 100
+              }
               liveBookings={currentlyHosted}
               // addCodes={addCodes}
             />
@@ -157,6 +159,12 @@ const Content = props => {
             markAsSeen={markAsSeen}
             updates={notifications}
             userRole="org"
+          />
+        </Col>
+        <Col w={[4, 10, 7]}>
+          <MyImpact
+            totalInterns={totalInternsSupported && totalInternsSupported}
+            totalPaid={coupons && calculateTotalCouponsValue(coupons) / 100}
           />
         </Col>
       </Row>
