@@ -53,7 +53,19 @@ const Section = styled(T.H4C)`
 `;
 
 const Title = withTheme(
-  ({ children, withBg, bgColor, section, mt, mb, ml, mr }) => {
+  ({
+    children,
+    withBg,
+    bgColor,
+    textColor,
+    section,
+    mt,
+    mb,
+    ml,
+    mr,
+    caps = false,
+    ...rest
+  }) => {
     let topText;
     let bottomText;
     if (typeof children === 'string') {
@@ -66,25 +78,51 @@ const Title = withTheme(
     }
     if (withBg)
       return (
-        <WithBackground bgColor={bgColor} mt={mt} mb={mb} ml={ml} mr={mr}>
-          <T.H2C color="white">{children}</T.H2C>
+        <WithBackground
+          bgColor={bgColor}
+          mt={mt}
+          mb={mb}
+          ml={ml}
+          mr={mr}
+          {...rest}
+        >
+          {caps ? (
+            <T.H2C color={textColor || 'white'}>{children}</T.H2C>
+          ) : (
+            <T.H2 color={textColor || 'white'}>{children}</T.H2>
+          )}
         </WithBackground>
       );
 
     if (section)
       return (
-        <Section color="white" mt={mt} mb={mb} ml={ml} mr={mr}>
+        <Section
+          color={textColor || 'white'}
+          mt={mt}
+          mb={mb}
+          ml={ml}
+          mr={mr}
+          {...rest}
+        >
           {children}
         </Section>
       );
 
     return (
-      <AlternateTitle mt={mt} mb={mb} ml={ml} mr={mr}>
+      <AlternateTitle mt={mt} mb={mb} ml={ml} mr={mr} {...rest}>
         <div className="top">
-          <T.H3C style={{ color: 'inherit' }}>{topText}</T.H3C>
+          {caps ? (
+            <T.H3C color={textColor || 'white'}>{topText}</T.H3C>
+          ) : (
+            <T.H3 color={textColor || 'white'}>{topText}</T.H3>
+          )}
         </div>
         <div className="bottom">
-          <T.H3C style={{ color: 'inherit' }}>{bottomText}</T.H3C>
+          {caps ? (
+            <T.H3C color={textColor || 'white'}>{bottomText}</T.H3C>
+          ) : (
+            <T.H3 color={textColor || 'white'}>{bottomText}</T.H3>
+          )}
         </div>
       </AlternateTitle>
     );
