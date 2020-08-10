@@ -49,6 +49,7 @@ export const newColors = {
   yellow: '#FFDF59',
   pink: '#CF3475',
   lightPink: '#DE5991',
+  transPink: '#FFFBFD',
   gray3: '#585858',
 };
 
@@ -144,6 +145,7 @@ export const bookingStatus = {
 };
 
 const spacings = {
+  0: '0px',
   1: '5px',
   2: '10px',
   3: '15px',

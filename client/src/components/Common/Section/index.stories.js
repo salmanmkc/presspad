@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
   Updates,
   Wallet,
@@ -9,6 +10,7 @@ import {
   AccountDetails,
   InternshipDetails,
   MyImpact,
+  Payments,
 } from './index';
 import * as T from '../Typography';
 import { Row, Col } from '../Grid';
@@ -193,3 +195,42 @@ export const MyImpactSection = () => (
     </Col>
   </Row>
 );
+
+export const RecentPayments = () => {
+  const data = [
+    {
+      date: moment(),
+      intern: 'John Harper',
+      earnings: 400.5,
+    },
+  ];
+
+  return (
+    <Row>
+      <Col w={[4, 6, 6]}>
+        <Payments type="recent" payments={data} />
+      </Col>
+    </Row>
+  );
+};
+
+export const YourPayments = () => {
+  const data = [
+    {
+      dueDate: moment(),
+      status: 'upcoming',
+      amountDue: 400.5,
+      paymentId: '1',
+    },
+  ];
+
+  const handleClick = () => console.log('function to handle pay button');
+
+  return (
+    <Row>
+      <Col w={[4, 6, 6]}>
+        <Payments payments={data} handleClick={handleClick} />
+      </Col>
+    </Row>
+  );
+};

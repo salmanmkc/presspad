@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input, Checkbox } from 'antd';
+
 // COMMON COMPONENTS
 import Button from '../../Common/Button';
 

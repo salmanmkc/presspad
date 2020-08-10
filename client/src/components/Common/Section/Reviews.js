@@ -17,15 +17,15 @@ const Reviews = ({ reviews }) => (
                 icon="star"
                 width="15px"
                 height="auto"
-                color={rating <= review.rating ? 'pink' : 'lighterGray'}
+                color={rating <= review.rate ? 'pink' : 'lighterGray'}
               />
             ))}
           </S.Ratings>
           <T.PBold color="black">
-            {review.firstName}
-            {review.subtitle && `, ${review.subtitle}`}
+            {review.name && review.name.split(' ')[0]}
+            {review.subtitle ? `, ${review.subtitle}` : `, intern`}
           </T.PBold>
-          <T.PXS color="black">{review.text}</T.PXS>
+          <T.PXS color="black">{review.message}</T.PXS>
         </S.Review>
       ))
     ) : (

@@ -5,7 +5,6 @@ import { breakpoints } from '../../../theme';
 
 export const SmallCardWrapper = styled(Link)`
   box-shadow: ${({ theme }) => theme.shadows.card};
-  // min-width: 250px;
   display: flex;
   position: relative;
   min-height: 150px;
@@ -14,8 +13,8 @@ export const SmallCardWrapper = styled(Link)`
   // desktop
   @media ${breakpoints.mobileXL} {
     flex-direction: row;
-    min-width: 450px;
-    max-width: ${({ type }) => (type === 'big' ? '610px' : '515px')};
+    max-width: ${({ width, type }) =>
+      width || (type === 'big' ? '610px' : '515px')};
   }
 `;
 
@@ -98,7 +97,7 @@ export const ViewBooking = styled(H7C)`
   width: 50%;
   text-align: right;
   position: absolute;
-  right: ${({ theme }) => theme.spacings[3]};
+  right: ${({ theme }) => theme.spacings[2]};
   bottom: ${({ theme }) => theme.spacings[3]};
   display: flex;
   justify-content: flex-end;

@@ -22,6 +22,7 @@ const BookingCards = ({
   status = '',
   windowWidth,
   role,
+  width,
 }) => {
   const isMobile = windowWidth < TABLET_WIDTH;
 
@@ -64,6 +65,7 @@ const BookingCards = ({
 
   return (
     <S.SmallCardWrapper
+      width={width}
       to={`${BOOKING_VIEW_URL.replace(':id', bookingID)}`}
       type={type}
     >
