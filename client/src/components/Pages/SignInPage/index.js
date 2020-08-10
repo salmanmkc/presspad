@@ -111,38 +111,11 @@ export default class SignInPage extends Component {
     const { onInputChange, onFormSubmit } = this;
     return (
       <>
-        <S.TitleWrapper>
-          <S.TitleContainer>
-            <Title
-              withBg
-              bgColor="pink"
-              style={{
-                justifyContent: 'flex-start',
-                paddingLeft: 120,
-              }}
-            >
-              Log In
-            </Title>
-          </S.TitleContainer>
-        </S.TitleWrapper>
         <Row>
-          <Col w={[4, 12, 12]}>
-            <S.TabletTitle>
-              <Title
-                withBg
-                bgColor="white"
-                textColor="pink"
-                style={{
-                  justifyContent: 'flex-start',
-                  marginTop: 40,
-                  marginBottom: -30,
-                }}
-              >
-                Log In
-              </Title>
-            </S.TabletTitle>
-          </Col>
-          <Col w={[4, 12, 8]} ml={6} mlT={0} mlM={0}>
+          <Title withBg mb="0">
+            <Col w={[4, 12, 12]}>login</Col>
+          </Title>
+          <Col w={[4, 12, 8]}>
             <Input
               label="Email"
               placeholder="Enter your email"

@@ -13,6 +13,7 @@ export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 
 export const PAYMENTS_URL = '/payments';
+export const ADD_FUNDS_URL = '/add-funds';
 export const BURSARY = '/bursary';
 export const REFERRAL_URL = '/refer';
 export const INVOICES = '/invoices';

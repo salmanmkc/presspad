@@ -2,6 +2,8 @@ import React from 'react';
 import styled, { css, withTheme } from 'styled-components';
 import * as T from '../Typography';
 
+import WithBackground from './WithBackground';
+
 const sharedStyles = css`
   padding-left: 30px;
   margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
@@ -35,14 +37,6 @@ const AlternateTitle = styled.div`
     color: ${({ theme, bgColor1 }) => bgColor1 || theme.colors.white};
     padding-bottom: 20px;
   }
-`;
-
-const WithBackground = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 15px 0;
-  background-color: ${({ theme, bgColor }) =>
-    theme.colors[bgColor] || theme.colors.pink};
 `;
 
 const Section = styled(T.H4C)`
@@ -84,13 +78,10 @@ const Title = withTheme(
           mb={mb}
           ml={ml}
           mr={mr}
+          color={textColor}
           {...rest}
         >
-          {caps ? (
-            <T.H2C color={textColor || 'white'}>{children}</T.H2C>
-          ) : (
-            <T.H2 color={textColor || 'white'}>{children}</T.H2>
-          )}
+          {caps ? <T.H2C>{children}</T.H2C> : <T.H2>{children}</T.H2>}
         </WithBackground>
       );
 

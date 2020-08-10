@@ -12,7 +12,6 @@ import {
   Skeleton,
 } from 'antd';
 import moment from 'moment';
-import { Elements } from 'react-stripe-elements';
 import Icon from '../../Common/Icon';
 
 import Button from '../../Common/Button';
@@ -20,10 +19,9 @@ import { calculatePrice, formatPrice } from '../../../helpers';
 
 import Update from './Update';
 import CouponsColumns from './CouponsColumns';
-import AddFundsModal from './AddFundsModal';
 import DisabledPopOver from '../../Common/DisabledPopOver';
 
-import { HOSTS_URL } from '../../../constants/navRoutes';
+import { HOSTS_URL, ADD_FUNDS_URL } from '../../../constants/navRoutes';
 
 import {
   PageWrapper,
@@ -79,10 +77,8 @@ class Content extends Component {
       handleCloseModals,
       handleSubmitCreateCoupon,
       handlePayNowClick,
-      handleAccountUpdate,
       markAsSeen,
       handleViewMoreToggle,
-      stripe,
     } = this.props;
 
     const {
@@ -94,7 +90,6 @@ class Content extends Component {
       endValue,
       endOpen,
       errors,
-      showAddFunds,
       discountPrice,
       notifications,
       slicedNotifications,
@@ -121,15 +116,6 @@ class Content extends Component {
 
     return (
       <PageWrapper>
-        <Elements>
-          <AddFundsModal
-            handleAccountUpdate={handleAccountUpdate}
-            handlePayNowClick={handlePayNowClick}
-            showAddFunds={showAddFunds}
-            account={account}
-            stripe={stripe}
-          />
-        </Elements>
         <ContentWrapper>
           <HeaderWrapper>
             <Row gutter={20} type="flex" justify="start">
@@ -248,6 +234,7 @@ class Content extends Component {
                       (details && details.logo && details.logo.url) ||
                       logPlaceholder
                     }
+                    // eslint-disable-next-line no-return-assign
                     onError={e => (e.target.src = logPlaceholder)}
                   />
 
@@ -263,9 +250,7 @@ class Content extends Component {
                             0}
                         </TD>
                         <TD position="right">
-                          <BlueLink onClick={() => handlePayNowClick(true)}>
-                            Add funds
-                          </BlueLink>
+                          <BlueLink1 to={ADD_FUNDS_URL}>Add funds</BlueLink1>
                         </TD>
                       </InfoTableRow>
                       <InfoTableRow>
