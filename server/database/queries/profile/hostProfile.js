@@ -16,6 +16,8 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
     reviews: 1,
     respondingTime: 1,
     respondedRequests: 1,
+    referred: { $size: '$referred' },
+    referredBy: 1,
   };
 
   const profileProject = {
@@ -153,6 +155,14 @@ exports.hostProfileData = (hostId, isPrivate = false) => {
       },
     },
     {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: 'referredBy',
+        as: 'referred',
+      },
+    },
+    {
       $project: listingProject,
     },
   ]);
@@ -170,10 +180,10 @@ exports.getListingActiveBookings = listingId =>
     listing: listingId,
     $or: [
       {
-        status: 'confirmed',
+        status: bookingStatuses.confirmed,
       },
       {
-        status: 'live',
+        status: bookingStatuses.accepted,
       },
     ],
   });

@@ -12,7 +12,7 @@ import SignUpPage from './SignUpPage';
 import Dashboard from './Dashboard';
 import HostProfile from './HostProfile';
 import InternCreateProfile from './InternCreateProfile';
-import AdminDashboard from './AdminDashboard';
+import { AdminDashboard, AdminBursary, AdminBursaryResponse } from './Admin';
 import SearchHosts from './SearchHosts';
 import BookingView from './BookingView';
 import MyProfile from './MyProfile';
@@ -25,6 +25,7 @@ import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 
+import ReferralSchema from './ReferralSchema';
 import Settings, { DeleteAccountSuccess } from './Settings';
 import ResetPassword, { SetPassword } from './ResetPassword';
 
@@ -51,10 +52,16 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
+  REFERRAL_URL,
   SETTINGS_URL,
   DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  ADMIN_BURSARY,
+  ADMIN_BURSARY_APPROVE,
+  ADMIN_BURSARY_PREAPPROVE,
+  ADMIN_BURSARY_REJECT,
+  ADMIN_BURSARY_SUCCESS,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -70,6 +77,18 @@ function Pages(props) {
     <>
       <Switch>
         <Route path={HOME_URL} exact Component={LandingPage} {...props} />
+        {/* protected host profile */}
+
+        <Route
+          exact
+          isPrivate
+          path={REFERRAL_URL}
+          Component={ReferralSchema}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
         <Route
           isPrivate
           exact
@@ -210,6 +229,71 @@ function Pages(props) {
             Component={AdminDashboard}
             handleChangeState={handleChangeState}
             isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY}
+            Component={AdminBursary}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_APPROVE}
+            type="approve"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_PREAPPROVE}
+            type="preapprove"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_REJECT}
+            type="reject"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_SUCCESS}
+            type="success"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
             {...props}
           />
         )}

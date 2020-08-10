@@ -66,18 +66,7 @@ const createAll = async ({ accounts, organisations }) => {
     acceptAutomatically: true,
     respondingTime: 432000000, // 5 days in ms
     respondedRequests: 3,
-  };
-
-  // host who doesn't accept automatically
-  const host2 = {
-    email: 'host2@test.com',
-    name: 'Bob Berry',
-    password: '123456',
-    role: 'host',
-    account: hostAccount._id,
-    acceptAutomatically: false,
-    respondingTime: 432000000, // 5 days in ms
-    respondedRequests: 3,
+    referralToken: 'faktokn1',
   };
 
   const intern = {
@@ -120,7 +109,6 @@ const createAll = async ({ accounts, organisations }) => {
     adminUser,
     createdOrganisationUser,
     hostUser,
-    hostUser2,
     internUser,
     internUser2,
     internUser3,
@@ -129,12 +117,27 @@ const createAll = async ({ accounts, organisations }) => {
     admin,
     organisationUser,
     host,
-    host2,
     intern,
     intern2,
     intern3,
     intern4,
   ]);
+
+  // host who doesn't accept automatically
+  const host2 = {
+    email: 'host2@test.com',
+    name: 'Bob Berry',
+    password: '123456',
+    role: 'host',
+    account: hostAccount._id,
+    acceptAutomatically: false,
+    respondingTime: 432000000, // 5 days in ms
+    respondedRequests: 3,
+    referralToken: 'faktokn2',
+    referredBy: hostUser._id,
+  };
+
+  const hostUser2 = await User.create(host2);
 
   return {
     adminUser,

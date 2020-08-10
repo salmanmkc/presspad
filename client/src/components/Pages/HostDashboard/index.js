@@ -1,313 +1,93 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { message } from 'antd';
+import { Spin } from 'antd';
 
 import Content from './Content';
-import {
-  API_HOST_DASHBOARD_URL,
-  API_DONATION_URL,
-  API_WITHDRAW_REQUEST_URL,
-} from '../../../constants/apiRoutes';
+import { API_HOST_DASHBOARD_URL } from '../../../constants/apiRoutes';
 
-import { withdrawSchema, donateSchema } from './schemas';
+const initState = {
+  name: '',
+  nextBooking: {},
+  updates: [],
+  accessibleFunds: null,
+  pending: null,
+  reviews: [],
+  lastPayments: [],
+  listingAvailableDates: [],
+  profileCompleted: false,
+};
 
-class HostProfile extends Component {
-  state = {
-    name: '',
-    nextGuest: {},
-    nextBooking: {},
-    nextGuestProfile: {},
-    account: {},
-    errors: {},
-    isNumberInputActive: false,
-    attemptedToSubmit: false,
-    // number of rows to be visible in the bookings table
-    viewNumber: 3,
-    // the amount of money that user want to donate
-    donateValue: null,
-    // the amount of money that user want to withdraw
-    withdrawValue: null,
-    // withdraw details
-    bankName: null,
-    bankSortCode: null,
-    accountNumber: null,
+const HostProfile = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useState({ ...initState });
+  const { windowWidth, role } = props;
 
-    // Values came from api request
-    bookings: [],
-    updates: [],
-    withdrawRequests: [],
+  useEffect(() => {
+    setIsLoading(true);
 
-    // MODALS
-    withdrawModalOpen: false,
-    donateModalOpen: false,
-    apiLoading: false,
-    profile: {},
-  };
+    const fetchData = async () => {
+      const { data } = await axios.get(API_HOST_DASHBOARD_URL);
 
-  async componentDidMount() {
-    this.fetchData();
-    document.addEventListener('keypress', e => {
-      const { isNumberInputActive } = this.state;
-      const numbers = [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        0,
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '0',
-        '.',
-        ',',
-      ];
-      if (!numbers.includes(e.key) && isNumberInputActive) {
-        e.preventDefault();
-      }
-    });
-  }
+      const {
+        userData: { name = '', acceptAutomatically = false },
+        notifications = [],
+        nextBooking = {},
+        accessibleFunds = null,
+        pending = null,
+        reviews = [],
+        lastPayments = [],
+        listing: { availableDates = [] },
+        profileCompleted = false,
+      } = data;
 
-  componentWillUnmount() {
-    document.removeEventListener('keypress', () => {});
-  }
-
-  fetchData = async () => {
-    const { data } = await axios.get(API_HOST_DASHBOARD_URL);
-    const {
-      name,
-      notifications,
-      bookings = [],
-      profile = {},
-      account = {},
-      withdrawRequests,
-      nextBookingWithDetails: nextBooking = {},
-      requestedAmount,
-    } = data;
-    const nextGuest = (nextBooking && nextBooking.intern) || {};
-    const { profile: nextGuestProfile = {} } = nextGuest;
-
-    this.setState(() => ({
-      name,
-      updates: notifications,
-      bookings,
-      profile,
-      nextGuest,
-      nextGuestProfile,
-      nextBooking,
-      account,
-      donateValue: account.currentBalance,
-      withdrawValue: account.currentBalance,
-      withdrawRequests,
-      requestedAmount,
-    }));
-  };
-
-  handleBlurNumberInput = () => {
-    this.setState({ isNumberInputActive: false });
-  };
-
-  handleFocusNumberInput = () => {
-    this.setState({ isNumberInputActive: true });
-  };
-
-  handleNumberChange = (name, value) => {
-    const {
-      attemptedToSubmit,
-      withdrawModalOpen,
-      account,
-      requestedAmount,
-    } = this.state;
-
-    let _value = value;
-    if (name === 'withdrawValue' || name === 'donateValue') {
-      _value = account.currentBalance - requestedAmount > 0 ? value : 0;
-    }
-
-    this.setState({ [name]: _value }, () => {
-      if (attemptedToSubmit) {
-        this.validate(withdrawModalOpen ? withdrawSchema : donateSchema);
-      }
-    });
-  };
-
-  handleInpuChange = e => {
-    const { attemptedToSubmit, withdrawModalOpen } = this.state;
-    const { name, value } = e.target;
-    this.setState({ [name]: value }, () => {
-      if (attemptedToSubmit) {
-        this.validate(withdrawModalOpen ? withdrawSchema : donateSchema);
-      }
-    });
-  };
-
-  handleViewMoreToggle = ({
-    target: {
-      dataset: { name },
-    },
-  }) => {
-    const { viewNumber } = this.state;
-    this.setState({ viewNumber: viewNumber ? undefined : 3 });
-  };
-
-  handleOpenModal = e => {
-    const { name: modalField } = e.target;
-    this.setState({ [modalField]: true });
-  };
-
-  handleCloseModals = () => {
-    this.setState({
-      withdrawModalOpen: false,
-      donateModalOpen: false,
-      errors: {},
-      attemptedToSubmit: false,
-    });
-  };
-
-  handleSubmitDonate = () => {
-    const { donateValue } = this.state;
-    this.setState({ attemptedToSubmit: true }, () => {
-      this.validate(donateSchema).then(res => {
-        if (res) {
-          this.setState({ apiLoading: true }, () => {
-            const penniesDonateValue = Math.floor(donateValue * 100);
-            axios
-              .post(API_DONATION_URL, { amount: penniesDonateValue })
-              .then(() => {
-                this.setState({ apiLoading: false });
-                this.handleCloseModals();
-                message.success(
-                  `Done!, You have successfully donated by £${donateValue}`,
-                );
-                this.fetchData();
-              })
-              .catch(() => {
-                message.error(`Error!, something went wrong`);
-                this.setState({ apiLoading: false });
-              });
-          });
-        }
+      setState({
+        name,
+        acceptAutomatically,
+        updates: notifications,
+        nextBooking,
+        accessibleFunds,
+        pending,
+        reviews,
+        lastPayments,
+        listingAvailableDates: availableDates,
+        profileCompleted,
       });
-    });
-  };
+    };
+    fetchData();
+    setIsLoading(false);
+  }, []);
 
-  handleSubmitWithdrawRequest = () => {
-    const { withdrawValue, bankName, bankSortCode, accountNumber } = this.state;
-    this.setState({ attemptedToSubmit: true }, () => {
-      this.validate(withdrawSchema).then(res => {
-        if (res) {
-          this.setState({ apiLoading: true }, () => {
-            const penniesWithdrawValue = Math.floor(withdrawValue * 100);
-            axios
-              .post(API_WITHDRAW_REQUEST_URL, {
-                amount: penniesWithdrawValue,
-                bankName,
-                bankSortCode,
-                accountNumber,
-              })
-              .then(() => {
-                this.setState({ apiLoading: false });
-                this.handleCloseModals();
-                message.success(
-                  `Done!, You have requested to withdraw £${withdrawValue}`,
-                );
-                this.fetchData();
-              })
-              .catch(() => {
-                message.error(`Error!, something went wrong`);
-                this.setState({ apiLoading: false });
-              });
-          });
-        }
-      });
-    });
-  };
+  const {
+    name,
+    updates,
+    nextBooking,
+    pending,
+    accessibleFunds,
+    reviews,
+    lastPayments,
+    listingAvailableDates,
+    acceptAutomatically,
+    profileCompleted,
+  } = state;
 
-  validate = schema => {
-    const { account, requestedAmount } = this.state;
-    return schema(account.currentBalance, requestedAmount)
-      .validate(this.state, { abortEarly: false })
-      .then(res => {
-        this.setState({ errors: {} });
-        return res;
-      })
-      .catch(err => {
-        const errors = {};
-        err.inner.forEach(element => {
-          errors[element.path.split('.')[0]] = element.message;
-        });
-        this.setState({ errors });
-      });
-  };
+  if (isLoading) return <Spin />;
 
-  render() {
-    const { windowWidth, role } = this.props;
-    const {
-      name,
-      nextGuest,
-      nextGuestProfile,
-      bankName,
-      bankSortCode,
-      accountNumber,
-      bookings,
-      updates,
-      withdrawModalOpen,
-      donateModalOpen,
-      nextBooking,
-      account,
-      apiLoading,
-      errors,
-      withdrawRequests,
-      profile,
-      viewNumber,
-      requestedAmount,
-    } = this.state;
-    return (
-      <Content
-        // Props & state\
-        windowWidth={windowWidth}
-        name={name}
-        role={role}
-        bankName={bankName}
-        bankSortCode={bankSortCode}
-        accountNumber={accountNumber}
-        bookings={bookings}
-        viewNumber={viewNumber}
-        updates={updates}
-        withdrawModalOpen={withdrawModalOpen}
-        donateModalOpen={donateModalOpen}
-        nextGuest={nextGuest}
-        nextGuestProfile={nextGuestProfile}
-        nextBooking={nextBooking}
-        account={account}
-        profile={profile}
-        apiLoading={apiLoading}
-        withdrawRequests={withdrawRequests}
-        errors={errors}
-        // Functions
-        handleBlurNumberInput={this.handleBlurNumberInput}
-        handleFocusNumberInput={this.handleFocusNumberInput}
-        handleNumberChange={this.handleNumberChange}
-        handleInpuChange={this.handleInpuChange}
-        handleViewMoreToggle={this.handleViewMoreToggle}
-        handleOpenModal={this.handleOpenModal}
-        handleCloseModals={this.handleCloseModals}
-        handleSubmitDonate={this.handleSubmitDonate}
-        handleSubmitWithdrawRequest={this.handleSubmitWithdrawRequest}
-        requestedAmount={requestedAmount}
-      />
-    );
-  }
-}
+  return (
+    <Content
+      windowWidth={windowWidth}
+      name={name}
+      role={role}
+      updates={updates}
+      nextBooking={nextBooking}
+      accessibleFunds={accessibleFunds}
+      pending={pending}
+      reviews={reviews}
+      lastPayments={lastPayments}
+      listingAvailableDates={listingAvailableDates}
+      acceptAutomatically={acceptAutomatically}
+      profileCompleted={profileCompleted}
+    />
+  );
+};
 
 export default HostProfile;

@@ -6,20 +6,29 @@ const createToken = require('../../../helpers/createToken');
 
 const {
   API_BURSARY_APPLICATIONS,
+  API_UPDATE_BURSARY_APPLICATIONS,
 } = require('../../../../client/src/constants/apiRoutes');
 const {
   bursaryApplicationStatuses: s,
 } = require('../../../database/constants');
 
-let connection;
-let users;
-
 describe('Testing for get all bursary applications / admin', () => {
+  let connection;
+  let token;
+  let bursaryApplications;
+
   beforeEach(async () => {
     // build dummy data
-    const { connection: _connection, users: _users } = await buildDB();
+    const {
+      connection: _connection,
+      users,
+      bursaryApplications: _bursaryApplications,
+    } = await buildDB();
     connection = _connection;
-    users = _users;
+    bursaryApplications = _bursaryApplications;
+    const { adminUser } = users;
+
+    token = `token=${createToken(adminUser._id)}`;
   });
 
   afterAll(async () => {
@@ -27,10 +36,6 @@ describe('Testing for get all bursary applications / admin', () => {
   });
 
   test('get all bursary applications', done => {
-    const { adminUser } = users;
-
-    const token = `token=${createToken(adminUser._id)}`;
-
     request(app)
       .get(API_BURSARY_APPLICATIONS)
       .expect('Content-Type', /json/)
@@ -50,6 +55,37 @@ describe('Testing for get all bursary applications / admin', () => {
         expect(res.body[s.preApproved]).toHaveLength(1);
         expect(res.body[s.completed]).toHaveLength(1);
         expect(res.body[s.approved]).toHaveLength(1);
+
+        done(err);
+      });
+  });
+
+  test('Update a bursary application - pre-approve', done => {
+    const {
+      requestedBursary,
+      requestedBursary2,
+      preApprovedBursary,
+    } = bursaryApplications;
+
+    const payload = {
+      points: 200,
+      adminMessage: 'test message',
+      inviteToInterview: true,
+      status: s.preApproved,
+    };
+
+    request(app)
+      .patch(
+        API_UPDATE_BURSARY_APPLICATIONS.replace(':id', requestedBursary._id),
+      )
+      .set('Cookie', [token])
+      .send(payload)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
 
         done(err);
       });

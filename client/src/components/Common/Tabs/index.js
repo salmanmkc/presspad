@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled, { withTheme } from 'styled-components';
-import { Col, Row } from '../Grid';
+import { Row } from '../Grid';
 import * as T from '../Typography';
 
 const Button = styled.button`
@@ -10,6 +10,7 @@ const Button = styled.button`
   outline: none;
   padding: 5px 10px;
   cursor: pointer;
+  margin-right: 5%;
   background-color: ${({ theme, selected }) =>
     selected ? theme.colors.pink : 'transparent'};
 `;
@@ -26,33 +27,22 @@ const TabButton = withTheme(
   ),
 );
 
-const Tabs = ({ items, caps }) => {
-  const [selected, setSelected] = useState(null);
-
-  const handleClick = e => {
-    setSelected(e);
-  };
-
-  return (
-    <Row>
-      {items.map((item, i) => {
-        const index = i;
-        const isSelected = selected === index;
-        return (
-          <Col w={[2, 2, 2]} key={index}>
-            <TabButton
-              caps={caps}
-              index={index}
-              handleClick={handleClick}
-              selected={isSelected}
-            >
-              {item}
-            </TabButton>
-          </Col>
-        );
-      })}
-    </Row>
-  );
-};
-
+const Tabs = ({ items, caps, handleClick, selected }) => (
+  <Row>
+    {items.map((item, i) => {
+      const index = i;
+      const isSelected = selected === index;
+      return (
+        <TabButton
+          caps={caps}
+          index={index}
+          handleClick={handleClick}
+          selected={isSelected}
+        >
+          {item}
+        </TabButton>
+      );
+    })}
+  </Row>
+);
 export default Tabs;

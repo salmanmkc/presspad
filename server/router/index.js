@@ -79,6 +79,8 @@ const authorization = require('../middlewares/authorization');
 // const softAuthCheck = require("./../middlewares/softAuthCheck");
 const { validation, validation2 } = require('../middlewares/validation');
 
+const hostUpdateAvailability = require('../controllers/listing/updateAvailability');
+
 // API ROUTES
 const {
   LOGIN_URL,
@@ -88,6 +90,7 @@ const {
   GET_ORGS_URL,
   HOST_PROFILE_URL,
   HOST_COMPLETE_PROFILE,
+  HOST_UPDATE_AVAILABILITY,
   INTERN_COMPLETE_PROFILE,
   SEARCH_PROFILES_URL,
   BOOKING_REQUEST_URL,
@@ -176,6 +179,9 @@ router.post(HOST_COMPLETE_PROFILE, authentication, hostsCompleteProfile);
 
 // delete the photo from the host listings
 router.patch(HOST_COMPLETE_PROFILE, authentication, deletListingPhotos);
+
+// update listing availability and host setting to accept booking automatically (host dashboard)
+router.patch(HOST_UPDATE_AVAILABILITY, authentication, hostUpdateAvailability);
 
 // update intern profile
 router.post(INTERN_COMPLETE_PROFILE, authentication, internsCompleteProfile);

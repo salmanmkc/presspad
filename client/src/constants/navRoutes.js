@@ -14,6 +14,10 @@ export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
 export const SETTINGS_URL = '/settings';
 export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
 export const PAYMENTS_URL = '/payments';
+export const BURSARY = '/bursary';
+export const REFERRAL_URL = '/refer';
+export const INVOICES = '/invoices';
+// export const REFER_OTHERS = '/refer-others';
 
 // editing details
 export const SETTINGS = {
@@ -30,6 +34,14 @@ export const ADMIN_HOSTS_URL = '/admin/hosts';
 export const ADMIN_ORGS_URL = '/admin/clients';
 export const ADMIN_BOOKINGS_URL = '/admin/bookings';
 export const ADMIN_PAYMENTS_URL = '/admin/payments';
+export const ADMIN_BURSARY = '/admin/bursary';
+export const ADMIN_BURSARY_APPROVE = `${ADMIN_BURSARY}/approve/:id`;
+export const ADMIN_BURSARY_PREAPPROVE = `${ADMIN_BURSARY}/pre-approve/:id`;
+export const ADMIN_BURSARY_REJECT = `${ADMIN_BURSARY}/reject/:id`;
+export const ADMIN_BURSARY_SUCCESS = `${ADMIN_BURSARY}/success`;
+
+// url to view all the data the user has entered in sign up
+export const ADMIN_USER_DETAILS = '/admin/user-details/:id';
 
 // signing up process
 export const SIGNUP_INTERN = '/sign-up/intern';
