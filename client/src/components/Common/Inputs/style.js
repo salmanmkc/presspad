@@ -13,6 +13,7 @@ const Wrapper = styled.div`
 const commonInputStyles = props => css`
   width: ${props.width || '100%'};
   height: ${props.height || '50px'};
+  min-height: 50px;
   color: ${({ theme }) => props.color || theme.colors.gray3};
   margin: ${props.margin || '0 0 0 0'};
   border-radius: 10px;
@@ -147,6 +148,9 @@ export const InputWrapper = styled.div`
   position: relative;
   width: 100%;
   margin-bottom: ${({ error, theme }) => (error ? theme.spacings[2] : 0)};
+  margin-top: ${({ mt, theme }) => (mt ? theme.spacings[mt] : 0)};
+  margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
+  margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
 
   .ant-input-group-addon {
     background: none;

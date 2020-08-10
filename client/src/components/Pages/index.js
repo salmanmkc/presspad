@@ -31,9 +31,11 @@ import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import SignUpFunnelPage from './SignUpFunnelPage';
 
+import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
-import Settings, { DeleteAccountSuccess } from './Settings';
 import ResetPassword, { SetPassword } from './ResetPassword';
+import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
+import UnderReview from './Settings/UnderReview';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -57,11 +59,12 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
-  REFERRAL_URL,
   SETTINGS_URL,
-  DELETE_ACCOUNT_SUCCESS,
+  REFERRAL_URL,
+  // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  SETTINGS,
   ADMIN_BURSARY,
   ADMIN_BURSARY_APPROVE,
   ADMIN_BURSARY_PREAPPROVE,
@@ -69,6 +72,7 @@ import {
   ADMIN_BURSARY_SUCCESS,
   ADMIN_ORGS_URL,
   ADMIN_INTERNS_URL,
+  SIGNUP_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -94,23 +98,30 @@ function Pages(props) {
         />
 
         <Route
-          isPrivate
           exact
+          path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
+          Component={DeleteAccountSuccess}
+          layout="illustrations"
+          mobileText="WE HOPE TO SEE YOU AGAIN!"
+          {...props}
+        />
+
+        <Route
+          exact
+          path={SETTINGS.UNDER_REVIEW}
+          Component={UnderReview}
+          layout="illustrations"
+          {...props}
+        />
+
+        <Route
+          isPrivate
           path={SETTINGS_URL}
           Component={Settings}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           resetState={resetState}
           layout="sideMenu"
-          {...props}
-        />
-
-        <Route
-          exact
-          path={DELETE_ACCOUNT_SUCCESS}
-          Component={DeleteAccountSuccess}
-          layout="illustrations"
-          mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
         />
 
@@ -437,7 +448,7 @@ function Pages(props) {
           {...props}
         />
         <Route
-          path="/sign-up"
+          path={SIGNUP_URL}
           exact
           render={linkProps =>
             !isLoggedIn ? (
@@ -449,8 +460,8 @@ function Pages(props) {
           {...props}
         />
         <Route
-          path={SIGNIN_URL}
           exact
+          path={SIGNIN_URL}
           render={linkProps =>
             !isLoggedIn ? (
               <SignInPage
@@ -462,6 +473,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         {/* To be deleted */}
