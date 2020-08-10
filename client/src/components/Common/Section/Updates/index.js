@@ -15,6 +15,7 @@ const Updates = ({ updates = [], userRole }) => {
   const [viewUpdateNum, setViewUpdateNum] = useState(3);
   const [seen, setMarkAsSeen] = useState(false);
 
+  // updates db field seen / seenForOrg of notification on mouse hover / click
   const markAsSeen = async () => {
     if (!seen) {
       try {

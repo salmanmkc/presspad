@@ -7,7 +7,7 @@ import { Row, Col } from '../Grid';
 
 import formatPrice from '../../../helpers/formatPrice';
 
-const Reviews = ({
+const MyAccount = ({
   funds,
   liveCodes,
   liveCodesCost,
@@ -24,7 +24,7 @@ const Reviews = ({
     <Row mb={3}>
       <Col w={[4, 8, 8]}>
         <T.PXS>Available Funds:</T.PXS>
-        <T.PXSBold>{funds ? formatPrice(funds) : 'N/A'}</T.PXSBold>
+        <T.PXSBold>{formatPrice(funds)}</T.PXSBold>
       </Col>
       <Col w={[4, 4, 4]}>
         <Button
@@ -68,4 +68,4 @@ const Reviews = ({
   </S.Wrapper>
 );
 
-export default Reviews;
+export default MyAccount;

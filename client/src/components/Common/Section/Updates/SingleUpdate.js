@@ -466,7 +466,6 @@ const Update = ({ item, userRole }) => {
                     <BlueSpan> {secondParty.name}</BlueSpan>
                   </Link>
                 </T.PXS>
-
                 {!seenForOrg && !loading && <Badge>new</Badge>}
                 {loading && !seenForOrg && <LoadingBallPulseSync />}
               </Col>
@@ -481,7 +480,6 @@ const Update = ({ item, userRole }) => {
                   <i>{timeString}</i>
                 </T.PXS>
               </Col>
-
               <Col w={updateCol}>
                 <T.PXS>
                   <strong>{user.name}</strong> has received a new review
@@ -500,7 +498,6 @@ const Update = ({ item, userRole }) => {
                   <i>{timeString}</i>
                 </T.PXS>
               </Col>
-
               <Col w={updateCol}>
                 <T.PXS>
                   <strong>{user.name}</strong> has completed their stay{' '}
@@ -513,23 +510,21 @@ const Update = ({ item, userRole }) => {
 
         case 'bookingTerminated':
           return (
-            <S.UpdateLink to={`/booking/${booking}`}>
-              <Row mb={3}>
-                <Col w={timeCol}>
-                  <T.PXS>
-                    <i>{timeString}</i>
-                  </T.PXS>
-                </Col>
-                <Col w={updateCol}>
-                  <T.PXS>
-                    Unfortunately due to lack of payment this booking has been
-                    terminated.{' '}
-                  </T.PXS>
-                  {!seenForOrg && !loading && <Badge>new</Badge>}
-                  {loading && !seenForOrg && <LoadingBallPulseSync />}
-                </Col>
-              </Row>
-            </S.UpdateLink>
+            <Row mb={3}>
+              <Col w={timeCol}>
+                <T.PXS>
+                  <i>{timeString}</i>
+                </T.PXS>
+              </Col>
+              <Col w={updateCol}>
+                <T.PXS>
+                  Unfortunately due to lack of payment this booking has been
+                  terminated.{' '}
+                </T.PXS>
+                {!seenForOrg && !loading && <Badge>new</Badge>}
+                {loading && !seenForOrg && <LoadingBallPulseSync />}
+              </Col>
+            </Row>
           );
         default:
           return null;

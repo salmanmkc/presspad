@@ -10,7 +10,6 @@ import {
   API_ORGS_DASHBOARD_URL,
   API_INTERNS_URL,
   API_COUPONS_URL,
-  API_NOTIFICATION_URL,
 } from '../../../constants/apiRoutes';
 
 import Content from './Content';
@@ -19,11 +18,7 @@ const moment = extendMoment(Moment);
 
 const initState = {
   orgName: '',
-
   notifications: [],
-  slicedNotifications: [],
-  viewNotificationNum: 3,
-  markAsSeen: false,
   coupons: [],
   account: {},
   interns: [],
@@ -57,7 +52,7 @@ const OrganisationDashboard = props => {
       const { account, name: orgName } = details[0];
 
       // new setState
-      setState({ orgName, account, notifications });
+      setState({ orgName, account, notifications, coupons });
     } catch (err) {
       setIsLoading(false);
       const error =
@@ -306,70 +301,7 @@ const OrganisationDashboard = props => {
   const handleAccountUpdate = account =>
     setState({ account, showAddFunds: false });
 
-  // ! TODO ADD org type mark as seen to Updates component
-  const markAsSeen = async () => {
-    const { notifications, markAsSeen } = state;
-
-    if (!markAsSeen) {
-      try {
-        const newNotifications = notifications.map(ele => ({ ...ele }));
-        const notificationsIds = notifications.reduce((acc, curr, i) => {
-          if (!curr.seenForOrg) {
-            acc.push(curr._id);
-            newNotifications[i].loading = true;
-          }
-          return acc;
-        }, []);
-
-        setState({
-          markAsSeen: true,
-          slicedNotifications: newNotifications,
-        });
-        if (notificationsIds[0]) {
-          await axios.patch(`${API_NOTIFICATION_URL}/seen`, notificationsIds);
-
-          const updatedNotifications = notifications.map(update => {
-            if (notificationsIds.includes(update._id)) {
-              return {
-                ...update,
-                seenForOrg: true,
-                loading: false,
-              };
-            }
-            return update;
-          });
-
-          setState(({ viewNotificationNum }) => ({
-            notifications: updatedNotifications,
-            slicedNotifications: viewNotificationNum
-              ? updatedNotifications.slice(0, viewNotificationNum)
-              : updatedNotifications,
-          }));
-        }
-      } catch (error) {
-        setState({ markAsSeen: false, notifications });
-        message.error('Something went wrong');
-      }
-    }
-  };
-
-  const handleViewMoreToggle = ({
-    target: {
-      dataset: { name },
-    },
-  }) => {
-    if (name === 'updates') {
-      setState(({ viewNotificationNum, notifications }) => ({
-        viewNotificationNum: viewNotificationNum ? undefined : 3,
-        slicedNotifications: viewNotificationNum
-          ? notifications
-          : notifications.slice(0, 3),
-        markAsSeen: false,
-      }));
-    }
-  };
-
-  const { orgName, notifications } = state;
+  const { orgName, notifications, account, coupons } = state;
 
   if (isLoading) return <Spin />;
 
@@ -379,6 +311,9 @@ const OrganisationDashboard = props => {
       name={name}
       notifications={notifications}
       windowWidth={windowWidth}
+      account={account}
+      coupons={coupons}
+      // old
       stripe={stripe}
       state={state}
       onEndChange={onEndChange}
@@ -399,8 +334,6 @@ const OrganisationDashboard = props => {
       handleSubmitCreateCoupon={handleSubmitCreateCoupon}
       handlePayNowClick={handlePayNowClick}
       handleAccountUpdate={handleAccountUpdate}
-      markAsSeen={markAsSeen}
-      handleViewMoreToggle={handleViewMoreToggle}
     />
   );
 };
