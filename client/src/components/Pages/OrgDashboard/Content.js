@@ -3,14 +3,47 @@ import moment from 'moment';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
-import { MyAccount, AccountDetails, Updates } from '../../Common/Section';
+import {
+  MyAccount,
+  AccountDetails,
+  Updates,
+  Coupons,
+} from '../../Common/Section';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { HOSTS_URL, ADD_FUNDS_URL } from '../../../constants/navRoutes';
 import { bottomMargins, typographies } from './styleProperties';
-import { calculatePrice, formatPrice } from '../../../helpers';
+import {
+  calculatePrice,
+  formatPrice,
+  createSingleDate,
+} from '../../../helpers';
 
 import { Wrapper } from './OrgDashboard.style';
+
+const createLiveCodesTableData = arr =>
+  arr.map(el => {
+    const {
+      code,
+      startDate,
+      endDate,
+      usedAmount,
+      reservedAmount,
+      status,
+      intern,
+    } = el;
+
+    return {
+      code,
+      startDate: createSingleDate(startDate),
+      endDate: createSingleDate(endDate),
+      usedAmount: formatPrice(usedAmount),
+      reservedAmount: formatPrice(reservedAmount),
+      status,
+      id: intern._id,
+      internName: intern.name,
+    };
+  });
 
 const Content = props => {
   const {
@@ -68,8 +101,6 @@ const Content = props => {
     .map(el => el.reservedAmount)
     .reduce((a, b) => a + b, 0);
 
-  console.log('live', liveCouponsTotalValue);
-
   return (
     <Wrapper mobile={device === 'mobile'}>
       <Row mb={5}>
@@ -87,7 +118,7 @@ const Content = props => {
               funds={currentBalance / 100}
               liveCodes={liveCoupons.length}
               liveCodesCost={liveCouponsTotalValue / 100}
-              liveBookings={1}
+              liveBookings={currentlyHosted}
               // addCodes={addCodes}
             />
           </Col>
@@ -103,8 +134,10 @@ const Content = props => {
         </Col>
       </Row>
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 10, 5]} mb={bottomMargins.col[device]}>
-          CURRENT INTERN DISCOUNT CODES
+        <Col w={[4, 12, 12]} mb={bottomMargins.col[device]}>
+          <Coupons
+            coupons={liveCoupons && createLiveCodesTableData(liveCoupons)}
+          />
         </Col>
       </Row>
       <Row mb={bottomMargins.row[device]}>

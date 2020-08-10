@@ -5,13 +5,18 @@ import { INTERN_PROFILE } from '../../../constants/navRoutes';
 
 const Coupons = ({ coupons }) => {
   const columns = [
-    StandardCol('discountCode', 'code'),
-    StandardCol('startDate', 'startDate'),
-    StandardCol('endDate', 'endDate'),
-    StandardCol('amountSpent', 'usedAmount'),
-    StandardCol('totalPotentialCost', 'reservedAmount'),
-    LinkCol('intern', INTERN_PROFILE, 'intern._id'),
-    StandardCol('status', 'status'),
+    { title: 'Discount Code', dataIndex: 'code', key: 'code' },
+    StandardCol('startDate'),
+    StandardCol('endDate'),
+    { title: 'Amount Spent', dataIndex: 'usedAmount', key: 'usedAmount' },
+    {
+      title: 'Total Potential Cost',
+      dataIndex: 'reservedAmount',
+      key: 'reservedAmount',
+    },
+
+    LinkCol('internName', INTERN_PROFILE, 'id'),
+    StandardCol('status'),
   ];
 
   return (
