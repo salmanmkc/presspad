@@ -2,12 +2,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import Welcome from './Welcome';
 import { internData, hostData, orgData } from './welcomeContent';
-import {
-  WELCOME_PAGES,
-  DASHBOARD_URL,
-  HOST_COMPLETE_PROFILE_URL,
-  INTERN_COMPLETE_PROFILE_URL,
-} from '../../../constants/navRoutes';
+import { WELCOME_PAGES, DASHBOARD_URL } from '../../../constants/navRoutes';
 
 const WelcomePages = ({ role }) => {
   const history = useHistory();
@@ -21,18 +16,7 @@ const WelcomePages = ({ role }) => {
     data = orgData;
   }
   const number = data && data.length;
-  const endFunc = () => {
-    if (role === 'organisation') {
-      return history.push(DASHBOARD_URL);
-    }
-    if (['host', 'superhost'].includes(role)) {
-      return history.push(HOST_COMPLETE_PROFILE_URL);
-    }
-    if (role === 'intern') {
-      return history.push(INTERN_COMPLETE_PROFILE_URL);
-    }
-    return history.push(DASHBOARD_URL);
-  };
+  const endFunc = () => history.push(DASHBOARD_URL);
   return (
     <div>
       {number < Number(id) ? (
