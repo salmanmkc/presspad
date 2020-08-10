@@ -20,7 +20,7 @@ const Updates = ({ updates = [], userRole }) => {
       try {
         const newUpdates = slicedUpdates.map(ele => ({ ...ele }));
         const updateIds = slicedUpdates.reduce((acc, curr, i) => {
-          if (!curr.seen) {
+          if (userRole === 'org' ? !curr.seenForgOrg : !curr.seen) {
             acc.push(curr._id);
             newUpdates[i].loading = true;
           }
@@ -35,7 +35,11 @@ const Updates = ({ updates = [], userRole }) => {
 
           const updatedUpdates = updates.map(update => {
             if (updateIds.includes(update._id)) {
-              return { ...update, seen: true, loading: false };
+              return {
+                ...update,
+                [userRole === 'org' ? 'seenForOrg' : 'seen']: true,
+                loading: false,
+              };
             }
             return update;
           });
