@@ -178,7 +178,7 @@ export default class SignInPage extends Component {
             </p>
             {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
             <Button type="secondary" onClick={onFormSubmit}>
-              Sign in
+              Log in
             </Button>
             <T.P color="gray3" mt={4} style={{ textAlign: 'center' }}>
               {"Don't have an account? "}
