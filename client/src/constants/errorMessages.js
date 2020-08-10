@@ -4,6 +4,7 @@ module.exports = {
   HOMETOWN: 'Hometown is required',
   BIO: 'Please write a short bio about yourself',
   JOB_TITLE: 'Job title is required',
+  REQUIRED_FIELD: 'required',
   // show field title on the backend only
   REQUIRED: field =>
     this && this.window
