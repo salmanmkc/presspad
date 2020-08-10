@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import { Row, Col } from '../../Common/Grid';
@@ -21,7 +21,7 @@ import {
 
 import { Wrapper } from './OrgDashboard.style';
 
-const createLiveCodesTableData = arr =>
+const createCodesTableData = arr =>
   arr.map(el => {
     const {
       code,
@@ -77,6 +77,7 @@ const Content = props => {
   } = props;
 
   const { currentBalance = 0 } = account;
+  const [liveCouponsSrc, setLiveCouponsSrc] = useState(true);
 
   console.log('coupons', coupons);
   console.log('account', account);
@@ -88,14 +89,18 @@ const Content = props => {
 
   // My Account
   const liveCoupons = coupons.filter(
+    item => moment(item.endDate).valueOf() >= moment().valueOf(),
+  );
+  const previousCoupons = coupons.filter(
     item =>
-      moment(item.endDate).valueOf() > moment().valueOf() &&
-      moment(item.startDate).valueOf() <= moment().valueOf(),
+      moment(item.endDate).valueOf() <= moment().valueOf() &&
+      moment(item.startDate).valueOf() < moment().valueOf(),
   );
   const currentlyHosted = coupons.filter(item => item.status === 'At host')
     .length;
 
   console.log('live', liveCoupons);
+  console.log('prev', previousCoupons);
 
   const liveCouponsTotalValue = liveCoupons
     .map(el => el.reservedAmount)
@@ -136,7 +141,13 @@ const Content = props => {
       <Row mb={bottomMargins.row[device]}>
         <Col w={[4, 12, 12]} mb={bottomMargins.col[device]}>
           <Coupons
-            coupons={liveCoupons && createLiveCodesTableData(liveCoupons)}
+            coupons={
+              liveCouponsSrc
+                ? createCodesTableData(liveCoupons)
+                : createCodesTableData(previousCoupons)
+            }
+            previewClickEvent={() => setLiveCouponsSrc(!liveCouponsSrc)}
+            liveCouponsSrc={liveCouponsSrc}
           />
         </Col>
       </Row>

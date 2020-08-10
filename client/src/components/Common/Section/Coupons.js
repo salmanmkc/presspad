@@ -3,7 +3,7 @@ import Table from '../Table';
 import { StandardCol, LinkCol } from '../Table/Common';
 import { INTERN_PROFILE } from '../../../constants/navRoutes';
 
-const Coupons = ({ coupons }) => {
+const Coupons = ({ coupons, previewClickEvent, liveCouponsSrc }) => {
   const columns = [
     { title: 'Discount Code', dataIndex: 'code', key: 'code' },
     StandardCol('startDate'),
@@ -23,10 +23,18 @@ const Coupons = ({ coupons }) => {
     <Table
       columns={columns}
       data={coupons}
-      previewLink="/previewLinkGoesHere"
-      previewLinkText="View all previous discount codes"
-      previewAlign="right"
-      tableHeader="Current Intern Discount Codes"
+      previewClickEvent={previewClickEvent}
+      previewLinkText={
+        liveCouponsSrc
+          ? 'View all previous discount codes'
+          : 'View all current discount codes'
+      }
+      previewAlign="center"
+      tableHeader={
+        liveCouponsSrc
+          ? 'Current Intern Discount Codes'
+          : 'Previous Intern Discount Codes'
+      }
       showImage="money"
     />
   );
