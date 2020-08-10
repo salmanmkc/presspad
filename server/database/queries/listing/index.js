@@ -6,6 +6,13 @@ const updateListing = (userId, data, s) =>
     session: s,
   });
 
+const updateListingAvailableDates = (hostId, dates) =>
+  Listing.updateOne(
+    { user: hostId },
+    { $set: { availableDates: dates } },
+    { new: true },
+  );
+
 const getAllCities = () =>
   Listing.aggregate([
     { $match: {} },
@@ -45,6 +52,7 @@ const deleteListingPhotoQ = (userId, fileNameToBeDeleted) =>
 
 module.exports = {
   updateListing,
+  updateListingAvailableDates,
   deleteListingPhotoQ,
   getAllCities,
 };

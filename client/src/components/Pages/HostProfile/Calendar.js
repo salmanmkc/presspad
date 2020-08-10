@@ -12,6 +12,7 @@ import {
   getDateRangeFromArray,
   calculatePriceByRange,
   formatPrice,
+  createSingleDate,
 } from '../../../helpers';
 
 // Typography
@@ -160,7 +161,8 @@ class CalendarComponent extends Component {
     const { avDates, listingActiveBookings } = this.state;
 
     // return true if current date is not included in available dates => disable tile
-    date = moment(date).format('YYYY-MM-DD');
+    date = createSingleDate(date);
+
     return (
       !avDates.includes(date) ||
       (listingActiveBookings && listingActiveBookings.includes(date)) ||

@@ -1,6 +1,30 @@
 import styled from 'styled-components';
 import { colors } from '../../../theme';
 
+export const Wrapper = styled.div`
+  width: 100%;
+  margin-top: ${({ mobile }) => mobile && '-2rem'};
+`;
+
+export const Container = styled.div`
+  margin-top: ${({ theme: { spacings } }) => spacings[3]};
+  margin-bottom: ${({ theme: { spacings } }) => spacings[3]};
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    margin-top: ${({ theme: { spacings } }) => spacings[6]};
+    margin-bottom: 0;
+  }
+`;
+
+export const CompleteProfileWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: ${({ theme }) => theme.spacings[4]};
+`;
+
+// OLD STYLES
+
 export const PageWrapper = styled.div`
   padding-top: 4rem;
   padding-bottom: 8rem;
