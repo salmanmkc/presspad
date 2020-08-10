@@ -4,15 +4,20 @@ import { message } from 'antd';
 
 import './style.css';
 
-const Notification = ({ setOpen, open, content, redirectUrl }) => {
+const Notification = ({ setOpen, open, content, cb, redirectUrl }) => {
   const history = useHistory();
+
   const handleClose = () => {
     setOpen(false);
+    if (cb && typeof cb === 'function') {
+      cb();
+    }
 
     if (redirectUrl) {
       history.push(redirectUrl);
     }
   };
+
   if (open) {
     return (
       <div>

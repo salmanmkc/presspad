@@ -11,8 +11,7 @@ export const BOOKING_VIEW_URL = '/booking/:id';
 export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
-export const SETTINGS_URL = '/settings';
-export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
+
 export const PAYMENTS_URL = '/payments';
 export const BURSARY = '/bursary';
 export const REFERRAL_URL = '/refer';
@@ -20,11 +19,15 @@ export const INVOICES = '/invoices';
 // export const REFER_OTHERS = '/refer-others';
 
 // editing details
+export const SETTINGS_URL = '/settings';
 export const SETTINGS = {
   ACCOUNT: `${SETTINGS_URL}/my-account`,
   ABOUT_ME: `${SETTINGS_URL}/about-me`,
   EDIT_PROFILE: `${SETTINGS_URL}/edit-profile`,
   VERIFY: `${SETTINGS_URL}/verify`,
+  DELETE_ACCOUNT: `${SETTINGS_URL}/delete-account`,
+  DELETE_ACCOUNT_SUCCESS: `/delete-account-success`,
+  UNDER_REVIEW: `/under-review`,
 };
 
 // admin routes
