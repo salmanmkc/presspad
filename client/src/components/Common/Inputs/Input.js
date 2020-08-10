@@ -19,10 +19,13 @@ const Input = ({
   helperText,
   limit,
   onChange,
+  onBlur,
   value,
+  defaultValue,
   extraInfo,
   name,
   type,
+  addonBefore,
 }) => (
   <InputWrapper error={!!error} mt={mt} mb={mb} mr={mr} ml={ml}>
     {label && (
@@ -38,7 +41,9 @@ const Input = ({
     {textArea ? (
       <TextArea
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
+        defaultValue={defaultValue}
         placeholder={placeholder || 'Type here...'}
         rows={4}
         style={{ paddingTop: '10px' }}
@@ -48,10 +53,13 @@ const Input = ({
     ) : (
       <AntdInput
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
+        defaultValue={defaultValue}
         placeholder={placeholder || 'Type here...'}
         name={name}
         type={type}
+        addonBefore={addonBefore}
       />
     )}
     {limit && (

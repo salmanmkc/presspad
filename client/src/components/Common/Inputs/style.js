@@ -149,6 +149,10 @@ export const InputWrapper = styled.div`
   width: 100%;
   margin-bottom: ${({ error, theme }) => (error ? theme.spacings[2] : 0)};
 
+  .ant-input-group-addon {
+    background: none;
+  }
+
   input {
     ${commonInputStyles}
   }

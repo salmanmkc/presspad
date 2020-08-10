@@ -42,7 +42,7 @@ const menuLinks = {
 
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'Create an account', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_URL },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };
@@ -60,7 +60,7 @@ const horizontalMenuLinks = {
   ],
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'Create an account', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_URL },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };

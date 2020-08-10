@@ -5,14 +5,13 @@ import { Redirect, Switch } from 'react-router-dom';
 import Route from '../Common/Route';
 import NotFound from '../Common/NotFound';
 
-import LandingPage from './LandingPage';
 import HostCreateProfile from './HostCreateProfile';
 import SignInPage from './SignInPage';
 import SignUpPage from './SignUpPage';
 import Dashboard from './Dashboard';
 import HostProfile from './HostProfile';
 import InternCreateProfile from './InternCreateProfile';
-import AdminDashboard from './AdminDashboard';
+import { AdminDashboard, AdminBursary, AdminBursaryResponse } from './Admin';
 import SearchHosts from './SearchHosts';
 import BookingView from './BookingView';
 import MyProfile from './MyProfile';
@@ -24,6 +23,7 @@ import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
+import SignUpFunnelPage from './SignUpFunnelPage';
 
 import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
@@ -33,7 +33,6 @@ import UnderReview from './Settings/UnderReview';
 
 import { withWindowWidth } from '../../HOCs';
 import {
-  HOME_URL,
   SIGNIN_URL,
   SIGNUP_INTERN,
   SIGNUP_HOST,
@@ -60,6 +59,11 @@ import {
   RESET_PASSWORD,
   SET_PASSWORD,
   SETTINGS,
+  ADMIN_BURSARY,
+  ADMIN_BURSARY_APPROVE,
+  ADMIN_BURSARY_PREAPPROVE,
+  ADMIN_BURSARY_REJECT,
+  ADMIN_BURSARY_SUCCESS,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -74,9 +78,6 @@ function Pages(props) {
   return (
     <>
       <Switch>
-        <Route path={HOME_URL} exact Component={LandingPage} {...props} />
-        {/* protected host profile */}
-
         <Route
           exact
           isPrivate
@@ -234,6 +235,71 @@ function Pages(props) {
             Component={AdminDashboard}
             handleChangeState={handleChangeState}
             isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY}
+            Component={AdminBursary}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_APPROVE}
+            type="approve"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_PREAPPROVE}
+            type="preapprove"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_REJECT}
+            type="reject"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BURSARY_SUCCESS}
+            type="success"
+            Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
             {...props}
           />
         )}
@@ -340,6 +406,18 @@ function Pages(props) {
                 {...linkProps}
                 {...props}
               />
+            ) : (
+              <Redirect to={DASHBOARD_URL} />
+            )
+          }
+          {...props}
+        />
+        <Route
+          path="/sign-up"
+          exact
+          render={linkProps =>
+            !isLoggedIn ? (
+              <SignUpFunnelPage {...linkProps} {...props} />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
