@@ -32,7 +32,7 @@ const SignUpFunnel = ({ history }) => {
             }}
             caps={false}
           >
-            I am... :
+            I am...
           </Title>
         </Col>
       </Row>
