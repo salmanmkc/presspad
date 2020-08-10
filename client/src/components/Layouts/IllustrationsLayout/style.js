@@ -46,7 +46,7 @@ export const ContentWrapper = styled.div`
 export const ColouredTopDiv = styled.div`
   background: ${({ theme, color = 'pink' }) => theme.colors[color]};
   min-height: fit-content;
-  height: 25vw;
+  height: 140px;
   overflow: hidden;
   display: flex;
   justify-content: ${({ isImage }) => (isImage ? 'flex-end' : 'center')};

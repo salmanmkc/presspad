@@ -2,20 +2,13 @@ import React, { useState } from 'react';
 import { withTheme } from 'styled-components';
 import * as S from './styled';
 import Button from '../ButtonNew';
-import { Col, Row } from '../Grid';
+import { Col } from '../Grid';
 
 const ProgressBar = withTheme(
   ({ theme, number, current: initialCurrent, color, handleClick, margin }) => {
     const [current, setCurrent] = useState(initialCurrent || 0);
     return (
-      <Row
-        style={{
-          alignItems: 'center',
-          minHeight: 50,
-          position: 'absolute',
-          bottom: 0,
-        }}
-      >
+      <S.Container>
         <Col w={[2, 6, 6]}>
           <S.Wrapper margin={margin}>
             {Array.from({ length: number }, (v, i) => (
@@ -45,7 +38,7 @@ const ProgressBar = withTheme(
             NEXT
           </Button>
         </Col>
-      </Row>
+      </S.Container>
     );
   },
 );
