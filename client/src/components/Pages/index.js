@@ -64,6 +64,7 @@ import {
   ADMIN_BURSARY_PREAPPROVE,
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
+  SIGNUP_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -413,7 +414,7 @@ function Pages(props) {
           {...props}
         />
         <Route
-          path="/sign-up"
+          path={SIGNUP_URL}
           exact
           render={linkProps =>
             !isLoggedIn ? (
@@ -425,8 +426,8 @@ function Pages(props) {
           {...props}
         />
         <Route
-          path={SIGNIN_URL}
           exact
+          path={SIGNIN_URL}
           render={linkProps =>
             !isLoggedIn ? (
               <SignInPage
@@ -438,6 +439,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         {/* To be deleted */}
