@@ -17,13 +17,12 @@ export const ColouredSideDiv = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   position: fixed;
-  min-height: 100vh;
   right: 0;
 `;
 
 export const ContentWrapper = styled.div`
+  position: relative;
   width: 100%;
-
   padding: ${() => `0 3% 0`};
 
   @media ${breakpoints.mobileL} {
@@ -47,7 +46,7 @@ export const ContentWrapper = styled.div`
 export const ColouredTopDiv = styled.div`
   background: ${({ theme, color = 'pink' }) => theme.colors[color]};
   min-height: fit-content;
-  height: 30vw;
+  height: 25vw;
   overflow: hidden;
   display: flex;
   justify-content: ${({ isImage }) => (isImage ? 'flex-end' : 'center')};
