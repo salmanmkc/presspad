@@ -11,57 +11,45 @@ const organisationSchema = new Schema(
     },
     description: {
       type: String,
-      required: true,
     },
     accountDetails: {
       firstName: {
         type: String,
-        required: true,
       },
       lastName: {
         type: String,
-        required: true,
       },
       phone: {
         type: String,
-        required: true,
       },
       email: {
         type: String,
-        required: true,
       },
     },
     contactDetails: {
       firstName: {
         type: String,
-        required: true,
       },
       lastName: {
         type: String,
-        required: true,
       },
       phone: {
         type: String,
-        required: true,
       },
       email: {
         type: String,
-        required: true,
       },
     },
     internshipOpportunities: [
       {
         opportunity: {
           type: String,
-          required: true,
         },
         link: {
           type: String,
-          required: true,
         },
         details: {
           type: String,
-          required: true,
         },
       },
     ],
