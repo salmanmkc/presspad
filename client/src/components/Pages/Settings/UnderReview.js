@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+
 import * as T from '../../Common/Typography';
 import * as S from './style';
 import { Col, Row } from '../../Common/Grid';
