@@ -9,7 +9,7 @@ const ProgressBar = withTheme(
     const [current, setCurrent] = useState(initialCurrent || 0);
     return (
       <Row style={{ alignItems: 'center', minHeight: 50 }}>
-        <Col w={[4, 6, 6]}>
+        <Col w={[2, 6, 6]}>
           <S.Wrapper margin={margin}>
             {Array.from({ length: number }, (v, i) => (
               <S.Circle
@@ -26,7 +26,7 @@ const ProgressBar = withTheme(
             ))}
           </S.Wrapper>
         </Col>
-        <Col w={[4, 6, 6]}>
+        <Col w={[2, 6, 6]}>
           <Button
             type="link"
             textColor="blue"
