@@ -19,7 +19,6 @@ export const internData = [
       'You can filter hosts when you search based on location, dates and interests, view their profiles and when you’re ready, send them a booking request. We’ll let you know how much of a discount you might be eligible for through our - and our partner organisations’ - bursary and discount programmes!',
   },
   {
-    title: 'MAKING PAYMENT EASY',
     topTitle: 'MAKING',
     bottomTitle: 'PAYMENT EASY',
     subTitle:
@@ -35,7 +34,6 @@ export const internData = [
       'That’s why we’ve got tonnes of events, freebies, activities and resources just for you. Get involved online to shape our movement - as with anything: you get what you give!',
   },
   {
-    title: 'FINALLY... THANK YOU!',
     topTitle: 'FINALLY...',
     bottomTitle: 'THANK YOU!',
     subTitle: 'We can only do what we do thanks to your trust and talent!',
@@ -72,7 +70,7 @@ export const hostData = [
       'That’s why we’ve got tonnes of events, freebies, activities and resources just for you. Get involved online to shape our movement - as with anything: you get what you give!',
   },
   {
-    title: 'FINALLY... THANK YOU!',
+    title: 'FINALLY...1 THANK YOU!',
     topTitle: 'FINALLY...',
     bottomTitle: 'THANK YOU!',
     subTitle:
