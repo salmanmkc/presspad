@@ -184,7 +184,7 @@ const MyProfile = props => {
     <div style={{ marginTop: '4rem' }}>
       <UploadFile
         profile
-        mainText="Upload more photos by dragging new photos here"
+        mainText="Upload photo by dragging here"
         secondaryText="file size max 2mb"
         userId={props.id}
         files={[state.profileImage]}

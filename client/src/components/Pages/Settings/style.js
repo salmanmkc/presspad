@@ -49,7 +49,7 @@ export const SuccessHeaderWrapper = styled.p`
 export const ChangePassword = styled.div`
   font-family: Glacial Indifference;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 25px;
   cursor: pointer;
   text-decoration-line: underline;

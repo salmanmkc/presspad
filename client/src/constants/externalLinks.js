@@ -6,7 +6,7 @@ export const PRIVACY_POLICY =
   'https://docs.google.com/document/d/1euFHtaTUh8NW7PZ22vTM3Yyla_8ZRWWKtDJaOzjzQYE/edit?usp=sharing';
 export const DBS_EXTERNAL = 'https://client.disclosureservices.com/sign-in/';
 export const CLASSES_DEFINITIONS =
-  'https://www.notion.so/Intern-sign-up-questions-b2687cc754674fff821c6a1ccde1f311#2548a4138b25430f96a8428a083acc77';
+  'https://www.independent.co.uk/news/uk/home-news/britain-now-has-7-social-classes-and-working-class-is-a-dwindling-breed-8557894.htm';
 export const PARTNERSHIP_AGREEMENT =
   'https://drive.google.com/file/d/1ANm7O_ayB6tzUz2TyiS8CWmWHxkQiG_p/view?usp=sharing';
 export const PARTICIPATION_AGREEMENT =
