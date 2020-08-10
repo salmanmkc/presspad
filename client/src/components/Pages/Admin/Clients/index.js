@@ -50,7 +50,7 @@ const AdminClients = () => {
           <T.H2 color="blue">Clients</T.H2>
         </Col>
       </Row>
-      <Table columns={columns} data={clients} loading={loading} />
+      <Table columns={columns} data={clients} loading={loading} showSearch />
     </>
   );
 };

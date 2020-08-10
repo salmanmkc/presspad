@@ -11,6 +11,8 @@ export const BOOKING = {
   'rejected by admin': colors.black,
   cancelled: colors.gray,
   completed: colors.blue,
+  'looking for host': colors.blue,
+  'at host': colors.yellow,
 };
 
 export const APPROVAL = {

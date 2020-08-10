@@ -47,27 +47,28 @@ module.exports = async (req, res, next) => {
 
           const cleanStats = await Promise.all(
             stats.map(async intern => {
-              let status = 'Looking for host';
+              let bookingStatus = 'looking for host';
 
               if (intern.liveBookings > 0) {
-                status = 'At host';
+                bookingStatus = 'at host';
               } else if (intern.pendingBookings > 0) {
-                status = 'Pending request';
+                bookingStatus = 'pending';
               } else if (intern.confirmedBookings > 0) {
-                status = 'Booking confirmed';
+                bookingStatus = 'confirmed';
               }
 
               const internObj = {
                 key: stats.indexOf(intern) + 1,
                 name: intern.name,
-                organisation: intern.organisationName || intern.orgName,
+                organisation: intern.organisation || intern.orgName,
                 totalPayments: intern.totalPayments || 0,
-                status,
-                userId: intern._id,
-                nextInstallmentDueDate: intern.nextInstallmentDueDate,
-                nextInstallmentPaid: intern.nextInstallmentPaid,
-                nextInstallmentAmount: intern.nextInstallmentAmount,
+                bookingStatus,
+                id: intern._id,
+                nextPaymentDueDate: intern.nextPaymentDueDate,
+                nextPaymentPaid: intern.nextPaymentPaid,
+                nextPayment: intern.nextPayment,
                 dbsCheck: intern.DBSCheck,
+                internshipStart: intern.internshipStart,
               };
 
               const { dbsCheck } = internObj;

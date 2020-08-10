@@ -106,6 +106,9 @@ module.exports.getAllInternStats = () =>
           // org name from profile collections
           orgName: { $arrayElemAt: ['$profile.organisation', 0] },
           DBSCheck: { $arrayElemAt: ['$profile.DBSCheck', 0] },
+          internshipStart: {
+            $arrayElemAt: ['$profile.internshipStartDate', 0],
+          },
         },
         account: { $push: '$account' },
         bookings: { $push: '$bookings' },
@@ -116,30 +119,32 @@ module.exports.getAllInternStats = () =>
       $project: {
         _id: '$_id._id',
         name: '$_id.name',
-        organisationName: '$_id.organisationName',
+        organisation: '$_id.organisationName',
         bookings: '$bookings',
         nextInstallment: '$nextInstallment',
         totalPayments: '$_id.totalPayments',
         orgName: '$_id.orgName',
         DBSCheck: '$_id.DBSCheck',
+        internshipStart: '$_id.internshipStart',
       },
     },
     {
       $project: {
         _id: 1,
         name: 1,
-        organisationName: 1,
+        organisation: 1,
         orgName: 1,
         DBSCheck: 1,
-        nextInstallmentDueDate: '$nextInstallment.dueDate',
-        nextInstallmentPaid: {
+        internshipStart: 1,
+        nextPaymentDueDate: '$nextInstallment.dueDate',
+        nextPaymentPaid: {
           $cond: [
             { $ifNull: ['$nextInstallment.transaction', false] },
             true,
             false,
           ],
         },
-        nextInstallmentAmount: '$nextInstallment.amount',
+        nextPayment: '$nextInstallment.amount',
         // get all the credits they've spent to date
         totalPayments: 1,
         // get any bookings that cover today's date

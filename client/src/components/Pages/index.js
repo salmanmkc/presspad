@@ -16,6 +16,7 @@ import {
   AdminBursary,
   AdminBursaryResponse,
   AdminClients,
+  AdminInterns,
 } from './Admin';
 import SearchHosts from './SearchHosts';
 import BookingView from './BookingView';
@@ -67,6 +68,7 @@ import {
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
   ADMIN_ORGS_URL,
+  ADMIN_INTERNS_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -306,6 +308,19 @@ function Pages(props) {
             path={ADMIN_ORGS_URL}
             type="success"
             Component={AdminClients}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_INTERNS_URL}
+            type="success"
+            Component={AdminInterns}
             handleChangeState={handleChangeState}
             isLoggedIn={isLoggedIn}
             layout="sideMenu"
