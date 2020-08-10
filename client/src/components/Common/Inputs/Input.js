@@ -24,6 +24,7 @@ const Input = ({
   defaultValue,
   extraInfo,
   type,
+  name,
   addonBefore,
 }) => (
   <InputWrapper error={!!error} mt={mt} mb={mb} mr={mr} ml={ml}>
@@ -46,6 +47,7 @@ const Input = ({
         placeholder={placeholder || 'Type here...'}
         rows={4}
         style={{ paddingTop: '10px' }}
+        name={name}
       />
     ) : (
       <AntdInput
@@ -55,6 +57,7 @@ const Input = ({
         defaultValue={defaultValue}
         placeholder={placeholder || 'Type here...'}
         type={type}
+        name={name}
         addonBefore={addonBefore}
       />
     )}
