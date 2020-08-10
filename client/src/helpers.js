@@ -347,5 +347,6 @@ export const decidePaymentStatus = ({ dueDate }) => {
   } else {
     status = 'upcoming';
   }
+
   return status;
 };

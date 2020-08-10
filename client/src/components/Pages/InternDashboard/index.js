@@ -21,6 +21,7 @@ import { PageWrapper } from './InternDashboard.style';
 const initState = {
   name: '',
   installments: [],
+  paymentsHistory: [],
   notifications: [],
   reviews: [],
 };
@@ -69,6 +70,7 @@ const InternDashboard = props => {
         reviews = [],
         installments = [],
         profileCompleted = false,
+        paymentsHistory = [],
       } = data;
 
       setState({
@@ -77,6 +79,7 @@ const InternDashboard = props => {
         nextBooking,
         reviews,
         installments,
+        paymentsHistory,
         profileCompleted,
       });
     } catch (err) {
@@ -93,6 +96,7 @@ const InternDashboard = props => {
     notifications,
     name,
     installments,
+    paymentsHistory,
     nextBooking,
     reviews,
     profileCompleted,
@@ -106,7 +110,7 @@ const InternDashboard = props => {
   if (isLoading) return <Spin />;
 
   return (
-    <PageWrapper>
+    <PageWrapper mobile={device === 'mobile'}>
       <Elements>
         <PayNowModal
           payNow={payNow}
@@ -114,12 +118,14 @@ const InternDashboard = props => {
           fetchData={fetchData}
         />
       </Elements>
-      <Row mb={5}>
+      <Row mb={3}>
         <Col w={[4, 12, 12]}>
           <HeaderTitle color="blue">
             Welcome{device !== 'mobile' && ' back'}, {firstName}!
           </HeaderTitle>
         </Col>
+      </Row>
+      <Row mb={device !== 'mobile' ? 7 : 6}>
         {!profileCompleted && (
           <Col w={[4, 12, 12]}>
             <CompleteProfilePrompt
@@ -172,7 +178,11 @@ const InternDashboard = props => {
             handleClick={rowData =>
               setPayNow({ openModal: true, installment: rowData.installment })
             }
-            payments={installments && updatedPayments(installments)}
+            payments={
+              installments && installments.length > 0
+                ? updatedPayments(installments)
+                : updatedPayments(paymentsHistory)
+            }
           />
         </Col>
       </Row>
@@ -198,10 +208,6 @@ const InternDashboard = props => {
           </>
         )}
       </Row>
-      {/*
-        <Updates updates={notifications} userRole="intern" />
-        <BookingsTableSection data={bookings} windowWidth={windowWidth} />
-        <PaymentsSection data={installments} /> */}
     </PageWrapper>
   );
 };

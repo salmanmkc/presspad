@@ -124,8 +124,16 @@ const internDashboard = id =>
         from: 'installments',
         let: { intern: '$_id' },
         pipeline: [
-          { $match: { $expr: { $eq: ['$$intern', '$intern'] } } },
-
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ['$$intern', '$intern'] },
+                  { $gte: ['$dueDate', new Date()] },
+                ],
+              },
+            },
+          },
           {
             $sort: {
               dueDate: 1,
@@ -137,12 +145,35 @@ const internDashboard = id =>
       },
     },
     {
+      $lookup: {
+        from: 'installments',
+        let: { intern: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [{ $eq: ['$$intern', '$intern'] }],
+              },
+            },
+          },
+          {
+            $sort: {
+              dueDate: 1,
+            },
+          },
+          { $limit: 3 },
+        ],
+        as: 'paymentsHistory',
+      },
+    },
+    {
       $project: {
         name: 1,
         reviews: 1,
         notifications: 1,
         profileCompleted: '$profile.isCompleted',
         installments: 1,
+        paymentsHistory: 1,
       },
     },
   ]);
