@@ -25,9 +25,11 @@ import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import SignUpFunnelPage from './SignUpFunnelPage';
 
+import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
-import Settings, { DeleteAccountSuccess } from './Settings';
 import ResetPassword, { SetPassword } from './ResetPassword';
+import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
+import UnderReview from './Settings/UnderReview';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -51,11 +53,12 @@ import {
   BOOKINGS_INTERNSHIP_URL,
   BOOKINGS_URL,
   CANCELLATION_CONFIRM,
-  REFERRAL_URL,
   SETTINGS_URL,
-  DELETE_ACCOUNT_SUCCESS,
+  REFERRAL_URL,
+  // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  SETTINGS,
   ADMIN_BURSARY,
   ADMIN_BURSARY_APPROVE,
   ADMIN_BURSARY_PREAPPROVE,
@@ -87,23 +90,30 @@ function Pages(props) {
         />
 
         <Route
-          isPrivate
           exact
+          path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
+          Component={DeleteAccountSuccess}
+          layout="illustrations"
+          mobileText="WE HOPE TO SEE YOU AGAIN!"
+          {...props}
+        />
+
+        <Route
+          exact
+          path={SETTINGS.UNDER_REVIEW}
+          Component={UnderReview}
+          layout="illustrations"
+          {...props}
+        />
+
+        <Route
+          isPrivate
           path={SETTINGS_URL}
           Component={Settings}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           resetState={resetState}
           layout="sideMenu"
-          {...props}
-        />
-
-        <Route
-          exact
-          path={DELETE_ACCOUNT_SUCCESS}
-          Component={DeleteAccountSuccess}
-          layout="illustrations"
-          mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
         />
 

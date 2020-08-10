@@ -184,12 +184,21 @@ export const filterArray = (array, searchVal) => _filterArray(array, searchVal);
 export const capitalizeFirstLetter = str =>
   str && str[0].toUpperCase() + str.substr(1, str.length).toLowerCase();
 
-export const titleCase = str =>
-  str &&
-  str
-    .split(' ')
-    .map(capitalizeFirstLetter)
-    .join(' ');
+export const titleCase = str => {
+  let _str = str;
+
+  if (str instanceof Array) {
+    _str = str.join(', ');
+  }
+
+  return (
+    _str &&
+    _str
+      .split(' ')
+      .map(capitalizeFirstLetter)
+      .join(' ')
+  );
+};
 
 yup.addMethod(yup.string, 'wordLengthValidator', function wordLengthValidator(
   length,

@@ -1,78 +1,78 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
-import { Input } from 'antd';
-import axios from 'axios';
 import * as T from '../../Common/Typography';
+import { SETTINGS } from '../../../constants/navRoutes';
 import * as S from './style';
-import { Col, Row } from '../../Common/Grid';
-import { API_USER_BASE } from '../../../constants/apiRoutes';
-import DeleteAccountSuccess from './DeleteAccountSuccess';
-import { DELETE_ACCOUNT_SUCCESS } from '../../../constants/navRoutes';
-import Button from '../../Common/ButtonNew';
 
-function Settings({ resetState, role }) {
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
-  const [reason, setReason] = useState('');
+import MyAccount from './MyAccount';
+import MyProfile from './MyProfile';
+import AboutMe from './AboutMe';
+import Verifications from './Verifications';
+import { withWindowWidth } from '../../../HOCs';
+import { MOBILE_M_WIDTH } from '../../../constants/screenWidths';
 
-  const history = useHistory();
+import DeleteAccount from './DeleteAccount';
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(API_USER_BASE, { data: { reason } });
-      setError('');
+function Settings({ windowWidth, ...props }) {
+  const Heading = windowWidth > MOBILE_M_WIDTH ? T.H2 : T.H3;
 
-      resetState();
-      history.push({
-        pathname: DELETE_ACCOUNT_SUCCESS,
-        state: { role },
-      });
-    } catch (e) {
-      if (e.response && e.response.data && e.response.data.error) {
-        setError(e.response.data.error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
   return (
-    <div>
-      <Row>
-        <Col w={[4, 8, 8]}>
-          <T.H2 color="blue">YOUR ACCOUNT HAS BEEN DELETED</T.H2>
-        </Col>
-      </Row>
-      <Row>
-        <Col w={[4, 8, 8]}>
-          <S.Label htmlFor="reason">
-            We’re sad to see you go! Could you let us know why?
-          </S.Label>
-          <Input.TextArea
-            rows={6}
-            id="reason"
-            onChange={e => setReason(e.target.value)}
+    <>
+      <S.PageWrapper>
+        <Heading>Settings</Heading>
+        <S.TabsWrapper>
+          <S.Tabs to={SETTINGS.ACCOUNT}>
+            <T.H5C color="inherit" mb={0}>
+              MY ACCOUNT
+            </T.H5C>
+          </S.Tabs>
+          <S.Tabs to={SETTINGS.ABOUT_ME}>
+            <T.H5C color="inherit" mb={0}>
+              ABOUT ME
+            </T.H5C>
+          </S.Tabs>
+          <S.Tabs to={SETTINGS.EDIT_PROFILE}>
+            <T.H5C color="inherit" mb={0}>
+              MY PROFILE
+            </T.H5C>
+          </S.Tabs>
+          <S.Tabs to={SETTINGS.VERIFY}>
+            <T.H5C color="inherit" mb={0}>
+              VERIFICATIONS
+            </T.H5C>
+          </S.Tabs>
+        </S.TabsWrapper>
+        <Switch>
+          <Route
+            path={SETTINGS.ACCOUNT}
+            render={() => <MyAccount {...props} />}
+            exact
           />
-        </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 8, 8]}>
-          {error && <S.Error block>{error}</S.Error>}
-          <Button
-            type="secondary"
-            onClick={handleSubmit}
-            loading={loading}
-            mt={5}
-          >
-            DELETE ACCOUNT
-          </Button>
-        </Col>
-      </Row>
-    </div>
+          <Route
+            path={SETTINGS.ABOUT_ME}
+            render={() => <AboutMe {...props} />}
+            exact
+          />
+          <Route
+            path={SETTINGS.EDIT_PROFILE}
+            render={() => <MyProfile {...props} />}
+            exact
+          />
+          <Route
+            path={SETTINGS.VERIFY}
+            render={() => <Verifications {...props} />}
+            exact
+          />
+          <Route
+            path={SETTINGS.DELETE_ACCOUNT}
+            render={_props => <DeleteAccount {...props} {..._props} />}
+            exact
+          />
+        </Switch>
+      </S.PageWrapper>
+    </>
   );
 }
 
-export { DeleteAccountSuccess };
-export default Settings;
+export default withWindowWidth(Settings);
