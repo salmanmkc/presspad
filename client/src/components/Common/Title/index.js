@@ -61,8 +61,6 @@ const Title = withTheme(
     withBg,
     bgColor,
     textColor,
-    topColor,
-    bottomColor,
     section,
     mt,
     mb,
@@ -117,16 +115,16 @@ const Title = withTheme(
       <AlternateTitle mt={mt} mb={mb} ml={ml} mr={mr} {...rest}>
         <div className="top">
           {caps ? (
-            <T.H3C color={topColor || 'white'}>{topText}</T.H3C>
+            <T.H3C color="white">{topText}</T.H3C>
           ) : (
-            <T.H3 color={topColor || 'white'}>{topText}</T.H3>
+            <T.H3 color="blue">{topText}</T.H3>
           )}
         </div>
         <div className="bottom">
           {caps ? (
-            <T.H3C color={bottomColor || 'white'}>{bottomText}</T.H3C>
+            <T.H3C color="white">{bottomText}</T.H3C>
           ) : (
-            <T.H3 color={bottomColor || 'white'}>{bottomText}</T.H3>
+            <T.H3 color="blue">{bottomText}</T.H3>
           )}
         </div>
       </AlternateTitle>
