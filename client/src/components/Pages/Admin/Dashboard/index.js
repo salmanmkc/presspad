@@ -4,20 +4,20 @@ import axios from 'axios';
 
 import { Button, message, Modal, Input as antInput, Input } from 'antd';
 
-import Icon from '../../Common/Icon';
+import Icon from '../../../Common/Icon';
 
-import Field from '../../Common/ProfileComponents/Field';
+import Field from '../../../Common/ProfileComponents/Field';
 
 // SUB COMPONENTS
-import ClientTable from './ClientTable';
-import InternTable from './InternTable';
-import HostTable from './HostTable';
-import PaymentsTable from './Payments/PaymentsTable';
-import PaymentsTopStats from './Payments/PaymentTopStats';
-import SearchBar from '../../Common/SearchBar';
-import InternProfile from '../InternProfile/AdminOrInternView';
-import HostProfile from '../HostProfile';
-import BookingsTable from './Bookings';
+import ClientTable from '../ClientTable';
+import InternTable from '../InternTable';
+import HostTable from '../HostTable';
+import PaymentsTable from '../Payments/PaymentsTable';
+import PaymentsTopStats from '../Payments/PaymentTopStats';
+import SearchBar from '../../../Common/SearchBar';
+import InternProfile from '../../InternProfile/AdminOrInternView';
+import HostProfile from '../../HostProfile';
+import BookingsTable from '../Bookings';
 
 // STYLING
 import {
@@ -29,7 +29,7 @@ import {
   MainSection,
   ContentTitle,
   HostWrapper,
-} from './AdminDashboard.style';
+} from '../AdminDashboard.style';
 
 // API ROUTES
 import {
@@ -37,8 +37,8 @@ import {
   API_UPDATE_WITHDRAW_REQUEST_URL,
   API_ADMIN_REVIEWS_BOOKING,
   API_ADMIN_UPDATE_PROFILE,
-} from '../../../constants/apiRoutes';
-import { filterArray } from '../../../helpers';
+} from '../../../../constants/apiRoutes';
+import { filterArray } from '../../../../helpers';
 
 const { TextArea } = antInput;
 

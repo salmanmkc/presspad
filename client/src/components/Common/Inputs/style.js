@@ -151,6 +151,10 @@ export const InputWrapper = styled.div`
   margin-left: ${({ ml, theme }) => (ml ? theme.spacings[ml] : 0)};
   margin-right: ${({ mr, theme }) => (mr ? theme.spacings[mr] : 0)};
 
+  .ant-input-group-addon {
+    background: none;
+  }
+
   input {
     ${commonInputStyles}
   }

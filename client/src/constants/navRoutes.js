@@ -35,6 +35,10 @@ export const ADMIN_ORGS_URL = '/admin/clients';
 export const ADMIN_BOOKINGS_URL = '/admin/bookings';
 export const ADMIN_PAYMENTS_URL = '/admin/payments';
 export const ADMIN_BURSARY = '/admin/bursary';
+export const ADMIN_BURSARY_APPROVE = `${ADMIN_BURSARY}/approve/:id`;
+export const ADMIN_BURSARY_PREAPPROVE = `${ADMIN_BURSARY}/pre-approve/:id`;
+export const ADMIN_BURSARY_REJECT = `${ADMIN_BURSARY}/reject/:id`;
+export const ADMIN_BURSARY_SUCCESS = `${ADMIN_BURSARY}/success`;
 
 // url to view all the data the user has entered in sign up
 export const ADMIN_USER_DETAILS = '/admin/user-details/:id';

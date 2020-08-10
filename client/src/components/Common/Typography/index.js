@@ -115,13 +115,13 @@ const PXSBold = ({ children, ...props }) => (
   </BodyXS>
 );
 
-const Link = ({ children, to, isExternal, caps, fz, ...props }) => (
+const Link = ({ children, to, isExternal, caps, fz, newTab, ...props }) => (
   <StyledLink
     to={isExternal ? undefined : to}
     href={!isExternal ? undefined : to}
     as={!isExternal ? undefined : 'a'}
-    rel={!isExternal ? undefined : 'noopener noreferrer'}
-    target={!isExternal ? undefined : '_blank'}
+    rel={!isExternal && !newTab ? undefined : 'noopener noreferrer'}
+    target={!isExternal && !newTab ? undefined : '_blank'}
     {...props}
     caps={caps}
     fz={fz}

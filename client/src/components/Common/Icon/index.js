@@ -69,7 +69,7 @@ const iconMap = {
   loading: Loading,
   menu: Menu,
   search: Search,
-  waring: Warning,
+  warning: Warning,
   moreInfo: MoreInfo,
   user: User,
   info: Info,

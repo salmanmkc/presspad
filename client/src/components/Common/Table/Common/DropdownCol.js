@@ -8,7 +8,11 @@ const DropdownCol = (colTitle, onChange, options) => ({
   key: colTitle,
   className: 'dropdownCol',
   render: (text, rowData) => (
-    <Select options={options} onChange={onChange} value={text} />
+    <Select
+      options={options}
+      onChange={e => onChange(e, rowData)}
+      value={text}
+    />
   ),
 });
 
