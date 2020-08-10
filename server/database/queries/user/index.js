@@ -206,6 +206,13 @@ module.exports.updateUserById = (userId, data) =>
     { new: true },
   );
 
+module.exports.updateHostAcceptAutomatically = (hostId, acceptAutomatically) =>
+  User.findByIdAndUpdate(
+    hostId,
+    { $set: { acceptAutomatically } },
+    { new: true },
+  );
+
 module.exports.findUserByToken = token =>
   User.findOne({
     'resetToken.value': token,

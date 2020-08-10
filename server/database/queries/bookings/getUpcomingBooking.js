@@ -47,7 +47,8 @@ const getUpcomingBooking = ({ userId, role }) =>
         withUser: { $arrayElemAt: ['$user.name', 0] },
         withUserRole: { $arrayElemAt: ['$user.role', 0] },
         withUserBio: { $arrayElemAt: ['$profile.bio', 0] },
-        withUserInterests: '$profile.areasOfInterest',
+        withUserInterestsIntern: '$profile.interests',
+        withUserInterestsHost: '$profile.areasOfInterest',
       },
     },
   ]);

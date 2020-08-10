@@ -29,6 +29,7 @@
     ]
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "node ./server/index.js",
     "dev": "concurrently --kill-others-on-fail \"cd client && npm start\" \"nodemon ./server/index.js\"",
     "server": "nodemon server",
@@ -52,6 +53,9 @@
     "lint-fix:client": "cd client/ && eslint . --fix",
     "test:local": "cross-env NODE_ENV=test jest --detectOpenHandles --forceExit"
   },
+  "resolutions": {
+    "yargs-parser": "15.0.1"
+  },
   "devDependencies": {
     "codecov": "^3.6.1",
     "concurrently": "^4.1.2",
@@ -63,7 +67,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "jest": "^24.9.0",
     "mongodb-memory-server": "^6.2.4",
-    "nodemon": "^1.19.4",
+    "nodemon": "^2.0.3",
     "prettier": "1.19.1",
     "supertest": "^4.0.2"
   },

@@ -23,6 +23,11 @@ export const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.colors.darkerGray};
 `;
 
+export const UpdateLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.darkerGray};
+  font-size: 1rem;
+`;
+
 export const WalletLink = styled(Link)`
   position: absolute;
   bottom: ${({ theme }) => theme.spacings[3]};
@@ -42,7 +47,6 @@ export const ImageWrapper = styled.div`
   position: absolute;
   right: ${({ right }) => right || 0};
   bottom: ${({ bottom }) => bottom || 0};
-  z-index: -1;
 `;
 
 export const SocialLinkWrapper = styled.div`
@@ -61,7 +65,6 @@ export const HeartWrapper = styled.div`
     position: absolute;
     right: ${({ right }) => right || 0};
     bottom: ${({ bottom }) => bottom || 0};
-    z-index: -1;
   }
 `;
 

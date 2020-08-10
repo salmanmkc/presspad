@@ -16,26 +16,33 @@ export default class Reviews extends Component {
   };
 
   async componentDidMount() {
-    const { userId } = this.props;
+    const { userId, reviews: _reviews } = this.props;
 
-    this.setState({ loading: true }, async () => {
-      const {
-        data: { reviews },
-      } = await axios.get(API_REVIEWS, {
-        params: { to: userId },
+    if (_reviews && _reviews.length > 0) {
+      this.setState({ reviews: _reviews });
+    } else if (userId && !_reviews) {
+      this.setState({ loading: true }, async () => {
+        const {
+          data: { reviews },
+        } = await axios.get(API_REVIEWS, {
+          params: { to: userId },
+        });
+        this.setState({ loading: false, reviews });
       });
-      this.setState({ loading: false, reviews });
-    });
+    }
   }
 
   render() {
     const { reviews, loading } = this.state;
+    const { title } = this.props;
 
     return (
       <Wrapper>
-        <TitleDiv>
-          <T.H4C>Reviews</T.H4C>
-        </TitleDiv>
+        {title && (
+          <TitleDiv>
+            <T.H4C>Reviews</T.H4C>
+          </TitleDiv>
+        )}
 
         <Skeleton loading={loading} active avatar>
           {reviews && reviews.length ? (

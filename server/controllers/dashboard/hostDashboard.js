@@ -1,11 +1,12 @@
+/* eslint-disable no-nested-ternary */
 const boom = require('boom');
 
-const { getHostNextBooking } = require('../../database/queries/bookings');
+const { getUpcomingBooking } = require('../../database/queries/bookings');
 
 const {
   hostDashboard: hostDashboardQuery,
 } = require('../../database/queries/dashboard');
-const generateFileURL = require('../../helpers/generateFileURL');
+const { getHostPaymentsInfo } = require('../../database/queries/payments');
 
 const hostDashboard = async (req, res, next) => {
   const { _id: hostId, role } = req.user;
@@ -14,47 +15,77 @@ const hostDashboard = async (req, res, next) => {
     return next(boom.forbidden());
   }
   try {
-    const [[dashboardData], [nextBooking]] = await Promise.all([
+    const [[dashboardData], [nextBooking], [paymentInfo]] = await Promise.all([
       // get full host dashboard data
       hostDashboardQuery(hostId),
       // get the next booking
-      getHostNextBooking(hostId),
+      getUpcomingBooking({ userId: hostId, role }),
+      // get payment infos
+      getHostPaymentsInfo(hostId),
+      // get recent payments
     ]);
 
-    let nextBookingWithDetails;
+    let accessibleFunds;
+    let pending;
+    let recentPayments;
+    console.log('next', nextBooking);
+    const {
+      _id,
+      email,
+      name,
+      acceptAutomatically,
+      listing,
+      reviews,
+      notifications,
+      profileCompleted,
+    } = dashboardData;
 
-    const { profile, bookings, withdrawRequests } = dashboardData;
+    const {
+      withdrawalRequests,
+      account: { currentBalance },
+      pendingPayment,
+      paymentHistory,
+    } = paymentInfo;
 
-    const requestedAmount = withdrawRequests
-      .filter(request => request && request.status === 'pending')
-      .reduce((prev, cur) => {
-        return prev + cur.amount;
-      }, 0);
-
-    if (nextBooking && nextBooking._id && bookings && bookings.length) {
-      // get the next booking details
-      nextBookingWithDetails = bookings.find(
-        _item => _item._id.toString() === nextBooking._id.toString(),
+    if (withdrawalRequests && withdrawalRequests.length) {
+      const [_pendingWithdrawn] = withdrawalRequests.reduce(
+        (acc, curr) => {
+          if (curr.status === 'pending') {
+            acc[0] += curr.amount;
+          } else if (curr.status === 'transfered') {
+            acc[1] += curr.amount;
+          }
+          return acc;
+        },
+        [0, 0],
       );
-
-      if (nextBookingWithDetails) {
-        const {
-          intern: { profile: internProfile },
-        } = nextBookingWithDetails;
-        if (internProfile && internProfile.profileImage) {
-          // get intern's profile image of next booking
-          generateFileURL(internProfile.profileImage);
-        }
-      }
+      accessibleFunds = currentBalance - pendingPayment - _pendingWithdrawn;
+      pending = pendingPayment + _pendingWithdrawn;
+    }
+    if (paymentHistory && paymentHistory.length > 0) {
+      recentPayments = paymentHistory
+        .sort((a, b) =>
+          a.transactionDates[a.transactionDates.length - 1] >
+          b.transactionDates[b.transactionDates.length - 1]
+            ? -1
+            : 1,
+        )
+        .splice(0, 3);
     }
 
-    if (profile && profile.profileImage) generateFileURL(profile.profileImage);
+    const output = {
+      userData: { _id, email, name, acceptAutomatically },
+      listing,
+      reviews,
+      profileCompleted,
+      notifications,
+      nextBooking,
+      accessibleFunds,
+      pending,
+      lastPayments: recentPayments,
+    };
 
-    return res.json({
-      ...dashboardData,
-      nextBookingWithDetails,
-      requestedAmount: Number(Number(requestedAmount).toFixed(2)),
-    });
+    return res.json(output);
   } catch (err) {
     return next(boom.badImplementation(err));
   }

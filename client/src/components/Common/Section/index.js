@@ -7,6 +7,7 @@ import AccountDetails from './AccountDetails';
 import InternshipDetails from './InternshipDetails';
 import MyImpact from './MyImpact';
 import Updates from './Updates';
+import Payments from './Payments';
 
 export {
   Wallet,
@@ -18,4 +19,5 @@ export {
   InternshipDetails,
   MyImpact,
   Updates,
+  Payments,
 };

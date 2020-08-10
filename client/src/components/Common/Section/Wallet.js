@@ -16,7 +16,7 @@ const Wallet = ({ balance, pending }) => (
       <T.H7C color="black">View wallet</T.H7C>
     </S.WalletLink>
     <S.ImageWrapper>
-      <Icon icon="flower" width="auto" height="220" color="secondary" />
+      <Icon icon="flower" width="auto" height="220px" color="secondary" />
     </S.ImageWrapper>
   </S.Wrapper>
 );

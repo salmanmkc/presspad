@@ -6,6 +6,9 @@ import TagCol from './TagCol';
 import PayButtonCol from './PayButtonCol';
 import InputCol from './InputCol';
 import HouseViewingCol from './HouseViewingCol';
+import BoldDateCol from './BoldDateCol';
+import ButtonCol from './ButtonCol';
+import InterviewCol from './InterviewCol';
 
 export {
   LinkCol,
@@ -16,4 +19,7 @@ export {
   PayButtonCol,
   InputCol,
   HouseViewingCol,
+  BoldDateCol,
+  ButtonCol,
+  InterviewCol,
 };
