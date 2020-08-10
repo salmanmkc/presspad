@@ -63,6 +63,7 @@ const Title = withTheme(
     mb,
     ml,
     mr,
+    caps = false,
     ...rest
   }) => {
     let topText;
@@ -85,7 +86,11 @@ const Title = withTheme(
           mr={mr}
           {...rest}
         >
-          <T.H2C color={textColor || 'white'}>{children}</T.H2C>
+          {caps ? (
+            <T.H2C color={textColor || 'white'}>{children}</T.H2C>
+          ) : (
+            <T.H2 color={textColor || 'white'}>{children}</T.H2>
+          )}
         </WithBackground>
       );
 
@@ -106,10 +111,18 @@ const Title = withTheme(
     return (
       <AlternateTitle mt={mt} mb={mb} ml={ml} mr={mr} {...rest}>
         <div className="top">
-          <T.H3C style={{ color: 'inherit' }}>{topText}</T.H3C>
+          {caps ? (
+            <T.H3C color={textColor || 'white'}>{topText}</T.H3C>
+          ) : (
+            <T.H3 color={textColor || 'white'}>{topText}</T.H3>
+          )}
         </div>
         <div className="bottom">
-          <T.H3C style={{ color: 'inherit' }}>{bottomText}</T.H3C>
+          {caps ? (
+            <T.H3C color={textColor || 'white'}>{bottomText}</T.H3C>
+          ) : (
+            <T.H3 color={textColor || 'white'}>{bottomText}</T.H3>
+          )}
         </div>
       </AlternateTitle>
     );

@@ -1,5 +1,5 @@
 // website sections
-export const HOME_URL = '/';
+export const HOME_URL = '/hosts';
 export const ABOUT_URL = '/about';
 export const MYPROFILE_URL = '/my-profile';
 export const DASHBOARD_URL = '/dashboard';

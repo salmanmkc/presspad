@@ -5,7 +5,6 @@ import { Redirect, Switch } from 'react-router-dom';
 import Route from '../Common/Route';
 import NotFound from '../Common/NotFound';
 
-import LandingPage from './LandingPage';
 import HostCreateProfile from './HostCreateProfile';
 import SignInPage from './SignInPage';
 import SignUpPage from './SignUpPage';
@@ -24,6 +23,7 @@ import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
+import SignUpFunnelPage from './SignUpFunnelPage';
 
 import ReferralSchema from './ReferralSchema';
 import Settings, { DeleteAccountSuccess } from './Settings';
@@ -31,7 +31,6 @@ import ResetPassword, { SetPassword } from './ResetPassword';
 
 import { withWindowWidth } from '../../HOCs';
 import {
-  HOME_URL,
   SIGNIN_URL,
   SIGNUP_INTERN,
   SIGNUP_HOST,
@@ -62,6 +61,7 @@ import {
   ADMIN_BURSARY_PREAPPROVE,
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
+  SIGNUP_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -76,9 +76,6 @@ function Pages(props) {
   return (
     <>
       <Switch>
-        <Route path={HOME_URL} exact Component={LandingPage} {...props} />
-        {/* protected host profile */}
-
         <Route
           exact
           isPrivate
@@ -400,6 +397,18 @@ function Pages(props) {
                 {...linkProps}
                 {...props}
               />
+            ) : (
+              <Redirect to={DASHBOARD_URL} />
+            )
+          }
+          {...props}
+        />
+        <Route
+          path={SIGNUP_URL}
+          exact
+          render={linkProps =>
+            !isLoggedIn ? (
+              <SignUpFunnelPage {...linkProps} {...props} />
             ) : (
               <Redirect to={DASHBOARD_URL} />
             )
