@@ -95,6 +95,12 @@ const bursaryApplicationSchema = new Schema(
         },
       },
     ],
+    adminMessage: {
+      type: String,
+    },
+    inviteToInterview: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

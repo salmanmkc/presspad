@@ -64,7 +64,9 @@ const createAll = async ({ users }) => {
 
   const [
     rejectedBursary,
+    rejectedBursary2,
     requestedBursary,
+    requestedBursary2,
     preApprovedBursary,
     approvedBursary,
     completedBursary,
@@ -72,7 +74,9 @@ const createAll = async ({ users }) => {
 
   return {
     rejectedBursary,
+    rejectedBursary2,
     requestedBursary,
+    requestedBursary2,
     preApprovedBursary,
     approvedBursary,
     completedBursary,
