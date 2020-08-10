@@ -3,6 +3,7 @@ const router = require('express').Router();
 // IMPORT CONTROLLERS
 const loginController = require('../controllers/user/login');
 const userInfo = require('../controllers/user/userInfo');
+const accountInfo = require('../controllers/user/accountInfo');
 const signUpController = require('../controllers/user/signup');
 const getAllOrgs = require('../controllers/user/getAllOrgs');
 const hostsCompleteProfile = require('../controllers/hostsCompleteProfile');
@@ -15,6 +16,7 @@ const searchProfiles = require('../controllers/profile/searchProfiles');
 const getInternshipDetails = require('../controllers/profile/getInternshipDetails');
 const updateInternshipDetails = require('../controllers/profile/updateInternshipDetails');
 const deleteAccount = require('../controllers/user/deleteAccount');
+const internSettings = require('../controllers/user/internSettings');
 
 const {
   viewBooking,
@@ -81,6 +83,7 @@ const hostUpdateAvailability = require('../controllers/listing/updateAvailabilit
 const {
   LOGIN_URL,
   USER_URL,
+  ACCOUNT_URL,
   SIGNUP_URL,
   SIGNOUT_URL,
   GET_ORGS_URL,
@@ -135,6 +138,10 @@ const {
   USER_BASE,
   RESET_PASSWORD,
   SET_PASSWORD,
+  INTERN_SETTINGS_MY_ACCOUNT,
+  INTERN_SETTINGS_ABOUT_ME,
+  INTERN_SETTINGS_MY_PROFILE,
+  INTERN_SETTINGS_VERIFICATIONS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -180,6 +187,7 @@ router.post(INTERN_COMPLETE_PROFILE, authentication, internsCompleteProfile);
 
 // get user info from the cookie if it exists and send to front end
 router.get(USER_URL, authentication, userInfo);
+router.get(ACCOUNT_URL, authentication, accountInfo);
 
 // gets intern profile data
 router.get(INTERN_PROFILE_URL, authentication, getInternProfile);
@@ -348,5 +356,25 @@ router.delete(USER_BASE, authentication, deleteAccount);
 
 router.post(RESET_PASSWORD, resetPassword);
 router.post(SET_PASSWORD, setPassword);
+
+router.patch(
+  INTERN_SETTINGS_MY_ACCOUNT,
+  authentication,
+  internSettings.myAccount,
+);
+
+router.patch(INTERN_SETTINGS_ABOUT_ME, authentication, internSettings.aboutMe);
+
+router.patch(
+  INTERN_SETTINGS_MY_PROFILE,
+  authentication,
+  internSettings.myProfile,
+);
+
+router.patch(
+  INTERN_SETTINGS_VERIFICATIONS,
+  authentication,
+  internSettings.verifications,
+);
 
 module.exports = router;

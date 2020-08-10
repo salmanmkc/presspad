@@ -10,7 +10,7 @@ const {
 } = require('../../database/queries/payments');
 
 const orgPayment = async (req, res, next) => {
-  const { paymentMethod, paymentIntent, amount, account } = req.body;
+  const { paymentMethod, paymentIntent, amount } = req.body;
 
   try {
     const { account: orgAccount } = await getUserById(req.user._id, true);
@@ -19,8 +19,6 @@ const orgPayment = async (req, res, next) => {
     if (!req.user) return next(boom.forbidden('req.user undefined'));
     if (req.user.role !== 'organisation')
       return next(boom.forbidden('user is not an organisation'));
-    if (orgAccount.toString() !== account._id)
-      return next(boom.forbidden('user account is not a match'));
 
     // start a mongodb session
     const session = await mongoose.startSession();
@@ -44,7 +42,7 @@ const orgPayment = async (req, res, next) => {
       if (paymentMethod) {
         intent = await stripe.paymentIntents.create({
           payment_method: paymentMethod.id,
-          amount: amount * 100,
+          amount,
           currency: 'gbp',
           confirmation_method: 'manual',
           confirm: true,

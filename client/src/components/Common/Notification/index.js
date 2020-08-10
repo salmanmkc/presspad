@@ -1,12 +1,23 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { message } from 'antd';
 
 import './style.css';
 
-const Notifiaction = ({ setOpen, open, content }) => {
+const Notification = ({ setOpen, open, content, cb, redirectUrl }) => {
+  const history = useHistory();
+
   const handleClose = () => {
     setOpen(false);
+    if (cb && typeof cb === 'function') {
+      cb();
+    }
+
+    if (redirectUrl) {
+      history.push(redirectUrl);
+    }
   };
+
   if (open) {
     return (
       <div>
@@ -15,6 +26,7 @@ const Notifiaction = ({ setOpen, open, content }) => {
           onClose: () => handleClose(),
           content,
           className: 'custom-class',
+          duration: 1,
           style: {
             width: '100%',
             position: 'fixed',
@@ -27,4 +39,4 @@ const Notifiaction = ({ setOpen, open, content }) => {
   return null;
 };
 
-export default Notifiaction;
+export default Notification;

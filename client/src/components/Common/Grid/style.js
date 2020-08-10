@@ -35,7 +35,7 @@ export const Col = styled.div`
   margin-top: ${({ theme, mt }) => theme.spacings[mt] || 0};
   margin-bottom: ${({ theme, mb }) => theme.spacings[mb] || 0};
   flex-shrink: 0;
-  position: relative;
+  // position: relative;
   width: 100%;
   min-height: 1px;
   height: 100%;

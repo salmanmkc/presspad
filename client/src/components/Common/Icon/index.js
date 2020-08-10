@@ -39,6 +39,7 @@ import Copy from './icons/Copy';
 import AlertTriangle from './icons/AlertTriangle';
 import Money from './icons/Money';
 import Arrow2 from './icons/Arrow2';
+import UnKnownCard from './icons/UnKnownCard';
 import Flower from './icons/Flower';
 import Hearts from './icons/Hearts';
 import Star from './icons/Star';
@@ -69,7 +70,7 @@ const iconMap = {
   loading: Loading,
   menu: Menu,
   search: Search,
-  waring: Warning,
+  warning: Warning,
   moreInfo: MoreInfo,
   user: User,
   info: Info,
@@ -89,6 +90,7 @@ const iconMap = {
   alertTriangle: AlertTriangle,
   money: Money,
   arrow2: Arrow2,
+  unKnownCard: UnKnownCard,
   whatsapp: Whatsapp,
   email: Email,
   flower: Flower,

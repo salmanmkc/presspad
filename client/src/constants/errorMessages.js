@@ -4,6 +4,7 @@ module.exports = {
   HOMETOWN: 'Hometown is required',
   BIO: 'Please write a short bio about yourself',
   JOB_TITLE: 'Job title is required',
+  REQUIRED_FIELD: 'required',
   // show field title on the backend only
   REQUIRED: field =>
     this && this.window
@@ -27,6 +28,7 @@ module.exports = {
   EMAIL: 'Invalid email',
   INVALID_DATE: 'please select valid date',
   INVALID_END_DATE: 'please select an end date greater than your start date',
+  DEFAULT_REQUIRED: 'This field is required',
   // sign up fields
   signup: {
     NAME_REQUIRED: 'Please enter your name.',

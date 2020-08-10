@@ -130,12 +130,7 @@ const Content = ({
                 bookingID={nextBooking._id}
                 withUserType={nextBooking.withUserRole}
                 bio={nextBooking.withUserBio}
-                interests={
-                  nextBooking.withUserInterestsIntern &&
-                  nextBooking.withUserInterestsIntern.length > 0
-                    ? nextBooking.withUserInterestsIntern
-                    : nextBooking.withUserInterestsHost
-                }
+                interests={nextBooking.interests}
                 status={nextBooking.status}
               />
             ) : (

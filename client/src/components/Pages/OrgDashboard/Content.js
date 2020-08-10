@@ -6,7 +6,7 @@ import * as T from '../../Common/Typography';
 import { MyAccount, AccountDetails, Updates } from '../../Common/Section';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
-
+import { HOSTS_URL, ADD_FUNDS_URL } from '../../../constants/navRoutes';
 import { bottomMargins, typographies } from './styleProperties';
 import { calculatePrice, formatPrice } from '../../../helpers';
 
@@ -54,18 +54,21 @@ const Content = props => {
   const SectionTitle = typographies.sectionTitle[device];
 
   // My Account
-  const currentlyHosted = coupons.filter(item => item.status === 'At host')
-    .length;
-
   const liveCoupons = coupons.filter(
     item =>
       moment(item.endDate).valueOf() > moment().valueOf() &&
       moment(item.startDate).valueOf() <= moment().valueOf(),
   );
+  const currentlyHosted = coupons.filter(item => item.status === 'At host')
+    .length;
+
+  console.log('live', liveCoupons);
 
   const liveCouponsTotalValue = liveCoupons
     .map(el => el.reservedAmount)
     .reduce((a, b) => a + b, 0);
+
+  console.log('live', liveCouponsTotalValue);
 
   return (
     <Wrapper mobile={device === 'mobile'}>
@@ -84,8 +87,7 @@ const Content = props => {
               funds={currentBalance / 100}
               liveCodes={liveCoupons.length}
               liveCodesCost={liveCouponsTotalValue / 100}
-              liveBookings={currentlyHosted}
-              // addFunds={addFunds}
+              liveBookings={1}
               // addCodes={addCodes}
             />
           </Col>
