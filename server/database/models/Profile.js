@@ -200,6 +200,9 @@ const profileSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    awaitingReviewDate: {
+      type: Date,
+    },
     bio: {
       type: String,
       validate: wordLengthValidator(250, 'bio'),

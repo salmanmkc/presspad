@@ -170,9 +170,6 @@ const verifications = prevValues =>
           addressline1: prevValues.internshipOfficeAddress.addressline1
             ? string().required(DEFAULT_REQUIRED)
             : string().nullable(),
-          addressline2: prevValues.internshipOfficeAddress.addressline2
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
           city: prevValues.internshipOfficeAddress.city
             ? string().required(DEFAULT_REQUIRED)
             : string().nullable(),
@@ -219,7 +216,6 @@ const verificationsAllRequired = object({
   internshipEndDate: mixed().required(DEFAULT_REQUIRED),
   internshipOfficeAddress: object({
     addressline1: string().required(DEFAULT_REQUIRED),
-    addressline2: string().required(DEFAULT_REQUIRED),
     city: string().required(DEFAULT_REQUIRED),
     postcode: string().required(DEFAULT_REQUIRED),
   }).required(),
