@@ -6,7 +6,10 @@ import { colors } from '../../../theme';
 export const Disclaimer = styled.div``;
 
 export const ErrorMsg = styled.div`
-  color: ${colors.red};
+  color: ${colors.pink};
+  font-size: 16px;
+  text-align: center;
+  padding-bottom: 8px;
 `;
 
 export const ForgetLink = styled(Link)`
@@ -21,13 +24,13 @@ export const signupLink = styled(Link)`
 export const TitleContainer = styled.div`
   position: absolute;
   left: 0;
-  top: 40px;
+  top: 80px;
   width: 500px;
 `;
 
 export const TitleWrapper = styled.div`
   width: auto;
-  height: 110px;
+  height: 150px;
   display: none;
   @media ${({ theme }) => theme.breakpoints.tablet} {
     display: block;

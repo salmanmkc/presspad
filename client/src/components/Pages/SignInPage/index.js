@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Input } from 'antd';
 import axios from 'axios';
 
 // CONSTANTS
@@ -117,7 +116,10 @@ export default class SignInPage extends Component {
             <Title
               withBg
               bgColor="pink"
-              style={{ justifyContent: 'flex-start', paddingLeft: 120 }}
+              style={{
+                justifyContent: 'flex-start',
+                paddingLeft: 120,
+              }}
             >
               Log In
             </Title>
@@ -140,7 +142,7 @@ export default class SignInPage extends Component {
               </Title>
             </S.TabletTitle>
           </Col>
-          <Col w={[4, 12, 6]}>
+          <Col w={[4, 12, 8]} ml={6} mlT={0} mlM={0}>
             <Input
               label="Email"
               placeholder="Enter your email"
@@ -165,15 +167,24 @@ export default class SignInPage extends Component {
               mt={4}
             />
             <p style={{ marginTop: 10, marginLeft: 5 }}>
-              <S.ForgetLink to={RESET_PASSWORD}>Forgot password?</S.ForgetLink>
+              {/* <S.ForgetLink to={RESET_PASSWORD}>Forgot password?</S.ForgetLink> */}
+              <T.Link
+                to={RESET_PASSWORD}
+                color="gray3"
+                style={{ textDecoration: 'underline', fontWeight: 'bold' }}
+              >
+                Forgot password?
+              </T.Link>
             </p>
             {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
             <Button type="secondary" onClick={onFormSubmit}>
               Sign in
             </Button>
-            <T.P style={{ textAlign: 'center' }}>
-              dont have an account{' '}
-              <S.signupLink to={SIGNUP_URL}>sign up</S.signupLink>
+            <T.P color="gray3" mt={4} style={{ textAlign: 'center' }}>
+              {"Don't have an account? "}
+              <S.signupLink to={SIGNUP_URL} style={{ fontWeight: 'bold' }}>
+                Sign up
+              </S.signupLink>
             </T.P>
           </Col>
         </Row>
