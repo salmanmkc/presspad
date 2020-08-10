@@ -61,6 +61,11 @@ module.exports = id => {
               },
             },
           },
+          {
+            $sort: {
+              createdAt: 1,
+            },
+          },
         ],
         as: 'notifications',
       },
@@ -98,6 +103,7 @@ module.exports = id => {
         type: '$notifications.type',
         private: '$notifications.private',
         createdAt: '$notifications.createdAt',
+        booking: 1,
       },
     },
   ]);

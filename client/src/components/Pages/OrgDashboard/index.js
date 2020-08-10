@@ -306,8 +306,10 @@ const OrganisationDashboard = props => {
   const handleAccountUpdate = account =>
     setState({ account, showAddFunds: false });
 
+  // ! TODO ADD org type mark as seen to Updates component
   const markAsSeen = async () => {
     const { notifications, markAsSeen } = state;
+
     if (!markAsSeen) {
       try {
         const newNotifications = notifications.map(ele => ({ ...ele }));
