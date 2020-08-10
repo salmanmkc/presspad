@@ -167,7 +167,6 @@ export default class SignInPage extends Component {
               mt={4}
             />
             <p style={{ marginTop: 10, marginLeft: 5 }}>
-              {/* <S.ForgetLink to={RESET_PASSWORD}>Forgot password?</S.ForgetLink> */}
               <T.Link
                 to={RESET_PASSWORD}
                 color="gray3"
@@ -178,7 +177,7 @@ export default class SignInPage extends Component {
             </p>
             {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
             <Button type="secondary" onClick={onFormSubmit}>
-              Log in
+              Sign in
             </Button>
             <T.P color="gray3" mt={4} style={{ textAlign: 'center' }}>
               {"Don't have an account? "}
