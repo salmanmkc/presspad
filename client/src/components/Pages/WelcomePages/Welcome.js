@@ -27,7 +27,7 @@ const Welcome = ({
     <div>
       <S.TitleWrapper>
         <S.TitleContainer>
-          <Title topTitle={topTitle} bottomTitle={bottomTitle}>
+          <Title topTitle={topTitle} bottomTitle={bottomTitle} caps>
             {title}
           </Title>
         </S.TitleContainer>
