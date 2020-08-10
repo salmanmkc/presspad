@@ -3,6 +3,7 @@ const router = require('express').Router();
 // IMPORT CONTROLLERS
 const loginController = require('../controllers/user/login');
 const userInfo = require('../controllers/user/userInfo');
+const accountInfo = require('../controllers/user/accountInfo');
 const signUpController = require('../controllers/user/signup');
 const getAllOrgs = require('../controllers/user/getAllOrgs');
 const hostsCompleteProfile = require('../controllers/hostsCompleteProfile');
@@ -79,6 +80,7 @@ const hostUpdateAvailability = require('../controllers/listing/updateAvailabilit
 const {
   LOGIN_URL,
   USER_URL,
+  ACCOUNT_URL,
   SIGNUP_URL,
   SIGNOUT_URL,
   GET_ORGS_URL,
@@ -182,6 +184,7 @@ router.post(INTERN_COMPLETE_PROFILE, authentication, internsCompleteProfile);
 
 // get user info from the cookie if it exists and send to front end
 router.get(USER_URL, authentication, userInfo);
+router.get(ACCOUNT_URL, authentication, accountInfo);
 
 // gets intern profile data
 router.get(INTERN_PROFILE_URL, authentication, getInternProfile);

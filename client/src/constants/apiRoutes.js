@@ -8,6 +8,8 @@ const API_SIGNUP_URL = `${API_PREFIX}${SIGNUP_URL}`;
 
 const USER_URL = '/user/check-user';
 const API_USER_URL = `${API_PREFIX}${USER_URL}`;
+const ACCOUNT_URL = '/user/account';
+const API_ACCOUNT_URL = `${API_PREFIX}${ACCOUNT_URL}`;
 
 const GET_ORGS_URL = '/user/get-all-orgs';
 const API_GET_ORGS_URL = `${API_PREFIX}${GET_ORGS_URL}`;
@@ -187,6 +189,7 @@ module.exports = {
   API_SIGNUP_URL,
   API_SIGNOUT_URL,
   API_USER_URL,
+  API_ACCOUNT_URL,
   API_GET_ORGS_URL,
   API_HOST_COMPLETE_PROFILE,
   API_INTERN_COMPLETE_PROFILE,
@@ -249,6 +252,7 @@ module.exports = {
   SIGNUP_URL,
   SIGNOUT_URL,
   USER_URL,
+  ACCOUNT_URL,
   GET_ORGS_URL,
   HOST_COMPLETE_PROFILE,
   INTERN_COMPLETE_PROFILE,
