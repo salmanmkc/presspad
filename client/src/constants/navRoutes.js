@@ -1,5 +1,5 @@
 // website sections
-export const HOME_URL = '/';
+export const HOME_URL = '/hosts';
 export const ABOUT_URL = '/about';
 export const MYPROFILE_URL = '/my-profile';
 export const DASHBOARD_URL = '/dashboard';
@@ -57,6 +57,7 @@ export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
 // sign in/out
 export const SIGNIN_URL = '/sign-in';
 export const SIGNOUT_URL = '/sign-out';
+export const SIGNUP_URL = '/sign-up';
 
 // reset/set password
 export const RESET_PASSWORD = '/reset-password';
