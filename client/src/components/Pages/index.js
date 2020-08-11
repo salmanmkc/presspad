@@ -18,6 +18,7 @@ import {
   AdminClients,
   AdminInterns,
   AdminHosts,
+  AdminPayments
 } from './Admin';
 import SearchHosts from './SearchHosts';
 import BookingView from './BookingView';
@@ -76,6 +77,7 @@ import {
   ADMIN_ORGS_URL,
   ADMIN_INTERNS_URL,
   ADMIN_HOSTS_URL,
+  ADMIN_PAYMENTS_URL,
   SIGNUP_URL,
 } from '../../constants/navRoutes';
 
@@ -349,6 +351,18 @@ function Pages(props) {
             path={ADMIN_HOSTS_URL}
             type="success"
             Component={AdminHosts}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_PAYMENTS_URL}
+            Component={AdminPayments}
             handleChangeState={handleChangeState}
             isLoggedIn={isLoggedIn}
             layout="sideMenu"
