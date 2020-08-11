@@ -4,6 +4,7 @@ import * as T from '../../Typography';
 import camelToWords from '../../../../helpers/camelToWords';
 import { BOOKING, APPROVAL, PAYMENT } from '../../../../constants/statusTypes';
 import Icon from '../../Icon';
+import { Select } from '../../Inputs';
 
 const decideStatusType = (type, text) => {
   switch (type) {
@@ -18,7 +19,7 @@ const decideStatusType = (type, text) => {
   }
 };
 
-const TagCol = (colTitle, type) => ({
+const TagCol = (colTitle, type, handleAction) => ({
   title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
@@ -60,6 +61,17 @@ const TagCol = (colTitle, type) => ({
               margin="0 0 2px 10px"
             />
           </T.Link>
+        )}
+        {text === 'awaiting admin' && (
+          <Select
+            options={[
+              { label: 'approve', value: 'approve' },
+              { label: 'reject', value: 'reject' },
+            ]}
+            onChange={selected => handleAction(rowData, selected)}
+            mt={3}
+            style={{ minWidth: '150px' }}
+          />
         )}
       </S.WrappedAction>
     ) : (

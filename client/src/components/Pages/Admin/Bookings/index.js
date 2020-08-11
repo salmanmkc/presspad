@@ -30,13 +30,21 @@ const AdminBookings = () => {
     setSelected(e);
   };
 
+  const reviewBooking = (rowData, input) => {
+    if (input === 'approve') {
+      console.log('query to approve booking');
+    } else if (input === 'reject') {
+      console.log('query to reject booking');
+    }
+  };
+
   const activeCols = [
     LinkCol('host', ADMIN_USER_DETAILS, 'id'),
     LinkCol('intern', ADMIN_USER_DETAILS, 'id'),
     TwoDatesCol('dates'),
     StandardCol('paidByOrganisation', 'perc', null, 'organisation'),
     StandardCol('bursaryCosts', 'price'),
-    TagCol('status', 'booking'),
+    TagCol('status', 'booking', reviewBooking),
   ];
 
   const historyCols = [
@@ -45,7 +53,7 @@ const AdminBookings = () => {
     TwoDatesCol('dates'),
     StandardCol('paidByOrganisation', 'perc', null, 'organisation'),
     StandardCol('bursaryCosts', 'price'),
-    TagCol('status', 'booking'),
+    TagCol('status', 'booking', reviewBooking),
   ];
 
   useEffect(() => {
