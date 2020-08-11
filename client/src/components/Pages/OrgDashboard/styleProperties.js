@@ -3,7 +3,7 @@ import * as T from '../../Common/Typography';
 export const bottomMargins = {
   row: {
     desktop: 5,
-    mobile: 0,
+    mobile: 2,
   },
   col: {
     desktop: 0,

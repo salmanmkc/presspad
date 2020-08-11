@@ -8,6 +8,11 @@ export const Wrapper = styled.div`
   margin-top: ${({ mobile }) => mobile && '-2rem'};
 `;
 
+export const Container = styled.div`
+  // margin-top: ${({ theme: { spacings } }) => spacings[2]};
+  margin-bottom: ${({ theme: { spacings } }) => spacings[2]};
+`;
+
 // OLD STYLES
 
 export const PageWrapper = styled.div`

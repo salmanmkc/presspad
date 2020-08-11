@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
@@ -9,44 +8,24 @@ import {
   Updates,
   Coupons,
   MyImpact,
+  InternshipDetails,
+  Community,
 } from '../../Common/Section';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
-import { HOSTS_URL, ADD_FUNDS_URL } from '../../../constants/navRoutes';
+
 import { bottomMargins, typographies } from './styleProperties';
+
 import {
-  calculatePrice,
-  formatPrice,
-  createSingleDate,
-} from '../../../helpers';
+  createCodesTableData,
+  calculateTotalCouponsValue,
+  getLiveCoupons,
+  getPreviousCoupons,
+  getCurrentlyHosted,
+  getTotalInternsSupported,
+} from './utils';
 
-import { Wrapper } from './OrgDashboard.style';
-
-const createCodesTableData = arr =>
-  arr.map(el => {
-    const {
-      code,
-      startDate,
-      endDate,
-      usedAmount,
-      reservedAmount,
-      status,
-      intern,
-    } = el;
-
-    return {
-      code,
-      startDate: createSingleDate(startDate),
-      endDate: createSingleDate(endDate),
-      usedAmount: formatPrice(usedAmount),
-      reservedAmount: formatPrice(reservedAmount),
-      status,
-      id: intern._id,
-      internName: intern.name,
-    };
-  });
-const calculateTotalCouponsValue = arr =>
-  arr.map(el => el.reservedAmount).reduce((a, b) => a + b, 0);
+import { Wrapper, Container } from './OrgDashboard.style';
 
 const Content = props => {
   const {
@@ -87,24 +66,10 @@ const Content = props => {
   const HeaderTitle = typographies.headerTitle[device];
   const SectionTitle = typographies.sectionTitle[device];
 
-  // My Account
-  const liveCoupons = coupons.filter(
-    item => moment(item.endDate).valueOf() >= moment().valueOf(),
-  );
-  const previousCoupons = coupons.filter(
-    item =>
-      moment(item.endDate).valueOf() <= moment().valueOf() &&
-      moment(item.startDate).valueOf() < moment().valueOf(),
-  );
-  const currentlyHosted = coupons.filter(item => item.status === 'At host')
-    .length;
-
-  // My Impact
-  const totalInternsSupported = [
-    ...new Set(
-      coupons.filter(el => el.usedAmount > 0).map(el => el.intern._id),
-    ),
-  ].length;
+  const liveCoupons = getLiveCoupons(coupons);
+  const previousCoupons = getPreviousCoupons(coupons);
+  const currentlyHosted = getCurrentlyHosted(coupons);
+  const totalInternsSupported = getTotalInternsSupported(coupons);
 
   return (
     <Wrapper mobile={device === 'mobile'}>
@@ -118,54 +83,76 @@ const Content = props => {
       </Row>
       <Row mb={bottomMargins.row[device]}>
         {account && (
-          <Col w={[4, 10, 7]} mb={bottomMargins.col[device]}>
+          <Col w={[4, 12, 7]} mb={bottomMargins.col[device]}>
             <MyAccount
               funds={currentBalance / 100}
               liveCodes={liveCoupons.length}
-              liveCodesCost={
-                liveCoupons && calculateTotalCouponsValue(liveCoupons) / 100
-              }
+              liveCodesCost={calculateTotalCouponsValue(liveCoupons) / 100}
               liveBookings={currentlyHosted}
               // addCodes={addCodes}
             />
           </Col>
         )}
 
-        <Col w={[4, 10, 5]}>
-          <AccountDetails
-            firstName="Abbie"
-            lastName="Harper"
-            email="abbie@test.com"
-            phone="078328828882"
-          />
+        <Col w={[4, 12, 5]}>
+          <Container>
+            <AccountDetails
+              firstName="Abbie"
+              lastName="Harper"
+              email="abbie@test.com"
+              phone="078328828882"
+            />
+          </Container>
         </Col>
       </Row>
+      {coupons && (
+        <Row mb={bottomMargins.row[device]}>
+          <Col w={[4, 12, 12]} mb={bottomMargins.col[device]}>
+            <Coupons
+              coupons={
+                liveCouponsSrc
+                  ? createCodesTableData(liveCoupons)
+                  : createCodesTableData(previousCoupons)
+              }
+              previewClickEvent={() => setLiveCouponsSrc(!liveCouponsSrc)}
+              liveCouponsSrc={liveCouponsSrc}
+            />
+          </Col>
+        </Row>
+      )}
+
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 12, 12]} mb={bottomMargins.col[device]}>
-          <Coupons
-            coupons={
-              liveCouponsSrc
-                ? createCodesTableData(liveCoupons)
-                : createCodesTableData(previousCoupons)
-            }
-            previewClickEvent={() => setLiveCouponsSrc(!liveCouponsSrc)}
-            liveCouponsSrc={liveCouponsSrc}
-          />
-        </Col>
+        {notifications && (
+          <Col w={[4, 6, 4]} mb={bottomMargins.col[device]}>
+            <Updates
+              markAsSeen={markAsSeen}
+              updates={notifications}
+              userRole="org"
+            />
+          </Col>
+        )}
+        {totalInternsSupported && coupons && (
+          <Col w={[4, 6, 7]}>
+            <MyImpact
+              totalInterns={totalInternsSupported && totalInternsSupported}
+              totalPaid={coupons && calculateTotalCouponsValue(coupons) / 100}
+            />
+          </Col>
+        )}
       </Row>
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 10, 4]} mb={bottomMargins.col[device]}>
-          <Updates
-            markAsSeen={markAsSeen}
-            updates={notifications}
-            userRole="org"
-          />
+        <Col w={[4, 12, 5]}>
+          <Container>
+            <InternshipDetails
+              internOpps={[
+                'Internship Scheme A 2020',
+                'Ongoing Creative Industry Scheme',
+              ]}
+            />
+          </Container>
         </Col>
-        <Col w={[4, 10, 7]}>
-          <MyImpact
-            totalInterns={totalInternsSupported && totalInternsSupported}
-            totalPaid={coupons && calculateTotalCouponsValue(coupons) / 100}
-          />
+        <Col w={[4, 12, 7]}>
+          <Community />
         </Col>
       </Row>
     </Wrapper>
