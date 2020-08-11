@@ -25,12 +25,14 @@ import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import AddFunds from './OrgDashboard/AddFunds';
 import SignUpFunnelPage from './SignUpFunnelPage';
-
-import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
-import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
-import UnderReview from './Settings/UnderReview';
+
+// Intern setting
+// import InternSettings from './Settings/Intern';
+// import DeleteInternAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
+// import UnderReview from './Settings/Intern/UnderReview';
+import settingComponents from './Settings';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -94,7 +96,7 @@ function Pages(props) {
         <Route
           exact
           path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
-          Component={DeleteAccountSuccess}
+          Component={settingComponents('deleteAccount', role)}
           layout="illustrations"
           mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
@@ -103,7 +105,7 @@ function Pages(props) {
         <Route
           exact
           path={SETTINGS.UNDER_REVIEW}
-          Component={UnderReview}
+          Component={settingComponents('underReview', role)}
           layout="illustrations"
           {...props}
         />
@@ -111,7 +113,7 @@ function Pages(props) {
         <Route
           isPrivate
           path={SETTINGS_URL}
-          Component={Settings}
+          Component={settingComponents('setting', role)}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           resetState={resetState}
