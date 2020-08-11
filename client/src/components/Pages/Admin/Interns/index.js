@@ -35,8 +35,12 @@ const AdminInterns = () => {
     console.log('function to update DBS', rowData);
   };
 
-  const approveProfile = rowData => {
-    console.log('action to approve the profile');
+  const approveProfile = (input, rowData) => {
+    if (input === 'approve') {
+      console.log('action to approve the profile');
+    } else if (input === 'request changes') {
+      window.open(`mailto:${rowData.email}`);
+    }
   };
 
   const approvedCols = [
@@ -54,6 +58,7 @@ const AdminInterns = () => {
     StandardCol('status'),
     DropdownCol('actions', approveProfile, [
       { label: 'Approve', value: 'approve' },
+      { label: 'Request changes', value: 'request changes' },
     ]),
   ];
 

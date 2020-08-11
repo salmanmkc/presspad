@@ -64,7 +64,7 @@ module.exports = async (req, res, next) => {
           fullData = false;
         }
       }
-
+      console.log('fu', fullData);
       profileData.awaitingReview = fullData;
       if (fullData) {
         profileData.awaitingReviewDate = moment();

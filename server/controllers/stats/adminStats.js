@@ -122,6 +122,8 @@ module.exports = async (req, res, next) => {
                 verified: host.profile[0].verified,
                 profileId: host.profile[0]._id,
                 dbsCheck: host.profile[0].DBSCheck,
+                firstVerified: host.profile[0].firstVerified,
+                awaitingReview: host.profile[0].awaitingReview,
                 id: host._id,
                 earnings: host.totalIncome,
                 wallet: host.currentBalance,
