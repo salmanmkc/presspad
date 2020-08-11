@@ -53,7 +53,9 @@ const Select = ({
       style={style}
     >
       {options.map(({ value, label: _label }) => (
-        <Option value={value}>{_label}</Option>
+        <Option key={value} value={value}>
+          {_label}
+        </Option>
       ))}
     </AntdSelect>
     {error && <Error>{error}</Error>}

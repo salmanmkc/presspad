@@ -90,7 +90,11 @@ const Menu = ({
       {horizontal &&
         isLoggedIn &&
         horizontalMenuLinks[role].map(menuLink => (
-          <S.Link to={menuLink.route} horizontal={horizontal}>
+          <S.Link
+            key={menuLink.route}
+            to={menuLink.route}
+            horizontal={horizontal}
+          >
             <S.Header horizontal={horizontal}>{menuLink.title}</S.Header>
           </S.Link>
         ))}
@@ -99,7 +103,12 @@ const Menu = ({
       {!horizontal &&
         isLoggedIn &&
         menuLinks[role].map(menuLink => (
-          <S.Link to={menuLink.route} isMobile={isMobile} onClick={resetMenu}>
+          <S.Link
+            key={menuLink.route}
+            to={menuLink.route}
+            isMobile={isMobile}
+            onClick={resetMenu}
+          >
             <S.Header>{menuLink.title}</S.Header>
           </S.Link>
         ))}
@@ -120,6 +129,7 @@ const Menu = ({
       {!isLoggedIn &&
         menuLinks['loggedOut'].map(menuLink => (
           <S.Link
+            key={menuLink.route}
             to={menuLink.route}
             horizontal={horizontal}
             isMobile={isMobile}
