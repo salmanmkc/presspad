@@ -3,6 +3,7 @@ import * as S from '../style';
 import * as T from '../../Typography';
 import camelToWords from '../../../../helpers/camelToWords';
 import { BOOKING, APPROVAL, PAYMENT } from '../../../../constants/statusTypes';
+import Icon from '../../Icon';
 
 const decideStatusType = (type, text) => {
   switch (type) {
@@ -25,11 +26,42 @@ const TagCol = (colTitle, type) => ({
   sorter: (a, b) => a[colTitle].localeCompare(b[colTitle]),
   render: (text, rowData) =>
     text ? (
-      <S.Tag type={decideStatusType(type, text)}>
-        <T.PXSBold caps color="white">
-          {text}
-        </T.PXSBold>
-      </S.Tag>
+      <S.WrappedAction>
+        <S.Tag type={decideStatusType(type, text)}>
+          <T.PXSBold caps color="white">
+            {text}
+          </T.PXSBold>
+        </S.Tag>
+        {text === 'awaiting cancellation' && (
+          <T.Link
+            caps
+            to="/"
+            color={BOOKING[text]}
+            ml={2}
+            mt={2}
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            please review!
+            <Icon
+              icon="arrow2"
+              width="15px"
+              height="15px"
+              margin="0 0 2px 10px"
+            />
+          </T.Link>
+        )}
+        {text === 'cancelled after payment' && (
+          <T.Link caps to="/" color={BOOKING[text]}>
+            view details
+            <Icon
+              icon="arrow2"
+              width="15px"
+              height="15px"
+              margin="0 0 2px 10px"
+            />
+          </T.Link>
+        )}
+      </S.WrappedAction>
     ) : (
       <T.PXS color="black">N/A</T.PXS>
     ),

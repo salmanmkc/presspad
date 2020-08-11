@@ -3,7 +3,7 @@ import { colors } from '../theme';
 export const BOOKING = {
   'awaiting admin': colors.pink,
   'awaiting cancellation': colors.pink,
-  'cancelled after payment': colors.pink,
+  'cancelled after payment': colors.gray,
   pending: colors.darkGray,
   accepted: colors.yellow,
   confirmed: colors.lightBlue,

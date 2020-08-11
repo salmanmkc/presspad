@@ -82,16 +82,16 @@ const AdminBookings = () => {
             // expandedSection={renderExpandedSection}
           />
         );
-      //   case 1:
-      //     return (
-      //       <Table
-      //         data={bookingHistory}
-      //         columns={columns}
-      //         showSearch
-      //         loading={loading}
-      //         //   expandedSection={renderExpandedSection}
-      //       />
-      //     );
+      case 1:
+        return (
+          <Table
+            data={bookingHistory}
+            columns={historyCols}
+            showSearch
+            loading={loading}
+            //   expandedSection={renderExpandedSection}
+          />
+        );
       default:
         return null;
     }

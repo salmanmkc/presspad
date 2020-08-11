@@ -12,6 +12,9 @@ module.exports = () =>
             status: bookingStatuses.cancelled,
           },
           {
+            status: bookingStatuses.awaitingCancellation,
+          },
+          {
             status: bookingStatuses.cancelledAfterPayment,
           },
           {
