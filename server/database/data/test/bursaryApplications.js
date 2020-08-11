@@ -44,13 +44,20 @@ const createAll = async ({ users }) => {
       bursaryPoints: 200,
     },
     {
+      status: s.preApproved,
+      intern: internUser3,
+      typeOfUser: 'existing',
+      startDate: Date.now() + 40 * 24 * 60 * 60 * 1000,
+      endDate: Date.now() + 60 * 24 * 60 * 60 * 1000,
+    },
+    {
       status: s.approved,
       intern: internUser3,
       typeOfUser: 'new',
       startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      reservedAmount: 2000,
-      usedAmount: 2000,
+      totalPotentialAmount: 2000,
+      totalSpentSoFar: 1500,
       bursaryPoints: 200,
     },
     {
@@ -59,8 +66,8 @@ const createAll = async ({ users }) => {
       typeOfUser: 'existing',
       startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      reservedAmount: 1000,
-      usedAmount: 500,
+      totalPotentialAmount: 1000,
+      totalSpentSoFar: 500,
       bursaryPoints: 200,
     },
   ];

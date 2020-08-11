@@ -11,10 +11,26 @@ const getBursaryWindows = () => {
 };
 
 const getBursaryApplications = type => {
-  return BursaryApplication.aggregate([
-    {
+  let matchObject = {};
+  if (type === 'history') {
+    matchObject = {
+      $match: {
+        $expr: {
+          $or: [
+            { $eq: ['$status', bursaryApplicationStatuses.rejected] },
+            { $eq: ['$status', bursaryApplicationStatuses.completed] },
+          ],
+        },
+      },
+    };
+  } else {
+    matchObject = {
       $match: { $expr: { $eq: ['$status', type] } },
-    },
+    };
+  }
+
+  return BursaryApplication.aggregate([
+    matchObject,
     {
       $lookup: {
         from: 'bursaryapplications',
@@ -30,7 +46,7 @@ const getBursaryApplications = type => {
           {
             $group: {
               _id: null,
-              reservedAmount: { $sum: '$reservedAmount' },
+              totalPotentialAmount: { $sum: '$totalPotentialAmount' },
             },
           },
         ],
@@ -41,7 +57,7 @@ const getBursaryApplications = type => {
       $addFields: {
         awardedBursariesCost: {
           $ifNull: [
-            { $arrayElemAt: ['$awardedBursariesCost.reservedAmount', 0] },
+            { $arrayElemAt: ['$awardedBursariesCost.totalPotentialAmount', 0] },
             0,
           ],
         },
@@ -100,6 +116,8 @@ const getBursaryApplications = type => {
       $addFields: {
         id: '$intern._id',
         name: '$intern.name',
+        applicationStatus: '$status',
+        totalAmountSpent: '$totalSpentSoFar',
         dateRequested: '$createdAt',
       },
     },

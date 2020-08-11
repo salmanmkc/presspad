@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import React from 'react';
 import Table from '../../../../Common/Table';
 import {
   LinkCol,
@@ -14,34 +13,7 @@ import { Row, Col } from '../../../../Common/Grid';
 import renderExpandedSection from './renderExpandedSection';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
-
-// DUMMY DATA TO BE REPLACED ONCE BACK END CONNECTED
-const dummyData = [
-  {
-    name: 'Test Name',
-    typeOfUser: 'New',
-    dateRequested: moment(),
-    bursaryPoints: null,
-    id: 1,
-    type: 'Updated address',
-    email: 'test@test.com',
-    rejectedBursaries: 0,
-    awardedBursariesCost: 840,
-    invited: false,
-  },
-  {
-    name: 'Test Name 2',
-    typeOfUser: 'Existing',
-    dateRequested: moment(),
-    bursaryPoints: 250,
-    id: 1,
-    type: 'Updated address',
-    email: 'test@test.com',
-    rejectedBursaries: 0,
-    awardedBursariesCost: 840,
-    invited: true,
-  },
-];
+import { useGetApplications } from '../utils';
 
 const selectOptions = ['Approve', 'Reject'].map(option => ({
   label: option,
@@ -49,14 +21,9 @@ const selectOptions = ['Approve', 'Reject'].map(option => ({
 }));
 
 const PreApproved = ({ sendToResponse }) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const updateBursaryPoints = (e, rowData) => {
-    const { id } = rowData;
-    const points = e.target.value;
-    console.log('function to udpate user with new bursary points', points, id);
-  };
+  const { data, loading, updateBursaryPoints } = useGetApplications(
+    'pre-approved',
+  );
 
   const inviteToInterview = (rowData, e) =>
     console.log(
@@ -74,12 +41,6 @@ const PreApproved = ({ sendToResponse }) => {
     InterviewCol('interview', inviteToInterview),
     DropdownCol('approvalAction', sendToResponse, selectOptions),
   ];
-
-  useEffect(() => {
-    setLoading(true);
-    setData(dummyData);
-    setLoading(false);
-  }, []);
 
   return (
     <>

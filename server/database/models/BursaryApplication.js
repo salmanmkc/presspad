@@ -60,17 +60,17 @@ const bursaryApplicationSchema = new Schema(
       max: 100,
     },
     // the total amount of money been deducted for this bursary
-    reservedAmount: {
+    totalPotentialAmount: {
       type: Number,
       min: 0,
     },
     // the amount of money been used by intern so far
-    usedAmount: {
+    totalSpentSoFar: {
       type: Number,
       min: 0,
       validate: {
-        validator(usedAmount) {
-          return usedAmount <= this.reservedAmount;
+        validator(totalSpentSoFar) {
+          return totalSpentSoFar <= this.totalPotentialAmount;
         },
         message: 'used amount exceeded the reserved amount',
       },
@@ -98,7 +98,7 @@ const bursaryApplicationSchema = new Schema(
     adminMessage: {
       type: String,
     },
-    inviteToInterview: {
+    invitedToInterview: {
       type: Boolean,
     },
   },

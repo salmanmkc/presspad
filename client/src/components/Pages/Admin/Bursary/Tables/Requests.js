@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 
 import Table from '../../../../Common/Table';
 import {
@@ -14,10 +13,7 @@ import { Row, Col } from '../../../../Common/Grid';
 import renderExpandedSection from './renderExpandedSection';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
-import {
-  API_BURSARY_APPLICATIONS,
-  API_UPDATE_BURSARY_APPLICATIONS,
-} from '../../../../../constants/apiRoutes';
+import { useGetApplications } from '../utils';
 
 const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
   label: option,
@@ -25,38 +21,7 @@ const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
 }));
 
 const Requests = ({ sendToResponse }) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [fetchData, setFetchData] = useState(0);
-
-  const updateBursaryPoints = async (e, rowData) => {
-    const { _id } = rowData;
-    const bursaryPoints = e.target.value;
-    if (bursaryPoints) {
-      try {
-        await axios.patch(
-          `${API_UPDATE_BURSARY_APPLICATIONS.replace(':id', _id)}`,
-          { bursaryPoints },
-          { params: { type: 'update-points' } },
-        );
-        setFetchData(count => count + 1);
-      } catch (error) {
-        if (error.response && error.response.data) {
-          setData(oldState =>
-            oldState.map(row => {
-              if (row._id === _id) {
-                return {
-                  ...row,
-                  error: error.response.data.error,
-                };
-              }
-              return row;
-            }),
-          );
-        }
-      }
-    }
-  };
+  const { data, loading, updateBursaryPoints } = useGetApplications('request');
 
   const exportData = () =>
     console.log('function to export all bursary data for these requests');
@@ -68,27 +33,6 @@ const Requests = ({ sendToResponse }) => {
     InputCol('bursaryPoints', null, updateBursaryPoints),
     DropdownCol('approvalAction', sendToResponse, selectOptions),
   ];
-
-  useEffect(() => {
-    let mounted = true;
-    async function getBursaryApplications() {
-      setLoading(true);
-
-      const { data: _data } = await axios.get(
-        `${API_BURSARY_APPLICATIONS}?type=request`,
-      );
-
-      if (mounted) {
-        setData(_data);
-        setLoading(false);
-      }
-    }
-
-    getBursaryApplications();
-    return () => {
-      mounted = false;
-    };
-  }, [fetchData]);
 
   return (
     <>

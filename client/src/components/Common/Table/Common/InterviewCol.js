@@ -9,7 +9,7 @@ const InterviewCol = (colTitle, handleClick) => ({
   key: colTitle,
   className: 'buttonCol',
   render: (text, rowData) =>
-    rowData && rowData.invited ? (
+    rowData && rowData.invitedToInterview ? (
       <Icon icon="circleTick" color="lightBlue" width="20px" height="20px" />
     ) : (
       <ButtonNew
