@@ -5,7 +5,7 @@ import * as T from '../../../Common/Typography';
 import { SETTINGS } from '../../../../constants/navRoutes';
 import * as S from './style';
 
-import MyAccount from './MyAccount';
+import MyAccount from '../MyAccount';
 import MyProfile from './MyProfile';
 import AboutMe from './AboutMe';
 import Verifications from './Verifications';
@@ -20,8 +20,7 @@ function Settings({ windowWidth, ...props }) {
   return (
     <>
       <S.PageWrapper>
-        {/* delete Intern */}
-        <Heading>Intern Settings</Heading>
+        <Heading>HOsttt Settings</Heading>
         <S.TabsWrapper>
           <S.Tabs to={SETTINGS.ACCOUNT}>
             <T.H5C color="inherit" mb={0}>
