@@ -47,14 +47,12 @@ const AdminPayments = () => {
   ];
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
       try {
         const data = await axios.post(API_ADMIN_STATS_URL, {
           userType: 'payments',
         });
 
-        console.log('da', data.data);
         setTotalPayments(data.data);
 
         const { withdrawRequests } = data.data;

@@ -26,7 +26,7 @@ const tabs = ['approved', 'approval requests'];
 const AdminInterns = ({ preview }) => {
   const [internRequests, setInternRequests] = useState([]);
   const [approvedInterns, setApprovedInterns] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
 
@@ -66,7 +66,6 @@ const AdminInterns = ({ preview }) => {
   ];
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
       try {
         const data = await axios.post(API_ADMIN_STATS_URL, {
@@ -89,16 +88,17 @@ const AdminInterns = ({ preview }) => {
         if (preview) {
           setSelected(1);
         }
+        setLoading(false);
       } catch (err) {
         let errorMsg = 'Something went wrong';
         if (err.response && err.response.status !== 500) {
           errorMsg = err.response.data.error;
         }
         setError(errorMsg);
+        setLoading(false);
       }
     };
     fetchData();
-    setLoading(false);
   }, [preview]);
 
   const renderTable = () => {

@@ -27,7 +27,7 @@ const tabs = ['approved', 'approval requests'];
 const AdminHosts = ({ preview }) => {
   const [hostRequests, setHostRequests] = useState([]);
   const [approvedHosts, setApprovedHosts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
 
@@ -81,7 +81,6 @@ const AdminHosts = ({ preview }) => {
   ];
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
       try {
         const data = await axios.post(API_ADMIN_STATS_URL, {
@@ -104,16 +103,17 @@ const AdminHosts = ({ preview }) => {
         if (preview) {
           setSelected(1);
         }
+        setLoading(false);
       } catch (err) {
         let errorMsg = 'Something went wrong';
         if (err.response && err.response.status !== 500) {
           errorMsg = err.response.data.error;
         }
         setError(errorMsg);
+        setLoading(false);
       }
     };
     fetchData();
-    setLoading(false);
   }, [preview]);
 
   const renderTable = () => {
