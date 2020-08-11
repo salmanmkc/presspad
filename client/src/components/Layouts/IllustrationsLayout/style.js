@@ -57,7 +57,7 @@ export const ColouredTopDiv = styled.div`
 `;
 
 export const Image = styled.img`
-  max-width: 600px;
+  max-width: 400px;
   width: 80%;
 `;
 
