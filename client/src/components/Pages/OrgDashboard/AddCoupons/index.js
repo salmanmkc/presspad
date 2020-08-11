@@ -8,12 +8,14 @@ import Title from '../../../Common/Title';
 import * as T from '../../../Common/Typography';
 import { Select, DatePicker, Input } from '../../../Common/Inputs';
 import Icon from '../../../Common/Icon';
+import Button from '../../../Common/ButtonNew';
 
 import { formatPrice, calculatePrice } from '../../../../helpers';
 import { typographies } from '../styleProperties';
-import { Warning } from './style';
+import { Warning, CancelLink } from './style';
 
 import { API_ACCOUNT_URL } from '../../../../constants/apiRoutes';
+import { DASHBOARD_URL } from '../../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../../constants/screenWidths';
 
 const reducer = (state, action) => {
@@ -64,14 +66,6 @@ const AddCoupons = props => {
   const [balanceLoading, setBalanceLoading] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // const [multiDateRange, setMultiDateRange] = useState([
-  //   {
-  //     startDate: '',
-  //     endDate: '',
-  //   },
-  // ]);
-  // const [couponPrice, setCouponPrice]
-
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const AmountTitle = typographies.addCouponAmount[device];
 
@@ -92,7 +86,7 @@ const AddCoupons = props => {
       const { data } = await axios.get(API_ACCOUNT_URL);
 
       if (mounted) {
-        setBalance(data.currentBalance);
+        setBalance(formatPrice(data.currentBalance));
         setBalanceLoading(false);
       }
     }
@@ -107,9 +101,16 @@ const AddCoupons = props => {
     const { startDate, endDate } = multiDateRange[0];
 
     if (startDate && endDate && discountPercentage > 0) {
-      const price = calculatePrice(startDate, endDate);
-      // const price = (calculatePrice(range) * discountPercentage) / 100;
-      console.log('da', price);
+      const range = moment.range(startDate, endDate);
+      const price = formatPrice(
+        (calculatePrice(range) * Number(discountPercentage)) / 100,
+      );
+
+      dispatch({
+        type: 'change',
+        name: 'couponPrice',
+        value: price,
+      });
     }
   }, [discountPercentage, multiDateRange]);
 
@@ -135,14 +136,20 @@ const AddCoupons = props => {
   };
 
   const handleSelectChange = value => {
-    dispatch({ type: 'change', name: 'discountPercentage', value });
+    dispatch({
+      type: 'change',
+      name: 'discountPercentage',
+      value,
+    });
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     console.log('yh');
   };
-  console.log('state', state);
+
+  const notEnoughFunds = couponPrice > balance;
+
   return (
     <>
       <Row>
@@ -153,7 +160,7 @@ const AddCoupons = props => {
       <Row>
         <Col w={[4, 12, 12]}>
           <AmountTitle color="pink">
-            £{balanceLoading ? '...' : formatPrice(balance)}
+            £{balanceLoading ? '...' : balance}
           </AmountTitle>
           <T.PSBold color="darkBlue">available Balance</T.PSBold>
         </Col>
@@ -212,22 +219,23 @@ const AddCoupons = props => {
         </Row>
         <Row mb={5}>
           <Col w={[4, 3, 3]}>
-            <AmountTitle color="pink">£740</AmountTitle>
+            <AmountTitle color="pink">£{couponPrice}</AmountTitle>
             <T.PSBold color="darkBlue">potential cost of internship</T.PSBold>
           </Col>
-
-          <Warning w={[4, 3, 3]}>
-            <Icon
-              color="pink"
-              icon="warning"
-              width="40"
-              height="40"
-              margin="0 5px 0 0"
-            />
-            <T.H8C caps color="blue" style={{ display: 'inline-flex' }}>
-              Not enough money in the fund
-            </T.H8C>
-          </Warning>
+          {notEnoughFunds && (
+            <Warning w={[4, 3, 3]}>
+              <Icon
+                color="pink"
+                icon="warning"
+                width="40"
+                height="40"
+                margin="0 5px 0 0"
+              />
+              <T.H8C caps color="blue" style={{ display: 'inline-flex' }}>
+                Not enough money in the fund
+              </T.H8C>
+            </Warning>
+          )}
         </Row>
         <Row mb={5}>
           <Col w={[4, 12, 8]}>
@@ -240,6 +248,21 @@ const AddCoupons = props => {
               value={message}
               error={errors.message}
             />
+          </Col>
+        </Row>
+        <Row mb={5}>
+          <Col w={[4, 6, 5.4]} mb={5}>
+            <Button type="secondary" bgColor="pink" disabled={notEnoughFunds}>
+              CREATE DISCOUNT CODE
+            </Button>
+          </Col>
+          <Col w={[4, 6, 5.4]}>
+            <CancelLink
+              to={DASHBOARD_URL}
+              // disabled={paymentLoading}
+            >
+              Cancel
+            </CancelLink>
           </Col>
         </Row>
       </form>
