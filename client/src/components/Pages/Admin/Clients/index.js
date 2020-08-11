@@ -10,7 +10,6 @@ import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
 const AdminClients = () => {
-  console.log('hey');
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

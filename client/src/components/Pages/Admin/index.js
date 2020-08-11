@@ -5,6 +5,7 @@ import AdminClients from './Clients';
 import AdminInterns from './Interns';
 import AdminHosts from './Hosts';
 import AdminPayments from './Payments';
+import AdminBookings from './Bookings';
 
 export {
   AdminDashboard,
@@ -14,4 +15,5 @@ export {
   AdminInterns,
   AdminHosts,
   AdminPayments,
+  AdminBookings,
 };

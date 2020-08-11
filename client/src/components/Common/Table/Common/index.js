@@ -10,6 +10,7 @@ import BoldDateCol from './BoldDateCol';
 import ButtonCol from './ButtonCol';
 import InterviewCol from './InterviewCol';
 import BankDetailsCol from './BankDetailsCol';
+import TwoDatesCol from './TwoDatesCol';
 
 export {
   LinkCol,
@@ -24,4 +25,5 @@ export {
   ButtonCol,
   InterviewCol,
   BankDetailsCol,
+  TwoDatesCol,
 };

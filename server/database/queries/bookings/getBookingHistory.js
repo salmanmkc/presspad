@@ -72,7 +72,7 @@ module.exports = () =>
             },
           },
         ],
-        as: 'intern',
+        as: 'internDetails',
       },
     },
     {
@@ -111,18 +111,18 @@ module.exports = () =>
             },
           },
         ],
-        as: 'host',
+        as: 'hostDetails',
       },
     },
     {
       $unwind: {
-        path: '$intern',
+        path: '$internDetails',
         preserveNullAndEmptyArrays: false,
       },
     },
     {
       $unwind: {
-        path: '$host',
+        path: '$hostDetails',
         preserveNullAndEmptyArrays: false,
       },
     },
@@ -181,6 +181,14 @@ module.exports = () =>
       $unwind: {
         path: '$coupon',
         preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        host: '$hostDetails.name',
+        intern: '$internDetails.name',
+        paidByOrganisation: '$coupon.discountRate',
+        organisation: '$coupon.Organisation',
       },
     },
     {

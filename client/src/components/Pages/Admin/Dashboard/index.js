@@ -17,7 +17,7 @@ import PaymentsTopStats from '../PaymentsOld/PaymentTopStats';
 import SearchBar from '../../../Common/SearchBar';
 import InternProfile from '../../InternProfile/AdminOrInternView';
 import HostProfile from '../../HostProfile';
-import BookingsTable from '../Bookings';
+import BookingsTable from '../BookingsOld';
 
 // STYLING
 import {
@@ -527,14 +527,14 @@ export default class AdminDashboard extends Component {
                 highlightVal={highlightVal}
               />
             )}
-            {activeLink === 'clients' && (
+            {/* {activeLink === 'clients' && (
               <ClientTable
                 getColumnSearchProps={this.getColumnSearchProps}
                 loading={loading}
                 data={filteredData}
                 highlightVal={highlightVal}
               />
-            )}
+            )} */}
             {/* {activeLink === 'interns' && (
               <InternTable
                 getColumnSearchProps={this.getColumnSearchProps}
@@ -547,7 +547,7 @@ export default class AdminDashboard extends Component {
                 handleDBSChange={this.handleDBSChange}
               />
             )} */}
-            {activeLink === 'hosts' && (
+            {/* {activeLink === 'hosts' && (
               <HostWrapper>
                 <HostTable
                   getColumnSearchProps={this.getColumnSearchProps}
@@ -573,7 +573,7 @@ export default class AdminDashboard extends Component {
                   selectSection={this.selectSection}
                 />
               </HostWrapper>
-            )}
+            )} */}
             {activeLink === 'bookings' && (
               <HostWrapper>
                 <BookingsTable

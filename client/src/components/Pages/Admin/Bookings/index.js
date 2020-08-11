@@ -1,142 +1,124 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Select } from 'antd';
-import moment from 'moment';
-import { H7C } from '../../../Common/Typography';
-import columns from './columns';
-import ExpandedDetails from './ExpandedDetails';
-import Icon from '../../../Common/Icon';
-import BookingView from './BookingView/BookingView';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const { Option } = Select;
+import { Row, Col } from '../../../Common/Grid';
+import Table from '../../../Common/Table';
+import {
+  LinkCol,
+  StandardCol,
+  TwoDatesCol,
+  TagCol,
+} from '../../../Common/Table/Common';
+import * as T from '../../../Common/Typography';
+import Tabs from '../../../Common/Tabs';
 
-export default function BookingsSections({
-  getColumnSearchProps,
-  data,
-  loading,
-  highlightVal,
-  triggerHostView,
-  triggerInternView,
-  handleAction,
-  adminAction,
-  setSearchBar,
-  setBookingView,
-  bookingView,
-  selectSection,
-}) {
-  const [bookingDetails, setBookingDetails] = useState(null);
-  const [reviewBooking, setReviewBooking] = useState(false);
+import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
+import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
+
+const tabs = ['active', 'history'];
+
+const AdminBookings = () => {
+  const [bookings, setBookings] = useState([]);
+  const [bookingHistory, setBookingHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [selected, setSelected] = useState(0);
+
+  const handleTab = e => {
+    setSelected(e);
+  };
+
+  const activeCols = [
+    LinkCol('host', ADMIN_USER_DETAILS, 'id'),
+    LinkCol('intern', ADMIN_USER_DETAILS, 'id'),
+    TwoDatesCol('dates'),
+    StandardCol('paidByOrganisation', 'perc', null, 'organisation'),
+    StandardCol('bursaryCosts', 'price'),
+    TagCol('status', 'booking'),
+  ];
+
+  const historyCols = [
+    LinkCol('host', ADMIN_USER_DETAILS, 'id'),
+    LinkCol('intern', ADMIN_USER_DETAILS, 'id'),
+    TwoDatesCol('dates'),
+    StandardCol('paidByOrganisation', 'perc', null, 'organisation'),
+    StandardCol('bursaryCosts', 'price'),
+    TagCol('status', 'booking'),
+  ];
 
   useEffect(() => {
-    setBookingView(false);
-    setSearchBar(true);
-  }, [setBookingView, setSearchBar]);
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const data = await axios.post(API_ADMIN_STATS_URL, {
+          userType: 'bookings',
+        });
+        const history = await axios.post(API_ADMIN_STATS_URL, {
+          userType: 'bookingHistory',
+        });
+        setBookings(data.data);
+        setBookingHistory(history.data);
+      } catch (err) {
+        let errorMsg = 'Something went wrong';
+        if (err.response && err.response.status !== 500) {
+          errorMsg = err.response.data.error;
+        }
+        setError(errorMsg);
+      }
+    };
+    fetchData();
+    setLoading(false);
+  }, []);
 
-  const lengthOfStay = (startDate, endDate) =>
-    moment(endDate).diff(moment(startDate), 'days');
-
-  const renderActions = (status, booking) => {
-    switch (status) {
-      case 'awaiting admin':
+  const renderTable = () => {
+    switch (selected) {
+      case 0:
         return (
-          <Select
-            style={{ width: '100px' }}
-            placeholder="Select"
-            defaultValue={adminAction}
-            onSelect={value => handleAction(value, booking)}
-            autoClearSearchValue
-          >
-            <Option value="approveRequest">Approve</Option>
-            <Option value="rejectRequest">Reject</Option>
-          </Select>
+          <Table
+            data={bookings}
+            columns={activeCols}
+            showSearch
+            loading={loading}
+            // expandedSection={renderExpandedSection}
+          />
         );
-      case 'accepted' || 'confirmed':
-        return (
-          <Select
-            onChange={handleAction}
-            style={{ width: '100px' }}
-            placeholder="Select"
-          >
-            <Option value="cancelBooking">Cancel</Option>
-          </Select>
-        );
-
-      case 'awaiting cancellation':
-        return (
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <button
-              type="button"
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                setBookingDetails(booking);
-                setReviewBooking(true);
-                setSearchBar(false);
-                setBookingView(true);
-              }}
-            >
-              <H7C style={{ textDecoration: 'underline' }} color="pink">
-                Please Review
-              </H7C>
-            </button>
-            <Icon icon="reviewExplanationMark" width="24px" />
-          </div>
-        );
-      case 'cancelled after payment':
-        return (
-          <Select
-            onChange={() => {
-              setBookingDetails(booking);
-              setBookingView(true);
-              setSearchBar(false);
-            }}
-            style={{ width: '100px' }}
-            placeholder="Select"
-          >
-            <Option value="cancelBooking">View Details</Option>
-          </Select>
-        );
-
+      //   case 1:
+      //     return (
+      //       <Table
+      //         data={bookingHistory}
+      //         columns={columns}
+      //         showSearch
+      //         loading={loading}
+      //         //   expandedSection={renderExpandedSection}
+      //       />
+      //     );
       default:
-        return <H7C color="gray">N/A</H7C>;
+        return null;
     }
   };
 
   return (
     <>
-      {bookingView ? (
-        <BookingView
-          details={bookingDetails}
-          reviewBooking={reviewBooking}
-          setReviewBooking={setReviewBooking}
-          setBookingView={setBookingView}
-          setBookingDetails={setBookingDetails}
-          setSearchBar={setSearchBar}
-          selectSection={selectSection}
-        />
-      ) : (
-        <Table
-          columns={columns(
-            getColumnSearchProps,
-            highlightVal,
-            triggerHostView,
-            triggerInternView,
-            renderActions,
-            lengthOfStay,
-          )}
-          dataSource={data}
-          pagination={{ pageSize: 5 }}
-          scroll={{ x: '100%' }}
-          loading={loading}
-          expandable={{
-            expandedRowRender: (record, index) => (
-              <ExpandedDetails record={record} />
-            ),
-          }}
-        />
+      <Row mb={6}>
+        <Col w={[4, 10, 10]}>
+          <T.H2 color="blue">Bookings</T.H2>
+        </Col>
+      </Row>
+      <Row mb={4}>
+        <Col w={[4, 12, 12]}>
+          <Tabs items={tabs} caps handleClick={handleTab} selected={selected} />
+        </Col>
+      </Row>
+      <Row mb={4}>
+        <Col w={[4, 12, 12]}>{renderTable()}</Col>
+      </Row>
+      {error && (
+        <Row>
+          <T.PXS color="pink">{error}</T.PXS>
+        </Row>
       )}
     </>
   );
-}
+};
+
+export default AdminBookings;

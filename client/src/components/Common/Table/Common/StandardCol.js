@@ -12,6 +12,8 @@ const formatText = (text, type) => {
       return createSingleDate(text);
     case 'price':
       return formatPrice(text);
+    case 'perc':
+      return `${text}%`;
     default:
       return text;
   }
@@ -24,6 +26,8 @@ const decideSort = (a, b, colTitle, type) => {
     case 'price':
       return a[colTitle] - b[colTitle];
     case 'number':
+      return a[colTitle] - b[colTitle];
+    case 'perc':
       return a[colTitle] - b[colTitle];
     default:
       return a[colTitle].localeCompare(b[colTitle]);
