@@ -14,7 +14,10 @@ import { Row, Col } from '../../../../Common/Grid';
 import renderExpandedSection from './renderExpandedSection';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
-import { API_BURSARY_APPLICATIONS } from '../../../../../constants/apiRoutes';
+import {
+  API_BURSARY_APPLICATIONS,
+  API_UPDATE_BURSARY_APPLICATIONS,
+} from '../../../../../constants/apiRoutes';
 
 const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
   label: option,
@@ -24,11 +27,35 @@ const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
 const Requests = ({ sendToResponse }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fetchData, setFetchData] = useState(0);
 
-  const updateBursaryPoints = (e, rowData) => {
-    const { id } = rowData;
-    const points = e.target.value;
-    console.log('function to udpate user with new bursary points', points, id);
+  const updateBursaryPoints = async (e, rowData) => {
+    const { _id } = rowData;
+    const bursaryPoints = e.target.value;
+    if (bursaryPoints) {
+      try {
+        await axios.patch(
+          `${API_UPDATE_BURSARY_APPLICATIONS.replace(':id', _id)}`,
+          { bursaryPoints },
+          { params: { type: 'update-points' } },
+        );
+        setFetchData(count => count + 1);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          setData(oldState =>
+            oldState.map(row => {
+              if (row._id === _id) {
+                return {
+                  ...row,
+                  error: error.response.data.error,
+                };
+              }
+              return row;
+            }),
+          );
+        }
+      }
+    }
   };
 
   const exportData = () =>
@@ -61,7 +88,7 @@ const Requests = ({ sendToResponse }) => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [fetchData]);
 
   return (
     <>

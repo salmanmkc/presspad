@@ -23,8 +23,9 @@ module.exports.upsertBursaryWindows = async (req, res, next) => {
 
 module.exports.updateBursaryApplication = async (req, res, next) => {
   try {
-    const { points, adminMessage, inviteToInterview, status } = req.body;
+    const { bursaryPoints, adminMessage, inviteToInterview, status } = req.body;
     const { id } = req.params;
+    const { type } = req.query;
     let updateData;
 
     console.log(id);
@@ -47,14 +48,12 @@ module.exports.updateBursaryApplication = async (req, res, next) => {
         break;
 
       default:
-        return next(boom.badData());
+        if (type === 'update-points') {
+          updateData = { bursaryPoints };
+        } else {
+          return next(boom.badData());
+        }
     }
-    updateData = {
-      points,
-      adminMessage,
-      inviteToInterview,
-      status,
-    };
 
     const updatedBursaryApplication = await updateBursaryApplication({
       id,
