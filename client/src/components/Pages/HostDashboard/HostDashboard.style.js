@@ -16,13 +16,6 @@ export const Container = styled.div`
   }
 `;
 
-export const CompleteProfileWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-  margin-bottom: ${({ theme }) => theme.spacings[4]};
-`;
-
 // OLD STYLES
 
 export const PageWrapper = styled.div`

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const User = require('../../models/User');
-const { bookingStatuses } = require('../../../constants');
 
 /**
  * get intern dashboard information
@@ -23,6 +22,56 @@ const internDashboard = id =>
     },
     {
       $unwind: { path: '$profile', preserveNullAndEmptyArrays: true },
+    },
+    // reviews
+    {
+      $lookup: {
+        from: 'reviews',
+        let: { intern: '$_id' },
+
+        pipeline: [
+          {
+            $match: { $expr: { $eq: ['$$intern', '$to'] } },
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'from',
+              foreignField: '_id',
+              as: 'user',
+            },
+          },
+          {
+            $unwind: '$user',
+          },
+          {
+            $lookup: {
+              from: 'profiles',
+              localField: 'from',
+              foreignField: 'user',
+              as: 'profile',
+            },
+          },
+          {
+            $unwind: '$profile',
+          },
+          {
+            $project: {
+              name: '$user.name',
+              rate: '$rating',
+              jobTitle: '$profile.jobTitle',
+              message: '$message',
+            },
+          },
+          {
+            $sort: {
+              createdAt: 1,
+            },
+          },
+          { $limit: 2 },
+        ],
+        as: 'reviews',
+      },
     },
     // Intern notification
     {
@@ -48,23 +97,31 @@ const internDashboard = id =>
           {
             $unwind: { path: '$secondParty', preserveNullAndEmptyArrays: true },
           },
+          {
+            $sort: {
+              createdAt: 1,
+            },
+          },
+          { $limit: 3 },
         ],
         as: 'notifications',
       },
+    },
+    {
+      $lookup: {
+        from: 'accounts',
+        localField: 'account',
+        foreignField: '_id',
+        as: 'account',
+      },
+    },
+    {
+      $unwind: { path: '$account', preserveNullAndEmptyArrays: true },
     },
     // Intern installments
     {
       $lookup: {
         from: 'installments',
-        let: { intern: '$_id' },
-        pipeline: [{ $match: { $expr: { $eq: ['$$intern', '$intern'] } } }],
-        as: 'installments',
-      },
-    },
-    // Intern bookings
-    {
-      $lookup: {
-        from: 'bookings',
         let: { intern: '$_id' },
         pipeline: [
           {
@@ -72,68 +129,51 @@ const internDashboard = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$intern', '$intern'] },
-                  // { $ne: ['$status', bookingStatuses.cancelled] },
+                  { $gte: ['$dueDate', new Date()] },
                 ],
               },
             },
           },
-          // host name
           {
-            $lookup: {
-              from: 'users',
-              let: { host: '$host' },
-              pipeline: [
-                { $match: { $expr: { $eq: ['$$host', '$_id'] } } },
-                // host profile
-                {
-                  $lookup: {
-                    from: 'profiles',
-                    let: { host: '$_id' },
-                    pipeline: [
-                      { $match: { $expr: { $eq: ['$$host', '$user'] } } },
-                    ],
-                    as: 'profile',
-                  },
-                },
-                {
-                  $unwind: {
-                    path: '$profile',
-                    preserveNullAndEmptyArrays: true,
-                  },
-                },
-
-                {
-                  $project: {
-                    name: 1,
-                    'profile.bio': 1,
-                    'profile.jobTitle': 1,
-                    'profile.organisation': 1,
-                    'profile.profileImage': 1,
-                  },
-                },
-              ],
-              as: 'host',
+            $sort: {
+              dueDate: 1,
+            },
+          },
+          { $limit: 3 },
+        ],
+        as: 'installments',
+      },
+    },
+    {
+      $lookup: {
+        from: 'installments',
+        let: { intern: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [{ $eq: ['$$intern', '$intern'] }],
+              },
             },
           },
           {
-            $unwind: { path: '$host', preserveNullAndEmptyArrays: true },
+            $sort: {
+              dueDate: 1,
+            },
           },
+          { $limit: 3 },
         ],
-        as: 'bookings',
+        as: 'paymentsHistory',
       },
     },
     {
       $project: {
         name: 1,
-        'profile.profileImage': 1,
-        'profile.DBSCheck': 1,
+        reviews: 1,
         notifications: 1,
-        'installments._id': 1,
-        'installments.booking': 1,
-        'installments.amount': 1,
-        'installments.dueDate': 1,
-        'installments.transaction': 1,
-        bookings: 1,
+        profileCompleted: '$profile.isCompleted',
+        installments: 1,
+        paymentsHistory: 1,
       },
     },
   ]);

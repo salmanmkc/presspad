@@ -36,7 +36,7 @@ const HostProfile = props => {
         pending = null,
         reviews = [],
         lastPayments = [],
-        listing: { availableDates = [] },
+        listing: { availableDates = [] } = {},
         profileCompleted = false,
       } = data;
 
