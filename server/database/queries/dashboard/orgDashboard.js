@@ -23,6 +23,15 @@ module.exports = id => {
         account: { $arrayElemAt: ['$account', 0] },
       },
     },
+    {
+      $project: {
+        account: 1,
+        name: 1,
+        _id: 1,
+        accountDetails: 1,
+        internshipOpportunities: 1,
+      },
+    },
   ]);
 
   // interns notifications

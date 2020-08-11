@@ -3,7 +3,6 @@ const boom = require('boom');
 const {
   orgDashboard: orgDashboardQuery,
 } = require('../../database/queries/dashboard');
-const generateFileURL = require('../../helpers/generateFileURL');
 
 module.exports = async (req, res, next) => {
   const { user } = req;

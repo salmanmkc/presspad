@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Row, Col } from '../../Common/Grid';
-import * as T from '../../Common/Typography';
+
 import {
   MyAccount,
   AccountDetails,
@@ -33,43 +33,25 @@ const Content = props => {
     orgName = '',
     notifications = [],
     account = {},
+    accountDetails = {},
+    internshipOpportunities = [],
     windowWidth,
     coupons = [],
-    // old
-    state,
-
-    onEndChange,
-    handleStartOpenChange,
-    handleEndOpenChange,
-    disabledEndDate,
-    onStartChange,
-    disabledStartDate,
-    onSelectInternChange,
-    handleOpenModal,
-    handleFilterInInterns,
-    onInternSearch,
-    handleDiscountChange,
-    handleCloseModals,
-    handleSubmitCreateCoupon,
-    handlePayNowClick,
-    handleAccountUpdate,
     markAsSeen,
-    handleViewMoreToggle,
-    stripe,
   } = props;
 
-  const { currentBalance = 0 } = account;
   const [liveCouponsSrc, setLiveCouponsSrc] = useState(true);
 
   const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const HeaderTitle = typographies.headerTitle[device];
-  const SectionTitle = typographies.sectionTitle[device];
 
+  const { currentBalance = 0 } = account;
   const liveCoupons = getLiveCoupons(coupons);
   const previousCoupons = getPreviousCoupons(coupons);
   const currentlyHosted = getCurrentlyHosted(coupons);
   const totalInternsSupported = getTotalInternsSupported(coupons);
+  const internOpps = internshipOpportunities.map(el => el.opportunity);
 
   return (
     <Wrapper mobile={device === 'mobile'}>
@@ -93,17 +75,18 @@ const Content = props => {
             />
           </Col>
         )}
-
-        <Col w={[4, 12, 5]}>
-          <Container>
-            <AccountDetails
-              firstName="Abbie"
-              lastName="Harper"
-              email="abbie@test.com"
-              phone="078328828882"
-            />
-          </Container>
-        </Col>
+        {accountDetails && (
+          <Col w={[4, 12, 5]}>
+            <Container>
+              <AccountDetails
+                firstName={accountDetails.firstName}
+                lastName={accountDetails.lastName}
+                email={accountDetails.email}
+                phone={accountDetails.phone}
+              />
+            </Container>
+          </Col>
+        )}
       </Row>
       {coupons && (
         <Row mb={bottomMargins.row[device]}>
@@ -123,7 +106,7 @@ const Content = props => {
 
       <Row mb={bottomMargins.row[device]}>
         {notifications && (
-          <Col w={[4, 6, 4]} mb={bottomMargins.col[device]}>
+          <Col w={[4, 6, 5]} mb={bottomMargins.col[device]}>
             <Updates
               markAsSeen={markAsSeen}
               updates={notifications}
@@ -141,16 +124,13 @@ const Content = props => {
         )}
       </Row>
       <Row mb={bottomMargins.row[device]}>
-        <Col w={[4, 12, 5]}>
-          <Container>
-            <InternshipDetails
-              internOpps={[
-                'Internship Scheme A 2020',
-                'Ongoing Creative Industry Scheme',
-              ]}
-            />
-          </Container>
-        </Col>
+        {internshipOpportunities && (
+          <Col w={[4, 12, 5]}>
+            <Container>
+              <InternshipDetails internOpps={internOpps} />
+            </Container>
+          </Col>
+        )}
         <Col w={[4, 12, 7]}>
           <Community />
         </Col>

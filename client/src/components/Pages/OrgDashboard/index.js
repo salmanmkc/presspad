@@ -21,6 +21,11 @@ const initState = {
   notifications: [],
   coupons: [],
   account: {},
+  accountDetails: {},
+
+  internshipOpportunities: [],
+
+  // old stuff
   interns: [],
   isCouponModalOpen: false,
   loaded: false,
@@ -31,7 +36,7 @@ const initState = {
   discountPrice: 0,
   code: null,
   addCouponLoading: false,
-  showAddFunds: false,
+
   errors: {},
 };
 
@@ -49,10 +54,23 @@ const OrganisationDashboard = props => {
       setIsLoading(false);
       const [details, notifications, coupons] = data;
 
-      const { account, name: orgName } = details[0];
+      const {
+        account,
+        name: orgName,
+        accountDetails,
 
-      // new setState
-      setState({ orgName, account, notifications, coupons });
+        internshipOpportunities,
+      } = details[0];
+
+      setState({
+        orgName,
+        account,
+        notifications,
+        coupons,
+        accountDetails,
+
+        internshipOpportunities,
+      });
     } catch (err) {
       setIsLoading(false);
       const error =
@@ -301,7 +319,15 @@ const OrganisationDashboard = props => {
   const handleAccountUpdate = account =>
     setState({ account, showAddFunds: false });
 
-  const { orgName, notifications, account, coupons } = state;
+  const {
+    orgName,
+    notifications,
+    account,
+    coupons,
+    accountDetails,
+
+    internshipOpportunities,
+  } = state;
 
   if (isLoading) return <Spin />;
 
@@ -313,6 +339,8 @@ const OrganisationDashboard = props => {
       windowWidth={windowWidth}
       account={account}
       coupons={coupons}
+      accountDetails={accountDetails}
+      internshipOpportunities={internshipOpportunities}
       // old
       stripe={stripe}
       state={state}
