@@ -37,7 +37,7 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
 
     // PAID CANCELLED BUTTONS
     const { bankName, accountNumber, sortCode } = rowData;
-    if (text === 'paid')
+    if (text === 'transfered')
       return (
         <T.PXSBold caps color="lightBlue">
           paid

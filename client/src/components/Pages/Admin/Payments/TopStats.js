@@ -8,7 +8,6 @@ import formatPrice from '../../../../helpers/formatPrice';
 import { Row, Col } from '../../../Common/Grid';
 
 const PaymentTopStats = ({ data, loading }) => {
-  console.log('load', loading);
   if (loading) return <T.PBold align="center">loading top stats ... </T.PBold>;
 
   const {
@@ -19,8 +18,6 @@ const PaymentTopStats = ({ data, loading }) => {
     stripeBalance: { available = {}, pending = {} },
     unusedCoupons = 0,
   } = data;
-
-  console.log('da', data);
 
   return (
     <Row jc="space-between" jcT="flex-start">

@@ -42,6 +42,11 @@ const withdrawRequestSchema = new Schema(
       default: 'pending',
       enum: ['pending', 'transfered', 'rejected', 'cancelled'],
     },
+    reason: {
+      type: String,
+      default: 'N/A',
+      enum: ['withdraw from wallet', 'refund', 'N/A'],
+    },
     // the date when the money has transfered
     transfereDate: {
       type: Date,
