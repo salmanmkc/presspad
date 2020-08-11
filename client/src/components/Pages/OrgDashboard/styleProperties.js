@@ -16,4 +16,8 @@ export const typographies = {
     desktop: T.H2,
     mobile: T.H3,
   },
+  addCouponAmount: {
+    desktop: T.H3C,
+    mobile: T.H4C,
+  },
 };

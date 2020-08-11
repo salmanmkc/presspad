@@ -71,7 +71,6 @@ const Content = props => {
               liveCodes={liveCoupons.length}
               liveCodesCost={calculateTotalCouponsValue(liveCoupons) / 100}
               liveBookings={currentlyHosted}
-              // addCodes={addCodes}
             />
           </Col>
         )}
