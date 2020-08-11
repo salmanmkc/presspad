@@ -15,6 +15,8 @@ import Tabs from '../../../Common/Tabs';
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
+import renderExpandedSection from './renderExpandedSection';
+
 const tabs = ['active', 'history'];
 
 const AdminBookings = () => {
@@ -79,7 +81,7 @@ const AdminBookings = () => {
             columns={activeCols}
             showSearch
             loading={loading}
-            // expandedSection={renderExpandedSection}
+            expandedSection={renderExpandedSection}
           />
         );
       case 1:
@@ -89,7 +91,7 @@ const AdminBookings = () => {
             columns={historyCols}
             showSearch
             loading={loading}
-            //   expandedSection={renderExpandedSection}
+            expandedSection={renderExpandedSection}
           />
         );
       default:
