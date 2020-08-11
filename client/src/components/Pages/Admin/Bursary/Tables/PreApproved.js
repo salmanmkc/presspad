@@ -21,14 +21,12 @@ const selectOptions = ['Approve', 'Reject'].map(option => ({
 }));
 
 const PreApproved = ({ sendToResponse }) => {
-  const { data, loading, updateBursaryPoints } = useGetApplications(
-    'pre-approved',
-  );
-
-  const inviteToInterview = (rowData, e) =>
-    console.log(
-      'function to send the user an email and then update database as invited to interview',
-    );
+  const {
+    data,
+    loading,
+    updateBursaryPoints,
+    inviteToInterview,
+  } = useGetApplications('pre-approved');
 
   const exportData = () =>
     console.log('function to export all bursary data for these requests');

@@ -40,6 +40,45 @@ export const useGetApplications = type => {
     }
   };
 
+  const inviteToInterview = async rowData => {
+    const { _id } = rowData;
+    try {
+      setData(oldState =>
+        oldState.map(row => {
+          if (row._id === _id) {
+            return {
+              ...row,
+              inviteLoading: true,
+            };
+          }
+          return row;
+        }),
+      );
+
+      await axios.patch(
+        `${API_UPDATE_BURSARY_APPLICATIONS.replace(':id', _id)}`,
+        {},
+        { params: { type: 'invite-to-interview' } },
+      );
+      setFetchData(count => count + 1);
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setData(oldState =>
+          oldState.map(row => {
+            if (row._id === _id) {
+              return {
+                ...row,
+                inviteError: error.response.data.error,
+                inviteLoading: false,
+              };
+            }
+            return row;
+          }),
+        );
+      }
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
     async function getBursaryApplications() {
@@ -63,5 +102,5 @@ export const useGetApplications = type => {
     };
   }, [fetchData, type]);
 
-  return { data, loading, updateBursaryPoints };
+  return { data, loading, updateBursaryPoints, inviteToInterview };
 };

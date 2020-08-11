@@ -63,6 +63,9 @@ module.exports.updateBursaryApplication = async (req, res, next) => {
       default:
         if (type === 'update-points') {
           updateData = { bursaryPoints };
+        } else if (type === 'invite-to-interview') {
+          // send invitation email
+          updateData = { invitedToInterview: true };
         } else {
           return next(boom.badData());
         }
