@@ -346,3 +346,16 @@ export const formatPrice = (price, fractionDigits) =>
 
 export const truncateString = (string, maxLength) =>
   string.length > maxLength ? `${string.slice(0, maxLength)}...` : string;
+
+export const decidePaymentStatus = ({ dueDate }) => {
+  let status;
+  if (moment(dueDate).isBefore(moment())) {
+    status = 'overdue';
+  } else if (moment(dueDate).isSame(moment())) {
+    status = 'due';
+  } else {
+    status = 'upcoming';
+  }
+
+  return status;
+};

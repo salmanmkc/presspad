@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+export const PageWrapper = styled.div`
+  width: 100%;
+  margin-top: ${({ mobile }) => mobile && '-2rem'};
+`;
+
 export const SectionTitle = styled.h4`
   margin: 20px 0;
   font-family: Roboto;
