@@ -17,6 +17,8 @@ import Tabs from '../../../Common/Tabs';
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
+import renderExpandedSection from './renderExpandedSection';
+
 const tabs = ['approved', 'approval requests'];
 
 const AdminHosts = () => {
@@ -117,7 +119,7 @@ const AdminHosts = () => {
             columns={approvedCols}
             showSearch
             loading={loading}
-            // expandedSection={renderExpandedSection}
+            expandedSection={renderExpandedSection}
           />
         );
       case 1:
@@ -127,7 +129,7 @@ const AdminHosts = () => {
             columns={requestCols}
             showSearch
             loading={loading}
-            // expandedSection={renderExpandedSection}
+            expandedSection={renderExpandedSection}
           />
         );
       default:

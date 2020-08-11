@@ -130,6 +130,7 @@ module.exports = async (req, res, next) => {
                 earnings: host.totalIncome,
                 wallet: host.currentBalance,
                 bookingStatus,
+                contactNumber: host.profile[0].phoneNumber,
                 status:
                   host.profile[0].firstVerified &&
                   host.profile[0].awaitingReview

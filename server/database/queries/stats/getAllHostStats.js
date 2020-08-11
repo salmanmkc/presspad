@@ -107,6 +107,7 @@ module.exports.getAllHostStats = () =>
         'profile.awaitingReviewDate': 1,
         'profile.firstVerified': 1,
         'profile.houseViewingDate': 1,
+        'profile.phoneNumber': 1,
         totalIncome: { $arrayElemAt: ['$account.income', 0] },
         currentBalance: { $arrayElemAt: ['$account.currentBalance', 0] },
         // look up from bookings:
