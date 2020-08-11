@@ -148,7 +148,7 @@ export default class SignInPage extends Component {
                 Forgot password?
               </T.Link>
             </p>
-            <S.HiddenInput type="submit" style={{ visibility: 'hidden' }} />
+            <S.HiddenInput type="submit" />
             {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
             <Button type="secondary" onClick={onFormSubmit}>
               Sign in
