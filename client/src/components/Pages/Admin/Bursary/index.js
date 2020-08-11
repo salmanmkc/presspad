@@ -121,6 +121,8 @@ const AdminBursary = () => {
       if (err.response && err.response.data) {
         setUpdateWindowsLoading(false);
         setError(err.response.data.error);
+      } else {
+        setError('something went wrong please try again later');
       }
     }
   };
@@ -132,12 +134,12 @@ const AdminBursary = () => {
   const sendToResponse = (responseType, rowData) => {
     switch (responseType) {
       case 'Approve':
-        return history.push(ADMIN_BURSARY_APPROVE.replace(':id', rowData.id));
+        return history.push(ADMIN_BURSARY_APPROVE.replace(':id', rowData._id));
       case 'Reject':
-        return history.push(ADMIN_BURSARY_REJECT.replace(':id', rowData.id));
+        return history.push(ADMIN_BURSARY_REJECT.replace(':id', rowData._id));
       case 'Pre-approve':
         return history.push(
-          ADMIN_BURSARY_PREAPPROVE.replace(':id', rowData.id),
+          ADMIN_BURSARY_PREAPPROVE.replace(':id', rowData._id),
         );
       default:
         return null;

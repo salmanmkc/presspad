@@ -23,7 +23,7 @@ module.exports.upsertBursaryWindows = async (req, res, next) => {
 
 module.exports.updateBursaryApplication = async (req, res, next) => {
   try {
-    const { bursaryPoints, adminMessage, inviteToInterview, status } = req.body;
+    const { bursaryPoints, adminMessage, invite, status } = req.body;
     const { id } = req.params;
     const { type } = req.query;
     let updateData;
@@ -39,10 +39,23 @@ module.exports.updateBursaryApplication = async (req, res, next) => {
 
     switch (status) {
       case preApproved:
-        // validate application status
+        updateData = {
+          status: preApproved,
+          adminMessage,
+          invitedToInterview: invite,
+        };
 
+        if (invite) {
+          // send invitation email
+          console.log('invite');
+        } else {
+          // send confirmation email wait for next window
+        }
         break;
       case rejected:
+        updateData = { status: rejected, adminMessage };
+
+        // send rejecting email
         break;
       case approved:
         break;
