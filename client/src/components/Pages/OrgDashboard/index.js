@@ -22,7 +22,6 @@ const initState = {
   coupons: [],
   account: {},
   accountDetails: {},
-
   internshipOpportunities: [],
 
   // old stuff
@@ -58,7 +57,6 @@ const OrganisationDashboard = props => {
         account,
         name: orgName,
         accountDetails,
-
         internshipOpportunities,
       } = details[0];
 
@@ -68,7 +66,6 @@ const OrganisationDashboard = props => {
         notifications,
         coupons,
         accountDetails,
-
         internshipOpportunities,
       });
     } catch (err) {

@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import axios from 'axios';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 
 import { Row, Col } from '../../../Common/Grid';
 import Title from '../../../Common/Title';
 import * as T from '../../../Common/Typography';
 import { Select, DatePicker, Input } from '../../../Common/Inputs';
+import Icon from '../../../Common/Icon';
 
-import { formatPrice } from '../../../../helpers';
+import { formatPrice, calculatePrice } from '../../../../helpers';
 import { typographies } from '../styleProperties';
+import { Warning } from './style';
 
 import { API_ACCOUNT_URL } from '../../../../constants/apiRoutes';
 import { TABLET_WIDTH } from '../../../../constants/screenWidths';
@@ -19,6 +23,7 @@ const reducer = (state, action) => {
         ...state,
         [action.name]: action.value,
       };
+
     case 'isError':
       return {
         ...state,
@@ -29,10 +34,20 @@ const reducer = (state, action) => {
   }
 };
 
+const moment = extendMoment(Moment);
+
 const initialState = {
   email: '',
   name: '',
   message: '',
+  discountPercentage: 0,
+  multiDateRange: [
+    {
+      startDate: null,
+      endDate: null,
+    },
+  ],
+  couponPrice: 0,
   errors: {},
 };
 
@@ -48,18 +63,27 @@ const AddCoupons = props => {
   const [balance, setBalance] = useState(0);
   const [balanceLoading, setBalanceLoading] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [discountPercentage, setDiscountPercentage] = useState(0);
-  const [multiDateRange, setMultiDateRange] = useState([
-    {
-      startDate: '',
-      endDate: '',
-    },
-  ]);
+
+  // const [multiDateRange, setMultiDateRange] = useState([
+  //   {
+  //     startDate: '',
+  //     endDate: '',
+  //   },
+  // ]);
+  // const [couponPrice, setCouponPrice]
 
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const AmountTitle = typographies.addCouponAmount[device];
 
-  const { email, name, message, errors } = state;
+  const {
+    email,
+    name,
+    message,
+    multiDateRange,
+    discountPercentage,
+    couponPrice,
+    errors,
+  } = state;
 
   useEffect(() => {
     let mounted = true;
@@ -79,6 +103,16 @@ const AddCoupons = props => {
     };
   }, []);
 
+  useEffect(() => {
+    const { startDate, endDate } = multiDateRange[0];
+
+    if (startDate && endDate && discountPercentage > 0) {
+      const price = calculatePrice(startDate, endDate);
+      // const price = (calculatePrice(range) * discountPercentage) / 100;
+      console.log('da', price);
+    }
+  }, [discountPercentage, multiDateRange]);
+
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
       if (i === index) {
@@ -87,14 +121,21 @@ const AddCoupons = props => {
       return dateObj;
     });
 
-    setMultiDateRange(updatedDates);
+    dispatch({
+      type: 'change',
+      name: 'multiDateRange',
+      value: updatedDates,
+    });
   };
 
   const handleInputChange = e => {
     const { name: _name, value } = e.target;
-    console.log('name', _name);
-    console.log('val', value);
+
     dispatch({ type: 'change', name: _name, value });
+  };
+
+  const handleSelectChange = value => {
+    dispatch({ type: 'change', name: 'discountPercentage', value });
   };
 
   const handleSubmit = async e => {
@@ -118,13 +159,13 @@ const AddCoupons = props => {
         </Col>
       </Row>
       <form onSubmit={handleSubmit}>
-        <Row mb={5}>
+        <Row mt={5} mb={5}>
           <Col w={[4, 4, 5]}>
             <Select
               options={optionsPercentages}
               label="Discount %"
               placeholder="%"
-              onChange={setDiscountPercentage}
+              onChange={val => handleSelectChange(val)}
               value={discountPercentage}
             />
           </Col>
@@ -168,6 +209,25 @@ const AddCoupons = props => {
               error={errors.name}
             />
           </Col>
+        </Row>
+        <Row mb={5}>
+          <Col w={[4, 3, 3]}>
+            <AmountTitle color="pink">£740</AmountTitle>
+            <T.PSBold color="darkBlue">potential cost of internship</T.PSBold>
+          </Col>
+
+          <Warning w={[4, 3, 3]}>
+            <Icon
+              color="pink"
+              icon="warning"
+              width="40"
+              height="40"
+              margin="0 5px 0 0"
+            />
+            <T.H8C caps color="blue" style={{ display: 'inline-flex' }}>
+              Not enough money in the fund
+            </T.H8C>
+          </Warning>
         </Row>
         <Row mb={5}>
           <Col w={[4, 12, 8]}>
