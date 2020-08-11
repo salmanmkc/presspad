@@ -9,10 +9,17 @@ export const TitleContainer = styled.div`
   position: absolute;
   left: 0;
   width: 100%;
-  min-width: 450px;
-  min-height: 200px;
+  @media (max-width: ${({ theme }) => theme.size.mobileM}) {
+    & h3 {
+      font-size: 22px;
+    }
+  }
+  @media (max-width: ${({ theme }) => theme.size.mobileS}) {
+    & h3 {
+      font-size: 18px;
+    }
+  }
   @media ${({ theme }) => theme.breakpoints.tablet} {
-    // position: relative;
     width: 37%;
     min-width: 450px;
     left: 0;

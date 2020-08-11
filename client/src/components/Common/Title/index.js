@@ -37,9 +37,6 @@ const AlternateTitle = styled.div`
     color: ${({ theme, bgColor1 }) => bgColor1 || theme.colors.white};
     padding-bottom: 20px;
   }
-  & h3 {
-    min-width: 330px;
-  }
 `;
 
 const Section = styled(T.H4C)`
