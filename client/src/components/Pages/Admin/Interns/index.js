@@ -24,7 +24,7 @@ const AdminInterns = () => {
   const [internRequests, setInternRequests] = useState([]);
   const [approvedInterns, setApprovedInterns] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
 
   const handleTab = e => {
@@ -88,7 +88,7 @@ const AdminInterns = () => {
         if (err.response && err.response.status !== 500) {
           errorMsg = err.response.data.error;
         }
-        setErrors({ serverErr: errorMsg });
+        setError(errorMsg);
       }
     };
     fetchData();
@@ -137,6 +137,11 @@ const AdminInterns = () => {
       <Row mb={4}>
         <Col w={[4, 12, 12]}>{renderTable()}</Col>
       </Row>
+      {error && (
+        <Row>
+          <T.PXS color="pink">{error}</T.PXS>
+        </Row>
+      )}
     </>
   );
 };

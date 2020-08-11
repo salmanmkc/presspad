@@ -1,14 +1,11 @@
 import React from 'react';
-import { Popover } from 'antd';
-import * as S from '../AdminDashboard.style';
-import * as T from '../../../Common/Typography';
 import Figure from '../../../Common/Figure';
+import { Row } from '../../../Common/Grid';
+import LoadingBallPulseSync from '../../../Common/LoadingBallPulseSync';
 import formatPrice from '../../../../helpers/formatPrice';
 
-import { Row, Col } from '../../../Common/Grid';
-
 const PaymentTopStats = ({ data, loading }) => {
-  if (loading) return <T.PBold align="center">loading top stats ... </T.PBold>;
+  if (loading) return <LoadingBallPulseSync />;
 
   const {
     account: { hostingIncome = 0, bursaryFunds = 0 },

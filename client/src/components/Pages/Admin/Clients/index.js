@@ -13,7 +13,7 @@ const AdminClients = () => {
   console.log('hey');
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState('');
 
   const columns = [
     LinkCol('organisation', ADMIN_USER_DETAILS, 'id'),
@@ -36,7 +36,7 @@ const AdminClients = () => {
         if (err.response && err.response.status !== 500) {
           errorMsg = err.response.data.error;
         }
-        setErrors({ serverErr: errorMsg });
+        setError(errorMsg);
       }
     };
     fetchData();
@@ -51,6 +51,11 @@ const AdminClients = () => {
         </Col>
       </Row>
       <Table columns={columns} data={clients} loading={loading} showSearch />
+      {error && (
+        <Row>
+          <T.PXS color="pink">{error}</T.PXS>
+        </Row>
+      )}
     </>
   );
 };

@@ -25,7 +25,7 @@ const AdminHosts = () => {
   const [hostRequests, setHostRequests] = useState([]);
   const [approvedHosts, setApprovedHosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
 
   const handleTab = e => {
@@ -103,7 +103,7 @@ const AdminHosts = () => {
         if (err.response && err.response.status !== 500) {
           errorMsg = err.response.data.error;
         }
-        setErrors({ serverErr: errorMsg });
+        setError(errorMsg);
       }
     };
     fetchData();
@@ -152,6 +152,11 @@ const AdminHosts = () => {
       <Row mb={4}>
         <Col w={[4, 12, 12]}>{renderTable()}</Col>
       </Row>
+      {error && (
+        <Row>
+          <T.PXS color="pink">{error}</T.PXS>
+        </Row>
+      )}
     </>
   );
 };

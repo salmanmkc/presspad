@@ -7,7 +7,6 @@ import {
   LinkCol,
   StandardCol,
   PayButtonCol,
-  InputCol,
   BankDetailsCol,
 } from '../../../Common/Table/Common';
 import * as T from '../../../Common/Typography';
@@ -18,6 +17,8 @@ import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
 import TopStats from './TopStats';
 
+import renderExpandedSection from './renderExpandedSection';
+
 const tabs = ['requests', 'history'];
 
 const AdminPayments = () => {
@@ -25,7 +26,7 @@ const AdminPayments = () => {
   const [paymentRequests, setPaymentRequests] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
 
   const handleTab = e => {
@@ -36,7 +37,7 @@ const AdminPayments = () => {
     console.log('func to go here to update payment status');
   };
 
-  const requestCols = [
+  const columns = [
     LinkCol('host/intern', ADMIN_USER_DETAILS, 'id'),
     StandardCol('amount', 'price'),
     BankDetailsCol('bankName'),
@@ -44,8 +45,6 @@ const AdminPayments = () => {
     BankDetailsCol('sortCode'),
     PayButtonCol('status', updatePaymentStatus),
   ];
-
-  const historyCols = [];
 
   useEffect(() => {
     setLoading(true);
@@ -79,7 +78,7 @@ const AdminPayments = () => {
         if (err.response && err.response.status !== 500) {
           errorMsg = err.response.data.error;
         }
-        setErrors({ serverErr: errorMsg });
+        setError(errorMsg);
         setLoading(false);
       }
     };
@@ -92,20 +91,20 @@ const AdminPayments = () => {
         return (
           <Table
             data={paymentRequests}
-            columns={requestCols}
+            columns={columns}
             showSearch
             loading={loading}
-            // expandedSection={renderExpandedSection}
+            expandedSection={renderExpandedSection}
           />
         );
       case 1:
         return (
           <Table
             data={paymentHistory}
-            columns={requestCols}
+            columns={columns}
             showSearch
             loading={loading}
-            // expandedSection={renderExpandedSection}
+            expandedSection={renderExpandedSection}
           />
         );
       default:
@@ -132,7 +131,12 @@ const AdminPayments = () => {
       </Row>
       <Row mb={4}>
         <Col w={[4, 12, 12]}>{renderTable()}</Col>
-      </Row>{' '}
+      </Row>
+      {error && (
+        <Row>
+          <T.PXS color="pink">{error}</T.PXS>
+        </Row>
+      )}
     </>
   );
 };
