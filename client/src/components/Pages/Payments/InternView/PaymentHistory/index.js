@@ -29,7 +29,9 @@ const PaymentHistoryTable = ({ paymentHistory }) => {
       render: text => <T.PS>£{formatPrice(text, 2)}</T.PS>,
     },
     {
-      render: (text, record) => <PaymentStatus dueDate={record.dueDate} />,
+      render: (text, record) => (
+        <PaymentStatus paid={record.transaction} dueDate={record.dueDate} />
+      ),
     },
     {
       render: (text, record) => (

@@ -2,7 +2,6 @@
 const boom = require('boom');
 
 const { getUpcomingBooking } = require('../../database/queries/bookings');
-
 const {
   hostDashboard: hostDashboardQuery,
 } = require('../../database/queries/dashboard');
@@ -28,7 +27,7 @@ const hostDashboard = async (req, res, next) => {
     let accessibleFunds;
     let pending;
     let recentPayments;
-    console.log('next', nextBooking);
+
     const {
       _id,
       email,
