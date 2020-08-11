@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
 
@@ -7,9 +6,6 @@ import * as T from '../../../Common/Typography';
 
 import AdminInterns from '../Interns';
 import AdminHosts from '../Hosts';
-
-import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
-import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
 import TopStats from './TopStats';
 
