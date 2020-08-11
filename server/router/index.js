@@ -17,6 +17,7 @@ const getInternshipDetails = require('../controllers/profile/getInternshipDetail
 const updateInternshipDetails = require('../controllers/profile/updateInternshipDetails');
 const deleteAccount = require('../controllers/user/deleteAccount');
 const internSettings = require('../controllers/user/internSettings');
+const settingMyAccount = require('../controllers/user/myAccount');
 
 const {
   viewBooking,
@@ -354,11 +355,7 @@ router.delete(USER_BASE, authentication, deleteAccount);
 router.post(RESET_PASSWORD, resetPassword);
 router.post(SET_PASSWORD, setPassword);
 
-router.patch(
-  INTERN_SETTINGS_MY_ACCOUNT,
-  authentication,
-  internSettings.myAccount,
-);
+router.patch(INTERN_SETTINGS_MY_ACCOUNT, authentication, settingMyAccount);
 
 router.patch(INTERN_SETTINGS_ABOUT_ME, authentication, internSettings.aboutMe);
 
