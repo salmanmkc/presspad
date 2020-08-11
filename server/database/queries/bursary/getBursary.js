@@ -10,38 +10,38 @@ const getBursaryWindows = () => {
   });
 };
 
-const getBursaryApplications = () => {
+const getBursaryApplications = type => {
   return BursaryApplication.aggregate([
+    {
+      $match: { $expr: { $eq: ['$status', type] } },
+    },
     {
       $lookup: {
         from: 'bursaryapplications',
-        let: { internId: '$intern', applicationId: '$_id' },
+        let: { internId: '$intern' },
         pipeline: [
           {
             $match: {
               $expr: {
-                $and: [
-                  { $eq: ['$$internId', '$intern'] },
-                  { $ne: ['$$applicationId', '$_id'] },
-                ],
+                $and: [{ $eq: ['$$internId', '$intern'] }],
               },
             },
           },
           {
             $group: {
               _id: null,
-              usedAmount: { $sum: '$usedAmount' },
+              reservedAmount: { $sum: '$reservedAmount' },
             },
           },
         ],
-        as: 'sumOtherBursariesUsedAmount',
+        as: 'awardedBursariesCost',
       },
     },
     {
       $addFields: {
-        sumOtherBursariesUsedAmount: {
+        awardedBursariesCost: {
           $ifNull: [
-            { $arrayElemAt: ['$sumOtherBursariesUsedAmount.usedAmount', 0] },
+            { $arrayElemAt: ['$awardedBursariesCost.reservedAmount', 0] },
             0,
           ],
         },
@@ -67,12 +67,14 @@ const getBursaryApplications = () => {
             $count: 'count',
           },
         ],
-        as: 'rejected',
+        as: 'rejectedBursaries',
       },
     },
     {
       $addFields: {
-        rejected: { $ifNull: [{ $arrayElemAt: ['$rejected.count', 0] }, 0] },
+        rejectedBursaries: {
+          $ifNull: [{ $arrayElemAt: ['$rejectedBursaries.count', 0] }, 0],
+        },
       },
     },
     {
@@ -95,9 +97,10 @@ const getBursaryApplications = () => {
       $unwind: { path: '$intern', preserveNullAndEmptyArrays: true },
     },
     {
-      $group: {
-        _id: '$status',
-        data: { $push: '$$ROOT' },
+      $addFields: {
+        id: '$intern._id',
+        name: '$intern.name',
+        dateRequested: '$createdAt',
       },
     },
   ]);

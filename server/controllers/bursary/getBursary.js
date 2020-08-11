@@ -16,17 +16,11 @@ module.exports.getBursaryWindows = async (req, res, next) => {
 
 module.exports.getBursaryApplications = async (req, res, next) => {
   try {
-    const bursaries = await getBursaryApplications();
-    if (!bursaries[0]) {
-      return next(boom.notFound());
-    }
+    const { type } = req.query;
 
-    const applications = bursaries.reduce((acc, curr) => {
-      acc[curr._id] = curr.data;
-      return acc;
-    }, {});
+    const bursaries = await getBursaryApplications(type);
 
-    return res.json(applications);
+    return res.json(bursaries);
   } catch (error) {
     return next(boom.badImplementation(error));
   }

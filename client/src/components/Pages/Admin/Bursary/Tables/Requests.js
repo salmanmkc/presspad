@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import axios from 'axios';
+
 import Table from '../../../../Common/Table';
 import {
   LinkCol,
@@ -13,21 +14,7 @@ import { Row, Col } from '../../../../Common/Grid';
 import renderExpandedSection from './renderExpandedSection';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
-
-// DUMMY DATA TO BE REPLACED ONCE BACK END CONNECTED
-const dummyData = [
-  {
-    name: 'Test Name',
-    typeOfUser: 'New',
-    dateRequested: moment(),
-    bursaryPoints: null,
-    id: 1,
-    type: 'Updated address',
-    email: 'test@test.com',
-    rejectedBursaries: 0,
-    awardedBursariesCost: 840,
-  },
-];
+import { API_BURSARY_APPLICATIONS } from '../../../../../constants/apiRoutes';
 
 const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
   label: option,
@@ -56,9 +43,24 @@ const Requests = ({ sendToResponse }) => {
   ];
 
   useEffect(() => {
-    setLoading(true);
-    setData(dummyData);
-    setLoading(false);
+    let mounted = true;
+    async function getBursaryApplications() {
+      setLoading(true);
+
+      const { data: _data } = await axios.get(
+        `${API_BURSARY_APPLICATIONS}?type=request`,
+      );
+
+      if (mounted) {
+        setData(_data);
+        setLoading(false);
+      }
+    }
+
+    getBursaryApplications();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (

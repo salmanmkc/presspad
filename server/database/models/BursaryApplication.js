@@ -50,7 +50,7 @@ const bursaryApplicationSchema = new Schema(
         message: 'end date is in the past',
       },
     },
-    points: {
+    bursaryPoints: {
       type: Number,
     },
     // 50% => 50

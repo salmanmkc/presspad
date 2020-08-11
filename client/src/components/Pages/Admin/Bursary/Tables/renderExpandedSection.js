@@ -7,8 +7,14 @@ import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
 
 import formatPrice from '../../../../../helpers/formatPrice';
 
-const renderExpandedSection = (rowData, index) => {
-  const { email, rejectedBursaries, awardedBursariesCost, name, id } = rowData;
+const renderExpandedSection = rowData => {
+  const {
+    intern: { email },
+    rejectedBursaries,
+    awardedBursariesCost,
+    name,
+    id,
+  } = rowData;
   return (
     <>
       <Row mb={2}>
