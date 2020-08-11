@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Col } from '../../../Common/Grid';
+import * as T from '../../../Common/Typography';
 
 export const Warning = styled(Col)`
   display: flex;
@@ -14,4 +15,10 @@ export const CancelLink = styled(Link)`
   text-decoration: underline;
   display: inline-block;
   width: 100%;
+`;
+
+export const Error = styled(T.PXS)`
+  color: ${({ theme }) => theme.colors.pink};
+  padding-left: ${({ theme }) => theme.spacings[2]};
+  padding-top: ${({ theme }) => theme.spacings[1]};
 `;

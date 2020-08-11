@@ -12,11 +12,17 @@ import Button from '../../../Common/ButtonNew';
 
 import { formatPrice, calculatePrice } from '../../../../helpers';
 import { typographies } from '../styleProperties';
-import { Warning, CancelLink } from './style';
+import { Warning, CancelLink, Error } from './style';
 
 import { API_ACCOUNT_URL } from '../../../../constants/apiRoutes';
 import { DASHBOARD_URL } from '../../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../../constants/screenWidths';
+
+import validationSchema from './validationSchema';
+
+const { SERVER_ERROR } = require('../../../../constants/errorMessages');
+
+const { validate } = require('../../../../validation');
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -42,7 +48,7 @@ const initialState = {
   email: '',
   name: '',
   message: '',
-  discountPercentage: 0,
+  discountRate: 0,
   multiDateRange: [
     {
       startDate: null,
@@ -64,7 +70,10 @@ const AddCoupons = props => {
   const { windowWidth } = props;
   const [balance, setBalance] = useState(0);
   const [balanceLoading, setBalanceLoading] = useState(true);
+  const [notEnoughFunds, setNotEnoughFunds] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const AmountTitle = typographies.addCouponAmount[device];
@@ -74,7 +83,7 @@ const AddCoupons = props => {
     name,
     message,
     multiDateRange,
-    discountPercentage,
+    discountRate,
     couponPrice,
     errors,
   } = state;
@@ -97,13 +106,14 @@ const AddCoupons = props => {
     };
   }, []);
 
+  // calculate coupon price
   useEffect(() => {
     const { startDate, endDate } = multiDateRange[0];
 
-    if (startDate && endDate && discountPercentage > 0) {
+    if (startDate && endDate && discountRate > 0) {
       const range = moment.range(startDate, endDate);
       const price = formatPrice(
-        (calculatePrice(range) * Number(discountPercentage)) / 100,
+        (calculatePrice(range) * Number(discountRate)) / 100,
       );
 
       dispatch({
@@ -112,7 +122,16 @@ const AddCoupons = props => {
         value: price,
       });
     }
-  }, [discountPercentage, multiDateRange]);
+  }, [discountRate, multiDateRange]);
+
+  // check if enough funds
+  useEffect(() => {
+    if (couponPrice > balance) {
+      setNotEnoughFunds(true);
+    } else {
+      setNotEnoughFunds(false);
+    }
+  }, [couponPrice, balance]);
 
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
@@ -138,18 +157,58 @@ const AddCoupons = props => {
   const handleSelectChange = value => {
     dispatch({
       type: 'change',
-      name: 'discountPercentage',
+      name: 'discountRate',
       value,
     });
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('yh');
+
+    try {
+      // setSubmitting(true);
+      if (balance < couponPrice) {
+        setError('Not enough funds');
+        // setSubmitting(false);
+      }
+
+      const { errors: validationErrors } = validate({
+        schema: validationSchema,
+        data: { ...state },
+      });
+
+      if (!validationErrors) {
+        // do call
+        // const { data } = await axios.post(API_COUPONS_URL, {
+        //   name,
+        //   email,
+        //   discountRate,
+        //   startDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
+        //   endDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
+        // });
+        // setError('');
+        // dispatch({ type: 'isError', errors: null });
+        console.log('ALL GOOD!', {
+          name,
+          email,
+          discountRate,
+          startDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
+          endDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
+        });
+        // setSubmitting(false);
+      } else {
+        // set validation errors
+        dispatch({ type: 'isError', errors: validationErrors });
+        // setSubmitting(false);
+      }
+    } catch (err) {
+      // set server error
+      setError(SERVER_ERROR);
+      // setSubmitting(false);
+    }
   };
-
-  const notEnoughFunds = couponPrice > balance;
-
+  console.log('state', state);
+  console.log('err', errors);
   return (
     <>
       <Row>
@@ -173,7 +232,8 @@ const AddCoupons = props => {
               label="Discount %"
               placeholder="%"
               onChange={val => handleSelectChange(val)}
-              value={discountPercentage}
+              value={discountRate}
+              error={errors.discountRate && 'required'}
             />
           </Col>
         </Row>
@@ -187,6 +247,7 @@ const AddCoupons = props => {
                 index={index}
                 mb={1}
                 value={multiDateRange[index]}
+                error={errors['multiDateRange[0]'] && 'required'}
               />
             ))}
           </Col>
@@ -252,7 +313,7 @@ const AddCoupons = props => {
         </Row>
         <Row mb={5}>
           <Col w={[4, 6, 5.4]} mb={5}>
-            <Button type="secondary" bgColor="pink" disabled={notEnoughFunds}>
+            <Button type="secondary" bgColor="pink">
               CREATE DISCOUNT CODE
             </Button>
           </Col>
@@ -265,6 +326,7 @@ const AddCoupons = props => {
             </CancelLink>
           </Col>
         </Row>
+        {error && <Error>{error}</Error>}
       </form>
     </>
   );
