@@ -1,10 +1,6 @@
 import moment from 'moment';
 
-import {
-  calculatePrice,
-  formatPrice,
-  createSingleDate,
-} from '../../../helpers';
+import { formatPrice, createSingleDate } from '../../../helpers';
 
 export const createCodesTableData = arr =>
   arr.map(el => {

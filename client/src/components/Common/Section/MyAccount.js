@@ -7,15 +7,9 @@ import Button from '../ButtonNew';
 import { Row, Col } from '../Grid';
 
 import formatPrice from '../../../helpers/formatPrice';
-import { ADD_FUNDS_URL } from '../../../constants/navRoutes';
+import { ADD_FUNDS_URL, ADD_COUPONS_URL } from '../../../constants/navRoutes';
 
-const MyAccount = ({
-  funds,
-  liveCodes,
-  liveCodesCost,
-  liveBookings,
-  addCodes,
-}) => {
+const MyAccount = ({ funds, liveCodes, liveCodesCost, liveBookings }) => {
   const history = useHistory();
   return (
     <S.Wrapper>
@@ -48,7 +42,7 @@ const MyAccount = ({
           <Button
             small
             label="ADD codes"
-            onClick={addCodes}
+            onClick={() => history.push(ADD_COUPONS_URL)}
             type="primary"
             bgColor="darkBlue"
           />
