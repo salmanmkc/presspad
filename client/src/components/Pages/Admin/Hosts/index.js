@@ -15,13 +15,16 @@ import * as T from '../../../Common/Typography';
 import Tabs from '../../../Common/Tabs';
 
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
-import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
+import {
+  ADMIN_USER_DETAILS,
+  ADMIN_HOSTS_URL,
+} from '../../../../constants/navRoutes';
 
 import renderExpandedSection from './renderExpandedSection';
 
 const tabs = ['approved', 'approval requests'];
 
-const AdminHosts = () => {
+const AdminHosts = ({ preview }) => {
   const [hostRequests, setHostRequests] = useState([]);
   const [approvedHosts, setApprovedHosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -98,6 +101,9 @@ const AdminHosts = () => {
         }
         setHostRequests(requests);
         setApprovedHosts(approved);
+        if (preview) {
+          setSelected(1);
+        }
       } catch (err) {
         let errorMsg = 'Something went wrong';
         if (err.response && err.response.status !== 500) {
@@ -108,7 +114,7 @@ const AdminHosts = () => {
     };
     fetchData();
     setLoading(false);
-  }, []);
+  }, [preview]);
 
   const renderTable = () => {
     switch (selected) {
@@ -127,9 +133,12 @@ const AdminHosts = () => {
           <Table
             data={hostRequests}
             columns={requestCols}
-            showSearch
+            showSearch={!preview}
             loading={loading}
             expandedSection={renderExpandedSection}
+            tableHeader={preview && 'host approval requests'}
+            previewLink={preview && ADMIN_HOSTS_URL}
+            previewLinkText={preview && 'View all host requests'}
           />
         );
       default:
@@ -139,16 +148,25 @@ const AdminHosts = () => {
 
   return (
     <>
-      <Row mb={6}>
-        <Col w={[4, 10, 10]}>
-          <T.H2 color="blue">Interns</T.H2>
-        </Col>
-      </Row>
-      <Row mb={4}>
-        <Col w={[4, 12, 12]}>
-          <Tabs items={tabs} caps handleClick={handleTab} selected={selected} />
-        </Col>
-      </Row>
+      {!preview && (
+        <>
+          <Row mb={6}>
+            <Col w={[4, 10, 10]}>
+              <T.H2 color="blue">Hosts</T.H2>
+            </Col>
+          </Row>
+          <Row mb={4}>
+            <Col w={[4, 12, 12]}>
+              <Tabs
+                items={tabs}
+                caps
+                handleClick={handleTab}
+                selected={selected}
+              />
+            </Col>
+          </Row>
+        </>
+      )}
       <Row mb={4}>
         <Col w={[4, 12, 12]}>{renderTable()}</Col>
       </Row>
