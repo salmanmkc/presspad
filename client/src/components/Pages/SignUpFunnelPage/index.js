@@ -3,7 +3,6 @@ import { withTheme } from 'styled-components';
 
 import FunnelPageDate from './FunnelPageData';
 
-import Title from '../../Common/Title';
 import { Row, Col } from '../../Common/Grid';
 import * as T from '../../Common/Typography';
 import * as S from './styled';
@@ -22,18 +21,7 @@ const SignUpFunnel = ({ history }) => {
     <S.Wrapper>
       <Row>
         <Col w={[4, 12, 12]}>
-          <Title
-            withBg
-            bgColor="white"
-            textColor="blue"
-            style={{
-              justifyContent: 'flex-start',
-              marginTop: 55,
-            }}
-            caps={false}
-          >
-            I am...
-          </Title>
+          <S.Title>I am...</S.Title>
         </Col>
       </Row>
       <Row>

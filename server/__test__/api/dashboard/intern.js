@@ -33,36 +33,33 @@ describe('Testing for intern dashboard route', () => {
       .expect(200)
       .end((error, result) => {
         expect(result).toBeDefined();
+
         const {
           name,
-          profile,
+          reviews,
           notifications,
           installments,
-          bookings,
-        } = result.body.data;
+          profileCompleted,
+          nextBooking,
+        } = result.body;
 
         expect(name).toBe('Mone Dupree');
-        expect(profile).toBeDefined();
+        expect(profileCompleted).toBeDefined();
 
         expect(notifications).toBeDefined();
-        expect(notifications).toHaveLength(1);
         expect(notifications[0].secondParty).toBeDefined();
         expect(notifications[0].user).toBeDefined();
 
         expect(installments).toBeDefined();
-        expect(installments).toHaveLength(8);
         expect(installments[0].booking).toBeDefined();
         expect(installments[0].amount).toBeDefined();
         expect(installments[0].dueDate).toBeDefined();
 
-        expect(bookings).toBeDefined();
-        expect(bookings).toHaveLength(14);
-        expect(bookings[0].status).toBeDefined();
-        expect(bookings[0].startDate).toBeDefined();
-        expect(bookings[0].endDate).toBeDefined();
-        expect(bookings[0].host).toBeDefined();
-        expect(bookings[0].host.name).toBeDefined();
-        expect(bookings[0].host.profile).toBeDefined();
+        expect(reviews).toBeDefined();
+        expect(reviews[0].name).toBeDefined();
+
+        expect(nextBooking).toBeDefined();
+        expect(nextBooking._id).toBeDefined();
         done();
       });
   });

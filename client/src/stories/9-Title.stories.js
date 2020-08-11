@@ -18,7 +18,7 @@ export const Title2Component = () => (
 );
 
 export const TitleWithBackground = () => (
-  <div style={{ width: 600 }}>
+  <div style={{ width: 600, paddingLeft: '7vw' }}>
     <Title withBg>GET VERIFIED</Title>
   </div>
 );

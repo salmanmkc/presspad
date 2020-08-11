@@ -45,3 +45,19 @@ export const ButtonContainer = styled.div`
     margin-bottom: 0px;
   }
 `;
+
+export const Title = styled.h1`
+  font-family: Glacial Indifference;
+  font-style: normal;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.blue};
+  margin-top: 30px;
+  font-size: 40px;
+  line-height: ${({ caps }) => (caps ? '40px' : '50px')};
+
+  @media ${({ theme }) => theme.breakpoints.tablet} {
+    margin-top: 50px;
+    font-size: 60px;
+    line-height: 80px;
+  }
+`;

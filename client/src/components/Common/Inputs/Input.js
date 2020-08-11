@@ -58,7 +58,7 @@ const Input = ({
         defaultValue={defaultValue}
         placeholder={placeholder || 'Type here...'}
         name={name}
-        type={type}
+        type={type || 'text'}
         addonBefore={addonBefore}
       />
     )}

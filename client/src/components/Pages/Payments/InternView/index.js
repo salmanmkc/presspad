@@ -6,8 +6,8 @@ import { Elements } from 'react-stripe-elements';
 
 import * as T from '../../../Common/Typography';
 import Icon from '../../../Common/Icon';
+import PayNowModal from '../../../Common/PayNowModal';
 
-import PayNowModal from './PayNowModal';
 import UnpaidPaymentTable from './UnpaidPaymentTable';
 import PaymentHistory from './PaymentHistory';
 
