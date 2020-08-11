@@ -2,7 +2,6 @@ import React from 'react';
 import Figure from '../../../Common/Figure';
 import { Row } from '../../../Common/Grid';
 import LoadingBallPulseSync from '../../../Common/LoadingBallPulseSync';
-import formatPrice from '../../../../helpers/formatPrice';
 
 const DashboardTopStats = ({ data, loading }) => {
   if (loading) return <LoadingBallPulseSync />;
