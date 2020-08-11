@@ -206,6 +206,9 @@ const profileSchema = new Schema(
     awaitingReviewDate: {
       type: Date,
     },
+    houseViewingDate: {
+      type: Date,
+    },
     bio: {
       type: String,
       validate: wordLengthValidator(250, 'bio'),

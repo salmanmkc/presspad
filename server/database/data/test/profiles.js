@@ -156,7 +156,12 @@ const createAll = async ({ users }) => {
 
   await reset();
   const host = { ...hostProfileData, user: hostUser };
-  const host2 = { ...hostProfileData, user: hostUser2 };
+  const host2 = {
+    ...hostProfileData,
+    verified: false,
+    awaitingReview: true,
+    user: hostUser2,
+  };
   const intern = { ...internProfileData, user: internUser };
   const [hostProfile, host2Profile, internProfile] = await Profile.create([
     host,

@@ -124,10 +124,17 @@ module.exports = async (req, res, next) => {
                 dbsCheck: host.profile[0].DBSCheck,
                 firstVerified: host.profile[0].firstVerified,
                 awaitingReview: host.profile[0].awaitingReview,
+                requestDate: host.profile[0].awaitingReviewDate,
+                houseViewing: host.profile[0].houseViewingDate,
                 id: host._id,
                 earnings: host.totalIncome,
                 wallet: host.currentBalance,
                 bookingStatus,
+                status:
+                  host.profile[0].firstVerified &&
+                  host.profile[0].awaitingReview
+                    ? 'Updated details'
+                    : 'Signed up',
               };
 
               const { dbsCheck } = hostObj;
