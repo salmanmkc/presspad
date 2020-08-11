@@ -18,6 +18,7 @@ export const ColouredSideDiv = styled.div`
   justify-content: flex-end;
   position: fixed;
   right: 0;
+  height: 100vh;
 `;
 
 export const ContentWrapper = styled.div`
