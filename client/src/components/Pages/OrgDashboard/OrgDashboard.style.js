@@ -9,7 +9,6 @@ export const Wrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  // margin-top: ${({ theme: { spacings } }) => spacings[2]};
   margin-bottom: ${({ theme: { spacings } }) => spacings[2]};
 `;
 

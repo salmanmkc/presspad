@@ -65,7 +65,6 @@ const AcceptedContent = ({
   hostId,
 }) => (
   <>
-    {console.log('couponInfo', couponInfo)}
     <ViewProfile hostId={hostId} />
     <P mt="4">
       Good news, your booking request has been accepted! To confirm your booking
