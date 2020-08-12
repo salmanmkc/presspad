@@ -10,11 +10,15 @@ import {
   DBSCol,
   DropdownCol,
   HouseViewingCol,
+  ButtonCol,
 } from '../../../Common/Table/Common';
 import * as T from '../../../Common/Typography';
 import Tabs from '../../../Common/Tabs';
 
-import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
+import {
+  API_ADMIN_STATS_URL,
+  API_VERIFY_PROFILE_URL,
+} from '../../../../constants/apiRoutes';
 import {
   ADMIN_USER_DETAILS,
   ADMIN_HOSTS_URL,
@@ -25,6 +29,7 @@ import renderExpandedSection from './renderExpandedSection';
 const tabs = ['approved', 'approval requests'];
 
 const AdminHosts = ({ preview }) => {
+  const [allHosts, setAllHosts] = useState([]);
   const [hostRequests, setHostRequests] = useState([]);
   const [approvedHosts, setApprovedHosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,9 +52,44 @@ const AdminHosts = ({ preview }) => {
     console.log('function to remove house date', rowData);
   };
 
-  const approveProfile = (input, rowData) => {
-    if (input === 'approve') {
-      console.log('action to approve the profile');
+  const updateHosts = (idToUpdate, fieldToChange, newValue) => {
+    setLoading(true);
+    const requests = [];
+    const approved = [];
+    const updatedTotal = [];
+    if (allHosts && allHosts.length > 0) {
+      allHosts.forEach(host => {
+        const updatedHost =
+          host.id === idToUpdate
+            ? { ...host, [fieldToChange]: newValue }
+            : host;
+
+        updatedTotal.push(updatedHost);
+
+        if (updatedHost.verified) {
+          approved.push(host);
+        } else if (updatedHost.awaitingReview) {
+          requests.push(host);
+        }
+      });
+    }
+    setHostRequests(requests);
+    setApprovedHosts(approved);
+    setAllHosts(updatedTotal);
+    setLoading(false);
+  };
+
+  const verifyProfile = async (input, rowData) => {
+    if (input === 'approve' || input === 'unapprove') {
+      try {
+        await axios.post(API_VERIFY_PROFILE_URL, {
+          profileId: rowData.profileId,
+          verify: input === 'approve',
+        });
+        updateHosts(rowData.id, 'verified', input === 'approve');
+      } catch (err) {
+        setError(err);
+      }
     } else if (input === 'request changes') {
       window.open(`mailto:${rowData.email}`);
     }
@@ -62,6 +102,7 @@ const AdminHosts = ({ preview }) => {
     StandardCol('wallet', 'price'),
     StandardCol('earnings', 'price'),
     TagCol('bookingStatus', 'booking'),
+    ButtonCol('', verifyProfile, 'unapprove', 'delete', 'gray'),
   ];
 
   const requestCols = [
@@ -74,7 +115,7 @@ const AdminHosts = ({ preview }) => {
       deleteHouseViewingDate,
     ),
     StandardCol('status'),
-    DropdownCol('actions', approveProfile, [
+    DropdownCol('actions', verifyProfile, [
       { label: 'Approve', value: 'approve' },
       { label: 'Request changes', value: 'request changes' },
     ]),
@@ -98,6 +139,7 @@ const AdminHosts = ({ preview }) => {
             }
           });
         }
+        setAllHosts(totalHosts);
         setHostRequests(requests);
         setApprovedHosts(approved);
         if (preview) {

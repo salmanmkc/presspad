@@ -2,7 +2,7 @@ import React from 'react';
 import camelToWords from '../../../../helpers/camelToWords';
 import ButtonNew from '../../ButtonNew';
 
-const ButtonCol = (colTitle, handleClick, btnType, color) => ({
+const ButtonCol = (colTitle, handleClick, btnLabel, btnType, color) => ({
   title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
@@ -11,10 +11,10 @@ const ButtonCol = (colTitle, handleClick, btnType, color) => ({
     <ButtonNew
       type={btnType || 'primary'}
       bgColor={color}
-      onClick={handleClick(rowData)}
+      onClick={() => handleClick(btnLabel, rowData)}
       style={{ minWidth: '60px', height: '30px', fontSize: '14px' }}
     >
-      Pay
+      {btnLabel || 'pay'}
     </ButtonNew>
   ),
 });
