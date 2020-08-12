@@ -5,8 +5,7 @@ const schema = object({
   discountRate: number()
     .typeError(REQUIRED_FIELD)
     .moreThan(0)
-    .lessThan(101)
-    .nullable(),
+    .lessThan(101),
   name: string().required(REQUIRED_FIELD),
   email: string()
     .email()

@@ -18,9 +18,13 @@ const couponSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'users',
     },
-    internName: {
+    name: {
       type: String,
-
+      lowercase: true,
+      trim: true,
+    },
+    email: {
+      type: String,
       lowercase: true,
       trim: true,
     },

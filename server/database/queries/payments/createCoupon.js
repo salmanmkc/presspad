@@ -6,7 +6,8 @@ const Account = require('../../models/Account');
 const createCoupon = async ({
   organisationAccount,
   organisation,
-  internName,
+  name,
+  email,
   createdBy,
   discountRate,
   days,
@@ -14,7 +15,6 @@ const createCoupon = async ({
   endDate,
   amount,
   usedDays,
-  intern,
 }) => {
   const session = await mongoose.startSession();
   try {
@@ -24,14 +24,14 @@ const createCoupon = async ({
         {
           organisationAccount,
           organisation,
-          internName,
+          name,
+          email,
           createdBy,
           discountRate,
           days,
           startDate,
           endDate,
           usedDays,
-          intern,
           reservedAmount: amount,
         },
       ],

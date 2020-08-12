@@ -11,6 +11,7 @@ const { calculatePrice } = require('../../helpers/payments');
 
 const createCoupon = async (req, res, next) => {
   const { user, body } = req;
+
   const {
     _id: userId,
     role,
@@ -18,7 +19,7 @@ const createCoupon = async (req, res, next) => {
     account: organisationAccount,
   } = user;
 
-  const { internName, discountRate, startDate, endDate, intern } = body;
+  const { name, email, discountRate, startDate, endDate } = body;
 
   const range = moment.range(moment(startDate), endDate);
   const amount = calculatePrice(range);
@@ -34,7 +35,8 @@ const createCoupon = async (req, res, next) => {
     const results = await createCouponQuery({
       organisationAccount,
       organisation,
-      internName,
+      name,
+      email,
       createdBy: userId,
       discountRate,
       days,
@@ -42,7 +44,6 @@ const createCoupon = async (req, res, next) => {
       endDate,
       amount: Math.floor((amount * discountRate) / 100),
       usedDays: 0,
-      intern,
     });
 
     return res.json(results);
