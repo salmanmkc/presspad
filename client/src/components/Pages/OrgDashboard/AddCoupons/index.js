@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -6,6 +7,8 @@ import { extendMoment } from 'moment-range';
 import { Row, Col } from '../../../Common/Grid';
 import Title from '../../../Common/Title';
 import * as T from '../../../Common/Typography';
+import LinkCopy from '../../../Common/LinkCopy';
+import Button from '../../../Common/ButtonNew';
 
 import Form from './Form';
 
@@ -16,32 +19,13 @@ import {
   API_COUPONS_URL,
 } from '../../../../constants/apiRoutes';
 import { TABLET_WIDTH } from '../../../../constants/screenWidths';
+import { DASHBOARD_URL } from '../../../../constants/navRoutes';
 
 import validationSchema from './validationSchema';
 
 const { SERVER_ERROR } = require('../../../../constants/errorMessages');
 
 const { validate } = require('../../../../validation');
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'change':
-      return {
-        ...state,
-        [action.name]: action.value,
-      };
-
-    case 'isError':
-      return {
-        ...state,
-        errors: action.errors,
-      };
-    default:
-      throw new Error();
-  }
-};
-
-const moment = extendMoment(Moment);
 
 const initialState = {
   email: '',
@@ -58,6 +42,31 @@ const initialState = {
   errors: {},
 };
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'change':
+      return {
+        ...state,
+        [action.name]: action.value,
+      };
+
+    case 'isError':
+      return {
+        ...state,
+        errors: action.errors,
+      };
+    case 'resetState':
+      return {
+        ...initialState,
+        errors: {},
+      };
+    default:
+      throw new Error();
+  }
+};
+
+const moment = extendMoment(Moment);
+
 const AddCoupons = props => {
   const { windowWidth } = props;
   const [balance, setBalance] = useState(0);
@@ -66,6 +75,8 @@ const AddCoupons = props => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const history = useHistory();
 
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const AmountTitle = typographies.addCouponAmount[device];
@@ -80,27 +91,22 @@ const AddCoupons = props => {
     code,
   } = state;
 
+  const getAccount = async () => {
+    setBalanceLoading(true);
+    const { data } = await axios.get(API_ACCOUNT_URL);
+    console.log('DATA', data);
+    setBalance(data.currentBalance);
+    setBalanceLoading(false);
+  };
+
+  // set funds
   useEffect(() => {
-    let mounted = true;
-    async function getAccount() {
-      setBalanceLoading(true);
-      const { data } = await axios.get(API_ACCOUNT_URL);
-
-      if (mounted) {
-        setBalance(data.currentBalance);
-        setBalanceLoading(false);
-      }
-    }
-
     getAccount();
-    return () => {
-      mounted = false;
-    };
   }, []);
 
   // calculate coupon price
   useEffect(() => {
-    const { startDate, endDate } = multiDateRange && multiDateRange[0];
+    const { startDate, endDate } = multiDateRange[0];
 
     if (startDate && endDate && discountRate) {
       const range = moment.range(startDate, endDate);
@@ -176,15 +182,15 @@ const AddCoupons = props => {
           startDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
           endDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
         });
-
-        if (code) {
-          dispatch({ type: 'change', name: 'code', value: _code });
-        }
-
         setSubmitting(false);
+        // refresh balance
+        getAccount();
+        // add code
+        dispatch({ type: 'change', name: 'code', value: _code });
       } else {
         // set validation errors
         dispatch({ type: 'isError', errors: validationErrors });
+
         setSubmitting(false);
       }
     } catch (err) {
@@ -194,6 +200,9 @@ const AddCoupons = props => {
     }
   };
 
+  const resetState = () => dispatch({ type: 'resetState' });
+  console.log('bala', balance);
+  // SUCCESS PART
   if (code) {
     return (
       <>
@@ -202,16 +211,54 @@ const AddCoupons = props => {
             <Col w={[4, 12, 12]}>success!</Col>
           </Title>
         </Row>
-        <Row>
+        <Row mb={5}>
           <Col w={[4, 10, 7]}>
             A discount code has been created and sent to {email}. You can also
             copy the link below if you would like to send it to them manually.{' '}
           </Col>
         </Row>
+        <Row mb={5}>
+          <Col w={[4, 10, 5]}>
+            <LinkCopy strToCopy="test" />
+          </Col>
+        </Row>
+        <Row mb={7}>
+          <Col w={[4, 12, 12]}>
+            <AmountTitle color="pink">
+              £{balanceLoading ? '...' : formatPrice(balance)}
+            </AmountTitle>
+            <T.PSBold color="darkBlue">remaining balance</T.PSBold>
+          </Col>
+        </Row>
+        <Row mb={5}>
+          <Col w={[4, 6, 6]} mb={5}>
+            <Button
+              type="secondary"
+              bgColor="pink"
+              onClick={() => {
+                resetState();
+                getAccount();
+              }}
+            >
+              CREATE ANOTHER CODE
+            </Button>
+          </Col>
+        </Row>
+        <Row mt="-2rem">
+          <Col w={[4, 6, 6]} mb={5}>
+            <Button
+              type="primary"
+              outline
+              onClick={() => history.push(DASHBOARD_URL)}
+            >
+              GO TO DASHBOARD
+            </Button>
+          </Col>
+        </Row>
       </>
     );
   }
-
+  // FORM PART
   return (
     <>
       <Row>
