@@ -28,11 +28,7 @@ const PaymentsTable = ({
   };
 
   const onBlur = (requestId, e) => {
-    const {
-      bankName = '',
-      bankSortCode = '',
-      accountNumber = '',
-    } = bankDetails;
+    const { bankName = '', sortCode = '', accountNumber = '' } = bankDetails;
 
     if (!requestId) {
       return message.error('missing Id');
@@ -42,8 +38,8 @@ const PaymentsTable = ({
       switch (e.target.name) {
         case 'bankName':
           return bankName.length > 0;
-        case 'bankSortCode':
-          return bankSortCode.length > 0;
+        case 'sortCode':
+          return sortCode.length > 0;
         case 'accountNumber':
           return accountNumber.length > 0;
 

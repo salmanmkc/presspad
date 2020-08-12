@@ -42,7 +42,7 @@ const AdminPayments = () => {
     setSelected(e);
   };
 
-  const updateRequests = (idToUpdate, fieldToChange, newValue) => {
+  const updateRequests = (idToUpdate, updates) => {
     setLoading(true);
     const requests = [];
     const history = [];
@@ -51,7 +51,7 @@ const AdminPayments = () => {
       allPayments.forEach(request => {
         const updatePayment =
           request.requestId === idToUpdate
-            ? { ...request, [fieldToChange]: newValue }
+            ? { ...request, ...updates }
             : request;
 
         updatedTotal.push(updatePayment);
@@ -70,19 +70,16 @@ const AdminPayments = () => {
   };
 
   const handleBankDetailChange = (input, inputField, requestId) => {
-    const fieldToUpdate =
-      inputField === 'sortCode' ? 'bankSortCode' : inputField;
-
     if (bankDetails.length < 1) {
-      return setBankDetails([{ requestId, [fieldToUpdate]: input }]);
+      return setBankDetails([{ requestId, [inputField]: input }]);
     }
 
     const updated = bankDetails.map(bank => {
       if (bank.requestId === requestId) {
-        const updatedBank = { ...bank, [fieldToUpdate]: input };
+        const updatedBank = { ...bank, [inputField]: input };
         return updatedBank;
       }
-      const newBank = { requestId, [fieldToUpdate]: input };
+      const newBank = { requestId, [inputField]: input };
       return newBank;
     });
 
@@ -90,17 +87,14 @@ const AdminPayments = () => {
   };
 
   const updateBankDetails = async (rowData, type, inputField) => {
-    const fieldToUpdate =
-      inputField === 'sortCode' ? 'bankSortCode' : inputField;
-
     if (type === 'delete') {
       try {
         await axios.patch(API_ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL, {
           requestId: rowData.requestId,
-          bankDetails: { [fieldToUpdate]: '' },
+          bankDetails: { [inputField]: '' },
         });
         setNotification(true);
-        return updateRequests(rowData.requestId, inputField, '');
+        return updateRequests(rowData.requestId, { [inputField]: '' });
       } catch (err) {
         return setError(err);
       }
@@ -116,6 +110,8 @@ const AdminPayments = () => {
           requestId: rowData.requestId,
           bankDetails: bankDetailsToUpdate[0],
         });
+        setNotification(true);
+        return updateRequests(rowData.requestId, bankDetailsToUpdate[0]);
       } catch (err) {
         setError(err);
       }

@@ -50,7 +50,7 @@ const createDataSource = array =>
       paid: <CheckBoxJsx key={item._id} paymentStatus={item.status} />,
       bank: item.bankName,
       account: item.accountNumber,
-      sortCode: item.bankSortCode,
+      sortCode: item.sortCode,
     };
     return dataItem;
   });
@@ -160,8 +160,8 @@ const columns = (
         <Input
           disabled={updateLoading}
           placeholder="Sort code..."
-          name="bankSortCode"
-          id="bankSortCode"
+          name="sortCode"
+          id="sortCode"
           type="text"
           style={{ width: '140px' }}
           onChange={onInputChange}

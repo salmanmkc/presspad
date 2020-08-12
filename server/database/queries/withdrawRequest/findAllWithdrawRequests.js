@@ -34,7 +34,7 @@ const findAllWithdrawRequests = () =>
         accountNumber: 1,
         amount: 1,
         bankName: 1,
-        sortCode: '$bankSortCode',
+        sortCode: '$sortCode',
         createdAt: 1,
         status: 1,
         reason: 1,

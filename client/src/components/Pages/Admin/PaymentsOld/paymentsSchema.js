@@ -5,7 +5,7 @@ const validateBankDetails = () =>
     bankName: Yup.string()
       .max(20)
       .typeError('must be a string'),
-    bankSortCode: Yup.string()
+    sortCode: Yup.string()
       .max(20)
       .typeError('must be a string'),
     accountNumber: Yup.string()

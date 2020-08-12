@@ -29,7 +29,7 @@ const withdrawRequestSchema = new Schema(
       type: String,
       trim: true,
     },
-    bankSortCode: {
+    sortCode: {
       type: String,
       trim: true,
     },

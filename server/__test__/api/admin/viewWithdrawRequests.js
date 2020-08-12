@@ -50,9 +50,7 @@ describe('Testing for get host profile route', () => {
         expect(response.body[0].status).toBe(pendingWithdrawRequest.status);
         expect(response.body[0].amount).toBe(pendingWithdrawRequest.amount);
         expect(response.body[0].bankName).toBe(pendingWithdrawRequest.bankName);
-        expect(response.body[0].sortCode).toBe(
-          pendingWithdrawRequest.bankSortCode,
-        );
+        expect(response.body[0].sortCode).toBe(pendingWithdrawRequest.sortCode);
         expect(response.body[0].accountNumber).toBe(
           pendingWithdrawRequest.accountNumber,
         );
