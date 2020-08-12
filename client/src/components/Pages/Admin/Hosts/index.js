@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
+import Modal from '../../../Common/Modal';
 import Table from '../../../Common/Table';
 import {
   LinkCol,
@@ -24,6 +25,7 @@ import {
   ADMIN_HOSTS_URL,
 } from '../../../../constants/navRoutes';
 
+import UpdateDBSModal from '../Common/UpdateDBSModal';
 import renderExpandedSection from './renderExpandedSection';
 
 const tabs = ['approved', 'approval requests'];
@@ -38,10 +40,6 @@ const AdminHosts = ({ preview }) => {
 
   const handleTab = e => {
     setSelected(e);
-  };
-
-  const updateDBS = rowData => {
-    console.log('function to update DBS', rowData);
   };
 
   const addHouseViewingDate = rowData => {
@@ -79,6 +77,14 @@ const AdminHosts = ({ preview }) => {
     setLoading(false);
   };
 
+  const dbsSaved = (id, result, data) => {
+    if (result === 'success') {
+      updateHosts(id, 'dbsCheck', data);
+    } else {
+      setError(data);
+    }
+  };
+
   const verifyProfile = async (input, rowData) => {
     if (input === 'approve' || input === 'unapprove') {
       try {
@@ -108,7 +114,7 @@ const AdminHosts = ({ preview }) => {
   const requestCols = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('requestDate', 'date'),
-    DBSCol('dbsCheck', updateDBS),
+    DBSCol('dbsCheck', dbsSaved),
     HouseViewingCol(
       'houseViewing',
       addHouseViewingDate,
