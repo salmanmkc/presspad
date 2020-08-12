@@ -1,7 +1,9 @@
 import React from 'react';
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import * as yup from 'yup';
 
+const moment = extendMoment(Moment);
 export const createSingleDate = date => moment(date).format('DD/MM/YYYY');
 
 export const createStartEndDate = (start, end) => {
@@ -29,6 +31,7 @@ export const createDatesArray = (start, end) => {
 
   return datesArray;
 };
+
 // creates array of all available dates for listing
 export const getDateRangeFromArray = datesArray => {
   const avDatesArray = [];
@@ -233,11 +236,27 @@ export const getIntersectRange = ({
 }) => {
   const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
   const couponRange = moment.range(moment(couponStart), moment(couponEnd));
+
   return bookingRange.intersect(couponRange);
 };
 
 export const getDiscountDays = dates => {
-  const intersectRange = getIntersectRange(dates);
+  let _dates = dates;
+  if (!dates.installmentDate) {
+    _dates = {
+      ...dates,
+      // do not calculate discount from the first free two weeks
+      bookingStart: moment(dates.bookingStart).add(14, 'd'),
+    };
+  } else {
+    _dates = {
+      ...dates,
+      // do not calculate paid days
+      bookingStart: moment(dates.installmentDate),
+    };
+  }
+
+  const intersectRange = getIntersectRange(_dates);
 
   if (!intersectRange) return { discountDays: 0 };
 
@@ -246,7 +265,7 @@ export const getDiscountDays = dates => {
 
   const discountDays = intersectRange.diff('day') + 1;
 
-  return { discountDays };
+  return { discountDays, discountRange: intersectRange };
 };
 
 let id = 0;

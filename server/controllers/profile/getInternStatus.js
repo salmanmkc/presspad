@@ -44,10 +44,10 @@ module.exports = async (req, res, next) => {
     });
 
     verified = profile.verified;
-    await validate(internCompleteProfileSchema, profile);
-
-    isComplete = true;
-
+    const validated = await validate(internCompleteProfileSchema, profile);
+    if (validated) {
+      isComplete = true;
+    }
     return res.send({ isComplete, verified, validInternshipDates });
   } catch (err) {
     if (err.name === 'ValidationError') {

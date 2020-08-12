@@ -220,7 +220,7 @@ const AddCoupons = props => {
         </Row>
         <Row mb={5}>
           <Col w={[4, 10, 5]}>
-            <LinkCopy strToCopy="test" />
+            <LinkCopy strToCopy={code} />
           </Col>
         </Row>
         <Row mb={7}>

@@ -62,6 +62,7 @@ const MakePayment = ({
   }, [handleCouponChange, isNew, usedCoupon.code]);
 
   let netAmount = fullPrice - couponDiscount;
+
   useEffect(() => {
     if (netAmount <= 0) {
       handlePaymentMethod(true);
@@ -168,6 +169,7 @@ const MakePayment = ({
   }
 
   const remainingPrice = getRemainingPrice(installments);
+
   const firstUnpaid = getFirstUnpaidInstallment(installments);
   netAmount = remainingPrice - couponDiscount;
   return (
@@ -196,7 +198,9 @@ const MakePayment = ({
           <PS>Remaining cost for period:</PS>
           {usedCoupon.code || couponDiscount > 0 ? (
             <PreviousPriceWrapper>
-              <T.PBold>£{formatPrice(netAmount)}</T.PBold>
+              <T.PBold>
+                £{formatPrice((remainingPrice * (100 - discountRate)) / 100)}
+              </T.PBold>
               <T.PXSBold
                 color="lightGray"
                 style={{
@@ -204,7 +208,7 @@ const MakePayment = ({
                   marginLeft: '0.5rem',
                 }}
               >
-                £{formatPrice(fullPrice)}
+                £{formatPrice(remainingPrice)}
               </T.PXSBold>
             </PreviousPriceWrapper>
           ) : (

@@ -10,7 +10,7 @@ const internCompleteProfileSchema = Joi.object({
     fileName: Joi.string().required(),
     isPrivate: Joi.boolean().default(false),
   }).required(),
-  interests: Joi.string().required(),
+  interests: Joi.array().required(),
   bio: Joi.string().required(),
 
   // Other information 1 (required for booking)

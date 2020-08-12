@@ -7,7 +7,7 @@ import {
   API_COUPON_SOFT_URL,
 } from '../../../constants/apiRoutes';
 
-import { createStartEndDate, getDiscountDays } from '../../../helpers';
+import { getDiscountDays } from '../../../helpers';
 
 // Typography
 import * as T from '../Typography';
@@ -61,23 +61,16 @@ const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
       _id: couponId,
     } = couponInfo;
 
-    // get user booking request details
-    const bookingdates =
-      _dates.length > 1 && createStartEndDate(_dates[0], _dates[1]);
-    const startDate = bookingdates[0];
-    const endDate = bookingdates[1];
-
     // calculate discount days
     const { discountDays: _discountDays } = getDiscountDays({
-      bookingStart: startDate,
-      bookingEnd: endDate,
+      bookingStart: _dates[0],
+      bookingEnd: _dates[1],
       couponStart,
       couponEnd,
       usedDays,
     });
 
     // calculate discount
-
     couponDiscount = ((_bookingPrice * _discountRate) / 100).toFixed(2);
 
     // get remaining amount

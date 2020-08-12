@@ -6,13 +6,13 @@ import { message, Spin } from 'antd';
 import { Elements } from 'react-stripe-elements';
 
 import {
-  getDiscountDays,
   createInstallments,
   getFirstUnpaidInstallment,
   createUpdatedNewInstallments,
 } from '../helpers';
 
 import {
+  getDiscountDays,
   calculatePrice,
   calculateHostRespondingTime,
 } from '../../../../helpers';
