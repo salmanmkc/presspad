@@ -76,6 +76,7 @@ module.exports = async (req, res, next) => {
                 firstVerified: intern.firstVerified,
                 email: intern.email,
                 contactNumber: intern.contactNumber,
+                profileId: intern.profileId,
                 status:
                   intern.firstVerified && intern.awaitingReview
                     ? 'Updated DBS'

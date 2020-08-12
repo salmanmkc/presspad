@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
-import Modal from '../../../Common/Modal';
 import Table from '../../../Common/Table';
+import Notification from '../../../Common/Notification';
+
 import {
   LinkCol,
   StandardCol,
@@ -19,13 +20,13 @@ import Tabs from '../../../Common/Tabs';
 import {
   API_ADMIN_STATS_URL,
   API_VERIFY_PROFILE_URL,
+  API_ADMIN_UPDATE_PROFILE,
 } from '../../../../constants/apiRoutes';
 import {
   ADMIN_USER_DETAILS,
   ADMIN_HOSTS_URL,
 } from '../../../../constants/navRoutes';
 
-import UpdateDBSModal from '../Common/UpdateDBSModal';
 import renderExpandedSection from './renderExpandedSection';
 
 const tabs = ['approved', 'approval requests'];
@@ -37,19 +38,12 @@ const AdminHosts = ({ preview }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
+  const [houseDate, setHouseDate] = useState('');
+  const [notificationOpen, setNotification] = useState(false);
 
   const handleTab = e => {
     setSelected(e);
   };
-
-  const addHouseViewingDate = rowData => {
-    console.log('function to add house date', rowData);
-  };
-
-  const deleteHouseViewingDate = rowData => {
-    console.log('function to remove house date', rowData);
-  };
-
   const updateHosts = (idToUpdate, fieldToChange, newValue) => {
     setLoading(true);
     const requests = [];
@@ -65,9 +59,9 @@ const AdminHosts = ({ preview }) => {
         updatedTotal.push(updatedHost);
 
         if (updatedHost.verified) {
-          approved.push(host);
+          approved.push(updatedHost);
         } else if (updatedHost.awaitingReview) {
-          requests.push(host);
+          requests.push(updatedHost);
         }
       });
     }
@@ -79,9 +73,23 @@ const AdminHosts = ({ preview }) => {
 
   const dbsSaved = (id, result, data) => {
     if (result === 'success') {
+      setNotification(true);
       updateHosts(id, 'dbsCheck', data);
     } else {
       setError(data);
+    }
+  };
+
+  const editHouseViewingDate = async (rowData, type) => {
+    try {
+      await axios.patch(API_ADMIN_UPDATE_PROFILE, {
+        fieldsToUpdate: { houseViewingDate: type === 'add' ? houseDate : null },
+        userId: rowData.id,
+      });
+      setNotification(true);
+      updateHosts(rowData.id, 'houseViewing', type === 'add' ? houseDate : '');
+    } catch (err) {
+      setError(err);
     }
   };
 
@@ -115,11 +123,7 @@ const AdminHosts = ({ preview }) => {
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('requestDate', 'date'),
     DBSCol('dbsCheck', dbsSaved),
-    HouseViewingCol(
-      'houseViewing',
-      addHouseViewingDate,
-      deleteHouseViewingDate,
-    ),
+    HouseViewingCol('houseViewing', setHouseDate, editHouseViewingDate),
     StandardCol('status'),
     DropdownCol('actions', verifyProfile, [
       { label: 'Approve', value: 'approve' },
@@ -223,6 +227,11 @@ const AdminHosts = ({ preview }) => {
           <T.PXS color="pink">{error}</T.PXS>
         </Row>
       )}
+      <Notification
+        setOpen={setNotification}
+        open={notificationOpen}
+        content="Changes saved"
+      />
     </>
   );
 };

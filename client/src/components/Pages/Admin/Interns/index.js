@@ -3,17 +3,22 @@ import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
 import Table from '../../../Common/Table';
+import Notification from '../../../Common/Notification';
 import {
   LinkCol,
   StandardCol,
   TagCol,
   DBSCol,
   DropdownCol,
+  ButtonCol,
 } from '../../../Common/Table/Common';
 import * as T from '../../../Common/Typography';
 import Tabs from '../../../Common/Tabs';
 
-import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
+import {
+  API_ADMIN_STATS_URL,
+  API_VERIFY_PROFILE_URL,
+} from '../../../../constants/apiRoutes';
 import {
   ADMIN_USER_DETAILS,
   ADMIN_INTERNS_URL,
@@ -24,23 +29,65 @@ import renderExpandedSection from './renderExpandedSection';
 const tabs = ['approved', 'approval requests'];
 
 const AdminInterns = ({ preview }) => {
+  const [allInterns, setAllInterns] = useState([]);
   const [internRequests, setInternRequests] = useState([]);
   const [approvedInterns, setApprovedInterns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
+  const [notificationOpen, setNotification] = useState(false);
 
   const handleTab = e => {
     setSelected(e);
   };
 
-  const updateDBS = rowData => {
-    console.log('function to update DBS', rowData);
+  const updateInterns = (idToUpdate, fieldToChange, newValue) => {
+    setLoading(true);
+    const requests = [];
+    const approved = [];
+    const updatedTotal = [];
+    if (allInterns && allInterns.length > 0) {
+      allInterns.forEach(host => {
+        const updatedHost =
+          host.id === idToUpdate
+            ? { ...host, [fieldToChange]: newValue }
+            : host;
+
+        updatedTotal.push(updatedHost);
+
+        if (updatedHost.verified) {
+          approved.push(updatedHost);
+        } else if (updatedHost.awaitingReview) {
+          requests.push(updatedHost);
+        }
+      });
+    }
+    setInternRequests(requests);
+    setApprovedInterns(approved);
+    setAllInterns(updatedTotal);
+    setLoading(false);
   };
 
-  const approveProfile = (input, rowData) => {
-    if (input === 'approve') {
-      console.log('action to approve the profile');
+  const dbsSaved = (id, result, data) => {
+    if (result === 'success') {
+      setNotification(true);
+      updateInterns(id, 'dbsCheck', data);
+    } else {
+      setError(data);
+    }
+  };
+
+  const verifyProfile = async (input, rowData) => {
+    if (input === 'approve' || input === 'unapprove') {
+      try {
+        await axios.post(API_VERIFY_PROFILE_URL, {
+          profileId: rowData.profileId,
+          verify: input === 'approve',
+        });
+        updateInterns(rowData.id, 'verified', input === 'approve');
+      } catch (err) {
+        setError(err);
+      }
     } else if (input === 'request changes') {
       window.open(`mailto:${rowData.email}`);
     }
@@ -52,14 +99,15 @@ const AdminInterns = ({ preview }) => {
     StandardCol('internshipStart', 'date'),
     StandardCol('organisation'),
     TagCol('bookingStatus', 'booking'),
+    ButtonCol('', verifyProfile, 'unapprove', 'delete', 'gray'),
   ];
 
   const requestCols = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('requestDate', 'date'),
-    DBSCol('dbsCheck', updateDBS),
+    DBSCol('dbsCheck', dbsSaved),
     StandardCol('status'),
-    DropdownCol('actions', approveProfile, [
+    DropdownCol('actions', verifyProfile, [
       { label: 'Approve', value: 'approve' },
       { label: 'Request changes', value: 'request changes' },
     ]),
@@ -83,6 +131,7 @@ const AdminInterns = ({ preview }) => {
             }
           });
         }
+        setAllInterns(totalInterns);
         setInternRequests(requests);
         setApprovedInterns(approved);
         if (preview) {
@@ -160,6 +209,11 @@ const AdminInterns = ({ preview }) => {
           <T.PXS color="pink">{error}</T.PXS>
         </Row>
       )}
+      <Notification
+        setOpen={setNotification}
+        open={notificationOpen}
+        content="Changes saved"
+      />
     </>
   );
 };

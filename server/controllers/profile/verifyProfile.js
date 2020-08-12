@@ -1,26 +1,28 @@
 // expect boolean and profileId
 
 const boom = require('boom');
-const pubSub = require('./../../pubSub');
+const pubSub = require('../../pubSub');
 
 // QUERIES
 const {
   approveRejectProfile,
-} = require('./../../database/queries/profile/verifyProfile');
+} = require('../../database/queries/profile/verifyProfile');
 
 const {
   getUserDataByProfileId,
-} = require('./../../database/queries/profile/getProfile');
+} = require('../../database/queries/profile/getProfile');
 
 module.exports = async (req, res, next) => {
   const { verify, profileId } = req.body;
   if (req.user.role !== 'admin')
     return next(boom.forbidden('Only admin can access this route'));
   try {
+    console.log('reached');
     await approveRejectProfile(profileId, verify);
 
     // get host details
     const [host] = await getUserDataByProfileId(profileId);
+    console.log('reached2', host);
     pubSub.emit(pubSub.events.profile.APPROVED, { user: host });
 
     return res.json('success');

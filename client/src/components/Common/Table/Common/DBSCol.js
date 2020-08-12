@@ -7,7 +7,6 @@ import Modal from '../../Modal';
 import { Input, UploadFile } from '../../Inputs';
 import { Row, Col } from '../../Grid';
 import ButtonNew from '../../ButtonNew';
-import Notification from '../../Notification';
 
 import { API_ADMIN_UPDATE_PROFILE } from '../../../../constants/apiRoutes';
 
@@ -54,7 +53,6 @@ const DBSCol = (colTitle, dbsSaved) => ({
 const DBSForm = ({ dbsCheck, userId, dbsSaved, record }) => {
   const [newDBSDetails, setNewDBSDetails] = useState({});
   const [loading, setLoading] = useState(false);
-  const [notificationOpen, setNotification] = useState(false);
 
   const uploadDBSCheck = async () => {
     try {
@@ -93,7 +91,6 @@ const DBSForm = ({ dbsCheck, userId, dbsSaved, record }) => {
         userId,
       });
       dbsSaved(userId, 'success', newDBSDetails);
-      setNotification(true);
       setLoading(false);
     } catch (err) {
       dbsSaved(userId, 'error', err);
@@ -143,11 +140,6 @@ const DBSForm = ({ dbsCheck, userId, dbsSaved, record }) => {
           </ButtonNew>
         </Col>
       </Row>
-      <Notification
-        setOpen={setNotification}
-        open={notificationOpen}
-        content="Changes saved"
-      />
     </>
   );
 };

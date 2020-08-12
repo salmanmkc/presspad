@@ -123,6 +123,9 @@ module.exports.getAllInternStats = () =>
           contactNumber: {
             $arrayElemAt: ['$profile.phoneNumber', 0],
           },
+          profileId: {
+            $arrayElemAt: ['$profile._id', 0],
+          },
         },
         account: { $push: '$account' },
         bookings: { $push: '$bookings' },
@@ -146,6 +149,7 @@ module.exports.getAllInternStats = () =>
         internshipStart: '$_id.internshipStart',
         contactNumber: '$_id.contactNumber',
         email: '$_id.email',
+        profileId: '$_id.profileId',
       },
     },
     // only get interns that are approved or requesting approval
@@ -168,6 +172,7 @@ module.exports.getAllInternStats = () =>
         awaitingReviewDate: 1,
         firstVerified: 1,
         internshipStart: 1,
+        profileId: 1,
         nextPaymentDueDate: '$nextInstallment.dueDate',
         nextPaymentPaid: {
           $cond: [
