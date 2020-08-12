@@ -1,5 +1,6 @@
 const boom = require('boom');
 const moment = require('moment');
+const pubSub = require('../../pubSub');
 
 const { getBursaryApplicationInfo } = require('../../database/queries/bursary');
 const {
@@ -63,5 +64,12 @@ module.exports = async (req, res, next) => {
     adminMessage,
     londonWeighting,
   });
+
+  // send email
+  pubSub.emit(pubSub.events.bursary.APPROVED, {
+    adminMessage,
+    applicationId: id,
+  });
+
   return res.json(approvedBursaryApplication);
 };

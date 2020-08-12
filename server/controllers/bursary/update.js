@@ -5,6 +5,7 @@ const {
 } = require('../../database/queries/bursary');
 const { bursaryApplicationStatuses } = require('../../database/constants');
 const approveBursaryApplication = require('./approveBursaryApplication');
+const pubSub = require('../../pubSub');
 
 module.exports.upsertBursaryWindows = async (req, res, next) => {
   try {
@@ -42,16 +43,27 @@ module.exports.updateBursaryApplication = async (req, res, next) => {
 
         if (invite) {
           // send invitation email
-          console.log('invite');
-        } else {
-          // send confirmation email wait for next window
+          pubSub.emit(pubSub.events.bursary.INVITE_TO_INTERVIEW, {
+            adminMessage,
+            applicationId: id,
+          });
         }
+        // send confirmation email wait for next window
+        pubSub.emit(pubSub.events.bursary.PRE_APPROVED, {
+          adminMessage,
+          applicationId: id,
+        });
         break;
+
       case rejected:
         updateData = { status: rejected, adminMessage };
-
         // send rejecting email
+        pubSub.emit(pubSub.events.bursary.REJECTED, {
+          adminMessage,
+          applicationId: id,
+        });
         break;
+
       case approved:
         return approveBursaryApplication(req, res, next);
 
@@ -59,8 +71,12 @@ module.exports.updateBursaryApplication = async (req, res, next) => {
         if (type === 'update-points') {
           updateData = { bursaryPoints };
         } else if (type === 'invite-to-interview') {
-          // send invitation email
           updateData = { invitedToInterview: true };
+
+          // send invitation email
+          pubSub.emit(pubSub.events.bursary.INVITE_TO_INTERVIEW, {
+            applicationId: id,
+          });
         } else {
           return next(boom.badData());
         }

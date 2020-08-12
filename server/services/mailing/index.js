@@ -15,6 +15,7 @@ const bookingCancelledByUser = require('./bookingCancelledByUser');
 const bookingTerminated = require('./bookingTerminated');
 const bookingCancelledUnpaid = require('./bookingCancelledUnpaid');
 const bookingPaidOverDueWarning = require('./bookingPaidOverDueWarning');
+const sendBursaryEmails = require('./sendBursaryEmails');
 
 module.exports = {
   scheduleReminderEmails,
@@ -34,4 +35,5 @@ module.exports = {
   bookingTerminated,
   bookingCancelledUnpaid,
   bookingPaidOverDueWarning,
+  sendBursaryEmails,
 };

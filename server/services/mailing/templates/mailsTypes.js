@@ -187,6 +187,26 @@ const types = {
       subject: 'Welcome to PressPad!',
       params: [],
     },
+    BURSARY_REJECTED: {
+      createBody: intern.bursary.rejected,
+      subject: 'sorry! Your bursary has been rejected!',
+      params: ['adminMessage'],
+    },
+    BURSARY_PRE_APPROVED: {
+      createBody: intern.bursary.preApproved,
+      subject: 'Congratulations! Your bursary has been pre-approved!',
+      params: ['adminMessage'],
+    },
+    BURSARY_APPROVED: {
+      createBody: intern.bursary.approved,
+      subject: 'Congratulations! Your bursary has been approved!',
+      params: ['adminMessage'],
+    },
+    BURSARY_INVITE_TO_INTERVIEW: {
+      createBody: intern.bursary.approved,
+      subject: 'Congratulations! You are invited to an interview',
+      params: ['adminMessage'],
+    },
   },
 
   internAndHost: {
