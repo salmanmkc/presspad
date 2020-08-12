@@ -14,25 +14,26 @@ const BankDetailsCol = (colTitle, onChange, onDelete) => ({
     text ? (
       <S.HouseViewing>
         <T.PXS color="black">{text}</T.PXS>
-        <S.StyledBtn
-          noMargin
-          onClick={() => onDelete(rowData, 'delete', colTitle)}
-        >
-          <Icon icon="cross" color="pink" width="20px" height="20px" />
-        </S.StyledBtn>
+        {rowData.pending && (
+          <S.StyledBtn
+            noMargin
+            onClick={() => onDelete(rowData, 'delete', colTitle)}
+          >
+            <Icon icon="cross" color="pink" width="20px" height="20px" />
+          </S.StyledBtn>
+        )}
       </S.HouseViewing>
     ) : (
       <>
-        <Input
-          onChange={e =>
-            onChange && onChange(e.target.value, colTitle, rowData.requestId)
-          }
-        />
-        {/* <S.StyledBtn noMargin onClick={() => onSubmit(rowData, 'add')}>
-          <T.PXSBold color="pink" mt={1} ml={3}>
-            Add
-          </T.PXSBold>
-        </S.StyledBtn> */}
+        {rowData.pending ? (
+          <Input
+            onChange={e =>
+              onChange && onChange(e.target.value, colTitle, rowData.requestId)
+            }
+          />
+        ) : (
+          <T.PXS color="black">N/A</T.PXS>
+        )}
       </>
     ),
 });

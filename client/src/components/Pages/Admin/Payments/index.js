@@ -56,7 +56,7 @@ const AdminPayments = () => {
 
         updatedTotal.push(updatePayment);
 
-        if (request.status === 'pending') {
+        if (updatePayment.status === 'pending') {
           requests.push(updatePayment);
         } else {
           history.push(updatePayment);
@@ -113,27 +113,22 @@ const AdminPayments = () => {
         setNotification(true);
         return updateRequests(rowData.requestId, bankDetailsToUpdate[0]);
       } catch (err) {
-        setError(err);
+        return setError(err);
       }
     }
-
-    // const fieldToUpdate = Object.keys(bankDetail);
-    // if (!bankDetail || rowData.id !== idToUpdate[0]) {
-    //   return null;
-    // }
   };
 
-  const updatePaymentStatus = (rowData, statusType) => {
-    // console.log('row', rowData);
-    // const idToUpdate = Object.keys(bankDetail);
-    // if (!bankDetail || rowData.id !== idToUpdate[0]) {
-    //   return null;
-    // }
-    // try {
-    //   await axios.patch(API_ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL, {
-    //     requestId: rowData.id,
-    //   })
-    // }
+  const updatePaymentStatus = async (rowData, type) => {
+    try {
+      await axios.patch(
+        `${API_UPDATE_WITHDRAW_REQUEST_URL.replace(':id', rowData.requestId)}`,
+        { type },
+      );
+      setNotification(true);
+      updateRequests(rowData.requestId, { status: type });
+    } catch (err) {
+      setError(err);
+    }
   };
 
   const columns = [
@@ -142,7 +137,7 @@ const AdminPayments = () => {
     BankDetailsCol('bankName', handleBankDetailChange, updateBankDetails),
     BankDetailsCol('accountNumber', handleBankDetailChange, updateBankDetails),
     BankDetailsCol('sortCode', handleBankDetailChange, updateBankDetails),
-    PayButtonCol('status', updateBankDetails),
+    PayButtonCol('status', updateBankDetails, updatePaymentStatus),
   ];
 
   useEffect(() => {
