@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const { BursaryWindow, BursaryApplication } = require('../../models');
 const {
   bursaryWindowStatuses,
@@ -124,7 +126,55 @@ const getBursaryApplications = type => {
   ]);
 };
 
+const getBursaryApplicationInfo = id => {
+  return BursaryApplication.aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(id) } },
+    // lookup admin account
+    {
+      $lookup: {
+        from: 'users',
+        pipeline: [
+          { $match: { role: 'admin' } },
+          {
+            $lookup: {
+              from: 'accounts',
+              localField: 'account',
+              foreignField: '_id',
+              as: 'account',
+            },
+          },
+          {
+            $unwind: { path: '$account', preserveNullAndEmptyArrays: true },
+          },
+        ],
+        as: 'admin',
+      },
+    },
+    // lookup intern profile to get internship details
+    {
+      $lookup: {
+        from: 'profiles',
+        let: { intern: '$intern' },
+        pipeline: [{ $match: { $expr: { $eq: ['$$intern', '$user'] } } }],
+        as: 'intern',
+      },
+    },
+    {
+      $unwind: { path: '$intern', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $project: {
+        status: 1,
+        bursaryFunds: { $arrayElemAt: ['$admin.account.bursaryFunds', 0] },
+        internshipStartDate: '$intern.internshipStartDate',
+        internshipEndDate: '$intern.internshipEndDate',
+      },
+    },
+  ]);
+};
+
 module.exports = {
   getBursaryWindows,
   getBursaryApplications,
+  getBursaryApplicationInfo,
 };

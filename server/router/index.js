@@ -70,6 +70,7 @@ const {
   getBursaryApplications,
   upsertBursaryWindows,
   updateBursaryApplication,
+  getBursaryApplicationInfo,
 } = require('../controllers/bursary');
 
 // IMPORT MIDDLEWARES
@@ -375,6 +376,13 @@ router.get(
   authentication,
   authorization(['admin']),
   getBursaryApplications,
+);
+
+router.get(
+  UPDATE_BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  getBursaryApplicationInfo,
 );
 
 router.patch(

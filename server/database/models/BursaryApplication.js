@@ -59,6 +59,14 @@ const bursaryApplicationSchema = new Schema(
       min: 0,
       max: 100,
     },
+    londonWeighting: {
+      type: Boolean,
+    },
+    // the maxLimit that the admin used when he approved this application
+    maxLimit: {
+      type: Number,
+      min: 0,
+    },
     // the total amount of money been deducted for this bursary
     totalPotentialAmount: {
       type: Number,

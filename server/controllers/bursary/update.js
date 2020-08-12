@@ -4,6 +4,7 @@ const {
   updateBursaryApplication,
 } = require('../../database/queries/bursary');
 const { bursaryApplicationStatuses } = require('../../database/constants');
+const approveBursaryApplication = require('./approveBursaryApplication');
 
 module.exports.upsertBursaryWindows = async (req, res, next) => {
   try {
@@ -23,19 +24,13 @@ module.exports.upsertBursaryWindows = async (req, res, next) => {
 
 module.exports.updateBursaryApplication = async (req, res, next) => {
   try {
-    const { bursaryPoints, adminMessage, invite, status } = req.body;
+    const { status, invite, bursaryPoints, adminMessage } = req.body;
+
     const { id } = req.params;
     const { type } = req.query;
     let updateData;
 
-    console.log(id);
-    console.log(req.body);
-    const {
-      request,
-      approved,
-      preApproved,
-      rejected,
-    } = bursaryApplicationStatuses;
+    const { approved, preApproved, rejected } = bursaryApplicationStatuses;
 
     switch (status) {
       case preApproved:
@@ -58,7 +53,7 @@ module.exports.updateBursaryApplication = async (req, res, next) => {
         // send rejecting email
         break;
       case approved:
-        break;
+        return approveBursaryApplication(req, res, next);
 
       default:
         if (type === 'update-points') {
