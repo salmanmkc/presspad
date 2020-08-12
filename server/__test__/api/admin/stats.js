@@ -45,8 +45,10 @@ describe('Testing for get host profile route', () => {
       .end((error, result) => {
         expect(result).toBeDefined();
         expect(result.body).toBeDefined();
-        expect(result.body[0].name).toBe(financialTimeOrganisation.name);
-        expect(result.body[0].currentlyHosted).toBeDefined();
+        expect(result.body[0].organisation).toBe(
+          financialTimeOrganisation.name,
+        );
+        expect(result.body[0].currentlyHosting).toBeDefined();
         expect(result.body[0].currentBalance).toBeDefined();
         expect(result.body[0]._id).toBeDefined();
         done(error);
@@ -72,7 +74,7 @@ describe('Testing for get host profile route', () => {
         expect(result.body).toBeDefined();
         expect(result.body[0].key).toBe(1);
         expect(result.body[0].name).toBe(internUser.name);
-        expect(result.body[0].status).toBe('At host');
+        expect(result.body[0].bookingStatus).toBe('at host');
         expect(result.body[0].organisation).toBe(
           financialTimeOrganisation.name,
         );
@@ -101,10 +103,9 @@ describe('Testing for get host profile route', () => {
         expect(result.body[0].key).toBe(1);
         expect(result.body[0].name).toBe(hostUser.name);
         expect(result.body[0].email).toBe(hostUser.email);
-        expect(result.body[0].hosted).toBe(1);
-        expect(result.body[0].approvalStatus).toBe('Approved');
-        expect(result.body[0].totalIncome).toBe(49500);
-        expect(result.body[0].currentBalance).toBe(49500);
+        expect(result.body[0].internsHosted).toBe(1);
+        expect(result.body[0].earnings).toBe(49500);
+        expect(result.body[0].wallet).toBe(49500);
         done(error);
       });
   });
