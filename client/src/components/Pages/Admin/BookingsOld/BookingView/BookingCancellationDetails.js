@@ -16,28 +16,28 @@ const detailsStyles = {
 const BookingCancellationDetails = ({ details }) => {
   const {
     cancellationDetails = {},
-    host = {},
-    intern = {},
+    hostDetails = {},
+    internDetails = {},
     startDate = '',
     endDate = '',
     payedAmount = '',
     price = '',
     coupon = {},
   } = details;
-  const { internship } = intern;
+  const { internship } = internDetails;
 
   const cancellingUserDetails =
-    cancellationDetails && cancellationDetails.cancelledBy === intern._id
-      ? { name: intern.name, role: 'intern' }
-      : { name: host.name, role: 'host' };
+    cancellationDetails && cancellationDetails.cancelledBy === internDetails._id
+      ? { name: internDetails.name, role: 'intern' }
+      : { name: hostDetails.name, role: 'host' };
 
   // prints presspad selection for cancelling party
   const printResponsibleParty = type => {
     switch (type) {
       case 'intern':
-        return `${intern.name} (intern)`;
+        return `${internDetails.name} (intern)`;
       case 'host':
-        return `${host.name} (host)`;
+        return `${hostDetails.name} (host)`;
       case 'organisation':
         return `${coupon.Organisation} (organisation)`;
       case 'pressPad':
@@ -232,23 +232,23 @@ const BookingCancellationDetails = ({ details }) => {
           <S.SubRow>
             <S.Column>
               <PXSBold>Name</PXSBold>
-              <PXS>{host.name}</PXS>
+              <PXS>{hostDetails.name}</PXS>
             </S.Column>
             <S.Column>
               <PXSBold>Contact Email</PXSBold>
               <PXS>
                 <a
-                  href={`mailto:${host.email}`}
+                  href={`mailto:${hostDetails.email}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {host.email}
+                  {hostDetails.email}
                 </a>
               </PXS>
             </S.Column>
             <S.Column>
               <PXSBold>Contact Number</PXSBold>
-              <PXS>{host.phone}</PXS>
+              <PXS>{hostDetails.phone}</PXS>
             </S.Column>
           </S.SubRow>
         </S.Row>
@@ -261,23 +261,23 @@ const BookingCancellationDetails = ({ details }) => {
           <S.SubRow>
             <S.Column>
               <PXSBold>Name</PXSBold>
-              <PXS>{intern.name}</PXS>
+              <PXS>{internDetails.name}</PXS>
             </S.Column>
             <S.Column>
               <PXSBold>Contact Email</PXSBold>
               <PXS>
                 <a
-                  href={`mailto:${intern.email}`}
+                  href={`mailto:${internDetails.email}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {intern.email}
+                  {internDetails.email}
                 </a>
               </PXS>
             </S.Column>
             <S.Column>
               <PXSBold>Contact Number</PXSBold>
-              <PXS>{intern.phone}</PXS>
+              <PXS>{internDetails.phone}</PXS>
             </S.Column>
           </S.SubRow>
         </S.Row>

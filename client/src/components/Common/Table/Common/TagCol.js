@@ -34,33 +34,50 @@ const TagCol = (colTitle, type, handleAction) => ({
           </T.PXSBold>
         </S.Tag>
         {text === 'awaiting cancellation' && (
-          <T.Link
+          <S.StyledBtn
             caps
-            to="/"
+            onClick={() => handleAction(rowData, text)}
             color={BOOKING[text]}
-            ml={2}
-            mt={2}
-            style={{ display: 'flex', alignItems: 'center' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              margin: '5px 0 0 10px',
+            }}
           >
-            please review!
+            <T.PXSBold caps color={BOOKING[text]}>
+              please review!
+            </T.PXSBold>
+
             <Icon
               icon="arrow2"
               width="15px"
               height="15px"
               margin="0 0 2px 10px"
+              color={BOOKING[text]}
             />
-          </T.Link>
+          </S.StyledBtn>
         )}
         {text === 'cancelled after payment' && (
-          <T.Link caps to="/" color={BOOKING[text]}>
-            view details
+          <S.StyledBtn
+            onClick={() => handleAction(rowData, text)}
+            color={BOOKING[text]}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              margin: '5px 0 0 10px',
+            }}
+          >
+            <T.PXSBold caps color={BOOKING[text]}>
+              view details
+            </T.PXSBold>
             <Icon
               icon="arrow2"
               width="15px"
               height="15px"
               margin="0 0 2px 10px"
+              color={BOOKING[text]}
             />
-          </T.Link>
+          </S.StyledBtn>
         )}
         {text === 'awaiting admin' && (
           <Select

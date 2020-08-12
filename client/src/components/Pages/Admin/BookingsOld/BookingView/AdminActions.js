@@ -16,15 +16,15 @@ const selectStyles = error => ({
 });
 
 const cancelReasonOptions = [
-  { label: 'cancellationReason', key: 'legitimate', value: 'legitimate' },
-  { label: 'cancellationReason', value: 'illegitimate', key: 'illegitimate' },
+  { label: 'legitimate', key: 'legitimate', value: 'legitimate' },
+  { label: 'illegitimate', value: 'illegitimate', key: 'illegitimate' },
 ];
 
 const responsibleOptions = [
-  { label: 'responsibleParty', value: 'intern' },
-  { label: 'responsibleParty', value: 'host' },
-  { label: 'responsibleParty', value: 'organisation' },
-  { label: 'responsibleParty', value: 'presspad' },
+  { label: 'intern', value: 'intern' },
+  { label: 'host', value: 'host' },
+  { label: 'organisation', value: 'organisation' },
+  { label: 'presspad', value: 'presspad' },
 ];
 
 const AdminActions = ({
@@ -43,9 +43,10 @@ const AdminActions = ({
     setCancelBookingState({ ...cancelBookingState, [name]: value });
   };
 
-  const handleSelect = (value, option) => {
-    const { label } = option;
-    setCancelBookingState({ ...cancelBookingState, [label]: value });
+  const handleSelect = (value, option, type) => {
+    console.log('val', 'option', value, option);
+
+    setCancelBookingState({ ...cancelBookingState, [type]: value });
   };
 
   return (
@@ -58,7 +59,9 @@ const AdminActions = ({
           <Select
             placeholder="Select"
             style={selectStyles(errors.cancellationReason)}
-            onChange={(value, option) => handleSelect(value, option)}
+            onChange={(value, option) =>
+              handleSelect(value, option, 'cancellationReason')
+            }
             options={cancelReasonOptions}
           />
           <PXSBold mt={2} color="red">
@@ -71,7 +74,9 @@ const AdminActions = ({
           <Select
             style={selectStyles(errors.responsibleParty)}
             placeholder="Select"
-            onChange={(value, option) => handleSelect(value, option)}
+            onChange={(value, option) =>
+              handleSelect(value, option, 'responsibleParty')
+            }
             options={responsibleOptions}
           />
           <PXSBold mt={2} color="red">

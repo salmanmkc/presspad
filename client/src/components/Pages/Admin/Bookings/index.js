@@ -15,6 +15,8 @@ import Tabs from '../../../Common/Tabs';
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
+import BookingView from '../BookingsOld/BookingView/BookingView';
+
 import renderExpandedSection from './renderExpandedSection';
 
 const tabs = ['active', 'history'];
@@ -25,16 +27,26 @@ const AdminBookings = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
+  const [bookingView, setBookingView] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const [reviewBooking, setReviewBooking] = useState(false);
 
   const handleTab = e => {
     setSelected(e);
   };
 
-  const reviewBooking = (rowData, input) => {
+  const respondToBooking = (rowData, input) => {
     if (input === 'approve') {
       console.log('query to approve booking');
     } else if (input === 'reject') {
       console.log('query to reject booking');
+    } else if (input === 'awaiting cancellation') {
+      setBookingView(true);
+      setBookingDetails(rowData);
+      setReviewBooking(true);
+    } else if (input === 'cancelled after payment') {
+      setBookingDetails(rowData);
+      setBookingView(true);
     }
   };
 
@@ -44,7 +56,7 @@ const AdminBookings = () => {
     TwoDatesCol('dates'),
     StandardCol('paidByOrganisation', 'perc', null, 'organisation'),
     StandardCol('bursaryCosts', 'price'),
-    TagCol('status', 'booking', reviewBooking),
+    TagCol('status', 'booking', respondToBooking),
   ];
 
   const historyCols = [
@@ -53,7 +65,7 @@ const AdminBookings = () => {
     TwoDatesCol('dates'),
     StandardCol('paidByOrganisation', 'perc', null, 'organisation'),
     StandardCol('bursaryCosts', 'price'),
-    TagCol('status', 'booking', reviewBooking),
+    TagCol('status', 'booking', respondToBooking),
   ];
 
   useEffect(() => {
@@ -106,6 +118,17 @@ const AdminBookings = () => {
         return null;
     }
   };
+
+  if (bookingView)
+    return (
+      <BookingView
+        details={bookingDetails}
+        reviewBooking={reviewBooking}
+        setReviewBooking={setReviewBooking}
+        setBookingView={setBookingView}
+        setBookingDetails={setBookingDetails}
+      />
+    );
 
   return (
     <>
