@@ -42,6 +42,7 @@ const findAllWithdrawRequests = () =>
         'host/intern': '$userInfo.name',
         email: '$userInfo.email',
         contactNumber: '$profile.phoneNumber',
+        requestId: '$_id',
       },
     },
   ]);

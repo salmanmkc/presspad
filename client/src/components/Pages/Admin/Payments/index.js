@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
 import Table from '../../../Common/Table';
+import Notification from '../../../Common/Notification';
+
 import {
   LinkCol,
   StandardCol,
@@ -12,7 +14,11 @@ import {
 import * as T from '../../../Common/Typography';
 import Tabs from '../../../Common/Tabs';
 
-import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
+import {
+  API_ADMIN_STATS_URL,
+  API_UPDATE_WITHDRAW_REQUEST_URL,
+  API_ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL,
+} from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
 import TopStats from './TopStats';
@@ -22,29 +28,125 @@ import renderExpandedSection from './renderExpandedSection';
 const tabs = ['requests', 'history'];
 
 const AdminPayments = () => {
-  const [totalPayments, setTotalPayments] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
+  const [allPayments, setAllPayments] = useState([]);
   const [paymentRequests, setPaymentRequests] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
-  const [bankDetails, setBankDetails] = useState({});
+  const [bankDetails, setBankDetails] = useState([]);
+  const [notificationOpen, setNotification] = useState(false);
 
   const handleTab = e => {
     setSelected(e);
   };
 
+  const updateRequests = (idToUpdate, fieldToChange, newValue) => {
+    setLoading(true);
+    const requests = [];
+    const history = [];
+    const updatedTotal = [];
+    if (allPayments && allPayments.length > 0) {
+      allPayments.forEach(request => {
+        const updatePayment =
+          request.requestId === idToUpdate
+            ? { ...request, [fieldToChange]: newValue }
+            : request;
+
+        updatedTotal.push(updatePayment);
+
+        if (request.status === 'pending') {
+          requests.push(updatePayment);
+        } else {
+          history.push(updatePayment);
+        }
+      });
+    }
+    setAllPayments(updatedTotal);
+    setPaymentHistory(history);
+    setPaymentRequests(requests);
+    setLoading(false);
+  };
+
+  const handleBankDetailChange = (input, inputField, requestId) => {
+    const fieldToUpdate =
+      inputField === 'sortCode' ? 'bankSortCode' : inputField;
+
+    if (bankDetails.length < 1) {
+      return setBankDetails([{ requestId, [fieldToUpdate]: input }]);
+    }
+
+    const updated = bankDetails.map(bank => {
+      if (bank.requestId === requestId) {
+        const updatedBank = { ...bank, [fieldToUpdate]: input };
+        return updatedBank;
+      }
+      const newBank = { requestId, [fieldToUpdate]: input };
+      return newBank;
+    });
+
+    setBankDetails(updated);
+  };
+
+  const updateBankDetails = async (rowData, type, inputField) => {
+    const fieldToUpdate =
+      inputField === 'sortCode' ? 'bankSortCode' : inputField;
+
+    if (type === 'delete') {
+      try {
+        await axios.patch(API_ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL, {
+          requestId: rowData.requestId,
+          bankDetails: { [fieldToUpdate]: '' },
+        });
+        setNotification(true);
+        return updateRequests(rowData.requestId, inputField, '');
+      } catch (err) {
+        return setError(err);
+      }
+    }
+
+    const bankDetailsToUpdate = bankDetails.filter(
+      bank => bank.requestId === rowData.requestId,
+    );
+
+    if (bankDetailsToUpdate && bankDetailsToUpdate.length > 0) {
+      try {
+        await axios.patch(API_ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL, {
+          requestId: rowData.requestId,
+          bankDetails: bankDetailsToUpdate[0],
+        });
+      } catch (err) {
+        setError(err);
+      }
+    }
+
+    // const fieldToUpdate = Object.keys(bankDetail);
+    // if (!bankDetail || rowData.id !== idToUpdate[0]) {
+    //   return null;
+    // }
+  };
+
   const updatePaymentStatus = (rowData, statusType) => {
-    console.log('func to go here to update payment status');
+    // console.log('row', rowData);
+    // const idToUpdate = Object.keys(bankDetail);
+    // if (!bankDetail || rowData.id !== idToUpdate[0]) {
+    //   return null;
+    // }
+    // try {
+    //   await axios.patch(API_ADMIN_UPDATE_REQUEST_BANK_DETAILS_URL, {
+    //     requestId: rowData.id,
+    //   })
+    // }
   };
 
   const columns = [
     LinkCol('host/intern', ADMIN_USER_DETAILS, 'id'),
     StandardCol('amount', 'price'),
-    BankDetailsCol('bankName'),
-    BankDetailsCol('accountNumber'),
-    BankDetailsCol('sortCode'),
-    PayButtonCol('status', updatePaymentStatus),
+    BankDetailsCol('bankName', handleBankDetailChange, updateBankDetails),
+    BankDetailsCol('accountNumber', handleBankDetailChange, updateBankDetails),
+    BankDetailsCol('sortCode', handleBankDetailChange, updateBankDetails),
+    PayButtonCol('status', updateBankDetails),
   ];
 
   useEffect(() => {
@@ -54,7 +156,7 @@ const AdminPayments = () => {
           userType: 'payments',
         });
 
-        setTotalPayments(data.data);
+        setPaymentData(data.data);
 
         const { withdrawRequests } = data.data;
         const requests = [];
@@ -69,6 +171,7 @@ const AdminPayments = () => {
             }
           });
         }
+        setAllPayments(withdrawRequests);
         setPaymentHistory(history);
         setPaymentRequests(requests);
         setLoading(false);
@@ -120,7 +223,7 @@ const AdminPayments = () => {
       </Row>
       <Row mb={6}>
         <Col w={[4, 12, 12]}>
-          <TopStats data={totalPayments} loading={loading} />
+          <TopStats data={paymentData} loading={loading} />
         </Col>
       </Row>
       <Row mb={4}>
@@ -136,6 +239,11 @@ const AdminPayments = () => {
           <T.PXS color="pink">{error}</T.PXS>
         </Row>
       )}
+      <Notification
+        setOpen={setNotification}
+        open={notificationOpen}
+        content="Changes saved"
+      />
     </>
   );
 };
