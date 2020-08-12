@@ -94,7 +94,7 @@ const AddCoupons = props => {
   const getAccount = async () => {
     setBalanceLoading(true);
     const { data } = await axios.get(API_ACCOUNT_URL);
-    console.log('DATA', data);
+
     setBalance(data.currentBalance);
     setBalanceLoading(false);
   };
@@ -178,9 +178,10 @@ const AddCoupons = props => {
         } = await axios.post(API_COUPONS_URL, {
           name,
           email,
+          message,
           discountRate,
           startDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
-          endDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
+          endDate: moment(multiDateRange[0].endDate).format('YYYY-MM-DD'),
         });
         setSubmitting(false);
         // refresh balance
@@ -201,7 +202,7 @@ const AddCoupons = props => {
   };
 
   const resetState = () => dispatch({ type: 'resetState' });
-  console.log('bala', balance);
+
   // SUCCESS PART
   if (code) {
     return (

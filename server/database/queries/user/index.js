@@ -3,7 +3,7 @@ const User = require('../../models/User');
 const Booking = require('../../models/Booking');
 const Review = require('../../models/Review');
 
-const { addOrg } = require('./organisation');
+const { addOrg, getOrgById } = require('./organisation');
 const updateRespondingData = require('./updateRespondingData');
 const { createNewAccount } = require('../account');
 const { bookingStatuses } = require('../../../constants');
@@ -220,3 +220,4 @@ module.exports.findUserByToken = token =>
   });
 
 module.exports.updateRespondingData = updateRespondingData;
+module.exports.getOrgById = getOrgById;

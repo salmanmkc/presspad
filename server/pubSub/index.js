@@ -4,6 +4,7 @@ const pubSub = require('./createPubSub');
 require('./booking');
 require('./profile');
 require('./user');
+require('./coupon');
 
 module.exports = {
   emit: pubSub.emit,

@@ -28,6 +28,9 @@ const couponSchema = new Schema(
       lowercase: true,
       trim: true,
     },
+    message: {
+      type: String,
+    },
     // organisation's admin
     createdBy: {
       type: Schema.Types.ObjectId,

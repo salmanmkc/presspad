@@ -23,6 +23,9 @@ const events = {
     PAID_AUTOMATIC_CANCELLED: 'booking.paid_automatic_cancelled',
     UNPAID_AUTOMATIC_CANCELLED: 'booking.unpaid_automatic_cancelled',
   },
+  coupon: {
+    CREATED: 'coupon.created',
+  },
 };
 
 module.exports = events;
