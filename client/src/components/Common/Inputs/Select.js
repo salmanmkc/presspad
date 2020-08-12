@@ -30,15 +30,25 @@ const Select = ({
   onChange,
   error,
   style,
+  value,
+  mode,
+  height,
 }) => (
-  <SelectWrapper error={!!error} mt={mt} mb={mb} ml={ml} mr={mr}>
+  <SelectWrapper
+    error={!!error}
+    mt={mt}
+    mb={mb}
+    ml={ml}
+    mr={mr}
+    height={height}
+  >
     {label && (
-      <T.PBold as="label" color="primary" ml={2}>
+      <T.PBold as="label" color="primary" ml={2} style={{ display: 'block' }}>
         {label}
       </T.PBold>
     )}
     {helperText && (
-      <T.PXS color="gray3" ml={2} mb={2}>
+      <T.PXS color="gray3" ml={2} mb={2} className="helper">
         {helperText}
       </T.PXS>
     )}
@@ -48,12 +58,13 @@ const Select = ({
       suffixIcon={renderIcon}
       removeIcon={renderClearIcon}
       clearIcon={renderClearIcon}
-      mode={multi && 'multiple'}
+      mode={mode || (multi && 'multiple')}
       onChange={onChange}
       style={style}
+      value={value || undefined}
     >
-      {options.map(({ value, label: _label }) => (
-        <Option key={value} value={value}>
+      {options.map(({ value: _value, label: _label }) => (
+        <Option key={_value} value={_value}>
           {_label}
         </Option>
       ))}

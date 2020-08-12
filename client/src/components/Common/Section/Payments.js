@@ -18,7 +18,7 @@ const Payments = ({ type, payments, handleClick }) => {
 
   const columns = [
     BoldDateCol('dueDate'),
-    StandardCol('amountDue', 'price'),
+    StandardCol('amount', 'price'),
     TagCol('status', 'payment'),
     PayButtonCol('', handleClick, 'pay'),
   ];
@@ -30,7 +30,7 @@ const Payments = ({ type, payments, handleClick }) => {
       previewLink={PAYMENTS_URL}
       previewLinkText="View all payments"
       previewAlign="right"
-      tableHeader="Recent Payments"
+      tableHeader={type === 'recent' ? 'Recent Payments' : 'Your Payments'}
       showImage="money"
     />
   );

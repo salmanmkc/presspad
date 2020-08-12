@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { DatePicker as AntdDatePicker } from 'antd';
+
 import Icon from '../Icon';
 import * as S from './style';
 import * as T from '../Typography';
@@ -32,6 +33,7 @@ const DatePicker = ({
   handleAdd,
   arrayLength,
   extraInfo,
+  label,
   disablePast,
   disableFuture,
   ...props
@@ -110,15 +112,24 @@ const DatePicker = ({
     );
   }
 
+  let _value = value;
+  if (typeof _value === 'string') {
+    _value = moment(_value);
+  }
   return (
     <S.DatePickerWrapper mt={mt} mb={mb} ml={ml} mr={mr} error={!!error}>
+      {label && (
+        <T.PBold as="label" color="primary" ml={2}>
+          {label}
+        </T.PBold>
+      )}
       <AntdDatePicker
         format={customFormat || format}
         placeholder={customPlaceholder || placeholder}
         type="date"
         suffixIcon={renderIcon}
         onChange={onChange}
-        value={value}
+        value={_value}
         disabledDate={singleDatePickerDisabled}
         {...props}
       >

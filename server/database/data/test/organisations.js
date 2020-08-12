@@ -28,6 +28,34 @@ const createAll = async ({ accounts }) => {
         fileName: 'test.svg',
       },
       account: organisationAccount._id,
+      description:
+        'The Financial Times is an international daily newspaper printed in broadsheet and published digitally that focuses on business and economic current affairs.',
+      accountDetails: {
+        firstName: 'Robert',
+        lastName: 'Meyers',
+        phone: '+44 7911 123245',
+        email: 'robert.meyers@financial-times.com',
+      },
+      contactDetails: {
+        firstName: 'Susanne',
+        lastName: 'Leopoldski',
+        phone: '+44 7911 636345',
+        email: 'susanne.leopoldski@financial-times.com',
+      },
+      internshipOpportunities: [
+        {
+          opportunity: 'Internship Schme A 2020',
+          link: 'https://www.fa.com/internship-scheme-a-2020',
+          details:
+            'Opportunity for graduates to participate in a the upcoming internship scheme involving a diverse range of opportunities. Applications close September 14th 2020. Please send your applications including CV to susanne.leopoldski@financial-times.com.',
+        },
+        {
+          opportunity: 'Ongoing Creative Industry Scheme',
+          link: 'https://www.fa.com/creative-industry-scheme',
+          details:
+            'Cultural and creative sectors are comprised of all sectors whose activities are based on cultural values, or other artistic individual or collective creative expressions and are defined in the legal basis of the Creative Europe Programme. Take part in this new programme focussing on supporting young talents in this thriving sector.',
+        },
+      ],
     },
   ];
 

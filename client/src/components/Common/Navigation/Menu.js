@@ -14,7 +14,7 @@ const menuLinks = {
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
     { title: 'Refer Others', route: N.REFERRAL_URL },
-    { title: 'Settings', route: N.SETTINGS_URL },
+    { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   intern: [
     { title: 'Dashboard', route: N.DASHBOARD_URL },
@@ -22,13 +22,13 @@ const menuLinks = {
     { title: 'Payments', route: N.PAYMENTS_URL },
     { title: 'Profile', route: N.MYPROFILE_URL },
     { title: 'Bursary', route: N.BURSARY },
-    { title: 'Settings', route: N.SETTINGS_URL },
+    { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   organisation: [
     { title: 'Dashboard', route: N.DASHBOARD_URL },
     { title: 'Invoices', route: N.INVOICES },
     { title: 'Profile', route: N.MYPROFILE_URL },
-    { title: 'Settings', route: N.SETTINGS_URL },
+    { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
   admin: [
     { title: 'Dashboard', route: N.ADMIN_DASHBOARD_URL },
@@ -42,7 +42,7 @@ const menuLinks = {
 
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'Create an account', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_URL },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };
@@ -60,7 +60,7 @@ const horizontalMenuLinks = {
   ],
   loggedOut: [
     { title: 'Find a Pad', route: N.HOSTS_URL },
-    { title: 'Create an account', route: N.SIGNUP_HOST },
+    { title: 'Create an account', route: N.SIGNUP_URL },
     { title: 'Log In', route: N.SIGNIN_URL },
   ],
 };

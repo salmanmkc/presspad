@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import { Input } from 'antd';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-
-// COMMON COMPONENTS
-import Button from '../../Common/Button';
 
 // CONSTANTS
 import { API_LOGIN_URL } from '../../../constants/apiRoutes';
@@ -12,17 +7,18 @@ import {
   DASHBOARD_URL,
   ADMIN_DASHBOARD_URL,
   RESET_PASSWORD,
+  SIGNUP_URL,
 } from '../../../constants/navRoutes';
 
 // STYLING
-import {
-  Wrapper,
-  HeaderText,
-  SignInForm,
-  InputLabel,
-  InputDiv,
-  ErrorMsg,
-} from './SignInPage.style';
+import * as S from './SignInPage.style';
+
+// COMMON COMPONENTS
+import Button from '../../Common/ButtonNew';
+import Title from '../../Common/Title';
+import { Row, Col } from '../../Common/Grid';
+import { Input } from '../../Common/Inputs/index';
+import * as T from '../../Common/Typography';
 
 export default class SignInPage extends Component {
   state = {
@@ -114,60 +110,57 @@ export default class SignInPage extends Component {
     const { emailError, passwordError } = errors;
     const { onInputChange, onFormSubmit } = this;
     return (
-      <Wrapper>
-        <HeaderText>Sign In</HeaderText>
-        <SignInForm>
-          <InputDiv>
-            <InputLabel htmlFor="email">Email</InputLabel>
+      <>
+        <Row>
+          <Title withBg mb="0">
+            <Col w={[4, 12, 12]}>login</Col>
+          </Title>
+          <Col w={[4, 12, 8]}>
             <Input
+              label="Email"
               placeholder="Enter your email"
               name="email"
               id="email"
               type="text"
-              size="large"
               onChange={onInputChange}
               value={email}
+              error={emailError}
+              mt={6}
             />
-            <ErrorMsg>{emailError}</ErrorMsg>
-          </InputDiv>
-          <InputDiv>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input.Password
+
+            <Input
+              label="Password"
               placeholder="Enter your password"
               name="password"
               id="password"
-              type="text"
-              size="large"
+              type="password"
               onChange={onInputChange}
               value={password}
+              error={passwordError}
+              mt={4}
             />
-            <ErrorMsg>{passwordError}</ErrorMsg>
-          </InputDiv>
-          {msg && <ErrorMsg>{msg}</ErrorMsg>}
-          <Button
-            label="Sign in"
-            type="primary"
-            onClick={onFormSubmit}
-            style={
-              msg ? { marginTop: '0.5rem', margin: '1rem' } : { margin: '1rem' }
-            }
-          />
-        </SignInForm>
-        <p>
-          <Link to={RESET_PASSWORD}>Forgot password?</Link>
-        </p>
-        <p>
-          Already have an account?
-          <Link
-            to={{
-              pathname: '/',
-              hash: 'findMoreSection',
-            }}
-          >
-            &nbsp;Sign Up
-          </Link>
-        </p>
-      </Wrapper>
+            <p style={{ marginTop: 10, marginLeft: 5 }}>
+              <T.Link
+                to={RESET_PASSWORD}
+                color="gray3"
+                style={{ textDecoration: 'underline', fontWeight: 'bold' }}
+              >
+                Forgot password?
+              </T.Link>
+            </p>
+            {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
+            <Button type="secondary" onClick={onFormSubmit}>
+              Sign in
+            </Button>
+            <T.P color="gray3" mt={4} style={{ textAlign: 'center' }}>
+              {"Don't have an account? "}
+              <S.signupLink to={SIGNUP_URL} style={{ fontWeight: 'bold' }}>
+                Sign up
+              </S.signupLink>
+            </T.P>
+          </Col>
+        </Row>
+      </>
     );
   }
 }

@@ -184,12 +184,21 @@ export const filterArray = (array, searchVal) => _filterArray(array, searchVal);
 export const capitalizeFirstLetter = str =>
   str && str[0].toUpperCase() + str.substr(1, str.length).toLowerCase();
 
-export const titleCase = str =>
-  str &&
-  str
-    .split(' ')
-    .map(capitalizeFirstLetter)
-    .join(' ');
+export const titleCase = str => {
+  let _str = str;
+
+  if (str instanceof Array) {
+    _str = str.join(', ');
+  }
+
+  return (
+    _str &&
+    _str
+      .split(' ')
+      .map(capitalizeFirstLetter)
+      .join(' ')
+  );
+};
 
 yup.addMethod(yup.string, 'wordLengthValidator', function wordLengthValidator(
   length,
@@ -344,3 +353,16 @@ export const formatPrice = (price, fractionDigits) => {
 
 export const truncateString = (string, maxLength) =>
   string.length > maxLength ? `${string.slice(0, maxLength)}...` : string;
+
+export const decidePaymentStatus = ({ dueDate }) => {
+  let status;
+  if (moment(dueDate).isBefore(moment())) {
+    status = 'overdue';
+  } else if (moment(dueDate).isSame(moment())) {
+    status = 'due';
+  } else {
+    status = 'upcoming';
+  }
+
+  return status;
+};

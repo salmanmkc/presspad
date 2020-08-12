@@ -103,6 +103,7 @@ const profileSchema = new Schema(
       type: String,
       enum: types.ethnicity,
     },
+    ethnicityOther: String,
     parentProfession: {
       type: String,
       required: false,
@@ -113,6 +114,8 @@ const profileSchema = new Schema(
       enum: types.disability,
       required: false,
     },
+    disabilityYes: String,
+    disabilityYesOther: String,
     parentsWorkInPress: {
       type: String,
       enum: types.parentsWorkInPress,
@@ -143,11 +146,13 @@ const profileSchema = new Schema(
       enum: types.workingArea,
       required: false, // required for hosts
     },
-    areasOfInterest: {
-      type: String,
-      enum: types.areasOfInterest,
-      required: false, // required for hosts
-    },
+    interests: [
+      {
+        type: String,
+        // enum: types.interests,
+        required: false, // required for hosts
+      },
+    ],
     hostingReasonAnswer: {
       type: String,
       validate: wordLengthValidator(250, 'hostingReasonAnswer'),
@@ -185,16 +190,15 @@ const profileSchema = new Schema(
         required: false, // required for intern
       },
     },
-    interests: {
-      type: String,
-      trim: true,
-      enum: types.interests,
-      required: false, // required for Interns
-    },
     verified: {
       type: Boolean,
       default: false,
       required: true,
+    },
+    // for interns
+    awaitingReview: {
+      type: Boolean,
+      default: false,
     },
     bio: {
       type: String,
@@ -308,6 +312,21 @@ const profileSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    lastStudySubject: String,
+    lastStudyUniversity: String,
+    religion: String,
+    genderOther: String,
+    neurodivergent: String,
+    neurodivergentYes: String,
+    childCare: {
+      type: String,
+      enum: types.childCare,
+    },
+    illCare: {
+      type: String,
+      enum: types.illCare,
+    },
+    belongToClass: String,
   },
   {
     timestamps: true,

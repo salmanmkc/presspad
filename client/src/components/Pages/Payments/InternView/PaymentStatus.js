@@ -24,9 +24,11 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.colors.white};
 `;
 
-const PaymentStatus = ({ dueDate }) => {
+const PaymentStatus = ({ dueDate, paid }) => {
   let status;
-  if (moment(dueDate).isBefore(moment())) {
+  if (paid) {
+    status = 'paid';
+  } else if (moment(dueDate).isBefore(moment())) {
     status = 'overdue';
   } else if (moment(dueDate).isSame(moment())) {
     status = 'payment due';

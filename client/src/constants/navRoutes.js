@@ -1,5 +1,5 @@
 // website sections
-export const HOME_URL = '/';
+export const HOME_URL = '/hosts';
 export const ABOUT_URL = '/about';
 export const MYPROFILE_URL = '/my-profile';
 export const DASHBOARD_URL = '/dashboard';
@@ -11,20 +11,24 @@ export const BOOKING_VIEW_URL = '/booking/:id';
 export const ADD_REVIWE_URL = '/review-info/:id/';
 export const BOOKINGS_URL = '/bookings';
 export const BOOKINGS_INTERNSHIP_URL = '/bookings/update-internship';
-export const SETTINGS_URL = '/settings';
-export const DELETE_ACCOUNT_SUCCESS = '/settings/account-deleted';
+
 export const PAYMENTS_URL = '/payments';
+export const ADD_FUNDS_URL = '/add-funds';
 export const BURSARY = '/bursary';
 export const REFERRAL_URL = '/refer';
 export const INVOICES = '/invoices';
 // export const REFER_OTHERS = '/refer-others';
 
 // editing details
+export const SETTINGS_URL = '/settings';
 export const SETTINGS = {
   ACCOUNT: `${SETTINGS_URL}/my-account`,
   ABOUT_ME: `${SETTINGS_URL}/about-me`,
   EDIT_PROFILE: `${SETTINGS_URL}/edit-profile`,
   VERIFY: `${SETTINGS_URL}/verify`,
+  DELETE_ACCOUNT: `${SETTINGS_URL}/delete-account`,
+  DELETE_ACCOUNT_SUCCESS: `/delete-account-success`,
+  UNDER_REVIEW: `/under-review`,
 };
 
 // admin routes
@@ -57,6 +61,7 @@ export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
 // sign in/out
 export const SIGNIN_URL = '/sign-in';
 export const SIGNOUT_URL = '/sign-out';
+export const SIGNUP_URL = '/sign-up';
 
 // reset/set password
 export const RESET_PASSWORD = '/reset-password';
