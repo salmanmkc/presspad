@@ -228,6 +228,10 @@ export const truncatePostcode = postcode => {
   return postcode.substr(0, 2);
 };
 
+/**
+ * get the intersection range between booking and coupon ranges
+ * @param {Object} param0 {bookingStart, bookingEnd, couponStart, couponEnd}
+ */
 export const getIntersectRange = ({
   bookingStart,
   bookingEnd,
@@ -236,10 +240,15 @@ export const getIntersectRange = ({
 }) => {
   const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
   const couponRange = moment.range(moment(couponStart), moment(couponEnd));
-
   return bookingRange.intersect(couponRange);
 };
 
+/**
+ * get the discount days giving the booking range and the coupon range
+ * discountDays = discountDays"from intersectRange" - usedDays.
+ * discountRange have all range that intersect with the booking
+ * @param {Object} dates {bookingStart, bookingEnd, couponStart, couponEnd, usedDays}
+ */
 export const getDiscountDays = dates => {
   let _dates = dates;
   if (!dates.installmentDate) {
@@ -255,7 +264,6 @@ export const getDiscountDays = dates => {
       bookingStart: moment(dates.installmentDate),
     };
   }
-
   const intersectRange = getIntersectRange(_dates);
 
   if (!intersectRange) return { discountDays: 0 };
@@ -265,7 +273,7 @@ export const getDiscountDays = dates => {
 
   const discountDays = intersectRange.diff('day') + 1;
 
-  return { discountDays, discountRange: intersectRange };
+  return { discountDays };
 };
 
 let id = 0;

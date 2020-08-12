@@ -31,7 +31,7 @@ const internPayment = async (req, res, next) => {
     bookingId,
     withoutPay,
   } = req.body;
-  console.log('INFO', couponInfo);
+
   try {
     const [booking] = await getBookingById(bookingId, 'intern');
     // check for Authorization
@@ -88,7 +88,7 @@ const internPayment = async (req, res, next) => {
       // Calculate coupon discount amount
       couponDiscount =
         (calculatePrice(discountDays) * coupon.discountRate) / 100;
-      console.log('dicount', couponDiscount);
+
       // Validate discount amount
       if (couponDiscount !== couponInfo.couponDiscount)
         return next(boom.badData('wrong coupon Info'));

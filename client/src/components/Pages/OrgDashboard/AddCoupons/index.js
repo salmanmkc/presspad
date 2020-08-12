@@ -23,8 +23,6 @@ import { DASHBOARD_URL } from '../../../../constants/navRoutes';
 
 import validationSchema from './validationSchema';
 
-const { SERVER_ERROR } = require('../../../../constants/errorMessages');
-
 const { validate } = require('../../../../validation');
 
 const initialState = {
@@ -196,7 +194,9 @@ const AddCoupons = props => {
       }
     } catch (err) {
       // set server error
-      setError(SERVER_ERROR);
+      setError(
+        'Please make sure to fill in all required fields and to check if you have sufficient funds.',
+      );
       setSubmitting(false);
     }
   };

@@ -198,9 +198,7 @@ const MakePayment = ({
           <PS>Remaining cost for period:</PS>
           {usedCoupon.code || couponDiscount > 0 ? (
             <PreviousPriceWrapper>
-              <T.PBold>
-                £{formatPrice((remainingPrice * (100 - discountRate)) / 100)}
-              </T.PBold>
+              <T.PBold>£{formatPrice(netAmount)}</T.PBold>
               <T.PXSBold
                 color="lightGray"
                 style={{
@@ -208,7 +206,7 @@ const MakePayment = ({
                   marginLeft: '0.5rem',
                 }}
               >
-                £{formatPrice(remainingPrice)}
+                £{formatPrice(fullPrice)}
               </T.PXSBold>
             </PreviousPriceWrapper>
           ) : (

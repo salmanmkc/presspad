@@ -127,8 +127,14 @@ const Form = ({
           />
         </Col>
       </Row>
+      {error && (
+        <Row>
+          <Col w={[4, 6, 5.4]}>
+            <Error>{error}</Error>
+          </Col>
+        </Row>
+      )}
       <Row mb={5}>
-        {error && <Error>{error}</Error>}
         <Col w={[4, 6, 5.4]} mb={5}>
           <Button type="secondary" bgColor="pink" loading={submitting}>
             CREATE DISCOUNT CODE
