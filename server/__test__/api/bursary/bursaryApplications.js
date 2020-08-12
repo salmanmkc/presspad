@@ -35,37 +35,98 @@ describe('Testing for get all bursary applications / admin', () => {
     await connection.close();
   });
 
-  test('get all bursary applications', done => {
+  test('get "request" bursary applications', done => {
     request(app)
-      .get(API_BURSARY_APPLICATIONS)
+      .get(`${API_BURSARY_APPLICATIONS}?type=${s.request}`)
       .expect('Content-Type', /json/)
       .expect(200)
       .set('Cookie', [token])
       .end((err, res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body[s.rejected]).toHaveLength(2);
-        expect(res.body[s.request]).toHaveLength(2);
-        expect(res.body[s.request][0].intern._id).toBeDefined();
-        expect(res.body[s.request][0].intern.name).toBeDefined();
-        expect(
-          res.body[s.request][0].sumOtherBursariesUsedAmount,
-        ).toBeDefined();
-        expect(res.body[s.request][0].rejected).toBeDefined();
-        expect(res.body[s.preApproved]).toHaveLength(1);
-        expect(res.body[s.completed]).toHaveLength(1);
-        expect(res.body[s.approved]).toHaveLength(1);
+        expect(res.body).toHaveLength(2);
+        expect(res.body[0].intern._id).toBeDefined();
+        expect(res.body[0].intern.name).toBeDefined();
+        expect(res.body[0].awardedBursariesCost).toBeDefined();
+
+        done(err);
+      });
+  });
+
+  test('get "request" bursary applications', done => {
+    request(app)
+      .get(`${API_BURSARY_APPLICATIONS}?type=${s.rejected}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .set('Cookie', [token])
+      .end((err, res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body).toHaveLength(2);
+        expect(res.body[0].intern._id).toBeDefined();
+        expect(res.body[0].intern.name).toBeDefined();
+        expect(res.body[0].awardedBursariesCost).toBeDefined();
+
+        done(err);
+      });
+  });
+
+  test('get "approved" bursary applications', done => {
+    request(app)
+      .get(`${API_BURSARY_APPLICATIONS}?type=${s.approved}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .set('Cookie', [token])
+      .end((err, res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body).toHaveLength(1);
+        expect(res.body[0].intern._id).toBeDefined();
+        expect(res.body[0].intern.name).toBeDefined();
+        expect(res.body[0].awardedBursariesCost).toBeDefined();
+
+        done(err);
+      });
+  });
+
+  test('get "preApproved" bursary applications', done => {
+    request(app)
+      .get(`${API_BURSARY_APPLICATIONS}?type=${s.preApproved}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .set('Cookie', [token])
+      .end((err, res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body).toHaveLength(2);
+        expect(res.body[0].intern._id).toBeDefined();
+        expect(res.body[0].intern.name).toBeDefined();
+        expect(res.body[0].awardedBursariesCost).toBeDefined();
+
+        done(err);
+      });
+  });
+
+  test('get "completed" bursary applications', done => {
+    request(app)
+      .get(`${API_BURSARY_APPLICATIONS}?type=${s.completed}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .set('Cookie', [token])
+      .end((err, res) => {
+        expect(res).toBeDefined();
+        expect(res.body).toBeDefined();
+        expect(res.body).toHaveLength(1);
+        expect(res.body[0].intern._id).toBeDefined();
+        expect(res.body[0].intern.name).toBeDefined();
+        expect(res.body[0].awardedBursariesCost).toBeDefined();
 
         done(err);
       });
   });
 
   test('Update a bursary application - pre-approve', done => {
-    const {
-      requestedBursary,
-      requestedBursary2,
-      preApprovedBursary,
-    } = bursaryApplications;
+    const { requestedBursary } = bursaryApplications;
 
     const payload = {
       points: 200,
@@ -83,7 +144,6 @@ describe('Testing for get all bursary applications / admin', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
-        console.log(res.body);
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
 
