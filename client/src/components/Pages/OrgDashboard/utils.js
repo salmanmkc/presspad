@@ -11,7 +11,7 @@ export const createCodesTableData = arr =>
       usedAmount,
       reservedAmount,
       status,
-      intern,
+      email = '',
     } = el;
 
     return {
@@ -21,8 +21,7 @@ export const createCodesTableData = arr =>
       usedAmount: formatPrice(usedAmount),
       reservedAmount: formatPrice(reservedAmount),
       status,
-      id: intern._id,
-      internName: intern.name,
+      email: email || 'N/A',
     };
   });
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import Table from '../Table';
-import { StandardCol, LinkCol } from '../Table/Common';
-import { INTERN_PROFILE } from '../../../constants/navRoutes';
+import { StandardCol } from '../Table/Common';
 
 const Coupons = ({ coupons, previewClickEvent, liveCouponsSrc }) => {
   const columns = [
@@ -15,7 +14,7 @@ const Coupons = ({ coupons, previewClickEvent, liveCouponsSrc }) => {
       key: 'reservedAmount',
     },
 
-    LinkCol('internName', INTERN_PROFILE, 'id'),
+    StandardCol('email'),
     StandardCol('status'),
   ];
 

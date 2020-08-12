@@ -47,6 +47,7 @@ const Content = props => {
   const HeaderTitle = typographies.headerTitle[device];
 
   const { currentBalance = 0 } = account;
+
   const liveCoupons = getLiveCoupons(coupons);
   const previousCoupons = getPreviousCoupons(coupons);
   const currentlyHosted = getCurrentlyHosted(coupons);
