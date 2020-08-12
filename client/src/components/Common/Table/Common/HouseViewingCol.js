@@ -22,7 +22,7 @@ const HouseViewingCol = (colTitle, onChange, onSubmit) => ({
         </S.HouseViewing>
       ) : (
         <>
-          <DatePicker onChange={onChange} />
+          <DatePicker onChange={e => onChange(e, rowData.id)} />
           <S.StyledBtn noMargin onClick={() => onSubmit(rowData, 'add')}>
             <T.PXSBold color="pink" mt={1} ml={3}>
               Add

@@ -28,6 +28,7 @@ const AdminPayments = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
+  const [bankDetails, setBankDetails] = useState({});
 
   const handleTab = e => {
     setSelected(e);

@@ -38,7 +38,7 @@ const AdminHosts = ({ preview }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selected, setSelected] = useState(0);
-  const [houseDate, setHouseDate] = useState('');
+  const [houseDate, setHouseDate] = useState({});
   const [notificationOpen, setNotification] = useState(false);
 
   const handleTab = e => {
@@ -80,14 +80,27 @@ const AdminHosts = ({ preview }) => {
     }
   };
 
+  const handleDateChange = (input, userId) => setHouseDate({ [userId]: input });
+
   const editHouseViewingDate = async (rowData, type) => {
+    const idToUpdate = Object.keys(houseDate);
+    // if user they have hit add on doesn't match user of data stored in state do nothing
+    if (!houseDate || rowData.id !== idToUpdate[0]) {
+      return null;
+    }
     try {
       await axios.patch(API_ADMIN_UPDATE_PROFILE, {
-        fieldsToUpdate: { houseViewingDate: type === 'add' ? houseDate : null },
+        fieldsToUpdate: {
+          houseViewingDate: type === 'add' ? houseDate[rowData.id] : null,
+        },
         userId: rowData.id,
       });
       setNotification(true);
-      updateHosts(rowData.id, 'houseViewing', type === 'add' ? houseDate : '');
+      updateHosts(
+        rowData.id,
+        'houseViewing',
+        type === 'add' ? houseDate[rowData.id] : '',
+      );
     } catch (err) {
       setError(err);
     }
@@ -123,7 +136,7 @@ const AdminHosts = ({ preview }) => {
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('requestDate', 'date'),
     DBSCol('dbsCheck', dbsSaved),
-    HouseViewingCol('houseViewing', setHouseDate, editHouseViewingDate),
+    HouseViewingCol('houseViewing', handleDateChange, editHouseViewingDate),
     StandardCol('status'),
     DropdownCol('actions', verifyProfile, [
       { label: 'Approve', value: 'approve' },
