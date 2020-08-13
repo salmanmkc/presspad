@@ -67,7 +67,9 @@ import {
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
   SIGNUP_URL,
+  BURSARY,
 } from '../../constants/navRoutes';
+import Bursary from './Bursary';
 
 function Pages(props) {
   const {
@@ -90,7 +92,6 @@ function Pages(props) {
           layout="sideMenu"
           {...props}
         />
-
         <Route
           exact
           path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
@@ -99,7 +100,6 @@ function Pages(props) {
           mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
         />
-
         <Route
           exact
           path={SETTINGS.UNDER_REVIEW}
@@ -107,7 +107,6 @@ function Pages(props) {
           layout="illustrations"
           {...props}
         />
-
         <Route
           isPrivate
           path={SETTINGS_URL}
@@ -118,7 +117,6 @@ function Pages(props) {
           layout="sideMenu"
           {...props}
         />
-
         {/* protected host profile */}
         <Route
           exact
@@ -140,7 +138,6 @@ function Pages(props) {
           color="lightBlue"
           {...props}
         />
-
         {/* protected host profile */}
         <Route
           isPrivate
@@ -160,7 +157,6 @@ function Pages(props) {
           isLoggedIn={isLoggedIn}
           {...props}
         />
-
         <Route
           isPrivate
           exact
@@ -254,6 +250,7 @@ function Pages(props) {
             {...props}
           />
         )}
+
         {role === 'admin' && (
           <Route
             isPrivate
@@ -317,6 +314,18 @@ function Pages(props) {
             {...props}
           />
         )}
+
+        <Route
+          isPrivate
+          exact
+          path={BURSARY}
+          Component={Bursary}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
         <Route
           isPrivate
           exact
@@ -342,7 +351,6 @@ function Pages(props) {
           {...props}
           layout="rightDiv"
         />
-
         {['intern', 'host', 'superhost'].includes(role) && (
           <Route
             isPrivate
@@ -354,7 +362,6 @@ function Pages(props) {
             {...props}
           />
         )}
-
         <Route
           path={PAYMENTS_URL}
           exact
