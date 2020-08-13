@@ -21,6 +21,7 @@ const UploadFile = ({
   files,
   setFiles,
   error: _error,
+  fullWidth,
 }) => {
   // const [files, setFiles] = useState([]);
   const [error, setError] = useState('');
@@ -141,7 +142,7 @@ const UploadFile = ({
                 </S.ThumbsContainer>
               </Col>
             )}
-            <Col w={[4, 4, 4]}>
+            <Col w={fullWidth ? [4, 12, 12] : [4, 4, 4]}>
               <S.BoxWrapper
                 {...getRootProps({ className: 'dropzone' })}
                 disabled={disabled}
