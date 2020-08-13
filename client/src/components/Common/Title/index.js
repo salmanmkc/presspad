@@ -113,9 +113,13 @@ const Title = withTheme(
         </div>
         <div className="bottom">
           {caps ? (
-            <T.H3C color="white">{_bottomText}</T.H3C>
+            <T.H3C color="white" mr={1}>
+              {_bottomText}
+            </T.H3C>
           ) : (
-            <T.H3 color="white">{_bottomText}</T.H3>
+            <T.H3 color="white" mr={1}>
+              {_bottomText}
+            </T.H3>
           )}
         </div>
       </AlternateTitle>

@@ -25,7 +25,7 @@ const Welcome = ({
           </Title>
         </S.TitleContainer>
       </S.TitleWrapper>
-      <Row>
+      <Row mb={2}>
         <Col w={[4, 12, 10]}>
           <S.SubTitleContainer>
             <T.H5 color="pink"> {subTitle}</T.H5>

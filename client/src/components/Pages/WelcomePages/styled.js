@@ -9,15 +9,8 @@ export const TitleContainer = styled.div`
   position: absolute;
   left: 0;
   width: 100%;
-  @media (max-width: ${({ theme }) => theme.size.mobileM}) {
-    & h3 {
-      font-size: 22px;
-    }
-  }
-  @media (max-width: ${({ theme }) => theme.size.mobileS}) {
-    & h3 {
-      font-size: 18px;
-    }
+  @media (max-width: ${({ theme }) => theme.size.tablet}) {
+    position: relative;
   }
   @media ${({ theme }) => theme.breakpoints.tablet} {
     width: 37%;
@@ -29,10 +22,16 @@ export const TitleContainer = styled.div`
 
 export const TitleWrapper = styled.div`
   min-height: fit-content;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   position: absolute;
   left: 0;
   width: 100%;
+  @media (max-width: ${({ theme }) => theme.size.tablet}) {
+    position: relative;
+    width: calc(100% + 6%);
+    left: -3%;
+  }
+
   @media ${({ theme }) => theme.breakpoints.tablet} {
     position: static;
     min-height: 200px;
@@ -42,7 +41,7 @@ export const TitleWrapper = styled.div`
 `;
 
 export const SubTitleContainer = styled.div`
-  margin-top: 140px;
+  margin-bottom: 10px;
   @media ${({ theme }) => theme.breakpoints.tablet} {
     margin-top: 50px;
   }
@@ -52,7 +51,6 @@ export const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 50vh;
   margin-bottom: 80px;
 `;
 
