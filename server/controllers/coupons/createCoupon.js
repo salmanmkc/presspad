@@ -45,7 +45,7 @@ const createCoupon = async (req, res, next) => {
       days,
       startDate,
       endDate,
-      amount: Math.floor((amount * discountRate) / 100),
+      amount,
       usedDays: 0,
     });
     const { code } = results;
