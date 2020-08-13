@@ -15,7 +15,7 @@ import Tabs from '../../../Common/Tabs';
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
-import BookingView from '../BookingsOld/BookingView/BookingView';
+import BookingView from './BookingView/BookingView';
 
 import renderExpandedSection from './renderExpandedSection';
 
@@ -90,7 +90,7 @@ const AdminBookings = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [reviewBooking]);
 
   const renderTable = () => {
     switch (selected) {

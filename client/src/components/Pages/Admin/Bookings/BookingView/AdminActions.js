@@ -112,6 +112,7 @@ const AdminActions = ({
                 placeholder="Write your reasons here..."
                 name="notes"
                 onChange={handleInputChange}
+                value={cancelBookingState.notes}
               />
             </S.TextArea>
           </S.Column>

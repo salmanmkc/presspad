@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { message } from 'antd';
 
@@ -15,6 +16,7 @@ import BookingCancellationDetails from './BookingCancellationDetails';
 import AdminActions from './AdminActions';
 
 import { API_CANCEL_BOOKING_AFTER_PAYMENT_URL } from '../../../../../constants/apiRoutes';
+import { ADMIN_BOOKINGS_URL } from '../../../../../constants/navRoutes';
 import { SERVER_ERROR } from '../../../../../constants/errorMessages';
 
 const BookingReview = ({
@@ -41,6 +43,8 @@ const BookingReview = ({
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const history = useHistory();
 
   const handleSubmit = () => {
     const data = {
@@ -146,6 +150,7 @@ const BookingReview = ({
                 onClick={() => {
                   setReviewBooking(false);
                   setBookingView(false);
+                  history.push(ADMIN_BOOKINGS_URL);
                 }}
               >
                 return to bookings
