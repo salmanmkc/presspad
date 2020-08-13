@@ -1,5 +1,7 @@
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
+import { Redirect, Switch, useLocation } from 'react-router-dom';
+
+import welcomeImage from './WelcomePages/wlcomeImage';
 
 //  COMMON COMPONENTS
 import Route from '../Common/Route';
@@ -27,7 +29,6 @@ import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
-import ThemeTest from './ThemeTest';
 import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
@@ -38,8 +39,10 @@ import SignUpFunnelPage from './SignUpFunnelPage';
 import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
+import WelcomePages from './WelcomePages';
 import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 import UnderReview from './Settings/UnderReview';
+import * as InternSignUpFlow from './InternSignUpFlow';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -68,6 +71,7 @@ import {
   // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  WELCOME_PAGES,
   ADD_FUNDS_URL,
   SETTINGS,
   ADMIN_BURSARY,
@@ -81,6 +85,11 @@ import {
   ADMIN_PAYMENTS_URL,
   ADMIN_BOOKINGS_URL,
   SIGNUP_URL,
+  INTERN_SIGNUP_ABOUT_ME,
+  INTERN_SIGNUP_BURSARY,
+  INTERN_SIGNUP_PROFILE,
+  INTERN_SIGNUP_VERIFICATIONS,
+  INTERN_SIGNUP_WELCOME,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -91,7 +100,7 @@ function Pages(props) {
     windowWidth,
     resetState,
   } = props;
-
+  const location = useLocation();
   return (
     <>
       <Switch>
@@ -102,6 +111,56 @@ function Pages(props) {
           Component={ReferralSchema}
           isLoggedIn={isLoggedIn}
           layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_ABOUT_ME}
+          Component={InternSignUpFlow.AboutMe}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_PROFILE}
+          Component={InternSignUpFlow.MyProfile}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_VERIFICATIONS}
+          Component={InternSignUpFlow.Verifications}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_BURSARY}
+          Component={InternSignUpFlow.Bursary}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_WELCOME}
+          Component={InternSignUpFlow.Welcome}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
           {...props}
         />
 
@@ -163,6 +222,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
         {/* public host profile */}
@@ -172,6 +232,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
 
@@ -211,6 +272,7 @@ function Pages(props) {
               {...props}
             />
           )}
+          footer
           {...props}
         />
         <Route
@@ -456,6 +518,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         <Route
@@ -473,6 +537,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         <Route
@@ -490,6 +556,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         {['organisation'].includes(role) && (
@@ -531,14 +599,14 @@ function Pages(props) {
           color="blue"
           {...props}
         />
-        {/* To be deleted */}
         <Route
-          path="/test"
-          Component={ThemeTest}
+          path={WELCOME_PAGES}
+          Component={() => <WelcomePages role={role} />}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}
-          layout="sideMenu"
+          layout="illustrations"
+          image={welcomeImage(location, role)}
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>

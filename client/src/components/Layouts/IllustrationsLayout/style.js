@@ -17,13 +17,13 @@ export const ColouredSideDiv = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   position: fixed;
-  min-height: 100vh;
   right: 0;
+  height: 100vh;
 `;
 
 export const ContentWrapper = styled.div`
+  position: relative;
   width: 100%;
-
   padding: ${() => `0 3% 0`};
 
   @media ${breakpoints.mobileL} {
@@ -47,7 +47,7 @@ export const ContentWrapper = styled.div`
 export const ColouredTopDiv = styled.div`
   background: ${({ theme, color = 'pink' }) => theme.colors[color]};
   min-height: fit-content;
-  height: 30vw;
+  height: 140px;
   overflow: hidden;
   display: flex;
   justify-content: ${({ isImage }) => (isImage ? 'flex-end' : 'center')};
@@ -57,11 +57,27 @@ export const ColouredTopDiv = styled.div`
 `;
 
 export const Image = styled.img`
-  max-width: 600px;
+  max-width: 400px;
   width: 80%;
 `;
 
 export const TopImage = styled.img`
   max-width: 100%;
   height: 150%;
+`;
+
+export const TitleContainer = styled.div`
+  padding: 15%;
+  @media (max-width: 1300px) {
+    padding: 12%;
+  }
+  @media (max-width: 1220px) {
+    padding: 11.3%;
+  }
+  h1 {
+    font-size: 130px;
+    @media (max-width: 1200px) {
+      font-size: 110px;
+    }
+  }
 `;

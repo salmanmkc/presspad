@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+
 import { Row, Col } from '../../../Common/Grid';
 import * as T from '../../../Common/Typography';
 import { DatePicker } from '../../../Common/Inputs';
@@ -12,6 +14,10 @@ import {
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_PREAPPROVE,
 } from '../../../../constants/navRoutes';
+import { API_BURSARY_WINDOWS } from '../../../../constants/apiRoutes';
+import validationSchema from './validationSchema';
+
+const { validate } = require('../../../../validation');
 
 const tabs = ['requests', 'pre-approved', 'approved', 'history'];
 
@@ -24,8 +30,38 @@ const AdminBursary = () => {
   ]);
 
   const [selected, setSelected] = useState(0);
+  const [fetchWindowsLoading, setFetchWindowsLoading] = useState(true);
+  const [updateWindowsLoading, setUpdateWindowsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const history = useHistory();
+
+  useEffect(() => {
+    let mounted = true;
+    async function getBursaryWindows() {
+      setFetchWindowsLoading(true);
+      let { data } = await axios.get(API_BURSARY_WINDOWS);
+
+      if (!data[0]) {
+        data = [
+          {
+            startDate: '',
+            endDate: '',
+          },
+        ];
+      }
+
+      if (mounted) {
+        setMultiDateRange(data);
+        setFetchWindowsLoading(false);
+      }
+    }
+
+    getBursaryWindows();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const onRangeChange = (date, type, index) => {
     const updatedDates = multiDateRange.map((dateObj, i) => {
@@ -53,8 +89,43 @@ const AdminBursary = () => {
     ]);
   };
 
-  const updateDates = () =>
-    console.log('api call to update the application window dates');
+  const updateDates = async () => {
+    try {
+      const { errors: validationErrors } = validate({
+        schema: validationSchema,
+        data: multiDateRange,
+      });
+
+      if (!validationErrors) {
+        setUpdateWindowsLoading(true);
+
+        const { data: bursaryWindows } = await axios.put(API_BURSARY_WINDOWS, {
+          bursaryWindows: multiDateRange,
+        });
+
+        setUpdateWindowsLoading(false);
+        setMultiDateRange(bursaryWindows);
+      } else {
+        // validation errors
+        setMultiDateRange(e =>
+          e.map((window, i) => {
+            const windowError = validationErrors[`[${i}]`] || {};
+            return {
+              ...window,
+              error: windowError.startDate || windowError.endDate,
+            };
+          }),
+        );
+      }
+    } catch (err) {
+      if (err.response && err.response.data) {
+        setUpdateWindowsLoading(false);
+        setError(err.response.data.error);
+      } else {
+        setError('something went wrong please try again later');
+      }
+    }
+  };
 
   const handleTab = e => {
     setSelected(e);
@@ -63,12 +134,12 @@ const AdminBursary = () => {
   const sendToResponse = (responseType, rowData) => {
     switch (responseType) {
       case 'Approve':
-        return history.push(ADMIN_BURSARY_APPROVE.replace(':id', rowData.id));
+        return history.push(ADMIN_BURSARY_APPROVE.replace(':id', rowData._id));
       case 'Reject':
-        return history.push(ADMIN_BURSARY_REJECT.replace(':id', rowData.id));
+        return history.push(ADMIN_BURSARY_REJECT.replace(':id', rowData._id));
       case 'Pre-approve':
         return history.push(
-          ADMIN_BURSARY_PREAPPROVE.replace(':id', rowData.id),
+          ADMIN_BURSARY_PREAPPROVE.replace(':id', rowData._id),
         );
       default:
         return null;
@@ -102,28 +173,40 @@ const AdminBursary = () => {
           <T.H4C color="black" mb={4}>
             Application Windows
           </T.H4C>
-          {multiDateRange.map((date, index) => (
-            <DatePicker
-              onChange={onRangeChange}
-              type="dateRange"
-              multi
-              index={index}
-              handleDelete={handleDelete}
-              handleAdd={handleAdd}
-              arrayLength={multiDateRange.length}
-              mb={1}
-              value={multiDateRange[index]}
-            />
-          ))}
+          {fetchWindowsLoading ? (
+            <div>loading...</div>
+          ) : (
+            multiDateRange.map((date, index) => (
+              <DatePicker
+                onChange={onRangeChange}
+                type="dateRange"
+                multi
+                index={index}
+                handleDelete={handleDelete}
+                handleAdd={handleAdd}
+                arrayLength={multiDateRange.length}
+                mb={1}
+                value={multiDateRange[index]}
+                error={date.error}
+                key={date._id || index}
+              />
+            ))
+          )}
           <ButtonNew
             small
             type="tertiary"
             style={{ width: '145px' }}
             mt={4}
             onClick={updateDates}
+            loading={updateWindowsLoading}
           >
             Update dates
           </ButtonNew>
+          {error && (
+            <T.PXS color="pink" mt="2">
+              {error}
+            </T.PXS>
+          )}
         </Col>
       </Row>
       <Row mb={4}>

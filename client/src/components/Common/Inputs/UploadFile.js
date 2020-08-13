@@ -136,7 +136,7 @@ const UploadFile = ({
             {files.filter(
               file => file && !file.deleted && (file.name || file.fileName),
             ).length > 0 && (
-              <Col w={profile ? [4, 4, 3] : [4, 12, 12]}>
+              <Col w={profile ? [4, 4, 5] : [4, 12, 12]}>
                 <S.ThumbsContainer profile={profile}>
                   {thumbs}
                 </S.ThumbsContainer>

@@ -1,10 +1,8 @@
 import React from 'react';
 import * as T from '../../Typography';
 import camelToWords from '../../../../helpers/camelToWords';
-import formatPrice from '../../../../helpers/formatPrice';
+import { formatPrice, createSingleDate } from '../../../../helpers';
 import Icon from '../../Icon';
-
-import { createSingleDate } from '../../../../helpers';
 
 const formatText = (text, type) => {
   switch (type) {

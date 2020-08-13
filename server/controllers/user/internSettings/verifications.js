@@ -1,19 +1,23 @@
 const boom = require('boom');
-const moment = require('moment');
-const { internSettings } = require('../../../../client/src/validation');
+const { internCompleteProfile } = require('../../../../client/src/validation');
 const {
   updateUserProfile,
   findProfile,
 } = require('../../../database/queries/profiles');
+
+const { getBursaryByUserId } = require('../../../database/queries/bursary');
+
 const { deleteFile } = require('../../../helpers/storage');
 const { storageBucket: bucketName } = require('../../../config');
 
 module.exports = async (req, res, next) => {
   try {
     const { user } = req;
-    let fullData = false;
+    let completed = false;
+    let DBSCheckUpdated = false;
     const {
       verified: prevVerified,
+      awaitingReview: prevAwaitingReview,
       DBSCheck: { fileName: prevFileName, refNum: prevRefNum } = {
         fileName: '',
         refNum: '',
@@ -33,6 +37,8 @@ module.exports = async (req, res, next) => {
       refNum,
       prevPhotoIDToDelete,
       prevDBSCheckToDelete,
+      prevOfferLetterToDelete,
+      offerLetter,
     } = req.body;
 
     const profileData = {
@@ -44,40 +50,65 @@ module.exports = async (req, res, next) => {
       reference1,
       reference2,
       photoID,
+      offerLetter,
+
       DBSCheck: { ...DBSCheck, refNum },
       refNum: DBSCheck.refNum,
     };
+
+    const updatedProfile = await updateUserProfile(
+      user._id,
+      profileData,
+    ).lean();
+    const bursary = await getBursaryByUserId(user._id);
+
+    try {
+      await internCompleteProfile.validate({ ...bursary, ...updatedProfile });
+      completed = true;
+    } catch (error) {
+      completed = false;
+    }
 
     if (
       (DBSCheck && DBSCheck.fileName !== prevFileName) ||
       prevRefNum !== refNum
     ) {
+      DBSCheckUpdated = true;
+    }
+
+    if (!completed) {
+      await updateUserProfile(user._id, {
+        awaitingReview: false,
+        verified: false,
+      });
+    } else if (completed && DBSCheckUpdated) {
+      await updateUserProfile(user._id, {
+        awaitingReview: true,
+        awaitingReviewDate: Date.now(),
+        verified: false,
+      });
+    } else if (completed && !(DBSCheck && DBSCheck.fileName)) {
       if (prevVerified) {
-        profileData.awaitingReview = true;
-        profileData.verified = false;
-      } else {
-        try {
-          await internSettings.verificationsAllRequired.validate(profileData);
-          fullData = true;
-        } catch (error) {
-          console.log('error', error);
-          fullData = false;
-        }
-      }
-      console.log('fu', fullData);
-      profileData.awaitingReview = fullData;
-      if (fullData) {
-        profileData.awaitingReviewDate = moment();
+        // do nothing
+      } else if (prevAwaitingReview) {
+        await updateUserProfile(user._id, {
+          awaitingReview: true,
+          awaitingReviewDate: Date.now(),
+          verified: false,
+        });
       }
     }
 
-    await updateUserProfile(user._id, profileData);
     if (prevPhotoIDToDelete) {
       deleteFile(bucketName, prevPhotoIDToDelete);
     }
 
     if (prevDBSCheckToDelete) {
       deleteFile(bucketName, prevDBSCheckToDelete);
+    }
+
+    if (prevOfferLetterToDelete) {
+      deleteFile(bucketName, prevOfferLetterToDelete);
     }
 
     res.json();

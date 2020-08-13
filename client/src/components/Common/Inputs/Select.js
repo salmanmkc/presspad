@@ -64,7 +64,7 @@ const Select = ({
       value={value || undefined}
     >
       {options.map(({ value: _value, label: _label }) => (
-        <Option value={_value} label={_label}>
+        <Option key={_value} value={_value} label={_label}>
           {_label}
         </Option>
       ))}
