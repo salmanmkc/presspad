@@ -31,6 +31,7 @@ import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
 import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 import UnderReview from './Settings/UnderReview';
+import * as InternSignUpFlow from './InternSignUpFlow';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -67,6 +68,11 @@ import {
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
   SIGNUP_URL,
+  INTERN_SIGNUP_ABOUT_ME,
+  INTERN_SIGNUP_BURSARY,
+  INTERN_SIGNUP_PROFILE,
+  INTERN_SIGNUP_VERIFICATIONS,
+  INTERN_SIGNUP_WELCOME,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -88,6 +94,56 @@ function Pages(props) {
           Component={ReferralSchema}
           isLoggedIn={isLoggedIn}
           layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_ABOUT_ME}
+          Component={InternSignUpFlow.AboutMe}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_PROFILE}
+          Component={InternSignUpFlow.MyProfile}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_VERIFICATIONS}
+          Component={InternSignUpFlow.Verifications}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_BURSARY}
+          Component={InternSignUpFlow.Bursary}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_WELCOME}
+          Component={InternSignUpFlow.Welcome}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
           {...props}
         />
 
@@ -379,6 +435,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         <Route
@@ -396,6 +454,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         <Route
@@ -413,6 +473,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         {['organisation'].includes(role) && (

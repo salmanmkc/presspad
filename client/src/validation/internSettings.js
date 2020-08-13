@@ -141,46 +141,60 @@ const myProfile = prevValues =>
       : string().nullable(),
   });
 
-const verifications = prevValues =>
+const verifications = (prevValues, hasNoInternship) =>
   object({
-    organisation: prevValues.organisation
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    internshipContact: prevValues.internshipContact
-      ? object({
-          name: prevValues.internshipContact.name
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-          email: prevValues.internshipContact.email
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-          phoneNumber: prevValues.internshipContact.phoneNumber
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-        }).required()
-      : object().nullable(),
-    internshipStartDate: prevValues.internshipStartDate
-      ? mixed().required(DEFAULT_REQUIRED)
-      : mixed().nullable(),
-    internshipEndDate: prevValues.internshipEndDate
-      ? mixed().required(DEFAULT_REQUIRED)
-      : mixed().nullable(),
-    internshipOfficeAddress: prevValues.internshipOfficeAddress
-      ? object({
-          addressline1: prevValues.internshipOfficeAddress.addressline1
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-          addressline2: prevValues.internshipOfficeAddress.addressline2
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-          city: prevValues.internshipOfficeAddress.city
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-          postcode: prevValues.internshipOfficeAddress.postcode
-            ? string().required(DEFAULT_REQUIRED)
-            : string().nullable(),
-        }).required()
-      : object().nullable(),
+    organisation:
+      prevValues.organisation && !hasNoInternship
+        ? string().required(DEFAULT_REQUIRED)
+        : string().nullable(),
+    internshipContact:
+      prevValues.internshipContact && !hasNoInternship
+        ? object({
+            name:
+              prevValues.internshipContact.name && !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+            email:
+              prevValues.internshipContact.email && !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+            phoneNumber:
+              prevValues.internshipContact.phoneNumber && !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+          }).required()
+        : object().nullable(),
+    internshipStartDate:
+      prevValues.internshipStartDate && !hasNoInternship
+        ? mixed().required(DEFAULT_REQUIRED)
+        : mixed().nullable(),
+    internshipEndDate:
+      prevValues.internshipEndDate && !hasNoInternship
+        ? mixed().required(DEFAULT_REQUIRED)
+        : mixed().nullable(),
+    internshipOfficeAddress:
+      prevValues.internshipOfficeAddress && !hasNoInternship
+        ? object({
+            addressline1:
+              prevValues.internshipOfficeAddress.addressline1 &&
+              !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+            addressline2:
+              prevValues.internshipOfficeAddress.addressline2 &&
+              !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+            city:
+              prevValues.internshipOfficeAddress.city && !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+            postcode:
+              prevValues.internshipOfficeAddress.postcode && !hasNoInternship
+                ? string().required(DEFAULT_REQUIRED)
+                : string().nullable(),
+          }).required()
+        : object().nullable(),
 
     reference1: prevValues.reference1
       ? object({
