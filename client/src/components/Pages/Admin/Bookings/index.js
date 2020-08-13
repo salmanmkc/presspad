@@ -76,7 +76,6 @@ const AdminBookings = () => {
   };
 
   const submitAdminReview = async () => {
-    console.log('reached');
     setLoading(true);
     try {
       await axios.patch(API_ADMIN_REVIEWS_BOOKING, {

@@ -44,8 +44,6 @@ const AdminActions = ({
   };
 
   const handleSelect = (value, option, type) => {
-    console.log('val', 'option', value, option);
-
     setCancelBookingState({ ...cancelBookingState, [type]: value });
   };
 
