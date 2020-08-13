@@ -54,6 +54,15 @@ const internAccountData = {
   ...emptyAccount,
   income: 12000 + 5000 + 14000 + 28000,
 };
+const intern2AccountData = {
+  ...emptyAccount,
+};
+const intern3AccountData = {
+  ...emptyAccount,
+};
+const intern4AccountData = {
+  ...emptyAccount,
+};
 
 const hostAccountData = {
   ...emptyAccount,
@@ -84,6 +93,9 @@ const organisationAccountData = {
 const allAccounts = [
   presspadAccountData,
   internAccountData,
+  intern2AccountData,
+  intern3AccountData,
+  intern4AccountData,
   hostAccountData,
   organisationAccountData,
 ];
@@ -96,11 +108,22 @@ const createAll = async () => {
   const [
     presspadAccount,
     internAccount,
+    intern2Account,
+    intern3Account,
+    intern4Account,
     hostAccount,
     organisationAccount,
   ] = await Account.create(allAccounts);
 
-  return { presspadAccount, internAccount, hostAccount, organisationAccount };
+  return {
+    presspadAccount,
+    internAccount,
+    intern2Account,
+    intern3Account,
+    intern4Account,
+    hostAccount,
+    organisationAccount,
+  };
 };
 
 module.exports = {

@@ -42,7 +42,7 @@ const MyProfile = props => {
   });
 
   const [errors, setErrors] = useState({});
-  const [error, setError] = useState();
+  const [mainError, setMainError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [startUpload, setStartUpload] = useState(false);
@@ -81,7 +81,7 @@ const MyProfile = props => {
         }));
         setUploadingDone(true);
       } catch (e) {
-        setError(e.message);
+        setMainError(e.message);
       } finally {
         setUploading(false);
       }
@@ -133,7 +133,7 @@ const MyProfile = props => {
       });
       setNotificationOpen(true);
     } catch (e) {
-      setError(e.response.data.error);
+      setMainError(e.response.data.error);
     } finally {
       setLoading(false);
       setUploadingDone(false);
@@ -146,10 +146,10 @@ const MyProfile = props => {
     setErrors(_errors || {});
 
     if (_errors) {
-      setError('Must fill all required fields');
+      setMainError('Must fill all required fields');
       return;
     }
-    setError();
+    setMainError();
     if (
       state.profileImage &&
       state.profileImage.new &&
@@ -284,7 +284,7 @@ const MyProfile = props => {
 
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          {error && <T.PXS color="pink">{error}</T.PXS>}
+          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
 
           <Button
             type="secondary"

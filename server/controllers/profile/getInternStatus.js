@@ -4,10 +4,11 @@ const boom = require('boom');
 const {
   getProfileByRoleAndId,
 } = require('../../database/queries/profile/getProfile');
+const { getBursaryByUserId } = require('../../database/queries/bursary');
 
 // validation
-const internCompleteProfileSchema = require('../../middlewares/validation/internCompleteProfileSchema');
-const { validate } = require('../../middlewares/validation/index');
+const { internCompleteProfile } = require('../../../client/src/validation');
+
 const { checkInternshipDates } = require('../../helpers/general');
 /**
  * get the profile data adn the listing based on the role
@@ -44,11 +45,12 @@ module.exports = async (req, res, next) => {
     });
 
     verified = profile.verified;
-    const validated = await validate(internCompleteProfileSchema, profile);
+    const bursary = await getBursaryByUserId(_id);
 
-    if (validated) {
-      isComplete = true;
-    }
+    await internCompleteProfile.validate({ ...profile, ...bursary });
+
+    isComplete = true;
+
     return res.send({ isComplete, verified, validInternshipDates });
   } catch (err) {
     if (err.name === 'ValidationError') {

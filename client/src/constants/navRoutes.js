@@ -56,6 +56,12 @@ export const HOST_COMPLETE_PROFILE_URL = '/host-complete-profile';
 export const INTERN_COMPLETE_PROFILE_URL = '/intern-complete-profile';
 export const DBS_CHECK_PAGE = '/dbs-check';
 
+export const INTERN_SIGNUP_ABOUT_ME = '/sign-up/intern/about-me';
+export const INTERN_SIGNUP_BURSARY = '/sign-up/intern/bursary';
+export const INTERN_SIGNUP_PROFILE = '/sign-up/intern/profile';
+export const INTERN_SIGNUP_VERIFICATIONS = '/sign-up/intern/verifications';
+export const INTERN_SIGNUP_WELCOME = '/sign-up/intern/welcome';
+
 // booking cancellation type urls
 export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
 

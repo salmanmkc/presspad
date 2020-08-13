@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const User = require('../../models/User');
 const Booking = require('../../models/Booking');
 const Review = require('../../models/Review');
+const Bursary = require('../../models/Bursary');
+const Profile = require('../../models/Profile');
 
 const { addOrg, getOrgById } = require('./organisation');
 const updateRespondingData = require('./updateRespondingData');
@@ -19,6 +21,25 @@ module.exports.getUserById = (id, withoutPassword = true) =>
     ? User.findById(id, { password: 0 }).exec()
     : User.findById(id).exec();
 
+module.exports.getUserByBursaryId = async id => {
+  const bursary = await Bursary.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId(id),
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'intern',
+        foreignField: '_id',
+        as: 'intern',
+      },
+    },
+  ]);
+
+  return bursary && bursary[0] && bursary[0].intern && bursary[0].intern[0];
+};
 module.exports.addNewUser = async userInfo => {
   const { email, name, password, role, referralToken, referredBy } = userInfo;
 
@@ -50,13 +71,20 @@ module.exports.addNewUser = async userInfo => {
   }
 
   // assume it's intern at this point
-  return User.create({
+  const createdUser = await User.create({
     email: email.toLowerCase(),
     name,
     password,
     role,
     account: newAccount._id,
   });
+
+  // create empty bursary document
+  await Promise.all([
+    Bursary.create({ intern: createdUser._id }),
+    Profile.create({ user: createdUser._id }),
+  ]);
+  return createdUser;
 };
 
 module.exports.getInternStatus = internId =>

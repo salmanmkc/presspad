@@ -1,4 +1,4 @@
-const { object, string, ref } = require('yup');
+const { object, string } = require('yup');
 const { signup } = require('../constants/errorMessages');
 
 const {
@@ -10,9 +10,7 @@ const {
   ORGANISATION_REQUIRED,
   PASSWORD_REQUIRED,
   PASSWORD_SHORT,
-  PASSWORD_NOT_MATCH,
   PASSWORD_WEAK,
-  PASSWORD_CONFIRM_REQUIRED,
   ROLE_INVALID,
   ROLE_REQUIRED,
 } = signup;
@@ -36,9 +34,7 @@ const schema = object({
     .min(8, PASSWORD_SHORT)
     .matches(passwordPattern, PASSWORD_WEAK)
     .required(PASSWORD_REQUIRED),
-  passwordConfirm: string()
-    .oneOf([ref('password')], PASSWORD_NOT_MATCH)
-    .required(PASSWORD_CONFIRM_REQUIRED),
+
   role: string()
     .oneOf(['intern', 'host', 'organisation'], ROLE_INVALID)
     .required(ROLE_REQUIRED),
