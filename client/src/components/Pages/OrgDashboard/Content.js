@@ -102,7 +102,7 @@ class Content extends Component {
       potentialCost = (calculatePrice(range) * discountRate) / 100;
     }
 
-    const currentlyHosted = coupons.filter(item => item.status === 'At host')
+    const currentlyHosted = coupons.filter(item => item.status === 'at host')
       .length;
 
     const internsWithNewOne = state.addedNewInternName

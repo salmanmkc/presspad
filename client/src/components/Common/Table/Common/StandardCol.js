@@ -75,7 +75,7 @@ const StandardCol = (colTitle, type, customSort, subtitle, subtitleType) => ({
       <div style={{ display: 'flex' }}>
         {decideIcon(text)}
         <T.PXS color="black" style={{ textTransform: 'capitalize' }}>
-          {text ? formatText(text, type) : 'N/A'}
+          {text || text === 0 ? formatText(text, type) : 'N/A'}
         </T.PXS>
       </div>
       {subtitle && (

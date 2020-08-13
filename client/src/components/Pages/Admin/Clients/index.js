@@ -9,6 +9,8 @@ import * as T from '../../../Common/Typography';
 import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
+import renderExpandedSection from './renderExpandedSection';
+
 const AdminClients = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +51,13 @@ const AdminClients = () => {
           <T.H2 color="blue">Clients</T.H2>
         </Col>
       </Row>
-      <Table columns={columns} data={clients} loading={loading} showSearch />
+      <Table
+        columns={columns}
+        data={clients}
+        loading={loading}
+        showSearch
+        expandedSection={renderExpandedSection}
+      />
       {error && (
         <Row>
           <T.PXS color="pink">{error}</T.PXS>

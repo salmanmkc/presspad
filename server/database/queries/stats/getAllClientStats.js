@@ -18,6 +18,8 @@ module.exports.getAllClientStats = async () => {
         name: 1,
         plan: 1,
         account: 1,
+        contactDetails: 1,
+        sortedExternalTransactions: 1,
         interns: {
           $filter: {
             input: '$users',
@@ -38,7 +40,7 @@ module.exports.getAllClientStats = async () => {
         from: 'accounts',
         localField: 'account',
         foreignField: '_id',
-        as: 'account',
+        as: 'accountDetails',
       },
     },
     {
@@ -47,13 +49,15 @@ module.exports.getAllClientStats = async () => {
         organisation: '$name',
         plan: 1,
         credits: 1,
+        contactDetails: 1,
+        account: 1,
         'internList._id': 1,
         'internList.name': 1,
         'internList.email': 1,
         interns: 1,
-        couponsValue: { $arrayElemAt: ['$account.couponsValue', 0] },
-        currentBalance: { $arrayElemAt: ['$account.currentBalance', 0] },
-        totalPayments: { $arrayElemAt: ['$account.income', 0] },
+        couponsValue: { $arrayElemAt: ['$accountDetails.couponsValue', 0] },
+        currentBalance: { $arrayElemAt: ['$accountDetails.currentBalance', 0] },
+        totalPayments: { $arrayElemAt: ['$accountDetails.income', 0] },
       },
     },
   ]);
@@ -68,16 +72,20 @@ module.exports.getAllClientStats = async () => {
       // create a new key for currentlyHosting and default to 0
       newClientObj.currentlyHosting = 0;
 
-      if (newClientObj.interns && newClientObj.interns.length > 0) {
+      if (newClientObj.internList && newClientObj.internList.length > 0) {
         // map through all the interns and get their list of bookings and status
         const internBookings = await Promise.all(
-          newClientObj.interns.map(async intern => getInternStatus(intern._id)),
+          newClientObj.internList.map(async intern =>
+            getInternStatus(intern._id),
+          ),
         );
         // clean up the result so all bookings are in one array
         const cleanBookings = internBookings.reduce((a, b) => a.concat(b), []);
+
+        console.log('cl', cleanBookings);
         // filter so only have bookings where they are at the host
         newClientObj.currentlyHosting = cleanBookings.filter(
-          booking => booking.status === 'At host',
+          booking => booking.status === 'at host',
         ).length;
       }
       return newClientObj;
