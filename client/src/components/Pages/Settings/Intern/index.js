@@ -20,8 +20,7 @@ function Settings({ windowWidth, ...props }) {
   return (
     <>
       <S.PageWrapper>
-        {/* delete Intern */}
-        <Heading>Intern Settings</Heading>
+        <Heading>Settings</Heading>
         <S.TabsWrapper>
           <S.Tabs to={SETTINGS.ACCOUNT}>
             <T.H5C color="inherit" mb={0}>
