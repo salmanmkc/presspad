@@ -12,7 +12,7 @@ import Button from '../../../Common/ButtonNew';
 
 import Form from './Form';
 
-import { formatPrice, calculatePrice } from '../../../../helpers';
+import { formatPrice, calculateCouponPriceByRange } from '../../../../helpers';
 import { typographies } from '../styleProperties';
 import {
   API_ACCOUNT_URL,
@@ -94,6 +94,7 @@ const AddCoupons = props => {
     const { data } = await axios.get(API_ACCOUNT_URL);
 
     setBalance(data.currentBalance);
+
     setBalanceLoading(false);
   };
 
@@ -107,8 +108,11 @@ const AddCoupons = props => {
     const { startDate, endDate } = multiDateRange[0];
 
     if (startDate && endDate && discountRate) {
-      const range = moment.range(startDate, endDate);
-      const price = (calculatePrice(range) * Number(discountRate)) / 100;
+      const price = calculateCouponPriceByRange(
+        startDate,
+        endDate,
+        discountRate,
+      );
 
       dispatch({
         type: 'change',

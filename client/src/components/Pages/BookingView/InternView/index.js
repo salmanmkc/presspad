@@ -197,6 +197,10 @@ export default class BookingView extends Component {
             if (error.response && error.response.status === 404) {
               errorMsg = 'wrong code ..';
             }
+            if (error.response && error.response.data.error) {
+              errorMsg = error.response.data.error;
+            }
+
             this.setState(prevState => ({
               couponInfo: {
                 ...prevState.couponInfo,

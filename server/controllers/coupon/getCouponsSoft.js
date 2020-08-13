@@ -19,11 +19,20 @@ module.exports = async (req, res, next) => {
       discountRate: 1,
       startDate: 1,
       endDate: 1,
+      intern: 1,
     };
 
     const coupon = await getCouponsQuery(query, queryProject).exec();
     if (!coupon[0]) {
       return next(boom.notFound());
+    }
+
+    if (coupon[0].intern) {
+      return next(
+        boom.badData(
+          'This coupon has already been used by a user. If it was you please log in first and try again.',
+        ),
+      );
     }
     return res.json({ data: coupon });
   } catch (error) {

@@ -1,16 +1,12 @@
 const boom = require('boom');
-const Moment = require('moment');
-const { extendMoment } = require('moment-range');
 const pubSub = require('../../pubSub');
-
-const moment = extendMoment(Moment);
 
 const {
   createCoupon: createCouponQuery,
 } = require('../../database/queries/payments');
 const { getOrgById } = require('../../database/queries/user');
 
-const { calculatePrice } = require('../../helpers/payments');
+const { calculateCouponPriceByRange } = require('../../helpers/payments');
 
 const createCoupon = async (req, res, next) => {
   const { user, body } = req;
@@ -24,16 +20,18 @@ const createCoupon = async (req, res, next) => {
 
   const { name, email, discountRate, startDate, endDate, message } = body;
 
-  const range = moment.range(moment(startDate), endDate);
-  const amount = calculatePrice(range);
-  const days = range.diff('days');
-
   // check for user role
   if (role !== 'organisation' || !organisation) {
     return next(boom.forbidden());
   }
 
   try {
+    const { amount, days } = await calculateCouponPriceByRange(
+      startDate,
+      endDate,
+      discountRate,
+    );
+
     const _organisation = await getOrgById(organisation);
 
     const results = await createCouponQuery({

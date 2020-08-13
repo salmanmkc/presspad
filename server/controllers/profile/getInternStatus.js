@@ -45,6 +45,7 @@ module.exports = async (req, res, next) => {
 
     verified = profile.verified;
     const validated = await validate(internCompleteProfileSchema, profile);
+
     if (validated) {
       isComplete = true;
     }

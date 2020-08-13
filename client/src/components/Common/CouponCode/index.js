@@ -31,6 +31,9 @@ const makeRequest = async (_code, userId) => {
     if (error.response && error.response.status === 404) {
       errorMsg = 'INVALID CODE';
     }
+    if (error.response && error.response.data.error) {
+      errorMsg = error.response.data.error;
+    }
     return { apiError: errorMsg };
   }
 };

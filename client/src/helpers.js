@@ -103,6 +103,39 @@ export const calculatePriceByRange = range => {
   return 0;
 };
 
+/**
+ * calculate booking the price giving range of dates
+ * this will discount the 14 free days
+ * @param {import("moment-range").MomentRange} range
+ */
+export const calculateCouponPriceByRange = (
+  startDate,
+  endDate,
+  discountRate,
+) => {
+  const range = moment.range(startDate, endDate);
+
+  if (!range) return 0;
+  let weeks;
+  let days;
+  if (typeof range === 'number') {
+    weeks = Math.trunc(range / 7);
+    days = range;
+  } else {
+    range.start.startOf('day');
+    range.end.add(1, 'day').endOf('day');
+    weeks = range.diff('weeks');
+    days = range.diff('days');
+  }
+
+  // if more than 2 weeks take off 14 free days and add 6 days (covering 3 before and 3 after internship)
+  if (weeks >= 2) {
+    return (days - 14 + 6) * 2000 * Number(discountRate / 100);
+  }
+
+  return 0;
+};
+
 // fields to filter based on them
 const filterFields = {
   // common
