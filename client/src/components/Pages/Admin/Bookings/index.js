@@ -7,6 +7,7 @@ import Table from '../../../Common/Table';
 import Modal from '../../../Common/Modal';
 import { Input } from '../../../Common/Inputs';
 import Notification from '../../../Common/Notification';
+import ButtonNew from '../../../Common/ButtonNew';
 
 import {
   LinkCol,
@@ -48,16 +49,26 @@ const AdminBookings = () => {
     setSelected(e);
   };
 
-  const onChange = e => setRejectMessage(e.target.value);
+  const handleReject = e => setRejectMessage(e.target.value);
 
   const updateBookings = updatedBooking => {
     setLoading(true);
-    const newBookings = bookings.filter(
-      booking => booking._id !== updatedBooking._id,
-    );
-    const newHistory = bookingHistory.push(updatedBooking);
-    setBookings(newBookings);
-    setBookingHistory(newHistory);
+
+    if (updatedBooking.status === 'pending') {
+      const newBookings = bookings.map(booking =>
+        booking._id === updatedBooking._id ? updatedBooking : booking,
+      );
+      setBookings(newBookings);
+    }
+
+    if (updatedBooking.status === 'rejected by admin') {
+      const newBookings = bookings.filter(
+        booking => booking._id !== updatedBooking._id,
+      );
+      const newHistory = [updatedBooking, ...bookingHistory];
+      setBookings(newBookings);
+      setBookingHistory(newHistory);
+    }
     setLoading(false);
   };
 
@@ -68,12 +79,13 @@ const AdminBookings = () => {
   };
 
   const submitAdminReview = async () => {
+    console.log('reached');
     setLoading(true);
     try {
       await axios.patch(API_ADMIN_REVIEWS_BOOKING, {
         status: newBookingStatus,
         message: rejectMessage,
-        booking: bookingToUpdate._id,
+        booking: bookingToUpdate,
       });
       const updatedBooking = { ...bookingToUpdate, status: newBookingStatus };
       updateBookings(updatedBooking);
@@ -87,18 +99,17 @@ const AdminBookings = () => {
     }
   };
 
-  const renderBookingUpdateConfirm = (type, booking) => {
-    setNewBookingStatus(type);
-    setBookingToUpdate(booking);
-    setRejectMessage('');
-    setModalOpen(true);
-  };
-
   const respondToBooking = (rowData, input) => {
     if (input === 'approve') {
-      renderBookingUpdateConfirm('approve', rowData);
+      setNewBookingStatus('pending');
+      setBookingToUpdate(rowData);
+      setRejectMessage('');
+      setModalOpen(true);
     } else if (input === 'reject') {
-      renderBookingUpdateConfirm('reject', rowData);
+      setNewBookingStatus('rejected by admin');
+      setBookingToUpdate(rowData);
+      setRejectMessage('');
+      setModalOpen(true);
     } else if (input === 'awaiting cancellation') {
       setBookingView(true);
       setBookingDetails(rowData);
@@ -214,38 +225,79 @@ const AdminBookings = () => {
         open={notificationOpen}
         content={error || 'Changes saved'}
       />
-      {newBookingStatus === 'reject' && (
+      {newBookingStatus === 'rejected by admin' && (
         <Modal
           visible={modalOpen}
           title="Rejecting request"
+          onOK={submitAdminReview}
+          onCancel={() => setModalOpen(false)}
           content={
             <>
-              <T.PXS mb={2} mt={4}>
-                Are you sure you want to reject this request?
-              </T.PXS>
-              <T.PXS mb={4}>
-                Please write a message to the intern so they know why you are
-                rejecting their request
-              </T.PXS>
-              <Input
-                onChange={onChange}
-                textArea
-                value={rejectMessage}
-                label="Other info"
-                helperText="Write a short bio so interns can find out a bit more about you"
-              />
+              <Row>
+                <Col w={[4, 12, 12]}>
+                  <T.PXS mb={2} mt={4}>
+                    Are you sure you want to reject this request?
+                  </T.PXS>
+                  <T.PXS mb={4}>
+                    Please write a message to the intern so they know why you
+                    are rejecting their request
+                  </T.PXS>
+                </Col>
+              </Row>
+              <Row>
+                <Col w={[4, 12, 12]}>
+                  <Input
+                    onChange={handleReject}
+                    textArea
+                    value={rejectMessage}
+                  />
+                </Col>
+              </Row>
+              <Row mb={2} mt={4}>
+                <Col w={[4, 6, 6]}>
+                  <ButtonNew
+                    type="primary"
+                    onClick={submitAdminReview}
+                    loading={loading}
+                  >
+                    Reject booking
+                  </ButtonNew>
+                </Col>
+              </Row>
             </>
           }
         />
       )}
-      {newBookingStatus === 'approve' && (
-        <Modal visible={modalOpen} onOK={submitAdminReview}>
-          <>
-            <T.PXS mb={2} mt={4}>
-              Are you sure you want to approve this request?
-            </T.PXS>
-          </>
-        </Modal>
+      {newBookingStatus === 'pending' && (
+        <Modal
+          visible={modalOpen}
+          onOK={submitAdminReview}
+          onCancel={() => setModalOpen(false)}
+          title="Approving request"
+          hideOkButton
+          content={
+            <>
+              <Row>
+                <Col w={[4, 12, 12]}>
+                  <T.PXS mb={2} mt={4}>
+                    Are you sure you want to approve this request?
+                  </T.PXS>
+                </Col>
+              </Row>
+              <Row mb={2} mt={4}>
+                <Col w={[4, 6, 6]}>
+                  <ButtonNew
+                    type="primary"
+                    onClick={submitAdminReview}
+                    loading={loading}
+                  >
+                    Approve booking
+                  </ButtonNew>
+                </Col>
+              </Row>
+            </>
+          }
+        />
       )}
     </>
   );

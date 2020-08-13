@@ -5,6 +5,9 @@ import { ThemeProvider } from 'styled-components';
 
 import theme from '../../../theme';
 
+import * as T from '../Typography';
+import { Row, Col } from '../Grid';
+
 const disableButton = (props = { style: {} }) => ({
   ...props,
   style: { ...props.style, display: 'none' },
@@ -34,7 +37,20 @@ const Modal = ({
       ...props,
     })
   ) : (
-    <AntdModal maskClosable {...props}>
+    <AntdModal
+      maskClosable
+      {...props}
+      okButtonProps={
+        hideOkButton ? disableButton(okButtonProps) : okButtonProps
+      }
+    >
+      {title && (
+        <Row mt={4}>
+          <Col w={[4, 12, 12]}>
+            <T.H4 color="darkBlue">{title}</T.H4>
+          </Col>
+        </Row>
+      )}
       {content}
     </AntdModal>
   );

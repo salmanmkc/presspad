@@ -38,7 +38,6 @@ const Input = ({
         {helperText}
       </T.PXS>
     )}
-    {console.log('value', value)}
     {textArea ? (
       <TextArea
         onChange={onChange}
