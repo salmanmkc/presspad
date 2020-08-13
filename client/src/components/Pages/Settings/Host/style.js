@@ -53,6 +53,8 @@ export const ChangePassword = styled.div`
   line-height: 25px;
   cursor: pointer;
   text-decoration-line: underline;
+  display: inline;
+  margin-left: 12px;
 
   color: ${({ theme }) => theme.colors.blue};
 `;
@@ -77,4 +79,24 @@ export const DeleteLink = styled.div`
   bottom: 0;
   left: 0;
   margin-top: ${({ theme }) => theme.spacings[6]};
+`;
+
+export const RightDiv = styled.div`
+  width: 36%;
+  height: 100vh;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background: ${({ theme }) => theme.colors.pink};
+  display: none;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    display: block;
+  }
+`;
+
+export const Container = styled.div`
+  padding-right: 0;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    padding-right: 50%;
+  }
 `;
