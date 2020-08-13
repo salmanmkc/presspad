@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { Modal as AntModal } from 'antd';
 import { Row, Col } from '../../../Common/Grid';
 import Table from '../../../Common/Table';
+import Modal from '../../../Common/Modal';
+import { Input } from '../../../Common/Inputs';
+import Notification from '../../../Common/Notification';
+
 import {
   LinkCol,
   StandardCol,
@@ -12,7 +17,10 @@ import {
 import * as T from '../../../Common/Typography';
 import Tabs from '../../../Common/Tabs';
 
-import { API_ADMIN_STATS_URL } from '../../../../constants/apiRoutes';
+import {
+  API_ADMIN_STATS_URL,
+  API_ADMIN_REVIEWS_BOOKING,
+} from '../../../../constants/apiRoutes';
 import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
 import BookingView from './BookingView/BookingView';
@@ -30,16 +38,67 @@ const AdminBookings = () => {
   const [bookingView, setBookingView] = useState(false);
   const [bookingDetails, setBookingDetails] = useState(null);
   const [reviewBooking, setReviewBooking] = useState(false);
+  const [rejectMessage, setRejectMessage] = useState('');
+  const [newBookingStatus, setNewBookingStatus] = useState('');
+  const [bookingToUpdate, setBookingToUpdate] = useState({});
+  const [notificationOpen, setNotification] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleTab = e => {
     setSelected(e);
   };
 
+  const onChange = e => setRejectMessage(e.target.value);
+
+  const updateBookings = updatedBooking => {
+    setLoading(true);
+    const newBookings = bookings.filter(
+      booking => booking._id !== updatedBooking._id,
+    );
+    const newHistory = bookingHistory.push(updatedBooking);
+    setBookings(newBookings);
+    setBookingHistory(newHistory);
+    setLoading(false);
+  };
+
+  const resetBooking = () => {
+    setNewBookingStatus('');
+    setBookingToUpdate({});
+    setRejectMessage('');
+  };
+
+  const submitAdminReview = async () => {
+    setLoading(true);
+    try {
+      await axios.patch(API_ADMIN_REVIEWS_BOOKING, {
+        status: newBookingStatus,
+        message: rejectMessage,
+        booking: bookingToUpdate._id,
+      });
+      const updatedBooking = { ...bookingToUpdate, status: newBookingStatus };
+      updateBookings(updatedBooking);
+      resetBooking();
+      setLoading(false);
+      setNotification(true);
+    } catch (err) {
+      setError(err);
+      resetBooking();
+      setNotification(true);
+    }
+  };
+
+  const renderBookingUpdateConfirm = (type, booking) => {
+    setNewBookingStatus(type);
+    setBookingToUpdate(booking);
+    setRejectMessage('');
+    setModalOpen(true);
+  };
+
   const respondToBooking = (rowData, input) => {
     if (input === 'approve') {
-      console.log('query to approve booking');
+      renderBookingUpdateConfirm('approve', rowData);
     } else if (input === 'reject') {
-      console.log('query to reject booking');
+      renderBookingUpdateConfirm('reject', rowData);
     } else if (input === 'awaiting cancellation') {
       setBookingView(true);
       setBookingDetails(rowData);
@@ -149,6 +208,44 @@ const AdminBookings = () => {
         <Row>
           <T.PXS color="pink">{error}</T.PXS>
         </Row>
+      )}
+      <Notification
+        setOpen={setNotification}
+        open={notificationOpen}
+        content={error || 'Changes saved'}
+      />
+      {newBookingStatus === 'reject' && (
+        <Modal
+          visible={modalOpen}
+          title="Rejecting request"
+          content={
+            <>
+              <T.PXS mb={2} mt={4}>
+                Are you sure you want to reject this request?
+              </T.PXS>
+              <T.PXS mb={4}>
+                Please write a message to the intern so they know why you are
+                rejecting their request
+              </T.PXS>
+              <Input
+                onChange={onChange}
+                textArea
+                value={rejectMessage}
+                label="Other info"
+                helperText="Write a short bio so interns can find out a bit more about you"
+              />
+            </>
+          }
+        />
+      )}
+      {newBookingStatus === 'approve' && (
+        <Modal visible={modalOpen} onOK={submitAdminReview}>
+          <>
+            <T.PXS mb={2} mt={4}>
+              Are you sure you want to approve this request?
+            </T.PXS>
+          </>
+        </Modal>
       )}
     </>
   );

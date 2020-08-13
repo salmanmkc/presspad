@@ -18,18 +18,26 @@ const Modal = ({
   okButtonProps = {},
   ...props
 }) =>
-  AntdModal[type]({
-    title,
-    content: (
-      <ThemeProvider theme={theme}>
-        <MemoryRouter>{content}</MemoryRouter>
-      </ThemeProvider>
-    ),
-    okButtonProps: hideOkButton ? disableButton(okButtonProps) : okButtonProps,
-    maskClosable: true,
-    icon: false,
-    ...props,
-  });
+  type ? (
+    AntdModal[type]({
+      title,
+      content: (
+        <ThemeProvider theme={theme}>
+          <MemoryRouter>{content}</MemoryRouter>
+        </ThemeProvider>
+      ),
+      okButtonProps: hideOkButton
+        ? disableButton(okButtonProps)
+        : okButtonProps,
+      maskClosable: true,
+      icon: false,
+      ...props,
+    })
+  ) : (
+    <AntdModal maskClosable {...props}>
+      {content}
+    </AntdModal>
+  );
 
 Modal.info = props => Modal({ type: 'info', ...props });
 Modal.warning = props => Modal({ type: 'warning', ...props });
