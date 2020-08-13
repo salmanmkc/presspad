@@ -30,7 +30,7 @@ import ResetPassword, { SetPassword } from './ResetPassword';
 
 // Intern setting
 // import InternSettings from './Settings/Intern';
-// import DeleteInternAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
+import DeleteInternAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
 // import UnderReview from './Settings/Intern/UnderReview';
 import settingComponents from './Settings';
 
@@ -94,19 +94,31 @@ function Pages(props) {
         />
 
         <Route
+          isPrivate
           exact
-          path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
-          Component={settingComponents('deleteAccount', role)}
-          layout="illustrations"
-          mobileText="WE HOPE TO SEE YOU AGAIN!"
+          path={SETTINGS.UNDER_REVIEW}
+          Component={settingComponents('underReview', role)}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          isPrivate
+          exact
+          path={SETTINGS.BOOK_REVIEW}
+          Component={settingComponents('bookReview', role)}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
           {...props}
         />
 
         <Route
           exact
-          path={SETTINGS.UNDER_REVIEW}
-          Component={settingComponents('underReview', role)}
+          path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
+          Component={DeleteInternAccountSuccess}
           layout="illustrations"
+          mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
         />
 
