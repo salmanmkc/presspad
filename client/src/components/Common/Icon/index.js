@@ -45,6 +45,7 @@ import Hearts from './icons/Hearts';
 import Star from './icons/Star';
 import Ambassador from './icons/Ambassador';
 import Community from './icons/Community';
+import Key from './icons/Key';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -98,6 +99,7 @@ const iconMap = {
   star: Star,
   ambassador: Ambassador,
   community: Community,
+  key: Key,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {
