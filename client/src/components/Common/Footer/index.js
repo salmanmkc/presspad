@@ -1,78 +1,61 @@
 import React from 'react';
-import { Input, Button } from 'antd';
-import moment from 'moment';
+
+import * as S from './Footer.style';
+import * as T from '../Typography';
+import Icon from '../Icon';
+import { Col } from '../Grid';
 
 import {
-  Wrapper,
-  ContactWrapper,
-  CopyRightsWrapper,
-  SocialMediaIconsWrapper,
-  NewsLetter,
-  Title,
-  IconWrapper,
-  IconsWrapper,
-} from './Footer.style';
-import Icon from '../Icon';
+  TERMS_CONDITIONS,
+  COOKIE_POLICY,
+  PRIVACY_POLICY,
+  SOCIAL,
+} from '../../../constants/externalLinks';
 
 const Footer = () => (
-  <Wrapper>
-    <ContactWrapper>
-      <NewsLetter>
-        <Title>Join our newsletter</Title>
-        <div>
-          <Input
-            style={{ width: '245px', marginRight: '20px' }}
-            size="large"
-            placeholder="Enter your email address"
-            disabled
-          />
-          <Button
-            type="primary"
-            ghost
-            block={false}
-            size="large"
-            style={{ borderRadius: '0', cursor: 'not-allowed' }}
-          >
-            Subscribe
-          </Button>
-        </div>
-      </NewsLetter>
-      <SocialMediaIconsWrapper>
-        <Title>Get in touch</Title>
-
-        <IconsWrapper>
-          <IconWrapper>
-            <a href="https://twitter.com">
-              <Icon icon="twitter" />
-            </a>
-          </IconWrapper>
-          <IconWrapper>
-            <a href="https://facebook.com">
-              <Icon icon="facebook" />
-            </a>
-          </IconWrapper>
-          <IconWrapper>
-            <a href="https://instagram.com">
-              <Icon icon="instagram" />
-            </a>
-          </IconWrapper>
-          <IconWrapper>
-            <a href="https://linkedin.com">
-              <Icon icon="linkedin" />
-            </a>
-          </IconWrapper>
-          <IconWrapper>
-            <a href="https://youtube.com">
-              <Icon icon="youtube" />
-            </a>
-          </IconWrapper>
-        </IconsWrapper>
-      </SocialMediaIconsWrapper>
-    </ContactWrapper>
-    <CopyRightsWrapper>
-      Copyright © {moment().year()} PressPad
-    </CopyRightsWrapper>
-  </Wrapper>
+  <S.Wrapper>
+    <Col
+      w={[2, 8, 8]}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <T.Link
+        color="white"
+        isExternal
+        style={{ textDecoration: 'underline' }}
+        to={TERMS_CONDITIONS}
+        mb={1}
+      >
+        Terms of use
+      </T.Link>
+      <T.Link
+        color="white"
+        isExternal
+        style={{ textDecoration: 'underline' }}
+        to={COOKIE_POLICY}
+        mb={1}
+      >
+        Cookie policy
+      </T.Link>
+      <T.Link
+        color="white"
+        isExternal
+        style={{ textDecoration: 'underline' }}
+        to={PRIVACY_POLICY}
+      >
+        Privacy policy
+      </T.Link>
+    </Col>
+    <Col w={[2, 4, 4]} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      {Object.entries(SOCIAL).map(link => (
+        <S.SocialLink href={link[1]} target="_blank">
+          <Icon icon={link[0]} color="white" />{' '}
+        </S.SocialLink>
+      ))}
+    </Col>
+  </S.Wrapper>
 );
 
 export default Footer;

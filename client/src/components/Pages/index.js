@@ -205,6 +205,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
         {/* public host profile */}
@@ -214,6 +215,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
 
@@ -253,6 +255,7 @@ function Pages(props) {
               {...props}
             />
           )}
+          footer
           {...props}
         />
         <Route

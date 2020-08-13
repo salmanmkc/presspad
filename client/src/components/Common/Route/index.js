@@ -17,6 +17,7 @@ const Route = ({
   image,
   mobileText,
   color,
+  footer,
   ...rest
 }) => {
   const navbarProps = { userType: rest.role, resetState };
@@ -29,6 +30,7 @@ const Route = ({
       image={image}
       mobileText={mobileText}
       color={color}
+      footer={footer}
     >
       {isMounted ? (
         <>
