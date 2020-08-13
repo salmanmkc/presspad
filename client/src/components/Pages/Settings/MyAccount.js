@@ -6,6 +6,7 @@ import { Col, Row } from '../../Common/Grid';
 import * as S from './Host/style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
+import Icon from '../../Common/Icon';
 import { API_INTERN_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 import { SETTINGS } from '../../../constants/navRoutes';
@@ -90,6 +91,7 @@ const MyAccount = props => {
       {!changePasswordActive && (
         <Row>
           <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+            <Icon icon="key" width="25" style={{ display: 'inline' }} />
             <S.ChangePassword onClick={() => setChangePasswordActive(true)}>
               Change my password
             </S.ChangePassword>
