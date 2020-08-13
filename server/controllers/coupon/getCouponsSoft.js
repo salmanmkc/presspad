@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
 
     if (coupon[0].intern) {
       return next(
-        boom.badData(
+        boom.badRequest(
           'This coupon has already been used by a user. If it was you please log in first and try again.',
         ),
       );

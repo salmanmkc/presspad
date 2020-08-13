@@ -173,6 +173,7 @@ export default class BookingView extends Component {
               (calculatePrice(discountDays) * discountRate) / 100;
 
             const availableAmount = reservedAmount - usedAmount;
+
             if (availableAmount < couponDiscount) {
               couponDiscount = availableAmount;
             }

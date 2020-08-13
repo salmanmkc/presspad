@@ -7,7 +7,7 @@ import {
   API_COUPON_SOFT_URL,
 } from '../../../constants/apiRoutes';
 
-import { getDiscountDays } from '../../../helpers';
+import { getDiscountDays, calculatePrice } from '../../../helpers';
 
 // Typography
 import * as T from '../Typography';
@@ -74,8 +74,7 @@ const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
     });
 
     // calculate discount
-    couponDiscount = ((_bookingPrice * _discountRate) / 100).toFixed(2);
-
+    couponDiscount = (calculatePrice(_discountDays) * _discountRate) / 100;
     // get remaining amount
     const availableAmount = reservedAmount - usedAmount;
 

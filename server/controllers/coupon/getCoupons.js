@@ -22,6 +22,8 @@ module.exports = async (req, res, next) => {
         startDate: 1,
         endDate: 1,
         intern: 1,
+        reservedAmount: 1,
+        usedAmount: 1,
       };
     }
     const coupon = await getCouponsQuery(query, queryProject).exec();
@@ -31,8 +33,6 @@ module.exports = async (req, res, next) => {
 
     // check if coupon has been used by another user
     if (coupon[0].intern && coupon[0].intern.toString() !== userId.toString()) {
-      console.log('user', userId);
-      console.log('intern', coupon[0].intern);
       return next(
         boom.badRequest('This coupon has already been used by another user.'),
       );

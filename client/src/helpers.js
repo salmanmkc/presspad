@@ -104,8 +104,8 @@ export const calculatePriceByRange = range => {
 };
 
 /**
- * calculate booking the price giving range of dates
- * this will discount the 14 free days
+ * calculate coupon price giving a range of dates
+ * this will discount the 14 free days and add 3 days to either side of internship start and end date
  * @param {import("moment-range").MomentRange} range
  */
 export const calculateCouponPriceByRange = (
