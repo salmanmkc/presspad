@@ -11,31 +11,63 @@ export const useGetApplications = type => {
   const [loading, setLoading] = useState(false);
   const [fetchData, setFetchData] = useState(0);
 
+  const onChangeBursaryPoints = (e, rowData) => {
+    setData(oldState =>
+      oldState.map(row => {
+        if (row._id === rowData._id) {
+          return {
+            ...row,
+            bursaryPoints: e.target.value,
+            changed: true,
+          };
+        }
+        return row;
+      }),
+    );
+  };
+
   const updateBursaryPoints = async (e, rowData) => {
     const { _id } = rowData;
     const bursaryPoints = e.target.value;
-    if (bursaryPoints) {
-      try {
-        await axios.patch(
-          `${API_UPDATE_BURSARY_APPLICATIONS.replace(':id', _id)}`,
-          { bursaryPoints },
-          { params: { type: 'update-points' } },
-        );
-        setFetchData(count => count + 1);
-      } catch (error) {
-        if (error.response && error.response.data) {
-          setData(oldState =>
-            oldState.map(row => {
-              if (row._id === _id) {
-                return {
-                  ...row,
-                  error: error.response.data.error,
-                };
-              }
-              return row;
-            }),
+    const { changed } = data.find(app => app._id === _id);
+
+    // eslint-disable-next-line eqeqeq
+    if (changed) {
+      if (bursaryPoints && Number(bursaryPoints)) {
+        try {
+          await axios.patch(
+            `${API_UPDATE_BURSARY_APPLICATIONS.replace(':id', _id)}`,
+            { bursaryPoints },
+            { params: { type: 'update-points' } },
           );
+          setFetchData(count => count + 1);
+        } catch (error) {
+          if (error.response && error.response.data) {
+            setData(oldState =>
+              oldState.map(row => {
+                if (row._id === _id) {
+                  return {
+                    ...row,
+                    error: error.response.data.error,
+                  };
+                }
+                return row;
+              }),
+            );
+          }
         }
+      } else {
+        setData(oldState =>
+          oldState.map(row => {
+            if (row._id === _id) {
+              return {
+                ...row,
+                error: 'You must enter numbers',
+              };
+            }
+            return row;
+          }),
+        );
       }
     }
   };
@@ -102,5 +134,11 @@ export const useGetApplications = type => {
     };
   }, [fetchData, type]);
 
-  return { data, loading, updateBursaryPoints, inviteToInterview };
+  return {
+    data,
+    loading,
+    updateBursaryPoints,
+    onChangeBursaryPoints,
+    inviteToInterview,
+  };
 };

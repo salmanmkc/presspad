@@ -342,6 +342,8 @@ export const calculateHostRespondingTime = (
 };
 
 export const formatPrice = (price, fractionDigits) => {
+  if (!price) return 0;
+
   if (!fractionDigits && price % 1 !== 0) {
     // eslint-disable-next-line no-param-reassign
     fractionDigits = 2;

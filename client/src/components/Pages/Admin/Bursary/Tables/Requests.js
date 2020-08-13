@@ -21,7 +21,12 @@ const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
 }));
 
 const Requests = ({ sendToResponse }) => {
-  const { data, loading, updateBursaryPoints } = useGetApplications('request');
+  const {
+    data,
+    loading,
+    updateBursaryPoints,
+    onChangeBursaryPoints,
+  } = useGetApplications('request');
 
   const exportData = () =>
     console.log('function to export all bursary data for these requests');
@@ -30,7 +35,7 @@ const Requests = ({ sendToResponse }) => {
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('typeOfUser'),
     StandardCol('dateRequested', 'date'),
-    InputCol('bursaryPoints', null, updateBursaryPoints),
+    InputCol('bursaryPoints', onChangeBursaryPoints, updateBursaryPoints),
     DropdownCol('approvalAction', sendToResponse, selectOptions),
   ];
 

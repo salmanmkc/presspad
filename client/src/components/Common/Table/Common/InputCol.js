@@ -12,6 +12,7 @@ const InputCol = (colTitle, onChange, onBlur) => ({
       onChange={e => onChange && onChange(e, rowData)}
       onBlur={e => onBlur && onBlur(e, rowData)}
       defaultValue={text}
+      value={onChange ? text : undefined}
       error={rowData.error}
     />
   ),

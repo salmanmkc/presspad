@@ -75,7 +75,7 @@ const getBursaryApplications = type => {
               $expr: {
                 $and: [
                   { $eq: ['$$internId', '$intern'] },
-                  { $ne: ['$$applicationId', '$_id'] },
+                  // { $ne: ['$$applicationId', '$_id'] },
                   { $eq: ['$status', bursaryApplicationStatuses.rejected] },
                 ],
               },

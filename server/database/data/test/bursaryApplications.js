@@ -56,8 +56,8 @@ const createAll = async ({ users }) => {
       typeOfUser: 'new',
       startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      totalPotentialAmount: 2000,
-      totalSpentSoFar: 1500,
+      totalPotentialAmount: 2000 * 100,
+      totalSpentSoFar: 1500 * 100,
       bursaryPoints: 200,
     },
     {
@@ -66,8 +66,8 @@ const createAll = async ({ users }) => {
       typeOfUser: 'existing',
       startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
-      totalPotentialAmount: 1000,
-      totalSpentSoFar: 500,
+      totalPotentialAmount: 1000 * 100,
+      totalSpentSoFar: 500 * 100,
       bursaryPoints: 200,
     },
   ];

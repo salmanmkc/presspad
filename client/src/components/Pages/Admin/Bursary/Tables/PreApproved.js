@@ -24,6 +24,7 @@ const PreApproved = ({ sendToResponse }) => {
   const {
     data,
     loading,
+    onChangeBursaryPoints,
     updateBursaryPoints,
     inviteToInterview,
   } = useGetApplications('pre-approved');
@@ -35,7 +36,7 @@ const PreApproved = ({ sendToResponse }) => {
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('typeOfUser'),
     StandardCol('dateRequested', 'date'),
-    InputCol('bursaryPoints', null, updateBursaryPoints),
+    InputCol('bursaryPoints', onChangeBursaryPoints, updateBursaryPoints),
     InterviewCol('interview', inviteToInterview),
     DropdownCol('approvalAction', sendToResponse, selectOptions),
   ];

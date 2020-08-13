@@ -5,7 +5,7 @@ import { Row, Col } from '../../../../Common/Grid';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
 
-import formatPrice from '../../../../../helpers/formatPrice';
+import { formatPrice } from '../../../../../helpers';
 
 const renderExpandedSection = rowData => {
   const {
