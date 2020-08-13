@@ -46,92 +46,55 @@ const getCleanData = (d = {}) => ({
 });
 
 const MyListing = props => {
-  const [state, setState] = useState({
-    profileImage: {
-      fileName: '',
-      url: '',
-    },
-    homeImages: [
-      {
-        fileName: '',
-        url: '',
-      },
-    ],
-    bio: '',
-    useReasonAnswer: '',
-    storyAnswer: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    postcode: '',
-    availableDates: [
-      {
-        startDate: '',
-        endDate: '',
-      },
-    ],
-    aboutHome: [],
-    extraInfo: '',
-    otherInfo: '',
-    mentorExperience: '',
-    industryExperience: '',
-  });
+  const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [startUpload, setStartUpload] = useState(false);
+  // const [startUpload, setStartUpload] = useState(false);
   const [prevData, setPrevData] = useState({});
 
   // for images
-  const [uploading, setUploading] = useState(false);
-  const [uploadingDone, setUploadingDone] = useState(false);
+  // const [uploading, setUploading] = useState(false);
+  // const [uploadingDone, setUploadingDone] = useState(false);
 
-  useEffect(() => {
-    const upload = async () => {
-      try {
-        setUploading(true);
-        const generatedName = `${props.id}/${Date.now()}.${
-          state.profileImage.name
-        }`;
-        const {
-          data: { signedUrl },
-        } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
-        const headers = {
-          'Content-Type': 'application/octet-stream',
-        };
+  const upload = async file => {
+    try {
+      const generatedName = `${props.id}/${Date.now()}.${file.name}`;
+      const {
+        data: { signedUrl },
+      } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
+      const headers = {
+        'Content-Type': 'application/octet-stream',
+      };
 
-        await axios.put(signedUrl, state.profileImage, {
-          headers,
-        });
+      await axios.put(signedUrl, file, {
+        headers,
+      });
 
-        setState(_state => ({
-          ..._state,
-          profileImage: {
-            fileName: generatedName,
-            new: true,
-            uploaded: true,
-            preview: _state.profileImage.preview,
-          },
-        }));
-        setUploadingDone(true);
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setUploading(false);
-      }
-    };
-
-    if (
-      startUpload &&
-      state.profileImage.new &&
-      !state.profileImage.uploaded &&
-      !state.profileImage.deleted
-    ) {
-      upload();
+      return {
+        fileName: generatedName,
+        new: true,
+        uploaded: true,
+        preview: file.preview,
+      };
+    } catch (e) {
+      setError(e.message);
     }
-  }, [props.id, startUpload, state.profileImage]);
+  };
+
+  // useEffect(() => {
+
+  //   if (
+  //     startUpload &&
+  //     state.profileImage.new &&
+  //     !state.profileImage.uploaded &&
+  //     !state.profileImage.deleted
+  //   ) {
+  //     upload();
+  //   }
+  // }, [props.id, startUpload, state.profileImage]);
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
@@ -179,27 +142,29 @@ const MyListing = props => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const update = async () => {
+  const update = async (_profileImage, _homeImages) => {
     try {
       setLoading(true);
       await axios.patch(API_INTERN_SETTINGS_MY_PROFILE, {
         ...state,
+        profileImage: _profileImage || state.profileImage,
+        homeImages: _homeImages || state.homeImages,
         prevImageFileNameToDelete:
           state.profileImage &&
           state.profileImage.new &&
           prevData.profileImage &&
-          prevData.profileImage.fileName &&
           prevData.profileImage.fileName,
+        homeImagesToDelete: _homeImages
+          .filter(e => e.deleted && !e.new)
+          .map(e => e.fileName),
       });
       setNotificationOpen(true);
     } catch (e) {
       setError(e.response.data.error);
     } finally {
       setLoading(false);
-      setUploadingDone(false);
     }
   };
-
   const onSubmit = async () => {
     const _errors = await _validate();
     setErrors(_errors || {});
@@ -209,23 +174,56 @@ const MyListing = props => {
       return;
     }
     setError();
+    let _profileImage;
+    let _homeImages;
     if (
-      state.profileImage &&
-      state.profileImage.new &&
-      !state.profileImage.uploaded
+      (state.profileImage &&
+        state.profileImage.new &&
+        !state.profileImage.uploaded) ||
+      (state.homeImages && state.homeImages.find(e => e.new && !e.uploaded))
     ) {
-      setStartUpload(true);
+      const promiseArr = [];
+      if (state.profileImage && state.profileImage.new) {
+        promiseArr.push(
+          upload(state.profileImage).catch(err =>
+            setErrors(e => ({ ...e, profileImage: err.message })),
+          ),
+        );
+      } else {
+        promiseArr.push(Promise.resolve());
+      }
+      if (
+        state.homeImages &&
+        state.homeImages.find(e => e.new && !e.uploaded)
+      ) {
+        const filteredFiles = state.homeImages.filter(
+          e => e.new && !e.uploaded && !e.deleted,
+        );
+        filteredFiles.forEach(file => {
+          promiseArr.push(
+            upload(file),
+            // .catch(err =>
+            //   setErrors(e => ({ ...e, profileImage: err.message })),
+            // ),
+          );
+        });
+      } else {
+        promiseArr.push(Promise.resolve());
+      }
+
+      [_profileImage, _homeImages] = await Promise.all(promiseArr);
+      update(_profileImage, _homeImages);
     } else {
       update();
     }
   };
 
-  useEffect(() => {
-    if (uploadingDone) {
-      update();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uploadingDone]);
+  // useEffect(() => {
+  //   if (uploadingDone) {
+  //     update();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [uploadingDone]);
 
   useEffect(() => {
     const getData = async () => {
@@ -273,7 +271,7 @@ const MyListing = props => {
                Min. 3 photos (up to 9 photos)
             </T.PXS>
             <UploadFile
-              files={state.homeImages.filter(e => !e.deleted)}
+              files={state.homeImages}
               setFiles={homeImages => {
                 setState(_state => ({ ..._state, homeImages }));
               }}
@@ -283,6 +281,7 @@ const MyListing = props => {
               }}
               mainText="Upload more photos by dragging new photos here"
               secondaryText="file size max 2mb"
+              maxLimit={9}
             />
           </div>
         </Col>
@@ -473,11 +472,7 @@ const MyListing = props => {
         <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
           {error && <T.PXS color="pink">{error}</T.PXS>}
 
-          <Button
-            type="secondary"
-            onClick={onSubmit}
-            loading={loading || uploading}
-          >
+          <Button type="secondary" onClick={onSubmit} loading={loading}>
             SAVE CHANGES
           </Button>
         </Col>

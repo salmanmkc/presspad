@@ -197,19 +197,16 @@ const Verifications = props => {
           state.photoID &&
           state.photoID.new &&
           prevData.photoID &&
-          prevData.photoID.fileName &&
           prevData.photoID.fileName,
         prevDBSCheckToDelete:
           state.DBSCheck &&
           state.DBSCheck.new &&
           prevData.DBSCheck &&
-          prevData.DBSCheck.fileName &&
           prevData.DBSCheck.fileName,
         proofMediaToDelete:
           state.proofMedia &&
           state.proofMedia.new &&
           prevData.proofMedia &&
-          prevData.proofMedia.fileName &&
           prevData.proofMedia.fileName,
       });
     } catch (e) {

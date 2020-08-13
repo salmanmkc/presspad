@@ -22,10 +22,13 @@ const UploadFile = ({
   setFiles,
   error: _error,
   fullWidth,
+  maxLimit,
 }) => {
   // const [files, setFiles] = useState([]);
   const [error, setError] = useState('');
-
+  const filteredFiles = files.filter(
+    file => file && !file.deleted && (file.name || file.fileName),
+  );
   const onDropRejected = errors => {
     if (
       errors &&
@@ -44,7 +47,7 @@ const UploadFile = ({
 
   const onMultiDrop = acceptedFiles => {
     const updatedFiles = [
-      ...files,
+      ...filteredFiles,
       acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
@@ -52,7 +55,7 @@ const UploadFile = ({
         }),
       ),
     ].reduce((acc, val) => acc.concat(val), []);
-    setFiles(updatedFiles);
+    setFiles(updatedFiles.slice(0, maxLimit || updatedFiles.length));
   };
 
   const onSingleDrop = acceptedFiles => {
@@ -67,28 +70,36 @@ const UploadFile = ({
   };
 
   const removeFile = index => {
-    const updatedFiles = files.map((file, i) =>
+    const updatedFiles = filteredFiles.map((file, i) =>
       index !== i ? file : { ...file, deleted: true },
     );
     setFiles(updatedFiles);
   };
 
-  const thumbs = files
-    .filter(file => file && !file.deleted && (file.name || file.fileName))
-    .map((file, index) => (
-      <Col w={profile ? [4, 12, 12] : [4, 4, 4]}>
-        {type === 'file' ? (
-          <S.FileWrapper>
-            <T.Link
-              color="pink"
-              isExternal
-              href={file.preview}
-              download={file.path || file.url}
-              mr={2}
-              style={{ textDecoration: 'underline' }}
-            >
-              {file.path || file.fileName}
-            </T.Link>
+  const thumbs = filteredFiles.map((file, index) => (
+    <Col w={profile ? [4, 12, 12] : [4, 4, 4]}>
+      {type === 'file' ? (
+        <S.FileWrapper>
+          <T.Link
+            color="pink"
+            isExternal
+            href={file.preview}
+            download={file.path || file.url}
+            mr={2}
+            style={{ textDecoration: 'underline' }}
+          >
+            {file.path || file.fileName}
+          </T.Link>
+          <S.DeleteBtn onClick={() => removeFile(index)}>
+            <Icon icon="crossCircle" color="pink" width="21px" height="21px" />
+          </S.DeleteBtn>
+        </S.FileWrapper>
+      ) : (
+        <S.Thumb key={file.name} profile={profile}>
+          <S.ThumbInner image={file.preview}>
+            <S.ImageWrap profile={profile}>
+              <S.StyledImage src={file.preview || file.url} />
+            </S.ImageWrap>
             <S.DeleteBtn onClick={() => removeFile(index)}>
               <Icon
                 icon="crossCircle"
@@ -96,30 +107,15 @@ const UploadFile = ({
                 width="21px"
                 height="21px"
               />
+              <T.PXSBold color="pink" ml="1">
+                DELETE
+              </T.PXSBold>
             </S.DeleteBtn>
-          </S.FileWrapper>
-        ) : (
-          <S.Thumb key={file.name} profile={profile}>
-            <S.ThumbInner image={file.preview}>
-              <S.ImageWrap profile={profile}>
-                <S.StyledImage src={file.preview || file.url} />
-              </S.ImageWrap>
-              <S.DeleteBtn onClick={() => removeFile(index)}>
-                <Icon
-                  icon="crossCircle"
-                  color="pink"
-                  width="21px"
-                  height="21px"
-                />
-                <T.PXSBold color="pink" ml="1">
-                  DELETE
-                </T.PXSBold>
-              </S.DeleteBtn>
-            </S.ThumbInner>
-          </S.Thumb>
-        )}
-      </Col>
-    ));
+          </S.ThumbInner>
+        </S.Thumb>
+      )}
+    </Col>
+  ));
 
   return (
     <Dropzone
@@ -129,13 +125,12 @@ const UploadFile = ({
       maxSize={maxSize}
       onDropRejected={onDropRejected}
       disabled={disabled}
+      maxFiles={3}
     >
       {({ getRootProps, getInputProps }) => (
         <Row>
           <S.UploadContainer profile={profile}>
-            {files.filter(
-              file => file && !file.deleted && (file.name || file.fileName),
-            ).length > 0 && (
+            {filteredFiles.length > 0 && (
               <Col w={profile ? [4, 4, 3] : [4, 12, 12]}>
                 <S.ThumbsContainer profile={profile}>
                   {thumbs}
