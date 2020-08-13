@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import * as T from '../../Typography';
 import camelToWords from '../../../../helpers/camelToWords';
 import { formatPrice, createSingleDate } from '../../../../helpers';
@@ -9,7 +10,7 @@ const formatText = (text, type) => {
     case 'date':
       return createSingleDate(text);
     case 'price':
-      return formatPrice(text);
+      return `£${formatPrice(text)}`;
     case 'perc':
       return `${text}%`;
     default:
@@ -20,13 +21,17 @@ const formatText = (text, type) => {
 const decideSort = (a, b, colTitle, type) => {
   switch (type) {
     case 'date':
-      return a[colTitle] - b[colTitle];
+      return (
+        a[colTitle] ||
+        moment('01/01/1980') - b[colTitle] ||
+        moment('01/01/1980')
+      );
     case 'price':
-      return a[colTitle] - b[colTitle];
+      return a[colTitle] || 0 - b[colTitle] || 0;
     case 'number':
-      return a[colTitle] - b[colTitle];
+      return a[colTitle] || 0 - b[colTitle] || 0;
     case 'perc':
-      return a[colTitle] - b[colTitle];
+      return a[colTitle] || 0 - b[colTitle] || 0;
     default:
       return a[colTitle].localeCompare(b[colTitle]);
   }

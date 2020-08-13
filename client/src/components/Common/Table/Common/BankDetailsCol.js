@@ -14,7 +14,7 @@ const BankDetailsCol = (colTitle, onChange, onDelete) => ({
     text ? (
       <S.HouseViewing>
         <T.PXS color="black">{text}</T.PXS>
-        {rowData.pending && (
+        {rowData.status === 'pending' && (
           <S.StyledBtn
             noMargin
             onClick={() => onDelete(rowData, 'delete', colTitle)}
@@ -25,7 +25,7 @@ const BankDetailsCol = (colTitle, onChange, onDelete) => ({
       </S.HouseViewing>
     ) : (
       <>
-        {rowData.pending ? (
+        {rowData.status === 'pending' ? (
           <Input
             onChange={e =>
               onChange && onChange(e.target.value, colTitle, rowData.requestId)
