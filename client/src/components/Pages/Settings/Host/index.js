@@ -6,7 +6,7 @@ import { SETTINGS } from '../../../../constants/navRoutes';
 import * as S from './style';
 
 import MyAccount from '../MyAccount';
-import MyProfile from './MyProfile';
+import MyListing from './MyListing';
 import AboutMe from './AboutMe';
 import Verifications from './Verifications';
 import { withWindowWidth } from '../../../../HOCs';
@@ -20,7 +20,7 @@ function Settings({ windowWidth, ...props }) {
   return (
     <>
       <S.PageWrapper>
-        <Heading>HOsttt Settings</Heading>
+        <Heading>Settings</Heading>
         <S.TabsWrapper>
           <S.Tabs to={SETTINGS.ACCOUNT}>
             <T.H5C color="inherit" mb={0}>
@@ -34,7 +34,7 @@ function Settings({ windowWidth, ...props }) {
           </S.Tabs>
           <S.Tabs to={SETTINGS.EDIT_PROFILE}>
             <T.H5C color="inherit" mb={0}>
-              MY PROFILE
+              MY LISTING
             </T.H5C>
           </S.Tabs>
           <S.Tabs to={SETTINGS.VERIFY}>
@@ -56,7 +56,7 @@ function Settings({ windowWidth, ...props }) {
           />
           <Route
             path={SETTINGS.EDIT_PROFILE}
-            render={() => <MyProfile {...props} />}
+            render={() => <MyListing {...props} />}
             exact
           />
           <Route
