@@ -1,7 +1,7 @@
-const getMyBursary = require('./getMyBursary');
+const getBursary = require('./getBursary');
 const editBursary = require('./editBursary');
 
 module.exports = {
-  getMyBursary,
-  editBursary,
+  ...getBursary,
+  ...editBursary,
 };

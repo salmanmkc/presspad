@@ -7,6 +7,7 @@ const Profile = require('../../models/Profile');
 
 const { addOrg } = require('./organisation');
 const updateRespondingData = require('./updateRespondingData');
+const getUserByBursaryApplicationId = require('./getUserByBursaryApplicationId');
 const { createNewAccount } = require('../account');
 const { bookingStatuses } = require('../../../constants');
 
@@ -248,3 +249,4 @@ module.exports.findUserByToken = token =>
   });
 
 module.exports.updateRespondingData = updateRespondingData;
+module.exports.getUserByBursaryApplicationId = getUserByBursaryApplicationId;

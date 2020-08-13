@@ -69,12 +69,13 @@ const Table = ({
       <Row mb={4}>
         <Col w={[4, 12, 12]}>
           <AntdTable
+            rowKey={record => record._id || record.key}
             columns={columns}
             dataSource={filteredData}
             pagination={previewLink ? false : { pageSize }}
             scroll={{ x: '100% ' }}
             loading={loading}
-            onHeaderRow={() => 'hello'}
+            // onHeaderRow={() => 'hello'}
             expandable={
               expandedSection && {
                 expandedRowRender: (rowData, index) =>

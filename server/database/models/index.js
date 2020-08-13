@@ -15,6 +15,8 @@ const ScheduledEmail = require('./ScheduledEmail');
 const User = require('./User');
 const WithdrawRequest = require('./WithdrawRequest');
 const Bursary = require('./Bursary');
+const BursaryApplication = require('./BursaryApplication');
+const BursaryWindow = require('./BursaryWindow');
 
 module.exports = {
   Account,
@@ -34,4 +36,6 @@ module.exports = {
   User,
   WithdrawRequest,
   Bursary,
+  BursaryApplication,
+  BursaryWindow,
 };

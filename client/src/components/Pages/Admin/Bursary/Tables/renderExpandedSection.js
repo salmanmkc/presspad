@@ -5,10 +5,16 @@ import { Row, Col } from '../../../../Common/Grid';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
 
-import formatPrice from '../../../../../helpers/formatPrice';
+import { formatPrice } from '../../../../../helpers';
 
-const renderExpandedSection = (rowData, index) => {
-  const { email, rejectedBursaries, awardedBursariesCost, name, id } = rowData;
+const renderExpandedSection = rowData => {
+  const {
+    intern: { email },
+    rejectedBursaries,
+    awardedBursariesCost,
+    name,
+    id,
+  } = rowData;
   return (
     <>
       <Row mb={2}>

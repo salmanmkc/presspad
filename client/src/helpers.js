@@ -341,8 +341,17 @@ export const calculateHostRespondingTime = (
   return hostRespondingTime || 7;
 };
 
-export const formatPrice = (price, fractionDigits) =>
-  (price / 100).toFixed(fractionDigits);
+export const formatPrice = (price, fractionDigits) => {
+  if (!price) return 0;
+
+  if (!fractionDigits && price % 1 !== 0) {
+    // eslint-disable-next-line no-param-reassign
+    fractionDigits = 2;
+  }
+  return (price / 100)
+    .toFixed(fractionDigits)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
 
 export const truncateString = (string, maxLength) =>
   string.length > maxLength ? `${string.slice(0, maxLength)}...` : string;

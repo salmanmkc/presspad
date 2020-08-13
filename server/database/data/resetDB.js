@@ -15,7 +15,10 @@ const {
   ScheduledEmail,
   User,
   WithdrawRequest,
-} = require('./../models');
+  Bursary,
+  BursaryWindow,
+  BursaryApplication,
+} = require('../models');
 
 const resetDB = async () => {
   try {
@@ -35,6 +38,9 @@ const resetDB = async () => {
     await ScheduledEmail.deleteMany();
     await User.deleteMany();
     await WithdrawRequest.deleteMany();
+    await Bursary.deleteMany();
+    await BursaryWindow.deleteMany();
+    await BursaryApplication.deleteMany();
   } catch (err) {
     console.log('Error during resting the db, try again', err);
     throw err;
