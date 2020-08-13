@@ -110,7 +110,7 @@ export default class SignInPage extends Component {
     const { emailError, passwordError } = errors;
     const { onInputChange, onFormSubmit } = this;
     return (
-      <>
+      <form onSubmit={onFormSubmit}>
         <Row>
           <Title withBg mb="0">
             <Col w={[4, 12, 12]}>login</Col>
@@ -148,6 +148,7 @@ export default class SignInPage extends Component {
                 Forgot password?
               </T.Link>
             </p>
+            <S.HiddenInput type="submit" />
             {msg && <S.ErrorMsg>{msg}</S.ErrorMsg>}
             <Button type="secondary" onClick={onFormSubmit}>
               Sign in
@@ -160,7 +161,7 @@ export default class SignInPage extends Component {
             </T.P>
           </Col>
         </Row>
-      </>
+      </form>
     );
   }
 }

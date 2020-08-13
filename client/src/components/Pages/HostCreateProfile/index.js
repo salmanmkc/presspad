@@ -5,7 +5,7 @@ import {
   API_HOST_COMPLETE_PROFILE,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
-import { DASHBOARD_URL } from '../../../constants/navRoutes';
+import { WELCOME_PAGES } from '../../../constants/navRoutes';
 import Content from './Content';
 import {
   checkSelectedRange,
@@ -254,7 +254,7 @@ export default class HostCreateProfile extends Component {
             />
           ),
           onOk: () => {
-            this.props.history.push(DASHBOARD_URL);
+            this.props.history.push(WELCOME_PAGES.replace(':id', 1));
           },
           type: 'success',
         });
