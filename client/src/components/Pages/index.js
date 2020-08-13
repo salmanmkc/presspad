@@ -28,10 +28,7 @@ import SignUpFunnelPage from './SignUpFunnelPage';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
 
-// Intern setting
-// import InternSettings from './Settings/Intern';
 import DeleteInternAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
-// import UnderReview from './Settings/Intern/UnderReview';
 import settingComponents from './Settings';
 
 import { withWindowWidth } from '../../HOCs';
