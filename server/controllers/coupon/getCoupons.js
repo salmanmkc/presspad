@@ -37,6 +37,7 @@ module.exports = async (req, res, next) => {
         boom.badRequest('This coupon has already been used by another user.'),
       );
     }
+
     return res.json({ data: coupon });
   } catch (error) {
     return next(boom.badImplementation(error));

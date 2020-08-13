@@ -75,6 +75,7 @@ const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
 
     // calculate discount
     couponDiscount = (calculatePrice(_discountDays) * _discountRate) / 100;
+
     // get remaining amount
     const availableAmount = reservedAmount - usedAmount;
 

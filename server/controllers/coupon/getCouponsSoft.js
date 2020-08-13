@@ -20,6 +20,8 @@ module.exports = async (req, res, next) => {
       startDate: 1,
       endDate: 1,
       intern: 1,
+      reservedAmount: 1,
+      usedAmount: 1,
     };
 
     const coupon = await getCouponsQuery(query, queryProject).exec();
