@@ -1,5 +1,7 @@
 const { Bursary } = require('../../models');
-const { bursaryTypes: t } = require('../../constants');
+const {
+  types: { bursaryTypes: t },
+} = require('../../constants');
 
 const reset = () => Bursary.deleteMany();
 
@@ -18,14 +20,11 @@ const createAll = async ({ users }) => {
       comingFromLowerSociolEconomicBackground:
         t.comingFromLowerSociolEconomicBackground[0],
       householdMembersSpeakOtherLanguage:
-        t.householdMembersSpeakOtherLanguage[0],
-      otherLanguageHouseholdMembersSpeak: 'urdu',
+        t.householdMembersSpeakOtherLanguage[1],
+      householdMembersSpeakOtherLanguageYes: 'urdu',
       annualHouseholdIncome: t.annualHouseholdIncome[0],
       statusOfHome: t.statusOfHome[0],
-      anyHouseholdReceiveTheFollowing: [
-        t.anyHouseholdReceiveTheFollowing[0],
-        t.anyHouseholdReceiveTheFollowing[2],
-      ],
+      anyHouseholdReceive: [t.anyHouseholdReceive[0], t.anyHouseholdReceive[2]],
       benefitFromNepotism: t.benefitFromNepotism[0],
       peopleYouKnowSocially: [
         t.peopleYouKnowSocially[1],
