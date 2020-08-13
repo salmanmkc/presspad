@@ -1,6 +1,11 @@
+// intern setting
 import InternSettings from './Intern';
-import DeleteInternAccountSuccess from './Intern/DeleteAccountSuccess';
 import UnderReview from './Intern/UnderReview';
+
+// host setting
+import HostSetting from './Host';
+import HostUnderReview from './Host/UnderReview';
+import HostBookReview from './Host/BookReview';
 
 // eslint-disable-next-line consistent-return
 const settingComponents = (pageName, role) => {
@@ -8,10 +13,19 @@ const settingComponents = (pageName, role) => {
     switch (pageName) {
       case 'setting':
         return InternSettings;
-      case 'deleteAccount':
-        return DeleteInternAccountSuccess;
       case 'underReview':
         return UnderReview;
+      default:
+        break;
+    }
+  } else if (role === 'host') {
+    switch (pageName) {
+      case 'setting':
+        return HostSetting;
+      case 'underReview':
+        return HostUnderReview;
+      case 'bookReview':
+        return HostBookReview;
       default:
         break;
     }
