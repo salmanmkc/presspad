@@ -1,11 +1,58 @@
 const boom = require('boom');
 const {
+  editBursaryById,
   upsertBursaryWindow,
   updateBursaryApplication,
 } = require('../../database/queries/bursary');
-const { bursaryApplicationStatuses } = require('../../database/constants');
+const {
+  findProfile,
+  updateUserProfile,
+} = require('../../database/queries/profiles');
+const { getUserByBursaryId } = require('../../database/queries/user');
 const approveBursaryApplication = require('./approveBursaryApplication');
+
+const { internCompleteProfile } = require('../../../client/src/validation');
+const { bursaryApplicationStatuses } = require('../../database/constants');
 const pubSub = require('../../pubSub');
+
+module.exports.editBursary = async (req, res, next) => {
+  let completed;
+
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const bursary = await editBursaryById(id, data);
+    const user = await getUserByBursaryId(id);
+    const profile = await findProfile(user._id);
+
+    try {
+      await internCompleteProfile.validate({ ...bursary, ...profile });
+      completed = true;
+    } catch (error) {
+      completed = false;
+    }
+
+    if (!completed) {
+      await updateUserProfile(user._id, {
+        awaitingReview: false,
+        verified: false,
+      });
+    } else if (updateUserProfile.verified) {
+      // do nothing
+    } else if (updateUserProfile.awaitingReview) {
+      await updateUserProfile(user._id, {
+        awaitingReview: true,
+        awaitingReviewDate: Date.now(),
+        verified: false,
+      });
+    }
+
+    return res.json(bursary);
+  } catch (err) {
+    next(boom.badImplementation(err));
+  }
+};
 
 module.exports.upsertBursaryWindows = async (req, res, next) => {
   try {

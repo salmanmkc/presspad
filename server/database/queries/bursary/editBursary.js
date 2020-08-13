@@ -1,5 +1,6 @@
-const { BursaryWindow, BursaryApplication } = require('../../models');
-// const { bursaryWindowStatuses } = require('../../constants');
+const { BursaryWindow, BursaryApplication, Bursary } = require('../../models');
+
+const editBursaryById = (id, data) => Bursary.findByIdAndUpdate(id, data);
 
 const upsertBursaryWindow = bursaryWindow => {
   if (bursaryWindow._id) {
@@ -22,6 +23,7 @@ const updateBursaryApplication = ({ id, updateData, session }) => {
 };
 
 module.exports = {
+  editBursaryById,
   upsertBursaryWindow,
   updateBursaryApplication,
 };

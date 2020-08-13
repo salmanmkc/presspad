@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const { bursaryTypes: t } = require('../constants');
+const {
+  types: { bursaryTypes: t },
+} = require('../constants');
 
 const { Schema, model } = mongoose;
 
@@ -15,9 +17,15 @@ const bursarySchema = new Schema(
       type: String,
       enum: t.typeOfSchool,
     },
+    typeOfSchoolOther: {
+      type: String,
+    },
     highestLevelOfQualifications: {
       type: String,
       enum: t.highestLevelOfQualifications,
+    },
+    highestLevelOfQualificationsOther: {
+      type: String,
     },
     describeMainIncomeEarnerMainJob: {
       type: String,
@@ -41,11 +49,14 @@ const bursarySchema = new Schema(
       type: String,
       enum: t.comingFromLowerSociolEconomicBackground,
     },
+    comingFromLowerSociolEconomicBackgroundOther: {
+      type: String,
+    },
     householdMembersSpeakOtherLanguage: {
       type: String,
       enum: t.householdMembersSpeakOtherLanguage,
     },
-    otherLanguageHouseholdMembersSpeak: {
+    householdMembersSpeakOtherLanguageYes: {
       // If they say yes in previous question
       type: String,
     },
@@ -57,10 +68,13 @@ const bursarySchema = new Schema(
       type: String,
       enum: t.statusOfHome,
     },
-    anyHouseholdReceiveTheFollowing: [
+    statusOfHomeOther: {
+      type: String,
+    },
+    anyHouseholdReceive: [
       {
         type: String,
-        enum: t.anyHouseholdReceiveTheFollowing,
+        enum: t.anyHouseholdReceive,
       },
     ],
     benefitFromNepotism: {

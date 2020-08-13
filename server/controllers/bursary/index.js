@@ -1,7 +1,7 @@
 const getBursary = require('./getBursary');
-const update = require('./update');
+const editBursary = require('./editBursary');
 
 module.exports = {
   ...getBursary,
-  ...update,
+  ...editBursary,
 };

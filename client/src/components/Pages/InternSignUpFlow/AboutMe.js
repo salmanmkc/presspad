@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { CloseOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 import { Input, DatePicker, Select } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
@@ -13,9 +13,10 @@ import {
 import Notification from '../../Common/Notification';
 import { CLASSES_DEFINITIONS } from '../../../constants/externalLinks';
 import types from '../../../constants/types';
-import { SETTINGS } from '../../../constants/navRoutes';
+import { INTERN_SIGNUP_BURSARY } from '../../../constants/navRoutes';
+import Title from '../../Common/Title';
 
-const { validate, internSettings } = require('../../../validation');
+const { validate, internSignup } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
   birthDate: d.birthDate || null,
@@ -42,22 +43,32 @@ const getCleanData = (d = {}) => ({
 });
 
 const AboutMe = () => {
+  const history = useHistory();
   const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
   const [mainError, setMainError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [continueLoading, setContinueLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [prevData, setPrevData] = useState({});
+  const [lastClickOnContinue, setLastClickOnContinue] = useState({});
 
-  const _validate = async () => {
+  const _validate = async isContinue => {
     const { errors: _errors } = await validate({
-      schema: internSettings.aboutMeSchema(prevData),
+      schema: internSignup.aboutMeSchema(prevData, isContinue),
       data: { ...state },
     });
 
     return _errors;
   };
+
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
 
   const onInputChange = e => {
     const { value, name } = e.target;
@@ -66,9 +77,12 @@ const AboutMe = () => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const onSubmit = async () => {
+  const onSave = async isContinue => {
     try {
-      const _errors = await _validate();
+      setErrors({});
+      setLastClickOnContinue(isContinue);
+
+      const _errors = await _validate(isContinue);
 
       setErrors(_errors || {});
 
@@ -78,13 +92,19 @@ const AboutMe = () => {
       }
       setMainError();
 
-      setLoading(true);
+      if (isContinue) {
+        setContinueLoading(true);
+      } else {
+        setSaveLoading(true);
+      }
+
       await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
     } catch (e) {
       setMainError(e.response.data.error);
     } finally {
-      setLoading(false);
+      setContinueLoading(false);
+      setSaveLoading(false);
     }
   };
 
@@ -136,10 +156,29 @@ const AboutMe = () => {
     getData();
   }, []);
 
+  const done = () => {
+    if (lastClickOnContinue) {
+      history.push(INTERN_SIGNUP_BURSARY);
+    }
+  };
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '4rem', paddingBottom: '5rem' }}>
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Title withBg mb="0">
+          <Col w={[4, 12, 12]}>ABOUT ME</Col>
+        </Title>
+      </Row>
+
+      <Row>
+        <Col w={[4, 12, 12]}>
+          <T.H5 color="blue">
+            First off we need to find out a bit more about you.
+          </T.H5>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <DatePicker
             onChange={momentDate =>
               setState(_state => ({ ..._state, birthDate: momentDate }))
@@ -149,7 +188,9 @@ const AboutMe = () => {
             error={errors.birthDate}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.phoneNumber}
@@ -161,7 +202,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.hometown}
@@ -170,7 +211,9 @@ const AboutMe = () => {
             error={errors.hometown}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.lastStudySubject}
@@ -182,7 +225,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.lastStudyUniversity}
@@ -191,7 +234,9 @@ const AboutMe = () => {
             error={errors.lastStudyUniversity}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      </Row>
+      <Row>
+        <Col w={[4, 8, 8]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.hearAboutPressPadAnswer}
@@ -221,7 +266,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.gender.map(e => ({ label: e, value: e }))}
             label="Gender"
@@ -243,7 +288,7 @@ const AboutMe = () => {
             />
           )}
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.sexualOrientation.map(e => ({ label: e, value: e }))}
             label="Sexual Orientation"
@@ -258,7 +303,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.ethnicity.map(e => ({ label: e, value: e }))}
             label="Ethnicity"
@@ -280,7 +325,7 @@ const AboutMe = () => {
             />
           )}
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.religion.map(e => ({ label: e, value: e }))}
             label="Religion"
@@ -295,7 +340,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.disability.map(e => ({ label: e, value: e }))}
             label="Disability"
@@ -331,7 +376,7 @@ const AboutMe = () => {
           )}
         </Col>
 
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.neurodivergent.map(e => ({ label: e, value: e }))}
             label="Neurodivergent condition"
@@ -365,7 +410,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.childCare.map(e => ({ label: e, value: e }))}
             label="Are you a primary carer for a child or children under 18?"
@@ -381,7 +426,7 @@ const AboutMe = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
             <Select
               options={types.illCare.map(e => ({ label: e, value: e }))}
               label="Do you look after or care for someone with long term physical or mental ill health caused by disability or age (not in a paid capacity)?"
@@ -397,7 +442,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.degreeLevel.map(e => ({ label: e, value: e }))}
             label="Degree level"
@@ -411,8 +456,8 @@ const AboutMe = () => {
         </Col>
       </Row>
 
-      <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      <Row mb={6} mbT={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
               options={types.belongToClass.map(e => ({ label: e, value: e }))}
@@ -438,26 +483,48 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
+        <Col w={[6, 12, 12]}>
           {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
+        </Col>
+      </Row>
 
-          <Button type="secondary" onClick={onSubmit} loading={loading}>
-            SAVE CHANGES
+      <Row>
+        <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSave()}
+            loading={saveLoading}
+            disabled={saveLoading || continueLoading}
+            outline
+          >
+            SAVE PROGRESS
+          </Button>
+        </Col>
+        <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSave(true)}
+            loading={continueLoading}
+            disabled={saveLoading || continueLoading}
+          >
+            CONTINUE
           </Button>
         </Col>
       </Row>
+      <Row style={{ textAlign: 'center' }}>
+        <Col w={[4, 12, 11.6]} style={{ marginTop: '30px' }}>
+          <T.Link to={INTERN_SIGNUP_BURSARY} color="pink">
+            I’ll finish this later
+          </T.Link>
+        </Col>
+      </Row>
+
       <Notification
         open={notificationOpen}
         setOpen={setNotificationOpen}
         content="Changes saved"
+        cb={done}
       />
-      <S.DeleteLink position="static">
-        <T.Link to={SETTINGS.DELETE_ACCOUNT} mt={5}>
-          <T.H7C mt={5} color="gray">
-            <CloseOutlined /> DELETE ACCOUNT
-          </T.H7C>
-        </T.Link>
-      </S.DeleteLink>
     </div>
   );
 };

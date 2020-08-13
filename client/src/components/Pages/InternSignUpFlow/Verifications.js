@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Input, UploadFile, DatePicker, Checkbox } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
+import Title from '../../Common/Title';
 
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
@@ -10,11 +11,11 @@ import {
   API_INTERN_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
-import { SETTINGS } from '../../../constants/navRoutes';
+import { DASHBOARD_URL } from '../../../constants/navRoutes';
 
 import Notification from '../../Common/Notification';
 
-const { validate, internSettings } = require('../../../validation');
+const { validate, internSignup } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
   organisation: d.organisation || '',
@@ -49,22 +50,36 @@ const getCleanData = (d = {}) => ({
   offerLetter: d.offerLetter || {
     fileName: '',
   },
-  hasInternship: d.hasInternship || false,
   hasNoInternship: d.hasNoInternship || false,
 });
 
 const Verifications = props => {
-  const [state, setState] = useState(getCleanData({}));
+  const [state, setState] = useState({
+    ...getCleanData({}),
+    agreedOnPartnershipAgreement: false,
+    agreedOnMediaFormRelease: false,
+  });
 
   const [errors, setErrors] = useState({});
   const [mainError, setMainError] = useState();
-  const [loading, setLoading] = useState(false);
+
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [continueLoading, setContinueLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
 
   const [prevData, setPrevData] = useState({});
   const [fetchData, setFetchData] = useState(0);
+  const [fetchingData, setFetchingData] = useState(true);
+  const [lastClickOnContinue, setLastClickOnContinue] = useState(false);
 
   const history = useHistory();
+
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
 
   const uploadFile = async (file = {}) => {
     try {
@@ -93,7 +108,11 @@ const Verifications = props => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: internSettings.verifications(prevData, state.hasNoInternship),
+      schema: internSignup.verifications(
+        prevData,
+        lastClickOnContinue,
+        state.hasNoInternship,
+      ),
       data: { ...state },
     });
     let e = _errors;
@@ -107,7 +126,11 @@ const Verifications = props => {
         ? { ...e, DBSCheck: 'DBS file is required' }
         : { DBSCheck: 'DBS file is required' };
     }
-    if (prevData.offerLetter && state.offerLetter.deleted) {
+    if (
+      prevData.offerLetter &&
+      state.offerLetter.deleted &&
+      !state.hasNoInternship
+    ) {
       e = e
         ? { ...e, offerLetter: 'Proof of internship file is required' }
         : { offerLetter: 'Proof of internship file is required' };
@@ -121,7 +144,6 @@ const Verifications = props => {
     setErrors(_errors => ({ ..._errors, [name]: '' }));
     return setState(_state => ({ ..._state, [name]: value }));
   };
-
   const update = async (_DBSCheck, _photoID, _offerLetter) => {
     try {
       await axios.patch(API_INTERN_SETTINGS_VERIFICATIONS, {
@@ -151,11 +173,13 @@ const Verifications = props => {
     } catch (e) {
       setMainError(e.response.data.error);
     } finally {
-      setLoading(false);
+      setContinueLoading(false);
+      setSaveLoading(false);
+      setFetchingData(true);
     }
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async isContinue => {
     let _DBSCheck;
     let _photoID;
     let _offerLetter;
@@ -168,7 +192,15 @@ const Verifications = props => {
       return;
     }
     setMainError();
-    setLoading(true);
+
+    setLastClickOnContinue(isContinue);
+
+    if (isContinue) {
+      setContinueLoading(true);
+    } else {
+      setSaveLoading(true);
+    }
+
     if (
       (state.DBSCheck && state.DBSCheck.new && !state.DBSCheck.uploaded) ||
       (state.photoID && state.photoID.new && !state.photoID.uploaded) ||
@@ -221,22 +253,14 @@ const Verifications = props => {
 
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
+      setFetchingData(false);
     };
     getData();
   }, [fetchData]);
 
   const done = () => {
-    if (
-      (prevData.DBSCheck &&
-        state.refNum &&
-        prevData.DBSCheck.refNum !== state.refNum) ||
-      (prevData.DBSCheck &&
-        prevData.DBSCheck.fileName &&
-        state.DBSCheck &&
-        state.DBSCheck.fileName &&
-        prevData.DBSCheck.fileName !== state.DBSCheck.fileName)
-    ) {
-      history.push(SETTINGS.UNDER_REVIEW);
+    if (lastClickOnContinue) {
+      history.push(DASHBOARD_URL);
     } else {
       setFetchData(e => e + 1);
     }
@@ -260,8 +284,28 @@ const Verifications = props => {
   return (
     <div style={{ marginTop: '4rem' }}>
       <Row>
-        <Col w={[4, 4, 4]}>
-          <T.H5 color="blue">Internship Details</T.H5>
+        <Title withBg mb="0">
+          <Col w={[4, 12, 12]}>GET VERIFIED</Col>
+        </Title>
+      </Row>
+
+      <Row>
+        <Col w={[4, 8, 8]}>
+          <T.H5 color="blue">
+            Nearly there! To make sure PressPad is a safe place for interns and
+            hosts, we just need a bit more information to verify who you are and
+            why you are using our services.
+          </T.H5>
+          <T.H5 color="blue" mt={6}>
+            Placement Details
+          </T.H5>
+          <T.P color="gray3" mt={2}>
+            In order to stay with one of our hosts and be eligble for our
+            bursary, you need an internship, work placements or contract lined
+            up. Don’t worry if you don’t have one right now - we can still get
+            you on the platform and you can add these details later so when you
+            do have one, we can get you hosted ASAP!
+          </T.P>
         </Col>
       </Row>
 
@@ -498,6 +542,7 @@ const Verifications = props => {
               />
             </Col>
           </Row>
+
           <Row>
             <Col w={[4, 8, 8]}>
               <T.H5 color="blue" mt={4}>
@@ -688,12 +733,104 @@ const Verifications = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
+        <Col w={[4, 12, 12]} mt={6}>
+          <T.H5 color="blue">Partnership Agreement</T.H5>
+          <T.P color="gray3">
+            It is important for us that both host and intern go into any stay
+            with the best of intentions. This is why we ask everyone to read and
+            agree to the Partnership Agreement which outlines the commitments
+            you are making to each other.{' '}
+          </T.P>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 12, 12]} mt={5}>
+          <Checkbox
+            label="I have read and agree with the Partnernship Agreement"
+            onChange={e =>
+              setState(_state => ({
+                ..._state,
+                agreedOnPartnershipAgreement: e.target.checked,
+              }))
+            }
+            checked={state.agreedOnPartnershipAgreement}
+            error={errors.agreedOnPartnershipAgreement}
+          />
+        </Col>
+      </Row>
 
-          <Button type="secondary" onClick={onSubmit} loading={loading}>
-            SAVE CHANGES
+      <Row>
+        <Col w={[4, 12, 12]} mt={6}>
+          <T.H5 color="blue">Media Release Form</T.H5>
+          <T.P color="gray3">
+            Agreeing to PressPad&apos;s media release form means that you
+            consent for us to use any information you provide us when signing
+            up, using or reviewing PressPad&apos;s services in our promotional
+            and marketing materials. It also means that if we ask you to star in
+            our next Youtube video or give an interview to the media about
+            PressPad (don&apos;t be shy!) we already have all the paperwork we
+            need from you.
+          </T.P>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 12, 12]} mt={5} mb={5}>
+          <Checkbox
+            label="I have read and agree with the Media Release Form"
+            onChange={e =>
+              setState(_state => ({
+                ..._state,
+                agreedOnMediaFormRelease: e.target.checked,
+              }))
+            }
+            checked={state.agreedOnMediaFormRelease}
+            error={errors.agreedOnMediaFormRelease}
+          />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[6, 12, 12]}>
+          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 6, 5.3]} mb={4} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSubmit()}
+            loading={saveLoading}
+            disabled={saveLoading || continueLoading || fetchingData}
+            outline
+          >
+            SAVE PROGRESS
           </Button>
+        </Col>
+
+        <Col w={[4, 6, 5.3]} mb={4} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSubmit(true)}
+            loading={continueLoading}
+            disabled={
+              saveLoading ||
+              continueLoading ||
+              fetchingData ||
+              !state.agreedOnPartnershipAgreement ||
+              !state.agreedOnMediaFormRelease
+            }
+          >
+            Finish
+          </Button>
+        </Col>
+      </Row>
+
+      <Row style={{ textAlign: 'center' }} mb={8}>
+        <Col w={[4, 12, 11.6]} style={{ marginTop: '30px' }}>
+          <T.Link to={DASHBOARD_URL} color="pink">
+            I’ll finish this later
+          </T.Link>
         </Col>
       </Row>
       <Notification

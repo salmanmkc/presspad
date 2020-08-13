@@ -42,7 +42,6 @@ module.exports = {
     PASSWORD_NOT_MATCH: 'Passwords do not match.',
     PASSWORD_WEAK:
       'Password requires 8 characters including at least 1 uppercase character and 1 number.',
-    PASSWORD_CONFIRM_REQUIRED: 'Password confirm is required',
     ROLE_INVALID: 'invalid role',
     ROLE_REQUIRED: 'role is required',
   },

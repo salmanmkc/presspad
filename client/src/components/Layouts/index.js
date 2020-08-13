@@ -4,6 +4,7 @@ import GeneralLayout from './GeneralLayout';
 import RightDivLayout from './RightDivLayout';
 import IllustrationsLayout from './IllustrationsLayout';
 import LoginLayout from './LoginLayout';
+import SignupLayout from './SignupLayout';
 
 const Layout = ({ layout, ...props }) => {
   switch (layout) {
@@ -15,6 +16,8 @@ const Layout = ({ layout, ...props }) => {
       return <IllustrationsLayout {...props} />;
     case 'login':
       return <LoginLayout {...props} />;
+    case 'signup':
+      return <SignupLayout {...props} />;
     default:
       return <GeneralLayout {...props} />;
   }

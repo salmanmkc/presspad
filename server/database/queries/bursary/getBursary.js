@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { BursaryWindow, BursaryApplication } = require('../../models');
+const { BursaryWindow, BursaryApplication, Bursary } = require('../../models');
 const {
   bursaryWindowStatuses,
   bursaryApplicationStatuses,
@@ -173,8 +173,11 @@ const getBursaryApplicationInfo = id => {
   ]);
 };
 
+const getBursaryByUserId = id => Bursary.findOne({ intern: id }).lean();
+
 module.exports = {
   getBursaryWindows,
   getBursaryApplications,
   getBursaryApplicationInfo,
+  getBursaryByUserId,
 };
