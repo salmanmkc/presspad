@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Input, UploadFile, DatePicker } from '../../../Common/Inputs';
+import { Input, UploadFile, Select } from '../../../Common/Inputs';
 import { Col, Row } from '../../../Common/Grid';
 
 import * as T from '../../../Common/Typography';
@@ -11,26 +11,13 @@ import {
   API_MY_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import { SETTINGS } from '../../../../constants/navRoutes';
-
+import { hostWorkingArea } from '../../../../constants/types';
 import Notification from '../../../Common/Notification';
 
-const { validate, internSettings } = require('../../../../validation');
+const { validate, hostSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
   organisation: d.organisation || '',
-  internshipContact: d.internshipContact || {
-    name: '',
-    email: '',
-    phoneNumber: '',
-  },
-  internshipStartDate: d.internshipStartDate || null,
-  internshipEndDate: d.internshipEndDate || null,
-  internshipOfficeAddress: d.internshipOfficeAddress || {
-    addressline1: '',
-    addressline2: '',
-    city: '',
-    postcode: '',
-  },
   reference1: d.reference1 || {
     name: '',
     email: '',
@@ -42,28 +29,24 @@ const getCleanData = (d = {}) => ({
   photoID: d.photoID || {
     fileName: '',
   },
+  proofMedia: d.proofMedia || {
+    fileName: '',
+  },
   DBSCheck: d.DBSCheck || {
     fileName: '',
   },
   refNum: d.refNum || (d.DBSCheck && d.DBSCheck.refNum) || '',
+  jobTitle: d.jobTitle || '',
+  workArea: d.workArea || '',
+  workAreaOther: d.workAreaOther || '',
 });
 
 const Verifications = props => {
   const [state, setState] = useState({
+    jobTitle: '',
+    workArea: '',
+    workAreaOther: '',
     organisation: '',
-    internshipContact: {
-      name: '',
-      email: '',
-      phoneNumber: '',
-    },
-    internshipStartDate: null,
-    internshipEndDate: null,
-    internshipOfficeAddress: {
-      addressline1: '',
-      addressline2: '',
-      city: '',
-      postcode: '',
-    },
     reference1: {
       name: '',
       email: '',
@@ -73,6 +56,9 @@ const Verifications = props => {
       email: '',
     },
     photoID: {
+      fileName: '',
+    },
+    proofMedia: {
       fileName: '',
     },
     DBSCheck: {
@@ -116,6 +102,39 @@ const Verifications = props => {
     }
   };
 
+  useEffect(() => {
+    if (!state.workArea || !state.workArea.includes('Other')) {
+      setState(_state => ({ ..._state, workAreaOther: '' }));
+    }
+  }, [state.workArea]);
+
+  const uploadproofMedia = async () => {
+    try {
+      const generatedName = `${props.id}/${Date.now()}.${
+        state.proofMedia.name
+      }`;
+      const {
+        data: { signedUrl },
+      } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
+      const headers = {
+        'Content-Type': 'application/octet-stream',
+      };
+
+      await axios.put(signedUrl, state.proofMedia, {
+        headers,
+      });
+
+      return {
+        fileName: generatedName,
+        new: true,
+        uploaded: true,
+        preview: state.proofMedia.preview,
+      };
+    } catch (e) {
+      return setError(e.message);
+    }
+  };
+
   const uploadDBSCheck = async () => {
     try {
       const generatedName = `${props.id}/${Date.now()}.${state.DBSCheck.name}`;
@@ -143,7 +162,7 @@ const Verifications = props => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: internSettings.verifications(prevData),
+      schema: hostSettings.verifications({ jobTitle: 'sdd', workArea: 'ss' }),
       data: { ...state },
     });
     let e = _errors;
@@ -167,12 +186,13 @@ const Verifications = props => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const update = async (_DBSCheck, _photoID) => {
+  const update = async (_DBSCheck, _photoID, _proofMedia) => {
     try {
       await axios.patch(API_INTERN_SETTINGS_VERIFICATIONS, {
         ...state,
         DBSCheck: _DBSCheck || state.DBSCheck,
         photoID: _photoID || state.photoID,
+        proofMedia: _proofMedia || state.proofMedia,
         prevPhotoIDToDelete:
           state.photoID &&
           state.photoID.new &&
@@ -185,6 +205,12 @@ const Verifications = props => {
           prevData.DBSCheck &&
           prevData.DBSCheck.fileName &&
           prevData.DBSCheck.fileName,
+        proofMediaToDelete:
+          state.proofMedia &&
+          state.proofMedia.new &&
+          prevData.proofMedia &&
+          prevData.proofMedia.fileName &&
+          prevData.proofMedia.fileName,
       });
     } catch (e) {
       setError(e.response.data.error);
@@ -196,7 +222,8 @@ const Verifications = props => {
   const onSubmit = async () => {
     let _DBSCheck;
     let _photoID;
-    const _errors = await _validate();
+    let _proofMedia;
+    const _errors = await _validate(state);
 
     setErrors(_errors || {});
 
@@ -208,7 +235,8 @@ const Verifications = props => {
     setLoading(true);
     if (
       (state.DBSCheck && state.DBSCheck.new && !state.DBSCheck.uploaded) ||
-      (state.photoID && state.photoID.new && !state.photoID.uploaded)
+      (state.photoID && state.photoID.new && !state.photoID.uploaded) ||
+      (state.proofMedia && state.proofMedia.new && !state.proofMedia.uploaded)
     ) {
       const promiseArr = [];
       if (state.DBSCheck && state.DBSCheck.new) {
@@ -229,10 +257,19 @@ const Verifications = props => {
       } else {
         promiseArr.push(Promise.resolve());
       }
+      if (state.proofMedia && state.proofMedia.new) {
+        promiseArr.push(
+          uploadproofMedia().catch(err =>
+            setErrors(e => ({ ...e, proofMedia: err.message })),
+          ),
+        );
+      } else {
+        promiseArr.push(Promise.resolve());
+      }
 
-      [_DBSCheck, _photoID] = await Promise.all(promiseArr);
+      [_DBSCheck, _photoID, _proofMedia] = await Promise.all(promiseArr);
     }
-    await update(_DBSCheck, _photoID);
+    await update(_DBSCheck, _photoID, _proofMedia);
     setNotificationOpen(true);
   };
 
@@ -267,234 +304,64 @@ const Verifications = props => {
   return (
     <div style={{ marginTop: '4rem' }}>
       <Row>
-        <Col w={[4, 4, 4]}>
-          <T.H5 color="blue">Internship Details</T.H5>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Input
+            onChange={onInputChange}
+            value={state.jobTitle}
+            label="Job title"
+            name="jobTitle"
+            error={errors.jobTitle}
+          />
         </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.organisation}
-            label="Name of organisation"
+            label="Organisation"
             name="organisation"
             error={errors.organisation}
           />
         </Col>
-
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                internshipContact: {
-                  ...state.internshipContact,
-                  name: e.target.value,
-                },
-              }));
-            }}
-            value={state.internshipContact && state.internshipContact.name}
-            label="Contact name"
-            placeholder="Contact name..."
-            name="name"
-            error={errors.internshipContact && errors.internshipContact.name}
-          />
-        </Col>
       </Row>
-
       <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                internshipContact: {
-                  ...state.internshipContact,
-                  email: e.target.value,
-                },
-              }));
-            }}
-            value={state.internshipContact && state.internshipContact.email}
-            label="Contact email"
-            placeholder="Contact email..."
-            name="email"
-            error={errors.internshipContact && errors.internshipContact.email}
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Select
+            options={hostWorkingArea.map(e => ({ label: e, value: e }))}
+            label="Area you work in"
+            allowClear
+            onChange={value =>
+              setState(_state => ({ ..._state, workArea: value || '' }))
+            }
+            value={state.workArea}
+            error={errors.workArea}
           />
-        </Col>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                internshipContact: {
-                  ...state.internshipContact,
-                  phoneNumber: e.target.value,
-                },
-              }));
-            }}
-            value={
-              state.internshipContact && state.internshipContact.phoneNumber
-            }
-            label="Contact number"
-            placeholder="Contact number..."
-            name="phoneNumber"
-            error={
-              errors.internshipContact && errors.internshipContact.phoneNumber
-            }
-          />
-        </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <DatePicker
-            onChange={momentDate =>
-              setState(_state => ({
-                ..._state,
-                internshipStartDate: momentDate,
-              }))
-            }
-            value={state.internshipStartDate}
-            label="Start date"
-            error={errors.internshipStartDate}
-          />
-        </Col>
-
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <DatePicker
-            onChange={momentDate =>
-              setState(_state => ({ ..._state, internshipEndDate: momentDate }))
-            }
-            value={state.internshipEndDate}
-            label="End date"
-            error={errors.internshipEndDate}
-          />
-        </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                internshipOfficeAddress: {
-                  ...state.internshipOfficeAddress,
-                  addressline1: e.target.value,
-                },
-              }));
-            }}
-            value={
-              state.internshipOfficeAddress &&
-              state.internshipOfficeAddress.addressline1
-            }
-            label="Address Line 1"
-            name="addressline1"
-            error={
-              errors.internshipOfficeAddress &&
-              errors.internshipOfficeAddress.addressline1
-            }
-          />
-        </Col>
-
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                internshipOfficeAddress: {
-                  ...state.internshipOfficeAddress,
-                  addressline2: e.target.value,
-                },
-              }));
-            }}
-            value={
-              state.internshipOfficeAddress &&
-              state.internshipOfficeAddress.addressline2
-            }
-            label="Address Line 2"
-            name="addressline2"
-            error={
-              errors.internshipOfficeAddress &&
-              errors.internshipOfficeAddress.addressline2
-            }
-          />
-        </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-              setState(_state => ({
-                ..._state,
-                internshipOfficeAddress: {
-                  ...state.internshipOfficeAddress,
-                  city: e.target.value,
-                },
-              }));
-            }}
-            value={
-              state.internshipOfficeAddress &&
-              state.internshipOfficeAddress.city
-            }
-            label="City"
-            name="city"
-            error={
-              errors.internshipOfficeAddress &&
-              errors.internshipOfficeAddress.city
-            }
-          />
-        </Col>
-
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
-          <Input
-            onChange={e => {
-              e.persist();
-
-              setState(_state => ({
-                ..._state,
-                internshipOfficeAddress: {
-                  ...state.internshipOfficeAddress,
-                  postcode: e.target.value,
-                },
-              }));
-            }}
-            value={
-              state.internshipOfficeAddress &&
-              state.internshipOfficeAddress.postcode
-            }
-            label="Postcode"
-            name="postcode"
-            error={
-              errors.internshipOfficeAddress &&
-              errors.internshipOfficeAddress.postcode
-            }
-          />
+          {state.workArea && state.workArea.includes('Other') && (
+            <Input
+              onChange={onInputChange}
+              value={state.workAreaOther}
+              label="Please specify"
+              name="workAreaOther"
+              error={errors.workAreaOther}
+            />
+          )}
         </Col>
       </Row>
 
       <Row>
         <Col w={[4, 8, 8]}>
           <T.H5 color="blue" mt={8}>
-            Internship Details
+            References
           </T.H5>
           <T.P color="gray3">
-            This can be any professional you have worked with during your career
-            or a teacher / lecturer / tutor
+            Please provide one personal and one professional reference. Please
+            make sure that the professional reference is from someone you've
+            recently worked with.
           </T.P>
         </Col>
       </Row>
 
       <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
             onChange={e => {
               e.persist();
@@ -513,7 +380,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
             onChange={e => {
               e.persist();
@@ -534,7 +401,7 @@ const Verifications = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
             onChange={e => {
               e.persist();
@@ -553,7 +420,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
             onChange={e => {
               e.persist();
@@ -575,21 +442,40 @@ const Verifications = props => {
 
       <Row>
         <Col w={[4, 8, 8]}>
-          <T.H5 color="blue" mt={8}>
+          <T.H5 color="blue" mt={8} mb={3}>
             Verification documents
           </T.H5>
-          <T.PBold color="blue">Proof of identity </T.PBold>
-          <T.PXS color="gray3">
-            This can be any professional you have worked with during your career
-            or a teacher / lecturer / tutor
-          </T.PXS>
         </Col>
       </Row>
 
       <Row>
-        <Col w={[4, 12, 12]}>
+        <Col w={[4, 6, 4]}>
+          <T.PBold color="blue">Proof of identity </T.PBold>
+          <T.PXS color="gray3" mb={5}>
+            e.g. a photo of your passport or driver’s licence
+          </T.PXS>
           <UploadFile
-            mainText="Upload your profile picture here"
+            fullWidth
+            mainText="Drag new photo here or click"
+            secondaryText="file size max 2mb"
+            type="file"
+            userId={props.id}
+            files={[state.photoID]}
+            setFiles={([photoID]) =>
+              setState(_state => ({ ..._state, photoID }))
+            }
+            error={errors.photoID}
+          />
+        </Col>
+
+        <Col w={[4, 6, 4]}>
+          <T.PBold color="blue">Proof that you work in the media </T.PBold>
+          <T.PXS color="gray3" mb={1}>
+            This can be a photo of your press card or of a letter/email
+          </T.PXS>
+          <UploadFile
+            fullWidth
+            mainText="Drag new photo here or click"
             secondaryText="file size max 2mb"
             type="file"
             userId={props.id}
@@ -603,37 +489,41 @@ const Verifications = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 8, 8]}>
-          <T.H5 color="blue" mt={8}>
+        <Col w={[4, 8, 7]}>
+          <T.H5 color="blue" mt={5}>
             DBS Certificate{' '}
           </T.H5>
 
           <T.PXS color="gray3">
             This is the official UK criminal records check. If you don’t have
-            one, please click here and we will do it for you for free. It will
-            take no longer than 5 minutes to complete
+            one, please click here{' '}
+            <T.Link to={SETTINGS.BOOK_REVIEW} color="lightBlue">
+              click here
+            </T.Link>{' '}
+            and we will do it for you for free. It will take no longer than 5
+            minutes to complete
           </T.PXS>
         </Col>
       </Row>
-
-      <div w={[4, 6, 6]}>
-        <UploadFile
-          mainText="Upload your profile picture here"
-          secondaryText="file size max 2mb"
-          type="file"
-          userId={props.id}
-          files={[state.DBSCheck]}
-          setFiles={([DBSCheck]) =>
-            setState(_state => ({
-              ..._state,
-              DBSCheck,
-            }))
-          }
-          error={errors.DBSCheck}
-        />
-      </div>
       <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]}>
+          <UploadFile
+            fullWidth
+            mainText="Upload your profile picture here"
+            secondaryText="file size max 2mb"
+            type="file"
+            userId={props.id}
+            files={[state.DBSCheck]}
+            setFiles={([DBSCheck]) =>
+              setState(_state => ({
+                ..._state,
+                DBSCheck,
+              }))
+            }
+            error={errors.DBSCheck}
+          />
+        </Col>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.refNum}
@@ -641,6 +531,24 @@ const Verifications = props => {
             name="refNum"
             error={errors.refNum}
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 8, 7]}>
+          <T.H5 color="blue" mt={5}>
+            Book a video property check
+          </T.H5>
+
+          <T.H7C color="gray3">Current status: COMPLETED</T.H7C>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 4]}>
+          <T.P color="gray3">
+            Click here to book a time for one of our team to carry out a video
+            check of your home. This check will take no longer than 30 minutes
+            maximum.
+          </T.P>
         </Col>
       </Row>
       <Row>
