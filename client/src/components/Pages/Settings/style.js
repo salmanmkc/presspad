@@ -58,7 +58,10 @@ export const ChangePassword = styled.div`
 `;
 
 export const IllCareWrapper = styled.div`
+  width: 100%;
+
   label,
+  .extraInfo,
   .helper {
     width: 100%;
     @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {

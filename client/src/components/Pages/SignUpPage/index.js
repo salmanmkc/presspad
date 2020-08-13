@@ -1,67 +1,65 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { useHistory, useLocation } from 'react-router-dom';
 // CONSTANTS
 import { API_SIGNUP_URL, API_GET_ORGS_URL } from '../../../constants/apiRoutes';
+
+import USER_TYPES from '../../../constants/userTypes';
+
 import {
+  HOST_COMPLETE_PROFILE_URL,
+  INTERN_COMPLETE_PROFILE_URL,
   WELCOME_PAGES,
   Error500,
-  INTERN_COMPLETE_PROFILE_URL,
-  HOST_COMPLETE_PROFILE_URL,
+  INTERN_SIGNUP_WELCOME,
   DASHBOARD_URL,
 } from '../../../constants/navRoutes';
-import USER_TYPES from '../../../constants/userTypes';
 
 import SignUp from './SignUp';
 
-export default class SignUpPage extends Component {
-  state = {
-    fields: {},
-    errors: {},
-    msg: null,
-    userType: null,
-    existingOrgs: [],
-    isLoading: false,
-  };
+const SignUpPage = props => {
+  const [fields, setFields] = useState({
+    name: '',
+    email: '',
+    password: '',
+    organisation: '',
+  });
+  const [errors, setErrors] = useState({});
+  const [msg, setMsg] = useState('');
+  const [existingOrgs, setExistingOrgs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [agreeOnTerms, setAgreeOnTerms] = useState(false);
+  const history = useHistory();
+  const location = useLocation();
+  const useQuery = () => new URLSearchParams(location.search);
+  const query = useQuery();
 
-  componentDidMount() {
-    const { userType } = this.props;
-    this.setState({ userType });
-
-    if (userType === USER_TYPES.organisation) this.getAllOrgs();
-
+  useEffect(() => {
+    const { userType } = props;
     window.scrollTo(0, 0);
-  }
 
-  // host checkbox function
-  onCheckboxChange = e => {
-    const { fields } = this.state;
-    fields[e.target.name] = e.target.checked;
-    this.setState({
-      fields,
-    });
-  };
-
-  // get all organisations for client side validation
-  getAllOrgs = async () => {
-    const { history } = this.props;
-    try {
-      const orgs = await axios.get(API_GET_ORGS_URL);
-      if (orgs.data.length > 0) {
-        const orgNames = orgs.data.map(organisation => ({
-          name: organisation.name,
-          email: organisation.orgDetails.email,
-        }));
-        this.setState({ existingOrgs: orgNames });
+    // get all organisations for client side validation
+    const getAllOrgs = async () => {
+      try {
+        const orgs = await axios.get(API_GET_ORGS_URL);
+        if (orgs.data.length > 0) {
+          const orgNames = orgs.data.map(organisation => ({
+            name: organisation.name,
+            email: organisation.orgDetails.email,
+          }));
+          setExistingOrgs(orgNames);
+        }
+      } catch (err) {
+        history.push(Error500);
       }
-    } catch (err) {
-      history.push(Error500);
-    }
-  };
+    };
+
+    if (userType === 'organisation') getAllOrgs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // check organisation already exists
-  checkOrg = () => {
-    const { fields, existingOrgs } = this.state;
+  const checkOrg = () => {
     const { organisation } = fields;
 
     const matchedOrg = existingOrgs.filter(
@@ -72,69 +70,66 @@ export default class SignUpPage extends Component {
     return matchedOrg;
   };
 
-  onInputChange = e => {
-    const { fields } = this.state;
-    fields[e.target.name] = e.target.value;
-    this.setState({
-      fields,
-    });
-
-    if (['password', 'passwordConfirm'].includes(e.target.name))
-      this.passwordValidation();
-  };
-
-  passwordValidation = () => {
-    const { fields } = this.state;
-    const errors = {};
+  const passwordValidation = () => {
+    let _error = '';
     let formIsValid = true;
 
     // regex for password validation
     const pattern = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/g);
 
     if (fields.password && fields.password.length < 8) {
-      errors.passwordError = 'Password is too short.';
+      _error = 'Password is too short.';
       formIsValid = false;
     } else if (!pattern.test(fields.password)) {
-      errors.passwordError =
+      _error =
         'Password requires 8 characters including at least 1 uppercase character and 1 number.';
-      formIsValid = false;
-    } else if (fields.password !== fields.passwordConfirm) {
-      errors.passwordConfirmError = 'Passwords do not match.';
       formIsValid = false;
     }
 
-    this.setState({
-      errors,
-    });
-
+    setErrors(e => ({ ...e, password: _error }));
     return formIsValid;
   };
 
-  validateForm = () => {
-    const { fields, userType } = this.state;
-    const errors = {};
+  const onCheckboxChange = e => {
+    setAgreeOnTerms(e.target.checked);
+  };
+
+  useEffect(() => {
+    if (fields.password) {
+      passwordValidation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields.password]);
+
+  const onInputChange = e => {
+    e.persist();
+    setFields(_state => ({ ..._state, [e.target.name]: e.target.value }));
+  };
+
+  const validateForm = () => {
+    const _errors = {};
     let formIsValid = true;
 
     if (!fields.name) {
       formIsValid = false;
-      errors.nameError = 'Please enter your name.';
+      _errors.name = 'Please enter your name.';
     }
 
     if (!fields.email) {
       formIsValid = false;
-      errors.emailError = 'Please enter your email.';
+      _errors.email = 'Please enter your email.';
     }
 
-    if (!fields.organisation && userType === USER_TYPES.organisation) {
+    if (!fields.organisation && props.userType === USER_TYPES.organisation) {
       formIsValid = false;
-      errors.organisationError = '* Please enter your organisation';
+      _errors.organisation = 'Please enter your organisation';
     }
 
-    if (fields.organisation && userType === USER_TYPES.organisation) {
-      const matchedOrg = this.checkOrg(fields.organisation);
+    if (fields.organisation && props.userType === USER_TYPES.organisation) {
+      const matchedOrg = checkOrg(fields.organisation);
       if (matchedOrg.length > 0) {
         formIsValid = false;
-        errors.organisationError = `* ${matchedOrg[0].name} already has an account created by ${matchedOrg[0].email}`;
+        _errors.organisation = `${matchedOrg[0].name} already has an account created by ${matchedOrg[0].email}`;
       }
     }
 
@@ -145,7 +140,7 @@ export default class SignUpPage extends Component {
       );
       if (!pattern.test(fields.email)) {
         formIsValid = false;
-        errors.emailError = 'Please enter valid email.';
+        _errors.email = 'Please enter valid email.';
       }
     }
 
@@ -155,99 +150,85 @@ export default class SignUpPage extends Component {
     );
 
     if (fields.password && fields.password.length < 8) {
-      errors.passwordError = 'Password is too short.';
+      _errors.password = 'Password is too short.';
       formIsValid = false;
     } else if (!passwordPattern.test(fields.password)) {
-      errors.passwordError =
+      _errors.password =
         'Password requires 8 characters including at least 1 uppercase character and 1 number.';
       formIsValid = false;
     }
 
-    if (fields.password !== fields.passwordConfirm) {
-      formIsValid = false;
-      errors.passwordConfirmError = 'Passwords do not match';
-    }
-
     // for hosts make sure they've ticked the disclaimer
     if (
-      [USER_TYPES.host, USER_TYPES.intern].includes(userType) &&
-      !fields.checkbox
+      (props.userType === 'host' || props.userType === 'intern') &&
+      !agreeOnTerms
     ) {
       formIsValid = false;
-      errors.disclaimerError =
+      _errors.checkbox =
         'You need to agree with the Terms & Conditions and PressPad Privacy Policy in order to complete the signup';
     }
 
-    this.setState({
-      errors,
-    });
+    setErrors(_errors);
 
     return formIsValid;
   };
 
-  onFormSubmit = async e => {
-    const { fields, userType } = this.state;
-    const { handleChangeState, history, location } = this.props;
-    const useQuery = () => new URLSearchParams(location.search);
-    const query = useQuery();
+  const onFormSubmit = async e => {
+    const { handleChangeState } = props;
+
     const referralToken = query.get('referral');
 
-    fields.role = userType;
     e.preventDefault();
-    const isValid = this.validateForm();
+    const isValid = validateForm();
+
     if (isValid) {
-      const userInfo = { ...fields };
       try {
-        this.setState({ isLoading: true });
+        setIsLoading(true);
 
         const { data } = await axios.post(API_SIGNUP_URL, {
-          ...userInfo,
+          ...fields,
+          role: props.userType,
           referralToken,
         });
+
         handleChangeState({ ...data, isLoggedIn: true });
-        if (data.role === USER_TYPES.admin) {
-          this.setState({ isLoading: false });
+        if (['organisation'].includes(data.role)) {
           history.push(DASHBOARD_URL);
-        } else if (data.role === USER_TYPES.organisation) {
-          this.setState({ isLoading: false });
-          history.push(WELCOME_PAGES.replace(':id', 1));
-        } else if (data.role === USER_TYPES.intern) {
-          this.setState({ isLoading: false });
-          history.push(INTERN_COMPLETE_PROFILE_URL);
-        } else if (
-          [USER_TYPES.host, USER_TYPES.superhost].includes(data.role)
-        ) {
-          this.setState({ isLoading: false });
+        } else if (data.role === 'intern') {
+          history.push(INTERN_SIGNUP_WELCOME);
+        } else if (['host', 'superhost'].includes(data.role)) {
           history.push(HOST_COMPLETE_PROFILE_URL);
         }
       } catch (err) {
         if (err.response) {
-          if (err.response.data.error.includes('Email')) {
-            this.setState({
-              errors: {
-                emailError: err.response.data.error,
-              },
-              isLoading: false,
-            });
-          } else
-            this.setState({ msg: err.response.data.error, isLoading: false });
+          if (
+            err.response.data &&
+            err.response.data.error &&
+            err.response.data.error.includes('Email')
+          ) {
+            setErrors({ email: err.response.data.error });
+          }
+          setMsg(err.response.data.error);
         }
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
-  render() {
-    const { onInputChange, onFormSubmit, onCheckboxChange } = this;
-    const { userType } = this.props;
+  return (
+    <SignUp
+      fields={fields}
+      errors={errors}
+      msg={msg}
+      agreeOnTerms={agreeOnTerms}
+      userType={props.userType}
+      isLoading={isLoading}
+      onInputChange={onInputChange}
+      onFormSubmit={onFormSubmit}
+      onCheckboxChange={onCheckboxChange}
+    />
+  );
+};
 
-    return (
-      <SignUp
-        {...this.state}
-        userType={userType}
-        onInputChange={onInputChange}
-        onFormSubmit={onFormSubmit}
-        onCheckboxChange={onCheckboxChange}
-      />
-    );
-  }
-}
+export default SignUpPage;
