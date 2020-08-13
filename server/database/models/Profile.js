@@ -14,12 +14,12 @@ const profileSchema = new Schema(
     },
     birthDate: {
       type: Date,
-      required: true,
+      // required: true,
     },
     gender: {
       type: String,
       enum: types.gender,
-      required: true,
+      // required: true,
     },
     hometown: {
       type: String,
@@ -54,12 +54,12 @@ const profileSchema = new Schema(
     hearAboutPressPadAnswer: {
       type: String,
       validate: wordLengthValidator(50, 'hearAboutPressPadAnswer'),
-      required: true,
+      // required: true,
     },
     phoneNumber: {
       type: String,
       validate: wordLengthValidator(50, 'phoneNumber'),
-      required: true,
+      // required: true,
     },
     emergencyContact: {
       name: {
@@ -139,7 +139,7 @@ const profileSchema = new Schema(
     consentedOnPressPadTerms: {
       type: Boolean,
       default: false,
-      required: true,
+      // required: true,
     },
     workingArea: {
       type: String,
@@ -193,17 +193,18 @@ const profileSchema = new Schema(
     verified: {
       type: Boolean,
       default: false,
-      required: true,
+      // required: true,
     },
     // for interns
     awaitingReview: {
       type: Boolean,
       default: false,
     },
+    awaitingReviewDate: Date,
     bio: {
       type: String,
       validate: wordLengthValidator(250, 'bio'),
-      required: true,
+      // required: true,
     },
     organisation: {
       type: String,
@@ -220,7 +221,7 @@ const profileSchema = new Schema(
     profileImage: {
       fileName: {
         type: String,
-        required: true,
+        // required: true,
       },
       isPrivate: {
         type: Boolean,
@@ -240,7 +241,7 @@ const profileSchema = new Schema(
     photoID: {
       fileName: {
         type: String,
-        required: true,
+        // required: true,
       },
       isPrivate: {
         type: Boolean,
@@ -280,7 +281,7 @@ const profileSchema = new Schema(
     badge: {
       type: Boolean,
       default: false,
-      required: true,
+      // required: true,
     },
     internshipStartDate: {
       type: Date,
@@ -327,6 +328,11 @@ const profileSchema = new Schema(
       enum: types.illCare,
     },
     belongToClass: String,
+    // interns only
+    hasNoInternship: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

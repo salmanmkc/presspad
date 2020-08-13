@@ -3,8 +3,12 @@ const boom = require('boom');
 const { updateUserProfile } = require('../../../database/queries/profiles');
 const { deleteFile } = require('../../../helpers/storage');
 const { storageBucket: bucketName } = require('../../../config');
+const { getBursaryByUserId } = require('../../../database/queries/bursary');
+const { internCompleteProfile } = require('../../../../client/src/validation');
 
 module.exports = async (req, res, next) => {
+  let completed;
+
   const { user } = req;
   const {
     profileImage,
@@ -28,7 +32,32 @@ module.exports = async (req, res, next) => {
       profileImage,
     };
 
-    await updateUserProfile(user._id, profileData);
+    const updatedProfile = await updateUserProfile(user._id, profileData);
+
+    const bursary = await getBursaryByUserId(user._id);
+
+    try {
+      await internCompleteProfile.validate({ ...bursary, ...updatedProfile });
+      completed = true;
+    } catch (error) {
+      completed = false;
+    }
+
+    if (!completed) {
+      await updateUserProfile(user._id, {
+        awaitingReview: false,
+        verified: false,
+      });
+    } else if (updateUserProfile.verified) {
+      // do nothing
+    } else if (updateUserProfile.awaitingReview) {
+      await updateUserProfile(user._id, {
+        awaitingReview: true,
+        awaitingReviewDate: Date.now(),
+        verified: false,
+      });
+    }
+
     if (prevImageFileNameToDelete) {
       await deleteFile(bucketName, prevImageFileNameToDelete);
     }

@@ -11,7 +11,7 @@ import { Updates, Payments, Reviews, Community } from '../../Common/Section';
 import PayNowModal from '../../Common/PayNowModal';
 
 import { API_INTERN_DASHBOARD_URL } from '../../../constants/apiRoutes';
-import { INTERN_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
+import { INTERN_SIGNUP_ABOUT_ME } from '../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import { bottomMargins, typographies } from './styleProperties';
 import { colors } from '../../../theme';
@@ -130,7 +130,7 @@ const InternDashboard = props => {
           <Col w={[4, 12, 12]}>
             <CompleteProfilePrompt
               device={device}
-              url={INTERN_COMPLETE_PROFILE_URL}
+              url={INTERN_SIGNUP_ABOUT_ME}
             />
           </Col>
         )}

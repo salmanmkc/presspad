@@ -81,7 +81,7 @@ class App extends Component {
               />
             </ThemeProvider>
           </div>
-          <Cookies />
+          {process.env.NODE_ENV === 'production' && <Cookies />}
         </Router>
       </StripeProvider>
     );

@@ -1,6 +1,8 @@
 const signupSchema = require('./signup');
 const internshipSchema = require('./internship');
 const internSettings = require('./internSettings');
+const internSignup = require('./internSignup');
+const internCompleteProfile = require('./internCompleteProfile');
 
 const handleValidationError = ({ inner }) => {
   const newErrors = {};
@@ -39,4 +41,6 @@ module.exports = {
   signupSchema,
   validate,
   internSettings,
+  internSignup,
+  internCompleteProfile,
 };

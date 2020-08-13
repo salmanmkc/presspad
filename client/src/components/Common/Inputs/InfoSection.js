@@ -4,7 +4,7 @@ import * as S from './style';
 import Icon from '../Icon';
 
 const InfoSection = ({ text }) => (
-  <S.InfoWrapper>
+  <S.InfoWrapper className="extraInfo">
     <Icon
       icon="info"
       color="pink"

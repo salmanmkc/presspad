@@ -1,184 +1,140 @@
 import React from 'react';
-import { Input, Checkbox } from 'antd';
+// import { Input, Checkbox } from 'antd';
 
 // COMMON COMPONENTS
-import Button from '../../Common/Button';
+import Button from '../../Common/ButtonNew';
 
 import USER_TYPES from '../../../constants/userTypes';
-import {
-  TERMS_CONDITIONS,
-  PRIVACY_POLICY,
-} from '../../../constants/externalLinks';
+
+import Title from '../../Common/Title';
+
+import { Row, Col } from '../../Common/Grid';
+import { Input, Checkbox } from '../../Common/Inputs/index';
+import * as T from '../../Common/Typography';
 
 // STYLING
-import {
-  Wrapper,
-  HeaderText,
-  SignUpForm,
-  FormHeader,
-  InputLabel,
-  InputDiv,
-  ErrorMsg,
-  ButtonWrapper,
-  Disclaimer,
-  DisclaimerText,
-  DisclaimerWrapper,
-} from './SignUpPage.style';
+import { ErrorMsg } from './SignUpPage.style';
+import { SIGNIN_URL } from '../../../constants/navRoutes';
 
 export default props => {
   const {
     fields,
     errors,
     msg,
+    agreeOnTerms,
     onInputChange,
     onFormSubmit,
     onCheckboxChange,
     userType,
     isLoading,
   } = props;
-  const {
-    email,
-    password,
-    passwordConfirm,
-    name,
-    organisation,
-    checkbox,
-  } = fields;
-  const {
-    nameError,
-    emailError,
-    organisationError,
-    passwordError,
-    passwordConfirmError,
-    disclaimerError,
-  } = errors;
+  const { email, password, name, organisation } = fields;
 
   return (
-    <Wrapper>
-      <HeaderText>
-        Opening the door to diversity in the media through mentorship & hosting
-      </HeaderText>
-      <SignUpForm>
-        {(userType === USER_TYPES.intern || userType === USER_TYPES.host) && (
-          <FormHeader>
-            Please fill in the details below to sign up to PressPad
-          </FormHeader>
-        )}
-        {userType === USER_TYPES.organisation && (
-          <FormHeader>
-            Please fill in the details below to create your organisation’s
-            PressPad account
-          </FormHeader>
-        )}
-        <InputDiv>
-          <InputLabel htmlFor="email">Name</InputLabel>
+    <div>
+      <Row>
+        <Title withBg mb="0">
+          <Col w={[4, 12, 12]}>SIGN UP</Col>
+        </Title>
+      </Row>
+
+      <Row>
+        <Col w={[4, 12, 12]} mt={6}>
+          <T.H5 color="blue">
+            To create your PressPad account, please fill in the details below
+          </T.H5>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 12, 12]} mt={6}>
           <Input
-            placeholder="Enter your full name"
+            label="Name"
+            placeholder="Full name..."
             name="name"
             id="name"
             type="text"
-            size="large"
             onChange={onInputChange}
             value={name}
+            error={errors.name}
           />
-          <ErrorMsg>{nameError}</ErrorMsg>
-        </InputDiv>
-        <InputDiv isError={emailError}>
-          <InputLabel htmlFor="email">Email</InputLabel>
-          <Input
-            placeholder="Enter your email"
-            name="email"
-            id="email"
-            type="text"
-            size="large"
-            onChange={onInputChange}
-            value={email}
-          />
-          <ErrorMsg>{emailError}</ErrorMsg>
-        </InputDiv>
-        {userType === USER_TYPES.organisation && (
-          <InputDiv>
-            <InputLabel htmlFor="organisation">Organisation</InputLabel>
+        </Col>
+      </Row>
+
+      {userType === USER_TYPES.organisation && (
+        <Row>
+          <Col w={[4, 12, 12]} mt={6}>
             <Input
-              placeholder="Enter your organisation"
+              label="Organisation name"
+              placeholder="Organisation name..."
               name="organisation"
               id="organisation"
               type="text"
-              size="large"
               onChange={onInputChange}
               value={organisation}
+              error={errors.organisation}
             />
-            <ErrorMsg>{organisationError}</ErrorMsg>
-          </InputDiv>
-        )}
-        <InputDiv>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <Input.Password
+          </Col>
+        </Row>
+      )}
+
+      <Row>
+        <Col w={[4, 12, 12]} mt={4}>
+          <Input
+            label="Email"
+            placeholder="Email..."
+            name="email"
+            id="email"
+            type="text"
+            onChange={onInputChange}
+            value={email}
+            error={errors.email}
+          />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 12, 12]} mt={4}>
+          <Input
+            label="Password"
             placeholder="Enter your password"
             name="password"
             id="password"
             type="password"
-            size="large"
             onChange={onInputChange}
             value={password}
+            error={errors.password}
           />
-          <ErrorMsg>{passwordError}</ErrorMsg>
-        </InputDiv>
-        <InputDiv>
-          <InputLabel htmlFor="passwordConfirm">Confirm Password</InputLabel>
-          <Input.Password
-            placeholder="Re-enter your password"
-            name="passwordConfirm"
-            id="passwordConfirm"
-            type="password"
-            size="large"
-            onChange={onInputChange}
-            value={passwordConfirm}
+          <T.PXS color="gray3" mt={1} ml={1}>
+            Minimum 8 characters
+          </T.PXS>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 12, 12]} mt={5}>
+          <Checkbox
+            checked={agreeOnTerms}
+            onChange={onCheckboxChange}
+            label="I agree to the PressPad Terms of Use. By clicking Create Account I acknowledge the PressPad Privacy Policy "
           />
-          <ErrorMsg>{passwordConfirmError}</ErrorMsg>
-        </InputDiv>
-        {(userType === 'host' || userType === 'intern') && (
-          <DisclaimerWrapper>
-            <Disclaimer>
-              <Checkbox
-                name="checkbox"
-                checked={checkbox}
-                onChange={onCheckboxChange}
-              />
-              <DisclaimerText>
-                By signing up, I agree to the
-                <a
-                  href={TERMS_CONDITIONS}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  &nbsp;Terms & Conditions&nbsp;
-                </a>
-                and PressPad
-                <a
-                  href={PRIVACY_POLICY}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  &nbsp;Privacy Policy
-                </a>
-              </DisclaimerText>
-            </Disclaimer>
-          </DisclaimerWrapper>
-        )}
-        <ButtonWrapper>
-          <Button
-            label="Sign Up"
-            type="primary"
-            onClick={onFormSubmit}
-            loading={isLoading}
-          />
-        </ButtonWrapper>
-        <DisclaimerWrapper>
-          <ErrorMsg>{disclaimerError}</ErrorMsg>
-        </DisclaimerWrapper>
-        <ErrorMsg>{msg}</ErrorMsg>
-      </SignUpForm>
-    </Wrapper>
+        </Col>
+      </Row>
+
+      <Row mb={8}>
+        <Col w={[4, 12, 12]} mt={5}>
+          {msg && <ErrorMsg>{msg}</ErrorMsg>}
+          <Button type="secondary" onClick={onFormSubmit} loading={isLoading}>
+            SIGN UP
+          </Button>
+          <T.P color="gray3" mt={4} style={{ textAlign: 'center' }}>
+            Already signed up?{' '}
+            <T.Link to={SIGNIN_URL} color="pink" style={{ fontWeight: 'bold' }}>
+              Log in{' '}
+            </T.Link>
+          </T.P>
+        </Col>
+      </Row>
+    </div>
   );
 };
