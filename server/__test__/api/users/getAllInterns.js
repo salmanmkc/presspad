@@ -5,11 +5,11 @@ const user = require('../../../database/data/test/users');
 
 const app = require('../../../app');
 
-const createToken = require('./../../../helpers/createToken');
+const createToken = require('../../../helpers/createToken');
 
 const {
   API_INTERNS_URL,
-} = require('./../../../../client/src/constants/apiRoutes');
+} = require('../../../../client/src/constants/apiRoutes');
 
 let connection;
 let users;
@@ -38,7 +38,7 @@ describe('Testing for get all interns endpoint /interns', () => {
       .set('Cookie', [token])
       .end((err, res) => {
         expect(res).toBeDefined();
-        expect(res.body).toHaveLength(1);
+        expect(res.body).toHaveLength(4);
         expect(res.body[0]._id).toBe(internUser._id.toString());
         expect(res.body[0].email).toBe(internUser.email);
         expect(res.body[0].role).toBe(internUser.role);
@@ -65,7 +65,7 @@ describe('Testing for get all interns endpoint /interns', () => {
       .set('Cookie', [token])
       .end((err, res) => {
         expect(res).toBeDefined();
-        expect(res.body).toHaveLength(2);
+        expect(res.body).toHaveLength(5);
         done(err);
       });
   });
@@ -82,7 +82,7 @@ describe('Testing for get all interns endpoint /interns', () => {
       .set('Cookie', [token])
       .end((err, res) => {
         expect(res).toBeDefined();
-        expect(res.body).toHaveLength(1);
+        expect(res.body).toHaveLength(4);
         expect(res.body[0]._id).toBe(internUser._id.toString());
         expect(res.body[0].email).toBe(internUser.email);
         expect(res.body[0].role).toBe(internUser.role);

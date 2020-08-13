@@ -65,7 +65,7 @@ const DatePicker = ({
               type="date"
               suffixIcon={renderIcon}
               onChange={e => onChange(e, 'startDate', index)}
-              value={value && value.startDate}
+              value={value && value.startDate && moment(value.startDate)}
               disabledDate={current => disabledDate(current, 'start', value)}
               style={{ position: 'relative' }}
               {...props}
@@ -86,7 +86,7 @@ const DatePicker = ({
               type="date"
               suffixIcon={renderIcon}
               onChange={e => onChange(e, 'endDate', index)}
-              value={value && value.endDate}
+              value={value && value.endDate && moment(value.endDate)}
               disabledDate={current => disabledDate(current, 'end', value)}
               {...props}
             >
@@ -108,6 +108,7 @@ const DatePicker = ({
             </S.CrossBtn>
           )}
         </S.DateRangeWrapper>
+        {error && <S.Error>{error}</S.Error>}
         {multi && (
           <S.AddBtn
             color="pink"

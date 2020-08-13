@@ -45,7 +45,7 @@ const AboutMe = () => {
   const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
-  const [error, setError] = useState();
+  const [mainError, setMainError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [prevData, setPrevData] = useState({});
@@ -73,16 +73,16 @@ const AboutMe = () => {
       setErrors(_errors || {});
 
       if (_errors) {
-        setError('Must fill all required fields');
+        setMainError('Must fill all required fields');
         return;
       }
-      setError();
+      setMainError();
 
       setLoading(true);
       await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
     } catch (e) {
-      setError(e.response.data.error);
+      setMainError(e.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -439,7 +439,7 @@ const AboutMe = () => {
 
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          {error && <T.PXS color="pink">{error}</T.PXS>}
+          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
 
           <Button type="secondary" onClick={onSubmit} loading={loading}>
             SAVE CHANGES

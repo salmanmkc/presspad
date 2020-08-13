@@ -20,8 +20,6 @@ const Allocation = ({
   errors,
   setErrors,
 }) => {
-  // console.log('props', details);
-
   const { payedAmount = '', coupon = {} } = details;
 
   const handleRefundChange = (name, { value }) => {

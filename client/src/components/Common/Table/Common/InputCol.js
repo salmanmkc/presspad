@@ -7,19 +7,15 @@ const InputCol = (colTitle, onChange, onBlur) => ({
   dataIndex: colTitle,
   key: colTitle,
   className: 'dropdownCol',
-  render: (text, rowData) =>
-    text ? (
-      <Input
-        onChange={e => onChange && onChange(e, rowData)}
-        onBlur={e => onBlur && onBlur(e, rowData)}
-        defaultValue={text}
-      />
-    ) : (
-      <Input
-        onChange={e => onChange && onChange(e, rowData)}
-        onBlur={e => onBlur && onBlur(e, rowData)}
-      />
-    ),
+  render: (text, rowData) => (
+    <Input
+      onChange={e => onChange && onChange(e, rowData)}
+      onBlur={e => onBlur && onBlur(e, rowData)}
+      defaultValue={text}
+      value={onChange ? text : undefined}
+      error={rowData.error}
+    />
+  ),
 });
 
 export default InputCol;

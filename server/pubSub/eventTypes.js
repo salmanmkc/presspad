@@ -23,6 +23,12 @@ const events = {
     PAID_AUTOMATIC_CANCELLED: 'booking.paid_automatic_cancelled',
     UNPAID_AUTOMATIC_CANCELLED: 'booking.unpaid_automatic_cancelled',
   },
+  bursary: {
+    REJECTED: `bursary.rejected`,
+    PRE_APPROVED: `bursary.pre_approved`,
+    APPROVED: `bursary.approved`,
+    INVITE_TO_INTERVIEW: `bursary.invite_to_interview`,
+  },
 };
 
 module.exports = events;

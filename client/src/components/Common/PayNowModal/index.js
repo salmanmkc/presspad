@@ -5,10 +5,10 @@ import { injectStripe, CardElement } from 'react-stripe-elements';
 import { withRouter } from 'react-router-dom';
 
 import * as S from './style';
-import { formatPrice } from '../../../../../helpers';
+import { formatPrice } from '../../../helpers';
 
-import { API_INTERN_PAYMENT_URL } from '../../../../../constants/apiRoutes';
-import { BOOKING_VIEW_URL } from '../../../../../constants/navRoutes';
+import { API_INTERN_PAYMENT_URL } from '../../../constants/apiRoutes';
+import { BOOKING_VIEW_URL } from '../../../constants/navRoutes';
 
 class PayNowModal extends Component {
   state = {
@@ -58,7 +58,6 @@ class PayNowModal extends Component {
       const { cardElement } = this.state;
       const { payNow, stripe } = this.props;
       const { installment: paymentInfo } = payNow;
-
       // start payment process
       this.setState({ isLoading: true });
 
@@ -165,6 +164,7 @@ class PayNowModal extends Component {
   render() {
     const { payNow, setPayNow } = this.props;
     const { installment } = payNow;
+
     return (
       <Modal
         visible={payNow.openModal}

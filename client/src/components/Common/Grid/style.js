@@ -11,8 +11,6 @@ export const Row = styled.div`
   margin-right: -${({ inner, theme }) => (inner ? theme.vars.gridGutter / 2 : 0)}px !important;
   width: ${({ inner, theme }) =>
     inner ? `calc(100% + ${theme.vars.gridGutter}px)` : '100%'};
-  margin-top: ${({ theme, mt }) => theme.spacings[mt] || 0};
-  margin-bottom: ${({ theme, mb }) => theme.spacings[mb] || 0};
   align-items: ${({ ai }) => ai || 'flex-start'};
 
   justify-content: ${({ jcT, jc, jcM }) => jcM || jcT || jc || 'flex-start'};
@@ -32,8 +30,6 @@ export const Col = styled.div`
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
-  margin-top: ${({ theme, mt }) => theme.spacings[mt] || 0};
-  margin-bottom: ${({ theme, mb }) => theme.spacings[mb] || 0};
   flex-shrink: 0;
   // position: relative;
   width: 100%;

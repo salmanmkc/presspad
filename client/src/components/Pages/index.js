@@ -27,9 +27,10 @@ import AddFunds from './OrgDashboard/AddFunds';
 import SignUpFunnelPage from './SignUpFunnelPage';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
-
-import DeleteInternAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
+import DeleteAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
+// import UnderReview from './Settings/UnderReview';
 import settingComponents from './Settings';
+import * as InternSignUpFlow from './InternSignUpFlow';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -66,6 +67,11 @@ import {
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
   SIGNUP_URL,
+  INTERN_SIGNUP_ABOUT_ME,
+  INTERN_SIGNUP_BURSARY,
+  INTERN_SIGNUP_PROFILE,
+  INTERN_SIGNUP_VERIFICATIONS,
+  INTERN_SIGNUP_WELCOME,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -102,6 +108,15 @@ function Pages(props) {
 
         <Route
           isPrivate
+          path={INTERN_SIGNUP_ABOUT_ME}
+          Component={InternSignUpFlow.AboutMe}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          isPrivate
           exact
           path={SETTINGS.BOOK_REVIEW}
           Component={settingComponents('bookReview', role)}
@@ -109,11 +124,50 @@ function Pages(props) {
           layout="sideMenu"
           {...props}
         />
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_PROFILE}
+          Component={InternSignUpFlow.MyProfile}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_VERIFICATIONS}
+          Component={InternSignUpFlow.Verifications}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_BURSARY}
+          Component={InternSignUpFlow.Bursary}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={INTERN_SIGNUP_WELCOME}
+          Component={InternSignUpFlow.Welcome}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
 
         <Route
           exact
           path={SETTINGS.DELETE_ACCOUNT_SUCCESS}
-          Component={DeleteInternAccountSuccess}
+          Component={DeleteAccountSuccess}
           layout="illustrations"
           mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
@@ -390,6 +444,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         <Route
@@ -407,6 +463,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         <Route
@@ -424,6 +482,8 @@ function Pages(props) {
               <Redirect to={DASHBOARD_URL} />
             )
           }
+          layout="login"
+          color="blue"
           {...props}
         />
         {['organisation'].includes(role) && (

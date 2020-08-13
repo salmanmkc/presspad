@@ -19,6 +19,7 @@ const deleteAccount = require('../controllers/user/deleteAccount');
 const internSettings = require('../controllers/user/internSettings');
 const settingMyAccount = require('../controllers/user/myAccount');
 
+const { getMyBursary, editBursary } = require('../controllers/bursary');
 const {
   viewBooking,
   getUserBookings,
@@ -67,6 +68,14 @@ const { updateProfile } = require('../controllers/profile/updateProfile');
 // controller for admin to view all withdraw requests in presspad
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
 const updateBankDetails = require('../controllers/withdrawRequests/updateBankDetails');
+
+const {
+  getBursaryWindows,
+  getBursaryApplications,
+  upsertBursaryWindows,
+  updateBursaryApplication,
+  getBursaryApplicationInfo,
+} = require('../controllers/bursary');
 
 // IMPORT MIDDLEWARES
 const authentication = require('../middlewares/authentication');
@@ -136,10 +145,15 @@ const {
   USER_BASE,
   RESET_PASSWORD,
   SET_PASSWORD,
+  BURSARY_WINDOWS,
+  BURSARY_APPLICATIONS,
+  UPDATE_BURSARY_APPLICATIONS,
   INTERN_SETTINGS_MY_ACCOUNT,
   INTERN_SETTINGS_ABOUT_ME,
   INTERN_SETTINGS_MY_PROFILE,
   INTERN_SETTINGS_VERIFICATIONS,
+  MY_BURSARY,
+  SINGLE_BURSARY,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -356,6 +370,41 @@ router.post(RESET_PASSWORD, resetPassword);
 router.post(SET_PASSWORD, setPassword);
 
 router.patch(INTERN_SETTINGS_MY_ACCOUNT, authentication, settingMyAccount);
+router.get(
+  BURSARY_WINDOWS,
+  authentication,
+  authorization(['admin']),
+  getBursaryWindows,
+);
+router.put(
+  BURSARY_WINDOWS,
+  authentication,
+  authorization(['admin']),
+  upsertBursaryWindows,
+);
+
+router.get(
+  BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  getBursaryApplications,
+);
+
+router.get(
+  UPDATE_BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  getBursaryApplicationInfo,
+);
+
+router.patch(
+  UPDATE_BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  updateBursaryApplication,
+);
+
+router.patch(INTERN_SETTINGS_MY_ACCOUNT, authentication, settingMyAccount);
 
 router.patch(INTERN_SETTINGS_ABOUT_ME, authentication, internSettings.aboutMe);
 
@@ -370,5 +419,8 @@ router.patch(
   authentication,
   internSettings.verifications,
 );
+
+router.get(MY_BURSARY, authentication, getMyBursary);
+router.patch(SINGLE_BURSARY, authentication, editBursary);
 
 module.exports = router;

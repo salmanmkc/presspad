@@ -34,6 +34,7 @@ const Tabs = ({ items, caps, handleClick, selected }) => (
       const isSelected = selected === index;
       return (
         <TabButton
+          key={item}
           caps={caps}
           index={index}
           handleClick={handleClick}

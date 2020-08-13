@@ -20,6 +20,7 @@ import Warning from './icons/Warning';
 import CircleTick from './icons/CircleTick';
 import MoreInfo from './icons/MoreInfo';
 import User from './icons/User';
+import User2 from './icons/User2';
 import CrossCircle from './icons/CrossCircle';
 import Info from './icons/Info';
 import MapPin from './icons/MapPin';
@@ -46,6 +47,8 @@ import Star from './icons/Star';
 import Ambassador from './icons/Ambassador';
 import Community from './icons/Community';
 import Key from './icons/Key';
+import Verified from './icons/Verified';
+import Artboard from './icons/Artboard';
 
 const iconStyles = props => css`
   width: ${props.width || '100%'};
@@ -74,6 +77,7 @@ const iconMap = {
   warning: Warning,
   moreInfo: MoreInfo,
   user: User,
+  user2: User2,
   info: Info,
   mapPin: MapPin,
   download: Download,
@@ -100,6 +104,8 @@ const iconMap = {
   ambassador: Ambassador,
   community: Community,
   key: Key,
+  verified: Verified,
+  artboard: Artboard,
 };
 
 const styledIconMap = Object.keys(iconMap).reduce((accum, curr) => {

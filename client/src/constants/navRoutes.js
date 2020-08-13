@@ -43,7 +43,7 @@ export const ADMIN_BURSARY = '/admin/bursary';
 export const ADMIN_BURSARY_APPROVE = `${ADMIN_BURSARY}/approve/:id`;
 export const ADMIN_BURSARY_PREAPPROVE = `${ADMIN_BURSARY}/pre-approve/:id`;
 export const ADMIN_BURSARY_REJECT = `${ADMIN_BURSARY}/reject/:id`;
-export const ADMIN_BURSARY_SUCCESS = `${ADMIN_BURSARY}/success`;
+export const ADMIN_BURSARY_SUCCESS = `${ADMIN_BURSARY}/success/:id`;
 
 // url to view all the data the user has entered in sign up
 export const ADMIN_USER_DETAILS = '/admin/user-details/:id';
@@ -55,6 +55,12 @@ export const SIGNUP_ORG = '/sign-up/organisation';
 export const HOST_COMPLETE_PROFILE_URL = '/host-complete-profile';
 export const INTERN_COMPLETE_PROFILE_URL = '/intern-complete-profile';
 export const DBS_CHECK_PAGE = '/dbs-check';
+
+export const INTERN_SIGNUP_ABOUT_ME = '/sign-up/intern/about-me';
+export const INTERN_SIGNUP_BURSARY = '/sign-up/intern/bursary';
+export const INTERN_SIGNUP_PROFILE = '/sign-up/intern/profile';
+export const INTERN_SIGNUP_VERIFICATIONS = '/sign-up/intern/verifications';
+export const INTERN_SIGNUP_WELCOME = '/sign-up/intern/welcome';
 
 // booking cancellation type urls
 export const CANCELLATION_CONFIRM = `/booking-cancel-confirm/:id`;
