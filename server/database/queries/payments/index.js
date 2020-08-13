@@ -32,6 +32,7 @@ const {
   updateCanceledBooking,
   updateAccounts,
 } = require('./cancelBookingAfterPayments');
+const approveBursaryApplication = require('./approveBursaryApplication');
 
 module.exports = {
   createInstallments,
@@ -56,4 +57,5 @@ module.exports = {
   removePaymentsRemindersForBookings,
   updateCanceledBooking,
   updateAccounts,
+  approveBursaryApplication,
 };

@@ -5,6 +5,7 @@ require('./booking');
 require('./profile');
 require('./user');
 require('./coupon');
+require('./bursary');
 
 module.exports = {
   emit: pubSub.emit,

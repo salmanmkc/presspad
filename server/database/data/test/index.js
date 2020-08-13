@@ -24,7 +24,9 @@ const scheduledEmail = require('./scheduledEmails');
 const checklistQuestion = require('./checklistQuestions');
 const withdrawRequest = require('./withdrawRequests');
 const checklistAnswer = require('./checklistAnswers');
-const bursary = require('./bursary');
+const bursary = require('./bursaries');
+const bursaryApplication = require('./bursaryApplications');
+const bursaryWindow = require('./bursaryWindows');
 
 const couponDiscountRate = 50;
 
@@ -105,6 +107,13 @@ const buildData = options =>
       accounts,
     });
 
+    const bursaryApplications = await bursaryApplication.createAll({
+      users,
+    });
+    const bursaryWindows = await bursaryWindow.createAll({
+      users,
+    });
+
     const bursaries = await bursary.createAll({
       users,
     });
@@ -153,6 +162,8 @@ const buildData = options =>
       updatedConfirmedPaidUpfrontBooking,
       updatedConfirmedPaidFirst,
       bursaries,
+      bursaryApplications,
+      bursaryWindows,
     };
   });
 

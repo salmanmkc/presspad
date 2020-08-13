@@ -26,6 +26,12 @@ const events = {
   coupon: {
     CREATED: 'coupon.created',
   },
+  bursary: {
+    REJECTED: `bursary.rejected`,
+    PRE_APPROVED: `bursary.pre_approved`,
+    APPROVED: `bursary.approved`,
+    INVITE_TO_INTERVIEW: `bursary.invite_to_interview`,
+  },
 };
 
 module.exports = events;

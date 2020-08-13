@@ -1,28 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import axios from 'axios';
+
 import * as S from './style';
 import * as T from '../../../../Common/Typography';
 import { Row, Col } from '../../../../Common/Grid';
 import ButtonNew from '../../../../Common/ButtonNew';
 import Figure from '../../../../Common/Figure';
-import formatPrice from '../../../../../helpers/formatPrice';
+import LoadingBallPulseSync from '../../../../Common/LoadingBallPulseSync';
+import { formatPrice } from '../../../../../helpers';
 
 import { ADMIN_BURSARY } from '../../../../../constants/navRoutes';
-
-// dummy data to be  replaced when back end connected
-const dummyData = {
-  bursaryBalance: 100,
-};
+import { API_UPDATE_BURSARY_APPLICATIONS } from '../../../../../constants/apiRoutes';
 
 const Success = () => {
+  const [loading, setLoading] = useState(false);
   const [availableBalance, setAvailableBalance] = useState(0);
 
   const history = useHistory();
+  const { id: applicationId } = useParams();
 
   useEffect(() => {
-    const { bursaryBalance } = dummyData;
-    setAvailableBalance(bursaryBalance);
-  }, []);
+    let mounted = true;
+    async function getBursaryApplicationInfo() {
+      setLoading(true);
+      const { data: _data } = await axios.get(
+        API_UPDATE_BURSARY_APPLICATIONS.replace(':id', applicationId),
+      );
+
+      if (mounted) {
+        const { bursaryFunds } = _data;
+        setAvailableBalance(bursaryFunds);
+        setLoading(false);
+      }
+    }
+
+    getBursaryApplicationInfo();
+    return () => {
+      mounted = false;
+    };
+  }, [applicationId]);
 
   return (
     <Row>
@@ -38,7 +55,13 @@ const Success = () => {
               You have successfully granted another PressPad Bursary!
             </T.P>
             <Figure
-              stats={formatPrice(availableBalance)}
+              stats={
+                loading ? (
+                  <LoadingBallPulseSync />
+                ) : (
+                  formatPrice(availableBalance)
+                )
+              }
               title="remaining balance"
               small
             />
