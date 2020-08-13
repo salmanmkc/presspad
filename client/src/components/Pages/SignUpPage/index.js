@@ -8,8 +8,6 @@ import USER_TYPES from '../../../constants/userTypes';
 
 import {
   HOST_COMPLETE_PROFILE_URL,
-  INTERN_COMPLETE_PROFILE_URL,
-  WELCOME_PAGES,
   Error500,
   INTERN_SIGNUP_WELCOME,
   DASHBOARD_URL,
