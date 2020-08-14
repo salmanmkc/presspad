@@ -232,7 +232,6 @@ const MyListing = props => {
       } = await axios.get(API_MY_PROFILE_URL);
 
       const totalData = { ...profile, ...listing };
-      console.log('total', totalData);
       setState(getCleanData(totalData));
       setPrevData(getCleanData(totalData));
       setLoading(false);

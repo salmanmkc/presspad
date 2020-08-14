@@ -18,9 +18,14 @@ import {
 import { hostWorkingArea } from '../../../../constants/types';
 import Notification from '../../../Common/Notification';
 
+import { createSingleDate } from '../../../../helpers';
+
 const { validate, hostSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
+  jobTitle: d.jobTitle || '',
+  workingArea: d.workingArea || '',
+  workingAreaOther: d.workingAreaOther || '',
   organisation: d.organisation || '',
   reference1: d.reference1 || {
     name: '',
@@ -33,24 +38,22 @@ const getCleanData = (d = {}) => ({
   photoID: d.photoID || {
     fileName: '',
   },
-  proofMedia: d.proofMedia || {
+  pressCard: d.pressCard || {
     fileName: '',
   },
   DBSCheck: d.DBSCheck || {
     fileName: '',
+    refNum: '',
   },
-  refNum: d.refNum || (d.DBSCheck && d.DBSCheck.refNum) || '',
-  jobTitle: d.jobTitle || '',
-  workArea: d.workArea || '',
-  workAreaOther: d.workAreaOther || '',
+  houseViewingDate: d.houseViewingDate || null,
 });
 
 const Verifications = props => {
   const [state, setState] = useState({
     jobTitle: '',
-    workArea: '',
-    workAreaOther: '',
     organisation: '',
+    workingArea: '',
+    workingAreaOther: '',
     reference1: {
       name: '',
       email: '',
@@ -62,7 +65,7 @@ const Verifications = props => {
     photoID: {
       fileName: '',
     },
-    proofMedia: {
+    pressCard: {
       fileName: '',
     },
     DBSCheck: {
@@ -107,16 +110,14 @@ const Verifications = props => {
   };
 
   useEffect(() => {
-    if (!state.workArea || !state.workArea.includes('Other')) {
-      setState(_state => ({ ..._state, workAreaOther: '' }));
+    if (!state.workingArea || !state.workingArea.includes('Other')) {
+      setState(_state => ({ ..._state, workingAreaOther: '' }));
     }
-  }, [state.workArea]);
+  }, [state.workingArea]);
 
-  const uploadproofMedia = async () => {
+  const uploadpressCard = async () => {
     try {
-      const generatedName = `${props.id}/${Date.now()}.${
-        state.proofMedia.name
-      }`;
+      const generatedName = `${props.id}/${Date.now()}.${state.pressCard.name}`;
       const {
         data: { signedUrl },
       } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
@@ -124,7 +125,7 @@ const Verifications = props => {
         'Content-Type': 'application/octet-stream',
       };
 
-      await axios.put(signedUrl, state.proofMedia, {
+      await axios.put(signedUrl, state.pressCard, {
         headers,
       });
 
@@ -132,7 +133,7 @@ const Verifications = props => {
         fileName: generatedName,
         new: true,
         uploaded: true,
-        preview: state.proofMedia.preview,
+        preview: state.pressCard.preview,
       };
     } catch (e) {
       return setError(e.message);
@@ -166,7 +167,10 @@ const Verifications = props => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: hostSettings.verifications({ jobTitle: 'sdd', workArea: 'ss' }),
+      schema: hostSettings.verifications({
+        jobTitle: 'sdd',
+        workingArea: 'ss',
+      }),
       data: { ...state },
     });
     let e = _errors;
@@ -190,13 +194,13 @@ const Verifications = props => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const update = async (_DBSCheck, _photoID, _proofMedia) => {
+  const update = async (_DBSCheck, _photoID, _pressCard) => {
     try {
       await axios.patch(API_INTERN_SETTINGS_VERIFICATIONS, {
         ...state,
         DBSCheck: _DBSCheck || state.DBSCheck,
         photoID: _photoID || state.photoID,
-        proofMedia: _proofMedia || state.proofMedia,
+        pressCard: _pressCard || state.pressCard,
         prevPhotoIDToDelete:
           state.photoID &&
           state.photoID.new &&
@@ -207,11 +211,11 @@ const Verifications = props => {
           state.DBSCheck.new &&
           prevData.DBSCheck &&
           prevData.DBSCheck.fileName,
-        proofMediaToDelete:
-          state.proofMedia &&
-          state.proofMedia.new &&
-          prevData.proofMedia &&
-          prevData.proofMedia.fileName,
+        pressCardToDelete:
+          state.pressCard &&
+          state.pressCard.new &&
+          prevData.pressCard &&
+          prevData.pressCard.fileName,
       });
     } catch (e) {
       setError(e.response.data.error);
@@ -223,7 +227,7 @@ const Verifications = props => {
   const onSubmit = async () => {
     let _DBSCheck;
     let _photoID;
-    let _proofMedia;
+    let _pressCard;
     const _errors = await _validate(state);
 
     setErrors(_errors || {});
@@ -237,7 +241,7 @@ const Verifications = props => {
     if (
       (state.DBSCheck && state.DBSCheck.new && !state.DBSCheck.uploaded) ||
       (state.photoID && state.photoID.new && !state.photoID.uploaded) ||
-      (state.proofMedia && state.proofMedia.new && !state.proofMedia.uploaded)
+      (state.pressCard && state.pressCard.new && !state.pressCard.uploaded)
     ) {
       const promiseArr = [];
       if (state.DBSCheck && state.DBSCheck.new) {
@@ -258,19 +262,19 @@ const Verifications = props => {
       } else {
         promiseArr.push(Promise.resolve());
       }
-      if (state.proofMedia && state.proofMedia.new) {
+      if (state.pressCard && state.pressCard.new) {
         promiseArr.push(
-          uploadproofMedia().catch(err =>
-            setErrors(e => ({ ...e, proofMedia: err.message })),
+          uploadpressCard().catch(err =>
+            setErrors(e => ({ ...e, pressCard: err.message })),
           ),
         );
       } else {
         promiseArr.push(Promise.resolve());
       }
 
-      [_DBSCheck, _photoID, _proofMedia] = await Promise.all(promiseArr);
+      [_DBSCheck, _photoID, _pressCard] = await Promise.all(promiseArr);
     }
-    await update(_DBSCheck, _photoID, _proofMedia);
+    await update(_DBSCheck, _photoID, _pressCard);
     setNotificationOpen(true);
   };
 
@@ -279,7 +283,7 @@ const Verifications = props => {
       const {
         data: { profile },
       } = await axios.get(API_MY_PROFILE_URL);
-
+      console.log('profile', profile);
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
     };
@@ -331,18 +335,18 @@ const Verifications = props => {
             label="Area you work in"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, workArea: value || '' }))
+              setState(_state => ({ ..._state, workingArea: value || '' }))
             }
-            value={state.workArea}
-            error={errors.workArea}
+            value={state.workingArea}
+            error={errors.workingArea}
           />
-          {state.workArea && state.workArea.includes('Other') && (
+          {state.workingArea && state.workingArea.includes('Other') && (
             <Input
               onChange={onInputChange}
-              value={state.workAreaOther}
+              value={state.workingAreaOther}
               label="Please specify"
-              name="workAreaOther"
-              error={errors.workAreaOther}
+              name="workingAreaOther"
+              error={errors.workingAreaOther}
             />
           )}
         </Col>
@@ -476,9 +480,9 @@ const Verifications = props => {
             secondaryText="file size max 2mb"
             type="file"
             userId={props.id}
-            files={[state.photoID]}
-            setFiles={([photoID]) =>
-              setState(_state => ({ ..._state, photoID }))
+            files={[state.pressCard]}
+            setFiles={([pressCard]) =>
+              setState(_state => ({ ..._state, pressCard }))
             }
             error={errors.photoID}
           />
@@ -536,7 +540,12 @@ const Verifications = props => {
             Book a video property check
           </T.H5>
 
-          <T.H7C color="gray3">Current status: COMPLETED</T.H7C>
+          <T.H7C color="gray3">
+            Viewing Date:{' '}
+            {state.houseViewingDate
+              ? createSingleDate(state.houseViewingDate)
+              : 'N/A'}
+          </T.H7C>
         </Col>
       </Row>
       <Row>
