@@ -225,6 +225,11 @@ const types = {
       subject: 'Booking accepted!',
       params: ['internName', 'amountSpent', 'couponCode'],
     },
+    COUPON_CREATED: {
+      createBody: organisation.couponCreated,
+      subject: 'Coupon created!',
+      params: ['email', 'name', 'organisation', 'couponDetails'],
+    },
 
     // not implemented yet
     BOOKING_OVERDUE: {

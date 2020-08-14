@@ -65,7 +65,10 @@ const StandardCol = (colTitle, type, customSort, subtitle, subtitleType) => ({
     <>
       <div style={{ display: 'flex' }}>
         {decideIcon(text)}
-        <T.PXS color="black" style={{ textTransform: 'capitalize' }}>
+        <T.PXS
+          color="black"
+          style={{ textTransform: colTitle !== 'email' && 'capitalize' }}
+        >
           {formatText(text, type)}
         </T.PXS>
       </div>

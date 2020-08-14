@@ -27,6 +27,44 @@ const calculatePrice = range => {
 exports.calculatePrice = calculatePrice;
 
 /**
+ * calculate coupon price giving a range of dates
+ * this will discount the 14 free days and add 3 days to either side of internship start and end date
+ * @param {import("moment-range").MomentRange} range
+ */
+const calculateCouponPriceByRange = (startDate, endDate, discountRate) => {
+  const updatedStartDate = moment(startDate).subtract(3, 'day');
+  const updatedEndDate = moment(endDate).add(3, 'day');
+  const range = moment.range(updatedStartDate, updatedEndDate);
+
+  if (!range) return 0;
+  let weeks;
+  let days;
+  if (typeof range === 'number') {
+    weeks = Math.trunc(range / 7);
+    days = range;
+  } else {
+    range.start.startOf('day');
+    range.end.add(1, 'day').endOf('day');
+    weeks = range.diff('weeks');
+    days = range.diff('days');
+  }
+
+  // if more than 2 weeks take off 14 free days and add 6 days (covering 3 before and 3 after internship)
+  if (weeks >= 2) {
+    return {
+      amount: (days - 14) * 2000 * Number(discountRate / 100),
+      days,
+      updatedStartDate,
+      updatedEndDate,
+    };
+  }
+
+  return 0;
+};
+
+exports.calculateCouponPriceByRange = calculateCouponPriceByRange;
+
+/**
  * Create installments array
  * @param {number} netAmount the remaining amount that the intern has to pay
  * @param {Date} startDate booking starting date

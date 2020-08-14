@@ -1,7 +1,8 @@
 const boom = require('boom');
 
-const dashboardQuery = require('../../database/queries/organisation/dashboard.js');
-const generateFileURL = require('./../../helpers/generateFileURL');
+const {
+  orgDashboard: orgDashboardQuery,
+} = require('../../database/queries/dashboard');
 
 module.exports = async (req, res, next) => {
   const { user } = req;
@@ -13,11 +14,8 @@ module.exports = async (req, res, next) => {
   }
 
   try {
-    const results = await dashboardQuery(organisation);
-    const [orgDetails] = results;
-    if (orgDetails && orgDetails[0] && orgDetails[0].logo) {
-      await generateFileURL(orgDetails[0].logo);
-    }
+    const results = await orgDashboardQuery(organisation);
+
     return res.json(results);
   } catch (error) {
     return next(boom.badImplementation(error));

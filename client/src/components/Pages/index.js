@@ -25,6 +25,7 @@ import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import AddFunds from './OrgDashboard/AddFunds';
+import AddCoupons from './OrgDashboard/AddCoupons';
 import SignUpFunnelPage from './SignUpFunnelPage';
 
 import Settings from './Settings';
@@ -64,6 +65,7 @@ import {
   SET_PASSWORD,
   WELCOME_PAGES,
   ADD_FUNDS_URL,
+  ADD_COUPONS_URL,
   SETTINGS,
   ADMIN_BURSARY,
   ADMIN_BURSARY_APPROVE,
@@ -488,6 +490,15 @@ function Pages(props) {
             exact
             path={ADD_FUNDS_URL}
             Component={AddFunds}
+            layout="rightDiv"
+            {...props}
+          />
+        )}
+        {['organisation'].includes(role) && (
+          <Route
+            exact
+            path={ADD_COUPONS_URL}
+            Component={AddCoupons}
             layout="rightDiv"
             {...props}
           />
