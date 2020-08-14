@@ -6,13 +6,13 @@ import { message, Spin } from 'antd';
 import { Elements } from 'react-stripe-elements';
 
 import {
-  getDiscountDays,
   createInstallments,
   getFirstUnpaidInstallment,
   createUpdatedNewInstallments,
 } from '../helpers';
 
 import {
+  getDiscountDays,
   calculatePrice,
   calculateHostRespondingTime,
 } from '../../../../helpers';
@@ -173,6 +173,7 @@ export default class BookingView extends Component {
               (calculatePrice(discountDays) * discountRate) / 100;
 
             const availableAmount = reservedAmount - usedAmount;
+
             if (availableAmount < couponDiscount) {
               couponDiscount = availableAmount;
             }
@@ -197,6 +198,10 @@ export default class BookingView extends Component {
             if (error.response && error.response.status === 404) {
               errorMsg = 'wrong code ..';
             }
+            if (error.response && error.response.data.error) {
+              errorMsg = error.response.data.error;
+            }
+
             this.setState(prevState => ({
               couponInfo: {
                 ...prevState.couponInfo,

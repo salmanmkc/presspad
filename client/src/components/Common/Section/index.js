@@ -8,6 +8,7 @@ import InternshipDetails from './InternshipDetails';
 import MyImpact from './MyImpact';
 import Updates from './Updates';
 import Payments from './Payments';
+import Coupons from './Coupons';
 
 export {
   Wallet,
@@ -20,4 +21,5 @@ export {
   MyImpact,
   Updates,
   Payments,
+  Coupons,
 };

@@ -3,6 +3,17 @@ import { Link } from 'react-router-dom';
 
 import { size } from '../../../theme';
 
+export const Wrapper = styled.div`
+  width: 100%;
+  margin-top: ${({ mobile }) => mobile && '-2rem'};
+`;
+
+export const Container = styled.div`
+  margin-bottom: ${({ theme: { spacings } }) => spacings[2]};
+`;
+
+// OLD STYLES
+
 export const PageWrapper = styled.div`
   padding-top: 4rem;
   padding-bottom: 8rem;

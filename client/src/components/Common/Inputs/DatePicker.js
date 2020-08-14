@@ -57,6 +57,12 @@ const DatePicker = ({
   if (type === 'dateRange') {
     return (
       <>
+        {' '}
+        {label && (
+          <T.PBold as="label" color="primary" ml={2}>
+            {label}
+          </T.PBold>
+        )}
         <S.DateRangeWrapper mt={mt} mb={mb} ml={ml} mr={mr} error={!!error}>
           <>
             <AntdDatePicker
@@ -116,6 +122,7 @@ const DatePicker = ({
   if (typeof _value === 'string') {
     _value = moment(_value);
   }
+
   return (
     <S.DatePickerWrapper mt={mt} mb={mb} ml={ml} mr={mr} error={!!error}>
       {label && (

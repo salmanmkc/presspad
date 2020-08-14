@@ -2,8 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import { Row, Col, Tabs, Table, Skeleton } from 'antd';
 
-import CouponCode from './CouponCode';
-
 import {
   InfoMessage,
   TabPanWrapper,
@@ -15,6 +13,7 @@ import {
   SectionTitle,
   PayButton,
 } from '../../../Common/general';
+import CouponCode from '../../../Common/CouponCode';
 
 const { TabPane } = Tabs;
 

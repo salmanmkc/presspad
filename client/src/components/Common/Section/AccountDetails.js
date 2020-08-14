@@ -6,7 +6,7 @@ import { Row, Col } from '../Grid';
 
 import { SETTINGS } from '../../../constants/navRoutes';
 
-const Reviews = ({ firstName, lastName, email, phone }) => (
+const AccountDetails = ({ firstName, lastName, email, phone }) => (
   <S.Wrapper>
     <Row mb={5}>
       <Col w={[4, 12, 12]}>
@@ -46,4 +46,4 @@ const Reviews = ({ firstName, lastName, email, phone }) => (
   </S.Wrapper>
 );
 
-export default Reviews;
+export default AccountDetails;

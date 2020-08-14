@@ -62,6 +62,7 @@ const MakePayment = ({
   }, [handleCouponChange, isNew, usedCoupon.code]);
 
   let netAmount = fullPrice - couponDiscount;
+
   useEffect(() => {
     if (netAmount <= 0) {
       handlePaymentMethod(true);
@@ -168,6 +169,7 @@ const MakePayment = ({
   }
 
   const remainingPrice = getRemainingPrice(installments);
+
   const firstUnpaid = getFirstUnpaidInstallment(installments);
   netAmount = remainingPrice - couponDiscount;
   return (

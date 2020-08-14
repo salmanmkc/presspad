@@ -5,7 +5,7 @@ const Review = require('../../models/Review');
 const Bursary = require('../../models/Bursary');
 const Profile = require('../../models/Profile');
 
-const { addOrg } = require('./organisation');
+const { addOrg, getOrgById } = require('./organisation');
 const updateRespondingData = require('./updateRespondingData');
 const getUserByBursaryApplicationId = require('./getUserByBursaryApplicationId');
 const { createNewAccount } = require('../account');
@@ -249,4 +249,5 @@ module.exports.findUserByToken = token =>
   });
 
 module.exports.updateRespondingData = updateRespondingData;
+module.exports.getOrgById = getOrgById;
 module.exports.getUserByBursaryApplicationId = getUserByBursaryApplicationId;
