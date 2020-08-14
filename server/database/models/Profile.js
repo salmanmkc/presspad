@@ -4,6 +4,10 @@ const { Schema, model } = mongoose;
 const { types } = require('../constants');
 const { wordLengthValidator } = require('../utils');
 
+const {
+  types: { bursaryTypes: t },
+} = require('../constants');
+
 const profileSchema = new Schema(
   {
     user: {
@@ -332,6 +336,30 @@ const profileSchema = new Schema(
     hasNoInternship: {
       type: Boolean,
       default: false,
+    },
+
+    // HOST QUESTIONS - THESE QUESTIONS BELOW FOR INTERN ARE IN THE BURSARY TABLE
+    typeOfSchool: {
+      type: String,
+      enum: t.typeOfSchool,
+    },
+    typeOfSchoolOther: {
+      type: String,
+    },
+    eligibleForFreeSchoolMeals: {
+      type: String,
+      enum: t.eligibleForFreeSchoolMeals,
+    },
+    describeMainIncomeEarnerMainJob: {
+      type: String,
+      enum: t.describeMainIncomeEarnerMainJob,
+    },
+    highestLevelOfQualifications: {
+      type: String,
+      enum: t.highestLevelOfQualifications,
+    },
+    highestLevelOfQualificationsOther: {
+      type: String,
     },
   },
   {
