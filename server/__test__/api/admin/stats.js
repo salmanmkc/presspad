@@ -72,7 +72,7 @@ describe('Testing for get host profile route', () => {
       .end((error, result) => {
         expect(result).toBeDefined();
         expect(result.body).toBeDefined();
-        expect(result.body[3].key).toBe(3);
+        expect(result.body[3].key).toBe(4);
         expect(result.body[3].name).toBe(internUser.name);
         expect(result.body[3].bookingStatus).toBe('at host');
         expect(result.body[3].organisation).toBe(
