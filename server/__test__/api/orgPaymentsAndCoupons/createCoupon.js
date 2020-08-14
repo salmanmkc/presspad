@@ -1,5 +1,5 @@
 const request = require('supertest');
-
+const moment = require('moment');
 const app = require('../../../app');
 const { Account } = require('../../../database/models');
 const createToken = require('../../../helpers/createToken');
@@ -44,12 +44,13 @@ describe('Testing Organisation payemnts (create coupons):', () => {
         expect(res.body.success).toBeTruthy();
         const couponData = {
           internName: 'some intern',
+          email: 'intern@test.com',
           discountRate: 50,
-          startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
-          endDate: Date.now() + 34 * 24 * 60 * 60 * 1000,
+          startDate: moment(),
+          endDate: moment().add(20, 'days'),
         };
-
-        const newCouponValue = 15000;
+        // coupon price: 21 days - 14 days + 6 days x £20 x 50%
+        const newCouponValue = 13000;
 
         request(app)
           .post(API_COUPONS_URL)
@@ -84,7 +85,9 @@ describe('Testing Organisation payemnts (create coupons):', () => {
             } = await Account.findById(orgAccountId);
 
             expect(orgIncom).toBe(oldOrgIncom + fundsToAdd);
-            expect(oldOrgCurrentBalance).toBe(orgCurrentBalance);
+            expect(orgCurrentBalance).toBe(
+              oldOrgCurrentBalance + fundsToAdd - couponRes.body.reservedAmount,
+            );
             expect(oldCouponValue + newCouponValue).toBe(couponsValue);
 
             await connection.close();

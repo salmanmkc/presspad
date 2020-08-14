@@ -35,8 +35,11 @@ const {
 } = require('../controllers/booking');
 const adminStats = require('../controllers/stats/adminStats');
 const verifyProfile = require('../controllers/profile/verifyProfile');
-const orgsDashboard = require('../controllers/organisation/dashboard');
-const { internDashboard, hostDashboard } = require('../controllers/dashboard');
+const {
+  internDashboard,
+  hostDashboard,
+  orgDashboard,
+} = require('../controllers/dashboard');
 const getMyProfile = require('../controllers/profile/getMyProfile');
 const { getUploadSignedURL } = require('../controllers/storage');
 const { postReview, getReviews } = require('../controllers/review');
@@ -255,7 +258,7 @@ router.post(SIGNUP_URL, signUpController);
 router.get(GET_ORGS_URL, getAllOrgs);
 
 // Orgs
-router.get(ORGS_DASHBOARD, authentication, orgsDashboard);
+router.get(ORGS_DASHBOARD, authentication, orgDashboard);
 
 // Get intern dashboard
 router.get(INTERN_DASHBOARD_URL, authentication, internDashboard);

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import * as S from '../style';
 
 import { Row, Col } from '../../Grid';
+import * as T from '../../Typography';
 
 import { Badge, BlueSpan } from '../../general';
 import LoadingBallPulseSync from '../../LoadingBallPulseSync';
@@ -13,7 +14,16 @@ const timeCol = [1, 2, 4];
 const updateCol = [3, 8, 8];
 
 const Update = ({ item, userRole }) => {
-  const { type, secondParty, createdAt, seen, booking, loading } = item;
+  const {
+    type,
+    secondParty,
+    createdAt,
+    seen,
+    booking,
+    loading,
+    seenForOrg = false,
+    user = {},
+  } = item;
 
   const timeString = createdAt ? moment(createdAt).format('DD MMM YY') : 'N/A';
 
@@ -436,6 +446,86 @@ const Update = ({ item, userRole }) => {
             </S.UpdateLink>
           );
 
+        default:
+          return null;
+      }
+    case 'org':
+      switch (type) {
+        case 'stayApproved':
+          return (
+            <Row mb={3}>
+              <Col w={timeCol}>
+                <T.PXS>
+                  <i>{timeString}</i>
+                </T.PXS>
+              </Col>
+              <Col w={updateCol}>
+                <T.PXS>
+                  <strong>{user.name}</strong> has matched with
+                  <Link to={`/host/${secondParty._id}`}>
+                    <BlueSpan> {secondParty.name}</BlueSpan>
+                  </Link>
+                </T.PXS>
+                {!seenForOrg && !loading && <Badge>new</Badge>}
+                {loading && !seenForOrg && <LoadingBallPulseSync />}
+              </Col>
+            </Row>
+          );
+
+        case 'getReview':
+          return (
+            <Row mb={3}>
+              <Col w={timeCol}>
+                <T.PXS>
+                  <i>{timeString}</i>
+                </T.PXS>
+              </Col>
+              <Col w={updateCol}>
+                <T.PXS>
+                  <strong>{user.name}</strong> has received a new review
+                </T.PXS>
+                {!seenForOrg && !loading && <Badge>new</Badge>}
+                {loading && !seenForOrg && <LoadingBallPulseSync />}
+              </Col>
+            </Row>
+          );
+
+        case 'stayCompleted':
+          return (
+            <Row mb={3}>
+              <Col w={timeCol}>
+                <T.PXS>
+                  <i>{timeString}</i>
+                </T.PXS>
+              </Col>
+              <Col w={updateCol}>
+                <T.PXS>
+                  <strong>{user.name}</strong> has completed their stay{' '}
+                </T.PXS>
+                {!seenForOrg && !loading && <Badge>new</Badge>}
+                {loading && !seenForOrg && <LoadingBallPulseSync />}
+              </Col>
+            </Row>
+          );
+
+        case 'bookingTerminated':
+          return (
+            <Row mb={3}>
+              <Col w={timeCol}>
+                <T.PXS>
+                  <i>{timeString}</i>
+                </T.PXS>
+              </Col>
+              <Col w={updateCol}>
+                <T.PXS>
+                  Unfortunately due to lack of payment this booking has been
+                  terminated.{' '}
+                </T.PXS>
+                {!seenForOrg && !loading && <Badge>new</Badge>}
+                {loading && !seenForOrg && <LoadingBallPulseSync />}
+              </Col>
+            </Row>
+          );
         default:
           return null;
       }

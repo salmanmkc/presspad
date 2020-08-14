@@ -1,5 +1,7 @@
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
+import { Redirect, Switch, useLocation } from 'react-router-dom';
+
+import welcomeImage from './WelcomePages/wlcomeImage';
 
 //  COMMON COMPONENTS
 import Route from '../Common/Route';
@@ -18,18 +20,18 @@ import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
-import ThemeTest from './ThemeTest';
 import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import AddFunds from './OrgDashboard/AddFunds';
+import AddCoupons from './OrgDashboard/AddCoupons';
 import SignUpFunnelPage from './SignUpFunnelPage';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
 import DeleteAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
-// import UnderReview from './Settings/UnderReview';
 import settingComponents from './Settings';
+import WelcomePages from './WelcomePages';
 import * as InternSignUpFlow from './InternSignUpFlow';
 
 import { withWindowWidth } from '../../HOCs';
@@ -59,7 +61,9 @@ import {
   // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  WELCOME_PAGES,
   ADD_FUNDS_URL,
+  ADD_COUPONS_URL,
   SETTINGS,
   ADMIN_BURSARY,
   ADMIN_BURSARY_APPROVE,
@@ -82,7 +86,7 @@ function Pages(props) {
     windowWidth,
     resetState,
   } = props;
-
+  const location = useLocation();
   return (
     <>
       <Switch>
@@ -214,6 +218,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
         {/* public host profile */}
@@ -223,6 +228,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
 
@@ -262,6 +268,7 @@ function Pages(props) {
               {...props}
             />
           )}
+          footer
           {...props}
         />
         <Route
@@ -495,6 +502,15 @@ function Pages(props) {
             {...props}
           />
         )}
+        {['organisation'].includes(role) && (
+          <Route
+            exact
+            path={ADD_COUPONS_URL}
+            Component={AddCoupons}
+            layout="rightDiv"
+            {...props}
+          />
+        )}
         <Route
           path={SIGNUP_URL}
           exact
@@ -525,14 +541,14 @@ function Pages(props) {
           color="blue"
           {...props}
         />
-        {/* To be deleted */}
         <Route
-          path="/test"
-          Component={ThemeTest}
+          path={WELCOME_PAGES}
+          Component={() => <WelcomePages role={role} />}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}
-          layout="sideMenu"
+          layout="illustrations"
+          image={welcomeImage(location, role)}
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>

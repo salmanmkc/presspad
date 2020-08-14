@@ -23,6 +23,15 @@ module.exports = id => {
         account: { $arrayElemAt: ['$account', 0] },
       },
     },
+    {
+      $project: {
+        account: 1,
+        name: 1,
+        _id: 1,
+        accountDetails: 1,
+        internshipOpportunities: 1,
+      },
+    },
   ]);
 
   // interns notifications
@@ -59,6 +68,11 @@ module.exports = id => {
                   { $eq: ['$private', false] },
                 ],
               },
+            },
+          },
+          {
+            $sort: {
+              createdAt: 1,
             },
           },
         ],
@@ -98,6 +112,7 @@ module.exports = id => {
         type: '$notifications.type',
         private: '$notifications.private',
         createdAt: '$notifications.createdAt',
+        booking: 1,
       },
     },
   ]);

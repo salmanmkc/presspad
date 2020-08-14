@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
 // CONSTANTS
-import {
-  API_SIGNUP_URL,
-  API_GET_ORGS_URL,
-  DASHBOARD_URL,
-} from '../../../constants/apiRoutes';
+import { API_SIGNUP_URL, API_GET_ORGS_URL } from '../../../constants/apiRoutes';
 
 import USER_TYPES from '../../../constants/userTypes';
 
@@ -14,6 +10,7 @@ import {
   HOST_COMPLETE_PROFILE_URL,
   Error500,
   INTERN_SIGNUP_WELCOME,
+  DASHBOARD_URL,
 } from '../../../constants/navRoutes';
 
 import SignUp from './SignUp';
