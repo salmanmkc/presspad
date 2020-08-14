@@ -147,7 +147,6 @@ const AboutMe = () => {
       const {
         data: { profile },
       } = await axios.get(API_MY_PROFILE_URL);
-      console.log('profile', profile);
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
     };

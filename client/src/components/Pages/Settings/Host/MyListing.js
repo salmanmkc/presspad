@@ -10,12 +10,13 @@ import { Col, Row } from '../../../Common/Grid';
 
 import * as T from '../../../Common/Typography';
 import Button from '../../../Common/ButtonNew';
+import LoadingBallPulseSync from '../../../Common/LoadingBallPulseSync';
 import {
   API_INTERN_SETTINGS_MY_PROFILE,
   API_MY_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import Notification from '../../../Common/Notification';
-import aboutYourHome from './aboutYourHomeItems';
+import { accommodationChecklist } from '../../../../constants/types';
 
 const { validate, hostSettings } = require('../../../../validation');
 
@@ -24,25 +25,26 @@ const getCleanData = (d = {}) => ({
     fileName: '',
     url: '',
   },
-  bio: d.bio || '',
-  useReasonAnswer: d.useReasonAnswer || '',
-  storyAnswer: d.storyAnswer || '',
-  homeImages: d.homeImages || [],
-  addressLine1: d.addressLine1 || '',
-  addressLine2: d.addressLine2 || '',
-  city: d.city || '',
-  postcode: d.postcode || '',
+  photos: d.photos || [],
+  address: d.address || {
+    addressline1: '',
+    addressline2: '',
+    city: '',
+    postcode: '',
+  },
   availableDates: d.availableDates || [
     {
       startDate: '',
       endDate: '',
     },
   ],
-  aboutHome: d.aboutHome || [],
-  extraInfo: d.extraInfo || '',
+  accommodationChecklist: d.accommodationChecklist || [],
+  bio: d.bio || '',
   otherInfo: d.otherInfo || '',
-  mentorExperience: d.mentorExperience || '',
-  industryExperience: d.industryExperience || '',
+  hostingReasonAnswer: d.hostingReasonAnswer || '',
+  mentoringExperienceAnswer: d.mentoringExperienceAnswer || '',
+  industryExperienceAnswer: d.industryExperienceAnswer || '',
+  backgroundAnswer: d.backgroundAnswer || '',
 });
 
 const MyListing = props => {
@@ -142,19 +144,19 @@ const MyListing = props => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const update = async (_profileImage, _homeImages) => {
+  const update = async (_profileImage, _photos) => {
     try {
       setLoading(true);
       await axios.patch(API_INTERN_SETTINGS_MY_PROFILE, {
         ...state,
         profileImage: _profileImage || state.profileImage,
-        homeImages: _homeImages || state.homeImages,
+        photos: _photos || state.photos,
         prevImageFileNameToDelete:
           state.profileImage &&
           state.profileImage.new &&
           prevData.profileImage &&
           prevData.profileImage.fileName,
-        homeImagesToDelete: _homeImages
+        photosToDelete: _photos
           .filter(e => e.deleted && !e.new)
           .map(e => e.fileName),
       });
@@ -175,12 +177,12 @@ const MyListing = props => {
     }
     setError();
     let _profileImage;
-    let _homeImages;
+    let _photos;
     if (
       (state.profileImage &&
         state.profileImage.new &&
         !state.profileImage.uploaded) ||
-      (state.homeImages && state.homeImages.find(e => e.new && !e.uploaded))
+      (state.photos && state.photos.find(e => e.new && !e.uploaded))
     ) {
       const promiseArr = [];
       if (state.profileImage && state.profileImage.new) {
@@ -192,11 +194,8 @@ const MyListing = props => {
       } else {
         promiseArr.push(Promise.resolve());
       }
-      if (
-        state.homeImages &&
-        state.homeImages.find(e => e.new && !e.uploaded)
-      ) {
-        const filteredFiles = state.homeImages.filter(
+      if (state.photos && state.photos.find(e => e.new && !e.uploaded)) {
+        const filteredFiles = state.photos.filter(
           e => e.new && !e.uploaded && !e.deleted,
         );
         filteredFiles.forEach(file => {
@@ -211,8 +210,8 @@ const MyListing = props => {
         promiseArr.push(Promise.resolve());
       }
 
-      [_profileImage, _homeImages] = await Promise.all(promiseArr);
-      update(_profileImage, _homeImages);
+      [_profileImage, _photos] = await Promise.all(promiseArr);
+      update(_profileImage, _photos);
     } else {
       update();
     }
@@ -227,15 +226,26 @@ const MyListing = props => {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       const {
-        data: { profile },
+        data: { profile, listing },
       } = await axios.get(API_MY_PROFILE_URL);
 
-      setState(getCleanData(profile));
-      setPrevData(getCleanData(profile));
+      const totalData = { ...profile, ...listing };
+      console.log('total', totalData);
+      setState(getCleanData(totalData));
+      setPrevData(getCleanData(totalData));
+      setLoading(false);
     };
     getData();
   }, []);
+
+  if (loading)
+    return (
+      <div style={{ marginTop: '2rem' }}>
+        <LoadingBallPulseSync />
+      </div>
+    );
 
   return (
     <div style={{ marginTop: '2rem' }}>
@@ -271,9 +281,9 @@ const MyListing = props => {
               Min. 3 photos (up to 9 photos)
             </T.PXS>
             <UploadFile
-              files={state.homeImages}
-              setFiles={homeImages => {
-                setState(_state => ({ ..._state, homeImages }));
+              files={state.photos}
+              setFiles={photos => {
+                setState(_state => ({ ..._state, photos }));
               }}
               multiple
               setImageInfo={data => {
@@ -299,8 +309,8 @@ const MyListing = props => {
             name="addressLine1"
             label="Address Line 1"
             placeholder="Address line 1..."
-            value={state.addressLine1}
-            error={errors.addressLine1}
+            value={state.address.addressline1}
+            error={errors.address}
           />
         </Col>
         <Col w={[4, 6, 4]}>
@@ -309,8 +319,8 @@ const MyListing = props => {
             name="addressLine2"
             label="Address Line 2"
             placeholder="Address Line 2..."
-            value={state.addressLine2}
-            error={errors.addressLine2}
+            value={state.address.addressline2}
+            error={errors.address}
           />
         </Col>
       </Row>
@@ -321,8 +331,8 @@ const MyListing = props => {
             name="city"
             label="City"
             placeholder="City..."
-            value={state.city}
-            error={errors.city}
+            value={state.address.city}
+            error={errors.address}
           />
         </Col>
         <Col w={[4, 6, 4]} mb={5}>
@@ -331,8 +341,8 @@ const MyListing = props => {
             name="postcode"
             label="Postcode"
             placeholder="Postcode..."
-            value={state.postcode}
-            error={errors.postcode}
+            value={state.address.postcode}
+            error={errors.address}
           />
         </Col>
       </Row>
@@ -374,12 +384,15 @@ const MyListing = props => {
         <Col w={[4, 12, 7]}>
           <Checkbox
             isMulti
-            items={aboutYourHome}
-            checkedValues={state.aboutHome}
+            items={accommodationChecklist}
+            checkedValues={state.accommodationChecklist}
             onChange={checkedValues =>
-              setState(_state => ({ ..._state, aboutHome: checkedValues }))
+              setState(_state => ({
+                ..._state,
+                accommodationChecklist: checkedValues,
+              }))
             }
-            error={errors.aboutHome}
+            error={errors.accommodationChecklist}
           />
         </Col>
       </Row>
@@ -424,11 +437,11 @@ const MyListing = props => {
         <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
-            value={state.useReasonAnswer}
+            value={state.hostingReasonAnswer}
             label="Why do you want to be a PressPad host?"
-            name="useReasonAnswer"
+            name="hostingReasonAnswer"
             textArea
-            error={errors.useReasonAnswer}
+            error={errors.hostingReasonAnswer}
           />
         </Col>
       </Row>
@@ -437,11 +450,11 @@ const MyListing = props => {
         <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
-            value={state.mentorExperience}
+            value={state.mentoringExperienceAnswer}
             label="What experience do you have of mentoring?"
-            name="mentorExperience"
+            name="mentoringExperienceAnswer"
             textArea
-            error={errors.mentorExperience}
+            error={errors.mentoringExperienceAnswer}
           />
         </Col>
       </Row>
@@ -450,11 +463,11 @@ const MyListing = props => {
         <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
-            value={state.industryExperience}
+            value={state.industryExperienceAnswer}
             label="How was your own experience getting into the industry?"
-            name="industryExperience"
+            name="industryExperienceAnswer"
             textArea
-            error={errors.industryExperience}
+            error={errors.industryExperienceAnswer}
           />
         </Col>
       </Row>
@@ -463,12 +476,12 @@ const MyListing = props => {
         <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
-            value={state.extraInfo}
+            value={state.backgroundAnswer}
             label="Is there anything about you that would be helpful for an intern to know or any preferences you might have regarding those you'd most like to host?"
-            name="extraInfo"
+            name="backgroundAnswer"
             helperText="e.g. class, gender, hometown, LGBTQ+, ethnicity, religion. (Unlike the extra demographic questions, these will be visible to members searching for a place to stay)."
             textArea
-            error={errors.extraInfo}
+            error={errors.backgroundAnswer}
           />
         </Col>
       </Row>

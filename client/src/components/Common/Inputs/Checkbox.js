@@ -43,6 +43,7 @@ const Checkbox = ({
             <AntdCheckbox
               key={e}
               value={e}
+              checked={checkedValues.includes(e)}
               style={{
                 display: 'flex',
                 marginLeft: 0,
