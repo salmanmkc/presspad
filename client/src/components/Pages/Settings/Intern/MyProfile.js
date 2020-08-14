@@ -181,7 +181,7 @@ const MyProfile = props => {
   }, []);
 
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '2rem' }}>
       <Row>
         <Col w={[4, 12, 12]}>
           <div style={{ marginBottom: '20px' }}>

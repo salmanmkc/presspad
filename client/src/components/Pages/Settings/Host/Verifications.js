@@ -11,6 +11,10 @@ import {
   API_MY_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import { SETTINGS } from '../../../../constants/navRoutes';
+import {
+  DBS_EXTERNAL,
+  PROPERTY_CHECKS,
+} from '../../../../constants/externalLinks';
 import { hostWorkingArea } from '../../../../constants/types';
 import Notification from '../../../Common/Notification';
 
@@ -299,9 +303,9 @@ const Verifications = props => {
     }
   };
   return (
-    <div style={{ marginTop: '4rem' }}>
-      <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+    <div style={{ marginTop: '2rem' }}>
+      <Row mb={3}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={onInputChange}
             value={state.jobTitle}
@@ -310,7 +314,7 @@ const Verifications = props => {
             error={errors.jobTitle}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={onInputChange}
             value={state.organisation}
@@ -320,8 +324,8 @@ const Verifications = props => {
           />
         </Col>
       </Row>
-      <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      <Row mb={6}>
+        <Col w={[4, 6, 4]}>
           <Select
             options={hostWorkingArea.map(e => ({ label: e, value: e }))}
             label="Area you work in"
@@ -344,11 +348,9 @@ const Verifications = props => {
         </Col>
       </Row>
 
-      <Row>
+      <Row mb={3}>
         <Col w={[4, 8, 8]}>
-          <T.H5 color="blue" mt={8}>
-            References
-          </T.H5>
+          <T.H5 color="blue">References</T.H5>
           <T.P color="gray3">
             Please provide one personal and one professional reference. Please
             make sure that the professional reference is from someone you've
@@ -357,8 +359,8 @@ const Verifications = props => {
         </Col>
       </Row>
 
-      <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      <Row mb={3}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={e => {
               e.persist();
@@ -377,7 +379,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={e => {
               e.persist();
@@ -397,8 +399,8 @@ const Verifications = props => {
         </Col>
       </Row>
 
-      <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+      <Row mb={6}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={e => {
               e.persist();
@@ -417,7 +419,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={e => {
               e.persist();
@@ -437,18 +439,16 @@ const Verifications = props => {
         </Col>
       </Row>
 
-      <Row>
+      <Row mb={3}>
         <Col w={[4, 8, 8]}>
-          <T.H5 color="blue" mt={8} mb={3}>
-            Verification documents
-          </T.H5>
+          <T.H5 color="blue">Verification documents</T.H5>
         </Col>
       </Row>
 
-      <Row>
+      <Row mb={6}>
         <Col w={[4, 6, 4]}>
           <T.PBold color="blue">Proof of identity </T.PBold>
-          <T.PXS color="gray3" mb={5}>
+          <T.PXS color="gray3" mb={3}>
             e.g. a photo of your passport or driver’s licence
           </T.PXS>
           <UploadFile
@@ -467,7 +467,7 @@ const Verifications = props => {
 
         <Col w={[4, 6, 4]}>
           <T.PBold color="blue">Proof that you work in the media </T.PBold>
-          <T.PXS color="gray3" mb={1}>
+          <T.PXS color="gray3" mb={3}>
             This can be a photo of your press card or of a letter/email
           </T.PXS>
           <UploadFile
@@ -485,7 +485,7 @@ const Verifications = props => {
         </Col>
       </Row>
 
-      <Row>
+      <Row mb={3}>
         <Col w={[4, 8, 7]}>
           <T.H5 color="blue" mt={5}>
             DBS Certificate{' '}
@@ -494,7 +494,7 @@ const Verifications = props => {
           <T.PXS color="gray3">
             This is the official UK criminal records check. If you don’t have
             one, please click here{' '}
-            <T.Link to={SETTINGS.BOOK_REVIEW} color="lightBlue">
+            <T.Link to={DBS_EXTERNAL} isExternal color="lightBlue">
               click here
             </T.Link>{' '}
             and we will do it for you for free. It will take no longer than 5
@@ -502,7 +502,7 @@ const Verifications = props => {
           </T.PXS>
         </Col>
       </Row>
-      <Row>
+      <Row mb={6}>
         <Col w={[4, 6, 4]}>
           <UploadFile
             fullWidth
@@ -530,9 +530,9 @@ const Verifications = props => {
           />
         </Col>
       </Row>
-      <Row>
+      <Row mb={3}>
         <Col w={[4, 8, 7]}>
-          <T.H5 color="blue" mt={5}>
+          <T.H5 color="blue" mb={2}>
             Book a video property check
           </T.H5>
 
@@ -540,11 +540,13 @@ const Verifications = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 7]}>
           <T.P color="gray3">
-            Click here to book a time for one of our team to carry out a video
-            check of your home. This check will take no longer than 30 minutes
-            maximum.
+            <T.Link to={PROPERTY_CHECKS} isExternal color="lightBlue">
+              Click here
+            </T.Link>{' '}
+            to book a time for one of our team to carry out a video check of
+            your home. This check will take no longer than 30 minutes maximum.
           </T.P>
         </Col>
       </Row>

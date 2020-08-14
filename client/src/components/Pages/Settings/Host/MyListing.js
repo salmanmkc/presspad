@@ -238,7 +238,7 @@ const MyListing = props => {
   }, []);
 
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '2rem' }}>
       <Row>
         <Col w={[4, 12, 12]}>
           <div style={{ marginBottom: '20px' }}>
@@ -268,7 +268,7 @@ const MyListing = props => {
             <T.PBold color="blue">Photo of your home</T.PBold>
             <T.PXS color="blue" mb={2}>
               {' '}
-               Min. 3 photos (up to 9 photos)
+              Min. 3 photos (up to 9 photos)
             </T.PXS>
             <UploadFile
               files={state.homeImages}
@@ -287,13 +287,13 @@ const MyListing = props => {
         </Col>
       </Row>
       {/* address */}
-      <Row mb={4}>
+      <Row mb={3}>
         <Col w={[4, 12, 12]}>
           <T.H5 color="blue">Address</T.H5>
         </Col>
       </Row>
-      <Row mb={5}>
-        <Col w={[4, 6, 4]} mb={5}>
+      <Row mb={4}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={onInputChange}
             name="addressLine1"
@@ -303,7 +303,7 @@ const MyListing = props => {
             error={errors.addressLine1}
           />
         </Col>
-        <Col w={[4, 6, 4]} mb={5}>
+        <Col w={[4, 6, 4]}>
           <Input
             onChange={onInputChange}
             name="addressLine2"
@@ -338,9 +338,11 @@ const MyListing = props => {
       </Row>
       {/* Dates */}
 
-      <Row mb={4} mt={5}>
+      <Row mb={5} mt={5}>
         <Col w={[4, 12, 8]}>
-          <T.H5 color="blue">Address</T.H5>
+          <T.H5 color="blue" mb={3}>
+            Availability
+          </T.H5>
           {errors.availableDates && (
             <T.PBold mb={3} color="pink">
               {errors.availableDates}
@@ -365,8 +367,8 @@ const MyListing = props => {
         </Col>
       </Row>
       {/* about your home  */}
-      <Row>
-        <Col w={[4, 12, 8]} mb={2}>
+      <Row mb={5}>
+        <Col w={[4, 12, 8]} mb={3}>
           <T.H5 color="blue">About your home</T.H5>
         </Col>
         <Col w={[4, 12, 7]}>
@@ -384,7 +386,9 @@ const MyListing = props => {
 
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
-          <T.H5 color="blue">About you</T.H5>
+          <T.H5 color="blue" mb={3}>
+            About you
+          </T.H5>
         </Col>
       </Row>
 

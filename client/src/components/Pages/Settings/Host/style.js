@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 
 export const TabsWrapper = styled.div`
   display: flex;
-  margin: ${({ theme }) => theme.spacings[4]} 0;
+  margin: ${({ theme }) => theme.spacings[4]} 0
+    ${({ theme }) => theme.spacings[3]} 0;
   flex-wrap: wrap;
 `;
 

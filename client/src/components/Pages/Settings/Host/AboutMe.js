@@ -152,7 +152,7 @@ const AboutMe = () => {
   // }, []);
 
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '2rem' }}>
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <DatePicker

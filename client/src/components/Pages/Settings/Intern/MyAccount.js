@@ -65,7 +65,7 @@ const MyAccount = props => {
   };
 
   return (
-    <div style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+    <div style={{ marginTop: '2rem', marginBottom: '4rem' }}>
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Input
