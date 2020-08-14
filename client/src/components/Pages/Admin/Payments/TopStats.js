@@ -19,7 +19,7 @@ const PaymentTopStats = ({ data, loading }) => {
   return (
     <Row jc="space-between" jcT="flex-start">
       <Figure
-        stats={formatPrice(available[0].amount)}
+        stats={formatPrice(available[0].amount / 100)}
         title="stripe balance"
         small
         popoverContent={`available: ${formatPrice(
