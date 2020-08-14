@@ -113,9 +113,11 @@ export const calculateCouponPriceByRange = (
   endDate,
   discountRate,
 ) => {
+  const _start = startDate.clone();
+  const _end = endDate.clone();
   const range = moment.range(
-    moment(startDate).subtract(3, 'day'),
-    moment(endDate).add(3, 'day'),
+    moment(_start).subtract(3, 'day'),
+    moment(_end).add(3, 'day'),
   );
 
   if (!range) return 0;

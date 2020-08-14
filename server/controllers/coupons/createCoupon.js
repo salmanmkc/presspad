@@ -8,6 +8,8 @@ const { getOrgById } = require('../../database/queries/user');
 
 const { calculateCouponPriceByRange } = require('../../helpers/payments');
 
+const { createSingleDate } = require('../../helpers/createDatesArray');
+
 const createCoupon = async (req, res, next) => {
   const { user, body } = req;
 
@@ -55,7 +57,13 @@ const createCoupon = async (req, res, next) => {
       name,
       email,
       organisation: _organisation.name,
-      couponDetails: { code, message, discountRate, startDate, endDate },
+      couponDetails: {
+        code,
+        message,
+        discountRate,
+        startDate: createSingleDate(startDate),
+        endDate: createSingleDate(endDate),
+      },
     });
 
     return res.json(results);

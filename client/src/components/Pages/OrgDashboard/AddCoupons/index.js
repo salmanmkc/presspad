@@ -87,11 +87,14 @@ const AddCoupons = props => {
 
   const getAccount = async () => {
     setBalanceLoading(true);
-    const { data } = await axios.get(API_ACCOUNT_URL);
-
-    setBalance(data.currentBalance);
-
-    setBalanceLoading(false);
+    try {
+      const { data } = await axios.get(API_ACCOUNT_URL);
+      setBalance(data.currentBalance);
+      setBalanceLoading(false);
+    } catch (err) {
+      setError('Error loading balance.');
+      setBalanceLoading(false);
+    }
   };
 
   // set funds
