@@ -38,12 +38,14 @@ const getCleanData = (d = {}) => ({
   childCare: d.childCare || '', // new
   illCare: d.illCare || '', // new
   degreeLevel: d.degreeLevel || '',
+  typeOfSchool: d.typeOfSchool || '', // new
+  typeOfSchoolOther: d.typeOfSchoolOther || '', // new
+  eligibleForFreeSchoolMeals: d.eligibleForFreeSchoolMeals || '', // new
+  describeMainIncomeEarnerMainJob: d.describeMainIncomeEarnerMainJob || '', // new
+  highestLevelOfQualifications: d.highestLevelOfQualifications || '', // new
+  highestLevelOfQualificationsOther: d.highestLevelOfQualificationsOther || '', // new
+  parentsWorkInPress: d.parentsWorkInPress || '',
   belongToClass: d.belongToClass || '', // new
-  schooling: d.schooling || '', // new
-  freeSchool: d.freeSchool || '', // new
-  ParentsProfession: d.ParentsProfession || '', // new
-  qualificationsLevel: d.qualificationsLevel || '', // new
-  qualificationsLevelOther: d.qualificationsLevelOther || '', // new
 });
 
 const AboutMe = () => {
@@ -140,16 +142,18 @@ const AboutMe = () => {
     }
   }, [state.ethnicity]);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const {
-  //       data: { profile },
-  //     } = await axios.get(API_MY_PROFILE_URL);
-  //     setState(getCleanData(profile));
-  //     setPrevData(getCleanData(profile));
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      const {
+        data: { profile },
+      } = await axios.get(API_MY_PROFILE_URL);
+      console.log('profile', profile);
+      setState(getCleanData(profile));
+      setPrevData(getCleanData(profile));
+    };
+
+    getData();
+  }, []);
 
   return (
     <div style={{ marginTop: '2rem' }}>
