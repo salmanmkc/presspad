@@ -197,6 +197,9 @@ const API_MY_BURSARY = `${API_PREFIX}${MY_BURSARY}`;
 const SINGLE_BURSARY = '/bursary/:id';
 const API_SINGLE_BURSARY = `${API_PREFIX}${SINGLE_BURSARY}`;
 
+const TOP_ADMIN_STATS = '/admin/summary';
+const API_TOP_ADMIN_STATS = `${API_PREFIX}${TOP_ADMIN_STATS}`;
+
 module.exports = {
   // CLIENT
   API_LOGIN_URL,
@@ -266,6 +269,7 @@ module.exports = {
   API_HOST_UPDATE_AVAILABILITY,
   API_MY_BURSARY,
   API_SINGLE_BURSARY,
+  API_TOP_ADMIN_STATS,
 
   // SERVER
   LOGIN_URL,
@@ -335,4 +339,5 @@ module.exports = {
   HOST_UPDATE_AVAILABILITY,
   MY_BURSARY,
   SINGLE_BURSARY,
+  TOP_ADMIN_STATS,
 };

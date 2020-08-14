@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import { Row, Col } from '../../../Common/Grid';
 
@@ -8,6 +9,8 @@ import AdminInterns from '../Interns';
 import AdminHosts from '../Hosts';
 
 import TopStats from './TopStats';
+
+import { API_TOP_ADMIN_STATS } from '../../../../constants/apiRoutes';
 
 // DUMMY DATA FOR THE STATS
 const dummyData = {
@@ -19,16 +22,22 @@ const dummyData = {
   bookingRequests: 13,
 };
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ name }) => {
   const [topData, setTopData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const getFirstName = () => {
+    const firstName = name.split(' ')[0];
+    return firstName;
+  };
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
       try {
-        setTopData(dummyData);
+        const data = await axios.get(API_TOP_ADMIN_STATS);
+        setTopData(data.data);
         setLoading(false);
       } catch (err) {
         let errorMsg = 'Something went wrong';
@@ -46,12 +55,12 @@ const AdminDashboard = () => {
     <>
       <Row mb={6}>
         <Col w={[4, 10, 10]}>
-          <T.H2 color="blue">Welcome {topData.userName}</T.H2>
+          <T.H2 color="blue">Welcome {name && getFirstName()}</T.H2>
         </Col>
       </Row>
       <Row mb={6}>
         <Col w={[4, 12, 12]}>
-          <TopStats data={dummyData} loading={loading} />
+          <TopStats data={topData} loading={loading} />
         </Col>
       </Row>
       <div style={{ marginBottom: '40px' }}>
