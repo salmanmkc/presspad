@@ -1,6 +1,9 @@
 const boom = require('boom');
 
 const { updateUserProfile } = require('../../../database/queries/profiles');
+const {
+  getListingByUserId,
+} = require('../../../database/queries/listing/getListing');
 const { hostCompleteProfile } = require('../../../../client/src/validation');
 
 module.exports = async (req, res, next) => {
@@ -70,13 +73,18 @@ module.exports = async (req, res, next) => {
       parentsWorkInPress,
       belongToClass,
     };
+    console.log('type', typeOfSchool);
 
     const updatedProfile = await updateUserProfile(user._id, aboutMeData);
 
+    console.log('up', updatedProfile);
+    const listing = await getListingByUserId(user._id);
+
     try {
-      await hostCompleteProfile.validate({ ...updatedProfile });
+      await hostCompleteProfile.validate({ ...updatedProfile, ...listing });
       completed = true;
     } catch (error) {
+      console.log('err', error);
       completed = false;
     }
 

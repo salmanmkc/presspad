@@ -18,6 +18,7 @@ const updateInternshipDetails = require('../controllers/profile/updateInternship
 const deleteAccount = require('../controllers/user/deleteAccount');
 const internSettings = require('../controllers/user/internSettings');
 const settingMyAccount = require('../controllers/user/myAccount');
+const hostSettings = require('../controllers/user/hostSettings');
 
 const { getMyBursary, editBursary } = require('../controllers/bursary');
 const {
@@ -157,6 +158,7 @@ const {
   INTERN_SETTINGS_VERIFICATIONS,
   MY_BURSARY,
   SINGLE_BURSARY,
+  HOST_SETTINGS_ABOUT_ME,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -425,5 +427,7 @@ router.patch(
 
 router.get(MY_BURSARY, authentication, getMyBursary);
 router.patch(SINGLE_BURSARY, authentication, editBursary);
+
+router.patch(HOST_SETTINGS_ABOUT_ME, authentication, hostSettings.aboutMe);
 
 module.exports = router;

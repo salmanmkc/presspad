@@ -216,10 +216,6 @@ const verifications = (prevValues, hasNoInternship) =>
             : string().nullable(),
         }).required()
       : object().nullable(),
-    refNum:
-      prevValues.DBSCheck && prevValues.DBSCheck.refNum
-        ? string().required(DEFAULT_REQUIRED)
-        : string().nullable(),
   });
 
 const verificationsAllRequired = object({

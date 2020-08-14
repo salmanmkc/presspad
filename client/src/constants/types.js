@@ -183,17 +183,23 @@ module.exports = {
     'I don’t consider myself as belonging to any one class',
     'I’d prefer not to say',
   ],
-  schooling: [
-    'A state run or state-funded school - selective on academic',
-    'A state run or state-funded school - selective on faith or other grounds',
-    'A state run or state-funded school - non-selective',
-    'Independent or fee-paying school',
-    'Attended school outside of the UK',
+  typeOfSchool: [
+    'State-run or state-funded school - selective on academic, faith or other grounds',
+    'State-run or state-funded school - non-selective',
+    'Independent or fee-paying school - bursary',
+    'Independent or fee-paying school - no bursary',
+    'Attended school outside the UK',
+    'Don’t know',
+    "I'd prefer not to say",
+    'Other (please specify)',
+  ],
+  eligibleForFreeSchoolMeals: [
+    'Yes',
+    'No',
     'I don’t know',
     'I’d prefer not to say',
   ],
-  freeSchool: ['Yes', 'No', 'I don’t know', 'I’d prefer not to say'],
-  ParentsProfession: [
+  describeMainIncomeEarnerMainJob: [
     'Modern professional occupations such as (teacher, nurse, physiotherapist, social worker, musician, police officer (sergeant or above), software designer)',
     'Clerical and intermediate occupations (such as secretary, personal assistant, clerical worker, call centre agent, nursery nurse)',
     'Senior managers or administrators usually responsible for planning, organising and co-ordinator work, and for finance (such as finance manager, chief executive)',
@@ -205,7 +211,7 @@ module.exports = {
     'Unemployed',
     'I’d prefer not to say',
   ],
-  qualificationsLevel: [
+  highestLevelOfQualifications: [
     'At least one has a degree level qualification',
     'Qualifications below degree level',
     'Don’t know',

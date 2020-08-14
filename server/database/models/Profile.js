@@ -341,7 +341,7 @@ const profileSchema = new Schema(
     // HOST QUESTIONS - THESE QUESTIONS BELOW FOR INTERN ARE IN THE BURSARY TABLE
     typeOfSchool: {
       type: String,
-      enum: t.typeOfSchool,
+      enum: types.typeOfSchool,
     },
     typeOfSchoolOther: {
       type: String,

@@ -7,7 +7,7 @@ import * as S from './style';
 import * as T from '../../../Common/Typography';
 import Button from '../../../Common/ButtonNew';
 import {
-  API_INTERN_SETTINGS_ABOUT_ME, // should be for host
+  API_HOST_SETTINGS_ABOUT_ME,
   API_MY_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import Notification from '../../../Common/Notification';
@@ -15,7 +15,7 @@ import { CLASSES_DEFINITIONS } from '../../../../constants/externalLinks';
 import types from '../../../../constants/types';
 import { SETTINGS } from '../../../../constants/navRoutes';
 
-const { validate, internSettings } = require('../../../../validation');
+const { validate, hostSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
   birthDate: d.birthDate || null,
@@ -59,7 +59,7 @@ const AboutMe = () => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: internSettings.aboutMeSchema(prevData),
+      schema: hostSettings.aboutMeSchema(prevData),
       data: { ...state },
     });
 
@@ -75,7 +75,7 @@ const AboutMe = () => {
 
   const onSubmit = async () => {
     try {
-      const _errors = await _validate({ phoneNumber: 'sss' });
+      const _errors = await _validate();
 
       setErrors(_errors || {});
 
@@ -86,8 +86,8 @@ const AboutMe = () => {
       setError();
 
       setLoading(true);
-      // this should be for host api ..
-      // await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
+
+      await axios.patch(API_HOST_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
     } catch (e) {
       setError(e.response.data.error);
@@ -428,14 +428,14 @@ const AboutMe = () => {
         </Col>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
-            options={types.schooling.map(e => ({ label: e, value: e }))}
+            options={types.typeOfSchool.map(e => ({ label: e, value: e }))}
             label="Schooling type"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, schooling: value || '' }))
+              setState(_state => ({ ..._state, typeOfSchool: value || '' }))
             }
-            value={state.schooling}
-            error={errors.schooling}
+            value={state.typeOfSchool}
+            error={errors.typeOfSchool}
           />
         </Col>
       </Row>
@@ -443,14 +443,20 @@ const AboutMe = () => {
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
-            options={types.freeSchool.map(e => ({ label: e, value: e }))}
+            options={types.eligibleForFreeSchoolMeals.map(e => ({
+              label: e,
+              value: e,
+            }))}
             label="Did you receive free school meals at any point during your education?"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, freeSchool: value }))
+              setState(_state => ({
+                ..._state,
+                eligibleForFreeSchoolMeals: value,
+              }))
             }
-            value={state.freeSchool}
-            error={errors.freeSchool}
+            value={state.eligibleForFreeSchoolMeals}
+            error={errors.eligibleForFreeSchoolMeals}
           />
         </Col>
       </Row>
@@ -459,17 +465,20 @@ const AboutMe = () => {
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
-              options={types.ParentsProfession.map(e => ({
+              options={types.describeMainIncomeEarnerMainJob.map(e => ({
                 label: e,
                 value: e,
               }))}
               label="Thinking back to when you were aged about 14, which best describes the sort of work the main/highest income earner in your household did in their main job?"
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, ParentsProfession: value }))
+                setState(_state => ({
+                  ..._state,
+                  describeMainIncomeEarnerMainJob: value,
+                }))
               }
-              value={state.ParentsProfession}
-              error={errors.ParentsProfession}
+              value={state.describeMainIncomeEarnerMainJob}
+              error={errors.describeMainIncomeEarnerMainJob}
             />
           </S.IllCareWrapper>
         </Col>
@@ -478,7 +487,7 @@ const AboutMe = () => {
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
-              options={types.qualificationsLevel.map(e => ({
+              options={types.highestLevelOfQualifications.map(e => ({
                 label: e,
                 value: e,
               }))}
@@ -487,11 +496,11 @@ const AboutMe = () => {
               onChange={value =>
                 setState(_state => ({ ..._state, qualificationsLevel: value }))
               }
-              value={state.qualificationsLevel}
-              error={errors.qualificationsLevel}
+              value={state.highestLevelOfQualifications}
+              error={errors.highestLevelOfQualifications}
             />
-            {state.qualificationsLevel &&
-              state.qualificationsLevel.includes('Other') && (
+            {state.highestLevelOfQualifications &&
+              state.highestLevelOfQualifications.includes('Other') && (
                 <Input
                   onChange={onInputChange}
                   value={state.qualificationsLevelOther}
