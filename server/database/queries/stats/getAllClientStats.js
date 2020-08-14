@@ -44,6 +44,14 @@ module.exports.getAllClientStats = async () => {
       },
     },
     {
+      $lookup: {
+        from: 'externaltransactions',
+        localField: 'account',
+        foreignField: 'account',
+        as: 'transactions',
+      },
+    },
+    {
       $project: {
         _id: 1,
         organisation: '$name',
@@ -51,6 +59,13 @@ module.exports.getAllClientStats = async () => {
         credits: 1,
         contactDetails: 1,
         account: 1,
+        deposits: {
+          $filter: {
+            input: '$transactions',
+            as: 'item',
+            cond: { $eq: ['$$item.type', 'deposite'] },
+          },
+        },
         'internList._id': 1,
         'internList.name': 1,
         'internList.email': 1,
