@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
 
 import { Row, Col } from '../../../Common/Grid';
 import Title from '../../../Common/Title';
@@ -62,8 +60,6 @@ const reducer = (state, action) => {
       throw new Error();
   }
 };
-
-const moment = extendMoment(Moment);
 
 const AddCoupons = props => {
   const { windowWidth } = props;
@@ -182,8 +178,8 @@ const AddCoupons = props => {
           email,
           message,
           discountRate,
-          startDate: moment(multiDateRange[0].startDate).format('YYYY-MM-DD'),
-          endDate: moment(multiDateRange[0].endDate).format('YYYY-MM-DD'),
+          startDate: multiDateRange[0].startDate,
+          endDate: multiDateRange[0].endDate,
         });
         setSubmitting(false);
         // refresh balance

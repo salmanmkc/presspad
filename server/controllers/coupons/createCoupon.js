@@ -26,11 +26,12 @@ const createCoupon = async (req, res, next) => {
   }
 
   try {
-    const { amount, days } = await calculateCouponPriceByRange(
-      startDate,
-      endDate,
-      discountRate,
-    );
+    const {
+      amount,
+      days,
+      updatedStartDate,
+      updatedEndDate,
+    } = await calculateCouponPriceByRange(startDate, endDate, discountRate);
 
     const _organisation = await getOrgById(organisation);
 
@@ -43,8 +44,8 @@ const createCoupon = async (req, res, next) => {
       createdBy: userId,
       discountRate,
       days,
-      startDate,
-      endDate,
+      startDate: updatedStartDate,
+      endDate: updatedEndDate,
       amount,
       usedDays: 0,
     });

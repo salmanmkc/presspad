@@ -113,7 +113,10 @@ export const calculateCouponPriceByRange = (
   endDate,
   discountRate,
 ) => {
-  const range = moment.range(startDate, endDate);
+  const range = moment.range(
+    moment(startDate).subtract(3, 'day'),
+    moment(endDate).add(3, 'day'),
+  );
 
   if (!range) return 0;
   let weeks;
@@ -130,7 +133,7 @@ export const calculateCouponPriceByRange = (
 
   // if more than 2 weeks take off 14 free days and add 6 days (covering 3 before and 3 after internship)
   if (weeks >= 2) {
-    return (days - 14 + 6) * 2000 * Number(discountRate / 100);
+    return (days - 14) * 2000 * Number(discountRate / 100);
   }
 
   return 0;
