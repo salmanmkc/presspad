@@ -11,6 +11,8 @@ import { ADMIN_USER_DETAILS } from '../../../../constants/navRoutes';
 
 import renderExpandedSection from './renderExpandedSection';
 
+import handleError from '../../../../helpers/handleError';
+
 const AdminClients = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,11 +35,8 @@ const AdminClients = () => {
         setClients(data.data);
         setLoading(false);
       } catch (err) {
-        let errorMsg = 'Something went wrong';
-        if (err.response && err.response.status !== 500) {
-          errorMsg = err.response.data.error;
-        }
-        setError(errorMsg);
+        const msg = handleError(err);
+        setError(msg);
         setLoading(false);
       }
     };

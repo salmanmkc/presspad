@@ -12,15 +12,7 @@ import TopStats from './TopStats';
 
 import { API_TOP_ADMIN_STATS } from '../../../../constants/apiRoutes';
 
-// DUMMY DATA FOR THE STATS
-const dummyData = {
-  userName: 'Olivia',
-  interns: 442,
-  hosts: 323,
-  approvalRequests: 44,
-  liveBookings: 63,
-  bookingRequests: 13,
-};
+import handleError from '../../../../helpers/handleError';
 
 const AdminDashboard = ({ name }) => {
   const [topData, setTopData] = useState({});
@@ -40,11 +32,8 @@ const AdminDashboard = ({ name }) => {
         setTopData(data.data);
         setLoading(false);
       } catch (err) {
-        let errorMsg = 'Something went wrong';
-        if (err.response && err.response.status !== 500) {
-          errorMsg = err.response.data.error;
-        }
-        setError(errorMsg);
+        const msg = handleError(err);
+        setError(msg);
         setLoading(false);
       }
     };

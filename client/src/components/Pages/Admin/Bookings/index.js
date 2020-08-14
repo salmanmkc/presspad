@@ -25,6 +25,8 @@ import BookingView from './BookingView/BookingView';
 import ApproveRejectModal from './ApproveRejectModal';
 import renderExpandedSection from './renderExpandedSection';
 
+import handleError from '../../../../helpers/handleError';
+
 const tabs = ['active', 'history'];
 
 const AdminBookings = () => {
@@ -147,11 +149,8 @@ const AdminBookings = () => {
         setBookingHistory(history.data);
         setLoading(false);
       } catch (err) {
-        let errorMsg = 'Something went wrong';
-        if (err.response && err.response.status !== 500) {
-          errorMsg = err.response.data.error;
-        }
-        setError(errorMsg);
+        const msg = handleError(err);
+        setError(msg);
         setLoading(false);
       }
     };

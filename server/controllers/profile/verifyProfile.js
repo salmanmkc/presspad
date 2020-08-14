@@ -17,12 +17,10 @@ module.exports = async (req, res, next) => {
   if (req.user.role !== 'admin')
     return next(boom.forbidden('Only admin can access this route'));
   try {
-    console.log('reached');
     await approveRejectProfile(profileId, verify);
 
     // get host details
     const [host] = await getUserDataByProfileId(profileId);
-    console.log('reached2', host);
     pubSub.emit(pubSub.events.profile.APPROVED, { user: host });
 
     return res.json('success');

@@ -5,8 +5,6 @@ const updateWithdrawBankDetails = async (req, res, next) => {
   try {
     const { requestId, bankDetails } = req.body;
 
-    console.log('reached', bankDetails);
-
     // only admin is allowed to view all withdrawal requests on presspad.a
     if (req.user.role !== 'admin')
       return next(

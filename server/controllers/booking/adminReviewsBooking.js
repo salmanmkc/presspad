@@ -13,7 +13,6 @@ const { registerNotification } = require('../../services/notifications');
 const adminReviewsBooking = async (req, res, next) => {
   const { booking, status, message } = req.body;
   const { _id: bookingID } = booking;
-  console.log('BOK', booking, bookingID);
   const { intern, host } = await getBookingWithUsers(bookingID);
 
   const userDetails = await getUserById(host, true);

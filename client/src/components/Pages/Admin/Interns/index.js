@@ -24,6 +24,8 @@ import {
   ADMIN_INTERNS_URL,
 } from '../../../../constants/navRoutes';
 
+import handleError from '../../../../helpers/handleError';
+
 import renderExpandedSection from './renderExpandedSection';
 
 const tabs = ['approved', 'approval requests'];
@@ -139,11 +141,8 @@ const AdminInterns = ({ preview }) => {
         }
         setLoading(false);
       } catch (err) {
-        let errorMsg = 'Something went wrong';
-        if (err.response && err.response.status !== 500) {
-          errorMsg = err.response.data.error;
-        }
-        setError(errorMsg);
+        const msg = handleError(err);
+        setError(msg);
         setLoading(false);
       }
     };
