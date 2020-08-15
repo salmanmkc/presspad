@@ -29,7 +29,7 @@ const withdrawRequestSchema = new Schema(
       type: String,
       trim: true,
     },
-    bankSortCode: {
+    sortCode: {
       type: String,
       trim: true,
     },
@@ -41,6 +41,11 @@ const withdrawRequestSchema = new Schema(
       type: String,
       default: 'pending',
       enum: ['pending', 'transfered', 'rejected', 'cancelled'],
+    },
+    reason: {
+      type: String,
+      default: 'N/A',
+      enum: ['withdraw from wallet', 'refund', 'N/A'],
     },
     // the date when the money has transfered
     transfereDate: {

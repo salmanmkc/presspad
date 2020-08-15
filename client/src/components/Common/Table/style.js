@@ -63,3 +63,9 @@ export const HouseViewing = styled.div`
   display: flex;
   align-items: center;
 `;
+
+export const WrappedAction = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;

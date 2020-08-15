@@ -5,7 +5,7 @@ import camelToWords from '../../../../helpers/camelToWords';
 import Icon from '../../Icon';
 import ButtonNew from '../../ButtonNew';
 
-const PayButtonCol = (colTitle, handleClick, type) => ({
+const PayButtonCol = (colTitle, handleClick1, handleClick2, type) => ({
   title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
@@ -24,7 +24,7 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
               // recalculate price to cents
               // eslint-disable-next-line no-param-reassign
               rowData.amount *= 100;
-              handleClick({ openModal: true, installment: rowData });
+              handleClick1({ openModal: true, installment: rowData });
             }}
             style={{ minWidth: '60px', height: '30px', fontSize: '14px' }}
           >
@@ -37,7 +37,7 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
 
     // PAID CANCELLED BUTTONS
     const { bankName, accountNumber, sortCode } = rowData;
-    if (text === 'paid')
+    if (text === 'transfered')
       return (
         <T.PXSBold caps color="lightBlue">
           paid
@@ -54,7 +54,7 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
     if (bankName && accountNumber && sortCode)
       return (
         <>
-          <S.StyledBtn onClick={() => handleClick(rowData, 'cancel')}>
+          <S.StyledBtn onClick={() => handleClick2(rowData, 'cancelled')}>
             <Icon
               icon="crossCircle"
               color="pink"
@@ -66,7 +66,7 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
               cancel
             </T.PXSBold>
           </S.StyledBtn>
-          <S.StyledBtn onClick={() => handleClick(rowData, 'paid')}>
+          <S.StyledBtn onClick={() => handleClick2(rowData, 'transfered')}>
             <Icon
               icon="circleTick"
               color="lightBlue"
@@ -81,7 +81,7 @@ const PayButtonCol = (colTitle, handleClick, type) => ({
         </>
       );
     return (
-      <S.StyledBtn onClick={() => handleClick(rowData, 'save')}>
+      <S.StyledBtn onClick={() => handleClick1(rowData, 'save')}>
         <T.PXSBold caps color="darkBlue">
           save details
         </T.PXSBold>

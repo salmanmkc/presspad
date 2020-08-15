@@ -53,6 +53,7 @@ module.exports = async (req, res, next) => {
       offerLetter,
 
       DBSCheck: { ...DBSCheck, refNum },
+      refNum: DBSCheck.refNum,
     };
 
     const updatedProfile = await updateUserProfile(

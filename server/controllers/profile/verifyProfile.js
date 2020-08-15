@@ -1,16 +1,16 @@
 // expect boolean and profileId
 
 const boom = require('boom');
-const pubSub = require('./../../pubSub');
+const pubSub = require('../../pubSub');
 
 // QUERIES
 const {
   approveRejectProfile,
-} = require('./../../database/queries/profile/verifyProfile');
+} = require('../../database/queries/profile/verifyProfile');
 
 const {
   getUserDataByProfileId,
-} = require('./../../database/queries/profile/getProfile');
+} = require('../../database/queries/profile/getProfile');
 
 module.exports = async (req, res, next) => {
   const { verify, profileId } = req.body;

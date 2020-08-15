@@ -8,4 +8,11 @@ module.exports = async ({ user }) => {
       params: { to: user.email },
     });
   }
+  if (user.role === 'intern') {
+    await sendMail({
+      type: 'PROFILE_APPROVED',
+      userType: 'intern',
+      params: { to: user.email },
+    });
+  }
 };

@@ -4,13 +4,18 @@
   font-family: 'Glacial Indifference';
   font-style: normal;
   font-weight: 400;
-  src: url('./fonts/WEB/GlacialIndifference-Regular.eot'); /* IE9 Compat Modes */
   src: local('Glacial Indifference'), local('GlacialIndifference'),
+       url('./fonts/WEB/GlacialIndifference-Regular.eot'), /* IE9 Compat Modes */
        url('./fonts/WEB/GlacialIndifference-Regular.eot') format('embedded-opentype'), /* IE6-IE8 */
        url('./fonts/WEB/GlacialIndifference-Regular.woff2') format('woff2'), /* Super Modern Browsers */
        url('./fonts/WEB/GlacialIndifference-Regular.woff') format('woff'), /* Modern Browsers */
        url('./fonts/TTF/GlacialIndifference-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('./fonts/WEB/GlacialIndifference-Regular.eot') format('svg'); /* Legacy iOS */
+       url('./fonts/WEB/GlacialIndifference-Regular.eot') format('svg'),   /* Legacy iOS */
+       url('./fonts/WEB/GlacialIndifference-Bold.eot') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/WEB/GlacialIndifference-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/WEB/GlacialIndifference-Bold.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/TTF/GlacialIndifference-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/WEB/GlacialIndifference-Bold.eot') format('svg'), /* Legacy iOS */
 }
 
 

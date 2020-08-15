@@ -170,7 +170,7 @@ const filterFields = {
   amount: 1,
   bankName: 1,
   accountNumber: 1,
-  bankSortCode: 1,
+  sortCode: 1,
 };
 
 /**

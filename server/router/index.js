@@ -87,6 +87,8 @@ const { validation, validation2 } = require('../middlewares/validation');
 
 const hostUpdateAvailability = require('../controllers/listing/updateAvailability');
 
+const getTopAdminStats = require('../controllers/stats/topAdminStats');
+
 // API ROUTES
 const {
   LOGIN_URL,
@@ -155,6 +157,7 @@ const {
   INTERN_SETTINGS_VERIFICATIONS,
   MY_BURSARY,
   SINGLE_BURSARY,
+  TOP_ADMIN_STATS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -426,5 +429,8 @@ router.patch(
 
 router.get(MY_BURSARY, authentication, getMyBursary);
 router.patch(SINGLE_BURSARY, authentication, editBursary);
+
+// get summary stats
+router.get(TOP_ADMIN_STATS, authentication, getTopAdminStats);
 
 module.exports = router;

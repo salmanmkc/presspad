@@ -13,7 +13,16 @@ import SignUpPage from './SignUpPage';
 import Dashboard from './Dashboard';
 import HostProfile from './HostProfile';
 import InternCreateProfile from './InternCreateProfile';
-import { AdminDashboard, AdminBursary, AdminBursaryResponse } from './Admin';
+import {
+  AdminDashboard,
+  AdminBursary,
+  AdminBursaryResponse,
+  AdminClients,
+  AdminInterns,
+  AdminHosts,
+  AdminPayments,
+  AdminBookings,
+} from './Admin';
 import SearchHosts from './SearchHosts';
 import BookingView from './BookingView';
 import MyProfile from './MyProfile';
@@ -72,6 +81,11 @@ import {
   ADMIN_BURSARY_PREAPPROVE,
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
+  ADMIN_ORGS_URL,
+  ADMIN_INTERNS_URL,
+  ADMIN_HOSTS_URL,
+  ADMIN_PAYMENTS_URL,
+  ADMIN_BOOKINGS_URL,
   SIGNUP_URL,
   INTERN_SIGNUP_ABOUT_ME,
   INTERN_SIGNUP_BURSARY,
@@ -364,6 +378,69 @@ function Pages(props) {
             path={ADMIN_BURSARY_SUCCESS}
             type="success"
             Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_ORGS_URL}
+            type="success"
+            Component={AdminClients}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_INTERNS_URL}
+            type="success"
+            Component={AdminInterns}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_HOSTS_URL}
+            type="success"
+            Component={AdminHosts}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_PAYMENTS_URL}
+            Component={AdminPayments}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BOOKINGS_URL}
+            Component={AdminBookings}
             handleChangeState={handleChangeState}
             isLoggedIn={isLoggedIn}
             layout="sideMenu"

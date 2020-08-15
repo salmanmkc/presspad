@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 
 const withdrawSchema = Joi.object({
   bankName: Joi.string().required('Required'),
-  bankSortCode: Joi.string().required('Required'),
+  sortCode: Joi.string().required('Required'),
   accountNumber: Joi.string().required('Required'),
   amount: Joi.number()
     .required('Required')

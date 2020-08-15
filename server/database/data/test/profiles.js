@@ -49,6 +49,7 @@ const hostProfileData = {
   caringResponsibilities: 'no caring responsibilities',
   consentedOnPressPadTerms: true,
   verified: true,
+  firstVerified: Date.now(),
 };
 
 const internProfileData = {
@@ -120,6 +121,7 @@ const internProfileData = {
     phoneNumber: '004400011001100',
   },
   verified: true,
+  firstVerified: Date.now(),
 };
 
 const reset = () => Profile.deleteMany();
@@ -161,7 +163,12 @@ const createAll = async ({ users }) => {
 
   await reset();
   const host = { ...hostProfileData, user: hostUser };
-  const host2 = { ...hostProfileData, user: hostUser2 };
+  const host2 = {
+    ...hostProfileData,
+    verified: false,
+    awaitingReview: true,
+    user: hostUser2,
+  };
   const intern = { ...internProfileData, user: internUser };
   const intern2 = { ...internProfileData, user: internUser2 };
   const intern3 = { ...internProfileData, user: internUser3 };
