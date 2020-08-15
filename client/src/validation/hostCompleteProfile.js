@@ -63,7 +63,7 @@ const hostCompleteProfile = object({
       otherwise: string().nullable(),
     },
   ),
-  parentsWorkInPress: string.required(DEFAULT_REQUIRED),
+  parentsWorkInPress: string().required(DEFAULT_REQUIRED),
   belongToClass: string().required(DEFAULT_REQUIRED),
 
   //   listing

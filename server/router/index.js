@@ -159,6 +159,7 @@ const {
   MY_BURSARY,
   SINGLE_BURSARY,
   HOST_SETTINGS_ABOUT_ME,
+  HOST_SETTINGS_MY_LISTING,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -429,5 +430,7 @@ router.get(MY_BURSARY, authentication, getMyBursary);
 router.patch(SINGLE_BURSARY, authentication, editBursary);
 
 router.patch(HOST_SETTINGS_ABOUT_ME, authentication, hostSettings.aboutMe);
+
+router.patch(HOST_SETTINGS_MY_LISTING, authentication, hostSettings.myListing);
 
 module.exports = router;

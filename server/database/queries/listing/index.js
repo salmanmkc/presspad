@@ -1,9 +1,10 @@
+const mongoose = require('mongoose');
 const Listing = require('../../models/Listing');
 
-const updateListing = (userId, data, s) =>
+const updateListing = async (userId, data, s) =>
   Listing.updateOne({ user: userId }, data, {
     omitUndefined: true,
-    session: s,
+    session: s || (await mongoose.startSession()),
   });
 
 const updateListingAvailableDates = (hostId, dates) =>

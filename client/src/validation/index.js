@@ -4,6 +4,7 @@ const internSettings = require('./internSettings');
 const hostSettings = require('./hostSettings');
 const internSignup = require('./internSignup');
 const internCompleteProfile = require('./internCompleteProfile');
+const hostCompleteProfile = require('./hostCompleteProfile');
 
 const handleValidationError = ({ inner }) => {
   const newErrors = {};
@@ -45,4 +46,5 @@ module.exports = {
   hostSettings,
   internSignup,
   internCompleteProfile,
+  hostCompleteProfile,
 };

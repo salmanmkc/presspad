@@ -29,6 +29,9 @@ const UploadFile = ({
   const filteredFiles = files.filter(
     file => file && !file.deleted && (file.name || file.fileName),
   );
+  const softFilteredFiles = files.filter(
+    file => file && (file.name || file.fileName),
+  );
   const onDropRejected = errors => {
     if (
       errors &&
@@ -47,7 +50,7 @@ const UploadFile = ({
 
   const onMultiDrop = acceptedFiles => {
     const updatedFiles = [
-      ...filteredFiles,
+      ...softFilteredFiles,
       acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),

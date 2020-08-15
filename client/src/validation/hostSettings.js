@@ -203,10 +203,8 @@ const myListing = prevValues =>
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
     backgroundAnswer: prevValues.backgroundAnswer
-      ? array()
-          .of(string().required(DEFAULT_REQUIRED))
-          .required(DEFAULT_REQUIRED)
-      : array().nullable(),
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
   });
 
 const verifications = prevValues =>

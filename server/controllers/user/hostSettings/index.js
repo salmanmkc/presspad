@@ -1,3 +1,3 @@
 module.exports.aboutMe = require('./aboutMe');
-// module.exports.myProfile = require('./myProfile');
+module.exports.myListing = require('./myListing');
 // module.exports.verifications = require('./verifications');
