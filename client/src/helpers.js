@@ -1,7 +1,9 @@
 import React from 'react';
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import * as yup from 'yup';
 
+const moment = extendMoment(Moment);
 export const createSingleDate = date => moment(date).format('DD/MM/YYYY');
 
 export const createStartEndDate = (start, end) => {
@@ -29,6 +31,7 @@ export const createDatesArray = (start, end) => {
 
   return datesArray;
 };
+
 // creates array of all available dates for listing
 export const getDateRangeFromArray = datesArray => {
   const avDatesArray = [];
@@ -100,6 +103,44 @@ export const calculatePriceByRange = range => {
   return 0;
 };
 
+/**
+ * calculate coupon price giving a range of dates
+ * this will discount the 14 free days and add 3 days to either side of internship start and end date
+ * @param {import("moment-range").MomentRange} range
+ */
+export const calculateCouponPriceByRange = (
+  startDate,
+  endDate,
+  discountRate,
+) => {
+  const _start = startDate.clone();
+  const _end = endDate.clone();
+  const range = moment.range(
+    moment(_start).subtract(3, 'day'),
+    moment(_end).add(3, 'day'),
+  );
+
+  if (!range) return 0;
+  let weeks;
+  let days;
+  if (typeof range === 'number') {
+    weeks = Math.trunc(range / 7);
+    days = range;
+  } else {
+    range.start.startOf('day');
+    range.end.add(1, 'day').endOf('day');
+    weeks = range.diff('weeks');
+    days = range.diff('days');
+  }
+
+  // if more than 2 weeks take off 14 free days and add 6 days (covering 3 before and 3 after internship)
+  if (weeks >= 2) {
+    return (days - 14) * 2000 * Number(discountRate / 100);
+  }
+
+  return 0;
+};
+
 // fields to filter based on them
 const filterFields = {
   // common
@@ -129,7 +170,7 @@ const filterFields = {
   amount: 1,
   bankName: 1,
   accountNumber: 1,
-  bankSortCode: 1,
+  sortCode: 1,
 };
 
 /**
@@ -225,6 +266,10 @@ export const truncatePostcode = postcode => {
   return postcode.substr(0, 2);
 };
 
+/**
+ * get the intersection range between booking and coupon ranges
+ * @param {Object} param0 {bookingStart, bookingEnd, couponStart, couponEnd}
+ */
 export const getIntersectRange = ({
   bookingStart,
   bookingEnd,
@@ -236,8 +281,28 @@ export const getIntersectRange = ({
   return bookingRange.intersect(couponRange);
 };
 
+/**
+ * get the discount days giving the booking range and the coupon range
+ * discountDays = discountDays"from intersectRange" - usedDays.
+ * discountRange have all range that intersect with the booking
+ * @param {Object} dates {bookingStart, bookingEnd, couponStart, couponEnd, usedDays}
+ */
 export const getDiscountDays = dates => {
-  const intersectRange = getIntersectRange(dates);
+  let _dates = dates;
+  if (!dates.installmentDate) {
+    _dates = {
+      ...dates,
+      // do not calculate discount from the first free two weeks
+      bookingStart: moment(dates.bookingStart).add(14, 'd'),
+    };
+  } else {
+    _dates = {
+      ...dates,
+      // do not calculate paid days
+      bookingStart: moment(dates.installmentDate),
+    };
+  }
+  const intersectRange = getIntersectRange(_dates);
 
   if (!intersectRange) return { discountDays: 0 };
 
@@ -341,8 +406,17 @@ export const calculateHostRespondingTime = (
   return hostRespondingTime || 7;
 };
 
-export const formatPrice = (price, fractionDigits) =>
-  (price / 100).toFixed(fractionDigits);
+export const formatPrice = (price, fractionDigits) => {
+  if (!price) return 0;
+
+  if (!fractionDigits && price % 1 !== 0) {
+    // eslint-disable-next-line no-param-reassign
+    fractionDigits = 2;
+  }
+  return (price / 100)
+    .toFixed(fractionDigits)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
 
 export const truncateString = (string, maxLength) =>
   string.length > maxLength ? `${string.slice(0, maxLength)}...` : string;

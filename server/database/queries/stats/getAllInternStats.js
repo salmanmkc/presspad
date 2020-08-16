@@ -100,12 +100,32 @@ module.exports.getAllInternStats = () =>
         _id: {
           _id: '$_id',
           name: '$name',
+          email: '$email',
           totalPayments: { $arrayElemAt: ['$account.income', 0] },
           // org name from org collection
           organisationName: { $arrayElemAt: ['$organisation.name', 0] },
           // org name from profile collections
           orgName: { $arrayElemAt: ['$profile.organisation', 0] },
           DBSCheck: { $arrayElemAt: ['$profile.DBSCheck', 0] },
+          internshipStart: {
+            $arrayElemAt: ['$profile.internshipStartDate', 0],
+          },
+          verified: {
+            $arrayElemAt: ['$profile.verified', 0],
+          },
+          firstVerified: { $arrayElemAt: ['$profile.firstVerified', 0] },
+          awaitingReview: {
+            $arrayElemAt: ['$profile.awaitingReview', 0],
+          },
+          awaitingReviewDate: {
+            $arrayElemAt: ['$profile.awaitingReviewDate', 0],
+          },
+          contactNumber: {
+            $arrayElemAt: ['$profile.phoneNumber', 0],
+          },
+          profileId: {
+            $arrayElemAt: ['$profile._id', 0],
+          },
         },
         account: { $push: '$account' },
         bookings: { $push: '$bookings' },
@@ -116,30 +136,52 @@ module.exports.getAllInternStats = () =>
       $project: {
         _id: '$_id._id',
         name: '$_id.name',
-        organisationName: '$_id.organisationName',
+        organisation: '$_id.organisationName',
         bookings: '$bookings',
         nextInstallment: '$nextInstallment',
         totalPayments: '$_id.totalPayments',
         orgName: '$_id.orgName',
         DBSCheck: '$_id.DBSCheck',
+        verified: '$_id.verified',
+        awaitingReview: '$_id.awaitingReview',
+        awaitingReviewDate: '$_id.awaitingReviewDate',
+        firstVerified: '$_id.firstVerified',
+        internshipStart: '$_id.internshipStart',
+        contactNumber: '$_id.contactNumber',
+        email: '$_id.email',
+        profileId: '$_id.profileId',
+      },
+    },
+    // only get interns that are approved or requesting approval
+    {
+      $match: {
+        $or: [{ verified: true }, { awaitingReview: true }],
       },
     },
     {
       $project: {
         _id: 1,
         name: 1,
-        organisationName: 1,
+        organisation: 1,
         orgName: 1,
         DBSCheck: 1,
-        nextInstallmentDueDate: '$nextInstallment.dueDate',
-        nextInstallmentPaid: {
+        contactNumber: 1,
+        email: 1,
+        verified: 1,
+        awaitingReview: 1,
+        awaitingReviewDate: 1,
+        firstVerified: 1,
+        internshipStart: 1,
+        profileId: 1,
+        nextPaymentDueDate: '$nextInstallment.dueDate',
+        nextPaymentPaid: {
           $cond: [
             { $ifNull: ['$nextInstallment.transaction', false] },
             true,
             false,
           ],
         },
-        nextInstallmentAmount: '$nextInstallment.amount',
+        nextPayment: '$nextInstallment.amount',
         // get all the credits they've spent to date
         totalPayments: 1,
         // get any bookings that cover today's date

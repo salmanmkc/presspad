@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import React from 'react';
+
 import Table from '../../../../Common/Table';
 import {
   LinkCol,
@@ -13,21 +13,7 @@ import { Row, Col } from '../../../../Common/Grid';
 import renderExpandedSection from './renderExpandedSection';
 
 import { ADMIN_USER_DETAILS } from '../../../../../constants/navRoutes';
-
-// DUMMY DATA TO BE REPLACED ONCE BACK END CONNECTED
-const dummyData = [
-  {
-    name: 'Test Name',
-    typeOfUser: 'New',
-    dateRequested: moment(),
-    bursaryPoints: null,
-    id: 1,
-    type: 'Updated address',
-    email: 'test@test.com',
-    rejectedBursaries: 0,
-    awardedBursariesCost: 840,
-  },
-];
+import { useGetApplications } from '../utils';
 
 const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
   label: option,
@@ -35,14 +21,12 @@ const selectOptions = ['Pre-approve', 'Reject'].map(option => ({
 }));
 
 const Requests = ({ sendToResponse }) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const updateBursaryPoints = (e, rowData) => {
-    const { id } = rowData;
-    const points = e.target.value;
-    console.log('function to udpate user with new bursary points', points, id);
-  };
+  const {
+    data,
+    loading,
+    updateBursaryPoints,
+    onChangeBursaryPoints,
+  } = useGetApplications('request');
 
   const exportData = () =>
     console.log('function to export all bursary data for these requests');
@@ -51,15 +35,9 @@ const Requests = ({ sendToResponse }) => {
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
     StandardCol('typeOfUser'),
     StandardCol('dateRequested', 'date'),
-    InputCol('bursaryPoints', null, updateBursaryPoints),
+    InputCol('bursaryPoints', onChangeBursaryPoints, updateBursaryPoints),
     DropdownCol('approvalAction', sendToResponse, selectOptions),
   ];
-
-  useEffect(() => {
-    setLoading(true);
-    setData(dummyData);
-    setLoading(false);
-  }, []);
 
   return (
     <>

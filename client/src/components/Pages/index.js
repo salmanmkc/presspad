@@ -1,5 +1,7 @@
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
+import { Redirect, Switch, useLocation } from 'react-router-dom';
+
+import welcomeImage from './WelcomePages/wlcomeImage';
 
 //  COMMON COMPONENTS
 import Route from '../Common/Route';
@@ -11,24 +13,34 @@ import SignUpPage from './SignUpPage';
 import Dashboard from './Dashboard';
 import HostProfile from './HostProfile';
 import InternCreateProfile from './InternCreateProfile';
-import { AdminDashboard, AdminBursary, AdminBursaryResponse } from './Admin';
+import {
+  AdminDashboard,
+  AdminBursary,
+  AdminBursaryResponse,
+  AdminClients,
+  AdminInterns,
+  AdminHosts,
+  AdminPayments,
+  AdminBookings,
+} from './Admin';
 import SearchHosts from './SearchHosts';
 import BookingView from './BookingView';
 import MyProfile from './MyProfile';
 import AddReview from './AddReview';
 import InternProfile from './InternProfile';
 import UpdateInternship from './UpdateInternship';
-import ThemeTest from './ThemeTest';
 import Bookings from './Bookings';
 import DBSCheckPage from './DBSCheck';
 import PaymentsPage from './Payments';
 import CancellationConfirm from './CancellationConfirm';
 import AddFunds from './OrgDashboard/AddFunds';
+import AddCoupons from './OrgDashboard/AddCoupons';
 import SignUpFunnelPage from './SignUpFunnelPage';
 
 import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
+import WelcomePages from './WelcomePages';
 import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 import UnderReview from './Settings/UnderReview';
 import * as InternSignUpFlow from './InternSignUpFlow';
@@ -61,13 +73,20 @@ import {
   // DELETE_ACCOUNT_SUCCESS,
   RESET_PASSWORD,
   SET_PASSWORD,
+  WELCOME_PAGES,
   ADD_FUNDS_URL,
+  ADD_COUPONS_URL,
   SETTINGS,
   ADMIN_BURSARY,
   ADMIN_BURSARY_APPROVE,
   ADMIN_BURSARY_PREAPPROVE,
   ADMIN_BURSARY_REJECT,
   ADMIN_BURSARY_SUCCESS,
+  ADMIN_ORGS_URL,
+  ADMIN_INTERNS_URL,
+  ADMIN_HOSTS_URL,
+  ADMIN_PAYMENTS_URL,
+  ADMIN_BOOKINGS_URL,
   SIGNUP_URL,
   BURSARY,
   INTERN_SIGNUP_ABOUT_ME,
@@ -85,7 +104,7 @@ function Pages(props) {
     windowWidth,
     resetState,
   } = props;
-
+  const location = useLocation();
   return (
     <>
       <Switch>
@@ -202,6 +221,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
         {/* public host profile */}
@@ -211,6 +231,7 @@ function Pages(props) {
           Component={HostProfile}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
+          footer
           {...props}
         />
         <Route
@@ -249,6 +270,7 @@ function Pages(props) {
               {...props}
             />
           )}
+          footer
           {...props}
         />
         <Route
@@ -353,6 +375,69 @@ function Pages(props) {
             path={ADMIN_BURSARY_SUCCESS}
             type="success"
             Component={AdminBursaryResponse}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_ORGS_URL}
+            type="success"
+            Component={AdminClients}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_INTERNS_URL}
+            type="success"
+            Component={AdminInterns}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_HOSTS_URL}
+            type="success"
+            Component={AdminHosts}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_PAYMENTS_URL}
+            Component={AdminPayments}
+            handleChangeState={handleChangeState}
+            isLoggedIn={isLoggedIn}
+            layout="sideMenu"
+            {...props}
+          />
+        )}
+        {role === 'admin' && (
+          <Route
+            isPrivate
+            exact
+            path={ADMIN_BOOKINGS_URL}
+            Component={AdminBookings}
             handleChangeState={handleChangeState}
             isLoggedIn={isLoggedIn}
             layout="sideMenu"
@@ -493,6 +578,15 @@ function Pages(props) {
             {...props}
           />
         )}
+        {['organisation'].includes(role) && (
+          <Route
+            exact
+            path={ADD_COUPONS_URL}
+            Component={AddCoupons}
+            layout="rightDiv"
+            {...props}
+          />
+        )}
         <Route
           path={SIGNUP_URL}
           exact
@@ -523,14 +617,14 @@ function Pages(props) {
           color="blue"
           {...props}
         />
-        {/* To be deleted */}
         <Route
-          path="/test"
-          Component={ThemeTest}
+          path={WELCOME_PAGES}
+          Component={() => <WelcomePages role={role} />}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           {...props}
-          layout="sideMenu"
+          layout="illustrations"
+          image={welcomeImage(location, role)}
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>

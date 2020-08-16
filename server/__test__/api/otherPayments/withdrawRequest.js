@@ -42,7 +42,7 @@ describe('Testing for host making withdraw request', () => {
     const data = {
       amount,
       bankName: 'bankName',
-      bankSortCode: 'bankSortCode',
+      sortCode: 'sortCode',
       accountNumber: 'accountNumber',
     };
 
@@ -95,7 +95,7 @@ describe('Testing for host making withdraw request', () => {
     const data = {
       amount,
       bankName: 'bankName',
-      bankSortCode: 'bankSortCode',
+      sortCode: 'sortCode',
       accountNumber: 'accountNumber',
     };
 

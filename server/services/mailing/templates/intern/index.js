@@ -13,6 +13,7 @@ const paymentOverdue = require('./paymentOverdue');
 const profileApproved = require('./profileApproved');
 const profileRejected = require('./profileRejected');
 const welcome = require('./welcome');
+const bursary = require('./bursary');
 
 module.exports = {
   bookingCancelledByHostBeforePayment,
@@ -30,4 +31,5 @@ module.exports = {
   profileApproved,
   profileRejected,
   welcome,
+  bursary,
 };

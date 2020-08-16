@@ -10,6 +10,7 @@ export const Wrapper = styled.section`
   color: ${({ theme }) => theme.colors.darkerGray};
   position: relative;
   background-color: white;
+  min-height: 340px;
 `;
 
 export const Title = styled(T.H5C)`

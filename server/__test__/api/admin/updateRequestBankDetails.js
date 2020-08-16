@@ -39,7 +39,7 @@ describe('Testing for updating bank details route', () => {
       requestId: pendingInternWithdrawRequest._id,
       bankDetails: {
         bankName: 'Name of bank',
-        bankSortCode: '12345678',
+        sortCode: '12345678',
         accountNumber: '1241245',
       },
     };
@@ -56,7 +56,7 @@ describe('Testing for updating bank details route', () => {
         if (error) return done(error);
         expect(response.body).toBeDefined();
         expect(response.body.accountNumber).toBeDefined();
-        expect(response.body.bankSortCode).toBeDefined();
+        expect(response.body.sortCode).toBeDefined();
         expect(response.body.bankName).toBeDefined();
         return done();
       });

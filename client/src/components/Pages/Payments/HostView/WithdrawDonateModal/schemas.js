@@ -7,7 +7,7 @@ export const withdrawSchema = canBeWithdraw =>
     bankName: Yup.string()
       .typeError('must be a string')
       .required('Required'),
-    bankSortCode: Yup.string()
+    sortCode: Yup.string()
       .typeError('must be a string')
       .required('Required'),
     accountNumber: Yup.string()

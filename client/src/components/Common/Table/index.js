@@ -19,6 +19,7 @@ const Table = ({
   expandedSection,
   previewLink,
   previewLinkText,
+  previewClickEvent,
   previewAlign,
   embed,
   showImage,
@@ -69,12 +70,13 @@ const Table = ({
       <Row mb={4}>
         <Col w={[4, 12, 12]}>
           <AntdTable
+            rowKey={record => record._id || record.key}
             columns={columns}
             dataSource={filteredData}
-            pagination={previewLink ? false : { pageSize }}
+            pagination={previewLink || previewClickEvent ? false : { pageSize }}
             scroll={{ x: '100% ' }}
             loading={loading}
-            onHeaderRow={() => 'hello'}
+            // onHeaderRow={() => 'hello'}
             expandable={
               expandedSection && {
                 expandedRowRender: (rowData, index) =>
@@ -84,6 +86,29 @@ const Table = ({
           />
         </Col>
       </Row>
+      {previewClickEvent && (
+        <Row jc="center" mt={6}>
+          <Col
+            w={[4, 12, 12]}
+            style={{
+              display: 'flex',
+              justifyContent: previewAlign === 'right' ? 'flex-end' : 'center',
+              alignItems: 'center',
+            }}
+          >
+            <button
+              style={{ background: 'none', border: 'none' }}
+              type="button"
+              onClick={previewClickEvent}
+            >
+              {previewLinkText}
+              {previewAlign === 'right' && (
+                <Icon icon="arrow2" width="12px" margin="0 0 0 10px" />
+              )}
+            </button>
+          </Col>
+        </Row>
+      )}
 
       {previewLink && (
         <Row jc="center" mt={6}>

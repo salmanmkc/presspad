@@ -6,54 +6,6 @@ import { calculatePrice } from '../../../helpers';
 const moment = extendMoment(Moment);
 
 /**
- * get the intersection range between booking and coupon ranges
- * @param {Object} param0 {bookingStart, bookingEnd, couponStart, couponEnd}
- */
-export const getIntersectRange = ({
-  bookingStart,
-  bookingEnd,
-  couponStart,
-  couponEnd,
-}) => {
-  const bookingRange = moment.range(moment(bookingStart), moment(bookingEnd));
-  const couponRange = moment.range(moment(couponStart), moment(couponEnd));
-  return bookingRange.intersect(couponRange);
-};
-
-/**
- * get the discount days giving the booking range and the coupon range
- * discountDays = discountDays"from intersectRange" - usedDays.
- * discountRange have all range that intersect with the booking
- * @param {Object} dates {bookingStart, bookingEnd, couponStart, couponEnd, usedDays}
- */
-export const getDiscountDays = dates => {
-  let _dates = dates;
-  if (!dates.installmentDate) {
-    _dates = {
-      ...dates,
-      // do not calculate discount from the first free two weeks
-      bookingStart: moment(dates.bookingStart).add(14, 'd'),
-    };
-  } else {
-    _dates = {
-      ...dates,
-      // do not calculate paid days
-      bookingStart: moment(dates.installmentDate),
-    };
-  }
-  const intersectRange = getIntersectRange(_dates);
-
-  if (!intersectRange) return { discountDays: 0 };
-
-  // reset the time to 00:00 to calculate the start and the end day of the range
-  intersectRange.start.startOf('day');
-
-  const discountDays = intersectRange.diff('day') + 1;
-
-  return { discountDays };
-};
-
-/**
  * Create installments array
  * @param {number} netAmount the remaining amount that the intern has to pay
  * @param {Date} startDate booking starting date

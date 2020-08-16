@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { message } from 'antd';
 
 import * as S from './style';
-import { ContentTitle } from '../../AdminDashboard.style';
+import * as T from '../../../../Common/Typography';
 
 import validateCancelBooking from './schema';
 
@@ -15,15 +16,14 @@ import BookingCancellationDetails from './BookingCancellationDetails';
 import AdminActions from './AdminActions';
 
 import { API_CANCEL_BOOKING_AFTER_PAYMENT_URL } from '../../../../../constants/apiRoutes';
+import { ADMIN_BOOKINGS_URL } from '../../../../../constants/navRoutes';
 import { SERVER_ERROR } from '../../../../../constants/errorMessages';
 
 const BookingReview = ({
-  setSearchBar,
   setBookingView,
   details,
   reviewBooking,
   setReviewBooking,
-  selectSection,
 }) => {
   const { payedAmount, _id: bookingId } = details;
 
@@ -44,6 +44,8 @@ const BookingReview = ({
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const history = useHistory();
+
   const handleSubmit = () => {
     const data = {
       ...cancelBookingState,
@@ -63,7 +65,6 @@ const BookingReview = ({
           res,
         );
         setReviewBooking(false);
-        selectSection('bookingHistory');
       })
       .catch(err => {
         if (err.name === 'ValidationError') {
@@ -88,12 +89,13 @@ const BookingReview = ({
             <GoBackComponent
               onClick={() => {
                 setReviewBooking(false);
-                setSearchBar(true);
                 setBookingView(false);
               }}
             />
           </S.GoBackWrapper>
-          <ContentTitle>Review Booking</ContentTitle>
+          <T.H2 color="darkBlue" mb={6}>
+            Review Booking
+          </T.H2>
           {/* BOOKING DETAILS */}
           <BookingCancellationDetails details={details} />
           {/* ACTIONS FOR ADMIN REVIEW */}
@@ -147,8 +149,8 @@ const BookingReview = ({
                 color="blue"
                 onClick={() => {
                   setReviewBooking(false);
-                  setSearchBar(true);
                   setBookingView(false);
+                  history.push(ADMIN_BOOKINGS_URL);
                 }}
               >
                 return to bookings

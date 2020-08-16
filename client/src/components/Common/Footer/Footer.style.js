@@ -1,76 +1,40 @@
 import styled from 'styled-components';
 
-import { colors } from '../../../theme';
+import { breakpoints } from '../../../theme';
 
-export const Wrapper = styled.div`
+import { Row } from '../Grid';
+
+export const Wrapper = styled(Row)`
   width: 100%;
+  background: ${({ theme }) => theme.colors.darkBlue};
+
+  padding: 25px 3% 25px 3%;
+
+  @media ${breakpoints.mobileL} {
+    padding: 25px 7% 25px 7%;
+  }
+
+  @media ${breakpoints.tablet} {
+    padding: 25px 4% 25px 4%;
+    align-items: center;
+  }
+
+  @media ${breakpoints.laptop} {
+    padding: 25px 5% 25px 5%;
+  }
+
+  @media ${breakpoints.laptopL} {
+    padding: 25px 7% 25px 7%;
+  }
 `;
 
-export const ContactWrapper = styled.div`
-  width: 100%;
-  background-color: ${colors.white};
-  color: ${colors.fontBlack};
-  min-height: 113px;
-  box-shadow: 0px 5px 20px rgba(4, 25, 105, 0.61);
+export const SocialLink = styled.a`
+  margin-right: ${({ theme }) => theme.spacings[2]};
+  height: 20px;
+  width: 20px;
 
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-export const SocialMediaIconsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 20%;
-  margin: 0 auto;
-  text-align: center;
-  min-width: 200px;
-  padding: 20px 0;
-`;
-
-export const NewsLetter = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 20px 0;
-  margin: 0 auto;
-`;
-
-export const Title = styled.h3`
-  font-family: Raleway;
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 23px;
-`;
-
-export const CopyRightsWrapper = styled.div`
-  width: 100%;
-  background-color: ${colors.fontPrimary};
-  color: ${colors.white};
-  font-family: Raleway;
-  font-weight: 300;
-  font-size: 16px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const IconsWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const IconWrapper = styled.div`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: ${colors.lightBlue};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  a {
-    height: 20px;
+  @media ${breakpoints.tablet} {
+    height: 32px;
+    width: 32px;
   }
 `;

@@ -43,3 +43,8 @@ export const TabletTitle = styled.div`
     display: none;
   }
 `;
+
+export const HiddenInput = styled.input`
+  visibility: hidden;
+  position: absolute;
+`;

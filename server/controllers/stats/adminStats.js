@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.stripeSK);
 const boom = require('boom');
+const moment = require('moment');
 
 // IMPORT QUERIES
 const {
@@ -47,27 +48,39 @@ module.exports = async (req, res, next) => {
 
           const cleanStats = await Promise.all(
             stats.map(async intern => {
-              let status = 'Looking for host';
+              let bookingStatus = 'looking for host';
 
               if (intern.liveBookings > 0) {
-                status = 'At host';
+                bookingStatus = 'at host';
               } else if (intern.pendingBookings > 0) {
-                status = 'Pending request';
+                bookingStatus = 'pending';
               } else if (intern.confirmedBookings > 0) {
-                status = 'Booking confirmed';
+                bookingStatus = 'confirmed';
               }
 
               const internObj = {
                 key: stats.indexOf(intern) + 1,
                 name: intern.name,
-                organisation: intern.organisationName || intern.orgName,
+                organisation: intern.organisation || intern.orgName,
                 totalPayments: intern.totalPayments || 0,
-                status,
-                userId: intern._id,
-                nextInstallmentDueDate: intern.nextInstallmentDueDate,
-                nextInstallmentPaid: intern.nextInstallmentPaid,
-                nextInstallmentAmount: intern.nextInstallmentAmount,
+                bookingStatus,
+                id: intern._id,
+                nextPaymentDueDate: intern.nextPaymentDueDate,
+                nextPaymentPaid: intern.nextPaymentPaid,
+                nextPayment: intern.nextPayment,
                 dbsCheck: intern.DBSCheck,
+                internshipStart: intern.internshipStart,
+                verified: intern.verified,
+                awaitingReview: intern.awaitingReview,
+                requestDate: intern.awaitingReviewDate,
+                firstVerified: intern.firstVerified,
+                email: intern.email,
+                contactNumber: intern.contactNumber,
+                profileId: intern.profileId,
+                status:
+                  intern.firstVerified && intern.awaitingReview
+                    ? 'Updated DBS'
+                    : 'Signed up',
               };
 
               const { dbsCheck } = internObj;
@@ -91,20 +104,39 @@ module.exports = async (req, res, next) => {
 
           const cleanStats = await Promise.all(
             stats.map(async host => {
+              let bookingStatus = 'not hosting';
+
+              if (host.nextLiveBooking) {
+                const { status, startDate } = host.nextLiveBooking;
+                const current = moment().diff(startDate, 'days') >= 0;
+                if (status === 'confirmed') {
+                  bookingStatus = current ? 'hosting' : 'confirmed';
+                } else bookingStatus = host.nextLiveBooking;
+              }
+
               const hostObj = {
                 key: stats.indexOf(host) + 1,
                 name: host.name,
                 email: host.email,
-                hometown: host.listing.hometown,
-                hosted: host.internsHosted,
-                approvalStatus: host.profile[0].verified
-                  ? 'Approved'
-                  : 'Waiting for approval',
+                location: host.listing.address && host.listing.address.city,
+                internsHosted: host.internsHosted,
+                verified: host.profile[0].verified,
                 profileId: host.profile[0]._id,
                 dbsCheck: host.profile[0].DBSCheck,
-                userId: host._id,
-                totalIncome: host.totalIncome,
-                currentBalance: host.currentBalance,
+                firstVerified: host.profile[0].firstVerified,
+                awaitingReview: host.profile[0].awaitingReview,
+                requestDate: host.profile[0].awaitingReviewDate,
+                houseViewing: host.profile[0].houseViewingDate,
+                id: host._id,
+                earnings: host.totalIncome,
+                wallet: host.currentBalance,
+                bookingStatus,
+                contactNumber: host.profile[0].phoneNumber,
+                status:
+                  host.profile[0].firstVerified &&
+                  host.profile[0].awaitingReview
+                    ? 'Updated details'
+                    : 'Signed up',
               };
 
               const { dbsCheck } = hostObj;
@@ -131,9 +163,11 @@ module.exports = async (req, res, next) => {
       const files = [];
       return getActiveBookings().then(async data => {
         const cleanData = data.map(booking => {
-          if (booking.intern.internship['Proof of Internship']) {
+          if (booking.internDetails.internship['Proof of Internship']) {
             files.push(
-              generateUrl(booking.intern.internship['Proof of Internship']),
+              generateUrl(
+                booking.internDetails.internship['Proof of Internship'],
+              ),
             );
           }
 

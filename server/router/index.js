@@ -33,8 +33,11 @@ const {
 } = require('../controllers/booking');
 const adminStats = require('../controllers/stats/adminStats');
 const verifyProfile = require('../controllers/profile/verifyProfile');
-const orgsDashboard = require('../controllers/organisation/dashboard');
-const { internDashboard, hostDashboard } = require('../controllers/dashboard');
+const {
+  internDashboard,
+  hostDashboard,
+  orgDashboard,
+} = require('../controllers/dashboard');
 const getMyProfile = require('../controllers/profile/getMyProfile');
 const { getUploadSignedURL } = require('../controllers/storage');
 const { postReview, getReviews } = require('../controllers/review');
@@ -67,6 +70,14 @@ const { updateProfile } = require('../controllers/profile/updateProfile');
 const viewWithdrawRequests = require('../controllers/withdrawRequests');
 const updateBankDetails = require('../controllers/withdrawRequests/updateBankDetails');
 
+const {
+  getBursaryWindows,
+  getBursaryApplications,
+  upsertBursaryWindows,
+  updateBursaryApplication,
+  getBursaryApplicationInfo,
+} = require('../controllers/bursary');
+
 // IMPORT MIDDLEWARES
 const authentication = require('../middlewares/authentication');
 const authorization = require('../middlewares/authorization');
@@ -75,6 +86,8 @@ const authorization = require('../middlewares/authorization');
 const { validation, validation2 } = require('../middlewares/validation');
 
 const hostUpdateAvailability = require('../controllers/listing/updateAvailability');
+
+const getTopAdminStats = require('../controllers/stats/topAdminStats');
 
 // API ROUTES
 const {
@@ -135,12 +148,16 @@ const {
   USER_BASE,
   RESET_PASSWORD,
   SET_PASSWORD,
+  BURSARY_WINDOWS,
+  BURSARY_APPLICATIONS,
+  UPDATE_BURSARY_APPLICATIONS,
   INTERN_SETTINGS_MY_ACCOUNT,
   INTERN_SETTINGS_ABOUT_ME,
   INTERN_SETTINGS_MY_PROFILE,
   INTERN_SETTINGS_VERIFICATIONS,
   MY_BURSARY,
   SINGLE_BURSARY,
+  TOP_ADMIN_STATS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -242,7 +259,7 @@ router.post(SIGNUP_URL, signUpController);
 router.get(GET_ORGS_URL, getAllOrgs);
 
 // Orgs
-router.get(ORGS_DASHBOARD, authentication, orgsDashboard);
+router.get(ORGS_DASHBOARD, authentication, orgDashboard);
 
 // Get intern dashboard
 router.get(INTERN_DASHBOARD_URL, authentication, internDashboard);
@@ -356,6 +373,40 @@ router.delete(USER_BASE, authentication, deleteAccount);
 router.post(RESET_PASSWORD, resetPassword);
 router.post(SET_PASSWORD, setPassword);
 
+router.get(
+  BURSARY_WINDOWS,
+  authentication,
+  authorization(['admin']),
+  getBursaryWindows,
+);
+router.put(
+  BURSARY_WINDOWS,
+  authentication,
+  authorization(['admin']),
+  upsertBursaryWindows,
+);
+
+router.get(
+  BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  getBursaryApplications,
+);
+
+router.get(
+  UPDATE_BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  getBursaryApplicationInfo,
+);
+
+router.patch(
+  UPDATE_BURSARY_APPLICATIONS,
+  authentication,
+  authorization(['admin']),
+  updateBursaryApplication,
+);
+
 router.patch(
   INTERN_SETTINGS_MY_ACCOUNT,
   authentication,
@@ -378,5 +429,8 @@ router.patch(
 
 router.get(MY_BURSARY, authentication, getMyBursary);
 router.patch(SINGLE_BURSARY, authentication, editBursary);
+
+// get summary stats
+router.get(TOP_ADMIN_STATS, authentication, getTopAdminStats);
 
 module.exports = router;

@@ -4,8 +4,9 @@ import * as S from '../style';
 import camelToWords from '../../../../helpers/camelToWords';
 import { createSingleDate } from '../../../../helpers';
 import Icon from '../../Icon';
+import { DatePicker } from '../../Inputs';
 
-const HouseViewingCol = (colTitle, onAdd, onCancel) => ({
+const HouseViewingCol = (colTitle, onChange, onSubmit) => ({
   title: camelToWords(colTitle),
   dataIndex: colTitle,
   key: colTitle,
@@ -15,14 +16,19 @@ const HouseViewingCol = (colTitle, onAdd, onCancel) => ({
       {text ? (
         <S.HouseViewing>
           <T.PXS color="black">{createSingleDate(text)}</T.PXS>
-          <S.StyledBtn noMargin onClick={() => onCancel(rowData)}>
+          <S.StyledBtn noMargin onClick={() => onSubmit(rowData, 'delete')}>
             <Icon icon="cross" color="pink" width="20px" height="20px" />
           </S.StyledBtn>
         </S.HouseViewing>
       ) : (
-        <S.StyledBtn noMargin onClick={() => onAdd(rowData)}>
-          <T.PXSBold color="pink">Add</T.PXSBold>
-        </S.StyledBtn>
+        <>
+          <DatePicker onChange={e => onChange(e, rowData.id)} />
+          <S.StyledBtn noMargin onClick={() => onSubmit(rowData, 'add')}>
+            <T.PXSBold color="pink" mt={1} ml={3}>
+              Add
+            </T.PXSBold>
+          </S.StyledBtn>
+        </>
       )}
     </>
   ),

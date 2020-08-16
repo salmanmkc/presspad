@@ -59,12 +59,14 @@ const Select = ({
       removeIcon={renderClearIcon}
       clearIcon={renderClearIcon}
       mode={mode || (multi && 'multiple')}
-      onChange={onChange}
+      onSelect={onChange}
       style={style}
       value={value || undefined}
     >
       {options.map(({ value: _value, label: _label }) => (
-        <Option value={_value}>{_label}</Option>
+        <Option key={_value} value={_value} label={_label}>
+          {_label}
+        </Option>
       ))}
     </AntdSelect>
     {error && <Error>{error}</Error>}
