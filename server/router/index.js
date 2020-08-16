@@ -160,6 +160,7 @@ const {
   SINGLE_BURSARY,
   HOST_SETTINGS_ABOUT_ME,
   HOST_SETTINGS_MY_LISTING,
+  HOST_SETTINGS_VERIFICATIONS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -432,5 +433,11 @@ router.patch(SINGLE_BURSARY, authentication, editBursary);
 router.patch(HOST_SETTINGS_ABOUT_ME, authentication, hostSettings.aboutMe);
 
 router.patch(HOST_SETTINGS_MY_LISTING, authentication, hostSettings.myListing);
+
+router.patch(
+  HOST_SETTINGS_VERIFICATIONS,
+  authentication,
+  hostSettings.verifications,
+);
 
 module.exports = router;

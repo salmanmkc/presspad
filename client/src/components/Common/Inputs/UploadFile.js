@@ -80,7 +80,7 @@ const UploadFile = ({
   };
 
   const thumbs = filteredFiles.map((file, index) => (
-    <Col w={profile ? [4, 12, 12] : [4, 4, 4]}>
+    <Col w={profile || type === 'file' ? [4, 12, 12] : [4, 4, 4]}>
       {type === 'file' ? (
         <S.FileWrapper>
           <T.Link
@@ -89,7 +89,14 @@ const UploadFile = ({
             href={file.preview}
             download={file.path || file.url}
             mr={2}
-            style={{ textDecoration: 'underline' }}
+            style={{
+              width: '100%',
+              textDecoration: 'underline',
+              wordWrap: 'break-word !important',
+              overflowWrap: 'break-word',
+              '-ms-word-break': 'break-all',
+              wordBreak: 'break-word',
+            }}
           >
             {file.path || file.fileName}
           </T.Link>

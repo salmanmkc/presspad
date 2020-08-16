@@ -357,4 +357,5 @@ export const FileWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacings[2]};
+  width: 100%;
 `;

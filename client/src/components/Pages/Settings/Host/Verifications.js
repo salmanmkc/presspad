@@ -7,7 +7,7 @@ import { Col, Row } from '../../../Common/Grid';
 import * as T from '../../../Common/Typography';
 import Button from '../../../Common/ButtonNew';
 import {
-  API_INTERN_SETTINGS_VERIFICATIONS,
+  API_HOST_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
 import { SETTINGS } from '../../../../constants/navRoutes';
@@ -84,9 +84,9 @@ const Verifications = props => {
 
   const history = useHistory();
 
-  const uploadPhotoID = async () => {
+  const uploadFile = async (file = {}) => {
     try {
-      const generatedName = `${props.id}/${Date.now()}.${state.photoID.name}`;
+      const generatedName = `${props.id}/${Date.now()}.${file.name}`;
       const {
         data: { signedUrl },
       } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
@@ -94,7 +94,7 @@ const Verifications = props => {
         'Content-Type': 'application/octet-stream',
       };
 
-      await axios.put(signedUrl, state.photoID, {
+      await axios.put(signedUrl, file, {
         headers,
       });
 
@@ -102,7 +102,7 @@ const Verifications = props => {
         fileName: generatedName,
         new: true,
         uploaded: true,
-        preview: state.photoID.preview,
+        preview: file.preview,
       };
     } catch (e) {
       return setError(e.message);
@@ -114,56 +114,6 @@ const Verifications = props => {
       setState(_state => ({ ..._state, workingAreaOther: '' }));
     }
   }, [state.workingArea]);
-
-  const uploadpressCard = async () => {
-    try {
-      const generatedName = `${props.id}/${Date.now()}.${state.pressCard.name}`;
-      const {
-        data: { signedUrl },
-      } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
-      const headers = {
-        'Content-Type': 'application/octet-stream',
-      };
-
-      await axios.put(signedUrl, state.pressCard, {
-        headers,
-      });
-
-      return {
-        fileName: generatedName,
-        new: true,
-        uploaded: true,
-        preview: state.pressCard.preview,
-      };
-    } catch (e) {
-      return setError(e.message);
-    }
-  };
-
-  const uploadDBSCheck = async () => {
-    try {
-      const generatedName = `${props.id}/${Date.now()}.${state.DBSCheck.name}`;
-      const {
-        data: { signedUrl },
-      } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
-      const headers = {
-        'Content-Type': 'application/octet-stream',
-      };
-
-      await axios.put(signedUrl, state.DBSCheck, {
-        headers,
-      });
-
-      return {
-        fileName: generatedName,
-        new: true,
-        uploaded: true,
-        preview: state.DBSCheck.preview,
-      };
-    } catch (e) {
-      return setError(e.message);
-    }
-  };
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
@@ -196,7 +146,7 @@ const Verifications = props => {
 
   const update = async (_DBSCheck, _photoID, _pressCard) => {
     try {
-      await axios.patch(API_INTERN_SETTINGS_VERIFICATIONS, {
+      await axios.patch(API_HOST_SETTINGS_VERIFICATIONS, {
         ...state,
         DBSCheck: _DBSCheck || state.DBSCheck,
         photoID: _photoID || state.photoID,
@@ -228,7 +178,7 @@ const Verifications = props => {
     let _DBSCheck;
     let _photoID;
     let _pressCard;
-    const _errors = await _validate(state);
+    const _errors = await _validate();
 
     setErrors(_errors || {});
 
@@ -246,7 +196,7 @@ const Verifications = props => {
       const promiseArr = [];
       if (state.DBSCheck && state.DBSCheck.new) {
         promiseArr.push(
-          uploadDBSCheck().catch(err =>
+          uploadFile(state.DBSCheck).catch(err =>
             setErrors(e => ({ ...e, DBSCheck: err.message })),
           ),
         );
@@ -255,8 +205,8 @@ const Verifications = props => {
       }
       if (state.photoID && state.photoID.new) {
         promiseArr.push(
-          uploadPhotoID().catch(err =>
-            setErrors(e => ({ ...e, DBSCheck: err.message })),
+          uploadFile(state.photoID).catch(err =>
+            setErrors(e => ({ ...e, photoID: err.message })),
           ),
         );
       } else {
@@ -264,7 +214,7 @@ const Verifications = props => {
       }
       if (state.pressCard && state.pressCard.new) {
         promiseArr.push(
-          uploadpressCard().catch(err =>
+          uploadFile(state.pressCard).catch(err =>
             setErrors(e => ({ ...e, pressCard: err.message })),
           ),
         );
@@ -283,7 +233,6 @@ const Verifications = props => {
       const {
         data: { profile },
       } = await axios.get(API_MY_PROFILE_URL);
-      console.log('profile', profile);
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
     };
@@ -299,7 +248,10 @@ const Verifications = props => {
         prevData.DBSCheck.fileName &&
         state.DBSCheck &&
         state.DBSCheck.fileName &&
-        prevData.DBSCheck.fileName !== state.DBSCheck.fileName)
+        prevData.DBSCheck.fileName !== state.DBSCheck.fileName) ||
+      (prevData.houseViewingDate &&
+        state.houseViewingDate &&
+        prevData.houseViewingDate !== state.houseViewingDate)
     ) {
       history.push(SETTINGS.UNDER_REVIEW);
     } else {
