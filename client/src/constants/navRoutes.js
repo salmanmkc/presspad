@@ -30,6 +30,7 @@ export const SETTINGS = {
   DELETE_ACCOUNT: `${SETTINGS_URL}/delete-account`,
   DELETE_ACCOUNT_SUCCESS: `/delete-account-success`,
   UNDER_REVIEW: `/under-review`,
+  BOOK_REVIEW: `/book-review`,
 };
 
 // admin routes

@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { CloseOutlined } from '@ant-design/icons';
-import { Input, DatePicker, Select } from '../../Common/Inputs';
-import { Col, Row } from '../../Common/Grid';
+import { Input, DatePicker, Select } from '../../../Common/Inputs';
+import { Col, Row } from '../../../Common/Grid';
 import * as S from './style';
-import * as T from '../../Common/Typography';
-import Button from '../../Common/ButtonNew';
-import {
-  API_INTERN_SETTINGS_ABOUT_ME,
-  API_MY_PROFILE_URL,
-} from '../../../constants/apiRoutes';
-import Notification from '../../Common/Notification';
-import { CLASSES_DEFINITIONS } from '../../../constants/externalLinks';
-import types from '../../../constants/types';
-import { SETTINGS } from '../../../constants/navRoutes';
+import * as T from '../../../Common/Typography';
+import Button from '../../../Common/ButtonNew';
+// import {
+//   API_INTERN_SETTINGS_ABOUT_ME, // should be for host
+//   API_MY_PROFILE_URL,
+// } from '../../../../constants/apiRoutes';
+import Notification from '../../../Common/Notification';
+import { CLASSES_DEFINITIONS } from '../../../../constants/externalLinks';
+import types from '../../../../constants/types';
+import { SETTINGS } from '../../../../constants/navRoutes';
 
-const { validate, internSettings } = require('../../../validation');
+const { validate, internSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
   birthDate: d.birthDate || null,
@@ -39,13 +38,18 @@ const getCleanData = (d = {}) => ({
   illCare: d.illCare || '', // new
   degreeLevel: d.degreeLevel || '',
   belongToClass: d.belongToClass || '', // new
+  schooling: d.schooling || '', // new
+  freeSchool: d.freeSchool || '', // new
+  ParentsProfession: d.ParentsProfession || '', // new
+  qualificationsLevel: d.qualificationsLevel || '', // new
+  qualificationsLevelOther: d.qualificationsLevelOther || '', // new
 });
 
 const AboutMe = () => {
   const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
-  const [mainError, setMainError] = useState();
+  const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [prevData, setPrevData] = useState({});
@@ -68,21 +72,22 @@ const AboutMe = () => {
 
   const onSubmit = async () => {
     try {
-      const _errors = await _validate();
+      const _errors = await _validate({ phoneNumber: 'sss' });
 
       setErrors(_errors || {});
 
       if (_errors) {
-        setMainError('Must fill all required fields');
+        setError('Must fill all required fields');
         return;
       }
-      setMainError();
+      setError();
 
       setLoading(true);
-      await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
+      // this should be for host api ..
+      // await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
     } catch (e) {
-      setMainError(e.response.data.error);
+      setError(e.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -120,24 +125,34 @@ const AboutMe = () => {
   }, [state.gender]);
 
   useEffect(() => {
+    if (
+      !state.qualificationsLevel ||
+      !state.qualificationsLevel.includes('Other')
+    ) {
+      setState(_state => ({ ..._state, qualificationsLevelOther: '' }));
+    }
+  }, [state.qualificationsLevel]);
+
+  useEffect(() => {
     if (!state.ethnicity || !state.ethnicity.includes('Other')) {
       setState(_state => ({ ..._state, ethnicityOther: '' }));
     }
   }, [state.ethnicity]);
 
   useEffect(() => {
-    const getData = async () => {
-      const {
-        data: { profile },
-      } = await axios.get(API_MY_PROFILE_URL);
-      setState(getCleanData(profile));
-      setPrevData(getCleanData(profile));
-    };
-    getData();
+    // const getData = async () => {
+    //   const {
+    //     data: { profile },
+    //   } = await axios.get(API_MY_PROFILE_URL);
+    //   setState(getCleanData(profile));
+    //   setPrevData(getCleanData(profile));
+    // };
+    // getData();
+    setPrevData('');
   }, []);
 
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '2rem' }}>
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <DatePicker
@@ -191,7 +206,7 @@ const AboutMe = () => {
             error={errors.lastStudyUniversity}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.hearAboutPressPadAnswer}
@@ -319,7 +334,6 @@ const AboutMe = () => {
               error={errors.disabilityYes}
             />
           )}
-
           {state.disabilityYes && state.disabilityYes.includes('Other') && (
             <Input
               onChange={onInputChange}
@@ -409,14 +423,106 @@ const AboutMe = () => {
             error={errors.degreeLevel}
           />
         </Col>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Select
+            options={types.schooling.map(e => ({ label: e, value: e }))}
+            label="Schooling type"
+            allowClear
+            onChange={value =>
+              setState(_state => ({ ..._state, schooling: value || '' }))
+            }
+            value={state.schooling}
+            error={errors.schooling}
+          />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Select
+            options={types.freeSchool.map(e => ({ label: e, value: e }))}
+            label="Did you receive free school meals at any point during your education?"
+            allowClear
+            onChange={value =>
+              setState(_state => ({ ..._state, freeSchool: value }))
+            }
+            value={state.freeSchool}
+            error={errors.freeSchool}
+          />
+        </Col>
       </Row>
 
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
+              options={types.ParentsProfession.map(e => ({
+                label: e,
+                value: e,
+              }))}
+              label="Thinking back to when you were aged about 14, which best describes the sort of work the main/highest income earner in your household did in their main job?"
+              allowClear
+              onChange={value =>
+                setState(_state => ({ ..._state, ParentsProfession: value }))
+              }
+              value={state.ParentsProfession}
+              error={errors.ParentsProfession}
+            />
+          </S.IllCareWrapper>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <S.IllCareWrapper>
+            <Select
+              options={types.qualificationsLevel.map(e => ({
+                label: e,
+                value: e,
+              }))}
+              label="What is the highest level of qualifications achieved by either of your parent(s) or guardian(s) by the time you were 18?"
+              allowClear
+              onChange={value =>
+                setState(_state => ({ ..._state, qualificationsLevel: value }))
+              }
+              value={state.qualificationsLevel}
+              error={errors.qualificationsLevel}
+            />
+            {state.qualificationsLevel &&
+              state.qualificationsLevel.includes('Other') && (
+                <Input
+                  onChange={onInputChange}
+                  value={state.qualificationsLevelOther}
+                  label="Please specify"
+                  name="qualificationsLevelOther"
+                  error={errors.qualificationsLevelOther}
+                />
+              )}
+          </S.IllCareWrapper>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Select
+            options={types.parentsWorkInPress.map(e => ({
+              label: e,
+              value: e,
+            }))}
+            label="Did either of your parents or someone in your immediate family work in this industry?"
+            allowClear
+            onChange={value =>
+              setState(_state => ({ ..._state, parentsWorkInPress: value }))
+            }
+            value={state.parentsWorkInPress}
+            error={errors.parentsWorkInPress}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <S.IllCareWrapper>
+            <Select
               options={types.belongToClass.map(e => ({ label: e, value: e }))}
-              label="Which class fo you self-identify as belonging to?"
+              label="Which class of you self-identify as belonging to?"
               helperText={
                 <span>
                   Refer to{' '}
@@ -439,7 +545,7 @@ const AboutMe = () => {
 
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
+          {error && <T.PXS color="pink">{error}</T.PXS>}
 
           <Button type="secondary" onClick={onSubmit} loading={loading}>
             SAVE CHANGES

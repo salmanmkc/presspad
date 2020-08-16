@@ -1,16 +1,16 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import * as T from '../../Common/Typography';
+import * as T from '../../../Common/Typography';
 import * as S from './style';
-import { Col, Row } from '../../Common/Grid';
+import { Col, Row } from '../../../Common/Grid';
 
-import userTypes from '../../../constants/userTypes';
+import userTypes from '../../../../constants/userTypes';
 
 import {
   SIGNUP_HOST,
   SIGNUP_INTERN,
   SIGNUP_ORG,
-} from '../../../constants/navRoutes';
+} from '../../../../constants/navRoutes';
 
 const signupRoutes = {
   [userTypes.intern]: SIGNUP_INTERN,

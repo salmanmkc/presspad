@@ -3,13 +3,13 @@ import { useHistory } from 'react-router-dom';
 
 import { Input } from 'antd';
 import axios from 'axios';
-import * as T from '../../Common/Typography';
+import * as T from '../../../Common/Typography';
 import * as S from './style';
-import { Col, Row } from '../../Common/Grid';
-import { API_USER_BASE } from '../../../constants/apiRoutes';
+import { Col, Row } from '../../../Common/Grid';
+import { API_USER_BASE } from '../../../../constants/apiRoutes';
 
-import { SETTINGS } from '../../../constants/navRoutes';
-import Button from '../../Common/ButtonNew';
+import { SETTINGS } from '../../../../constants/navRoutes';
+import Button from '../../../Common/ButtonNew';
 
 function DeletedAccount({ resetState, role }) {
   const [error, setError] = useState();

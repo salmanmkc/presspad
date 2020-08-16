@@ -12,6 +12,9 @@ const Checkbox = ({
   onChange,
   checked,
   error,
+  isMulti,
+  items,
+  checkedValues,
 }) => (
   <>
     <CheckboxWrapper
@@ -22,16 +25,36 @@ const Checkbox = ({
       mr={mr}
       size={size}
     >
-      <AntdCheckbox
-        style={{
-          display: 'flex',
-          fontSize: size === 'small' ? '0.875rem' : '1rem',
-        }}
-        onChange={onChange}
-        checked={checked}
-      >
-        {label}
-      </AntdCheckbox>
+      {!isMulti && (
+        <AntdCheckbox
+          style={{
+            display: 'flex',
+            fontSize: size === 'small' ? '0.875rem' : '1rem',
+          }}
+          onChange={onChange}
+          checked={checked}
+        >
+          {label}
+        </AntdCheckbox>
+      )}
+      {isMulti && (
+        <AntdCheckbox.Group onChange={onChange} defaultValue={checkedValues}>
+          {items.map(e => (
+            <AntdCheckbox
+              key={e}
+              value={e}
+              style={{
+                display: 'flex',
+                marginLeft: 0,
+                fontSize: 16,
+                marginBottom: 5,
+              }}
+            >
+              {e}
+            </AntdCheckbox>
+          ))}
+        </AntdCheckbox.Group>
+      )}
     </CheckboxWrapper>
     {error && <Error checkbox>{error}</Error>}
   </>

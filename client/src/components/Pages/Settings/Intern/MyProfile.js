@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Input, UploadFile, Select } from '../../Common/Inputs';
-import { Col, Row } from '../../Common/Grid';
+import { Input, UploadFile, Select } from '../../../Common/Inputs';
+import { Col, Row } from '../../../Common/Grid';
 
-import * as T from '../../Common/Typography';
-import Button from '../../Common/ButtonNew';
+import * as T from '../../../Common/Typography';
+import Button from '../../../Common/ButtonNew';
 import {
   API_INTERN_SETTINGS_MY_PROFILE,
   API_MY_PROFILE_URL,
-} from '../../../constants/apiRoutes';
-import Notification from '../../Common/Notification';
-import types from '../../../constants/types';
+} from '../../../../constants/apiRoutes';
+import Notification from '../../../Common/Notification';
+import types from '../../../../constants/types';
 
-const { validate, internSettings } = require('../../../validation');
+const { validate, internSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
   profileImage: d.profileImage || {
@@ -181,7 +181,14 @@ const MyProfile = props => {
   }, []);
 
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '2rem' }}>
+      <Row>
+        <Col w={[4, 12, 12]}>
+          <div style={{ marginBottom: '20px' }}>
+            <T.PBold color="blue">Photo of you</T.PBold>
+          </div>
+        </Col>
+      </Row>
       <UploadFile
         profile
         mainText="Upload photo by dragging here"
