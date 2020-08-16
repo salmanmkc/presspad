@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { Input, UploadFile, DatePicker, Select } from '../../Common/Inputs';
-
 import { Col, Row } from '../../Common/Grid';
 import * as S from './style';
 import * as T from '../../Common/Typography';
@@ -13,8 +12,10 @@ import {
 } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 
+import BursarySuccess from './Success';
+
 import types from '../../../constants/types';
-import { INTERN_SIGNUP_PROFILE } from '../../../constants/navRoutes';
+import { BURSARY_SUCCESS } from '../../../constants/navRoutes';
 
 const { validate, internBursary } = require('../../../validation');
 
@@ -251,7 +252,7 @@ const Bursary = props => {
   }, []);
 
   const done = () => {
-    history.push(INTERN_SIGNUP_PROFILE);
+    history.push(BURSARY_SUCCESS);
   };
 
   return (
@@ -937,13 +938,6 @@ const Bursary = props => {
           </Button>
         </Col>
       </Row>
-      <Row style={{ textAlign: 'center' }}>
-        <Col w={[4, 8, 11.6]} style={{ marginTop: '30px' }}>
-          <T.Link to={INTERN_SIGNUP_PROFILE} color="pink">
-            I’ll finish this later
-          </T.Link>
-        </Col>
-      </Row>
 
       <Notification
         open={notificationOpen}
@@ -955,4 +949,5 @@ const Bursary = props => {
   );
 };
 
+export { BursarySuccess };
 export default Bursary;

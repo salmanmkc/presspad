@@ -44,7 +44,7 @@ import WelcomePages from './WelcomePages';
 import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 import UnderReview from './Settings/UnderReview';
 import * as InternSignUpFlow from './InternSignUpFlow';
-import Bursary from './Bursary';
+import Bursary, { BursarySuccess } from './Bursary';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -94,6 +94,7 @@ import {
   INTERN_SIGNUP_PROFILE,
   INTERN_SIGNUP_VERIFICATIONS,
   INTERN_SIGNUP_WELCOME,
+  BURSARY_SUCCESS,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -464,6 +465,18 @@ function Pages(props) {
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          isPrivate
+          exact
+          path={BURSARY_SUCCESS}
+          Component={BursarySuccess}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="illustrations"
+          image="presspadMovement"
           {...props}
         />
 

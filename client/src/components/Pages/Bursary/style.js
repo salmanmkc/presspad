@@ -12,3 +12,35 @@ export const IllCareWrapper = styled.div`
     }
   }
 `;
+
+export const TitleContainer = styled.div`
+  position: relative;
+
+  background: ${({ theme }) => theme.colors.darkBlue};
+  display: flex;
+  flex-direction: column;
+  margin-top: ${({ theme }) => theme.spacings.headerHeight};
+  margin-left: auto;
+
+  left: -3vw;
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.mobileL} {
+    left: -7vw;
+  }
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    left: -4vw;
+  }
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.laptop} {
+    left: -5vw;
+  }
+
+  @media ${({ theme: { breakpoints } }) => breakpoints.laptop} {
+    left: -7vw;
+  }
+`;
+
+export const SuccessWrapper = styled.div`
+  max-width: 26rem;
+`;
