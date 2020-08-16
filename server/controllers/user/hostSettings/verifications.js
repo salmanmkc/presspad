@@ -17,7 +17,6 @@ module.exports = async (req, res, next) => {
     const { user } = req;
     let completed = false;
     let DBSCheckUpdated = false;
-    const houseViewingUpdated = false;
     const {
       verified: prevVerified,
       awaitingReview: prevAwaitingReview,

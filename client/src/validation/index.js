@@ -28,6 +28,7 @@ const handleValidationError = ({ inner }) => {
 };
 
 const validate = ({ schema, data }) => {
+  console.log('dat', data, schema);
   try {
     const validData = schema.validateSync(data, {
       abortEarly: false,

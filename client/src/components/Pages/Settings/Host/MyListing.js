@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import {
   Input,
@@ -15,6 +16,8 @@ import {
   API_HOST_SETTINGS_MY_LISTING,
   API_MY_PROFILE_URL,
 } from '../../../../constants/apiRoutes';
+import { SETTINGS } from '../../../../constants/navRoutes';
+
 import Notification from '../../../Common/Notification';
 import { accommodationChecklist } from '../../../../constants/types';
 
@@ -49,17 +52,14 @@ const getCleanData = (d = {}) => ({
 
 const MyListing = props => {
   const [state, setState] = useState(getCleanData());
-
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [startUpload, setStartUpload] = useState(false);
   const [prevData, setPrevData] = useState({});
+  const [fetchData, setFetchData] = useState(0);
 
-  // for images
-  const [uploading, setUploading] = useState(false);
-  const [uploadingDone, setUploadingDone] = useState(false);
+  const history = useHistory();
 
   const upload = useCallback(
     async file => {
@@ -76,8 +76,6 @@ const MyListing = props => {
           headers,
         });
 
-        console.log('hey', signedUrl, file);
-
         return {
           fileName: generatedName,
           new: true,
@@ -85,23 +83,11 @@ const MyListing = props => {
           preview: file.preview,
         };
       } catch (e) {
-        console.log('ER', e);
         return setError(e.message);
       }
     },
     [props.id],
   );
-
-  useEffect(() => {
-    if (
-      startUpload &&
-      state.profileImage.new &&
-      !state.profileImage.uploaded &&
-      !state.profileImage.deleted
-    ) {
-      upload();
-    }
-  }, [props.id, startUpload, state.profileImage, upload]);
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
@@ -149,6 +135,20 @@ const MyListing = props => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
+  const onAddressChange = e => {
+    const { value, name } = e.target;
+    const isPostcode = name === 'postcode';
+    const cleanedPostcode = isPostcode ? value.trim().toUpperCase() : name;
+    e.persist();
+    setState(_state => ({
+      ..._state,
+      address: {
+        ...state.address,
+        [name]: isPostcode ? cleanedPostcode : value,
+      },
+    }));
+  };
+
   const getPhotosToDelete = (newPhotos = []) => {
     const totalPhotos = [...newPhotos, ...state.photos];
     const profilePhoto =
@@ -164,8 +164,6 @@ const MyListing = props => {
     if (profilePhoto) {
       photosToDelete.push(profilePhoto);
     }
-
-    console.log('photos', photosToDelete);
 
     return photosToDelete;
   };
@@ -239,13 +237,6 @@ const MyListing = props => {
   };
 
   useEffect(() => {
-    if (uploadingDone) {
-      update();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uploadingDone]);
-
-  useEffect(() => {
     const getData = async () => {
       setLoading(true);
       const {
@@ -258,7 +249,20 @@ const MyListing = props => {
       setLoading(false);
     };
     getData();
-  }, []);
+  }, [fetchData]);
+
+  const done = () => {
+    if (
+      prevData.address &&
+      prevData.address.postcode &&
+      state.address.postcode &&
+      prevData.address.postcode !== state.address.postcode
+    ) {
+      history.push(SETTINGS.BOOK_REVIEW);
+    } else {
+      setFetchData(e => e + 1);
+    }
+  };
 
   if (loading)
     return (
@@ -303,13 +307,9 @@ const MyListing = props => {
             <UploadFile
               files={state.photos}
               setFiles={photos => {
-                console.log('phot', photos);
                 setState(_state => ({ ..._state, photos }));
               }}
               multiple
-              setImageInfo={data => {
-                console.log('image been uploaded to S3', data);
-              }}
               mainText="Upload more photos by dragging new photos here"
               secondaryText="file size max 2mb"
               maxLimit={9}
@@ -326,8 +326,8 @@ const MyListing = props => {
       <Row mb={4}>
         <Col w={[4, 6, 4]}>
           <Input
-            onChange={onInputChange}
-            name="addressLine1"
+            onChange={onAddressChange}
+            name="addressline1"
             label="Address Line 1"
             placeholder="Address line 1..."
             value={state.address.addressline1}
@@ -336,8 +336,8 @@ const MyListing = props => {
         </Col>
         <Col w={[4, 6, 4]}>
           <Input
-            onChange={onInputChange}
-            name="addressLine2"
+            onChange={onAddressChange}
+            name="addressline2"
             label="Address Line 2"
             placeholder="Address Line 2..."
             value={state.address.addressline2}
@@ -348,7 +348,7 @@ const MyListing = props => {
       <Row mb={5}>
         <Col w={[4, 6, 4]} mb={5}>
           <Input
-            onChange={onInputChange}
+            onChange={onAddressChange}
             name="city"
             label="City"
             placeholder="City..."
@@ -358,7 +358,7 @@ const MyListing = props => {
         </Col>
         <Col w={[4, 6, 4]} mb={5}>
           <Input
-            onChange={onInputChange}
+            onChange={onAddressChange}
             name="postcode"
             label="Postcode"
             placeholder="Postcode..."
@@ -519,6 +519,7 @@ const MyListing = props => {
         open={notificationOpen}
         setOpen={setNotificationOpen}
         content="Changes saved"
+        cb={done}
       />
     </div>
   );

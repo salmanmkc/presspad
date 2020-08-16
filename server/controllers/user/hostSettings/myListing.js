@@ -4,6 +4,9 @@ const { updateUserProfile } = require('../../../database/queries/profiles');
 const { deleteFile } = require('../../../helpers/storage');
 const { storageBucket: bucketName } = require('../../../config');
 const { updateListing } = require('../../../database/queries/listing');
+const {
+  getListingByUserId,
+} = require('../../../database/queries/listing/getListing');
 const { hostCompleteProfile } = require('../../../../client/src/validation');
 
 module.exports = async (req, res, next) => {
@@ -27,6 +30,20 @@ module.exports = async (req, res, next) => {
   } = req.body;
 
   try {
+    let addressUpdated = false;
+
+    const { address: prevAddress } = await getListingByUserId(user._id);
+
+    if (address && prevAddress) {
+      if (
+        address.postcode &&
+        prevAddress.postcode &&
+        address.postcode !== prevAddress.postcode
+      ) {
+        addressUpdated = true;
+      }
+    }
+
     const myListingData = {
       photos,
       address,
@@ -61,6 +78,13 @@ module.exports = async (req, res, next) => {
       await updateUserProfile(user._id, {
         awaitingReview: false,
         verified: false,
+      });
+    } else if (completed && addressUpdated) {
+      await updateUserProfile(user._id, {
+        awaitingReview: true,
+        awaitingReviewDate: Date.now(),
+        verified: false,
+        houseViewingDate: '',
       });
     } else if (updateUserProfile.verified) {
       // do nothing

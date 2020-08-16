@@ -79,9 +79,10 @@ module.exports = async (req, res, next) => {
     const listing = await getListingByUserId(user._id);
 
     try {
-      await hostCompleteProfile.validate({ ...updatedProfile, ...listing });
+      await hostCompleteProfile.validate({ ...listing, ...updatedProfile });
       completed = true;
     } catch (error) {
+      console.log('er', error);
       completed = false;
     }
 
