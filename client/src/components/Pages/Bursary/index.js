@@ -13,7 +13,7 @@ import {
   API_BURSARY_WINDOWS,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
-import { INTERN_SIGNUP_BURSARY } from '../../../constants/navRoutes';
+import { BURSARY_APPLICATION } from '../../../constants/navRoutes';
 import Button from '../../Common/ButtonNew';
 import * as S from './style';
 
@@ -92,7 +92,7 @@ const Bursary = () => {
                   <Button
                     type="secondary"
                     withGraphic
-                    onClick={() => history.push(INTERN_SIGNUP_BURSARY)}
+                    onClick={() => history.push(BURSARY_APPLICATION)}
                   >
                     APPLY FOR BURSARY
                   </Button>
@@ -364,7 +364,7 @@ const Bursary = () => {
               <Button
                 type="secondary"
                 withGraphic
-                onClick={() => history.push(INTERN_SIGNUP_BURSARY)}
+                onClick={() => history.push(BURSARY_APPLICATION)}
               >
                 APPLY FOR BURSARY
               </Button>

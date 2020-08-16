@@ -95,6 +95,7 @@ import {
   INTERN_SIGNUP_VERIFICATIONS,
   INTERN_SIGNUP_WELCOME,
   BURSARY_SUCCESS,
+  BURSARY_APPLICATION,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -471,6 +472,17 @@ function Pages(props) {
         <Route
           isPrivate
           exact
+          path={BURSARY_APPLICATION}
+          Component={BursaryApplication}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="illustrations"
+          image="presspadMovement"
+          {...props}
+        />
+        <Route
+          isPrivate
+          exact
           path={BURSARY_SUCCESS}
           Component={BursarySuccess}
           handleChangeState={handleChangeState}
@@ -479,7 +491,6 @@ function Pages(props) {
           image="presspadMovement"
           {...props}
         />
-
         <Route
           isPrivate
           exact
