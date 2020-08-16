@@ -52,7 +52,7 @@ const confirmOrCancelWithdrawRequest = async (req, res, next) => {
 };
 
 const withdrawRequest = async (req, res, next) => {
-  const { amount, bankName, bankSortCode, accountNumber } = req.body;
+  const { amount, bankName, sortCode, accountNumber } = req.body;
   const { role, account, _id } = req.user;
 
   // check for user role
@@ -64,7 +64,7 @@ const withdrawRequest = async (req, res, next) => {
     const results = await hostRequestToWithdrawMoney({
       amount,
       bankName,
-      bankSortCode,
+      sortCode,
       accountNumber,
       user: _id,
       account,

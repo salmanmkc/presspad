@@ -40,7 +40,7 @@ describe('Testing for get host profile route', () => {
       .end((err, res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body.length).toBe(2);
+        expect(res.body.length).toBe(1);
 
         expect(res.body[0].address).toEqual({
           ...LondonListing.address,
@@ -120,10 +120,9 @@ describe('Testing for get host profile route', () => {
       .end((err, res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body.length).toBe(3);
+        expect(res.body.length).toBe(2);
         expect(res.body[0].address.city).toBe('London');
         expect(res.body[1].address.city).toBe('London');
-        expect(res.body[2].address.city).toBe('London');
         done(err);
       });
   });

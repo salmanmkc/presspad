@@ -21,8 +21,8 @@ const UploadFile = ({
   files,
   setFiles,
   error: _error,
-  fullWidth,
   maxLimit,
+  col,
 }) => {
   // const [files, setFiles] = useState([]);
   const [error, setError] = useState('');
@@ -80,7 +80,7 @@ const UploadFile = ({
   };
 
   const thumbs = filteredFiles.map((file, index) => (
-    <Col w={profile || type === 'file' ? [4, 12, 12] : [4, 4, 4]}>
+    <Col w={profile ? [4, 12, 12] : [4, col || 4, col || 4]}>
       {type === 'file' ? (
         <S.FileWrapper>
           <T.Link
@@ -147,7 +147,7 @@ const UploadFile = ({
                 </S.ThumbsContainer>
               </Col>
             )}
-            <Col w={fullWidth ? [4, 12, 12] : [4, 4, 4]}>
+            <Col w={[4, col || 4, col || 4]}>
               <S.BoxWrapper
                 {...getRootProps({ className: 'dropzone' })}
                 disabled={disabled}

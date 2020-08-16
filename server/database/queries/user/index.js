@@ -112,7 +112,7 @@ module.exports.getInternStatus = internId =>
                     { $eq: ['$status', bookingStatuses.confirmed] },
                   ],
                 },
-                then: 'At host',
+                then: 'at host',
               },
               {
                 case: {

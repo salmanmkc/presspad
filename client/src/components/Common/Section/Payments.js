@@ -20,7 +20,7 @@ const Payments = ({ type, payments, handleClick }) => {
     BoldDateCol('dueDate'),
     StandardCol('amount', 'price'),
     TagCol('status', 'payment'),
-    PayButtonCol('', handleClick, 'pay'),
+    PayButtonCol('', handleClick, null, 'pay'),
   ];
 
   return (

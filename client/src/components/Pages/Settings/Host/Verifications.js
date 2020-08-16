@@ -309,8 +309,8 @@ const Verifications = props => {
           <T.H5 color="blue">References</T.H5>
           <T.P color="gray3">
             Please provide one personal and one professional reference. Please
-            make sure that the professional reference is from someone you've
-            recently worked with.
+            make sure that the professional reference is from someone
+            you&apos;ve recently worked with.
           </T.P>
         </Col>
       </Row>

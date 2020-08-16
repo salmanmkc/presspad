@@ -128,7 +128,7 @@ export const borders = {
 //  set colours for tags in the table
 export const tagColors = {
   'Looking for host': colors.primary,
-  'At host': colors.green,
+  'at host': colors.green,
   'Pending request': colors.orange,
   new: colors.lightGray,
 };

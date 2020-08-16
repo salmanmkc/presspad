@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const buildDB = require('../../../database/data/test');
+const buildDB = require('../../../../database/data/test');
 
 const {
   getAllHostStats,
-} = require('../../../database/queries/stats/getAllHostStats');
+} = require('../../../../database/queries/stats/getAllHostStats');
 
 describe('Test get all host stats query', () => {
   beforeAll(async done => {

@@ -199,10 +199,16 @@ const profileSchema = new Schema(
       default: false,
       // required: true,
     },
+    firstVerified: {
+      type: Date,
+    },
     // for interns
     awaitingReview: {
       type: Boolean,
       default: false,
+    },
+    houseViewingDate: {
+      type: Date,
     },
     awaitingReviewDate: Date,
     bio: {

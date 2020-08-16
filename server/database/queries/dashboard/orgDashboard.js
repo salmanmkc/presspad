@@ -210,7 +210,7 @@ module.exports = id => {
         status: {
           $cond: {
             if: { $gt: ['$liveBookings', 0] },
-            then: 'At host',
+            then: 'at host',
             else: {
               $cond: {
                 if: { $gt: ['$pendingBookings', 0] },

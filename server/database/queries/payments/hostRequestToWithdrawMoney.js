@@ -6,7 +6,7 @@ const { getWithdrawRequestsByUserId } = require('../withdrawRequest');
 const hostRequestToWithdrawMoney = async ({
   amount,
   bankName,
-  bankSortCode,
+  sortCode,
   accountNumber,
   user,
   account: accountId,
@@ -29,7 +29,7 @@ const hostRequestToWithdrawMoney = async ({
   return WithdrawRequest.create({
     amount,
     bankName,
-    bankSortCode,
+    sortCode,
     accountNumber,
     user,
     account: accountId,

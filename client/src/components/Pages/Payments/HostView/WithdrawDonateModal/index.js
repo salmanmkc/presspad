@@ -19,7 +19,7 @@ const initialState = {
   withdrawValue: 0,
   withdrawValuePennies: 0, // * 100
   bankName: '',
-  bankSortCode: '',
+  sortCode: '',
   accountNumber: '',
   errors: {},
 };
@@ -74,7 +74,7 @@ const WithdrawDonateModal = ({
     withdrawValue,
     withdrawValuePennies,
     bankName,
-    bankSortCode,
+    sortCode,
     accountNumber,
     errors,
   } = state;
@@ -154,7 +154,7 @@ const WithdrawDonateModal = ({
           await axios.post(API_WITHDRAW_REQUEST_URL, {
             amount: withdrawValuePennies,
             bankName,
-            bankSortCode,
+            sortCode,
             accountNumber,
           });
           setLoading(false);
@@ -283,21 +283,21 @@ const WithdrawDonateModal = ({
             align="middle"
             style={{
               width: '100%',
-              marginBottom: errors.bankSortCode ? '20px' : 0,
+              marginBottom: errors.sortCode ? '20px' : 0,
             }}
           >
             <Col span={10}>
               <S.Label>Account sort code</S.Label>
             </Col>
             <Col span={12}>
-              <S.ErrorWrapper error={errors.bankSortCode}>
+              <S.ErrorWrapper error={errors.sortCode}>
                 <Input
                   size="large"
-                  name="bankSortCode"
-                  value={bankSortCode}
+                  name="sortCode"
+                  value={sortCode}
                   onChange={handleInputChange}
                 />
-                <S.Error>{errors.bankSortCode}</S.Error>
+                <S.Error>{errors.sortCode}</S.Error>
               </S.ErrorWrapper>
             </Col>
           </Row>
