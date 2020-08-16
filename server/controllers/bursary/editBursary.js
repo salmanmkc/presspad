@@ -9,12 +9,81 @@ module.exports = async (req, res, next) => {
   let completed;
 
   const { id } = req.params;
-  const data = req.body;
+  const { profile: isProfileDataBeenProvided } = req.query;
+  let profile;
+
+  const {
+    // bursary data
+    typeOfSchool,
+    typeOfSchoolOther,
+    highestLevelOfQualifications,
+    highestLevelOfQualificationsOther,
+    describeMainIncomeEarnerMainJob,
+    numberOfPeopleKnowBefore16,
+    typeOfUniversity,
+    eligibleForFreeSchoolMeals,
+    comingFromLowerSociolEconomicBackground,
+    householdMembersSpeakOtherLanguage,
+    householdMembersSpeakOtherLanguageYes,
+    annualHouseholdIncome,
+    statusOfHome,
+    statusOfHomeOther,
+    anyHouseholdReceive,
+    benefitFromNepotism,
+    peopleYouKnowSocially,
+    accentAffectsPotentialEmployers,
+    parentsSupportiveOfCareer,
+
+    // profile data
+    organisation,
+    internshipContact,
+    internshipStartDate,
+    internshipEndDate,
+    internshipOfficeAddress,
+    offerLetter,
+  } = req.body;
 
   try {
-    const bursary = await editBursaryById(id, data);
+    const bursaryData = {
+      typeOfSchool,
+      typeOfSchoolOther,
+      highestLevelOfQualifications,
+      highestLevelOfQualificationsOther,
+      describeMainIncomeEarnerMainJob,
+      numberOfPeopleKnowBefore16,
+      typeOfUniversity,
+      eligibleForFreeSchoolMeals,
+      comingFromLowerSociolEconomicBackground,
+      householdMembersSpeakOtherLanguage,
+      householdMembersSpeakOtherLanguageYes,
+      annualHouseholdIncome,
+      statusOfHome,
+      statusOfHomeOther,
+      anyHouseholdReceive,
+      benefitFromNepotism,
+      peopleYouKnowSocially,
+      accentAffectsPotentialEmployers,
+      parentsSupportiveOfCareer,
+    };
+
+    const profileData = {
+      organisation,
+      internshipContact,
+      internshipStartDate,
+      internshipEndDate,
+      internshipOfficeAddress,
+      offerLetter,
+    };
+
+    const bursary = await editBursaryById(id, bursaryData);
     const user = await getUserByBursaryId(id);
-    const profile = await findProfile(user._id);
+
+    console.log({ id });
+    if (isProfileDataBeenProvided) {
+      profile = await updateUserProfile(user._id, profileData).lean();
+    } else {
+      profile = await findProfile(user._id).lean();
+    }
 
     try {
       await internCompleteProfile.validate({ ...bursary, ...profile });

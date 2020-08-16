@@ -32,6 +32,7 @@ import ResetPassword, { SetPassword } from './ResetPassword';
 import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 import UnderReview from './Settings/UnderReview';
 import * as InternSignUpFlow from './InternSignUpFlow';
+import Bursary from './Bursary';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -75,7 +76,6 @@ import {
   INTERN_SIGNUP_VERIFICATIONS,
   INTERN_SIGNUP_WELCOME,
 } from '../../constants/navRoutes';
-import Bursary from './Bursary';
 
 function Pages(props) {
   const {
