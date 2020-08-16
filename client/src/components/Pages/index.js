@@ -44,7 +44,7 @@ import WelcomePages from './WelcomePages';
 import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
 import UnderReview from './Settings/UnderReview';
 import * as InternSignUpFlow from './InternSignUpFlow';
-import Bursary, { BursarySuccess } from './Bursary';
+import Bursary, { BursarySuccess, BursaryApplication } from './Bursary';
 
 import { withWindowWidth } from '../../HOCs';
 import {

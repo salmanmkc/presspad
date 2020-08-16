@@ -13,6 +13,25 @@ export const IllCareWrapper = styled.div`
   }
 `;
 
+export const BursaryPageHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const BursaryButtonWrapperDesktop = styled.div`
+  display: none;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    display: block;
+  }
+`;
+
+export const BursaryButtonWrapperTablet = styled.div`
+  display: block;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    display: none;
+  }
+`;
+
 export const TitleContainer = styled.div`
   position: relative;
 
@@ -42,5 +61,8 @@ export const TitleContainer = styled.div`
 `;
 
 export const SuccessWrapper = styled.div`
-  max-width: 26rem;
+  max-width: 100%;
+  @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
+    max-width: 26rem;
+  }
 `;
