@@ -10,7 +10,7 @@ import {
   HOST_COMPLETE_PROFILE_URL,
   Error500,
   INTERN_SIGNUP_WELCOME,
-  DASHBOARD_URL,
+  SIGNUP_ORG_WELCOME,
 } from '../../../constants/navRoutes';
 
 import SignUp from './SignUp';
@@ -108,7 +108,7 @@ const SignUpPage = props => {
     const _errors = {};
     let formIsValid = true;
 
-    if (!fields.name) {
+    if (props.userType !== USER_TYPES.organisation && !fields.name) {
       formIsValid = false;
       _errors.name = 'Please enter your name.';
     }
@@ -182,16 +182,20 @@ const SignUpPage = props => {
     if (isValid) {
       try {
         setIsLoading(true);
+        let _fields = fields;
+        if (props.userType === USER_TYPES.organisation) {
+          _fields = { ...fields, name: fields.organisation };
+        }
 
         const { data } = await axios.post(API_SIGNUP_URL, {
-          ...fields,
+          ..._fields,
           role: props.userType,
           referralToken,
         });
 
         handleChangeState({ ...data, isLoggedIn: true });
         if (['organisation'].includes(data.role)) {
-          history.push(DASHBOARD_URL);
+          history.push(SIGNUP_ORG_WELCOME);
         } else if (data.role === 'intern') {
           history.push(INTERN_SIGNUP_WELCOME);
         } else if (['host', 'superhost'].includes(data.role)) {

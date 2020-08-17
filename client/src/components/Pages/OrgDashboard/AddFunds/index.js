@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useReducer } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import { Elements, injectStripe } from 'react-stripe-elements';
@@ -16,7 +15,7 @@ import {
   API_ACCOUNT_URL,
   API_ORG_PAYMENT_URL,
 } from '../../../../constants/apiRoutes';
-import { DASHBOARD_URL } from '../../../../constants/navRoutes';
+import { DASHBOARD_URL, WELCOME_PAGES } from '../../../../constants/navRoutes';
 import { formatPrice } from '../../../../helpers';
 import validationSchema from './validationSchema';
 
@@ -50,7 +49,7 @@ const initialState = {
   errors: {},
 };
 
-function AddFunds({ stripe, elements }) {
+function AddFunds({ stripe, elements, signUp }) {
   const [balance, setBalance] = useState(0);
   const [balanceLoading, setBalanceLoading] = useState(true);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -58,11 +57,6 @@ function AddFunds({ stripe, elements }) {
   const [openNotification, setOpenNotification] = useState(false);
   const [error, setError] = useState('');
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const history = useHistory();
-  const location = useLocation();
-
-  const signUp = location.state && location.state.signUp;
 
   const {
     amount,
@@ -156,11 +150,8 @@ function AddFunds({ stripe, elements }) {
       }
     } else {
       // payment successful
-      setOpenNotification(true);
       setPaymentLoading(false);
-      setTimeout(() => {
-        history.push(DASHBOARD_URL);
-      }, 1000);
+      setOpenNotification(true);
     }
   };
 
@@ -247,6 +238,7 @@ function AddFunds({ stripe, elements }) {
         open={openNotification}
         setOpen={setOpenNotification}
         content="Successful payment, will redirect to dashboard soon ..."
+        redirectUrl={signUp ? WELCOME_PAGES.replace(':id', '1') : DASHBOARD_URL}
       />
       <Row>
         <Title withBg caps>
@@ -398,7 +390,7 @@ function AddFunds({ stripe, elements }) {
           </Col>
           <Col w={[4, 6, 5.4]}>
             <S.CancelLink
-              to={DASHBOARD_URL}
+              to={signUp ? WELCOME_PAGES.replace(':id', '1') : DASHBOARD_URL}
               disabled={paymentLoading}
               signUp={signUp}
             >
@@ -414,10 +406,10 @@ function AddFunds({ stripe, elements }) {
 
 const InjectedAddFunds = injectStripe(AddFunds);
 
-export default function AddFundsWrapper() {
+export default function AddFundsWrapper(props) {
   return (
     <Elements>
-      <InjectedAddFunds />
+      <InjectedAddFunds {...props} />
     </Elements>
   );
 }

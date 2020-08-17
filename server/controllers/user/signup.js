@@ -84,6 +84,7 @@ module.exports = async (req, res, next) => {
       role: user.role,
       email: user.email,
       name: user.name,
+      organisation: user.organisation && user.organisation._id,
     };
 
     if (role === 'host') {

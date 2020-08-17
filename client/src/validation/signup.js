@@ -18,10 +18,14 @@ const {
 const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
 const schema = object({
-  name: string()
-    .required(NAME_REQUIRED)
-    .min(3, NAME_SHORT)
-    .max(15, NAME_LONG),
+  name: string().when('role', {
+    is: 'organisation',
+    then: string().required(ORGANISATION_REQUIRED),
+    otherwise: string()
+      .required(NAME_REQUIRED)
+      .min(3, NAME_SHORT)
+      .max(15, NAME_LONG),
+  }),
   email: string()
     .email(EMAIL_INVALID)
     .required(EMAIL_REQUIRED),
