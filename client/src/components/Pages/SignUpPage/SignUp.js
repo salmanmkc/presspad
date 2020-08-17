@@ -46,20 +46,22 @@ export default props => {
         </Col>
       </Row>
 
-      <Row>
-        <Col w={[4, 12, 12]} mt={6}>
-          <Input
-            label="Name"
-            placeholder="Full name..."
-            name="name"
-            id="name"
-            type="text"
-            onChange={onInputChange}
-            value={name}
-            error={errors.name}
-          />
-        </Col>
-      </Row>
+      {userType !== USER_TYPES.organisation && (
+        <Row>
+          <Col w={[4, 12, 12]} mt={6}>
+            <Input
+              label="Name"
+              placeholder="Full name..."
+              name="name"
+              id="name"
+              type="text"
+              onChange={onInputChange}
+              value={name}
+              error={errors.name}
+            />
+          </Col>
+        </Row>
+      )}
 
       {userType === USER_TYPES.organisation && (
         <Row>

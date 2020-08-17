@@ -244,7 +244,7 @@ export const titleCase = str => {
 yup.addMethod(yup.string, 'wordLengthValidator', function wordLengthValidator(
   length,
 ) {
-  return this.test(value => {
+  return this.test(function _wordLengthValidator(value) {
     if (!value) return '';
     return value.split(' ').length <= length
       ? value

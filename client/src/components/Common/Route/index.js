@@ -31,6 +31,7 @@ const Route = ({
       mobileText={mobileText}
       color={color}
       footer={footer}
+      role={rest.role}
     >
       {isMounted ? (
         <>

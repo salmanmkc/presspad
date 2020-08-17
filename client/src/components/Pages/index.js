@@ -36,6 +36,8 @@ import CancellationConfirm from './CancellationConfirm';
 import AddFunds from './OrgDashboard/AddFunds';
 import AddCoupons from './OrgDashboard/AddCoupons';
 import SignUpFunnelPage from './SignUpFunnelPage';
+import OrgSignUpFlow from './OrgSignUpFlow';
+
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
 import DeleteAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
@@ -554,6 +556,7 @@ function Pages(props) {
         <Route
           path={SIGNUP_ORG}
           exact
+          color="blue"
           render={linkProps =>
             !isLoggedIn ? (
               <SignUpPage
@@ -567,7 +570,13 @@ function Pages(props) {
             )
           }
           layout="login"
-          color="blue"
+          {...props}
+        />
+        <Route
+          path={SIGNUP_ORG}
+          layout="signup"
+          isPrivate
+          Component={OrgSignUpFlow}
           {...props}
         />
         {['organisation'].includes(role) && (

@@ -56,9 +56,12 @@ export const Wrapper = styled.div`
 
 export const ColouredSideDiv = styled.div`
   width: ${({ position }) => (position === 'relative' ? '100vw' : '40%')};
+  min-height: ${({ position }) =>
+    position === 'relative' ? '441px' : '100vh'};
   position: ${({ position = 'static' }) => position};
 
-  background: ${({ theme }) => theme.colors.darkBlue};
+  background: ${({ theme, color }) =>
+    color ? theme.colors[color] : theme.colors.darkBlue};
   display: flex;
   flex-direction: column;
 

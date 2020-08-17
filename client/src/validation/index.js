@@ -3,11 +3,13 @@ const internshipSchema = require('./internship');
 const internSettings = require('./internSettings');
 const hostSettings = require('./hostSettings');
 const internSignup = require('./internSignup');
+const orgSignup = require('./orgSignup');
 const internCompleteProfile = require('./internCompleteProfile');
 
-const handleValidationError = ({ inner }) => {
+const handleValidationError = args => {
+  const { inner } = args;
   const newErrors = {};
-  if (inner)
+  if (inner) {
     inner.forEach(({ path, message: errorMessage }) => {
       if (path.includes('.')) {
         const segments = path.split('.');
@@ -23,6 +25,9 @@ const handleValidationError = ({ inner }) => {
         newErrors[path] = errorMessage;
       }
     });
+  } else {
+    throw args;
+  }
   return newErrors;
 };
 
@@ -45,4 +50,5 @@ module.exports = {
   hostSettings,
   internSignup,
   internCompleteProfile,
+  orgSignup,
 };

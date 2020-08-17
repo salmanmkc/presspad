@@ -11,7 +11,7 @@ import {
   API_INTERN_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
-import { DASHBOARD_URL } from '../../../constants/navRoutes';
+import { WELCOME_PAGES } from '../../../constants/navRoutes';
 
 import Notification from '../../Common/Notification';
 
@@ -260,7 +260,7 @@ const Verifications = props => {
 
   const done = () => {
     if (lastClickOnContinue) {
-      history.push(DASHBOARD_URL);
+      history.push(WELCOME_PAGES.replace(':id', '1'));
     } else {
       setFetchData(e => e + 1);
     }
@@ -828,7 +828,7 @@ const Verifications = props => {
 
       <Row style={{ textAlign: 'center' }} mb={8}>
         <Col w={[4, 12, 11.6]} style={{ marginTop: '30px' }}>
-          <T.Link to={DASHBOARD_URL} color="pink">
+          <T.Link to={WELCOME_PAGES.replace(':id', '1')} color="pink">
             I’ll finish this later
           </T.Link>
         </Col>

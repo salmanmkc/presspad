@@ -54,6 +54,11 @@ export const ADMIN_USER_DETAILS = '/admin/user-details/:id';
 export const SIGNUP_INTERN = '/sign-up/intern';
 export const SIGNUP_HOST = '/sign-up/host';
 export const SIGNUP_ORG = '/sign-up/organisation';
+export const SIGNUP_ORG_WELCOME = '/sign-up/organisation/welcome';
+export const SIGNUP_ORG_ACCOUNT_DETAILS =
+  '/sign-up/organisation/account-details';
+export const SIGNUP_ORG_CREATE_PROFILE = '/sign-up/organisation/create-profile';
+export const SIGNUP_ORG_ADD_FUNDS = '/sign-up/organisation/add-funds';
 export const HOST_COMPLETE_PROFILE_URL = '/host-complete-profile';
 export const INTERN_COMPLETE_PROFILE_URL = '/intern-complete-profile';
 export const DBS_CHECK_PAGE = '/dbs-check';
