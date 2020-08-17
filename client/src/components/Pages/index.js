@@ -36,13 +36,11 @@ import CancellationConfirm from './CancellationConfirm';
 import AddFunds from './OrgDashboard/AddFunds';
 import AddCoupons from './OrgDashboard/AddCoupons';
 import SignUpFunnelPage from './SignUpFunnelPage';
-
-import Settings from './Settings';
 import ReferralSchema from './ReferralSchema';
 import ResetPassword, { SetPassword } from './ResetPassword';
+import DeleteAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
+import settingComponents from './Settings';
 import WelcomePages from './WelcomePages';
-import DeleteAccountSuccess from './Settings/DeleteAccountSuccess';
-import UnderReview from './Settings/UnderReview';
 import * as InternSignUpFlow from './InternSignUpFlow';
 import Bursary, { BursarySuccess, BursaryApplication } from './Bursary';
 
@@ -120,7 +118,16 @@ function Pages(props) {
           {...props}
         />
         <Route
+          isPrivate
           exact
+          path={SETTINGS.UNDER_REVIEW}
+          Component={settingComponents('underReview', role)}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
+        <Route
           isPrivate
           path={INTERN_SIGNUP_ABOUT_ME}
           Component={InternSignUpFlow.AboutMe}
@@ -129,6 +136,15 @@ function Pages(props) {
           {...props}
         />
 
+        <Route
+          isPrivate
+          exact
+          path={SETTINGS.BOOK_REVIEW}
+          Component={settingComponents('bookReview', role)}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
         <Route
           exact
           isPrivate
@@ -177,17 +193,19 @@ function Pages(props) {
           mobileText="WE HOPE TO SEE YOU AGAIN!"
           {...props}
         />
+
         <Route
           exact
           path={SETTINGS.UNDER_REVIEW}
-          Component={UnderReview}
+          Component={settingComponents('underReview', role)}
           layout="illustrations"
           {...props}
         />
+
         <Route
           isPrivate
           path={SETTINGS_URL}
-          Component={Settings}
+          Component={settingComponents('setting', role)}
           handleChangeState={handleChangeState}
           isLoggedIn={isLoggedIn}
           resetState={resetState}

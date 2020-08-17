@@ -73,8 +73,14 @@ const DatePicker = ({
               onChange={e => onChange(e, 'startDate', index)}
               value={value && value.startDate && moment(value.startDate)}
               disabledDate={current => disabledDate(current, 'start', value)}
+              style={{ position: 'relative' }}
               {...props}
             />
+            {error && error.startDate && (
+              <S.Error style={{ position: 'absolute', left: 0, bottom: -20 }}>
+                {error.startDate}
+              </S.Error>
+            )}
           </>
           <T.H7C color="pink" mr={4} ml={4}>
             until
@@ -92,6 +98,11 @@ const DatePicker = ({
             >
               {children}
             </AntdDatePicker>
+            {error && error.endDate && (
+              <S.Error style={{ position: 'absolute', left: 0, bottom: -20 }}>
+                {error.endDate}
+              </S.Error>
+            )}
           </>
           {multi && (
             <S.CrossBtn
@@ -113,6 +124,7 @@ const DatePicker = ({
             + Add more
           </S.AddBtn>
         )}
+        {error && typeof error === 'string' && <S.Error>{error}</S.Error>}
         {extraInfo && <InfoSection text={extraInfo} />}
       </>
     );

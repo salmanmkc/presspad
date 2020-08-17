@@ -24,3 +24,8 @@ export const SOCIAL = {
   linkedin: 'https://www.linkedin.com/company/presspaduk/',
   youTube: 'https://www.youtube.com/channel/UCeHQ2RrqDFeaVmhBOPmxpEA',
 };
+
+export const PROPERTY_CHECKS =
+  'https://calendly.com/presspaduk/presspad-home-check';
+export const BURSARY_INTERVIEWS =
+  'https://calendly.com/presspaduk/bursary-interview';

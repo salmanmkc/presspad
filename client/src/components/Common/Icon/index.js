@@ -46,6 +46,7 @@ import Hearts from './icons/Hearts';
 import Star from './icons/Star';
 import Ambassador from './icons/Ambassador';
 import Community from './icons/Community';
+import Key from './icons/Key';
 import Verified from './icons/Verified';
 import Artboard from './icons/Artboard';
 
@@ -102,6 +103,7 @@ const iconMap = {
   star: Star,
   ambassador: Ambassador,
   community: Community,
+  key: Key,
   verified: Verified,
   artboard: Artboard,
 };

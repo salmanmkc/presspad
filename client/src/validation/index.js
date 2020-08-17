@@ -1,6 +1,7 @@
 const signupSchema = require('./signup');
 const internshipSchema = require('./internship');
 const internSettings = require('./internSettings');
+const hostSettings = require('./hostSettings');
 const internSignup = require('./internSignup');
 const internCompleteProfile = require('./internCompleteProfile');
 const internBursary = require('./internBursary');
@@ -42,6 +43,7 @@ module.exports = {
   signupSchema,
   validate,
   internSettings,
+  hostSettings,
   internSignup,
   internCompleteProfile,
   internBursary,

@@ -104,7 +104,7 @@ export const DateRangeWrapper = styled(Wrapper)`
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  position: relative;
   .ant-picker {
     ${commonInputStyles}
     margin-bottom: ${({ theme }) => theme.spacings[3]};

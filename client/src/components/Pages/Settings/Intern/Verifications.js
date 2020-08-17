@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Input, UploadFile, DatePicker, Checkbox } from '../../Common/Inputs';
-import { Col, Row } from '../../Common/Grid';
+import {
+  Input,
+  UploadFile,
+  DatePicker,
+  Checkbox,
+} from '../../../Common/Inputs';
+import { Col, Row } from '../../../Common/Grid';
 
-import * as T from '../../Common/Typography';
-import Button from '../../Common/ButtonNew';
+import * as T from '../../../Common/Typography';
+import Button from '../../../Common/ButtonNew';
 import {
   API_INTERN_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
-} from '../../../constants/apiRoutes';
-import { SETTINGS } from '../../../constants/navRoutes';
+} from '../../../../constants/apiRoutes';
+import { SETTINGS } from '../../../../constants/navRoutes';
 
-import Notification from '../../Common/Notification';
+import Notification from '../../../Common/Notification';
 
-const { validate, internSettings } = require('../../../validation');
+const { validate, internSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
   organisation: d.organisation || '',
@@ -258,7 +263,7 @@ const Verifications = props => {
   }, [state.hasNoInternship]);
 
   return (
-    <div style={{ marginTop: '4rem' }}>
+    <div style={{ marginTop: '2rem' }}>
       <Row>
         <Col w={[4, 4, 4]}>
           <T.H5 color="blue">Internship Details</T.H5>
