@@ -28,6 +28,7 @@ export const SETTINGS = {
   EDIT_PROFILE: `${SETTINGS_URL}/edit-profile`,
   VERIFY: `${SETTINGS_URL}/verify`,
   DELETE_ACCOUNT: `${SETTINGS_URL}/delete-account`,
+  DETAILS: `${SETTINGS_URL}/account-details`,
   DELETE_ACCOUNT_SUCCESS: `/delete-account-success`,
   UNDER_REVIEW: `/under-review`,
   BOOK_REVIEW: `/book-review`,
