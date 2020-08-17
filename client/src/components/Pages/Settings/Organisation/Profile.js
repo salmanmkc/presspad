@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 
 import Notification from '../../../Common/Notification';
 import Button from '../../../Common/ButtonNew';
 import { Input } from '../../../Common/Inputs';
 import * as T from '../../../Common/Typography';
 import { Row, Col } from '../../../Common/Grid';
-// import { API_ORG_DETAILS } from '../../../../constants/apiRoutes';
+import { API_ORG_DETAILS } from '../../../../constants/apiRoutes';
 
 import * as S from './style';
 
@@ -37,14 +37,14 @@ const CreateProfile = props => {
     async function getOrgDetails() {
       setLoading(true);
 
-      // const { data } = await axios.get(API_ORG_DETAILS.replace(':id', orgId));
+      const { data } = await axios.get(API_ORG_DETAILS.replace(':id', orgId));
 
       if (mounted) {
-        //   setPrevData(data || {});
-        //   if (data.description) setDescription(data.description);
-        //   if (data.internshipOpportunities.length)
-        //     setOpportunities(data.internshipOpportunities);
-        //   if (data.contactDetails) setContactDetails(data.contactDetails);
+        setPrevData(data || {});
+        if (data.description) setDescription(data.description);
+        if (data.internshipOpportunities.length)
+          setOpportunities(data.internshipOpportunities);
+        if (data.contactDetails) setContactDetails(data.contactDetails);
 
         setLoading(false);
         if (fetchData > 0) {
@@ -95,18 +95,9 @@ const CreateProfile = props => {
   };
 
   const onSave = async () => {
-    let _internshipOpportunities = internshipOpportunities;
-    if (
-      !prevData.internshipOpportunities ||
-      !prevData.internshipOpportunities.length
-    ) {
-      if (internshipOpportunities.length <= 1) {
-        const { opportunity, link, details } = internshipOpportunities[0];
-        if (!opportunity && !link && !details) {
-          _internshipOpportunities = undefined;
-        }
-      }
-    }
+    const _internshipOpportunities = internshipOpportunities.filter(
+      ({ opportunity, link, details }) => opportunity && link && details,
+    );
 
     const data = {
       description,
@@ -117,22 +108,21 @@ const CreateProfile = props => {
     try {
       setError('');
 
-      // const { errors: _errors } = validate({
-      //   schema: orgSignup.createProfile(prevData),
-      //   data,
-      // });
+      const { errors: _errors } = validate({
+        schema: orgSignup.createProfile(prevData),
+        data,
+      });
 
-      // if (!_errors) {
-      setSubmitLoading(true);
-      setErrors({});
+      if (!_errors) {
+        setSubmitLoading(true);
+        setErrors({});
 
-      // await axios.patch(API_ORG_DETAILS.replace(':id', orgId), data);
+        await axios.patch(API_ORG_DETAILS.replace(':id', orgId), data);
 
-      setNotificationOpen(true);
-      setFetchData(count => count + 1);
-      // } else {
-      // setErrors(_errors);
-      // }
+        setFetchData(count => count + 1);
+      } else {
+        setErrors(_errors);
+      }
       setSubmitLoading(false);
     } catch (e) {
       if (e.response && e.response.data) {

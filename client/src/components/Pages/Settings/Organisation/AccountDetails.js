@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 
 import Button from '../../../Common/ButtonNew';
 import Notification from '../../../Common/Notification';
 import { Input } from '../../../Common/Inputs';
 import { Row, Col } from '../../../Common/Grid';
-// import { SIGNUP_ORG_CREATE_PROFILE } from '../../../../constants/navRoutes';
-// import { API_ORG_DETAILS } from '../../../../constants/apiRoutes';
+import { API_ORG_DETAILS } from '../../../../constants/apiRoutes';
 
 import * as S from './style';
 
@@ -36,16 +35,16 @@ const AccountDetails = props => {
     async function getOrgDetails() {
       setLoading(true);
 
-      // const { data } = await axios.get(API_ORG_DETAILS.replace(':id', orgId));
+      const { data } = await axios.get(API_ORG_DETAILS.replace(':id', orgId));
 
       if (mounted) {
-        // setPrevData(data.accountDetails || {});
-        // if (data.accountDetails) {
-        //   setFirstName(data.accountDetails.firstName);
-        //   setLastName(data.accountDetails.lastName);
-        //   setPhone(data.accountDetails.phone);
-        //   setEmail(data.accountDetails.email);
-        // }
+        setPrevData(data.accountDetails || {});
+        if (data.accountDetails) {
+          setFirstName(data.accountDetails.firstName);
+          setLastName(data.accountDetails.lastName);
+          setPhone(data.accountDetails.phone);
+          setEmail(data.accountDetails.email);
+        }
         setLoading(false);
         if (fetchData > 0) {
           setNotificationOpen(true);
@@ -93,9 +92,7 @@ const AccountDetails = props => {
         setSubmitLoading(true);
         setErrors({});
 
-        // await axios.patch(API_ORG_DETAILS.replace(':id', orgId), data);
-
-        setNotificationOpen(true);
+        await axios.patch(API_ORG_DETAILS.replace(':id', orgId), data);
 
         setFetchData(count => count + 1);
       } else {
@@ -168,7 +165,7 @@ const AccountDetails = props => {
         <Col w={[4, 6, 4]} mb={3}>
           <Button
             type="secondary"
-            onClick={() => onSave()}
+            onClick={onSave}
             loading={submitLoading}
             disabled={loading}
           >

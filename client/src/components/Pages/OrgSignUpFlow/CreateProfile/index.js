@@ -101,15 +101,9 @@ const CreateProfile = props => {
   };
 
   const onSave = async isContinue => {
-    let _internshipOpportunities = internshipOpportunities;
-    if (!prevData.internshipOpportunities.length) {
-      if (internshipOpportunities.length <= 1) {
-        const { opportunity, link, details } = internshipOpportunities[0];
-        if (!opportunity && !link && !details) {
-          _internshipOpportunities = undefined;
-        }
-      }
-    }
+    const _internshipOpportunities = internshipOpportunities.filter(
+      ({ opportunity, link, details }) => opportunity && link && details,
+    );
 
     const data = {
       description,
