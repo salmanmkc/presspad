@@ -84,7 +84,6 @@ const InternDashboard = props => {
       });
     } catch (err) {
       setIsLoading(false);
-      console.log(err);
     }
   };
 

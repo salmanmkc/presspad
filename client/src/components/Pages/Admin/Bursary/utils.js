@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 import {
@@ -8,8 +8,11 @@ import {
 
 export const useGetApplications = type => {
   const [data, setData] = useState([]);
+  const [csvData, setCsvData] = useState([]);
+  const [csvLoaded, setCsvLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fetchData, setFetchData] = useState(0);
+  const csvRef = useRef();
 
   const onChangeBursaryPoints = (e, rowData) => {
     setData(oldState =>
@@ -134,11 +137,31 @@ export const useGetApplications = type => {
     };
   }, [fetchData, type]);
 
+  const getCsvData = async () => {
+    setCsvLoaded(false);
+    const { data: _data } = await axios.get(API_BURSARY_APPLICATIONS, {
+      params: {
+        type: 'all',
+      },
+    });
+    setCsvData(_data);
+    setCsvLoaded(true);
+  };
+
+  useEffect(() => {
+    if (csvData && csvLoaded) {
+      csvRef.current.link.click();
+    }
+  }, [csvData, csvLoaded]);
+
   return {
     data,
     loading,
     updateBursaryPoints,
     onChangeBursaryPoints,
     inviteToInterview,
+    getCsvData,
+    csvData,
+    csvRef,
   };
 };

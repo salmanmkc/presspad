@@ -4,6 +4,7 @@ const {
   getBursaryWindows,
   getBursaryApplications,
   getBursaryApplicationInfo,
+  getBursaryApplicationsForCSV,
 } = require('../../database/queries/bursary');
 
 module.exports.getMyBursary = async (req, res, next) => {
@@ -31,9 +32,12 @@ module.exports.getBursaryWindows = async (req, res, next) => {
 module.exports.getBursaryApplications = async (req, res, next) => {
   try {
     const { type } = req.query;
+    if (type === 'all') {
+      const bursaries = await getBursaryApplicationsForCSV();
+      return res.json(bursaries);
+    }
 
     const bursaries = await getBursaryApplications(type);
-
     return res.json(bursaries);
   } catch (error) {
     return next(boom.badImplementation(error));

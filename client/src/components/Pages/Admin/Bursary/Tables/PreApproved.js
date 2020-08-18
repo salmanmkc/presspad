@@ -1,4 +1,6 @@
 import React from 'react';
+import { CSVLink } from 'react-csv';
+
 import Table from '../../../../Common/Table';
 import {
   LinkCol,
@@ -27,10 +29,10 @@ const PreApproved = ({ sendToResponse }) => {
     onChangeBursaryPoints,
     updateBursaryPoints,
     inviteToInterview,
+    getCsvData,
+    csvData,
+    csvRef,
   } = useGetApplications('pre-approved');
-
-  const exportData = () =>
-    console.log('function to export all bursary data for these requests');
 
   const columns = [
     LinkCol('name', ADMIN_USER_DETAILS, 'id'),
@@ -51,9 +53,22 @@ const PreApproved = ({ sendToResponse }) => {
       />
       <Row mt={5}>
         <Col w={[4, 4, 4]}>
-          <ButtonNew type="secondary" outline onClick={exportData}>
+          <ButtonNew
+            type="secondary"
+            outline
+            onClick={(event, done) => {
+              getCsvData(done);
+            }}
+          >
             Export bursary data
           </ButtonNew>
+          <div style={{ display: 'none' }}>
+            <CSVLink data={csvData} ref={csvRef}>
+              <ButtonNew type="secondary" outline>
+                Export bursary data
+              </ButtonNew>
+            </CSVLink>
+          </div>
         </Col>
       </Row>
     </>

@@ -97,7 +97,6 @@ module.exports.getAllClientStats = async () => {
         // clean up the result so all bookings are in one array
         const cleanBookings = internBookings.reduce((a, b) => a.concat(b), []);
 
-        console.log('cl', cleanBookings);
         // filter so only have bookings where they are at the host
         newClientObj.currentlyHosting = cleanBookings.filter(
           booking => booking.status === 'at host',
