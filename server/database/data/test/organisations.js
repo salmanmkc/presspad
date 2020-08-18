@@ -44,12 +44,14 @@ const createAll = async ({ accounts }) => {
       },
       internshipOpportunities: [
         {
+          key: 0,
           opportunity: 'Internship Schme A 2020',
           link: 'https://www.fa.com/internship-scheme-a-2020',
           details:
             'Opportunity for graduates to participate in a the upcoming internship scheme involving a diverse range of opportunities. Applications close September 14th 2020. Please send your applications including CV to susanne.leopoldski@financial-times.com.',
         },
         {
+          key: 1,
           opportunity: 'Ongoing Creative Industry Scheme',
           link: 'https://www.fa.com/creative-industry-scheme',
           details:

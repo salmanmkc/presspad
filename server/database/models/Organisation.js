@@ -27,10 +27,7 @@ const organisationSchema = new Schema(
       },
     },
     contactDetails: {
-      firstName: {
-        type: String,
-      },
-      lastName: {
+      name: {
         type: String,
       },
       phone: {
@@ -42,6 +39,9 @@ const organisationSchema = new Schema(
     },
     internshipOpportunities: [
       {
+        key: {
+          type: Number,
+        },
         opportunity: {
           type: String,
         },

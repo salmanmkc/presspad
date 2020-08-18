@@ -1,7 +1,7 @@
 const request = require('supertest');
 
-const buildDB = require('./../../../database/data/test');
-const app = require('./../../../app');
+const buildDB = require('../../../database/data/test');
+const app = require('../../../app');
 
 const {
   API_SIGNUP_URL,

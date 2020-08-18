@@ -35,6 +35,9 @@ const {
 } = require('../controllers/booking');
 const adminStats = require('../controllers/stats/adminStats');
 const verifyProfile = require('../controllers/profile/verifyProfile');
+
+const updateOrgDetails = require('../controllers/organisation/updateOrgDetails');
+const getOrgDetails = require('../controllers/organisation/getOrgDetails');
 const {
   internDashboard,
   hostDashboard,
@@ -160,6 +163,7 @@ const {
   INTERN_SETTINGS_VERIFICATIONS,
   MY_BURSARY,
   SINGLE_BURSARY,
+  ORG_DETAILS,
   TOP_ADMIN_STATS,
   BURSARY_APPLICATIONS_STATUS,
 } = require('../../client/src/constants/apiRoutes');
@@ -263,6 +267,18 @@ router.post(SIGNUP_URL, signUpController);
 router.get(GET_ORGS_URL, getAllOrgs);
 
 // Orgs
+router.get(
+  ORG_DETAILS,
+  authentication,
+  authorization(['organisation']),
+  getOrgDetails,
+);
+router.patch(
+  ORG_DETAILS,
+  authentication,
+  authorization(['organisation']),
+  updateOrgDetails,
+);
 router.get(ORGS_DASHBOARD, authentication, orgDashboard);
 
 // Get intern dashboard

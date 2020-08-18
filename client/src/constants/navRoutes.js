@@ -30,6 +30,7 @@ export const SETTINGS = {
   EDIT_PROFILE: `${SETTINGS_URL}/edit-profile`,
   VERIFY: `${SETTINGS_URL}/verify`,
   DELETE_ACCOUNT: `${SETTINGS_URL}/delete-account`,
+  DETAILS: `${SETTINGS_URL}/account-details`,
   DELETE_ACCOUNT_SUCCESS: `/delete-account-success`,
   UNDER_REVIEW: `/under-review`,
   BOOK_REVIEW: `/book-review`,
@@ -55,6 +56,11 @@ export const ADMIN_USER_DETAILS = '/admin/user-details/:id';
 export const SIGNUP_INTERN = '/sign-up/intern';
 export const SIGNUP_HOST = '/sign-up/host';
 export const SIGNUP_ORG = '/sign-up/organisation';
+export const SIGNUP_ORG_WELCOME = '/sign-up/organisation/welcome';
+export const SIGNUP_ORG_ACCOUNT_DETAILS =
+  '/sign-up/organisation/account-details';
+export const SIGNUP_ORG_CREATE_PROFILE = '/sign-up/organisation/create-profile';
+export const SIGNUP_ORG_ADD_FUNDS = '/sign-up/organisation/add-funds';
 export const HOST_COMPLETE_PROFILE_URL = '/host-complete-profile';
 export const INTERN_COMPLETE_PROFILE_URL = '/intern-complete-profile';
 export const DBS_CHECK_PAGE = '/dbs-check';

@@ -4,6 +4,7 @@ import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
 import InternSteps from './InternSteps';
+import OrganisationSteps from './OrganisationSteps';
 
 import * as S from './style';
 import * as LoginStyle from '../LoginLayout/style';
@@ -11,7 +12,19 @@ import * as LoginStyle from '../LoginLayout/style';
 import whiteLogo from '../../../assets/white-presspad-logo.png';
 import { HOME_URL } from '../../../constants/navRoutes';
 
-const SignupLayout = ({ windowWidth, children }) => {
+const Steps = ({ role }) => {
+  switch (role) {
+    case 'intern':
+      return <InternSteps />;
+    case 'organisation':
+      return <OrganisationSteps />;
+
+    default:
+      return null;
+  }
+};
+
+const SignupLayout = ({ windowWidth, children, role }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet;
 
@@ -27,7 +40,7 @@ const SignupLayout = ({ windowWidth, children }) => {
         )}
 
         <S.ContentWrapper>{children}</S.ContentWrapper>
-        {!topHeaderRendered && <InternSteps />}
+        {!topHeaderRendered && <Steps role={role} />}
       </S.Wrapper>
     </>
   );

@@ -18,12 +18,12 @@ export const PageTitle = styled.div`
   margin-bottom: ${({ theme, mb }) => theme.spacings[mb || 5]};
   margin-left: ${({ theme, ml }) => theme.spacings[ml]};
   margin-right: ${({ theme, mr }) => theme.spacings[mr]};
-  color: ${({ theme, color }) => color || theme.colors.pink};
+  color: ${({ theme, color }) => theme.colors[color] || theme.colors.pink};
   display: flex;
   align-items: center;
 
   & > h2 {
-    color: ${({ theme, color }) => color || theme.colors.blue};
+    color: ${({ theme, color }) => theme.colors[color] || theme.colors.blue};
   }
 
   @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
@@ -38,7 +38,8 @@ export const PageTitle = styled.div`
     & > h2 {
       color: ${({ theme }) => theme.colors.white};
     }
-    background-color: ${({ theme, bgColor }) => bgColor || theme.colors.pink};
+    background-color: ${({ theme, bgColor }) =>
+      theme.colors[bgColor] || theme.colors.pink};
   }
   @media ${({ theme: { breakpoints } }) => breakpoints.laptop} {
     padding-left: 5vw;

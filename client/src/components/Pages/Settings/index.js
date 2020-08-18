@@ -6,6 +6,7 @@ import UnderReview from './Intern/UnderReview';
 import HostSetting from './Host';
 import HostUnderReview from './Host/UnderReview';
 import HostBookReview from './Host/BookReview';
+import OrgSetting from './Organisation';
 
 // eslint-disable-next-line consistent-return
 const settingComponents = (pageName, role) => {
@@ -26,6 +27,13 @@ const settingComponents = (pageName, role) => {
         return HostUnderReview;
       case 'bookReview':
         return HostBookReview;
+      default:
+        break;
+    }
+  } else if (role === 'organisation') {
+    switch (pageName) {
+      case 'setting':
+        return OrgSetting;
       default:
         break;
     }

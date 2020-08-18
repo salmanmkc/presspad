@@ -26,6 +26,7 @@ const Input = ({
   name,
   type,
   addonBefore,
+  disabled,
 }) => (
   <InputWrapper error={!!error} mt={mt} mb={mb} mr={mr} ml={ml}>
     {label && (
@@ -60,6 +61,7 @@ const Input = ({
         name={name}
         type={type || 'text'}
         addonBefore={addonBefore}
+        disabled={disabled}
       />
     )}
     {limit && (
