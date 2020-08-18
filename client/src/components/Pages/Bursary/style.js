@@ -8,7 +8,7 @@ export const IllCareWrapper = styled.div`
   .helper {
     width: 100%;
     @media ${({ theme: { breakpoints } }) => breakpoints.tablet} {
-      width: 200%;
+      width: ${({ width }) => width || '200%'};
     }
   }
 `;

@@ -83,7 +83,7 @@ const Bursary = props => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: internBursary(prevData),
+      schema: internBursary,
       data: { ...state },
     });
 
@@ -268,7 +268,7 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 8, 4]} mt={6}>
+        <Col w={[4, 8, 8]} mt={6}>
           <Select
             options={types.bursaryTypes.typeOfSchool.map(e => ({
               label: e,
@@ -296,8 +296,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.highestLevelOfQualifications.map(
                 e => ({
@@ -332,8 +332,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.describeMainIncomeEarnerMainJob.map(
                 e => ({
@@ -357,8 +357,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.numberOfPeopleKnowBefore16.map(e => ({
                 label: e,
@@ -380,8 +380,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.typeOfUniversity.map(e => ({
                 label: e,
@@ -406,8 +406,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.eligibleForFreeSchoolMeals.map(e => ({
                 label: e,
@@ -430,8 +430,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.comingFromLowerSociolEconomicBackground.map(
                 e => ({
@@ -455,8 +455,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.householdMembersSpeakOtherLanguage.map(
                 e => ({
@@ -490,8 +490,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.annualHouseholdIncome.map(e => ({
                 label: e,
@@ -513,8 +513,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.statusOfHome.map(e => ({
                 label: e,
@@ -545,8 +545,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.anyHouseholdReceive.map(e => ({
                 label: e,
@@ -571,8 +571,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.benefitFromNepotism.map(e => ({
                 label: e,
@@ -595,8 +595,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.peopleYouKnowSocially.map(e => ({
                 label: e,
@@ -621,8 +621,8 @@ const Bursary = props => {
       </Row>
 
       <Row>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.accentAffectsPotentialEmployers.map(
                 e => ({
@@ -645,8 +645,8 @@ const Bursary = props => {
         </S.IllCareWrapper>
       </Row>
       <Row mb={6}>
-        <S.IllCareWrapper>
-          <Col w={[4, 8, 4]} mt={6}>
+        <S.IllCareWrapper width="150%">
+          <Col w={[4, 8, 8]} mt={6}>
             <Select
               options={types.bursaryTypes.parentsSupportiveOfCareer.map(e => ({
                 label: e,
@@ -925,7 +925,7 @@ const Bursary = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[4, 8, 4]} mb={6} mbT={3}>
+        <Col w={[4, 8, 8]} mb={6} mbT={3}>
           <Button
             type="secondary"
             onClick={onSave}

@@ -3,6 +3,7 @@ const boom = require('boom');
 const { updateUserProfile } = require('../../../database/queries/profiles');
 const { getBursaryByUserId } = require('../../../database/queries/bursary');
 const { internCompleteProfile } = require('../../../../client/src/validation');
+const createBursaryApp = require('../../bursary/createBursaryApp.utils');
 
 module.exports = async (req, res, next) => {
   let completed;
@@ -66,6 +67,10 @@ module.exports = async (req, res, next) => {
       completed = true;
     } catch (error) {
       completed = false;
+    }
+
+    if (completed) {
+      await createBursaryApp(user._id);
     }
 
     if (!completed) {

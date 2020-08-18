@@ -97,19 +97,19 @@ const Bursary = () => {
                     APPLY FOR BURSARY
                   </Button>
                   {window ? (
-                    <T.PS color="gray3">
+                    <T.PXS color="gray3">
                       Application deadline for the next round of bursaries is{' '}
-                      <T.PSBold>
-                        {moment(window.endDate)
+                      <T.PXSBold>
+                        {moment(window.startDate)
                           .endOf()
                           .format('Do MMMM YYYY')}
                         .
-                      </T.PSBold>
-                    </T.PS>
+                      </T.PXSBold>
+                    </T.PXS>
                   ) : (
-                    <T.PS color="gray3">
+                    <T.PXS color="gray3">
                       Sorry!, no open applications for now
-                    </T.PS>
+                    </T.PXS>
                   )}
                 </>
               )}
@@ -130,13 +130,14 @@ const Bursary = () => {
         How does it work?
       </T.H3C>
 
-      <T.PXL bold color="blue" mb={3}>
+      <T.PL bold color="blue" mb={3} style={{ fontSize: '20px' }}>
         The PressPad bursary is funded directly from our corporate donors,
         grants and any revenue PressPad can generate by delivering training or
         consultancy work. As per our commitment to social impact, we also donate
         15% of all profits we receive from our hosting platform to our bursary
         impact fund.
-      </T.PXL>
+      </T.PL>
+
       <T.P color="gray3" mb={7}>
         Our bursary awards cover 50% or 100% of the cost of your placement, with
         the maximum bursary in real money terms capped at £840. We ask
@@ -350,13 +351,15 @@ const Bursary = () => {
         </Col>
       </Row>
       {bursary ? (
-        <Button
-          type="tertiary"
-          withGraphic
-          style={{ paddingLeft: '10px', paddingRight: '10px' }}
-        >
-          YOUR APPLICATION IS UNDER CONSIDERATION
-        </Button>
+        <S.BursaryButtonWrapperTablet>
+          <Button
+            type="tertiary"
+            withGraphic
+            style={{ paddingLeft: '10px', paddingRight: '10px' }}
+          >
+            YOUR APPLICATION IS UNDER CONSIDERATION
+          </Button>
+        </S.BursaryButtonWrapperTablet>
       ) : (
         <S.BursaryButtonWrapperTablet>
           {over14Days && (
@@ -369,17 +372,19 @@ const Bursary = () => {
                 APPLY FOR BURSARY
               </Button>
               {window ? (
-                <T.PS color="gray3">
+                <T.PXS color="gray3">
                   Application deadline for the next round of bursaries is{' '}
-                  <T.PSBold>
-                    {moment(window.endDate)
+                  <T.PXSBold>
+                    {moment(window.startDate)
                       .endOf()
                       .format('Do MMMM YYYY')}
                     .
-                  </T.PSBold>
-                </T.PS>
+                  </T.PXSBold>
+                </T.PXS>
               ) : (
-                <T.PS color="gray3">Sorry!, no open applications for now</T.PS>
+                <T.PXS color="gray3">
+                  Sorry!, no open applications for now
+                </T.PXS>
               )}
             </>
           )}

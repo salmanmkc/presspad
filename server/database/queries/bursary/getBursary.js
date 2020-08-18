@@ -185,6 +185,13 @@ const getPendingBursaryApplicationsByUserId = id => {
   });
 };
 
+const getBursaryApplicationsByUserIdAndWindowId = ({ userId, windowId }) => {
+  return BursaryApplication.find({
+    intern: userId,
+    bursaryWindow: windowId,
+  });
+};
+
 const getBursaryByUserId = id => Bursary.findOne({ intern: id }).lean();
 
 module.exports = {
@@ -193,4 +200,5 @@ module.exports = {
   getBursaryApplicationInfo,
   getBursaryByUserId,
   getPendingBursaryApplicationsByUserId,
+  getBursaryApplicationsByUserIdAndWindowId,
 };

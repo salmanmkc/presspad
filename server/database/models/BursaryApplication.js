@@ -25,6 +25,11 @@ const bursaryApplicationSchema = new Schema(
       ref: 'users',
       required: true,
     },
+    bursaryWindow: {
+      type: Schema.Types.ObjectId,
+      ref: 'bursarywindows',
+      required: true,
+    },
     typeOfUser: {
       type: String,
       enum: ['new', 'existing'],

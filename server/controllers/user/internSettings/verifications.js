@@ -9,6 +9,7 @@ const { getBursaryByUserId } = require('../../../database/queries/bursary');
 
 const { deleteFile } = require('../../../helpers/storage');
 const { storageBucket: bucketName } = require('../../../config');
+const createBursaryApp = require('../../bursary/createBursaryApp.utils');
 
 module.exports = async (req, res, next) => {
   try {
@@ -67,6 +68,10 @@ module.exports = async (req, res, next) => {
       completed = true;
     } catch (error) {
       completed = false;
+    }
+
+    if (completed) {
+      await createBursaryApp(user._id);
     }
 
     if (

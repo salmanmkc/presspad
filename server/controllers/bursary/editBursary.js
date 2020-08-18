@@ -1,4 +1,7 @@
 const boom = require('boom');
+
+const createBursaryApp = require('./createBursaryApp.utils');
+
 const {
   editBursaryById,
   upsertBursaryWindow,
@@ -88,7 +91,6 @@ module.exports.editBursary = async (req, res, next) => {
     const bursary = await editBursaryById(id, bursaryData);
     const user = await getUserByBursaryId(id);
 
-    console.log({ id });
     if (isProfileDataBeenProvided) {
       profile = await updateUserProfile(user._id, profileData).lean();
     } else {
@@ -100,6 +102,10 @@ module.exports.editBursary = async (req, res, next) => {
       completed = true;
     } catch (error) {
       completed = false;
+    }
+
+    if (completed) {
+      await createBursaryApp(user._id);
     }
 
     if (!completed) {
