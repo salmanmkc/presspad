@@ -36,6 +36,10 @@ module.exports = async (req, res, next) => {
 
     const bursary = await getBursaryByUserId(user._id);
 
+    const toValidate = { ...updatedProfile };
+
+    console.log('UPDA', toValidate);
+
     try {
       await internCompleteProfile.validate({ ...bursary, ...updatedProfile });
       completed = true;

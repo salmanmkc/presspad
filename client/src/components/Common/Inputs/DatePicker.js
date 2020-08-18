@@ -85,7 +85,9 @@ const DatePicker = ({
           <T.H7C color="pink" mr={4} ml={4}>
             until
           </T.H7C>
-          <>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+          >
             <AntdDatePicker
               format={customFormat || format}
               placeholder={customPlaceholder || placeholder}
@@ -98,23 +100,17 @@ const DatePicker = ({
             >
               {children}
             </AntdDatePicker>
-            {error && error.endDate && (
-              <S.Error style={{ position: 'absolute', left: 0, bottom: -20 }}>
-                {error.endDate}
-              </S.Error>
-            )}
-          </>
+
+            {error && error.endDate && <S.Error>{error.endDate}</S.Error>}
+          </div>
           {multi && (
-            <S.CrossBtn
-              show
-              onClick={() => arrayLength > 1 && handleDelete(index)}
-            >
+            <S.CrossBtn show onClick={() => handleDelete(index)}>
               <Icon icon="cross" width="20px" height="20px" color="darkGray" />
               <S.CrossLabel>Remove</S.CrossLabel>
             </S.CrossBtn>
           )}
         </S.DateRangeWrapper>
-        {error && <S.Error>{error}</S.Error>}
+        {error && typeof error === 'string' && <S.Error>{error}</S.Error>}
         {multi && (
           <S.AddBtn
             color="pink"

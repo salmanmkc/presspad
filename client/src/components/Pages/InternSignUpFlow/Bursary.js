@@ -206,7 +206,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.typeOfSchool.map(e => ({
                 label: e,
@@ -236,7 +236,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.highestLevelOfQualifications.map(
                 e => ({
@@ -272,7 +272,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.describeMainIncomeEarnerMainJob.map(
                 e => ({
@@ -297,7 +297,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.numberOfPeopleKnowBefore16.map(e => ({
                 label: e,
@@ -320,7 +320,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.typeOfUniversity.map(e => ({
                 label: e,
@@ -346,7 +346,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.eligibleForFreeSchoolMeals.map(e => ({
                 label: e,
@@ -370,7 +370,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.comingFromLowerSociolEconomicBackground.map(
                 e => ({
@@ -395,7 +395,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.householdMembersSpeakOtherLanguage.map(
                 e => ({
@@ -430,7 +430,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.annualHouseholdIncome.map(e => ({
                 label: e,
@@ -453,7 +453,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.statusOfHome.map(e => ({
                 label: e,
@@ -485,7 +485,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.anyHouseholdReceive.map(e => ({
                 label: e,
@@ -511,7 +511,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.benefitFromNepotism.map(e => ({
                 label: e,
@@ -535,7 +535,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.peopleYouKnowSocially.map(e => ({
                 label: e,
@@ -561,7 +561,7 @@ const Bursary = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.accentAffectsPotentialEmployers.map(
                 e => ({
@@ -585,7 +585,7 @@ const Bursary = () => {
       </Row>
       <Row mb={6}>
         <S.IllCareWrapper>
-          <Col w={[4, 8, 5.3]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 8, 5.3]} mt={4}>
             <Select
               options={types.bursaryTypes.parentsSupportiveOfCareer.map(e => ({
                 label: e,
@@ -606,7 +606,7 @@ const Bursary = () => {
         </S.IllCareWrapper>
       </Row>
       <Row>
-        <Col w={[6, 12, 12]}>
+        <Col w={[4, 12, 12]}>
           {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
         </Col>
       </Row>
@@ -634,7 +634,7 @@ const Bursary = () => {
         </Col>
       </Row>
       <Row style={{ textAlign: 'center' }}>
-        <Col w={[4, 8, 11.6]} style={{ marginTop: '30px' }}>
+        <Col w={[4, 8, 10.6]} style={{ marginTop: '30px' }}>
           <T.Link to={INTERN_SIGNUP_PROFILE} color="pink">
             I’ll finish this later
           </T.Link>

@@ -7,7 +7,7 @@ import { API_SIGNUP_URL, API_GET_ORGS_URL } from '../../../constants/apiRoutes';
 import USER_TYPES from '../../../constants/userTypes';
 
 import {
-  HOST_COMPLETE_PROFILE_URL,
+  HOST_SIGNUP_WELCOME,
   Error500,
   INTERN_SIGNUP_WELCOME,
   SIGNUP_ORG_WELCOME,
@@ -199,7 +199,7 @@ const SignUpPage = props => {
         } else if (data.role === 'intern') {
           history.push(INTERN_SIGNUP_WELCOME);
         } else if (['host', 'superhost'].includes(data.role)) {
-          history.push(HOST_COMPLETE_PROFILE_URL);
+          history.push(HOST_SIGNUP_WELCOME);
         }
       } catch (err) {
         if (err.response) {

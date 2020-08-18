@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Input,
-  UploadFile,
-  DatePicker,
-  Checkbox,
-} from '../../../Common/Inputs';
-import { Col, Row } from '../../../Common/Grid';
+import { Input, UploadFile, DatePicker, Checkbox } from '../../Common/Inputs';
+import { Col, Row } from '../../Common/Grid';
 
-import * as T from '../../../Common/Typography';
-import Button from '../../../Common/ButtonNew';
-import LoadingBallPulseSync from '../../../Common/LoadingBallPulseSync';
+import Title from '../../Common/Title';
+
+import * as T from '../../Common/Typography';
+import Button from '../../Common/ButtonNew';
+
 import {
   API_HOST_SETTINGS_MY_LISTING,
   API_MY_PROFILE_URL,
-} from '../../../../constants/apiRoutes';
-import { SETTINGS } from '../../../../constants/navRoutes';
+} from '../../../constants/apiRoutes';
+import {
+  HOST_SIGNUP_VERIFICATIONS,
+  SETTINGS,
+} from '../../../constants/navRoutes';
 
-import Notification from '../../../Common/Notification';
-import { accommodationChecklist } from '../../../../constants/types';
+import Notification from '../../Common/Notification';
+import { accommodationChecklist } from '../../../constants/types';
 
-const { validate, hostSettings } = require('../../../../validation');
+const { validate, hostSettings } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
   profileImage: d.profileImage || {
@@ -35,12 +35,15 @@ const getCleanData = (d = {}) => ({
     city: '',
     postcode: '',
   },
-  availableDates: d.availableDates || [
-    {
-      startDate: '',
-      endDate: '',
-    },
-  ],
+  availableDates:
+    d.availableDates && d.availableDates.length
+      ? d.availableDates
+      : [
+          {
+            startDate: '',
+            endDate: '',
+          },
+        ],
   accommodationChecklist: d.accommodationChecklist || [],
   bio: d.bio || '',
   otherInfo: d.otherInfo || '',
@@ -53,12 +56,14 @@ const getCleanData = (d = {}) => ({
 const MyListing = props => {
   const [state, setState] = useState(getCleanData());
   const [errors, setErrors] = useState({});
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [mainError, setMainError] = useState();
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [continueLoading, setContinueLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [prevData, setPrevData] = useState({});
   const [fetchData, setFetchData] = useState(0);
+  const [lastClickOnContinue, setLastClickOnContinue] = useState({});
+  const [fetchingData, setFetchingData] = useState(true);
 
   const history = useHistory();
 
@@ -84,7 +89,7 @@ const MyListing = props => {
           preview: file.preview,
         };
       } catch (e) {
-        return setError(e.message);
+        return setMainError(e.message);
       }
     },
     [props.id],
@@ -96,7 +101,7 @@ const MyListing = props => {
       data: { ...state },
     });
 
-    if (prevData.profileImage && !state.profileImage) {
+    if (prevData.profileImage && state.profileImage.deleted) {
       return _errors
         ? { ..._errors, profileImage: 'Profile image is required' }
         : { profileImage: 'Profile image is required' };
@@ -180,41 +185,54 @@ const MyListing = props => {
   const update = async (_profileImage, _photos = []) => {
     try {
       const oldPhotos =
-        state.photos && state.photos.filter(e => e.fileName && !e.new);
+        state.photos &&
+        state.photos.filter(e => e.fileName && !e.new && !e.deleted);
 
-      setLoading(true);
       await axios.patch(API_HOST_SETTINGS_MY_LISTING, {
         ...state,
         profileImage: _profileImage || state.profileImage,
         photos: [..._photos, ...oldPhotos],
-        photosToDelete: getPhotosToDelete(_photos),
+        photosToDelete: getPhotosToDelete(),
       });
+      setFetchingData(true);
       setNotificationOpen(true);
     } catch (err) {
       if (err.response) {
-        setError(err.response.data.error);
+        setMainError(err.response.data.error);
       } else {
-        setError('Something went wrong');
+        setMainError('Something went wrong');
       }
+    } finally {
+      setContinueLoading(false);
+      setSaveLoading(false);
     }
   };
 
-  const onSubmit = async () => {
-    const _errors = await _validate();
+  const onSubmit = async isContinue => {
+    const _errors = await _validate(isContinue);
     setErrors(_errors || {});
+    setLastClickOnContinue(isContinue);
 
     if (_errors) {
-      setError('Must fill all required fields');
+      setMainError('Must fill all required fields');
       return;
     }
-    setError();
+    setMainError();
+
+    if (isContinue) {
+      setContinueLoading(true);
+    } else {
+      setSaveLoading(true);
+    }
+
     let _profileImage;
     let _photos;
     if (
       (state.profileImage &&
         state.profileImage.new &&
         !state.profileImage.uploaded) ||
-      (state.photos && state.photos.find(e => e.new && !e.uploaded))
+      (state.photos &&
+        state.photos.find(e => (e.new && !e.uploaded) || e.deleted))
     ) {
       const promiseArr = [];
       if (state.profileImage && state.profileImage.new) {
@@ -226,8 +244,11 @@ const MyListing = props => {
       } else {
         promiseArr.push(Promise.resolve());
       }
+
       if (state.photos && state.photos.find(e => e.new && !e.uploaded)) {
-        const filteredFiles = state.photos.filter(e => e.new && !e.uploaded);
+        const filteredFiles = state.photos.filter(
+          e => e.new && !e.uploaded && !e.deleted,
+        );
         filteredFiles.forEach(file => {
           promiseArr.push(upload(file));
         });
@@ -243,42 +264,43 @@ const MyListing = props => {
 
   useEffect(() => {
     const getData = async () => {
-      setLoading(true);
       const {
         data: { profile, listing },
       } = await axios.get(API_MY_PROFILE_URL);
+      setFetchingData(false);
 
-      setLoaded(true);
       const totalData = { ...profile, ...listing };
       setState(getCleanData(totalData));
       setPrevData(getCleanData(totalData));
-      setLoading(false);
     };
     getData();
   }, [fetchData]);
 
   const done = () => {
-    if (
-      prevData.address &&
-      prevData.address.postcode &&
-      state.address.postcode &&
-      prevData.address.postcode !== state.address.postcode
-    ) {
-      history.push(SETTINGS.BOOK_REVIEW);
+    if (lastClickOnContinue) {
+      if (
+        prevData.address &&
+        prevData.address.postcode &&
+        state.address.postcode &&
+        prevData.address.postcode !== state.address.postcode
+      ) {
+        history.push(SETTINGS.BOOK_REVIEW);
+      } else {
+        history.push(HOST_SIGNUP_VERIFICATIONS);
+      }
     } else {
       setFetchData(e => e + 1);
     }
   };
 
-  if (!loaded)
-    return (
-      <div style={{ marginTop: '2rem' }}>
-        <LoadingBallPulseSync />
-      </div>
-    );
-
   return (
-    <div style={{ marginTop: '2rem' }}>
+    <div style={{ marginTop: '4rem', paddingBottom: '5rem' }}>
+      <Row>
+        <Title withBg mb="0">
+          <Col w={[4, 12, 12]}>CREATE LISTING</Col>
+        </Title>
+      </Row>
+
       <Row>
         <Col w={[4, 12, 12]}>
           <div style={{ marginBottom: '20px' }}>
@@ -297,7 +319,7 @@ const MyListing = props => {
         }
         error={
           prevData.profileImage &&
-          !state.profileImage &&
+          state.profileImage.deleted &&
           'Profile image is required'
         }
       />
@@ -319,6 +341,7 @@ const MyListing = props => {
               mainText="Upload more photos by dragging new photos here"
               secondaryText="file size max 2mb"
               maxLimit={9}
+              col={6}
               error={errors.photos}
             />
           </div>
@@ -331,7 +354,7 @@ const MyListing = props => {
         </Col>
       </Row>
       <Row mb={4}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={onAddressChange}
             name="addressline1"
@@ -341,7 +364,7 @@ const MyListing = props => {
             error={errors.address}
           />
         </Col>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={onAddressChange}
             name="addressline2"
@@ -353,7 +376,7 @@ const MyListing = props => {
         </Col>
       </Row>
       <Row mb={5}>
-        <Col w={[4, 6, 4]} mb={5}>
+        <Col w={[4, 6, 5.3]} mb={5}>
           <Input
             onChange={onAddressChange}
             name="city"
@@ -363,7 +386,7 @@ const MyListing = props => {
             error={errors.address}
           />
         </Col>
-        <Col w={[4, 6, 4]} mb={5}>
+        <Col w={[4, 6, 5.3]} mb={5}>
           <Input
             onChange={onAddressChange}
             name="postcode"
@@ -374,34 +397,33 @@ const MyListing = props => {
           />
         </Col>
       </Row>
-      {/* Dates */}
 
+      {/* Dates */}
       <Row mb={5} mt={5}>
-        <Col w={[4, 12, 8]}>
+        <Col w={[4, 12, 12]}>
           <T.H5 color="blue" mb={3}>
             Availability
           </T.H5>
-          {errors.availableDates && (
+          {errors.availableDates && typeof errors.availableDates === 'string' && (
             <T.PBold mb={3} color="pink">
               {errors.availableDates}
             </T.PBold>
           )}
-          {state.availableDates.length > 0 &&
-            state.availableDates.map((date, index) => (
-              <DatePicker
-                onChange={onRangeChange}
-                type="dateRange"
-                multi
-                index={index}
-                handleDelete={handleDateDelete}
-                handleAdd={handleDateAdd}
-                arrayLength={state.availableDates.length}
-                mb={3}
-                value={date}
-                disabledDate={d => !d || d.isBefore(new Date())}
-                error={errors[`availableDates[${index}]`]}
-              />
-            ))}
+          {state.availableDates.map((date, index) => (
+            <DatePicker
+              onChange={onRangeChange}
+              type="dateRange"
+              multi
+              index={index}
+              handleDelete={handleDateDelete}
+              handleAdd={handleDateAdd}
+              arrayLength={state.availableDates.length}
+              mb={3}
+              value={date}
+              disabledDate={d => !d || d.isBefore(new Date())}
+              error={errors[`availableDates[${index}]`]}
+            />
+          ))}
         </Col>
       </Row>
       {/* about your home  */}
@@ -427,7 +449,7 @@ const MyListing = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <T.H5 color="blue" mb={3}>
             About you
           </T.H5>
@@ -501,7 +523,7 @@ const MyListing = props => {
         </Col>
       </Row>
 
-      <Row>
+      <Row mb={6} mbT={4}>
         <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
@@ -514,15 +536,44 @@ const MyListing = props => {
           />
         </Col>
       </Row>
-      <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          {error && <T.PXS color="pink">{error}</T.PXS>}
 
-          <Button type="secondary" onClick={onSubmit} loading={loading}>
-            SAVE CHANGES
+      <Row>
+        <Col w={[4, 12, 12]}>
+          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSubmit()}
+            loading={saveLoading}
+            disabled={saveLoading || continueLoading || fetchingData}
+            outline
+          >
+            SAVE PROGRESS
+          </Button>
+        </Col>
+        <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSubmit(true)}
+            loading={continueLoading}
+            disabled={saveLoading || continueLoading || fetchingData}
+          >
+            CONTINUE
           </Button>
         </Col>
       </Row>
+      <Row style={{ textAlign: 'center' }}>
+        <Col w={[4, 12, 10.6]} style={{ marginTop: '30px' }}>
+          <T.Link to={HOST_SIGNUP_VERIFICATIONS} color="pink">
+            I’ll finish this later
+          </T.Link>
+        </Col>
+      </Row>
+
       <Notification
         open={notificationOpen}
         setOpen={setNotificationOpen}

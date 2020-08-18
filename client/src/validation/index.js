@@ -5,6 +5,7 @@ const hostSettings = require('./hostSettings');
 const internSignup = require('./internSignup');
 const orgSignup = require('./orgSignup');
 const internCompleteProfile = require('./internCompleteProfile');
+const hostCompleteProfile = require('./hostCompleteProfile');
 
 const handleValidationError = args => {
   const { inner } = args;
@@ -50,5 +51,6 @@ module.exports = {
   hostSettings,
   internSignup,
   internCompleteProfile,
+  hostCompleteProfile,
   orgSignup,
 };

@@ -327,7 +327,7 @@ const Verifications = props => {
       {!state.hasNoInternship && (
         <>
           <Row>
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={onInputChange}
                 value={state.organisation}
@@ -337,7 +337,7 @@ const Verifications = props => {
               />
             </Col>
 
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -361,7 +361,7 @@ const Verifications = props => {
           </Row>
 
           <Row>
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -382,7 +382,7 @@ const Verifications = props => {
                 }
               />
             </Col>
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -409,7 +409,7 @@ const Verifications = props => {
           </Row>
 
           <Row>
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <DatePicker
                 onChange={momentDate =>
                   setState(_state => ({
@@ -423,7 +423,7 @@ const Verifications = props => {
               />
             </Col>
 
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <DatePicker
                 onChange={momentDate =>
                   setState(_state => ({
@@ -439,7 +439,7 @@ const Verifications = props => {
           </Row>
 
           <Row>
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -464,7 +464,7 @@ const Verifications = props => {
               />
             </Col>
 
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -491,7 +491,7 @@ const Verifications = props => {
           </Row>
 
           <Row>
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -516,7 +516,7 @@ const Verifications = props => {
               />
             </Col>
 
-            <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+            <Col w={[4, 6, 6]} mt={4}>
               <Input
                 onChange={e => {
                   e.persist();
@@ -722,7 +722,7 @@ const Verifications = props => {
         error={errors.DBSCheck}
       />
       <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 6]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.refNum}
@@ -790,7 +790,7 @@ const Verifications = props => {
       </Row>
 
       <Row>
-        <Col w={[6, 12, 12]}>
+        <Col w={[4, 12, 12]}>
           {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
         </Col>
       </Row>

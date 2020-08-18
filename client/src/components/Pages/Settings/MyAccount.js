@@ -11,9 +11,13 @@ import { API_INTERN_SETTINGS_MY_ACCOUNT } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 import { SETTINGS } from '../../../constants/navRoutes';
 
-const { validate, internSettings } = require('../../../validation');
+const {
+  validate,
+  internSettings,
+  hostSettings,
+} = require('../../../validation');
 
-const MyAccount = props => {
+const MyAccount = ({ role, ...props }) => {
   const [state, setState] = useState({
     name: props.name,
     email: props.email,
@@ -28,13 +32,30 @@ const MyAccount = props => {
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
 
-  const _validate = async () => {
-    const { errors: _errors } = await validate({
-      schema: internSettings.myAccountSchema,
-      data: { ...state, changePasswordActive },
-    });
+  const decideSettings = () => {
+    switch (role) {
+      case 'intern':
+        return internSettings;
+      case 'host':
+        return hostSettings;
+      default:
+        return null;
+    }
+  };
 
-    return _errors;
+  const _validate = async () => {
+    const settings = decideSettings();
+
+    if (settings) {
+      const { errors: _errors } = await validate({
+        schema: settings.myAccountSchema,
+        data: { ...state, changePasswordActive },
+      });
+
+      return _errors;
+    }
+
+    return setError('Cannot find the correct settings for your account');
   };
 
   const onInputChange = e => {
@@ -45,6 +66,7 @@ const MyAccount = props => {
   };
 
   const onSubmit = async () => {
+    setErrors({});
     try {
       const _errors = await _validate();
 
@@ -68,7 +90,7 @@ const MyAccount = props => {
   return (
     <div style={{ marginTop: '2rem', marginBottom: '4rem' }}>
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.name}
@@ -77,7 +99,7 @@ const MyAccount = props => {
             error={errors.name}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.email}
@@ -100,7 +122,7 @@ const MyAccount = props => {
       )}
       {changePasswordActive && (
         <Row>
-          <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 6, 4]} mt={4}>
             <Input
               onChange={onInputChange}
               value={state.oldPassword}
@@ -110,7 +132,7 @@ const MyAccount = props => {
               error={errors.oldPassword}
             />
           </Col>
-          <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 6, 4]} mt={4}>
             <Input
               onChange={onInputChange}
               value={state.newPassword}

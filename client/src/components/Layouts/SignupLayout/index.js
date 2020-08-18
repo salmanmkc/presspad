@@ -4,6 +4,7 @@ import { withWindowWidth } from '../../../HOCs';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 
 import InternSteps from './InternSteps';
+import HostSteps from './HostSteps';
 import OrganisationSteps from './OrganisationSteps';
 
 import * as S from './style';
@@ -18,6 +19,8 @@ const Steps = ({ role }) => {
       return <InternSteps />;
     case 'organisation':
       return <OrganisationSteps />;
+    case 'host':
+      return <HostSteps />;
 
     default:
       return null;
@@ -27,7 +30,6 @@ const Steps = ({ role }) => {
 const SignupLayout = ({ windowWidth, children, role }) => {
   const largerThanTablet = windowWidth >= TABLET_WIDTH;
   const topHeaderRendered = !largerThanTablet;
-
   return (
     <>
       <S.Wrapper>

@@ -88,6 +88,15 @@ const deleteFile = async (bucketName, filename) => {
   // start a client
   const storage = admin.storage();
 
+  // to not delete images in the dummy data
+  const fakeImages = [
+    '5e2c87f84041d47b78b8b69a/1579977403930.ali2.webp',
+    '5e2c87f84041d47b78b8b69a/1579977407411.ali3.webp',
+  ];
+  if (fakeImages.includes(filename)) {
+    return;
+  }
+
   await storage
     .bucket(bucketName)
     .file(filename)

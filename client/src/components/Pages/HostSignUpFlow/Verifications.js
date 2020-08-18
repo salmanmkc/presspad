@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Input, UploadFile, Select } from '../../../Common/Inputs';
-import { Col, Row } from '../../../Common/Grid';
+import { Input, UploadFile, Select } from '../../Common/Inputs';
+import { Col, Row } from '../../Common/Grid';
 
-import * as T from '../../../Common/Typography';
-import Button from '../../../Common/ButtonNew';
+import * as T from '../../Common/Typography';
+import Button from '../../Common/ButtonNew';
 import {
   API_HOST_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
-} from '../../../../constants/apiRoutes';
-import { SETTINGS } from '../../../../constants/navRoutes';
+} from '../../../constants/apiRoutes';
+import { WELCOME_PAGES, SETTINGS } from '../../../constants/navRoutes';
 import {
   DBS_EXTERNAL,
   PROPERTY_CHECKS,
-} from '../../../../constants/externalLinks';
-import { hostWorkingArea } from '../../../../constants/types';
-import Notification from '../../../Common/Notification';
+} from '../../../constants/externalLinks';
+import { hostWorkingArea } from '../../../constants/types';
+import Notification from '../../Common/Notification';
+import Title from '../../Common/Title';
 
-import { createSingleDate } from '../../../../helpers';
+import { createSingleDate } from '../../../helpers';
 
-const { validate, hostSettings } = require('../../../../validation');
+const { validate, hostSettings } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
   jobTitle: d.jobTitle || '',
@@ -45,7 +46,6 @@ const getCleanData = (d = {}) => ({
     fileName: '',
     refNum: '',
   },
-  refNum: d.refNum || (d.DBSCheck && d.DBSCheck.refNum) || '',
   houseViewingDate: d.houseViewingDate || null,
 });
 
@@ -76,12 +76,15 @@ const Verifications = props => {
   });
 
   const [errors, setErrors] = useState({});
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [mainError, setMainError] = useState();
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [continueLoading, setContinueLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
 
   const [prevData, setPrevData] = useState({});
   const [fetchData, setFetchData] = useState(0);
+  const [fetchingData, setFetchingData] = useState(true);
+  const [lastClickOnContinue, setLastClickOnContinue] = useState({});
 
   const history = useHistory();
 
@@ -106,7 +109,7 @@ const Verifications = props => {
         preview: file.preview,
       };
     } catch (e) {
-      return setError(e.message);
+      return setMainError(e.message);
     }
   };
 
@@ -122,12 +125,12 @@ const Verifications = props => {
       data: { ...state },
     });
     let e = _errors;
-    if (prevData.photoID && !state.photoID) {
+    if (prevData.photoID && state.photoID.deleted) {
       e = e
         ? { ...e, photoID: 'identity proof is required' }
         : { photoID: 'identity proof is required' };
     }
-    if (prevData.DBSCheck && !state.DBSCheck) {
+    if (prevData.DBSCheck && state.DBSCheck.deleted) {
       e = e
         ? { ...e, DBSCheck: 'DBS file is required' }
         : { DBSCheck: 'DBS file is required' };
@@ -165,27 +168,37 @@ const Verifications = props => {
           prevData.pressCard &&
           prevData.pressCard.fileName,
       });
+      setFetchingData(true);
     } catch (e) {
-      setError(e.response.data.error);
+      setMainError(e.response.data.error);
     } finally {
-      setLoading(false);
+      setContinueLoading(false);
+      setSaveLoading(false);
     }
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async isContinue => {
     let _DBSCheck;
     let _photoID;
     let _pressCard;
+
     const _errors = await _validate();
 
     setErrors(_errors || {});
+    setLastClickOnContinue(isContinue);
 
     if (_errors) {
-      setError('Must fill all required fields');
+      setMainError('Must fill all required fields');
       return;
     }
-    setError();
-    setLoading(true);
+    setMainError();
+
+    if (isContinue) {
+      setContinueLoading(true);
+    } else {
+      setSaveLoading(true);
+    }
+
     if (
       (state.DBSCheck && state.DBSCheck.new && !state.DBSCheck.uploaded) ||
       (state.photoID && state.photoID.new && !state.photoID.uploaded) ||
@@ -231,6 +244,9 @@ const Verifications = props => {
       const {
         data: { profile },
       } = await axios.get(API_MY_PROFILE_URL);
+
+      setFetchingData(false);
+
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
     };
@@ -238,24 +254,38 @@ const Verifications = props => {
   }, [fetchData]);
 
   const done = () => {
-    if (
-      (prevData.DBSCheck &&
-        state.refNum &&
-        prevData.DBSCheck.refNum !== state.refNum) ||
-      (state.DBSCheck && state.DBSCheck.new) ||
-      (prevData.houseViewingDate &&
-        state.houseViewingDate &&
-        prevData.houseViewingDate !== state.houseViewingDate)
-    ) {
-      history.push(SETTINGS.UNDER_REVIEW);
+    if (lastClickOnContinue) {
+      if (
+        (prevData.DBSCheck &&
+          state.refNum &&
+          prevData.DBSCheck.refNum !== state.refNum) ||
+        (prevData.DBSCheck &&
+          prevData.DBSCheck.fileName &&
+          state.DBSCheck &&
+          state.DBSCheck.fileName &&
+          prevData.DBSCheck.fileName !== state.DBSCheck.fileName) ||
+        (prevData.houseViewingDate &&
+          state.houseViewingDate &&
+          prevData.houseViewingDate !== state.houseViewingDate)
+      ) {
+        history.push(SETTINGS.UNDER_REVIEW);
+      } else {
+        history.push(WELCOME_PAGES.replace(':id', '1'));
+      }
     } else {
       setFetchData(e => e + 1);
     }
   };
   return (
-    <div style={{ marginTop: '2rem' }}>
+    <div style={{ marginTop: '4rem', paddingBottom: '5rem' }}>
+      <Row>
+        <Title withBg mb="0">
+          <Col w={[4, 12, 12]}>CREATE LISTING</Col>
+        </Title>
+      </Row>
+
       <Row mb={3}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={onInputChange}
             value={state.jobTitle}
@@ -264,7 +294,7 @@ const Verifications = props => {
             error={errors.jobTitle}
           />
         </Col>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={onInputChange}
             value={state.organisation}
@@ -275,7 +305,7 @@ const Verifications = props => {
         </Col>
       </Row>
       <Row mb={6}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Select
             options={hostWorkingArea.map(e => ({ label: e, value: e }))}
             label="Area you work in"
@@ -297,7 +327,6 @@ const Verifications = props => {
           )}
         </Col>
       </Row>
-
       <Row mb={3}>
         <Col w={[4, 8, 8]}>
           <T.H5 color="blue">References</T.H5>
@@ -308,9 +337,8 @@ const Verifications = props => {
           </T.P>
         </Col>
       </Row>
-
       <Row mb={3}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={e => {
               e.persist();
@@ -329,7 +357,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={e => {
               e.persist();
@@ -348,9 +376,8 @@ const Verifications = props => {
           />
         </Col>
       </Row>
-
       <Row mb={6}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={e => {
               e.persist();
@@ -369,7 +396,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <Input
             onChange={e => {
               e.persist();
@@ -388,15 +415,13 @@ const Verifications = props => {
           />
         </Col>
       </Row>
-
       <Row mb={3}>
         <Col w={[4, 8, 8]}>
           <T.H5 color="blue">Verification documents</T.H5>
         </Col>
       </Row>
-
       <Row mb={6}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <T.PBold color="blue">Proof of identity </T.PBold>
           <T.PXS color="gray3" mb={3}>
             e.g. a photo of your passport or driver’s licence
@@ -416,7 +441,7 @@ const Verifications = props => {
           />
         </Col>
 
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <T.PBold color="blue">Proof that you work in the media </T.PBold>
           <T.PXS color="gray3" mb={3}>
             This can be a photo of your press card or of a letter/email
@@ -431,12 +456,11 @@ const Verifications = props => {
             setFiles={([pressCard]) =>
               setState(_state => ({ ..._state, pressCard }))
             }
-            error={errors.pressCard}
             col={12}
+            error={errors.photoID}
           />
         </Col>
       </Row>
-
       <Row mb={3}>
         <Col w={[4, 8, 7]}>
           <T.H5 color="blue" mt={5}>
@@ -455,7 +479,7 @@ const Verifications = props => {
         </Col>
       </Row>
       <Row mb={6}>
-        <Col w={[4, 6, 4]}>
+        <Col w={[4, 6, 5.3]}>
           <UploadFile
             fullWidth
             mainText="Upload your profile picture here"
@@ -473,7 +497,7 @@ const Verifications = props => {
             col={12}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.refNum}
@@ -497,7 +521,7 @@ const Verifications = props => {
           </T.H7C>
         </Col>
       </Row>
-      <Row>
+      <Row mb={6} mbT={4}>
         <Col w={[4, 6, 7]}>
           <T.P color="gray3">
             <T.Link to={PROPERTY_CHECKS} isExternal color="lightBlue">
@@ -509,12 +533,39 @@ const Verifications = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '48px' }}>
-          {error && <T.PXS color="pink">{error}</T.PXS>}
+        <Col w={[4, 12, 12]}>
+          {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
+        </Col>
+      </Row>
 
-          <Button type="secondary" onClick={onSubmit} loading={loading}>
-            SAVE CHANGES
+      <Row>
+        <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSubmit()}
+            loading={saveLoading}
+            disabled={saveLoading || continueLoading || fetchingData}
+            outline
+          >
+            SAVE PROGRESS
           </Button>
+        </Col>
+        <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
+          <Button
+            type="secondary"
+            onClick={() => onSubmit(true)}
+            loading={continueLoading}
+            disabled={saveLoading || continueLoading || fetchingData}
+          >
+            CONTINUE
+          </Button>
+        </Col>
+      </Row>
+      <Row style={{ textAlign: 'center' }}>
+        <Col w={[4, 12, 10.6]} style={{ marginTop: '30px' }}>
+          <T.Link to={WELCOME_PAGES.replace(':id', '1')} color="pink">
+            I’ll finish this later
+          </T.Link>
         </Col>
       </Row>
       <Notification

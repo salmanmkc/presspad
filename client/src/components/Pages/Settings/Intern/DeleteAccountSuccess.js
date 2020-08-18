@@ -37,12 +37,9 @@ function DeleteAccountSuccess() {
           <T.P color="blue" mt={4}>
             All personal details have now been deleted and your account removed.{' '}
           </T.P>
-          <T.Link
-            to={signupRoutes[role]}
-            mt={4}
-            style={{ display: 'block', textDecoration: 'underline' }}
-          >
-            Click here to create a new account
+          <T.Link to={signupRoutes[role]} mt={4}>
+            style={{ display: 'block', textDecoration: 'underline' }}> Click
+            here to create a new account
           </T.Link>
         </Col>
       </Row>

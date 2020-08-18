@@ -107,22 +107,37 @@ const aboutMeSchema = prevValues =>
     degreeLevel: prevValues.degreeLevel
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
+    typeOfSchool: prevValues.typeOfSchool
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    typeOfSchoolOther: string().when('typeOfSchool', {
+      is: typeOfSchool => typeOfSchool && typeOfSchool.includes('Other'),
+      then: string().required(DEFAULT_REQUIRED),
+      otherwise: string().nullable(),
+    }),
+    eligibleForFreeSchoolMeals: prevValues.eligibleForFreeSchoolMeals
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    describeMainIncomeEarnerMainJob: prevValues.describeMainIncomeEarnerMainJob
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    highestLevelOfQualifications: prevValues.highestLevelOfQualifications
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    highestLevelOfQualificationsOther: string().when(
+      'highestLevelOfQualifications',
+      {
+        is: highestLevelOfQualifications =>
+          highestLevelOfQualifications &&
+          highestLevelOfQualifications.includes('Other'),
+        then: string().required(DEFAULT_REQUIRED),
+        otherwise: string().nullable(),
+      },
+    ),
+    parentsWorkInPress: prevValues.parentsWorkInPress
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
     belongToClass: prevValues.belongToClass
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    schooling: prevValues.belongToClass
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    freeSchool: prevValues.belongToClass
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    ParentsProfession: prevValues.belongToClass
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    qualificationsLevel: prevValues.belongToClass
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    qualificationsLevelOther: prevValues.belongToClass
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
   });
@@ -135,8 +150,8 @@ const myListing = prevValues =>
           deleted: boolean().notOneOf([true]),
         }).required(DEFAULT_REQUIRED)
       : mixed().nullable(),
-    homeImages:
-      prevValues.homeImages && prevValues.homeImages.length
+    photos:
+      prevValues.photos && prevValues.photos.length
         ? array()
             .required(DEFAULT_REQUIRED)
             .min(3)
@@ -148,24 +163,22 @@ const myListing = prevValues =>
               }).required(DEFAULT_REQUIRED),
             )
         : array().nullable(),
-    bio: prevValues.bio
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    useReasonAnswer: prevValues.useReasonAnswer
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    addressLine1: prevValues.addressline1
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    addressLine2: prevValues.addressline2
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    city: prevValues.city
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    postcode: prevValues.postcode
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
+    address: prevValues.address
+      ? object({
+          addressline1: prevValues.address.addressline1
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          addressline2: prevValues.address.addressline2
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          city: prevValues.address.city
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+          postcode: prevValues.address.postcode
+            ? string().required(DEFAULT_REQUIRED)
+            : string().nullable(),
+        }).required()
+      : object().nullable(),
     availableDates: array()
       .of(
         object({
@@ -174,33 +187,40 @@ const myListing = prevValues =>
         }),
       )
       .required(),
-    extraInfo: prevValues.extraInfo
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    mentorExperience: prevValues.mentorExperience
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    industryExperience: prevValues.industryExperience
+    bio: prevValues.bio
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
     otherInfo: prevValues.otherInfo
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
-    aboutHome: prevValues.aboutHome
-      ? array()
-          .of(string().required(DEFAULT_REQUIRED))
-          .required(DEFAULT_REQUIRED)
-      : array().nullable(),
+    hostingReasonAnswer: prevValues.hostingReasonAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    mentoringExperienceAnswer: prevValues.mentoringExperienceAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    industryExperienceAnswer: prevValues.industryExperienceAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    backgroundAnswer: prevValues.backgroundAnswer
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
   });
 
 const verifications = prevValues =>
   object({
+    jobTitle: prevValues.jobTitle
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
     organisation: prevValues.organisation
       ? string().required(DEFAULT_REQUIRED)
       : string().nullable(),
-    internshipEndDate: prevValues.internshipEndDate
-      ? mixed().required(DEFAULT_REQUIRED)
-      : mixed().nullable(),
+    workArea: prevValues.workArea
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
+    workAreaOther: prevValues.workAreaOther
+      ? string().required(DEFAULT_REQUIRED)
+      : string().nullable(),
     reference1: prevValues.reference1
       ? object({
           name: prevValues.reference1.name
@@ -221,19 +241,18 @@ const verifications = prevValues =>
             : string().nullable(),
         }).required()
       : object().nullable(),
-    refNum:
-      prevValues.DBSCheck && prevValues.DBSCheck.refNum
-        ? string().required(DEFAULT_REQUIRED)
-        : string().nullable(),
-    workArea: prevValues.workArea
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    workAreaOther: prevValues.workAreaOther
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
-    jobTitle: prevValues.jobTitle
-      ? string().required(DEFAULT_REQUIRED)
-      : string().nullable(),
+    photoID: prevValues.photoID
+      ? mixed({
+          fileName: string(DEFAULT_REQUIRED).required(DEFAULT_REQUIRED),
+          deleted: boolean().notOneOf([true]),
+        }).required(DEFAULT_REQUIRED)
+      : mixed().nullable(),
+    pressCard: prevValues.pressCard
+      ? mixed({
+          fileName: string(DEFAULT_REQUIRED).required(DEFAULT_REQUIRED),
+          deleted: boolean().notOneOf([true]),
+        }).required(DEFAULT_REQUIRED)
+      : mixed().nullable(),
   });
 
 module.exports = {

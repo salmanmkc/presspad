@@ -4,6 +4,7 @@ const Booking = require('../../models/Booking');
 const Review = require('../../models/Review');
 const Bursary = require('../../models/Bursary');
 const Profile = require('../../models/Profile');
+const Listing = require('../../models/Listing');
 
 const { addOrg, getOrgById } = require('./organisation');
 const updateRespondingData = require('./updateRespondingData');
@@ -60,7 +61,7 @@ module.exports.addNewUser = async userInfo => {
   }
 
   if (role === 'host') {
-    return User.create({
+    const createdUser = await User.create({
       email: email.toLowerCase(),
       name,
       password,
@@ -69,6 +70,13 @@ module.exports.addNewUser = async userInfo => {
       referralToken,
       referredBy,
     });
+
+    await Promise.all([
+      Listing.create({ user: createdUser._id }),
+      Profile.create({ user: createdUser._id }),
+    ]);
+
+    return createdUser;
   }
 
   // assume it's intern at this point

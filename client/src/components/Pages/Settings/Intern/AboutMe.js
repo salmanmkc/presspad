@@ -139,7 +139,7 @@ const AboutMe = () => {
   return (
     <div style={{ marginTop: '2rem' }}>
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <DatePicker
             onChange={momentDate =>
               setState(_state => ({ ..._state, birthDate: momentDate }))
@@ -149,7 +149,7 @@ const AboutMe = () => {
             error={errors.birthDate}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.phoneNumber}
@@ -161,7 +161,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.hometown}
@@ -170,7 +170,7 @@ const AboutMe = () => {
             error={errors.hometown}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.lastStudySubject}
@@ -182,7 +182,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.lastStudyUniversity}
@@ -191,7 +191,7 @@ const AboutMe = () => {
             error={errors.lastStudyUniversity}
           />
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.hearAboutPressPadAnswer}
@@ -204,7 +204,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 12, 8]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 12, 8]} mt={4}>
           <T.H5 color="pink" mt={7}>
             Extra demographic questions
           </T.H5>
@@ -221,7 +221,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.gender.map(e => ({ label: e, value: e }))}
             label="Gender"
@@ -243,7 +243,7 @@ const AboutMe = () => {
             />
           )}
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.sexualOrientation.map(e => ({ label: e, value: e }))}
             label="Sexual Orientation"
@@ -258,7 +258,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.ethnicity.map(e => ({ label: e, value: e }))}
             label="Ethnicity"
@@ -280,7 +280,7 @@ const AboutMe = () => {
             />
           )}
         </Col>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.religion.map(e => ({ label: e, value: e }))}
             label="Religion"
@@ -295,7 +295,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.disability.map(e => ({ label: e, value: e }))}
             label="Disability"
@@ -331,7 +331,7 @@ const AboutMe = () => {
           )}
         </Col>
 
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.neurodivergent.map(e => ({ label: e, value: e }))}
             label="Neurodivergent condition"
@@ -365,7 +365,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.childCare.map(e => ({ label: e, value: e }))}
             label="Are you a primary carer for a child or children under 18?"
@@ -381,7 +381,7 @@ const AboutMe = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+          <Col w={[4, 6, 4]} mt={4}>
             <Select
               options={types.illCare.map(e => ({ label: e, value: e }))}
               label="Do you look after or care for someone with long term physical or mental ill health caused by disability or age (not in a paid capacity)?"
@@ -397,7 +397,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.degreeLevel.map(e => ({ label: e, value: e }))}
             label="Degree level"
@@ -412,7 +412,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <S.IllCareWrapper>
             <Select
               options={types.belongToClass.map(e => ({ label: e, value: e }))}
