@@ -15,14 +15,12 @@ const Success = () => {
         <Title>THANK YOU FOR APPLYING TO THE BURSARY</Title>
       </S.TitleContainer>
       <T.PLBold color="pink" mt={4}>
-        That’s it! You’ve successfully signed up.
+        PressPad are now reviewing your application for a bursary...
       </T.PLBold>
       <T.P color="gray3" mt={2}>
-        As soon as our team has approved your account you’ll be ready to book
-        your first host and prepare for your stay! It’s an exciting and maybe
-        nerve-wracking time but don’t worry, we’ve got your back. And not just
-        when it comes to finding a place to stay, we’ve got tonnes of advice and
-        support available too.
+        You will be updated within 5 working days. We will also let you know
+        when the next application period for the allocation of bursaries will
+        open.
       </T.P>
       <Row mt={6}>
         <Col w={[4, 8, 8]}>

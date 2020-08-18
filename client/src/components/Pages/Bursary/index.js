@@ -380,61 +380,67 @@ const Bursary = () => {
           />
         </Col>
       </Row>
-      {bursary ? (
-        <S.BursaryButtonWrapperTablet>
-          <Button
-            type="tertiary"
-            withGraphic
-            style={{ paddingLeft: '10px', paddingRight: '10px' }}
-          >
-            YOUR APPLICATION IS UNDER CONSIDERATION
-          </Button>
-        </S.BursaryButtonWrapperTablet>
+      {loading ? (
+        <Loading />
       ) : (
-        <S.BursaryButtonWrapperTablet>
-          {over14Days && profileCompleted && (
-            <>
+        <>
+          {bursary ? (
+            <S.BursaryButtonWrapperTablet>
               <Button
-                type="secondary"
+                type="tertiary"
                 withGraphic
-                onClick={() => history.push(BURSARY_APPLICATION)}
+                style={{ paddingLeft: '10px', paddingRight: '10px' }}
               >
-                APPLY FOR BURSARY
+                YOUR APPLICATION IS UNDER CONSIDERATION
               </Button>
-              {window ? (
-                <T.PXS color="gray3">
-                  Application deadline for the next round of bursaries is{' '}
-                  <T.PXSBold>
-                    {moment(window.startDate)
-                      .endOf()
-                      .format('Do MMMM YYYY')}
-                    .
-                  </T.PXSBold>
-                </T.PXS>
-              ) : (
-                <T.PXS color="gray3">
-                  Sorry!, no open applications for now
-                </T.PXS>
+            </S.BursaryButtonWrapperTablet>
+          ) : (
+            <S.BursaryButtonWrapperTablet>
+              {over14Days && profileCompleted && (
+                <>
+                  <Button
+                    type="secondary"
+                    withGraphic
+                    onClick={() => history.push(BURSARY_APPLICATION)}
+                  >
+                    APPLY FOR BURSARY
+                  </Button>
+                  {window ? (
+                    <T.PXS color="gray3">
+                      Application deadline for the next round of bursaries is{' '}
+                      <T.PXSBold>
+                        {moment(window.startDate)
+                          .endOf()
+                          .format('Do MMMM YYYY')}
+                        .
+                      </T.PXSBold>
+                    </T.PXS>
+                  ) : (
+                    <T.PXS color="gray3">
+                      Sorry!, no open applications for now
+                    </T.PXS>
+                  )}
+                </>
               )}
-            </>
-          )}
 
-          {!profileCompleted && (
-            <>
-              <T.PXS color="pink" mb={1}>
-                You have to complete your profile first to be able to apply for
-                a bursary
-              </T.PXS>
-              <Button
-                type="secondary"
-                withGraphic
-                onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
-              >
-                complete your profile details
-              </Button>
-            </>
+              {!profileCompleted && (
+                <>
+                  <T.PXS color="pink" mb={1}>
+                    You have to complete your profile first to be able to apply
+                    for a bursary
+                  </T.PXS>
+                  <Button
+                    type="secondary"
+                    withGraphic
+                    onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
+                  >
+                    complete your profile details
+                  </Button>
+                </>
+              )}
+            </S.BursaryButtonWrapperTablet>
           )}
-        </S.BursaryButtonWrapperTablet>
+        </>
       )}
     </div>
   );
