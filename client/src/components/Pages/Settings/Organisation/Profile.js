@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Notification from '../../../Common/Notification';
-import Title from '../../../Common/Title';
 import Button from '../../../Common/ButtonNew';
 import { Input } from '../../../Common/Inputs';
 import * as T from '../../../Common/Typography';
 import { Row, Col } from '../../../Common/Grid';
-import { SIGNUP_ORG_ADD_FUNDS } from '../../../../constants/navRoutes';
 import { API_ORG_DETAILS } from '../../../../constants/apiRoutes';
 
-import * as S from '../style';
+import * as S from './style';
 
 const { validate, orgSignup } = require('../../../../validation');
 
@@ -21,12 +19,8 @@ const CreateProfile = props => {
   ]);
   const [contactDetails, setContactDetails] = useState({});
   const [loading, setLoading] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState({
-    loading: false,
-    isContinue: false,
-  });
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [redirectUrl, setRedirectUrl] = useState('');
   const [prevData, setPrevData] = useState({});
   const [error, setError] = useState('');
   const [errors, setErrors] = useState({});
@@ -100,7 +94,7 @@ const CreateProfile = props => {
     });
   };
 
-  const onSave = async isContinue => {
+  const onSave = async () => {
     const _internshipOpportunities = internshipOpportunities.filter(
       ({ opportunity, link, details }) => opportunity && link && details,
     );
@@ -120,61 +114,30 @@ const CreateProfile = props => {
       });
 
       if (!_errors) {
-        setSubmitLoading({ loading: true, isContinue });
+        setSubmitLoading(true);
         setErrors({});
 
         await axios.patch(API_ORG_DETAILS.replace(':id', orgId), data);
 
-        if (isContinue) {
-          setRedirectUrl(SIGNUP_ORG_ADD_FUNDS);
-          setNotificationOpen(true);
-        } else {
-          setRedirectUrl('');
-          setFetchData(count => count + 1);
-        }
+        setFetchData(count => count + 1);
       } else {
         setErrors(_errors);
       }
-      setSubmitLoading({ loading: false, isContinue });
+      setSubmitLoading(false);
     } catch (e) {
       if (e.response && e.response.data) {
         setError(e.response.data.error);
       } else {
         setError('Something went wrong');
       }
-      setSubmitLoading({ loading: false, isContinue });
+      setSubmitLoading(false);
     }
   };
 
   return (
-    <div>
-      <Row>
-        <Col w={[4, 10, 12]}>
-          <Title caps withBg textColor="pink">
-            create profile
-          </Title>
-        </Col>
-      </Row>
-
+    <>
       <Row mb={6}>
-        <Col w={[4, 12, 10.8]}>
-          <T.H5 as="p" color="blue">
-            OK, we love making a noise about our partners and connecting them
-            with our diverse community of talented professionals looking for
-            opportunities at organisations like yours.
-          </T.H5>
-        </Col>
-      </Row>
-      <Row mb={6}>
-        <Col w={[4, 12, 10.8]}>
-          <T.H5 as="p" color="blue">
-            Create a profile to make it easier for them to find you and your
-            opportunities
-          </T.H5>
-        </Col>
-      </Row>
-      <Row mb={6}>
-        <Col w={[4, 12, 10.8]}>
+        <Col w={[4, 12, 8]}>
           <Input
             onChange={handleInputChange}
             label="Description"
@@ -189,12 +152,12 @@ const CreateProfile = props => {
         </Col>
       </Row>
       <Row mb={2}>
-        <Col w={[4, 12, 10.8]}>
+        <Col w={[4, 12, 8]}>
           <T.H5 color="blue">Internship Opportunities</T.H5>
         </Col>
       </Row>
       <Row mb={6}>
-        <Col w={[4, 12, 10.8]}>
+        <Col w={[4, 12, 8]}>
           <T.PS color="gray">
             Add information about any of your internship or entry level
             opportunities below
@@ -202,9 +165,9 @@ const CreateProfile = props => {
         </Col>
       </Row>
       {internshipOpportunities.map(({ opportunity, link, details, key }) => (
-        <S.Opportunities key={key}>
+        <div key={key}>
           <Row>
-            <Col w={[4, 10, 5.4]} mb={4}>
+            <Col w={[4, 6, 4]} mb={4}>
               <Input
                 label="Opportunity"
                 placeholder="Opportunity name"
@@ -218,7 +181,7 @@ const CreateProfile = props => {
                 disabled={loading}
               />
             </Col>
-            <Col w={[4, 10, 5.4]} mb={4}>
+            <Col w={[4, 6, 4]} mb={4}>
               <Input
                 label="Link"
                 placeholder="Link..."
@@ -234,7 +197,7 @@ const CreateProfile = props => {
             </Col>
           </Row>
           <Row mb={4}>
-            <Col w={[4, 12, 10.8]}>
+            <Col w={[4, 12, 8]}>
               <Input
                 onChange={handleOpportunitiesChange}
                 label="Details"
@@ -250,22 +213,22 @@ const CreateProfile = props => {
               />
             </Col>
           </Row>
-        </S.Opportunities>
+        </div>
       ))}
       <Row mb={7}>
-        <Col w={[4, 12, 10.8]}>
+        <Col w={[4, 12, 8]}>
           <S.Link color="pink" onClick={addMoreOpportunities}>
             + Add another internship opportunity
           </S.Link>
         </Col>
       </Row>
       <Row mb={2}>
-        <Col w={[4, 12, 10.8]}>
+        <Col w={[4, 12, 8]}>
           <T.H5 color="blue">Contact Details</T.H5>
         </Col>
       </Row>
       <Row mb={6}>
-        <Col w={[4, 12, 10.8]}>
+        <Col w={[4, 12, 8]}>
           <T.P color="gray">
             If there a main point of contact or email address applicants should
             reach out to find out more? Enter any useful contact details you’d
@@ -274,7 +237,7 @@ const CreateProfile = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[4, 10, 5.4]} mb={4}>
+        <Col w={[4, 6, 4]} mb={4}>
           <Input
             label="Contact name"
             placeholder="Contact name..."
@@ -285,7 +248,7 @@ const CreateProfile = props => {
             disabled={loading}
           />
         </Col>
-        <Col w={[4, 10, 5.4]} mb={4}>
+        <Col w={[4, 6, 4]} mb={4}>
           <Input
             label="Contact email"
             placeholder="Contact email..."
@@ -298,7 +261,7 @@ const CreateProfile = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[4, 10, 5.4]} mb={6}>
+        <Col w={[4, 6, 4]} mb={6}>
           <Input
             label="Contact number"
             placeholder="Contact number..."
@@ -312,25 +275,14 @@ const CreateProfile = props => {
       </Row>
 
       <Row mb={5}>
-        <Col w={[4, 10, 5.4]} mb={3}>
+        <Col w={[4, 6, 4]} mb={3}>
           <Button
             type="secondary"
-            outline
-            onClick={() => onSave()}
-            loading={submitLoading.loading && !submitLoading.isContinue}
-            disabled={submitLoading.loading && submitLoading.isContinue}
+            onClick={onSave}
+            loading={submitLoading}
+            disabled={loading}
           >
             save progress
-          </Button>
-        </Col>
-        <Col w={[4, 10, 5.4]}>
-          <Button
-            type="secondary"
-            onClick={() => onSave(true)}
-            loading={submitLoading.loading && submitLoading.isContinue}
-            disabled={submitLoading.loading && !submitLoading.isContinue}
-          >
-            continue
           </Button>
         </Col>
       </Row>
@@ -339,20 +291,12 @@ const CreateProfile = props => {
           <S.Error>{error}</S.Error>
         </Row>
       )}
-      <Row mb={5}>
-        <Col w={[4, 12, 10.8]} style={{ textAlign: 'center' }}>
-          <T.Link to={SIGNUP_ORG_ADD_FUNDS} color="pink">
-            I’ll finish this later
-          </T.Link>
-        </Col>
-      </Row>
       <Notification
         open={notificationOpen}
         setOpen={setNotificationOpen}
         content="Changes saved"
-        redirectUrl={redirectUrl}
       />
-    </div>
+    </>
   );
 };
 
