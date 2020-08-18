@@ -148,7 +148,7 @@ const Bursary = () => {
         )}
       </S.BursaryPageHeader>
 
-      {!bursary && !over14Days && (
+      {!bursary && !over14Days && profileCompleted && (
         <T.PS color="pink" mt={2}>
           You are currently able to stay with PressPad hosts for up to 2 weeks
           completely free so you do not need to apply for a bursary right now as
