@@ -104,7 +104,7 @@ module.exports.editBursary = async (req, res, next) => {
       completed = false;
     }
 
-    if (completed) {
+    if (completed && !profile.hasNoInternship) {
       await createBursaryApp(user._id);
     }
 

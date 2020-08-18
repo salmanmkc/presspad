@@ -48,7 +48,7 @@ module.exports = async (req, res, next) => {
       completed = false;
     }
 
-    if (completed) {
+    if (completed && !updatedProfile.hasNoInternship) {
       await createBursaryApp(user._id);
     }
 
