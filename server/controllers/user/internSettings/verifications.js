@@ -18,7 +18,6 @@ module.exports = async (req, res, next) => {
     let DBSCheckUpdated = false;
     const {
       verified: prevVerified,
-      awaitingReview: prevAwaitingReview,
       DBSCheck: { fileName: prevFileName, refNum: prevRefNum } = {
         fileName: '',
         refNum: '',
@@ -40,6 +39,7 @@ module.exports = async (req, res, next) => {
       prevDBSCheckToDelete,
       prevOfferLetterToDelete,
       offerLetter,
+      hasNoInternship,
     } = req.body;
 
     const profileData = {
@@ -52,7 +52,7 @@ module.exports = async (req, res, next) => {
       reference2,
       photoID,
       offerLetter,
-
+      hasNoInternship,
       DBSCheck: { ...DBSCheck, refNum },
       refNum: DBSCheck.refNum,
     };
@@ -92,10 +92,10 @@ module.exports = async (req, res, next) => {
         awaitingReviewDate: Date.now(),
         verified: false,
       });
-    } else if (completed && !(DBSCheck && DBSCheck.fileName)) {
+    } else if (completed) {
       if (prevVerified) {
         // do nothing
-      } else if (prevAwaitingReview) {
+      } else {
         await updateUserProfile(user._id, {
           awaitingReview: true,
           awaitingReviewDate: Date.now(),

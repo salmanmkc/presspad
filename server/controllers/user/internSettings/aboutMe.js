@@ -80,7 +80,7 @@ module.exports = async (req, res, next) => {
       });
     } else if (updateUserProfile.verified) {
       // do nothing
-    } else if (updateUserProfile.awaitingReview) {
+    } else {
       await updateUserProfile(user._id, {
         awaitingReview: true,
         awaitingReviewDate: Date.now(),

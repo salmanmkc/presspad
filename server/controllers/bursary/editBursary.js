@@ -88,7 +88,11 @@ module.exports.editBursary = async (req, res, next) => {
       offerLetter,
     };
 
-    const bursary = await editBursaryById(id, bursaryData);
+    if (isProfileDataBeenProvided) {
+      profileData.hasNoInternship = false;
+    }
+
+    const bursary = await editBursaryById(id, bursaryData).lean();
     const user = await getUserByBursaryId(id);
 
     if (isProfileDataBeenProvided) {
@@ -115,7 +119,7 @@ module.exports.editBursary = async (req, res, next) => {
       });
     } else if (updateUserProfile.verified) {
       // do nothing
-    } else if (updateUserProfile.awaitingReview) {
+    } else {
       await updateUserProfile(user._id, {
         awaitingReview: true,
         awaitingReviewDate: Date.now(),

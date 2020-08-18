@@ -27,8 +27,99 @@ const Bursary = () => {
   const [over14Days, setOver14Days] = useState();
   const [profileCompleted, setProfileCompleted] = useState();
   const [loading, setLoading] = useState(true);
-
+  const [hasNoInternship, setHasNoInternship] = useState(false);
   const history = useHistory();
+
+  // bursary => under consideration
+  // !bursary && (profileCompleted && over14Days && ! hasNoInternship) => able to apply **application**
+  // !bursary && (profileCompleted && !over14Days && ! hasNoInternship) => not able to apply + show the free message
+  // !bursary && (profileCompleted  && hasNoInternship) => able to apply **application**
+  // !bursary && (!profileCompleted) => not able to apply **signup flow**
+
+  const renderUnderConsiderationButton = () => {
+    if (bursary) {
+      return (
+        <S.BursaryButtonWrapperDesktop>
+          <Button
+            type="tertiary"
+            withGraphic
+            style={{ paddingLeft: '10px', paddingRight: '10px' }}
+          >
+            YOUR APPLICATION IS UNDER CONSIDERATION
+          </Button>
+        </S.BursaryButtonWrapperDesktop>
+      );
+    }
+    return null;
+  };
+
+  const renderApplyButton = () => {
+    if (
+      (!bursary && profileCompleted && over14Days && !hasNoInternship) ||
+      (!bursary && profileCompleted && hasNoInternship)
+    ) {
+      return (
+        <>
+          <Button
+            type="secondary"
+            withGraphic
+            onClick={() => history.push(BURSARY_APPLICATION)}
+          >
+            APPLY FOR BURSARY
+          </Button>
+          {window ? (
+            <T.PXS color="gray3">
+              Application deadline for the next round of bursaries is{' '}
+              <T.PXSBold>
+                {moment(window.startDate)
+                  .endOf()
+                  .format('Do MMMM YYYY')}
+                .
+              </T.PXSBold>
+            </T.PXS>
+          ) : (
+            <T.PXS color="gray3">Sorry!, no open applications for now</T.PXS>
+          )}
+        </>
+      );
+    }
+    return null;
+  };
+
+  const renderCompleteProfileButton = () => {
+    if (!bursary && !profileCompleted) {
+      return (
+        <>
+          <T.PXS color="pink" mb={1}>
+            You have to complete your profile first to be able to apply for a
+            bursary
+          </T.PXS>
+          <Button
+            type="secondary"
+            withGraphic
+            onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
+          >
+            complete your profile details
+          </Button>
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  const renderUnder14DaysMessage = () => {
+    if (!bursary && profileCompleted && !over14Days && !hasNoInternship) {
+      return (
+        <T.PS color="pink" mt={2}>
+          You are currently able to stay with PressPad hosts for up to 2 weeks
+          completely free so you do not need to apply for a bursary right now as
+          this covers the period of your internship
+        </T.PS>
+      );
+    }
+    return null;
+  };
   useEffect(() => {
     const getBursaryApplication = async () => {
       const { data } = await axios.get(API_BURSARY_APPLICATIONS_STATUS);
@@ -66,8 +157,11 @@ const Bursary = () => {
           .startOf()
           .diff(moment(profile.internshipStartDate).startOf(), 'days');
 
-        setProfileCompleted(profile.verified || profile.awaitingReview);
         setOver14Days(internshipDays >= 14);
+      }
+      setProfileCompleted(profile.verified || profile.awaitingReview);
+      if (profile) {
+        setHasNoInternship(profile.hasNoInternship);
       }
     };
 
@@ -80,81 +174,26 @@ const Bursary = () => {
     getAll();
   }, []);
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <S.BursaryPageHeader>
         <T.H2 color="blue">Bursary</T.H2>
 
-        {loading ? (
-          <Loading />
-        ) : (
-          <div>
-            {bursary ? (
-              <S.BursaryButtonWrapperDesktop>
-                <Button
-                  type="tertiary"
-                  withGraphic
-                  style={{ paddingLeft: '10px', paddingRight: '10px' }}
-                >
-                  YOUR APPLICATION IS UNDER CONSIDERATION
-                </Button>
-              </S.BursaryButtonWrapperDesktop>
-            ) : (
-              <S.BursaryButtonWrapperDesktop>
-                {over14Days && profileCompleted && (
-                  <>
-                    <Button
-                      type="secondary"
-                      withGraphic
-                      onClick={() => history.push(BURSARY_APPLICATION)}
-                    >
-                      APPLY FOR BURSARY
-                    </Button>
-                    {window ? (
-                      <T.PXS color="gray3">
-                        Application deadline for the next round of bursaries is{' '}
-                        <T.PXSBold>
-                          {moment(window.startDate)
-                            .endOf()
-                            .format('Do MMMM YYYY')}
-                          .
-                        </T.PXSBold>
-                      </T.PXS>
-                    ) : (
-                      <T.PXS color="gray3">
-                        Sorry!, no open applications for now
-                      </T.PXS>
-                    )}
-                  </>
-                )}
-                {!profileCompleted && (
-                  <>
-                    <T.PXS color="pink" mb={1}>
-                      You have to complete your profile first to be able to
-                      apply for a bursary
-                    </T.PXS>
-                    <Button
-                      type="secondary"
-                      withGraphic
-                      onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
-                    >
-                      complete your profile details
-                    </Button>
-                  </>
-                )}
-              </S.BursaryButtonWrapperDesktop>
-            )}
-          </div>
-        )}
+        <div>
+          {renderUnderConsiderationButton()}
+
+          <S.BursaryButtonWrapperDesktop>
+            {renderApplyButton()}
+            {renderCompleteProfileButton()}
+          </S.BursaryButtonWrapperDesktop>
+        </div>
       </S.BursaryPageHeader>
 
-      {!bursary && !over14Days && profileCompleted && (
-        <T.PS color="pink" mt={2}>
-          You are currently able to stay with PressPad hosts for up to 2 weeks
-          completely free so you do not need to apply for a bursary right now as
-          this covers the period of your internship
-        </T.PS>
-      )}
+      {renderUnder14DaysMessage()}
 
       <T.H3C color="pink" mt={8} mb={3}>
         How does it work?
@@ -380,68 +419,13 @@ const Bursary = () => {
           />
         </Col>
       </Row>
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          {bursary ? (
-            <S.BursaryButtonWrapperTablet>
-              <Button
-                type="tertiary"
-                withGraphic
-                style={{ paddingLeft: '10px', paddingRight: '10px' }}
-              >
-                YOUR APPLICATION IS UNDER CONSIDERATION
-              </Button>
-            </S.BursaryButtonWrapperTablet>
-          ) : (
-            <S.BursaryButtonWrapperTablet>
-              {over14Days && profileCompleted && (
-                <>
-                  <Button
-                    type="secondary"
-                    withGraphic
-                    onClick={() => history.push(BURSARY_APPLICATION)}
-                  >
-                    APPLY FOR BURSARY
-                  </Button>
-                  {window ? (
-                    <T.PXS color="gray3">
-                      Application deadline for the next round of bursaries is{' '}
-                      <T.PXSBold>
-                        {moment(window.startDate)
-                          .endOf()
-                          .format('Do MMMM YYYY')}
-                        .
-                      </T.PXSBold>
-                    </T.PXS>
-                  ) : (
-                    <T.PXS color="gray3">
-                      Sorry!, no open applications for now
-                    </T.PXS>
-                  )}
-                </>
-              )}
 
-              {!profileCompleted && (
-                <>
-                  <T.PXS color="pink" mb={1}>
-                    You have to complete your profile first to be able to apply
-                    for a bursary
-                  </T.PXS>
-                  <Button
-                    type="secondary"
-                    withGraphic
-                    onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
-                  >
-                    complete your profile details
-                  </Button>
-                </>
-              )}
-            </S.BursaryButtonWrapperTablet>
-          )}
-        </>
-      )}
+      {renderUnderConsiderationButton()}
+
+      <S.BursaryButtonWrapperTablet>
+        {renderApplyButton()}
+        {renderCompleteProfileButton()}
+      </S.BursaryButtonWrapperTablet>
     </div>
   );
 };

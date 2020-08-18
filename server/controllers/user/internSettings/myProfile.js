@@ -57,9 +57,9 @@ module.exports = async (req, res, next) => {
         awaitingReview: false,
         verified: false,
       });
-    } else if (updateUserProfile.verified) {
+    } else if (completed && updateUserProfile.verified) {
       // do nothing
-    } else if (updateUserProfile.awaitingReview) {
+    } else {
       await updateUserProfile(user._id, {
         awaitingReview: true,
         awaitingReviewDate: Date.now(),
