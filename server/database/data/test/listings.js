@@ -21,7 +21,7 @@ const defaultListingData = {
   ],
   photos: [
     {
-      fileName: '5e2c87f84041d47b78b8b69a/1579977401128.ali1.webp',
+      fileName: '5e2c87f84041d47b78b8b69a/1579977403930.ali2.webp',
       isPrivate: false,
     },
     {

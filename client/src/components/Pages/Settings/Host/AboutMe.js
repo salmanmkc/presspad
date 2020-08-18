@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { CloseOutlined } from '@ant-design/icons';
 import { Input, DatePicker, Select } from '../../../Common/Inputs';
 import { Col, Row } from '../../../Common/Grid';
 import * as S from './style';
 import * as T from '../../../Common/Typography';
 import Button from '../../../Common/ButtonNew';
-// import {
-//   API_INTERN_SETTINGS_ABOUT_ME, // should be for host
-//   API_MY_PROFILE_URL,
-// } from '../../../../constants/apiRoutes';
+import {
+  API_HOST_SETTINGS_ABOUT_ME,
+  API_MY_PROFILE_URL,
+} from '../../../../constants/apiRoutes';
 import Notification from '../../../Common/Notification';
 import { CLASSES_DEFINITIONS } from '../../../../constants/externalLinks';
 import types from '../../../../constants/types';
 import { SETTINGS } from '../../../../constants/navRoutes';
 
-const { validate, internSettings } = require('../../../../validation');
+const { validate, hostSettings } = require('../../../../validation');
 
 const getCleanData = (d = {}) => ({
   birthDate: d.birthDate || null,
@@ -37,12 +38,14 @@ const getCleanData = (d = {}) => ({
   childCare: d.childCare || '', // new
   illCare: d.illCare || '', // new
   degreeLevel: d.degreeLevel || '',
+  typeOfSchool: d.typeOfSchool || '', // new
+  typeOfSchoolOther: d.typeOfSchoolOther || '', // new
+  eligibleForFreeSchoolMeals: d.eligibleForFreeSchoolMeals || '', // new
+  describeMainIncomeEarnerMainJob: d.describeMainIncomeEarnerMainJob || '', // new
+  highestLevelOfQualifications: d.highestLevelOfQualifications || '', // new
+  highestLevelOfQualificationsOther: d.highestLevelOfQualificationsOther || '', // new
+  parentsWorkInPress: d.parentsWorkInPress || '',
   belongToClass: d.belongToClass || '', // new
-  schooling: d.schooling || '', // new
-  freeSchool: d.freeSchool || '', // new
-  ParentsProfession: d.ParentsProfession || '', // new
-  qualificationsLevel: d.qualificationsLevel || '', // new
-  qualificationsLevelOther: d.qualificationsLevelOther || '', // new
 });
 
 const AboutMe = () => {
@@ -56,7 +59,7 @@ const AboutMe = () => {
 
   const _validate = async () => {
     const { errors: _errors } = await validate({
-      schema: internSettings.aboutMeSchema(prevData),
+      schema: hostSettings.aboutMeSchema(prevData),
       data: { ...state },
     });
 
@@ -72,7 +75,7 @@ const AboutMe = () => {
 
   const onSubmit = async () => {
     try {
-      const _errors = await _validate({ phoneNumber: 'sss' });
+      const _errors = await _validate();
 
       setErrors(_errors || {});
 
@@ -83,8 +86,8 @@ const AboutMe = () => {
       setError();
 
       setLoading(true);
-      // this should be for host api ..
-      // await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
+
+      await axios.patch(API_HOST_SETTINGS_ABOUT_ME, state);
       setNotificationOpen(true);
     } catch (e) {
       setError(e.response.data.error);
@@ -126,12 +129,15 @@ const AboutMe = () => {
 
   useEffect(() => {
     if (
-      !state.qualificationsLevel ||
-      !state.qualificationsLevel.includes('Other')
+      !state.highestLevelOfQualifications ||
+      !state.highestLevelOfQualifications.includes('Other')
     ) {
-      setState(_state => ({ ..._state, qualificationsLevelOther: '' }));
+      setState(_state => ({
+        ..._state,
+        highestLevelOfQualificationsOther: '',
+      }));
     }
-  }, [state.qualificationsLevel]);
+  }, [state.highestLevelOfQualifications]);
 
   useEffect(() => {
     if (!state.ethnicity || !state.ethnicity.includes('Other')) {
@@ -140,15 +146,15 @@ const AboutMe = () => {
   }, [state.ethnicity]);
 
   useEffect(() => {
-    // const getData = async () => {
-    //   const {
-    //     data: { profile },
-    //   } = await axios.get(API_MY_PROFILE_URL);
-    //   setState(getCleanData(profile));
-    //   setPrevData(getCleanData(profile));
-    // };
-    // getData();
-    setPrevData('');
+    const getData = async () => {
+      const {
+        data: { profile },
+      } = await axios.get(API_MY_PROFILE_URL);
+      setState(getCleanData(profile));
+      setPrevData(getCleanData(profile));
+    };
+
+    getData();
   }, []);
 
   return (
@@ -425,14 +431,14 @@ const AboutMe = () => {
         </Col>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
-            options={types.schooling.map(e => ({ label: e, value: e }))}
+            options={types.typeOfSchool.map(e => ({ label: e, value: e }))}
             label="Schooling type"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, schooling: value || '' }))
+              setState(_state => ({ ..._state, typeOfSchool: value || '' }))
             }
-            value={state.schooling}
-            error={errors.schooling}
+            value={state.typeOfSchool}
+            error={errors.typeOfSchool}
           />
         </Col>
       </Row>
@@ -440,14 +446,20 @@ const AboutMe = () => {
       <Row>
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <Select
-            options={types.freeSchool.map(e => ({ label: e, value: e }))}
+            options={types.eligibleForFreeSchoolMeals.map(e => ({
+              label: e,
+              value: e,
+            }))}
             label="Did you receive free school meals at any point during your education?"
             allowClear
             onChange={value =>
-              setState(_state => ({ ..._state, freeSchool: value }))
+              setState(_state => ({
+                ..._state,
+                eligibleForFreeSchoolMeals: value,
+              }))
             }
-            value={state.freeSchool}
-            error={errors.freeSchool}
+            value={state.eligibleForFreeSchoolMeals}
+            error={errors.eligibleForFreeSchoolMeals}
           />
         </Col>
       </Row>
@@ -456,17 +468,20 @@ const AboutMe = () => {
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
-              options={types.ParentsProfession.map(e => ({
+              options={types.describeMainIncomeEarnerMainJob.map(e => ({
                 label: e,
                 value: e,
               }))}
               label="Thinking back to when you were aged about 14, which best describes the sort of work the main/highest income earner in your household did in their main job?"
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, ParentsProfession: value }))
+                setState(_state => ({
+                  ..._state,
+                  describeMainIncomeEarnerMainJob: value,
+                }))
               }
-              value={state.ParentsProfession}
-              error={errors.ParentsProfession}
+              value={state.describeMainIncomeEarnerMainJob}
+              error={errors.describeMainIncomeEarnerMainJob}
             />
           </S.IllCareWrapper>
         </Col>
@@ -475,26 +490,29 @@ const AboutMe = () => {
         <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
-              options={types.qualificationsLevel.map(e => ({
+              options={types.highestLevelOfQualifications.map(e => ({
                 label: e,
                 value: e,
               }))}
               label="What is the highest level of qualifications achieved by either of your parent(s) or guardian(s) by the time you were 18?"
               allowClear
               onChange={value =>
-                setState(_state => ({ ..._state, qualificationsLevel: value }))
+                setState(_state => ({
+                  ..._state,
+                  highestLevelOfQualifications: value,
+                }))
               }
-              value={state.qualificationsLevel}
-              error={errors.qualificationsLevel}
+              value={state.highestLevelOfQualifications}
+              error={errors.highestLevelOfQualifications}
             />
-            {state.qualificationsLevel &&
-              state.qualificationsLevel.includes('Other') && (
+            {state.highestLevelOfQualifications &&
+              state.highestLevelOfQualifications.includes('Other') && (
                 <Input
                   onChange={onInputChange}
-                  value={state.qualificationsLevelOther}
+                  value={state.highestLevelOfQualificationsOther}
                   label="Please specify"
-                  name="qualificationsLevelOther"
-                  error={errors.qualificationsLevelOther}
+                  name="highestLevelOfQualificationsOther"
+                  error={errors.highestLevelOfQualificationsOther}
                 />
               )}
           </S.IllCareWrapper>

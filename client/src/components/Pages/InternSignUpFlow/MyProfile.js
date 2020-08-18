@@ -256,7 +256,7 @@ const MyProfile = props => {
       />
 
       <Row>
-        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 6]} mt={4}>
           <Select
             options={types.interests.map(e => ({ label: e, value: e }))}
             label="What are your areas of interest?"
@@ -273,7 +273,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 10.3]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 10.3]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.bio}
@@ -287,7 +287,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 10.3]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 10.3]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.useReasonAnswer}
@@ -300,7 +300,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 10.3]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 10.3]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.storyAnswer}
@@ -313,7 +313,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 10.3]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 10.3]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.mentorDescribeAnswer}
@@ -326,7 +326,7 @@ const MyProfile = props => {
       </Row>
 
       <Row mb={6}>
-        <Col w={[4, 10, 10.3]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 10.3]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.issueAnswer}
@@ -339,7 +339,7 @@ const MyProfile = props => {
         </Col>
       </Row>
       <Row>
-        <Col w={[6, 12, 12]}>
+        <Col w={[4, 12, 12]}>
           {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
         </Col>
       </Row>
@@ -371,7 +371,7 @@ const MyProfile = props => {
         </Col>
       </Row>
       <Row style={{ textAlign: 'center' }}>
-        <Col w={[4, 12, 11.6]} style={{ marginTop: '30px' }}>
+        <Col w={[4, 12, 10.6]} style={{ marginTop: '30px' }}>
           <T.Link to={INTERN_SIGNUP_VERIFICATIONS} color="pink">
             I’ll finish this later
           </T.Link>

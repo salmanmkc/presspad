@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
 const { wordLengthValidator } = require('../utils');
-const { types } = require('./../constants');
+const { types } = require('../constants');
 
 const listingSchema = new Schema(
   {
@@ -13,7 +13,7 @@ const listingSchema = new Schema(
     address: {
       addressline1: {
         type: String,
-        required: true,
+        // required: true,
       },
       addressline2: {
         type: String,
@@ -21,11 +21,11 @@ const listingSchema = new Schema(
       },
       city: {
         type: String,
-        required: true,
+        // required: true,
       },
       postcode: {
         type: String,
-        required: true,
+        // required: true,
       },
     },
     neighbourhoodDescription: {

@@ -6,6 +6,7 @@ const internSignup = require('./internSignup');
 const orgSignup = require('./orgSignup');
 const internCompleteProfile = require('./internCompleteProfile');
 const internBursary = require('./internBursary');
+const hostCompleteProfile = require('./hostCompleteProfile');
 
 const handleValidationError = args => {
   const { inner } = args;
@@ -52,5 +53,6 @@ module.exports = {
   internSignup,
   internCompleteProfile,
   internBursary,
+  hostCompleteProfile,
   orgSignup,
 };

@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+
+import Title from '../../Common/Title';
 import { Input, DatePicker, Select } from '../../Common/Inputs';
 import { Col, Row } from '../../Common/Grid';
-import * as S from './style';
+import * as S from '../Settings/Host/style';
 import * as T from '../../Common/Typography';
 import Button from '../../Common/ButtonNew';
 import {
-  API_INTERN_SETTINGS_ABOUT_ME,
+  API_HOST_SETTINGS_ABOUT_ME,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
 import Notification from '../../Common/Notification';
 import { CLASSES_DEFINITIONS } from '../../../constants/externalLinks';
 import types from '../../../constants/types';
-import { INTERN_SIGNUP_BURSARY } from '../../../constants/navRoutes';
-import Title from '../../Common/Title';
+import { HOST_SIGNUP_LISTING } from '../../../constants/navRoutes';
 
-const { validate, internSignup } = require('../../../validation');
+const { validate, hostSettings } = require('../../../validation');
 
 const getCleanData = (d = {}) => ({
   birthDate: d.birthDate || null,
@@ -39,11 +40,17 @@ const getCleanData = (d = {}) => ({
   childCare: d.childCare || '', // new
   illCare: d.illCare || '', // new
   degreeLevel: d.degreeLevel || '',
+  typeOfSchool: d.typeOfSchool || '', // new
+  typeOfSchoolOther: d.typeOfSchoolOther || '', // new
+  eligibleForFreeSchoolMeals: d.eligibleForFreeSchoolMeals || '', // new
+  describeMainIncomeEarnerMainJob: d.describeMainIncomeEarnerMainJob || '', // new
+  highestLevelOfQualifications: d.highestLevelOfQualifications || '', // new
+  highestLevelOfQualificationsOther: d.highestLevelOfQualificationsOther || '', // new
+  parentsWorkInPress: d.parentsWorkInPress || '',
   belongToClass: d.belongToClass || '', // new
 });
 
 const AboutMe = () => {
-  const history = useHistory();
   const [state, setState] = useState(getCleanData());
 
   const [errors, setErrors] = useState({});
@@ -54,21 +61,16 @@ const AboutMe = () => {
   const [prevData, setPrevData] = useState({});
   const [lastClickOnContinue, setLastClickOnContinue] = useState({});
 
+  const history = useHistory();
+
   const _validate = async isContinue => {
     const { errors: _errors } = await validate({
-      schema: internSignup.aboutMeSchema(prevData, isContinue),
+      schema: hostSettings.aboutMeSchema(prevData, isContinue),
       data: { ...state },
     });
 
     return _errors;
   };
-
-  useEffect(() => {
-    window.scrollTo({
-      left: 0,
-      top: 0,
-    });
-  }, []);
 
   const onInputChange = e => {
     const { value, name } = e.target;
@@ -77,7 +79,7 @@ const AboutMe = () => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const onSave = async isContinue => {
+  const onSubmit = async isContinue => {
     try {
       setErrors({});
       setLastClickOnContinue(isContinue);
@@ -98,7 +100,8 @@ const AboutMe = () => {
         setSaveLoading(true);
       }
 
-      await axios.patch(API_INTERN_SETTINGS_ABOUT_ME, state);
+      await axios.patch(API_HOST_SETTINGS_ABOUT_ME, state);
+
       setNotificationOpen(true);
     } catch (e) {
       setMainError(e.response.data.error);
@@ -140,6 +143,18 @@ const AboutMe = () => {
   }, [state.gender]);
 
   useEffect(() => {
+    if (
+      !state.highestLevelOfQualifications ||
+      !state.highestLevelOfQualifications.includes('Other')
+    ) {
+      setState(_state => ({
+        ..._state,
+        highestLevelOfQualificationsOther: '',
+      }));
+    }
+  }, [state.highestLevelOfQualifications]);
+
+  useEffect(() => {
     if (!state.ethnicity || !state.ethnicity.includes('Other')) {
       setState(_state => ({ ..._state, ethnicityOther: '' }));
     }
@@ -150,17 +165,20 @@ const AboutMe = () => {
       const {
         data: { profile },
       } = await axios.get(API_MY_PROFILE_URL);
+
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
     };
+
     getData();
   }, []);
 
   const done = () => {
     if (lastClickOnContinue) {
-      history.push(INTERN_SIGNUP_BURSARY);
+      history.push(HOST_SIGNUP_LISTING);
     }
   };
+
   return (
     <div style={{ marginTop: '4rem', paddingBottom: '5rem' }}>
       <Row>
@@ -168,17 +186,8 @@ const AboutMe = () => {
           <Col w={[4, 12, 12]}>ABOUT ME</Col>
         </Title>
       </Row>
-
       <Row>
-        <Col w={[4, 12, 12]}>
-          <T.H5 color="blue">
-            First off we need to find out a bit more about you.
-          </T.H5>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <DatePicker
             onChange={momentDate =>
               setState(_state => ({ ..._state, birthDate: momentDate }))
@@ -188,9 +197,7 @@ const AboutMe = () => {
             error={errors.birthDate}
           />
         </Col>
-      </Row>
-      <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.phoneNumber}
@@ -202,7 +209,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.hometown}
@@ -211,9 +218,7 @@ const AboutMe = () => {
             error={errors.hometown}
           />
         </Col>
-      </Row>
-      <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.lastStudySubject}
@@ -225,7 +230,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.lastStudyUniversity}
@@ -234,9 +239,7 @@ const AboutMe = () => {
             error={errors.lastStudyUniversity}
           />
         </Col>
-      </Row>
-      <Row>
-        <Col w={[4, 8, 8]} mt={4}>
+        <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
           <Input
             onChange={onInputChange}
             value={state.hearAboutPressPadAnswer}
@@ -249,7 +252,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 12, 8]} mt={4}>
+        <Col w={[4, 12, 8]} style={{ marginTop: '20px' }}>
           <T.H5 color="pink" mt={7}>
             Extra demographic questions
           </T.H5>
@@ -266,7 +269,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.gender.map(e => ({ label: e, value: e }))}
             label="Gender"
@@ -288,7 +291,7 @@ const AboutMe = () => {
             />
           )}
         </Col>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.sexualOrientation.map(e => ({ label: e, value: e }))}
             label="Sexual Orientation"
@@ -303,7 +306,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.ethnicity.map(e => ({ label: e, value: e }))}
             label="Ethnicity"
@@ -325,7 +328,7 @@ const AboutMe = () => {
             />
           )}
         </Col>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.religion.map(e => ({ label: e, value: e }))}
             label="Religion"
@@ -340,7 +343,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.disability.map(e => ({ label: e, value: e }))}
             label="Disability"
@@ -364,7 +367,6 @@ const AboutMe = () => {
               error={errors.disabilityYes}
             />
           )}
-
           {state.disabilityYes && state.disabilityYes.includes('Other') && (
             <Input
               onChange={onInputChange}
@@ -376,7 +378,7 @@ const AboutMe = () => {
           )}
         </Col>
 
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.neurodivergent.map(e => ({ label: e, value: e }))}
             label="Neurodivergent condition"
@@ -410,7 +412,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.childCare.map(e => ({ label: e, value: e }))}
             label="Are you a primary carer for a child or children under 18?"
@@ -426,7 +428,7 @@ const AboutMe = () => {
 
       <Row>
         <S.IllCareWrapper>
-          <Col w={[4, 6, 5.3]} mt={4}>
+          <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
             <Select
               options={types.illCare.map(e => ({ label: e, value: e }))}
               label="Do you look after or care for someone with long term physical or mental ill health caused by disability or age (not in a paid capacity)?"
@@ -442,7 +444,7 @@ const AboutMe = () => {
       </Row>
 
       <Row>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <Select
             options={types.degreeLevel.map(e => ({ label: e, value: e }))}
             label="Degree level"
@@ -454,14 +456,118 @@ const AboutMe = () => {
             error={errors.degreeLevel}
           />
         </Col>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
+          <Select
+            options={types.typeOfSchool.map(e => ({ label: e, value: e }))}
+            label="Schooling type"
+            allowClear
+            onChange={value =>
+              setState(_state => ({ ..._state, typeOfSchool: value || '' }))
+            }
+            value={state.typeOfSchool}
+            error={errors.typeOfSchool}
+          />
+        </Col>
       </Row>
 
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
+          <Select
+            options={types.eligibleForFreeSchoolMeals.map(e => ({
+              label: e,
+              value: e,
+            }))}
+            label="Did you receive free school meals at any point during your education?"
+            allowClear
+            onChange={value =>
+              setState(_state => ({
+                ..._state,
+                eligibleForFreeSchoolMeals: value,
+              }))
+            }
+            value={state.eligibleForFreeSchoolMeals}
+            error={errors.eligibleForFreeSchoolMeals}
+          />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
+          <S.IllCareWrapper>
+            <Select
+              options={types.describeMainIncomeEarnerMainJob.map(e => ({
+                label: e,
+                value: e,
+              }))}
+              label="Thinking back to when you were aged about 14, which best describes the sort of work the main/highest income earner in your household did in their main job?"
+              allowClear
+              onChange={value =>
+                setState(_state => ({
+                  ..._state,
+                  describeMainIncomeEarnerMainJob: value,
+                }))
+              }
+              value={state.describeMainIncomeEarnerMainJob}
+              error={errors.describeMainIncomeEarnerMainJob}
+            />
+          </S.IllCareWrapper>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
+          <S.IllCareWrapper>
+            <Select
+              options={types.highestLevelOfQualifications.map(e => ({
+                label: e,
+                value: e,
+              }))}
+              label="What is the highest level of qualifications achieved by either of your parent(s) or guardian(s) by the time you were 18?"
+              allowClear
+              onChange={value =>
+                setState(_state => ({
+                  ..._state,
+                  highestLevelOfQualifications: value,
+                }))
+              }
+              value={state.highestLevelOfQualifications}
+              error={errors.highestLevelOfQualifications}
+            />
+            {state.highestLevelOfQualifications &&
+              state.highestLevelOfQualifications.includes('Other') && (
+                <Input
+                  onChange={onInputChange}
+                  value={state.highestLevelOfQualificationsOther}
+                  label="Please specify"
+                  name="highestLevelOfQualificationsOther"
+                  error={errors.highestLevelOfQualificationsOther}
+                />
+              )}
+          </S.IllCareWrapper>
+        </Col>
+      </Row>
+      <Row>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
+          <Select
+            options={types.parentsWorkInPress.map(e => ({
+              label: e,
+              value: e,
+            }))}
+            label="Did either of your parents or someone in your immediate family work in this industry?"
+            allowClear
+            onChange={value =>
+              setState(_state => ({ ..._state, parentsWorkInPress: value }))
+            }
+            value={state.parentsWorkInPress}
+            error={errors.parentsWorkInPress}
+          />
+        </Col>
+      </Row>
       <Row mb={6} mbT={4}>
-        <Col w={[4, 6, 5.3]} mt={4}>
+        <Col w={[4, 6, 5.3]} style={{ marginTop: '20px' }}>
           <S.IllCareWrapper>
             <Select
               options={types.belongToClass.map(e => ({ label: e, value: e }))}
-              label="Which class fo you self-identify as belonging to?"
+              label="Which class of you self-identify as belonging to?"
               helperText={
                 <span>
                   Refer to{' '}
@@ -487,12 +593,11 @@ const AboutMe = () => {
           {mainError && <T.PXS color="pink">{mainError}</T.PXS>}
         </Col>
       </Row>
-
       <Row>
         <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
           <Button
             type="secondary"
-            onClick={() => onSave()}
+            onClick={() => onSubmit()}
             loading={saveLoading}
             disabled={saveLoading || continueLoading}
             outline
@@ -503,7 +608,7 @@ const AboutMe = () => {
         <Col w={[4, 6, 5.3]} mb={6} mbT={3}>
           <Button
             type="secondary"
-            onClick={() => onSave(true)}
+            onClick={() => onSubmit(true)}
             loading={continueLoading}
             disabled={saveLoading || continueLoading}
           >
@@ -513,7 +618,7 @@ const AboutMe = () => {
       </Row>
       <Row style={{ textAlign: 'center' }}>
         <Col w={[4, 12, 10.6]} style={{ marginTop: '30px' }}>
-          <T.Link to={INTERN_SIGNUP_BURSARY} color="pink">
+          <T.Link to={HOST_SIGNUP_LISTING} color="pink">
             I’ll finish this later
           </T.Link>
         </Col>

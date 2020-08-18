@@ -29,6 +29,9 @@ const UploadFile = ({
   const filteredFiles = files.filter(
     file => file && !file.deleted && (file.name || file.fileName),
   );
+  const softFilteredFiles = files.filter(
+    file => file && (file.name || file.fileName),
+  );
   const onDropRejected = errors => {
     if (
       errors &&
@@ -47,7 +50,7 @@ const UploadFile = ({
 
   const onMultiDrop = acceptedFiles => {
     const updatedFiles = [
-      ...filteredFiles,
+      ...softFilteredFiles,
       acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
@@ -70,9 +73,7 @@ const UploadFile = ({
   };
 
   const removeFile = index => {
-    const updatedFiles = filteredFiles.map((file, i) =>
-      index !== i ? file : { ...file, deleted: true },
-    );
+    const updatedFiles = filteredFiles.filter((file, i) => index !== i);
     setFiles(updatedFiles);
   };
 
@@ -86,7 +87,14 @@ const UploadFile = ({
             href={file.preview}
             download={file.path || file.url}
             mr={2}
-            style={{ textDecoration: 'underline' }}
+            style={{
+              width: '100%',
+              textDecoration: 'underline',
+              wordWrap: 'break-word !important',
+              overflowWrap: 'break-word',
+              '-ms-word-break': 'break-all',
+              wordBreak: 'break-word',
+            }}
           >
             {file.path || file.fileName}
           </T.Link>
@@ -124,7 +132,7 @@ const UploadFile = ({
       accept={type === 'file' ? 'image/*, .pdf, .doc, .docx' : 'image/*'}
       maxSize={maxSize}
       onDropRejected={onDropRejected}
-      disabled={disabled}
+      disabled={disabled || files.length >= maxLimit}
       maxFiles={3}
     >
       {({ getRootProps, getInputProps }) => (

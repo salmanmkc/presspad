@@ -45,6 +45,7 @@ import settingComponents from './Settings';
 import WelcomePages from './WelcomePages';
 import * as InternSignUpFlow from './InternSignUpFlow';
 import Bursary, { BursarySuccess, BursaryApplication } from './Bursary';
+import * as HostSignUpFlow from './HostSignUpFlow';
 
 import { withWindowWidth } from '../../HOCs';
 import {
@@ -96,6 +97,10 @@ import {
   INTERN_SIGNUP_WELCOME,
   BURSARY_SUCCESS,
   BURSARY_APPLICATION,
+  HOST_SIGNUP_WELCOME,
+  HOST_SIGNUP_ABOUT_ME,
+  HOST_SIGNUP_LISTING,
+  HOST_SIGNUP_VERIFICATIONS,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -130,6 +135,46 @@ function Pages(props) {
         />
 
         <Route
+          isPrivate
+          path={HOST_SIGNUP_WELCOME}
+          Component={HostSignUpFlow.Welcome}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={HOST_SIGNUP_ABOUT_ME}
+          Component={HostSignUpFlow.AboutMe}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={HOST_SIGNUP_LISTING}
+          Component={HostSignUpFlow.MyListing}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
+          isPrivate
+          path={HOST_SIGNUP_VERIFICATIONS}
+          Component={HostSignUpFlow.Verifications}
+          isLoggedIn={isLoggedIn}
+          layout="signup"
+          {...props}
+        />
+
+        <Route
+          exact
           isPrivate
           path={INTERN_SIGNUP_ABOUT_ME}
           Component={InternSignUpFlow.AboutMe}

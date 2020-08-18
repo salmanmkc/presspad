@@ -206,7 +206,7 @@ const MyProfile = props => {
       />
 
       <Row>
-        <Col w={[4, 6, 4]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 6, 4]} mt={4}>
           <Select
             options={types.interests.map(e => ({ label: e, value: e }))}
             label="What are your areas of interest?"
@@ -223,7 +223,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 8]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.bio}
@@ -237,7 +237,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 8]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.useReasonAnswer}
@@ -250,7 +250,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 8]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.storyAnswer}
@@ -263,7 +263,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 8]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.mentorDescribeAnswer}
@@ -276,7 +276,7 @@ const MyProfile = props => {
       </Row>
 
       <Row>
-        <Col w={[4, 10, 8]} style={{ marginTop: '20px' }}>
+        <Col w={[4, 10, 8]} mt={4}>
           <Input
             onChange={onInputChange}
             value={state.issueAnswer}

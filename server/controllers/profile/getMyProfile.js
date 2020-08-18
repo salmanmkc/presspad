@@ -6,7 +6,7 @@ const {
   getListingByUserId,
 } = require('../../database/queries/listing/getListing');
 
-const generateUrl = require('./../../helpers/generateFileURL');
+const generateUrl = require('../../helpers/generateFileURL');
 
 /**
  * get the profile data adn the listing based on the role
@@ -21,12 +21,13 @@ const _getProfileBasedRole = async (_id, role, res) => {
   // you should check the object on the frontEnd
   if (!profile) return res.json({});
 
-  const { profileImage, photoID, offerLetter, DBSCheck } = profile;
+  const { profileImage, photoID, offerLetter, DBSCheck, pressCard } = profile;
   await Promise.all([
     generateUrl(profileImage),
     generateUrl(photoID),
     generateUrl(offerLetter),
     generateUrl(DBSCheck),
+    generateUrl(pressCard),
   ]);
 
   if (role === 'host' || role === 'superhost') {

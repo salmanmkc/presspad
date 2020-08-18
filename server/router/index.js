@@ -18,6 +18,7 @@ const updateInternshipDetails = require('../controllers/profile/updateInternship
 const deleteAccount = require('../controllers/user/deleteAccount');
 const internSettings = require('../controllers/user/internSettings');
 const settingMyAccount = require('../controllers/user/myAccount');
+const hostSettings = require('../controllers/user/hostSettings');
 
 const { getMyBursary, editBursary } = require('../controllers/bursary');
 const {
@@ -163,6 +164,9 @@ const {
   INTERN_SETTINGS_VERIFICATIONS,
   MY_BURSARY,
   SINGLE_BURSARY,
+  HOST_SETTINGS_ABOUT_ME,
+  HOST_SETTINGS_MY_LISTING,
+  HOST_SETTINGS_VERIFICATIONS,
   ORG_DETAILS,
   TOP_ADMIN_STATS,
   BURSARY_APPLICATIONS_STATUS,
@@ -452,6 +456,16 @@ router.patch(
 
 router.get(MY_BURSARY, authentication, getMyBursary);
 router.patch(SINGLE_BURSARY, authentication, editBursary);
+
+router.patch(HOST_SETTINGS_ABOUT_ME, authentication, hostSettings.aboutMe);
+
+router.patch(HOST_SETTINGS_MY_LISTING, authentication, hostSettings.myListing);
+
+router.patch(
+  HOST_SETTINGS_VERIFICATIONS,
+  authentication,
+  hostSettings.verifications,
+);
 
 // get summary stats
 router.get(TOP_ADMIN_STATS, authentication, getTopAdminStats);

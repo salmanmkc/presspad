@@ -15,6 +15,7 @@ const Checkbox = ({
   isMulti,
   items,
   checkedValues,
+  value,
 }) => (
   <>
     <CheckboxWrapper
@@ -38,11 +39,16 @@ const Checkbox = ({
         </AntdCheckbox>
       )}
       {isMulti && (
-        <AntdCheckbox.Group onChange={onChange} defaultValue={checkedValues}>
+        <AntdCheckbox.Group
+          onChange={onChange}
+          defaultValue={checkedValues}
+          value={value}
+        >
           {items.map(e => (
             <AntdCheckbox
               key={e}
               value={e}
+              checked={checkedValues.includes(e)}
               style={{
                 display: 'flex',
                 marginLeft: 0,
