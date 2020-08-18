@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import moment from 'moment';
 
+import Loading from '../../Common/LoadingBallPulseSync';
 import * as T from '../../Common/Typography';
 import { Col, Row } from '../../Common/Grid';
 import FAQ from '../../Common/FAQ';
@@ -13,7 +14,10 @@ import {
   API_BURSARY_WINDOWS,
   API_MY_PROFILE_URL,
 } from '../../../constants/apiRoutes';
-import { BURSARY_APPLICATION } from '../../../constants/navRoutes';
+import {
+  BURSARY_APPLICATION,
+  INTERN_SIGNUP_ABOUT_ME,
+} from '../../../constants/navRoutes';
 import Button from '../../Common/ButtonNew';
 import * as S from './style';
 
@@ -21,6 +25,8 @@ const Bursary = () => {
   const [bursary, setBursary] = useState();
   const [window, setWindow] = useState();
   const [over14Days, setOver14Days] = useState();
+  const [profileCompleted, setProfileCompleted] = useState();
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
   useEffect(() => {
@@ -60,13 +66,18 @@ const Bursary = () => {
           .startOf()
           .diff(moment(profile.internshipStartDate).startOf(), 'days');
 
+        setProfileCompleted(profile.verified || profile.awaitingReview);
         setOver14Days(internshipDays >= 14);
       }
     };
 
-    getProfile();
-    getBursaryApplication();
-    getWindows();
+    const getAll = async () => {
+      await Promise.all([getProfile(), getBursaryApplication(), getWindows()]);
+
+      setLoading(false);
+    };
+
+    getAll();
   }, []);
 
   return (
@@ -74,48 +85,67 @@ const Bursary = () => {
       <S.BursaryPageHeader>
         <T.H2 color="blue">Bursary</T.H2>
 
-        <div>
-          {bursary ? (
-            <S.BursaryButtonWrapperDesktop>
-              <Button
-                type="tertiary"
-                withGraphic
-                style={{ paddingLeft: '10px', paddingRight: '10px' }}
-              >
-                YOUR APPLICATION IS UNDER CONSIDERATION
-              </Button>
-            </S.BursaryButtonWrapperDesktop>
-          ) : (
-            <S.BursaryButtonWrapperDesktop>
-              {over14Days && (
-                <>
-                  <Button
-                    type="secondary"
-                    withGraphic
-                    onClick={() => history.push(BURSARY_APPLICATION)}
-                  >
-                    APPLY FOR BURSARY
-                  </Button>
-                  {window ? (
-                    <T.PXS color="gray3">
-                      Application deadline for the next round of bursaries is{' '}
-                      <T.PXSBold>
-                        {moment(window.startDate)
-                          .endOf()
-                          .format('Do MMMM YYYY')}
-                        .
-                      </T.PXSBold>
+        {loading ? (
+          <Loading />
+        ) : (
+          <div>
+            {bursary ? (
+              <S.BursaryButtonWrapperDesktop>
+                <Button
+                  type="tertiary"
+                  withGraphic
+                  style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                >
+                  YOUR APPLICATION IS UNDER CONSIDERATION
+                </Button>
+              </S.BursaryButtonWrapperDesktop>
+            ) : (
+              <S.BursaryButtonWrapperDesktop>
+                {over14Days && profileCompleted && (
+                  <>
+                    <Button
+                      type="secondary"
+                      withGraphic
+                      onClick={() => history.push(BURSARY_APPLICATION)}
+                    >
+                      APPLY FOR BURSARY
+                    </Button>
+                    {window ? (
+                      <T.PXS color="gray3">
+                        Application deadline for the next round of bursaries is{' '}
+                        <T.PXSBold>
+                          {moment(window.startDate)
+                            .endOf()
+                            .format('Do MMMM YYYY')}
+                          .
+                        </T.PXSBold>
+                      </T.PXS>
+                    ) : (
+                      <T.PXS color="gray3">
+                        Sorry!, no open applications for now
+                      </T.PXS>
+                    )}
+                  </>
+                )}
+                {!profileCompleted && (
+                  <>
+                    <T.PXS color="pink" mb={1}>
+                      You have to complete your profile first to be able to
+                      apply for a bursary
                     </T.PXS>
-                  ) : (
-                    <T.PXS color="gray3">
-                      Sorry!, no open applications for now
-                    </T.PXS>
-                  )}
-                </>
-              )}
-            </S.BursaryButtonWrapperDesktop>
-          )}
-        </div>
+                    <Button
+                      type="secondary"
+                      withGraphic
+                      onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
+                    >
+                      complete your profile details
+                    </Button>
+                  </>
+                )}
+              </S.BursaryButtonWrapperDesktop>
+            )}
+          </div>
+        )}
       </S.BursaryPageHeader>
 
       {!bursary && !over14Days && (
@@ -362,7 +392,7 @@ const Bursary = () => {
         </S.BursaryButtonWrapperTablet>
       ) : (
         <S.BursaryButtonWrapperTablet>
-          {over14Days && (
+          {over14Days && profileCompleted && (
             <>
               <Button
                 type="secondary"
@@ -386,6 +416,22 @@ const Bursary = () => {
                   Sorry!, no open applications for now
                 </T.PXS>
               )}
+            </>
+          )}
+
+          {!profileCompleted && (
+            <>
+              <T.PXS color="pink" mb={1}>
+                You have to complete your profile first to be able to apply for
+                a bursary
+              </T.PXS>
+              <Button
+                type="secondary"
+                withGraphic
+                onClick={() => history.push(INTERN_SIGNUP_ABOUT_ME)}
+              >
+                complete your profile details
+              </Button>
             </>
           )}
         </S.BursaryButtonWrapperTablet>

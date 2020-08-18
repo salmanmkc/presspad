@@ -37,7 +37,7 @@ const bursaryApplicationSchema = new Schema(
     },
     startDate: {
       type: Date,
-      required: true,
+      // required: true,
       validate: {
         validator: value =>
           moment().startOf('day') <= value ||
@@ -47,7 +47,7 @@ const bursaryApplicationSchema = new Schema(
     },
     endDate: {
       type: Date,
-      required: true,
+      // required: true,
       validate: {
         validator: value =>
           moment().startOf('day') <= value ||

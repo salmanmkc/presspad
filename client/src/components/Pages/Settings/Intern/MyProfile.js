@@ -214,7 +214,7 @@ const MyProfile = props => {
             onChange={value =>
               setState(_state => ({ ..._state, interests: value }))
             }
-            mode="tags"
+            multi
             height="auto"
             value={state.interests}
             error={errors.interests}
