@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 
 const dbConnection = require('../../dbConnection');
-const createEmptyCollection = require('./../createEmptyCollection');
+const createEmptyCollection = require('../createEmptyCollection');
 
 const accounts = require('./accounts');
 const users = require('./users');
 const checklistQuestions = require('./checklistQuestions');
-const resetDb = require('./resetDb');
+const resetDB = require('../resetDB');
 
 const buildProdData = () =>
   new Promise((resolve, reject) => {
     dbConnection()
       .then(async () => {
-        await resetDb();
+        await resetDB();
         await createEmptyCollection();
         await accounts();
         await users();

@@ -15,8 +15,13 @@ const depositDetails = deposits => {
 };
 
 const renderExpandedSection = (rowData, index) => {
-  const { contactDetails, deposits } = rowData;
-  const { email, firstName, lastName, phone } = contactDetails;
+  const { contactDetails = {}, deposits = [] } = rowData;
+  const {
+    email = '',
+    firstName = '',
+    lastName = '',
+    phone = '',
+  } = contactDetails;
 
   return (
     <>
