@@ -3,7 +3,7 @@ const { bursaryApplicationStatuses: s } = require('../../constants');
 
 const reset = () => BursaryApplication.deleteMany();
 
-const createAll = async ({ users }) => {
+const createAll = async ({ users, bursaryWindows: { bursaryWindow1 } }) => {
   const { internUser, internUser2, internUser3, internUser4 } = users;
 
   const bursaryApplications = [
@@ -13,6 +13,7 @@ const createAll = async ({ users }) => {
       typeOfUser: 'new',
       startDate: Date.now() - 100 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 80 * 24 * 60 * 60 * 1000,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.rejected,
@@ -20,6 +21,7 @@ const createAll = async ({ users }) => {
       typeOfUser: 'existing',
       startDate: Date.now() - 60 * 24 * 60 * 60 * 1000,
       endDate: Date.now() - 20 * 24 * 60 * 60 * 1000,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.request,
@@ -27,6 +29,7 @@ const createAll = async ({ users }) => {
       typeOfUser: 'existing',
       startDate: Date.now() - 14 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 100 * 24 * 60 * 60 * 1000,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.request,
@@ -34,6 +37,7 @@ const createAll = async ({ users }) => {
       typeOfUser: 'new',
       startDate: Date.now() - 14 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 100 * 24 * 60 * 60 * 1000,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.preApproved,
@@ -42,6 +46,7 @@ const createAll = async ({ users }) => {
       startDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 60 * 24 * 60 * 60 * 1000,
       bursaryPoints: 200,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.preApproved,
@@ -49,6 +54,7 @@ const createAll = async ({ users }) => {
       typeOfUser: 'existing',
       startDate: Date.now() + 40 * 24 * 60 * 60 * 1000,
       endDate: Date.now() + 60 * 24 * 60 * 60 * 1000,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.approved,
@@ -59,6 +65,7 @@ const createAll = async ({ users }) => {
       totalPotentialAmount: 2000 * 100,
       totalSpentSoFar: 1500 * 100,
       bursaryPoints: 200,
+      bursaryWindow: bursaryWindow1._id,
     },
     {
       status: s.completed,
@@ -69,6 +76,7 @@ const createAll = async ({ users }) => {
       totalPotentialAmount: 1000 * 100,
       totalSpentSoFar: 500 * 100,
       bursaryPoints: 200,
+      bursaryWindow: bursaryWindow1._id,
     },
   ];
 

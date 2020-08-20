@@ -5,15 +5,23 @@ const {
   getBursaryApplications,
   getBursaryApplicationInfo,
   getBursaryApplicationsForCSV,
+  getPendingBursaryApplicationsByUserId,
 } = require('../../database/queries/bursary');
+
+const { findProfile } = require('../../database/queries/profiles');
 
 module.exports.getMyBursary = async (req, res, next) => {
   const { _id } = req.user;
+  const { profile: isProfileDataBeenProvided } = req.query;
 
   try {
-    const profile = await getBursaryByUserId(_id);
+    const bursary = await getBursaryByUserId(_id).lean();
+    let profile;
 
-    return res.json(profile);
+    if (isProfileDataBeenProvided) {
+      profile = await findProfile(bursary.intern).lean();
+    }
+    return res.json({ ...profile, ...bursary });
   } catch (err) {
     next(boom.badImplementation(err));
   }
@@ -53,6 +61,20 @@ module.exports.getBursaryApplicationInfo = async (req, res, next) => {
     if (!bursaryApplicationInfo) {
       return next(boom.notFound());
     }
+
+    return res.json(bursaryApplicationInfo);
+  } catch (error) {
+    return next(boom.badImplementation(error));
+  }
+};
+
+module.exports.getMyBursaryApplicationStatus = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+
+    const bursaryApplicationInfo = await getPendingBursaryApplicationsByUserId(
+      _id,
+    );
 
     return res.json(bursaryApplicationInfo);
   } catch (error) {

@@ -5,6 +5,7 @@ const { deleteFile } = require('../../../helpers/storage');
 const { storageBucket: bucketName } = require('../../../config');
 const { getBursaryByUserId } = require('../../../database/queries/bursary');
 const { internCompleteProfile } = require('../../../../client/src/validation');
+const createBursaryApp = require('../../bursary/createBursaryApp.utils');
 
 module.exports = async (req, res, next) => {
   let completed;
@@ -47,14 +48,18 @@ module.exports = async (req, res, next) => {
       completed = false;
     }
 
+    if (completed && !updatedProfile.hasNoInternship) {
+      await createBursaryApp(user._id);
+    }
+
     if (!completed) {
       await updateUserProfile(user._id, {
         awaitingReview: false,
         verified: false,
       });
-    } else if (updateUserProfile.verified) {
+    } else if (completed && updateUserProfile.verified) {
       // do nothing
-    } else if (updateUserProfile.awaitingReview) {
+    } else {
       await updateUserProfile(user._id, {
         awaitingReview: true,
         awaitingReviewDate: Date.now(),

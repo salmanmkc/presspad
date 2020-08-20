@@ -25,6 +25,11 @@ const bursaryApplicationSchema = new Schema(
       ref: 'users',
       required: true,
     },
+    bursaryWindow: {
+      type: Schema.Types.ObjectId,
+      ref: 'bursarywindows',
+      required: true,
+    },
     typeOfUser: {
       type: String,
       enum: ['new', 'existing'],
@@ -32,7 +37,7 @@ const bursaryApplicationSchema = new Schema(
     },
     startDate: {
       type: Date,
-      required: true,
+      // required: true,
       validate: {
         validator: value =>
           moment().startOf('day') <= value ||
@@ -42,7 +47,7 @@ const bursaryApplicationSchema = new Schema(
     },
     endDate: {
       type: Date,
-      required: true,
+      // required: true,
       validate: {
         validator: value =>
           moment().startOf('day') <= value ||

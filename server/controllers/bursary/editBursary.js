@@ -1,4 +1,7 @@
 const boom = require('boom');
+
+const createBursaryApp = require('./createBursaryApp.utils');
+
 const {
   editBursaryById,
   upsertBursaryWindow,
@@ -19,18 +22,94 @@ module.exports.editBursary = async (req, res, next) => {
   let completed;
 
   const { id } = req.params;
-  const data = req.body;
+  const { profile: isProfileDataBeenProvided } = req.query;
+  let profile;
+
+  const {
+    // bursary data
+    typeOfSchool,
+    typeOfSchoolOther,
+    highestLevelOfQualifications,
+    highestLevelOfQualificationsOther,
+    describeMainIncomeEarnerMainJob,
+    numberOfPeopleKnowBefore16,
+    typeOfUniversity,
+    eligibleForFreeSchoolMeals,
+    comingFromLowerSociolEconomicBackground,
+    householdMembersSpeakOtherLanguage,
+    householdMembersSpeakOtherLanguageYes,
+    annualHouseholdIncome,
+    statusOfHome,
+    statusOfHomeOther,
+    anyHouseholdReceive,
+    benefitFromNepotism,
+    peopleYouKnowSocially,
+    accentAffectsPotentialEmployers,
+    parentsSupportiveOfCareer,
+
+    // profile data
+    organisation,
+    internshipContact,
+    internshipStartDate,
+    internshipEndDate,
+    internshipOfficeAddress,
+    offerLetter,
+  } = req.body;
 
   try {
-    const bursary = await editBursaryById(id, data);
+    const bursaryData = {
+      typeOfSchool,
+      typeOfSchoolOther,
+      highestLevelOfQualifications,
+      highestLevelOfQualificationsOther,
+      describeMainIncomeEarnerMainJob,
+      numberOfPeopleKnowBefore16,
+      typeOfUniversity,
+      eligibleForFreeSchoolMeals,
+      comingFromLowerSociolEconomicBackground,
+      householdMembersSpeakOtherLanguage,
+      householdMembersSpeakOtherLanguageYes,
+      annualHouseholdIncome,
+      statusOfHome,
+      statusOfHomeOther,
+      anyHouseholdReceive,
+      benefitFromNepotism,
+      peopleYouKnowSocially,
+      accentAffectsPotentialEmployers,
+      parentsSupportiveOfCareer,
+    };
+
+    const profileData = {
+      organisation,
+      internshipContact,
+      internshipStartDate,
+      internshipEndDate,
+      internshipOfficeAddress,
+      offerLetter,
+    };
+
+    if (isProfileDataBeenProvided) {
+      profileData.hasNoInternship = false;
+    }
+
+    const bursary = await editBursaryById(id, bursaryData).lean();
     const user = await getUserByBursaryId(id);
-    const profile = await findProfile(user._id);
+
+    if (isProfileDataBeenProvided) {
+      profile = await updateUserProfile(user._id, profileData).lean();
+    } else {
+      profile = await findProfile(user._id).lean();
+    }
 
     try {
       await internCompleteProfile.validate({ ...bursary, ...profile });
       completed = true;
     } catch (error) {
       completed = false;
+    }
+
+    if (completed && !profile.hasNoInternship) {
+      await createBursaryApp(user._id);
     }
 
     if (!completed) {
@@ -40,7 +119,7 @@ module.exports.editBursary = async (req, res, next) => {
       });
     } else if (updateUserProfile.verified) {
       // do nothing
-    } else if (updateUserProfile.awaitingReview) {
+    } else {
       await updateUserProfile(user._id, {
         awaitingReview: true,
         awaitingReviewDate: Date.now(),

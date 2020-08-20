@@ -270,8 +270,6 @@ const Verifications = props => {
     if (state.hasNoInternship) {
       setState(_state => ({
         ..._state,
-        reference1: {},
-        reference2: {},
         organisation: '',
         internshipContact: {},
         internshipStartDate: null,

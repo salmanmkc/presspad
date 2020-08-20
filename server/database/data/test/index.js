@@ -107,11 +107,13 @@ const buildData = options =>
       accounts,
     });
 
-    const bursaryApplications = await bursaryApplication.createAll({
-      users,
-    });
     const bursaryWindows = await bursaryWindow.createAll({
       users,
+    });
+
+    const bursaryApplications = await bursaryApplication.createAll({
+      users,
+      bursaryWindows,
     });
 
     const bursaries = await bursary.createAll({

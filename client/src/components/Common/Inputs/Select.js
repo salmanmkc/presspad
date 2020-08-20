@@ -59,7 +59,8 @@ const Select = ({
       removeIcon={renderClearIcon}
       clearIcon={renderClearIcon}
       mode={mode || (multi && 'multiple')}
-      onSelect={onChange}
+      onSelect={multi ? undefined : onChange}
+      onChange={multi ? onChange : undefined}
       style={style}
       value={value || undefined}
     >

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const FAQWrapper = styled.div`
   width: 100%;
-  max-width: ${({ isMobile }) => (!isMobile ? '460px' : '300px')};
 
   .ant-collapse-content {
     border: none;
