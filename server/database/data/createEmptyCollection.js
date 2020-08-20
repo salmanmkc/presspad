@@ -1,6 +1,9 @@
 const {
   Account,
   Booking,
+  Bursary,
+  BursaryApplication,
+  BursaryWindow,
   ChecklistAnswer,
   ChecklistQuestion,
   Coupon,
@@ -15,12 +18,15 @@ const {
   ScheduledEmail,
   User,
   WithdrawRequest,
-} = require('./../models');
+} = require('../models');
 
 const createEmptyCollection = async () => {
   try {
     await Account.createCollection();
     await Booking.createCollection();
+    await Bursary.createCollection();
+    await BursaryApplication.createCollection();
+    await BursaryWindow.createCollection();
     await ChecklistAnswer.createCollection();
     await ChecklistQuestion.createCollection();
     await Coupon.createCollection();
