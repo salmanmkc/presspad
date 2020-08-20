@@ -17,6 +17,8 @@ export const WELCOME_PAGES = '/welcome/:id';
 export const ADD_FUNDS_URL = '/add-funds';
 export const ADD_COUPONS_URL = '/add-coupons';
 export const BURSARY = '/bursary';
+export const BURSARY_SUCCESS = '/bursary/success';
+export const BURSARY_APPLICATION = '/bursary/application';
 export const REFERRAL_URL = '/refer';
 export const INVOICES = '/invoices';
 

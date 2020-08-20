@@ -3,12 +3,22 @@ import { Collapse } from 'antd';
 import { H5C, H7C, H6C, P } from '../Typography';
 import Icon from '../Icon';
 import { FAQWrapper, HeaderLine, HeaderWrapper } from './style';
-import { MOBILE_XL_WIDTH } from '../../../constants/screenWidths';
+import {
+  MOBILE_XL_WIDTH,
+  MOBILE_M_WIDTH,
+} from '../../../constants/screenWidths';
+import { withWindowWidth } from '../../../HOCs';
 
 const { Panel } = Collapse;
 
 const FAQ = props => {
-  const { title, content, colorChevron, size = 'desktop' } = props;
+  const { title, content, colorChevron, windowWidth } = props;
+  let size = 'desktop';
+  if (windowWidth <= MOBILE_XL_WIDTH) {
+    size = 'mobile';
+  } else if (windowWidth <= MOBILE_M_WIDTH) {
+    size = 'mobileSmall';
+  }
 
   const [open, setOpen] = useState(false);
   const isMobile = window.innerWidth <= MOBILE_XL_WIDTH;
@@ -39,12 +49,14 @@ const FAQ = props => {
         >
           {title}
         </Header>
-        <Icon
-          icon="arrow"
-          direction={open ? 'up' : 'down'}
-          color={setTChevronColor()}
-          width={chevronSizes[size]}
-        />
+        <div>
+          <Icon
+            icon="arrow"
+            direction={open ? 'up' : 'down'}
+            color={setTChevronColor()}
+            width={chevronSizes[size]}
+          />
+        </div>
       </HeaderWrapper>
       {!open && <HeaderLine />}
     </>
@@ -69,4 +81,4 @@ const FAQ = props => {
   );
 };
 
-export default FAQ;
+export default withWindowWidth(FAQ);

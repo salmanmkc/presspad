@@ -94,7 +94,7 @@ export const BodyXL = styled.p`
 export const BodyL = styled.p`
   ${CommonParagraphStyle};
   font-size: 22px;
-  fontline-height: 33px;
+  line-height: 33px;
 `;
 
 export const Body = styled.p`

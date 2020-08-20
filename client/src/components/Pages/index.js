@@ -44,6 +44,7 @@ import DeleteAccountSuccess from './Settings/Intern/DeleteAccountSuccess';
 import settingComponents from './Settings';
 import WelcomePages from './WelcomePages';
 import * as InternSignUpFlow from './InternSignUpFlow';
+import Bursary, { BursarySuccess, BursaryApplication } from './Bursary';
 import * as HostSignUpFlow from './HostSignUpFlow';
 
 import { withWindowWidth } from '../../HOCs';
@@ -88,11 +89,14 @@ import {
   ADMIN_PAYMENTS_URL,
   ADMIN_BOOKINGS_URL,
   SIGNUP_URL,
+  BURSARY,
   INTERN_SIGNUP_ABOUT_ME,
   INTERN_SIGNUP_BURSARY,
   INTERN_SIGNUP_PROFILE,
   INTERN_SIGNUP_VERIFICATIONS,
   INTERN_SIGNUP_WELCOME,
+  BURSARY_SUCCESS,
+  BURSARY_APPLICATION,
   HOST_SIGNUP_WELCOME,
   HOST_SIGNUP_ABOUT_ME,
   HOST_SIGNUP_LISTING,
@@ -120,7 +124,6 @@ function Pages(props) {
           layout="sideMenu"
           {...props}
         />
-
         <Route
           isPrivate
           exact
@@ -239,6 +242,14 @@ function Pages(props) {
         />
 
         <Route
+          exact
+          path={SETTINGS.UNDER_REVIEW}
+          Component={settingComponents('underReview', role)}
+          layout="illustrations"
+          {...props}
+        />
+
+        <Route
           isPrivate
           path={SETTINGS_URL}
           Component={settingComponents('setting', role)}
@@ -248,7 +259,6 @@ function Pages(props) {
           layout="sideMenu"
           {...props}
         />
-
         {/* protected host profile */}
         <Route
           exact
@@ -270,7 +280,6 @@ function Pages(props) {
           color="lightBlue"
           {...props}
         />
-
         {/* protected host profile */}
         <Route
           isPrivate
@@ -292,7 +301,6 @@ function Pages(props) {
           footer
           {...props}
         />
-
         <Route
           isPrivate
           exact
@@ -387,6 +395,7 @@ function Pages(props) {
             {...props}
           />
         )}
+
         {role === 'admin' && (
           <Route
             isPrivate
@@ -513,6 +522,40 @@ function Pages(props) {
             {...props}
           />
         )}
+
+        <Route
+          isPrivate
+          exact
+          path={BURSARY}
+          Component={Bursary}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="sideMenu"
+          {...props}
+        />
+
+        <Route
+          isPrivate
+          exact
+          path={BURSARY_APPLICATION}
+          Component={BursaryApplication}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="illustrations"
+          image="presspadMovement"
+          {...props}
+        />
+        <Route
+          isPrivate
+          exact
+          path={BURSARY_SUCCESS}
+          Component={BursarySuccess}
+          handleChangeState={handleChangeState}
+          isLoggedIn={isLoggedIn}
+          layout="illustrations"
+          image="presspadMovement"
+          {...props}
+        />
         <Route
           isPrivate
           exact
@@ -538,7 +581,6 @@ function Pages(props) {
           {...props}
           layout="rightDiv"
         />
-
         {['intern', 'host', 'superhost'].includes(role) && (
           <Route
             isPrivate
@@ -550,7 +592,6 @@ function Pages(props) {
             {...props}
           />
         )}
-
         <Route
           path={PAYMENTS_URL}
           exact

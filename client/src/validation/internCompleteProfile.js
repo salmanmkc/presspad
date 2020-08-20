@@ -59,36 +59,36 @@ const internCompleteProfile = object({
   // verifications
   organisation: string().when('hasNoInternship', {
     is: true,
-    then: string().required(DEFAULT_REQUIRED),
-    otherwise: string().nullable(),
+    then: string().nullable(),
+    otherwise: string().required(DEFAULT_REQUIRED),
   }),
   internshipContact: object().when('hasNoInternship', {
     is: true,
-    then: object({
+    then: object().nullable(),
+    otherwise: object({
       name: string().required(DEFAULT_REQUIRED),
       email: string().required(DEFAULT_REQUIRED),
       phoneNumber: string().required(DEFAULT_REQUIRED),
     }).required(DEFAULT_REQUIRED),
-    otherwise: object().nullable(),
   }),
   internshipStartDate: mixed().when('hasNoInternship', {
     is: true,
-    then: mixed().required(DEFAULT_REQUIRED),
-    otherwise: mixed().nullable(),
+    then: mixed().nullable(),
+    otherwise: mixed().required(DEFAULT_REQUIRED),
   }),
   internshipEndDate: mixed().when('hasNoInternship', {
     is: true,
-    then: mixed().required(DEFAULT_REQUIRED),
-    otherwise: mixed().nullable(),
+    then: mixed().nullable(),
+    otherwise: mixed().required(DEFAULT_REQUIRED),
   }),
   internshipOfficeAddress: object().when('hasNoInternship', {
     is: true,
-    then: object({
+    then: object().nullable(),
+    otherwise: object({
       addressline1: string().required(DEFAULT_REQUIRED),
       city: string().required(DEFAULT_REQUIRED),
       postcode: string().required(DEFAULT_REQUIRED),
     }).required(DEFAULT_REQUIRED),
-    otherwise: object().nullable(),
   }),
 
   reference1: object({
@@ -103,10 +103,10 @@ const internCompleteProfile = object({
 
   offerLetter: object().when('hasNoInternship', {
     is: true,
-    then: object({
+    then: object().nullable(),
+    otherwise: object({
       fileName: string().ensure(),
     }).required(DEFAULT_REQUIRED),
-    otherwise: object().nullable(),
   }),
 
   // bursary

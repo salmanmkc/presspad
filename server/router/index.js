@@ -82,6 +82,7 @@ const {
   upsertBursaryWindows,
   updateBursaryApplication,
   getBursaryApplicationInfo,
+  getMyBursaryApplicationStatus,
 } = require('../controllers/bursary');
 
 // IMPORT MIDDLEWARES
@@ -168,6 +169,7 @@ const {
   HOST_SETTINGS_VERIFICATIONS,
   ORG_DETAILS,
   TOP_ADMIN_STATS,
+  BURSARY_APPLICATIONS_STATUS,
 } = require('../../client/src/constants/apiRoutes');
 
 // add validation middleware
@@ -397,9 +399,15 @@ router.post(SET_PASSWORD, setPassword);
 
 router.patch(INTERN_SETTINGS_MY_ACCOUNT, authentication, settingMyAccount);
 router.get(
+  BURSARY_APPLICATIONS_STATUS,
+  authentication,
+  getMyBursaryApplicationStatus,
+);
+
+router.get(
   BURSARY_WINDOWS,
   authentication,
-  authorization(['admin']),
+  authorization(['admin', 'intern']),
   getBursaryWindows,
 );
 router.put(
