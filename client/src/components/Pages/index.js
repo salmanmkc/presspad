@@ -101,6 +101,7 @@ import {
   HOST_SIGNUP_ABOUT_ME,
   HOST_SIGNUP_LISTING,
   HOST_SIGNUP_VERIFICATIONS,
+  HOME_URL,
 } from '../../constants/navRoutes';
 
 function Pages(props) {
@@ -721,6 +722,19 @@ function Pages(props) {
           {...props}
           layout="illustrations"
           image={welcomeImage(location, role)}
+        />
+        <Route
+          exact
+          path={HOME_URL}
+          render={() => (
+            <SearchHosts
+              isLoggedIn={isLoggedIn}
+              windowWidth={windowWidth}
+              {...props}
+            />
+          )}
+          footer
+          {...props}
         />
         {props.isMounted && <Route Component={NotFound} {...props} />}
       </Switch>
