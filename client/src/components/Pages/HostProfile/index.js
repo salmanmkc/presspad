@@ -1,14 +1,13 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import HostView from './HostView';
+// import HostView from './HostView';
 import InternOrgView from './InternOrgView/index';
 // import AdminView from './AdminView';
 import { Error404 } from '../../../constants/navRoutes';
 
 export default function HostProfile(props) {
   const { role } = props;
-  console.log('role!!!', role);
 
   switch (role) {
     // admin view
