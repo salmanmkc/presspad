@@ -20,7 +20,7 @@ import { bottomMargins, typographies } from './styleProperties';
 import { formatPrice } from '../../../helpers';
 
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
-import { HOST_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
+import { HOST_SIGNUP_ABOUT_ME } from '../../../constants/navRoutes';
 import { colors } from '../../../theme';
 
 const Content = ({
@@ -78,10 +78,7 @@ const Content = ({
         </Col>
         {!profileCompleted && (
           <Col w={[4, 12, 12]}>
-            <CompleteProfilePrompt
-              device={device}
-              url={HOST_COMPLETE_PROFILE_URL}
-            />
+            <CompleteProfilePrompt device={device} url={HOST_SIGNUP_ABOUT_ME} />
           </Col>
         )}
       </Row>
