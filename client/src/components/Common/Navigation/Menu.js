@@ -12,7 +12,7 @@ const menuLinks = {
     { title: 'Dashboard', route: N.DASHBOARD_URL },
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
-    { title: 'Profile', route: N.MYPROFILE_URL },
+    { title: 'Profile', route: N.HOST_PROFILE },
     { title: 'Refer Others', route: N.REFERRAL_URL },
     { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
@@ -20,7 +20,7 @@ const menuLinks = {
     { title: 'Dashboard', route: N.DASHBOARD_URL },
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
-    { title: 'Profile', route: N.MYPROFILE_URL },
+    { title: 'Profile', route: N.INTERN_PROFILE },
     { title: 'Bursary', route: N.BURSARY },
     { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
@@ -73,6 +73,7 @@ const Menu = ({
   history,
   resetState,
   resetMenu,
+  id,
 }) => {
   const logOut = () => {
     axios
@@ -92,7 +93,11 @@ const Menu = ({
         horizontalMenuLinks[role].map(menuLink => (
           <S.Link
             key={menuLink.route}
-            to={menuLink.route}
+            to={
+              menuLink.title === 'Profile'
+                ? menuLink.route.replace(':id', id)
+                : menuLink.route
+            }
             horizontal={horizontal}
           >
             <S.Header horizontal={horizontal}>{menuLink.title}</S.Header>
@@ -105,7 +110,11 @@ const Menu = ({
         menuLinks[role].map(menuLink => (
           <S.Link
             key={menuLink.route}
-            to={menuLink.route}
+            to={
+              menuLink.title === 'Profile'
+                ? menuLink.route.replace(':id', id)
+                : menuLink.route
+            }
             isMobile={isMobile}
             onClick={resetMenu}
           >
