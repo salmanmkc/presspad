@@ -11,7 +11,7 @@ import * as T from '../../../Common/Typography';
 import profilePlaceholder from '../../../../assets/random-profile.jpg';
 import starSign from '../../../../assets/star-sign-symbol.svg';
 
-import { HOST_COMPLETE_PROFILE_URL } from '../../../../constants/navRoutes';
+import { SETTINGS } from '../../../../constants/navRoutes';
 
 const handleImageFail = ({ target }) => {
   // eslint-disable-next-line no-param-reassign
@@ -55,7 +55,7 @@ export default ({
     <TopDiv>
       {badge && <Symbol src={starSign} />}
       {userId === currentUserId && (
-        <EditButton to={HOST_COMPLETE_PROFILE_URL}>Edit Profile</EditButton>
+        <EditButton to={SETTINGS.EDIT_PROFILE}>Edit Profile</EditButton>
       )}
     </TopDiv>
   </Header>

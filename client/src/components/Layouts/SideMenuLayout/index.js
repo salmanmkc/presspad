@@ -37,6 +37,7 @@ const SideMenuLayout = ({
             role={navbarProps.userType}
             isLoggedIn={isLoggedIn}
             resetState={navbarProps.resetState}
+            id={navbarProps.id}
           />
         )}
         <ContentWrapper>

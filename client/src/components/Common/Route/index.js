@@ -20,7 +20,7 @@ const Route = ({
   footer,
   ...rest
 }) => {
-  const navbarProps = { userType: rest.role, resetState };
+  const navbarProps = { userType: rest.role, resetState, id: rest.id };
 
   return (
     <Layout

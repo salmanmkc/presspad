@@ -314,6 +314,7 @@ export default class InternView extends Component {
                 type="desktop"
                 calendarData={calendarData}
                 isMobile={isMobile}
+                role={role}
               />
 
               {/* Other Info */}

@@ -45,7 +45,7 @@ export default ({
       availableDates={availableDates}
       internBookings={internBookings}
       price={price}
-      adminView={role === 'admin'}
+      adminView={role === 'admin' || role === 'host' || role === 'organisation'}
       getHostProfile={getHostProfile}
       setProfileData={setProfileData}
       isMobile={isMobile}

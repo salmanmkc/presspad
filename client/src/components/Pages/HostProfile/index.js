@@ -3,16 +3,17 @@ import { Redirect } from 'react-router-dom';
 
 import HostView from './HostView';
 import InternOrgView from './InternOrgView/index';
-import AdminView from './AdminView';
+// import AdminView from './AdminView';
 import { Error404 } from '../../../constants/navRoutes';
 
 export default function HostProfile(props) {
   const { role } = props;
+  console.log('role!!!', role);
 
   switch (role) {
     // admin view
     case 'admin':
-      return <AdminView {...props} />;
+      return <InternOrgView {...props} />;
     // org and intern view
     case 'organisation':
     case 'intern':
@@ -22,7 +23,7 @@ export default function HostProfile(props) {
       return <InternOrgView unauthenticated {...props} />;
     // host view
     case 'host':
-      return <HostView {...props} />;
+      return <InternOrgView adminView {...props} />;
 
     default:
       return <Redirect to={Error404} />;
