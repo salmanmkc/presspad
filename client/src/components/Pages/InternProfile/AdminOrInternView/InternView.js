@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Avatar, Table, Empty } from 'antd';
 
-import { INTERN_COMPLETE_PROFILE_URL } from '../../../../constants/navRoutes';
+import { SETTINGS } from '../../../../constants/navRoutes';
 
 import {
   PageWrapper,
@@ -46,7 +46,7 @@ export default function InternView({
   return (
     <PageWrapper>
       <ContentWrapper>
-        <EditButton to={INTERN_COMPLETE_PROFILE_URL}>Edit Profile</EditButton>
+        <EditButton to={SETTINGS.EDIT_PROFILE}>Edit Profile</EditButton>
         <HeaderWrapper>
           <Row gutter={20} type="flex" justify="start">
             <Col xs={24} sm={4} lg={3}>

@@ -20,7 +20,7 @@ const menuLinks = {
     { title: 'Dashboard', route: N.DASHBOARD_URL },
     { title: 'Bookings', route: N.BOOKINGS_URL },
     { title: 'Payments', route: N.PAYMENTS_URL },
-    { title: 'Profile', route: N.MYPROFILE_URL },
+    { title: 'Profile', route: N.INTERN_PROFILE },
     { title: 'Bursary', route: N.BURSARY },
     { title: 'Settings', route: N.SETTINGS.ACCOUNT },
   ],
