@@ -16,7 +16,7 @@ const myAccountSchema = object({
   name: string()
     .required(NAME_REQUIRED)
     .min(3, NAME_SHORT)
-    .max(15, NAME_LONG),
+    .max(30, NAME_LONG),
   email: string()
     .email(EMAIL_INVALID)
     .required(EMAIL_REQUIRED),
