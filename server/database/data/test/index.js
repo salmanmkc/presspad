@@ -140,6 +140,19 @@ const buildData = options =>
       bookings.confirmedPaidFirst._id,
     );
 
+    await booking.updateApprovedBursary(
+      bursaryApplications.approvedInternUserBursary._id,
+      bookings.acceptedNotPaidInstallmentApplicable._id,
+    );
+    await booking.updateApprovedBursary(
+      bursaryApplications.approvedInternUserBursary._id,
+      bookings.confirmedPaidFirstNoCoupon._id,
+    );
+    await booking.updateApprovedBursary(
+      bursaryApplications.approvedInternUserBursary._id,
+      bookings.acceptedNotPaidOnePayment._id,
+    );
+
     return {
       connection,
       mongoServer,

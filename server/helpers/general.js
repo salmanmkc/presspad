@@ -52,8 +52,49 @@ const ordinalSuffixOf = i => {
   return `${i}th`;
 };
 
+const isObjectChanged = (newObj, oldObj) => {
+  let hasChanged = false;
+  function checkChanges(_newObj, _oldObj) {
+    if (hasChanged) return;
+
+    let arr;
+    if (Array.isArray(_oldObj)) {
+      arr = _oldObj;
+    } else if (typeof _oldObj === 'object') {
+      arr = Object.entries(_oldObj);
+    } else {
+      throw new Error('Parameters should be typeof object/arrays');
+    }
+
+    for (let i = 0; i < arr.length; i += 1) {
+      const key = arr[i][0];
+      const oldValue = arr[i][1];
+      const newValue = _newObj[key];
+
+      if (typeof oldValue !== 'object') {
+        if (newValue !== oldValue) {
+          hasChanged = true;
+          break;
+        }
+      } else if (oldValue instanceof Date) {
+        if (!moment(oldValue).isSame(newValue, 'd')) {
+          hasChanged = true;
+          break;
+        }
+      } else {
+        checkChanges(newValue, oldValue);
+      }
+    }
+  }
+
+  checkChanges(newObj, oldObj);
+
+  return hasChanged;
+};
+
 module.exports = {
   capitalizeName,
   checkInternshipDates,
   ordinalSuffixOf,
+  isObjectChanged,
 };

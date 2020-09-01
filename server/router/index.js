@@ -17,10 +17,14 @@ const getInternshipDetails = require('../controllers/profile/getInternshipDetail
 const updateInternshipDetails = require('../controllers/profile/updateInternshipDetails');
 const deleteAccount = require('../controllers/user/deleteAccount');
 const internSettings = require('../controllers/user/internSettings');
+const {
+  getMyBursary,
+  editBursary,
+  getApprovedBursaryApplication,
+} = require('../controllers/bursary');
 const settingMyAccount = require('../controllers/user/myAccount');
 const hostSettings = require('../controllers/user/hostSettings');
 
-const { getMyBursary, editBursary } = require('../controllers/bursary');
 const {
   viewBooking,
   getUserBookings,
@@ -164,6 +168,7 @@ const {
   INTERN_SETTINGS_VERIFICATIONS,
   MY_BURSARY,
   SINGLE_BURSARY,
+  GET_INTERN_BURSARY_APPLICATION,
   HOST_SETTINGS_ABOUT_ME,
   HOST_SETTINGS_MY_LISTING,
   HOST_SETTINGS_VERIFICATIONS,
@@ -456,6 +461,11 @@ router.patch(
 
 router.get(MY_BURSARY, authentication, getMyBursary);
 router.patch(SINGLE_BURSARY, authentication, editBursary);
+router.get(
+  GET_INTERN_BURSARY_APPLICATION,
+  authentication,
+  getApprovedBursaryApplication,
+);
 
 router.patch(HOST_SETTINGS_ABOUT_ME, authentication, hostSettings.aboutMe);
 

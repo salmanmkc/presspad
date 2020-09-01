@@ -8,7 +8,7 @@ const { getOrgById } = require('../../database/queries/user');
 
 const { calculateCouponPriceByRange } = require('../../helpers/payments');
 
-const { createSingleDate } = require('../../helpers/createDatesArray');
+const { createSingleDate } = require('../../helpers/dateHelper/index');
 
 const createCoupon = async (req, res, next) => {
   const { user, body } = req;

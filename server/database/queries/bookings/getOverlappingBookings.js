@@ -1,9 +1,10 @@
 const { Booking } = require('../../models');
 
-const getOverlappingBookings = (bookingId, startDate, endDate) =>
+const getOverlappingBookings = ({ bookingId, hostId, startDate, endDate }) =>
   Booking.find({
     $expr: {
       $and: [
+        { $eq: ['host', hostId] },
         { $ne: ['$_id', bookingId] },
         { $in: ['$status', ['pending', 'accepted', 'confirmed']] },
         { $lte: ['$startDate', new Date(endDate)] },

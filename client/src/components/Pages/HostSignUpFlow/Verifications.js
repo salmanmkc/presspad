@@ -482,7 +482,7 @@ const Verifications = props => {
         <Col w={[4, 6, 5.3]}>
           <UploadFile
             fullWidth
-            mainText="Upload your profile picture here"
+            mainText="Upload your DBS certificate here"
             secondaryText="file size max 2mb"
             type="file"
             userId={props.id}

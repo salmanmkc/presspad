@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Calendar from 'react-calendar/dist/entry.nostyle';
 import moment from 'moment';
 import axios from 'axios';
-import { Spin, Alert, Modal, Checkbox, Popover } from 'antd';
+import { Spin, Modal, Checkbox, Popover } from 'antd';
 import Icon from '../../Common/Icon';
 import sendBookingRequest from '../../../helpers/sendBookingRequest';
 import {
@@ -13,19 +13,21 @@ import {
   calculatePriceByRange,
   formatPrice,
   createSingleDate,
+  getDiscountDays,
+  calculateDaysRange,
 } from '../../../helpers';
 
 // Typography
 import * as T from '../../Common/Typography';
 import { colors } from '../../../theme';
 import Button from '../../Common/ButtonNew';
-
+import CouponCode from '../../Common/CouponCode';
 import { API_GET_INTERN_STATUS } from '../../../constants/apiRoutes';
 
 import {
   CalendarWrapper,
   BookingRequestDetails,
-  ErrorDiv,
+  MessageContainer,
   Row,
   Col,
   BursaryContainer,
@@ -40,10 +42,11 @@ import {
   SIGNUP_INTERN,
 } from '../../../constants/navRoutes';
 
-import CouponCode from '../../Common/CouponCode';
-
+// messages
 const inValidInternshipDates =
   "Your internship period doesn't match the selected dates";
+const inValidCouponDates = (start, end) =>
+  `This discount code is for an internship period from ${start} to ${end} which does not match the internship details you have entered. Please click here to update your internship details to complete your booking request or contact the organisation to get them to give you a new discount code`;
 
 const initialCouponState = {
   discountRate: 0,
@@ -62,11 +65,15 @@ class CalendarComponent extends Component {
     daysAmount: 0,
     isRangeSelected: false,
     price: 0,
+    bursaryDiscount: null,
     bookingExists: false,
     message: '',
     messageType: '',
     isBooking: false,
     couponState: initialCouponState,
+    internBursary: null,
+    invalidBursary: false,
+    couponInvalidDates: { invalid: false, startDate: null, endDate: null },
   };
 
   componentDidMount() {
@@ -74,22 +81,30 @@ class CalendarComponent extends Component {
       availableDates,
       bookingSearchDates,
       listingActiveBookings,
+      bursaryData,
     } = this.props;
+
+    const stateObj = {};
+
+    if (bursaryData && bursaryData[0]) {
+      [stateObj.internBursary] = bursaryData;
+    }
 
     // if dates were selected in search set state accordingly
     if (bookingSearchDates) {
-      this.setState({
-        dates: bookingSearchDates,
-        price: calculatePriceByRange(
-          moment.range(bookingSearchDates[0], bookingSearchDates[1]),
-        ),
-        daysAmount: createDatesArray(
-          bookingSearchDates[0],
-          bookingSearchDates[1],
-        ).length,
-        isRangeSelected: true,
-      });
+      stateObj.dates = bookingSearchDates;
+      stateObj.price = calculatePriceByRange(
+        moment.range(bookingSearchDates[0], bookingSearchDates[1]),
+      );
+      stateObj.daysAmout = createDatesArray(
+        bookingSearchDates[0],
+        bookingSearchDates[1],
+      ).length;
+      stateObj.isRangeSelected = true;
     }
+    this.setState({
+      ...stateObj,
+    });
     this.refreshAvailableDates(availableDates);
     this.refreshlistingActiveBookings(listingActiveBookings);
   }
@@ -103,6 +118,11 @@ class CalendarComponent extends Component {
       this.refreshlistingActiveBookings(this.props.listingActiveBookings);
     }
   }
+
+  setCouponInvalidDates = (startDate, endDate) =>
+    this.setState({
+      couponInvalidDates: { startDate, endDate, invalid: true },
+    });
 
   // converts and refreshes available listing dates
   refreshAvailableDates = dates => {
@@ -140,18 +160,27 @@ class CalendarComponent extends Component {
   // updates state
   onChange = dates => {
     const { internBookings } = this.props;
+    const { internBursary } = this.state;
+    const price = calculatePriceByRange(moment.range(dates[0], dates[1]));
 
     this.setState({
       dates,
       isRangeSelected: true,
-      price: calculatePriceByRange(moment.range(dates[0], dates[1])),
+      price,
       message: '',
       messageType: '',
+      couponState: initialCouponState,
+      bursaryDiscount: null,
       daysAmount:
         dates.length > 1 && createDatesArray(dates[0], dates[1]).length,
     });
     // check if booking exists and update state
     this.bookingFound(dates, internBookings);
+
+    // check if bursary exists and update state
+    if (internBursary && dates.length > 0) {
+      this.applyBursary({ price, dates });
+    }
   };
 
   setCouponState = couponState => this.setState({ couponState });
@@ -161,16 +190,16 @@ class CalendarComponent extends Component {
     const { avDates, listingActiveBookings } = this.state;
 
     // return true if current date is not included in available dates => disable tile
-    date = createSingleDate(date);
+    const _date = createSingleDate(date);
 
     return (
-      !avDates.includes(date) ||
-      (listingActiveBookings && listingActiveBookings.includes(date)) ||
+      !avDates.includes(_date) ||
+      (listingActiveBookings && listingActiveBookings.includes(_date)) ||
       moment
         .utc()
         .startOf('day')
         .add(7, 'days')
-        .isAfter(date)
+        .isAfter(_date)
     ); // Block day tiles only
   };
 
@@ -179,7 +208,7 @@ class CalendarComponent extends Component {
   };
 
   goToUpdateInternship = () => {
-    const { dates, price } = this.state;
+    const { dates, price, couponInvalidDates } = this.state;
 
     const { listingId, hostId } = this.props;
 
@@ -190,7 +219,14 @@ class CalendarComponent extends Component {
     searchParams.append('price', price);
     searchParams.append('listing', listingId);
     searchParams.append('host', hostId);
-
+    if (
+      couponInvalidDates.invalid &&
+      couponInvalidDates.startDate &&
+      couponInvalidDates.endDate
+    ) {
+      searchParams.append('couponInvalidStart', couponInvalidDates.startDate);
+      searchParams.append('couponInvalidEnd', couponInvalidDates.endDate);
+    }
     this.props.history.push({
       pathname: BOOKINGS_INTERNSHIP_URL,
       search: searchParams.toString(),
@@ -198,22 +234,27 @@ class CalendarComponent extends Component {
   };
 
   showAlertAndRedirectToProfile = message => {
+    let onOk;
+    let onCancel;
+
+    if (message.includes('internship')) {
+      onOk = this.goToUpdateInternship();
+      onCancel = this.goToUpdateInternship();
+    } else if (message.includes('complete your profile')) {
+      onOk = this.goToCompleteProfile;
+      onCancel = this.goToCompleteProfile;
+    }
     Modal.warning({
       title: "Sorry! You can't make a request.",
       content: message,
-      onOk:
-        message === inValidInternshipDates
-          ? this.goToUpdateInternship
-          : this.goToCompleteProfile,
-      onCancel:
-        message === inValidInternshipDates
-          ? this.goToUpdateInternship
-          : this.goToCompleteProfile,
+      onOk,
+      onCancel,
     });
   };
 
+  // eslint-disable-next-line consistent-return
   handleClick = async () => {
-    const { dates, price, couponState } = this.state;
+    const { dates, price, couponState, internBursary } = this.state;
     const {
       currentUserId,
       listingId,
@@ -233,6 +274,7 @@ class CalendarComponent extends Component {
       endDate: moment(dates[1]).format('YYYY-MM-DD'),
       price,
       couponId: couponState.couponId,
+      approvedBursary: internBursary && internBursary._id,
     };
 
     let message = '';
@@ -245,12 +287,12 @@ class CalendarComponent extends Component {
         params: { startDate: dates[0], endDate: dates[1] },
       });
 
-      if (!verified) {
-        message = "You can't make a request until you get verified";
-      } else if (!isComplete) {
+      if (!isComplete) {
         message = 'You need to complete your profile';
       } else if (!validInternshipDates) {
         message = inValidInternshipDates;
+      } else if (!verified) {
+        message = "You can't make a request until you get verified";
       }
 
       if (!verified || !isComplete || !validInternshipDates) {
@@ -268,9 +310,10 @@ class CalendarComponent extends Component {
             dates: new Date(),
             isRangeSelected: false,
             price: '0',
+            bursaryDiscount: null,
+            couponState: initialCouponState,
           });
-          // update coupon state
-          this.setCouponState(initialCouponState);
+
           // update parent state
           getHostProfile(this.props).then(({ profileData }) =>
             setProfileData(profileData),
@@ -301,8 +344,11 @@ class CalendarComponent extends Component {
   bookingFound = (selectedDates, existingBookingDates) => {
     let bookingDatesFound;
     if (selectedDates.length > 0) {
-      selectedDates = createDatesArray(selectedDates[0], selectedDates[1]);
-      bookingDatesFound = selectedDates.some(date =>
+      const _selectedDates = createDatesArray(
+        selectedDates[0],
+        selectedDates[1],
+      );
+      bookingDatesFound = _selectedDates.some(date =>
         existingBookingDates.includes(date),
       );
     } else bookingDatesFound = false;
@@ -318,6 +364,62 @@ class CalendarComponent extends Component {
       : this.setState({ bookingExists: false });
   };
 
+  applyBursary = ({ price, dates }) => {
+    const { internBursary = {} } = this.state;
+
+    const {
+      startDate: bursaryStart,
+      endDate: bursaryEnd,
+      londonWeighting,
+      discountRate: bursaryDiscountRate,
+      totalPotentialAmount,
+      totalSpentSoFar,
+    } = internBursary;
+
+    // get discounted days by bursary
+    const { discountDays: bursaryDiscountDays } = getDiscountDays({
+      bookingStart: dates[0],
+      bookingEnd: dates[1],
+      couponStart: bursaryStart,
+      couponEnd: bursaryEnd,
+    });
+    const noBookingDays = calculateDaysRange(dates[0], dates[1]);
+
+    // check if bursary and booking dates are the same and inform user
+
+    if (bursaryDiscountDays !== noBookingDays) {
+      this.setState(prevState => ({
+        ...prevState,
+        bursaryDiscount: null,
+        invalidBursary: true,
+        messageType: 'error',
+        message: `Your selected booking dates do not match with your approved bursary application ${createSingleDate(
+          bursaryStart,
+        )} - ${createSingleDate(bursaryEnd)}`,
+      }));
+    } else {
+      // calculate bursary discount
+      let bursaryDiscount = (price * bursaryDiscountRate) / 100;
+      if (londonWeighting) {
+        bursaryDiscount = (price * bursaryDiscountRate) / 100 + price * 0.2;
+      }
+      // get total left in bursary
+      const availableBursary = totalPotentialAmount - totalSpentSoFar;
+      // check if enough funds available - if not set remaining funds as discount
+      if (availableBursary < bursaryDiscount) {
+        bursaryDiscount = availableBursary;
+      }
+
+      this.setState(prevState => ({
+        ...prevState,
+        invalidBursary: false,
+        bursaryDiscount,
+        messageType: 'success',
+        message: 'Your PressPad Bursary has been applied!',
+      }));
+    }
+  };
+
   // host checkbox function
   onCheckboxChange = e =>
     e.target.checked
@@ -328,7 +430,10 @@ class CalendarComponent extends Component {
           bursary: false,
         });
 
-  renderPrice = (isMobile, price, couponState, bursary) => {
+  renderPrice = price => {
+    const { isMobile } = this.props;
+    const { couponState, bursaryDiscount } = this.state;
+
     const pricingTypographies = {
       priceMobile: content => <T.PSBold>£{content}</T.PSBold>,
       priceDesktop: content => <T.PBold>£{content}</T.PBold>,
@@ -345,33 +450,43 @@ class CalendarComponent extends Component {
       ),
     };
 
-    const { couponError, couponId, couponDiscount } = couponState;
-    const discountExists =
-      (!couponError && couponId && couponDiscount > 0) || bursary;
-    const validPrice = price > 0;
-    const _price = formatPrice(price);
-    const _newPrice = formatPrice(bursary ? 0 : price - couponDiscount);
+    const { couponDiscount } = couponState;
 
-    if (validPrice && discountExists) {
-      return (
+    const _price = formatPrice(price);
+
+    const validPrice = price > 0;
+    const _newPrice = formatPrice(price - bursaryDiscount - couponDiscount);
+
+    return (
+      <>
         <DiscountPriceDetails>
           {isMobile
             ? pricingTypographies.priceMobile(_newPrice)
             : pricingTypographies.priceDesktop(_newPrice)}
-          {pricingTypographies.formerPrice(_price)}
+          {validPrice &&
+            _price !== _newPrice &&
+            pricingTypographies.formerPrice(_price)}
         </DiscountPriceDetails>
-      );
-    }
-    return isMobile
-      ? pricingTypographies.priceMobile(_price)
-      : pricingTypographies.priceDesktop(_price);
+      </>
+    );
   };
 
-  renderBookingDetails = (isMobile, price, duration, couponState, bursary) => {
+  renderBookingDetails = () => {
+    const {
+      price,
+      daysAmount: duration,
+      couponState,
+      internBursary: bursary,
+      invalidBursary,
+      bursaryDiscount,
+    } = this.state;
+
     const { couponId, couponDiscount, couponError } = couponState;
+    const { isMobile } = this.props;
 
     const discountExists =
       (!couponError && couponId && couponDiscount > 0) || bursary;
+
     const validPrice = price > 0;
     return (
       <>
@@ -394,22 +509,20 @@ class CalendarComponent extends Component {
         <Row>
           <Col>
             {isMobile &&
-              (validPrice && discountExists ? (
+              (validPrice && (discountExists || bursaryDiscount) ? (
                 <T.PS>Discounted price for period:</T.PS>
               ) : (
                 <T.PS>Full price for period:</T.PS>
               ))}
             {/* Price calculation */}
             {!isMobile &&
-              (validPrice && discountExists ? (
+              (validPrice && (discountExists || bursaryDiscount) ? (
                 <T.PL>Discounted price for period:</T.PL>
               ) : (
                 <T.PL>Full price for period:</T.PL>
               ))}
           </Col>
-          <Col value>
-            {this.renderPrice(isMobile, price, couponState, bursary)}
-          </Col>
+          <Col value>{this.renderPrice(price)}</Col>
         </Row>
         <Row>
           <Col>
@@ -430,8 +543,14 @@ class CalendarComponent extends Component {
           </Col>
           <Col value>
             <CouponCode
-              bursary={this.state.bursary}
-              bookingPrice={price}
+              disabled={invalidBursary}
+              showAlertAndRedirectToProfile={this.showAlertAndRedirectToProfile}
+              inValidCouponDates={inValidCouponDates}
+              setCouponInvalidDates={this.setCouponInvalidDates}
+              // send dynamic booking price with bursary included
+              bookingPrice={
+                bursaryDiscount > 0 ? price - bursaryDiscount : price
+              }
               couponState={couponState}
               setCouponState={this.setCouponState}
               dates={this.state.dates}
@@ -483,9 +602,9 @@ class CalendarComponent extends Component {
       isBooking,
       couponState,
       dates,
-      daysAmount,
       price,
-      bursary,
+      invalidBursary,
+      bursaryDiscount,
     } = this.state;
 
     const {
@@ -496,7 +615,7 @@ class CalendarComponent extends Component {
       respondingTime,
     } = this.props;
 
-    const { couponDiscount, couponError } = couponState;
+    const { couponDiscount } = couponState;
 
     const hostRespondingTime = calculateHostRespondingTime(
       respondingTime,
@@ -526,13 +645,7 @@ class CalendarComponent extends Component {
         </CalendarWrapper>
         {/* Booking details */}
         <BookingRequestDetails>
-          {this.renderBookingDetails(
-            isMobile,
-            price,
-            daysAmount,
-            couponState,
-            bursary,
-          )}
+          {this.renderBookingDetails()}
           {/* Bursary checkbox */}
           {!currentUserId && this.renderBursaryCheckbox(isMobile)}
 
@@ -543,9 +656,19 @@ class CalendarComponent extends Component {
             booking request.
           </T.P>
           {message && (
-            <ErrorDiv>
-              <Alert message={message} type={messageType} />
-            </ErrorDiv>
+            <MessageContainer>
+              <Icon
+                icon={messageType === 'error' ? 'alertTriangle' : 'circleTick'}
+                color={messageType === 'error' ? 'red' : 'lightBlue'}
+                width="30px"
+              />
+              <T.PXSBold
+                style={{ marginLeft: '0.5rem' }}
+                color={messageType === 'error' ? 'red' : 'lightBlue'}
+              >
+                {message}
+              </T.PXSBold>
+            </MessageContainer>
           )}
 
           <RequestBtnContainer>
@@ -553,32 +676,27 @@ class CalendarComponent extends Component {
               <T.PS>
                 Price for period <br />{' '}
                 <strong>
-                  £
-                  {bursary
-                    ? 0
-                    : formatPrice(!couponError && price - couponDiscount) ||
-                      formatPrice(price)}
+                  £{formatPrice(price - bursaryDiscount - couponDiscount)}
                 </strong>
               </T.PS>
             ) : (
               <T.PL>
                 Price for period <br />{' '}
                 <strong>
-                  £
-                  {bursary
-                    ? 0
-                    : formatPrice(!couponError && price - couponDiscount) ||
-                      formatPrice(price)}
+                  £{formatPrice(price - bursaryDiscount - couponDiscount)}
                 </strong>
               </T.PL>
             )}
-
             <Button
               small={isMobile}
               type="secondary"
               onClick={this.handleClick}
               disabled={
-                !isRangeSelected || bookingExists || adminView || isBooking
+                !isRangeSelected ||
+                bookingExists ||
+                adminView ||
+                isBooking ||
+                invalidBursary
               }
               label={currentUserId ? 'REQUEST TO STAY' : 'SIGN UP TO STAY HERE'}
               loading={isBooking}

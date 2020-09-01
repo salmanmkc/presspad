@@ -256,8 +256,10 @@ export const RequestBtn = styled.button`
   }
 `;
 
-export const ErrorDiv = styled.div`
+export const MessageContainer = styled.div`
   margin-top: 1rem;
+  display: flex;
+  align-items: center;
 `;
 
 export const PriceTopDiv = styled.div`

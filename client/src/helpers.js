@@ -6,6 +6,13 @@ import * as yup from 'yup';
 const moment = extendMoment(Moment);
 export const createSingleDate = date => moment(date).format('DD/MM/YYYY');
 
+export const calculateDaysRange = (start, end) => {
+  const range = moment.range(moment(start), moment(end));
+  range.start.startOf('day');
+  range.end.add(1, 'day');
+  return range.diff('days');
+};
+
 export const createStartEndDate = (start, end) => {
   // get all available dates in range
   const currentDate = new Date(start);
@@ -292,8 +299,7 @@ export const getDiscountDays = dates => {
   if (!dates.installmentDate) {
     _dates = {
       ...dates,
-      // do not calculate discount from the first free two weeks
-      bookingStart: moment(dates.bookingStart).add(14, 'd'),
+      bookingStart: moment(dates.bookingStart),
     };
   } else {
     _dates = {

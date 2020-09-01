@@ -1,5 +1,5 @@
 const nodeMailer = require('nodemailer');
-const { email, pass, service } = require('./../../../config');
+const { email, pass, service } = require('../../../config');
 
 const mailsTypes = require('./mailsTypes');
 
@@ -51,7 +51,7 @@ const sendMail = ({ type, userType, params = {} }) => {
     return;
   }
 
-  return transporter.sendMail({
+  return transporter().sendMail({
     from: email,
     to: params.to,
     subject,

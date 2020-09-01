@@ -5,6 +5,7 @@ import {
   API_GET_USER_BOOKINGS_URL,
   API_HOST_PROFILE_URL,
   API_HOST_PROFILE_SOFT_URL,
+  API_GET_INTERN_BURSARY_APPLICATION,
 } from '../../../constants/apiRoutes';
 
 import { HOST_COMPLETE_PROFILE_URL } from '../../../constants/navRoutes';
@@ -60,6 +61,19 @@ export const verifyProfile = async (profileId, bool) => {
     });
 
     return { verifiedProfile: data };
+  } catch (error) {
+    message.error(error || 'Something went wrong');
+    return { error };
+  }
+};
+
+export const getInternApprovedBursaryApplication = async () => {
+  try {
+    const { data: bursary } = await axios.get(
+      API_GET_INTERN_BURSARY_APPLICATION,
+    );
+
+    return { bursary };
   } catch (error) {
     message.error(error || 'Something went wrong');
     return { error };

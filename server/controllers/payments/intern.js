@@ -7,6 +7,9 @@ const Sentry = require('../../sentry');
 const { getBookingById } = require('../../database/queries/bookings');
 const { getCoupons } = require('../../database/queries/coupon');
 const { discountStripeFees } = require('../../database/queries/payments');
+const {
+  getApprovedBursaryApplication,
+} = require('../../database/queries/bursary');
 
 const generatePaymentResponse = require('./generatePaymentResponse');
 const internTransaction = require('./internTransaction');
@@ -15,12 +18,14 @@ const { schedulePaymentReminders } = require('../../services/mailing');
 
 const {
   getDiscountDays,
-  calculatePrice,
+
   createInstallments,
   compareInstallments,
   getFirstUnpaidInstallment,
   createUpdatedNewInstallments,
 } = require('../../helpers/payments');
+
+const { calculateDaysRange } = require('../../helpers/dateHelper/index');
 
 const internPayment = async (req, res, next) => {
   const {
@@ -30,6 +35,7 @@ const internPayment = async (req, res, next) => {
     couponInfo,
     bookingId,
     withoutPay,
+    bursaryDiscount,
   } = req.body;
 
   try {
@@ -54,10 +60,53 @@ const internPayment = async (req, res, next) => {
     let couponDiscountDays = 0;
     let couponOrganisationAccount;
     let couponId;
+    let bursaryApplicationId;
     let updatedInstallments;
+    const isNewInstallments = Array.isArray(paymentInfo) || !paymentInfo._id;
 
-    if (!couponInfo.couponCode && withoutPay)
+    if (!couponInfo.couponCode && !bursaryDiscount && withoutPay) {
       return next(boom.badData('coupon must be used'));
+    }
+
+    // bursary used
+    if (bursaryDiscount > 0 && isNewInstallments) {
+      const bursaryApplications = await getApprovedBursaryApplication(
+        req.user._id,
+      );
+
+      const [approvedBursary] = bursaryApplications.filter(
+        el => el._id.toString() === booking.approvedBursary.toString(),
+      );
+
+      if (!approvedBursary) {
+        return next(boom.badData('intern has no approved bursary'));
+      }
+
+      const {
+        discountRate: bursaryDiscountRate = 0,
+        londonWeighting = false,
+        totalPotentialAmount = 0,
+        totalSpentSoFar = 0,
+      } = approvedBursary;
+
+      let _bursaryDiscount = (booking.price * bursaryDiscountRate) / 100;
+      if (londonWeighting) {
+        _bursaryDiscount =
+          (booking.price * bursaryDiscountRate) / 100 + booking.price * 0.2;
+      }
+      // get total left in bursary
+      const availableBursary = totalPotentialAmount - totalSpentSoFar;
+      // check if enough funds available - if not set remaining funds as discount
+      if (availableBursary < _bursaryDiscount) {
+        _bursaryDiscount = availableBursary;
+      }
+
+      if (bursaryDiscount !== _bursaryDiscount) {
+        return next(boom.badData(`bursaryDiscount doesn't match`));
+      }
+
+      bursaryApplicationId = approvedBursary._id;
+    }
 
     // Coupon used
     if (couponInfo.couponCode) {
@@ -70,7 +119,11 @@ const internPayment = async (req, res, next) => {
         const firstUnpaid = getFirstUnpaidInstallment(booking.installments);
         installmentDate = firstUnpaid.dueDate;
       }
-
+      // get number of booking days
+      const noBookingDays = calculateDaysRange(
+        booking.startDate,
+        booking.endDate,
+      );
       // get coupon discount days that maches the booking dates
       const { discountDays } = getDiscountDays({
         bookingStart: booking.startDate,
@@ -82,12 +135,23 @@ const internPayment = async (req, res, next) => {
       });
 
       // Validate discount days
-      if (discountDays !== couponInfo.discountDays)
-        return next(boom.badData('wrong coupon Info'));
+      // check only if user using coupon for first pay
+      if (isNewInstallments && noBookingDays !== discountDays) {
+        return next(boom.badData('wrong coupon dates'));
+      }
 
       // Calculate coupon discount amount
-      couponDiscount =
-        (calculatePrice(discountDays) * coupon.discountRate) / 100;
+      couponDiscount = (booking.price * coupon.discountRate) / 100;
+      if (bursaryApplicationId) {
+        const remainingPrice = booking.price - bursaryDiscount;
+        if (remainingPrice < couponDiscount) {
+          couponDiscount = remainingPrice;
+        }
+      }
+
+      if (!isNewInstallments) {
+        couponDiscount = (discountDays * 2000 * coupon.discountRate) / 100;
+      }
 
       // Validate discount amount
       if (couponDiscount !== couponInfo.couponDiscount)
@@ -99,7 +163,7 @@ const internPayment = async (req, res, next) => {
     }
 
     // User ask to create new installments
-    if (Array.isArray(paymentInfo) || !paymentInfo._id) {
+    if (isNewInstallments) {
       // check for old installments
       if (booking.installments[0])
         return next(boom.badData('booking already have installments'));
@@ -107,7 +171,9 @@ const internPayment = async (req, res, next) => {
       // calculate installments and compare them
       let newInstallments;
       const bookingDays =
-        moment(booking.endDate).diff(booking.startDate, 'd') + 1;
+        moment(booking.endDate)
+          .endOf('d')
+          .diff(booking.startDate, 'd') + 1;
       // if 3 installments
       if (Array.isArray(paymentInfo)) {
         newInstallments = createInstallments({
@@ -116,6 +182,7 @@ const internPayment = async (req, res, next) => {
           startDate: booking.startDate,
           endDate: booking.endDate,
           upfront: false,
+          bursaryDiscount,
         });
         // eslint-disable-next-line prefer-destructuring
         amount = newInstallments[0].amount;
@@ -127,6 +194,7 @@ const internPayment = async (req, res, next) => {
           startDate: booking.startDate,
           endDate: booking.endDate,
           upfront: true,
+          bursaryDiscount,
         });
         // eslint-disable-next-line prefer-destructuring
         amount = newInstallments.amount;
@@ -185,6 +253,8 @@ const internPayment = async (req, res, next) => {
         stripeInfo,
         amount,
         coupon,
+        bursaryApplicationId,
+        bursaryDiscount,
         updatedInstallments,
         withoutPay,
       );

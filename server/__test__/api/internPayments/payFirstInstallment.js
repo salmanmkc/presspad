@@ -16,7 +16,7 @@ const {
 } = require('../../../../client/src/constants/apiRoutes');
 const { paymentMethod } = require('./mockData');
 
-describe('Testing Intern payemnts (Pay in 3 installments):', () => {
+describe('Testing Intern payments (Pay in 3 installments):', () => {
   const couponInfo = {
     couponCode: '',
     discountDays: 0,
@@ -31,11 +31,13 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
       bookings,
       accounts,
       users,
+      bursaryApplications,
     } = await buildDb({
       replSet: true,
     });
 
     const { internUser } = users;
+    const { approvedInternUserBursary } = bursaryApplications;
 
     const token = `token=${createToken(internUser._id)}`;
 
@@ -43,16 +45,39 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
       _id,
       startDate,
       endDate,
+      price,
     } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
-    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const bookingDays =
+      moment(endDate)
+        .endOf('d')
+        .diff(startDate, 'd') + 1;
+
+    const {
+      discountRate: bursaryDiscountRate,
+      londonWeighting,
+      totalPotentialAmount,
+      totalSpentSoFar,
+    } = approvedInternUserBursary;
+    let bursaryDiscount = (price * bursaryDiscountRate) / 100;
+    if (londonWeighting) {
+      bursaryDiscount = (price * bursaryDiscountRate) / 100 + price * 0.2;
+    }
+    // get total left in bursary
+    const availableBursary = totalPotentialAmount - totalSpentSoFar;
+    // check if enough funds available - if not set remaining funds as discount
+    if (availableBursary < bursaryDiscount) {
+      bursaryDiscount = availableBursary;
+    }
+
     const paymentInfo = createInstallments({
       couponInfo,
       bookingDays,
       startDate,
       endDate,
       upfront: false,
+      bursaryDiscount,
     });
 
     const data = {
@@ -60,6 +85,7 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
       couponInfo,
       paymentInfo,
       paymentMethod,
+      bursaryDiscount,
     };
 
     request(app)
@@ -106,10 +132,12 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(0.45 * firstPay);
-        expect(oldHostCurrentBalance + 0.45 * firstPay).toBe(
-          hostCurrentBalance,
+        expect(hostIncom - oldHostIncom).toBe(
+          0.45 * (firstPay + bursaryDiscount),
         );
+        expect(
+          oldHostCurrentBalance + 0.45 * (firstPay + bursaryDiscount),
+        ).toBe(hostCurrentBalance);
 
         // Presspad account checks
         const {
@@ -130,7 +158,7 @@ describe('Testing Intern payemnts (Pay in 3 installments):', () => {
           presspadCurrentBalance,
         );
         expect(presspadBursaryFunds - oldPresspadBursaryFunds).toBe(
-          0.1 * firstPay,
+          0.1 * (firstPay + bursaryDiscount),
         );
         // Todo test hostingIncome
 

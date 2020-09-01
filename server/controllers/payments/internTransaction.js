@@ -9,6 +9,7 @@ const {
   removeUnpaidInstallments,
   removePaymentsReminders,
 } = require('../../database/queries/payments');
+const { updateBursaryApplication } = require('../../database/queries/bursary');
 
 const { getUserById } = require('../../database/queries/user');
 
@@ -23,6 +24,8 @@ const internTransaction = async (
   stripeInfo,
   amount,
   coupon,
+  bursaryApplicationId,
+  bursaryDiscount,
   updatedInstallments,
   withoutPay,
 ) => {
@@ -75,6 +78,37 @@ const internTransaction = async (
         transaction._id,
         session,
       );
+    }
+
+    // update bursary
+    if (bursaryApplicationId) {
+      // create internal transaction for bursary
+      const transaction = await createInternalTransaction(
+        intern,
+        null,
+        hostAccount,
+        bursaryDiscount,
+        'bursaryTransaction',
+        session,
+      );
+
+      // update bursaryApplication
+      const updateData = {
+        $inc: { totalSpentSoFar: bursaryDiscount },
+        $push: {
+          transactions: {
+            amount: bursaryDiscount,
+            booking: bookingId,
+            transaction: transaction._id,
+          },
+        },
+      };
+
+      await updateBursaryApplication({
+        id: bursaryApplicationId,
+        updateData,
+        session,
+      });
     }
   } else {
     // user paying old installment

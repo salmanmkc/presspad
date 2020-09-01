@@ -6,6 +6,8 @@ const reset = () => Booking.deleteMany();
 
 const update = (couponID, bookingId) =>
   Booking.findByIdAndUpdate(bookingId, { coupon: couponID }, { new: true });
+const updateApprovedBursary = (approvedBursary, bookingId) =>
+  Booking.findByIdAndUpdate(bookingId, { approvedBursary }, { new: true });
 
 const createAll = async ({ users, listings, couponDiscountRate }) => {
   const { internUser, hostUser, hostUser2 } = users;
@@ -225,4 +227,5 @@ module.exports = {
   createAll,
   reset,
   update,
+  updateApprovedBursary,
 };

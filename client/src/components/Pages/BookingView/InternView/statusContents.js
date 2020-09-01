@@ -63,6 +63,7 @@ const AcceptedContent = ({
   couponInfo,
   usedCoupon,
   hostId,
+  bursaryDiscount,
 }) => (
   <>
     <ViewProfile hostId={hostId} />
@@ -90,6 +91,7 @@ const AcceptedContent = ({
         endDate,
         couponInfo,
         usedCoupon,
+        bursaryDiscount,
       }}
       isNew
     />
@@ -259,6 +261,7 @@ const ConfirmedContent = ({
   upfront,
   bookingDays,
   paymentInfo,
+  bursaryDiscount,
   installments,
   updatedInstallments,
   price,
@@ -285,6 +288,7 @@ const ConfirmedContent = ({
           endDate,
           couponInfo,
           usedCoupon,
+          bursaryDiscount,
         }}
       />
     )}
