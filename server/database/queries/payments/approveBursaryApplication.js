@@ -12,6 +12,8 @@ const approveBursaryApplication = async ({
   totalPotentialAmount,
   adminMessage,
   londonWeighting,
+  startDate,
+  endDate,
 }) => {
   const session = await mongoose.startSession();
   try {
@@ -43,6 +45,8 @@ const approveBursaryApplication = async ({
       maxLimit,
       adminMessage,
       londonWeighting,
+      startDate,
+      endDate,
     };
 
     const updatedBursaryApplication = await updateBursaryApplication({

@@ -19,15 +19,21 @@ export const createInstallments = ({
   upfront,
   couponInfo,
   bookingDays,
+  bursaryDiscount,
 }) => {
   const installments = [];
   let key = 0;
   let _bookingDays = bookingDays;
-  const { couponDiscount, discountRate } = couponInfo;
+  const { couponDiscount } = couponInfo;
+
+  const totalDiscount = couponDiscount + bursaryDiscount;
+  const totalDayDiscount = Math.floor(totalDiscount / (bookingDays - 14));
+
+  let remainingDiscount = totalDiscount;
 
   if (_bookingDays <= 14) return [];
   if (upfront || _bookingDays < 56) {
-    const amount = calculatePrice(_bookingDays - 14) - couponDiscount;
+    const amount = calculatePrice(_bookingDays - 14) - totalDiscount;
     return {
       key,
       dueDate: moment().toISOString(),
@@ -35,27 +41,36 @@ export const createInstallments = ({
     };
   }
   if (moment().isAfter(endDate)) return [];
+
   // push first installment
   installments.push({
     key,
     dueDate: moment().toISOString(),
-    amount:
-      _bookingDays > 28
-        ? (calculatePrice(14) * (100 - discountRate)) / 100
-        : (calculatePrice(_bookingDays - 14) * (100 - discountRate)) / 100,
+    amount: calculatePrice(14) - totalDayDiscount * 14,
   });
+
   _bookingDays -= 28;
+  remainingDiscount -= totalDayDiscount * 14;
+
   while (_bookingDays > 0) {
     key += 1;
+
+    let amount;
+
+    if (_bookingDays > 28) {
+      amount = calculatePrice(28) - totalDayDiscount * 28;
+      remainingDiscount -= totalDayDiscount * 28;
+    } else {
+      // last installment
+      amount = calculatePrice(_bookingDays) - remainingDiscount;
+    }
+
     installments.push({
       key,
       dueDate: moment(startDate)
         .add(28 * key, 'd')
         .toISOString(),
-      amount:
-        _bookingDays > 28
-          ? (calculatePrice(28) * (100 - discountRate)) / 100
-          : (calculatePrice(_bookingDays) * (100 - discountRate)) / 100,
+      amount,
     });
     _bookingDays -= 28;
   }

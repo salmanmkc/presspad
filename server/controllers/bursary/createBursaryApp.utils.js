@@ -25,7 +25,7 @@ module.exports = async userId => {
   const currentWindow = windows[0];
 
   if (currentWindow) {
-    const prevApplications = getBursaryApplicationsByUserIdAndWindowId({
+    const prevApplications = await getBursaryApplicationsByUserIdAndWindowId({
       userId,
       windowId: currentWindow._id,
     });

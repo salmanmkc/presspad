@@ -265,13 +265,14 @@ const getBursaryApplicationInfo = id => {
   ]);
 };
 
-const getPendingBursaryApplicationsByUserId = id => {
+const getActiveBursaryApplicationsByUserId = id => {
   return BursaryApplication.findOne({
     intern: id,
     status: {
       $in: [
         bursaryApplicationStatuses.request,
         bursaryApplicationStatuses.preApproved,
+        bursaryApplicationStatuses.approved,
       ],
     },
   });
@@ -286,12 +287,19 @@ const getBursaryApplicationsByUserIdAndWindowId = ({ userId, windowId }) => {
 
 const getBursaryByUserId = id => Bursary.findOne({ intern: id }).lean();
 
+const getApprovedBursaryApplication = id =>
+  BursaryApplication.find({
+    intern: id,
+    status: bursaryApplicationStatuses.approved,
+  });
+
 module.exports = {
   getBursaryWindows,
   getBursaryApplications,
   getBursaryApplicationInfo,
   getBursaryByUserId,
+  getApprovedBursaryApplication,
   getBursaryApplicationsForCSV,
-  getPendingBursaryApplicationsByUserId,
+  getActiveBursaryApplicationsByUserId,
   getBursaryApplicationsByUserIdAndWindowId,
 };
