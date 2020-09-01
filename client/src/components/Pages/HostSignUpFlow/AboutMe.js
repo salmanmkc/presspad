@@ -63,6 +63,13 @@ const AboutMe = () => {
 
   const history = useHistory();
 
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
+
   const _validate = async isContinue => {
     const { errors: _errors } = await validate({
       schema: hostSettings.aboutMeSchema(prevData, isContinue),

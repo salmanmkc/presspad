@@ -67,6 +67,13 @@ const MyListing = props => {
 
   const history = useHistory();
 
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
+
   const upload = useCallback(
     async file => {
       try {

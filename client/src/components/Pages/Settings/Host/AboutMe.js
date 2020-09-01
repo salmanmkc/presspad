@@ -57,6 +57,13 @@ const AboutMe = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [prevData, setPrevData] = useState({});
 
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
+
   const _validate = async () => {
     const { errors: _errors } = await validate({
       schema: hostSettings.aboutMeSchema(prevData),
