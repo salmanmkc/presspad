@@ -52,22 +52,22 @@ const couponSchema = new Schema(
     startDate: {
       type: Date,
       required: true,
-      validate: {
-        validator: value =>
-          moment().startOf('day') <= value ||
-          process.env.NODE_ENV !== 'production',
-        message: 'start date is in the past',
-      },
+      // validate: {
+      //   validator: value =>
+      //     moment().startOf('day') <= value ||
+      //     process.env.NODE_ENV !== 'production',
+      //   message: 'start date is in the past',
+      // },
     },
     endDate: {
       type: Date,
       required: true,
-      validate: {
-        validator: value =>
-          moment().startOf('day') <= value ||
-          process.env.NODE_ENV !== 'production',
-        message: 'end date is in the past',
-      },
+      // validate: {
+      //   validator: value =>
+      //     moment().startOf('day') <= value ||
+      //     process.env.NODE_ENV !== 'production',
+      //   message: 'end date is in the past',
+      // },
     },
     // the amount of money been deducted from org account
     reservedAmount: {
