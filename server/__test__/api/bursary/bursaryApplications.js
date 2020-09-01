@@ -80,7 +80,7 @@ describe('Testing for get all bursary applications / admin', () => {
       .end((err, res) => {
         expect(res).toBeDefined();
         expect(res.body).toBeDefined();
-        expect(res.body).toHaveLength(1);
+        expect(res.body).toHaveLength(2);
         expect(res.body[0].intern._id).toBeDefined();
         expect(res.body[0].intern.name).toBeDefined();
         expect(res.body[0].awardedBursariesCost).toBeDefined();

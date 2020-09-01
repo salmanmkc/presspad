@@ -8,8 +8,13 @@ const {
 const { getBursaryByUserId } = require('../../../database/queries/bursary');
 
 const { deleteFile } = require('../../../helpers/storage');
+const { isObjectChanged } = require('../../../helpers/general');
 const { storageBucket: bucketName } = require('../../../config');
 const createBursaryApp = require('../../bursary/createBursaryApp.utils');
+
+const {
+  getApprovedBursaryApplication,
+} = require('../../../database/queries/bursary');
 
 module.exports = async (req, res, next) => {
   try {
@@ -22,7 +27,8 @@ module.exports = async (req, res, next) => {
         fileName: '',
         refNum: '',
       },
-    } = await findProfile(user._id);
+      ...prevProfile
+    } = await findProfile(user._id).lean();
 
     const {
       organisation,
@@ -56,6 +62,32 @@ module.exports = async (req, res, next) => {
       DBSCheck: { ...DBSCheck, refNum },
       refNum: DBSCheck.refNum,
     };
+
+    const [approvedBursary] = await getApprovedBursaryApplication(user._id);
+
+    if (approvedBursary) {
+      const newObj = {
+        internshipContact,
+        internshipStartDate,
+        internshipEndDate,
+        internshipOfficeAddress,
+        organisation,
+        offerLetter,
+      };
+      const oldObj = {
+        internshipContact: prevProfile.internshipContact,
+        internshipStartDate: prevProfile.internshipStartDate,
+        internshipEndDate: prevProfile.internshipEndDate,
+        internshipOfficeAddress: prevProfile.internshipOfficeAddress,
+        organisation: prevProfile.organisation,
+        offerLetter: prevProfile.offerLetter,
+      };
+      const hasChanged = isObjectChanged(newObj, oldObj);
+
+      if (hasChanged) {
+        return next(boom.badRequest(`Can't change intership details`));
+      }
+    }
 
     const updatedProfile = await updateUserProfile(
       user._id,

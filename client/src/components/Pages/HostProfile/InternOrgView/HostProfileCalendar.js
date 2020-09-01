@@ -18,6 +18,7 @@ import Calendar from '../Calendar';
 export default ({
   isMobile,
   type,
+  bursaryData,
   calendarData: {
     calendarBookingDetails: {
       currentUserId,
@@ -38,6 +39,7 @@ export default ({
 }) => {
   const renderCalendar = () => (
     <Calendar
+      bursaryData={bursaryData}
       currentUserId={currentUserId}
       hostId={hostId}
       role={role}

@@ -30,19 +30,39 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
       bookings,
       accounts,
       users,
+      bursaryApplications,
     } = await buildDb({
       replSet: true,
     });
 
     const { internUser } = users;
+    const { approvedInternUserBursary } = bursaryApplications;
+
     const token = `token=${createToken(internUser._id)}`;
     const booking = bookings.acceptedNotPaidOnePayment;
     const { _id: bookingId, price } = booking;
 
+    const {
+      discountRate: bursaryDiscountRate,
+      londonWeighting,
+      totalPotentialAmount,
+      totalSpentSoFar,
+    } = approvedInternUserBursary;
+    let bursaryDiscount = (price * bursaryDiscountRate) / 100;
+    if (londonWeighting) {
+      bursaryDiscount = (price * bursaryDiscountRate) / 100 + price * 0.2;
+    }
+    // get total left in bursary
+    const availableBursary = totalPotentialAmount - totalSpentSoFar;
+    // check if enough funds available - if not set remaining funds as discount
+    if (availableBursary < bursaryDiscount) {
+      bursaryDiscount = availableBursary;
+    }
+
     const paymentInfo = {
       key: 1,
       dueDate: moment().toISOString(),
-      amount: price,
+      amount: price - bursaryDiscount,
     };
 
     const data = {
@@ -50,6 +70,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
       couponInfo,
       paymentInfo,
       paymentMethod,
+      bursaryDiscount,
     };
 
     request(app)
@@ -79,7 +100,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
           currentBalance: internCurrentBalance,
         } = await Account.findById(internAccountId);
 
-        expect(internIncom - oldInternIncom).toBe(price);
+        expect(internIncom - oldInternIncom).toBe(price - bursaryDiscount);
         expect(oldInternCurrentBalance).toBe(internCurrentBalance);
 
         // Host account checks
@@ -111,8 +132,10 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
           bursaryFunds: presspadBursaryFunds,
         } = await Account.findById(presspadAccId);
 
-        expect(presspadIncom - oldPresspadIncom).toBe(price);
-        expect(oldPresspadCurrentBalance + price).toBe(presspadCurrentBalance);
+        expect(presspadIncom - oldPresspadIncom).toBe(price - bursaryDiscount);
+        expect(presspadCurrentBalance - oldPresspadCurrentBalance).toBe(
+          price - bursaryDiscount,
+        );
         expect(oldPresspadBursaryFunds + 0.1 * price).toBe(
           presspadBursaryFunds,
         );
@@ -125,7 +148,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
           booking: bookingId,
         });
 
-        expect(installmentAmount).toBe(price);
+        expect(installmentAmount).toBe(price - bursaryDiscount);
 
         // InternalTransaction check
         const {
@@ -134,7 +157,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
         } = await InternalTransaction.findById(transaction);
 
         expect(type).toBe('installment');
-        expect(internalTransactionAmount).toBe(price);
+        expect(internalTransactionAmount).toBe(price - bursaryDiscount);
 
         // ExternalTransaction check
 
@@ -146,7 +169,7 @@ describe('Testing Intern payemnts (Pay upfront):', () => {
           .limit(1)
           .sort({ $natural: -1 });
 
-        expect(exTransactionAmmount).toBe(price);
+        expect(exTransactionAmmount).toBe(price - bursaryDiscount);
         expect(exTransactionType).toBe('deposite');
 
         await connection.close();

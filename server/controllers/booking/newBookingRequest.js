@@ -10,7 +10,9 @@ const {
 } = require('../../database/queries/bookings');
 const { calculatePrice } = require('../../helpers/payments');
 
-// const { registerNotification } = require('../../services/notifications');
+const {
+  getApprovedBursaryApplication,
+} = require('../../database/queries/bursary');
 
 module.exports = async (req, res, next) => {
   try {
@@ -21,11 +23,13 @@ module.exports = async (req, res, next) => {
       endDate,
       price: _price,
       couponId,
+      approvedBursary,
     } = req.body;
 
     const { _id: intern } = req.user;
 
     const price = Number(_price);
+
     const data = {
       listing,
       intern,
@@ -78,7 +82,19 @@ module.exports = async (req, res, next) => {
       return next(boom.badRequest("Price doesn't match!"));
     }
 
-    // validate discount
+    // validate and add bursary application id to booking
+    if (approvedBursary && approvedBursary.length > 0) {
+      if (!ObjectId.isValid(approvedBursary)) {
+        return next(boom.badRequest('invalid bursary application Id'));
+      }
+
+      const [bursaryDetails] = await getApprovedBursaryApplication(intern);
+
+      if (bursaryDetails._id.toString() === approvedBursary.toString()) {
+        // add valid id to booking
+        data.approvedBursary = approvedBursary;
+      }
+    }
 
     if (couponId && couponId.length > 0) {
       if (!ObjectId.isValid(couponId)) {

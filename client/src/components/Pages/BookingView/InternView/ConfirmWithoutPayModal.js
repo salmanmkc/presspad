@@ -47,6 +47,7 @@ const ConfirmWithoutPay = props => {
     couponInfo,
     bookingId,
     visible,
+    bursaryDiscount,
   } = props;
   const { loading, success, error } = state;
 
@@ -59,6 +60,7 @@ const ConfirmWithoutPay = props => {
         bookingId,
         couponInfo,
         withoutPay: true,
+        bursaryDiscount,
       });
       dispatch({ type: 'success' });
     } catch (err) {

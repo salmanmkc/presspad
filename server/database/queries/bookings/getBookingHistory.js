@@ -34,6 +34,44 @@ module.exports = () =>
     },
     {
       $lookup: {
+        from: 'bursaryapplications',
+        let: { applicationId: '$approvedBursary', bookingId: '$_id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ['$$applicationId', '$_id'] },
+            },
+          },
+          {
+            $project: {
+              transactions: {
+                $filter: {
+                  input: '$transactions',
+                  as: 'item',
+                  cond: { $eq: ['$$item.booking', '$$bookingId'] },
+                },
+              },
+            },
+          },
+          {
+            $unwind: {
+              path: '$transactions',
+              preserveNullAndEmptyArrays: false,
+            },
+          },
+        ],
+        as: 'bursaryApplication',
+      },
+    },
+    {
+      $addFields: {
+        bursaryApplication: {
+          $arrayElemAt: ['$bursaryApplication.transactions', 0],
+        },
+      },
+    },
+    {
+      $lookup: {
         from: 'users',
         let: {
           userID: '$intern',

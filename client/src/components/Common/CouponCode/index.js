@@ -7,7 +7,11 @@ import {
   API_COUPON_SOFT_URL,
 } from '../../../constants/apiRoutes';
 
-import { getDiscountDays, calculatePrice } from '../../../helpers';
+import {
+  getDiscountDays,
+  calculateDaysRange,
+  createSingleDate,
+} from '../../../helpers';
 
 // Typography
 import * as T from '../Typography';
@@ -49,9 +53,18 @@ const initialCouponState = {
 };
 
 // calculates relevant details for coupon usage
-const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
+const checkCouponCode = async ({
+  _code = '',
+  _dates = '',
+  _bookingPrice = '',
+  userId = '',
+  showAlertAndRedirectToProfile = () => {},
+  inValidCouponDates = () => {},
+  setCouponInvalidDates = () => {},
+}) => {
   const { couponInfo, apiError } = await makeRequest(_code, userId);
   let couponDiscount;
+  let newCouponState;
 
   if (couponInfo) {
     const {
@@ -64,7 +77,7 @@ const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
       _id: couponId,
     } = couponInfo;
 
-    // calculate discount days
+    // calculate discount days which is the intersection of booking and coupon dates
     const { discountDays: _discountDays } = getDiscountDays({
       bookingStart: _dates[0],
       bookingEnd: _dates[1],
@@ -73,34 +86,57 @@ const checkCouponCode = async (_code, _dates, _bookingPrice, userId) => {
       usedDays,
     });
 
-    // calculate discount
-    couponDiscount = (calculatePrice(_discountDays) * _discountRate) / 100;
+    // get number of booking days
+    const noBookingDays = calculateDaysRange(_dates[0], _dates[1]);
 
-    // get remaining amount
-    const availableAmount = reservedAmount - usedAmount;
-
-    if (availableAmount < couponDiscount) {
-      couponDiscount = availableAmount;
+    // for logged in users:
+    // check if valid discounted days are equal to booking days => if not prompt to update internship
+    if (userId && noBookingDays !== _discountDays) {
+      newCouponState = {
+        ...initialCouponState,
+        code: _code,
+        couponError: 'Coupon dates do not match internship dates',
+      };
+      setCouponInvalidDates(couponStart, couponEnd);
+      showAlertAndRedirectToProfile(
+        inValidCouponDates(
+          createSingleDate(couponStart),
+          createSingleDate(couponEnd),
+        ),
+      );
     }
+    // for non-logged in users don't allow coupon to be used if not covering the entire booking dates
+    else if (noBookingDays !== _discountDays) {
+      newCouponState = {
+        ...initialCouponState,
+        code: _code,
+        couponError:
+          "the coupon is expired or doesn't cover this booking period",
+      };
+    } else {
+      // successful coupon use
+      couponDiscount = ((_bookingPrice * _discountRate) / 100).toFixed(2);
 
-    const newCouponState = {
-      code: _code,
-      discountRate: _discountRate,
-      couponDiscount,
-      isCouponLoading: false,
-      couponError: false,
-      couponId,
-    };
+      const availableAmount = reservedAmount - usedAmount;
 
-    if (_discountDays === 0) {
-      newCouponState.couponError =
-        "the coupon is expired or doesn't cover this booking period";
+      if (availableAmount < couponDiscount) {
+        couponDiscount = availableAmount;
+      }
+
+      newCouponState = {
+        code: _code,
+        discountRate: _discountRate,
+        couponDiscount,
+        isCouponLoading: false,
+        couponError: false,
+        couponId,
+      };
     }
 
     return { newCouponState };
   }
   if (apiError) {
-    const newCouponState = {
+    newCouponState = {
       ...initialCouponState,
       code: _code,
       couponError: apiError,
@@ -117,8 +153,11 @@ const CouponCode = props => {
     bookingPrice,
     setCouponState,
     couponState,
-    bursary,
     currentUserId: userId,
+    showAlertAndRedirectToProfile,
+    inValidCouponDates,
+    setCouponInvalidDates,
+    disabled,
   } = props;
 
   const { discountRate, couponError, isCouponLoading, couponId } = couponState;
@@ -157,12 +196,15 @@ const CouponCode = props => {
       });
 
       // send request to check coupon code and set errors
-      const { newCouponState } = await checkCouponCode(
-        code,
-        dates,
-        bookingPrice,
+      const { newCouponState } = await checkCouponCode({
+        _code: code,
+        _dates: dates,
+        _bookingPrice: bookingPrice,
         userId,
-      );
+        showAlertAndRedirectToProfile,
+        inValidCouponDates,
+        setCouponInvalidDates,
+      });
       setCouponState(newCouponState);
     }
   };
@@ -170,11 +212,11 @@ const CouponCode = props => {
   // updates state when code is valid on date / price change
   useEffect(() => {
     const getNewCouponState = async () => {
-      const { newCouponState } = await checkCouponCode(
-        code,
-        dates,
-        bookingPrice,
-      );
+      const { newCouponState } = await checkCouponCode({
+        _code: code,
+        _dates: dates,
+        _bookingPrice: bookingPrice,
+      });
       return newCouponState;
     };
     if (code.length > 0 && !typing) {
@@ -196,7 +238,7 @@ const CouponCode = props => {
         onChange={handleCouponChange}
         onBlur={handleBlur}
         placeholder="   Type code ..."
-        disabled={bookingPrice === 0 || bursary}
+        disabled={bookingPrice === 0 || disabled}
         value={code || ''}
       />
 

@@ -5,7 +5,10 @@ import { useLocation, useHistory } from 'react-router-dom';
 
 import { disabledStartDate, disabledEndDate } from '../../../helpers';
 import { updateInternshipAndCreateBooking } from './utils';
-import { API_INTERNSHIP_URL } from '../../../constants/apiRoutes';
+import {
+  API_INTERNSHIP_URL,
+  API_GET_INTERN_BURSARY_APPLICATION,
+} from '../../../constants/apiRoutes';
 import { DASHBOARD_URL } from '../../../constants/navRoutes';
 import { TABLET_WIDTH } from '../../../constants/screenWidths';
 import Form from './Form';
@@ -33,6 +36,7 @@ const fields = {
     isPrivate: true,
     url: '',
   },
+  bursary: {},
 };
 
 const useQuery = () => new URLSearchParams(useLocation().search);
@@ -50,6 +54,8 @@ const UpdateInternship = ({ id, windowWidth }) => {
     host: query.get('hostId'),
     price: query.get('price'),
     listing: query.get('listing'),
+    couponInvalidStart: query.get('couponInvalidStart'),
+    couponInvalidEnd: query.get('couponInvalidEnd'),
   };
 
   const onInputChange = e => {
@@ -79,14 +85,14 @@ const UpdateInternship = ({ id, windowWidth }) => {
   const onStartChange = value => {
     setState(_state => ({
       ..._state,
-      internshipStartDate: value._d && value._d,
+      internshipStartDate: value && value._d,
     }));
     setErrors(_errors => ({ ..._errors, internshipStartDate: '' }));
   };
   const onEndChange = value => {
     setState(_state => ({
       ..._state,
-      internshipEndDate: value._d && value._d,
+      internshipEndDate: value && value._d,
     }));
     setErrors(_errors => ({ ..._errors, internshipEndDate: '' }));
   };
@@ -105,10 +111,28 @@ const UpdateInternship = ({ id, windowWidth }) => {
     setState(_state => ({ ..._state, ...data }));
   };
 
+  const getInternApprovedBursaryApplication = async () => {
+    try {
+      const { data: bursary } = await axios.get(
+        API_GET_INTERN_BURSARY_APPLICATION,
+      );
+      if (bursary && bursary.length) {
+        setState(_state => ({ ..._state, bursary: bursary[0] }));
+      }
+    } catch (error) {
+      return { error };
+    }
+  };
+
   useEffect(() => {
     fetchInternshipDetails(id);
     return () => {};
   }, [id]);
+
+  useEffect(() => {
+    getInternApprovedBursaryApplication();
+    return () => {};
+  }, []);
 
   const onSubmit = async e => {
     e.preventDefault();
