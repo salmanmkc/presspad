@@ -42,7 +42,6 @@ const Content = props => {
 
   const [liveCouponsSrc, setLiveCouponsSrc] = useState(true);
 
-  const firstName = name.split(' ')[0];
   const device = windowWidth < TABLET_WIDTH ? 'mobile' : 'desktop';
   const HeaderTitle = typographies.headerTitle[device];
 
@@ -58,7 +57,7 @@ const Content = props => {
     <Wrapper mobile={device === 'mobile'}>
       <Row mb={5}>
         <Col w={[4, 6, 7]}>
-          <HeaderTitle color="blue">Welcome {firstName}!</HeaderTitle>
+          <HeaderTitle color="blue">Welcome {name}!</HeaderTitle>
         </Col>
         <Col w={[4, 6, 5]}>
           <HeaderTitle color="pink">{orgName.toUpperCase()}</HeaderTitle>
