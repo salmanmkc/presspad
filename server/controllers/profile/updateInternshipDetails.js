@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 
 // QUERIES
 const { updateUserProfile } = require('../../database/queries/profiles');
+const {
+  getApprovedBursaryApplication,
+} = require('../../database/queries/bursary');
 
 const { checkInternshipDates } = require('../../helpers/general');
 
@@ -28,6 +31,12 @@ const updateInternshipDetails = async (req, res, next) => {
 
     if (role !== 'intern') {
       return next(boom.forbidden());
+    }
+
+    const [approvedBursary] = await getApprovedBursaryApplication(userId);
+
+    if (approvedBursary) {
+      return next(boom.badRequest());
     }
 
     // check if internship dates are valid for booking request

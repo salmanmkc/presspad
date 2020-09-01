@@ -119,6 +119,11 @@ const bookingSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'coupons',
     },
+    // if the intern has an approved bursary application valid for booking
+    approvedBursary: {
+      type: Schema.Types.ObjectId,
+      ref: 'bursaryApplications',
+    },
   },
   {
     timestamps: true,

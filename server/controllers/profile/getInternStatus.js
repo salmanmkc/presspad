@@ -4,7 +4,10 @@ const boom = require('boom');
 const {
   getProfileByRoleAndId,
 } = require('../../database/queries/profile/getProfile');
-const { getBursaryByUserId } = require('../../database/queries/bursary');
+const {
+  getBursaryByUserId,
+  getApprovedBursaryApplication,
+} = require('../../database/queries/bursary');
 
 // validation
 const { internCompleteProfile } = require('../../../client/src/validation');
@@ -37,17 +40,30 @@ module.exports = async (req, res, next) => {
       return next(boom.notFound('You have no profile'));
     }
 
-    validInternshipDates = checkInternshipDates({
-      internshipStartDate: profile.internshipStartDate,
-      internshipEndDate: profile.internshipEndDate,
-      endDate,
-      startDate,
-    });
+    const [approvedBursary] = await getApprovedBursaryApplication(_id);
+
+    if (approvedBursary && approvedBursary.status) {
+      validInternshipDates = checkInternshipDates({
+        internshipStartDate: approvedBursary.startDate,
+        internshipEndDate: approvedBursary.endDate,
+        endDate,
+        startDate,
+      });
+    } else {
+      validInternshipDates = checkInternshipDates({
+        internshipStartDate: profile.internshipStartDate,
+        internshipEndDate: profile.internshipEndDate,
+        endDate,
+        startDate,
+      });
+    }
 
     verified = profile.verified;
     const bursary = await getBursaryByUserId(_id);
 
-    await internCompleteProfile.validate({ ...profile, ...bursary });
+    await internCompleteProfile
+      .validate({ ...profile, ...bursary })
+      .catch(err => console.log('err', err));
 
     isComplete = true;
 

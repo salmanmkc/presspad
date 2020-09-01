@@ -19,11 +19,13 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
       bookings,
       coupons,
       users,
+      bursaryApplications,
     } = await buildDb({
       replSet: true,
     });
 
     const { internUser } = users;
+    const { approvedInternUserBursary } = bursaryApplications;
 
     const token = `token=${createToken(internUser._id)}`;
 
@@ -31,15 +33,33 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
       _id,
       startDate,
       endDate,
+      price,
     } = bookings.acceptedNotPaidInstallmentApplicable;
     const bookingId = _id;
 
     const bookingDays =
       moment(endDate)
-        .startOf('d')
-        .diff(moment(startDate).startOf('d'), 'days') + 1;
+        .endOf('d')
+        .diff(moment(startDate).startOf('d'), 'd') + 1;
 
-    const couponDiscount = (bookingDays - 14) * 2000;
+    const {
+      discountRate: bursaryDiscountRate,
+      londonWeighting,
+      totalPotentialAmount,
+      totalSpentSoFar,
+    } = approvedInternUserBursary;
+    let bursaryDiscount = (price * bursaryDiscountRate) / 100;
+    if (londonWeighting) {
+      bursaryDiscount = (price * bursaryDiscountRate) / 100 + price * 0.2;
+    }
+    // get total left in bursary
+    const availableBursary = totalPotentialAmount - totalSpentSoFar;
+    // check if enough funds available - if not set remaining funds as discount
+    if (availableBursary < bursaryDiscount) {
+      bursaryDiscount = availableBursary;
+    }
+
+    const couponDiscount = (bookingDays - 14) * 2000 - bursaryDiscount;
     const couponInfo = {
       couponCode: coupons.activeFull.code,
       discountDays: bookingDays - 14,
@@ -53,6 +73,7 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
       startDate,
       endDate,
       upfront: false,
+      bursaryDiscount,
     });
 
     const data = {
@@ -60,6 +81,7 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
       couponInfo,
       paymentInfo,
       withoutPay: true,
+      bursaryDiscount,
     };
 
     request(app)
@@ -105,10 +127,12 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
           currentBalance: hostCurrentBalance,
         } = await Account.findById(hostAccId);
 
-        expect(hostIncom - oldHostIncom).toBe(0.45 * couponDiscount);
-        expect(oldHostCurrentBalance + 0.45 * couponDiscount).toBe(
-          hostCurrentBalance,
+        expect(hostIncom - oldHostIncom).toBe(
+          0.45 * (couponDiscount + bursaryDiscount),
         );
+        expect(
+          oldHostCurrentBalance + 0.45 * (couponDiscount + bursaryDiscount),
+        ).toBe(hostCurrentBalance);
 
         // Presspad account checks
         const {
@@ -129,11 +153,11 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
         expect(presspadIncom).toBe(oldPresspadIncom);
         expect(oldPresspadCurrentBalance).toBe(presspadCurrentBalance);
         expect(presspadBursaryFunds - oldPresspadBursaryFunds).toBe(
-          0.1 * couponDiscount,
+          0.1 * (couponDiscount + bursaryDiscount),
         );
 
         expect(presspadHostingIncome - oldPresspadHostingIncome).toBe(
-          0.45 * couponDiscount,
+          0.45 * (couponDiscount + bursaryDiscount),
         );
 
         // Installments check
@@ -169,7 +193,11 @@ describe('Testing Intern confirming booking when the coupon cover all payments',
     const { _id, startDate, endDate } = bookings.confirmedPaidFirstNoCoupon;
     const bookingId = _id;
 
-    const bookingDays = moment(endDate).diff(startDate, 'd') + 1;
+    const bookingDays =
+      moment(endDate)
+        .endOf('d')
+        .diff(startDate, 'd') + 1;
+
     const couponDiscount = (bookingDays - 28) * 2000;
     const couponInfo = {
       couponCode: coupons.activeFull.code,

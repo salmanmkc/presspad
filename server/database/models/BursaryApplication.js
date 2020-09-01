@@ -76,6 +76,7 @@ const bursaryApplicationSchema = new Schema(
     totalPotentialAmount: {
       type: Number,
       min: 0,
+      default: 0,
     },
     // the amount of money been used by intern so far
     totalSpentSoFar: {
@@ -87,6 +88,7 @@ const bursaryApplicationSchema = new Schema(
         },
         message: 'used amount exceeded the reserved amount',
       },
+      default: 0,
     },
     // bursary's transactions history
     transactions: [

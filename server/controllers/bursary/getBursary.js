@@ -4,8 +4,9 @@ const {
   getBursaryWindows,
   getBursaryApplications,
   getBursaryApplicationInfo,
+  getApprovedBursaryApplication,
   getBursaryApplicationsForCSV,
-  getPendingBursaryApplicationsByUserId,
+  getActiveBursaryApplicationsByUserId,
 } = require('../../database/queries/bursary');
 
 const { findProfile } = require('../../database/queries/profiles');
@@ -22,6 +23,17 @@ module.exports.getMyBursary = async (req, res, next) => {
       profile = await findProfile(bursary.intern).lean();
     }
     return res.json({ ...profile, ...bursary });
+  } catch (err) {
+    next(boom.badImplementation(err));
+  }
+};
+
+module.exports.getApprovedBursaryApplication = async (req, res, next) => {
+  const { _id } = req.user;
+
+  try {
+    const bursary = await getApprovedBursaryApplication(_id);
+    return res.json(bursary);
   } catch (err) {
     next(boom.badImplementation(err));
   }
@@ -72,7 +84,7 @@ module.exports.getMyBursaryApplicationStatus = async (req, res, next) => {
   try {
     const { _id } = req.user;
 
-    const bursaryApplicationInfo = await getPendingBursaryApplicationsByUserId(
+    const bursaryApplicationInfo = await getActiveBursaryApplicationsByUserId(
       _id,
     );
 

@@ -21,7 +21,7 @@ class PayNowModal extends Component {
   };
 
   handleServerResponse = async response => {
-    const { paymentInfo, couponInfo, bookingId } = this.props;
+    const { paymentInfo, couponInfo, bookingId, bursaryDiscount } = this.props;
     if (response.error) {
       this.setState({ error: response.error.message, isLoading: false });
     } else if (response.requires_action) {
@@ -38,6 +38,7 @@ class PayNowModal extends Component {
             paymentInfo,
             couponInfo,
             bookingId,
+            bursaryDiscount,
             paymentIntent: result.paymentIntent,
           },
         );
@@ -52,7 +53,13 @@ class PayNowModal extends Component {
   handleSubmit = async () => {
     try {
       const { cardElement } = this.state;
-      const { paymentInfo, stripe, couponInfo, bookingId } = this.props;
+      const {
+        paymentInfo,
+        stripe,
+        couponInfo,
+        bookingId,
+        bursaryDiscount,
+      } = this.props;
 
       // start payment proccess
       this.setState({ isLoading: true });
@@ -72,6 +79,7 @@ class PayNowModal extends Component {
             paymentMethod,
             bookingId,
             couponInfo,
+            bursaryDiscount,
           },
         );
 

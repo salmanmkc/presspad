@@ -14,7 +14,7 @@ import File from '../../Common/ProfileComponents/Field/File';
 
 import Button from '../../Common/ButtonNew';
 import BookingDetailsBox from '../../Common/BookingDetailsBox';
-import { dateRender } from '../../../helpers';
+import { dateRender, createSingleDate } from '../../../helpers';
 
 const Form = ({
   state,
@@ -36,16 +36,29 @@ const Form = ({
     <ContentWrapper>
       <form onSubmit={onSubmit}>
         <T.H3C mt="3">update internship details</T.H3C>
-        <T.P mt="5">
-          The dates you’ve requested to stay do not match the dates of your
-          internship. We can only let you stay with hosts during and around the
-          dates of your internship.
-        </T.P>
-        <T.P mt="6" mb="1">
-          Please update your internship details below to complete this booking
-          request.
-        </T.P>
+        <Row>
+          {bookingData.couponInvalidStart && bookingData.couponInvalidEnd ? (
+            <T.P mt="5" color="red">
+              This discount code you entered (valid between&nbsp;
+              {createSingleDate(bookingData.couponInvalidStart)} and&nbsp;
+              {createSingleDate(bookingData.couponInvalidEnd)}) does not match
+              the internship details. Please update your internship details
+              accordingly or contact the organisation to get them to give you a
+              new discount code.
+            </T.P>
+          ) : (
+            <T.P mt="5">
+              The dates you’ve requested to stay do not match the dates of your
+              internship. We can only let you stay with hosts during and around
+              the dates of your internship.
+            </T.P>
+          )}
 
+          <T.P mt="6" mb="1">
+            Please update your internship details below to complete this booking
+            request.
+          </T.P>
+        </Row>
         <Row>
           <SubRow>
             <Input
@@ -60,13 +73,22 @@ const Form = ({
         </Row>
 
         <T.PBold>Dates of internship</T.PBold>
+        {state.bursary.status === 'approved' && (
+          <T.PBold mt="2" mb="1" color="red">
+            As you have been granted a PressPad bursary you cannot update your
+            internship dates. Please contact us for further information.
+          </T.PBold>
+        )}
         <DatePickersRow>
           <DatePicker
             mt="1"
             mb="1"
             value={
-              state.internshipStartDate && moment(state.internshipStartDate)
+              state.bursary && state.bursary.startDate
+                ? moment(state.bursary.startDate)
+                : state.internshipStartDate && moment(state.internshipStartDate)
             }
+            disabled={state.bursary && state.bursary.startDate}
             disabledDate={disabledStartDate}
             onChange={onStartChange}
             dateRender={current =>
@@ -85,7 +107,12 @@ const Form = ({
           <DatePicker
             mt="1"
             mb="1"
-            value={state.internshipEndDate && moment(state.internshipEndDate)}
+            value={
+              state.bursary && state.bursary.endDate
+                ? moment(state.bursary.endDate)
+                : state.internshipEndDate && moment(state.internshipEndDate)
+            }
+            disabled={state.bursary && state.bursary.endDate}
             disabledDate={disabledEndDate}
             onChange={onEndChange}
             dateRender={current =>
