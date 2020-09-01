@@ -18,6 +18,9 @@ const sharedStyles = css`
 const AlternateTitle = styled.div`
   width: 100%;
   position: relative;
+  @media ${({ theme }) => theme.breakpoints.tablet} {
+    width: 500px;
+  }
 
   & .top {
     ${sharedStyles};
