@@ -56,7 +56,7 @@ const DashboardTopStats = ({ data, loading }) => {
         stats={bookingRequests}
         title="booking requests"
         small
-        popoverContent="cuurent number of booking requests awaiting admin approval"
+        popoverContent="current number of booking requests awaiting admin approval"
         maxWidth="25%"
       />
     </Row>
