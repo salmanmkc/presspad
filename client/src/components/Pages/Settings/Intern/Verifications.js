@@ -658,7 +658,7 @@ const Verifications = props => {
       <Row>
         <Col w={[4, 12, 12]}>
           <UploadFile
-            mainText="Upload your profile picture here"
+            mainText="Upload your identity picture here"
             secondaryText="file size max 2mb"
             type="file"
             userId={props.id}
@@ -686,7 +686,7 @@ const Verifications = props => {
       </Row>
 
       <UploadFile
-        mainText="Upload your profile picture here"
+        mainText="Upload your DBS certificate here"
         secondaryText="file size max 2mb"
         type="file"
         userId={props.id}
