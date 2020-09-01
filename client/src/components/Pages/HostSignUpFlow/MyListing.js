@@ -317,11 +317,7 @@ const MyListing = props => {
         setFiles={([profileImage]) =>
           setState(_state => ({ ..._state, profileImage }))
         }
-        error={
-          prevData.profileImage &&
-          state.profileImage.deleted &&
-          'Profile image is required'
-        }
+        error={prevData.profileImage && 'Profile image is required'}
       />
       {/* home images */}
       <Row>
