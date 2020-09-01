@@ -32,7 +32,13 @@ const internalTransactionSchema = new Schema(
     type: {
       type: Schema.Types.String,
       required: true,
-      enum: ['installment', 'couponTransaction', 'donation', 'refund'],
+      enum: [
+        'installment',
+        'couponTransaction',
+        'donation',
+        'refund',
+        'bursaryTransaction',
+      ],
     },
   },
   {

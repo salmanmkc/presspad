@@ -25,6 +25,7 @@ import {
   DisCountLoadingWrapper,
   PaymentMethodWrapper,
   PreviousPriceWrapper,
+  MessageContainer,
 } from './MakePayment.style';
 
 const MakePayment = ({
@@ -46,6 +47,7 @@ const MakePayment = ({
     installments = [],
     updatedInstallments = [],
     upfront,
+    bursaryDiscount,
   } = data;
   const {
     couponCode,
@@ -61,7 +63,7 @@ const MakePayment = ({
     }
   }, [handleCouponChange, isNew, usedCoupon.code]);
 
-  let netAmount = fullPrice - couponDiscount;
+  let netAmount = fullPrice - couponDiscount - bursaryDiscount;
 
   useEffect(() => {
     if (netAmount <= 0) {
@@ -80,9 +82,18 @@ const MakePayment = ({
     return (
       <Wrapper>
         <H4C>make a payment</H4C>
+        {bursaryDiscount > 0 && (
+          <MessageContainer>
+            <Icon icon="circleTick" color="lightBlue" width="25px" />
+            <T.PXSBold style={{ marginLeft: '0.5rem' }} color="lightBlue">
+              PressPad Bursary Applied!
+            </T.PXSBold>
+          </MessageContainer>
+        )}
         <PriceWrapper>
           <PS>Full price for period:</PS>
-          {couponDiscount > 0 ? (
+
+          {couponDiscount > 0 || bursaryDiscount > 0 ? (
             <PreviousPriceWrapper>
               <T.PBold>£{formatPrice(netAmount)}</T.PBold>
               <T.PXSBold

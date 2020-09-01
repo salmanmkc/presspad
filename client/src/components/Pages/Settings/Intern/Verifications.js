@@ -14,6 +14,7 @@ import Button from '../../../Common/ButtonNew';
 import {
   API_INTERN_SETTINGS_VERIFICATIONS,
   API_MY_PROFILE_URL,
+  API_BURSARY_APPLICATIONS_STATUS,
 } from '../../../../constants/apiRoutes';
 import { SETTINGS } from '../../../../constants/navRoutes';
 
@@ -65,6 +66,7 @@ const Verifications = props => {
   const [mainError, setMainError] = useState();
   const [loading, setLoading] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [hasActiveBursary, setHasActiveBursary] = useState(false);
 
   const [prevData, setPrevData] = useState({});
   const [fetchData, setFetchData] = useState(0);
@@ -224,8 +226,15 @@ const Verifications = props => {
         data: { profile },
       } = await axios.get(API_MY_PROFILE_URL);
 
+      const { data: activeBursaries } = await axios.get(
+        API_BURSARY_APPLICATIONS_STATUS,
+      );
+
       setState(getCleanData(profile));
       setPrevData(getCleanData(profile));
+      if (activeBursaries) {
+        setHasActiveBursary(true);
+      }
     };
     getData();
   }, [fetchData]);
@@ -251,8 +260,6 @@ const Verifications = props => {
     if (state.hasNoInternship) {
       setState(_state => ({
         ..._state,
-        reference1: {},
-        reference2: {},
         organisation: '',
         internshipContact: {},
         internshipStartDate: null,
@@ -295,6 +302,7 @@ const Verifications = props => {
                 label="Name of organisation"
                 name="organisation"
                 error={errors.organisation}
+                disabled={hasActiveBursary}
               />
             </Col>
 
@@ -317,6 +325,7 @@ const Verifications = props => {
                 error={
                   errors.internshipContact && errors.internshipContact.name
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
           </Row>
@@ -341,6 +350,7 @@ const Verifications = props => {
                 error={
                   errors.internshipContact && errors.internshipContact.email
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
             <Col w={[4, 6, 6]} style={{ marginTop: '20px' }}>
@@ -365,6 +375,7 @@ const Verifications = props => {
                   errors.internshipContact &&
                   errors.internshipContact.phoneNumber
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
           </Row>
@@ -381,6 +392,7 @@ const Verifications = props => {
                 value={state.internshipStartDate}
                 label="Start date"
                 error={errors.internshipStartDate}
+                disabled={hasActiveBursary}
               />
             </Col>
 
@@ -395,6 +407,7 @@ const Verifications = props => {
                 value={state.internshipEndDate}
                 label="End date"
                 error={errors.internshipEndDate}
+                disabled={hasActiveBursary}
               />
             </Col>
           </Row>
@@ -422,6 +435,7 @@ const Verifications = props => {
                   errors.internshipOfficeAddress &&
                   errors.internshipOfficeAddress.addressline1
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
 
@@ -447,6 +461,7 @@ const Verifications = props => {
                   errors.internshipOfficeAddress &&
                   errors.internshipOfficeAddress.addressline2
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
           </Row>
@@ -474,6 +489,7 @@ const Verifications = props => {
                   errors.internshipOfficeAddress &&
                   errors.internshipOfficeAddress.city
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
 
@@ -500,6 +516,7 @@ const Verifications = props => {
                   errors.internshipOfficeAddress &&
                   errors.internshipOfficeAddress.postcode
                 }
+                disabled={hasActiveBursary}
               />
             </Col>
           </Row>
@@ -528,6 +545,7 @@ const Verifications = props => {
               }))
             }
             error={errors.offerLetter}
+            disabled={hasActiveBursary}
           />
         </>
       )}

@@ -65,7 +65,7 @@ const Approve = () => {
           status: 'approved',
           adminMessage: message,
           londonWeighting,
-          bursaryPerc,
+          bursaryPerc: bursaryPerc * 100,
           maxLimit: maxLimit * 100,
           awardedBursary: calcCost(),
         },

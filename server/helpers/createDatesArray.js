@@ -14,6 +14,3 @@ module.exports = (start, end) => {
 
   return datesArray;
 };
-
-const createSingleDate = date => moment(date).format('DD/MM/YYYY');
-module.exports.createSingleDate = createSingleDate;

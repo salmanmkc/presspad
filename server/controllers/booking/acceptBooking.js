@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const boom = require('boom');
-const pubSub = require('./../../pubSub');
+const pubSub = require('../../pubSub');
 
 const {
   hostAcceptBookingById,
@@ -9,10 +9,10 @@ const {
 } = require('../../database/queries/bookings');
 const { updateRespondingData } = require('../../database/queries/user');
 const { registerNotification } = require('../../services/notifications');
-const requestAcceptedToIntern = require('./../../helpers/mailHelper/requestAcceptedToIntern');
-const requestAcceptedToAdmin = require('./../../helpers/mailHelper/requestAcceptedToAdmin');
-const { scheduleReminderEmails } = require('./../../services/mailing');
-const { rejectBookings } = require('./../../services/bookings');
+const requestAcceptedToIntern = require('../../helpers/mailHelper/requestAcceptedToIntern');
+const requestAcceptedToAdmin = require('../../helpers/mailHelper/requestAcceptedToAdmin');
+const { scheduleReminderEmails } = require('../../services/mailing');
+const { rejectBookings } = require('../../services/bookings');
 // const {
 //   findAllQuestions,
 //   createChecklistAnswers,
@@ -36,11 +36,12 @@ const acceptBooking = async (req, res, next) => {
 
     // get all overlaping requests
     const { startDate, endDate } = bookingDetails;
-    const overLappingBookings = await getOverlappingBookings(
-      mongoose.Types.ObjectId(bookingId),
+    const overLappingBookings = await getOverlappingBookings({
+      bookingId: mongoose.Types.ObjectId(bookingId),
+      hostId,
       startDate,
       endDate,
-    );
+    });
 
     // if overlaping cancel overlapping
     if (!cancelOthers && overLappingBookings.length) {

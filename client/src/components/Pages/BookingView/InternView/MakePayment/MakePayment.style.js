@@ -8,6 +8,12 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const MessageContainer = styled.div`
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+`;
+
 export const PriceWrapper = styled.div`
   display: flex;
   justify-content: space-between;

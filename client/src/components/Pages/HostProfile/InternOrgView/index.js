@@ -33,7 +33,11 @@ import types from '../../../../constants/types';
 import { titleCase, truncatePostcode } from '../../../../helpers';
 
 // utils
-import { getUserBookings, getHostProfile } from '../utils';
+import {
+  getUserBookings,
+  getHostProfile,
+  getInternApprovedBursaryApplication,
+} from '../utils';
 
 //  individual styles to overwrite components
 const tableFonts = { fontSize: '18px', lineHeight: '1.2' };
@@ -43,6 +47,7 @@ export default class InternView extends Component {
     isLoading: true,
     profileData: null,
     internBookings: [],
+    bursaryData: null,
     expandDateSection: false,
     showFullData: false,
     bookingSearchDates: [],
@@ -50,10 +55,10 @@ export default class InternView extends Component {
 
   async componentDidMount() {
     const { role, id, location, unauthenticated } = this.props;
-
+    const stateObj = {};
     // check if dates were selected in search
     if (location && location.state && location.state.selectedSearchDates) {
-      this.setState({ bookingSearchDates: location.state.selectedSearchDates });
+      stateObj.bookingSearchDates = location.state.selectedSearchDates;
     }
 
     // check intern's bookings
@@ -62,22 +67,28 @@ export default class InternView extends Component {
         internBookings,
         error: getInternBookingsError,
       } = await getUserBookings(role, id);
+      if (!getInternBookingsError) stateObj.internBookings = internBookings;
 
-      if (!getInternBookingsError) this.setState({ internBookings });
+      const {
+        bursary,
+        error: getInternBursaryApplicationError,
+      } = await getInternApprovedBursaryApplication();
+      if (!getInternBursaryApplicationError) stateObj.bursaryData = bursary;
     }
 
     // get profile data
     const { profileData, error: getHostProfileError } = await getHostProfile(
       this.props,
     );
-
     if (!getHostProfileError) {
-      this.setState({
-        isLoading: false,
-        profileData,
-        showFullData: profileData.showFullData,
-      });
+      stateObj.profileData = profileData;
     }
+
+    this.setState({
+      isLoading: false,
+      showFullData: stateObj.profileData.showFullData,
+      ...stateObj,
+    });
   }
 
   setProfileData = profileData =>
@@ -136,6 +147,7 @@ export default class InternView extends Component {
       showFullData,
       expandDateSection,
       bookingSearchDates,
+      bursaryData,
     } = this.state;
 
     const { match, id: currentUserId, role, windowWidth } = this.props;
@@ -314,6 +326,7 @@ export default class InternView extends Component {
                 type="desktop"
                 calendarData={calendarData}
                 isMobile={isMobile}
+                bursaryData={bursaryData}
                 role={role}
               />
 

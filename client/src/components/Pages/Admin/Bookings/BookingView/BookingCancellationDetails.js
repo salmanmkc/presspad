@@ -23,6 +23,7 @@ const BookingCancellationDetails = ({ details }) => {
     payedAmount = '',
     price = '',
     coupon = {},
+    bursaryApplication = {},
   } = details;
   const { internship } = internDetails;
 
@@ -158,6 +159,14 @@ const BookingCancellationDetails = ({ details }) => {
                   £{formatPrice(coupon.discountAmount)} ({coupon.Organisation})
                   {/* {coupon.discountRate}% ({coupon.Organisation}) */}
                 </PXS>
+              ) : (
+                'N/A'
+              )}
+            </S.Column>
+            <S.Column>
+              <PXSBold>Paid by bursary</PXSBold>
+              {bursaryApplication.amount ? (
+                <PXS>£{formatPrice(bursaryApplication.amount)}</PXS>
               ) : (
                 'N/A'
               )}

@@ -98,7 +98,7 @@ const UploadFile = ({
           >
             {file.path || file.fileName}
           </T.Link>
-          <S.DeleteBtn onClick={() => removeFile(index)}>
+          <S.DeleteBtn onClick={() => removeFile(index)} disabled={disabled}>
             <Icon icon="crossCircle" color="pink" width="21px" height="21px" />
           </S.DeleteBtn>
         </S.FileWrapper>
