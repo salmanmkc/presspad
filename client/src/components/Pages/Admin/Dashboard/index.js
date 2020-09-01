@@ -20,8 +20,10 @@ const AdminDashboard = ({ name }) => {
   const [error, setError] = useState('');
 
   const getFirstName = () => {
-    const firstName = name.split(' ')[0];
-    return firstName;
+    if (name.split(' ')[0]) {
+      return name.split(' ')[0];
+    }
+    return name;
   };
 
   useEffect(() => {
