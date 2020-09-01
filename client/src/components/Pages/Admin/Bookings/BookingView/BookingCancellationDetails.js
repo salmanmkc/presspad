@@ -43,7 +43,7 @@ const BookingCancellationDetails = ({ details }) => {
       case 'pressPad':
         return 'PressPad';
       default:
-        break;
+        return null;
     }
   };
 
@@ -58,7 +58,6 @@ const BookingCancellationDetails = ({ details }) => {
             {cancellingUserDetails.name} ({cancellingUserDetails.role})
           </PS>
         </S.Row>
-
         <S.Row>
           <H7C style={detailsStyles.headline} color="lightBlue">
             reason provided
