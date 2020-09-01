@@ -38,4 +38,17 @@ const getTargetDate = numberOfWeeks => {
   return targetDate;
 };
 
+const calculateDaysRange = (start, end) => {
+  const range = moment.range(moment(start), moment(end));
+  range.start.startOf('day');
+  range.end.add(1, 'day');
+  return range.diff('days');
+};
+
+const createSingleDate = date => moment(date).format('DD/MM/YYYY');
+
 module.exports = getTargetDate;
+
+module.exports.createSingleDate = createSingleDate;
+
+module.exports.calculateDaysRange = calculateDaysRange;

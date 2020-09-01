@@ -13,8 +13,9 @@ import {
 
 import {
   getDiscountDays,
-  calculatePrice,
+  // calculatePrice,
   calculateHostRespondingTime,
+  calculateDaysRange,
 } from '../../../../helpers';
 
 import { H4C, H5C, H6C } from '../../../Common/Typography';
@@ -41,6 +42,7 @@ import {
 import {
   API_COUPON_URL,
   API_HOST_PROFILE_URL,
+  API_GET_INTERN_BURSARY_APPLICATION,
 } from '../../../../constants/apiRoutes';
 import {
   Error404,
@@ -64,6 +66,7 @@ export default class BookingView extends Component {
     withoutPay: false,
     upfront: true,
     isLoading: true,
+    bursaryDiscount: 0,
   };
 
   async componentDidMount() {
@@ -71,13 +74,53 @@ export default class BookingView extends Component {
 
     this.setState({ isLoading: true });
 
-    const url = API_HOST_PROFILE_URL.replace(':id', bookingInfo.host._id);
+    const hostInfoURL = API_HOST_PROFILE_URL.replace(
+      ':id',
+      bookingInfo.host._id,
+    );
+
     try {
+      const [profileData, bursaryData] = await Promise.all([
+        axios.get(hostInfoURL),
+        axios.get(API_GET_INTERN_BURSARY_APPLICATION),
+      ]);
+
       const {
-        data: { listing, profile, reviews },
-      } = await axios.get(url);
-      // eslint-disable-next-line react/no-unused-state
-      this.setState({ isLoading: false, listing, profile, reviews });
+        data: { listing, reviews, profile },
+      } = profileData;
+      const { data: bursaryApplications } = bursaryData;
+
+      const filteredBursary = bursaryApplications.filter(
+        el => el._id === bookingInfo.approvedBursary,
+      );
+
+      const {
+        discountRate: bursaryDiscountRate = 0,
+        londonWeighting = false,
+        totalPotentialAmount = 0,
+        totalSpentSoFar = 0,
+      } = filteredBursary.length && filteredBursary[0];
+
+      let bursaryDiscount = (bookingInfo.price * bursaryDiscountRate) / 100;
+      if (londonWeighting) {
+        bursaryDiscount =
+          (bookingInfo.price * bursaryDiscountRate) / 100 +
+          bookingInfo.price * 0.2;
+      }
+      // get total left in bursary
+      const availableBursary = totalPotentialAmount - totalSpentSoFar;
+      // check if enough funds available - if not set remaining funds as discount
+      if (availableBursary < bursaryDiscount) {
+        bursaryDiscount = availableBursary;
+      }
+
+      this.setState({
+        isLoading: false,
+        listing,
+        profile,
+        reviews,
+        bursaryDiscount,
+      });
     } catch (error) {
       if (error.response && error.response.status === 404) {
         message.destroy();
@@ -94,6 +137,8 @@ export default class BookingView extends Component {
 
   handleCouponChange = async e => {
     const code = e.target.value;
+    const { bursaryDiscount } = this.state;
+
     if (!code) {
       return this.setState(prevState => ({
         couponInfo: {
@@ -139,7 +184,13 @@ export default class BookingView extends Component {
             } = await axios.get(`${API_COUPON_URL}?code=${code}`);
 
             const {
-              bookingInfo: { startDate, endDate, status, installments },
+              bookingInfo: {
+                startDate,
+                endDate,
+                status,
+                installments,
+                price: bookingPrice,
+              },
             } = this.props;
 
             const {
@@ -169,30 +220,56 @@ export default class BookingView extends Component {
               usedDays,
             });
 
-            let couponDiscount =
-              (calculatePrice(discountDays) * discountRate) / 100;
+            // get number of booking days
+            const noBookingDays = calculateDaysRange(startDate, endDate);
 
-            const availableAmount = reservedAmount - usedAmount;
-
-            if (availableAmount < couponDiscount) {
-              couponDiscount = availableAmount;
-            }
-
-            this.setState(prevState => {
-              const newCouponState = {
-                ...prevState.couponInfo,
-                discountDays,
-                discountRate,
-                couponDiscount,
-                isCouponLoading: false,
-                error: false,
-              };
-              if (discountDays === 0) {
-                newCouponState.error =
-                  "the coupon is expired or doesn't cover this booking period";
+            if (noBookingDays !== discountDays) {
+              this.setState(prevState => ({
+                couponInfo: {
+                  ...prevState.couponInfo,
+                  isCouponLoading: false,
+                  error:
+                    'This discount code does not match your internship details. Please contact the organisation to get them to give you a new discount code.',
+                  couponDiscount: 0,
+                },
+              }));
+            } else {
+              let remainingPrice;
+              let couponDiscount;
+              if (bursaryDiscount > 0) {
+                remainingPrice = bookingPrice - bursaryDiscount;
+              } else {
+                remainingPrice = bookingPrice;
               }
-              return { couponInfo: newCouponState };
-            });
+
+              couponDiscount = (bookingPrice * discountRate) / 100;
+
+              if (remainingPrice < couponDiscount) {
+                couponDiscount = remainingPrice;
+              }
+
+              const availableAmount = reservedAmount - usedAmount;
+
+              if (availableAmount < couponDiscount) {
+                couponDiscount = availableAmount;
+              }
+
+              this.setState(prevState => {
+                const newCouponState = {
+                  ...prevState.couponInfo,
+                  discountDays,
+                  discountRate,
+                  couponDiscount,
+                  isCouponLoading: false,
+                  error: false,
+                };
+                if (discountDays === 0) {
+                  newCouponState.error =
+                    "the coupon is expired or doesn't cover this booking period";
+                }
+                return { couponInfo: newCouponState };
+              });
+            }
           } catch (error) {
             let errorMsg = 'something went wrong';
             if (error.response && error.response.status === 404) {
@@ -239,6 +316,7 @@ export default class BookingView extends Component {
       withoutPay,
       upfront,
       reviews,
+      bursaryDiscount,
     } = this.state;
 
     const { interests, phoneNumber, school, hometown, gender, bio } = profile;
@@ -281,6 +359,7 @@ export default class BookingView extends Component {
         endDate,
         upfront,
         couponInfo,
+        bursaryDiscount,
         bookingDays,
       });
     }
@@ -382,6 +461,7 @@ export default class BookingView extends Component {
             upfront={upfront}
             bookingDays={bookingDays}
             paymentInfo={paymentInfo}
+            bursaryDiscount={bursaryDiscount}
             price={price}
             startDate={startDate}
             endDate={endDate}
@@ -405,6 +485,7 @@ export default class BookingView extends Component {
             upfront={upfront}
             bookingDays={bookingDays}
             paymentInfo={paymentInfo}
+            bursaryDiscount={bursaryDiscount}
             installments={installments}
             updatedInstallments={updatedInstallments}
             price={price}
@@ -501,6 +582,7 @@ export default class BookingView extends Component {
           }
           bookingId={bookingInfo._id}
           visible={withoutPay}
+          bursaryDiscount={bursaryDiscount}
         />
         <Elements>
           <PayNowModal
@@ -512,6 +594,7 @@ export default class BookingView extends Component {
             updatedInstallments={updatedInstallments}
             visible={payNow}
             handlePayNowClick={this.handlePayNowClick}
+            bursaryDiscount={bursaryDiscount}
           />
         </Elements>
 

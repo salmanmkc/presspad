@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
   const potentialInternshipCost = (internshipLength + 6 - 14) * 2000;
 
   const calcCost = () => {
-    let total = potentialInternshipCost * bursaryPerc;
+    let total = (potentialInternshipCost * bursaryPerc) / 100;
 
     if (londonWeighting) {
       const londonCost = total * 0.2;
@@ -63,6 +63,8 @@ module.exports = async (req, res, next) => {
     totalPotentialAmount: awardedBursary,
     adminMessage,
     londonWeighting,
+    startDate: moment(internshipStartDate).subtract(3, 'd'),
+    endDate: moment(internshipEndDate).add(3, 'd'),
   });
 
   // send email

@@ -136,11 +136,12 @@ describe('Tests for booking queries', () => {
 
     const startDate = startDateAfter(210);
     const endDate = endDateAfter(215);
-    const overlappingBookings = await getOverlappingBookings(
-      checkedBookingId,
+    const overlappingBookings = await getOverlappingBookings({
+      bookingId: checkedBookingId,
+      hostId: hostUser._id,
       startDate,
       endDate,
-    );
+    });
 
     expect(overlappingBookings).toHaveLength(5);
 
