@@ -27,7 +27,7 @@ const UploadFile = ({
   // const [files, setFiles] = useState([]);
   const [error, setError] = useState('');
   const filteredFiles = files.filter(
-    file => file && !file.deleted && (file.name || file.fileName),
+    file => file && (file.name || file.fileName),
   );
   const softFilteredFiles = files.filter(
     file => file && (file.name || file.fileName),
