@@ -101,7 +101,7 @@ const MyListing = props => {
       data: { ...state },
     });
 
-    if (prevData.profileImage && state.profileImage.deleted) {
+    if (prevData.profileImage) {
       return _errors
         ? { ..._errors, profileImage: 'Profile image is required' }
         : { profileImage: 'Profile image is required' };
@@ -185,8 +185,7 @@ const MyListing = props => {
   const update = async (_profileImage, _photos = []) => {
     try {
       const oldPhotos =
-        state.photos &&
-        state.photos.filter(e => e.fileName && !e.new && !e.deleted);
+        state.photos && state.photos.filter(e => e.fileName && !e.new);
 
       await axios.patch(API_HOST_SETTINGS_MY_LISTING, {
         ...state,
@@ -231,8 +230,7 @@ const MyListing = props => {
       (state.profileImage &&
         state.profileImage.new &&
         !state.profileImage.uploaded) ||
-      (state.photos &&
-        state.photos.find(e => (e.new && !e.uploaded) || e.deleted))
+      (state.photos && state.photos.find(e => e.new && !e.uploaded))
     ) {
       const promiseArr = [];
       if (state.profileImage && state.profileImage.new) {
@@ -246,9 +244,7 @@ const MyListing = props => {
       }
 
       if (state.photos && state.photos.find(e => e.new && !e.uploaded)) {
-        const filteredFiles = state.photos.filter(
-          e => e.new && !e.uploaded && !e.deleted,
-        );
+        const filteredFiles = state.photos.filter(e => e.new && !e.uploaded);
         filteredFiles.forEach(file => {
           promiseArr.push(upload(file));
         });

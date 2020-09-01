@@ -104,12 +104,7 @@ const MyProfile = props => {
       }
     };
 
-    if (
-      startUpload &&
-      state.profileImage.new &&
-      !state.profileImage.uploaded &&
-      !state.profileImage.deleted
-    ) {
+    if (startUpload && state.profileImage.new && !state.profileImage.uploaded) {
       upload();
     }
   }, [props.id, startUpload, state.profileImage]);
@@ -120,7 +115,7 @@ const MyProfile = props => {
       data: { ...state },
     });
 
-    if (prevData.profileImage && state.profileImage.deleted) {
+    if (prevData.profileImage) {
       return _errors
         ? { ..._errors, profileImage: 'Profile image is required' }
         : { profileImage: 'Profile image is required' };

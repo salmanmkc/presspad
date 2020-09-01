@@ -89,10 +89,7 @@ const Bursary = props => {
 
     let e = _errors;
 
-    if (
-      (prevData.offerLetter && state.offerLetter.deleted) ||
-      !state.offerLetter
-    ) {
+    if (prevData.offerLetter || !state.offerLetter) {
       e = e
         ? { ...e, offerLetter: 'Proof of internship file is required' }
         : { offerLetter: 'Proof of internship file is required' };
