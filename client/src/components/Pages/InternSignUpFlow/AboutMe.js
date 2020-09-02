@@ -461,7 +461,7 @@ const AboutMe = () => {
           <S.IllCareWrapper>
             <Select
               options={types.belongToClass.map(e => ({ label: e, value: e }))}
-              label="Which class fo you self-identify as belonging to?"
+              label="Which class do you self-identify as belonging to?"
               helperText={
                 <span>
                   Refer to{' '}

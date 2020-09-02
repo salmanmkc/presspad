@@ -24,7 +24,7 @@ const schema = object({
     otherwise: string()
       .required(NAME_REQUIRED)
       .min(3, NAME_SHORT)
-      .max(15, NAME_LONG),
+      .max(50, NAME_LONG),
   }),
   email: string()
     .email(EMAIL_INVALID)

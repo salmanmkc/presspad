@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Input } from 'antd';
@@ -17,6 +17,13 @@ function DeletedAccount({ resetState, role }) {
   const [reason, setReason] = useState('');
 
   const history = useHistory();
+
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
 
   const handleSubmit = async () => {
     try {
