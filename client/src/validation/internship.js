@@ -1,4 +1,4 @@
-const { boolean, date, object, string } = require('yup');
+const { mixed, date, object, string } = require('yup');
 
 const errMsgs = require('../constants/errorMessages');
 
@@ -6,12 +6,7 @@ const schema = object({
   organisation: string()
     .ensure()
     .required(errMsgs.REQUIRED('organisation')),
-  offerLetter: object({
-    fileName: string()
-      .ensure()
-      .required(errMsgs.REQUIRED('offerLetter')),
-    isPrivate: boolean().default(true),
-  }).required(),
+  offerLetter: mixed().required(errMsgs.REQUIRED('offerLetter')),
   internshipOfficeAddress: object({
     addressline1: string()
       .ensure()

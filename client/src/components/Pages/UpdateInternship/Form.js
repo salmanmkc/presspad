@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Input, DatePicker } from '../../Common/Inputs';
+import { Input, DatePicker, UploadFile } from '../../Common/Inputs';
 import * as T from '../../Common/Typography';
 import {
   Row,
@@ -10,7 +10,6 @@ import {
   Wrapper,
   ContentWrapper,
 } from './style';
-import File from '../../Common/ProfileComponents/Field/File';
 
 import Button from '../../Common/ButtonNew';
 import BookingDetailsBox from '../../Common/BookingDetailsBox';
@@ -137,7 +136,7 @@ const Form = ({
             onChange={onInputChange}
             name="name"
             value={state.internshipContact.name}
-            data-parent="internshipContact"
+            parent="internshipContact"
             error={errors.internshipContact.name}
           />
         </SubRow>
@@ -150,7 +149,7 @@ const Form = ({
               onChange={onInputChange}
               name="email"
               value={state.internshipContact.email}
-              data-parent="internshipContact"
+              parent="internshipContact"
               error={errors.internshipContact.email}
             />
           </SubRow>
@@ -161,7 +160,7 @@ const Form = ({
               onChange={onInputChange}
               name="phoneNumber"
               value={state.internshipContact.phoneNumber}
-              data-parent="internshipContact"
+              parent="internshipContact"
               error={errors.internshipContact.phoneNumber}
             />
           </SubRow>
@@ -173,22 +172,22 @@ const Form = ({
           <SubRow>
             <Input
               label="Address Line 1"
-              placeholder="TODO get correct placeholder"
+              placeholder="Address line 1..."
               onChange={onInputChange}
               name="addressline1"
               value={state.internshipOfficeAddress.addressline1}
-              data-parent="internshipOfficeAddress"
+              parent="internshipOfficeAddress"
               error={errors.internshipOfficeAddress.addressline1}
             />
           </SubRow>
           <SubRow>
             <Input
               label="Address Line 2"
-              placeholder="TODO get correct placeholder"
+              placeholder="Address line 2..."
               onChange={onInputChange}
               name="addressline2"
               value={state.internshipOfficeAddress.addressline2}
-              data-parent="internshipOfficeAddress"
+              parent="internshipOfficeAddress"
               error={errors.internshipOfficeAddress.addressline2}
             />
           </SubRow>
@@ -198,11 +197,11 @@ const Form = ({
           <SubRow>
             <Input
               label="City"
-              placeholder="TODO get correct placeholder"
+              placeholder="city..."
               onChange={onInputChange}
               name="city"
               value={state.internshipOfficeAddress.city}
-              data-parent="internshipOfficeAddress"
+              parent="internshipOfficeAddress"
               error={errors.internshipOfficeAddress.city}
             />
           </SubRow>
@@ -210,11 +209,11 @@ const Form = ({
           <SubRow>
             <Input
               label="Postcode"
-              placeholder="TODO get correct placeholder"
+              placeholder="postcode..."
               onChange={onInputChange}
               name="postcode"
               value={state.internshipOfficeAddress.postcode}
-              data-parent="internshipOfficeAddress"
+              parent="internshipOfficeAddress"
               error={errors.internshipOfficeAddress.postcode}
             />
           </SubRow>
@@ -229,15 +228,15 @@ const Form = ({
           be automatically rejected
         </T.PXS>
         <SubRow>
-          <File
-            placeholder="placeholder"
-            handleChange={onUploadInternshipOffer}
-            error={errors.offerLetter}
-            handleError={fileErrorHandler}
+          <UploadFile
+            mainText="Upload file by dragging here"
+            secondaryText="file size max 2mb"
+            type="file"
             userId={userId}
-            isPrivate
-            url={state.offerLetter.url}
-            pathname={state.offerLetter.fileName}
+            files={[state.offerLetter]}
+            setFiles={([offerLetter]) => onUploadInternshipOffer(offerLetter)}
+            error={errors.offerLetter}
+            col={12}
           />
         </SubRow>
         <Button
@@ -246,6 +245,7 @@ const Form = ({
           type="primary"
           loading={loading}
           small={isMobile}
+          disabled={state.bursary.status === 'approved'}
         >
           Update and complete request
         </Button>

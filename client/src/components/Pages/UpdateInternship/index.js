@@ -76,11 +76,9 @@ const UpdateInternship = ({ id, windowWidth }) => {
     return setState(_state => ({ ..._state, [name]: value }));
   };
 
-  const onUploadInternshipOffer = ({ value }) =>
-    setState(_state => ({
-      ..._state,
-      offerLetter: { ..._state.offerLetter, fileName: value, url: '' },
-    }));
+  const onUploadInternshipOffer = offerLetter => {
+    setState(_state => ({ ..._state, offerLetter }));
+  };
 
   const onStartChange = value => {
     setState(_state => ({
@@ -136,6 +134,8 @@ const UpdateInternship = ({ id, windowWidth }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
+    let _offerLetter = state.offerLetter;
+
     const { errors: _errors } = await validate({
       schema: internshipSchema,
       data: state,
@@ -143,9 +143,31 @@ const UpdateInternship = ({ id, windowWidth }) => {
 
     if (!_errors) {
       setLoading(true);
+      if (_offerLetter && _offerLetter.new && !_offerLetter.uploaded) {
+        const generatedName = `${id}/${Date.now()}.${_offerLetter.name}`;
+        const {
+          data: { signedUrl },
+        } = await axios.get(`/api/upload/signed-url?fileName=${generatedName}`);
+        const headers = {
+          'Content-Type': 'application/octet-stream',
+        };
+
+        await axios.put(signedUrl, _offerLetter, {
+          headers,
+        });
+
+        _offerLetter = {
+          fileName: generatedName,
+          new: true,
+          uploaded: true,
+          preview: _offerLetter.preview,
+        };
+      }
+
       const { error } = await updateInternshipAndCreateBooking({
         ...state,
         ...bookingData,
+        offerLetter: _offerLetter,
       });
 
       if (!error) {

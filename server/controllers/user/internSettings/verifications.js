@@ -85,7 +85,7 @@ module.exports = async (req, res, next) => {
       const hasChanged = isObjectChanged(newObj, oldObj);
 
       if (hasChanged) {
-        return next(boom.badRequest(`Can't change intership details`));
+        return next(boom.badRequest(`Can't change internship details`));
       }
     }
 
