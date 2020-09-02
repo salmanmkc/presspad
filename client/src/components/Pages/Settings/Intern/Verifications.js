@@ -616,7 +616,7 @@ const Verifications = props => {
               }));
             }}
             value={state.reference2 && state.reference2.name}
-            label="2. Reference name"
+            label="Reference name"
             name="name"
             error={errors.reference2 && errors.reference2.name}
           />

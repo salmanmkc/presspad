@@ -27,6 +27,7 @@ const Input = ({
   type,
   addonBefore,
   disabled,
+  parent,
 }) => (
   <InputWrapper error={!!error} mt={mt} mb={mb} mr={mr} ml={ml}>
     {label && (
@@ -50,6 +51,7 @@ const Input = ({
         style={{ paddingTop: '10px' }}
         name={name}
         type={type}
+        data-parent={parent}
       />
     ) : (
       <AntdInput
@@ -62,6 +64,7 @@ const Input = ({
         type={type || 'text'}
         addonBefore={addonBefore}
         disabled={disabled}
+        data-parent={parent}
       />
     )}
     {limit && (
