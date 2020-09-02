@@ -74,7 +74,7 @@ const HostSteps = ({ position }) => (
         </S.Row>
         <S.Row marginBottom>
           <Icon icon="tick" width="20px" height="20px" color="white" />
-          <T.P color="white" ml={2}>
+          <T.P color="white" ml={2} mt={5}>
             Photos of your home
           </T.P>
         </S.Row>

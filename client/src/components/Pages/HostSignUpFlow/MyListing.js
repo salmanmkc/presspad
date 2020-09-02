@@ -325,7 +325,7 @@ const MyListing = props => {
         }
       />
       {/* home images */}
-      <Row>
+      <Row mt={5} mtT={6}>
         <Col w={[4, 12, 12]}>
           <div style={{ marginBottom: '30px' }}>
             <T.PBold color="blue">Photos of your home</T.PBold>
