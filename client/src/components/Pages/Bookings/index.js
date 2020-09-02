@@ -92,7 +92,7 @@ const Bookings = props => {
               withUserType={currentBooking[0].withUserRole}
             />
           ) : (
-            <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
+            <T.PXL color={colors.gray}>No current booking</T.PXL>
           )}
         </S.SectionWrapper>
 
@@ -117,7 +117,7 @@ const Bookings = props => {
               status={upcomingBooking[0].status}
             />
           ) : (
-            <T.PXL color={colors.lightestGray}>No upcoming booking</T.PXL>
+            <T.PXL color={colors.gray}>No upcoming booking</T.PXL>
           )}
         </S.SectionWrapper>
         {/* BOOKING REQUESTS */}

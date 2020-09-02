@@ -164,7 +164,7 @@ const InternDashboard = props => {
               status={nextBooking.status}
             />
           ) : (
-            <T.PXL color={colors.lightestGray}>No current booking</T.PXL>
+            <T.PXL color={colors.gray}>No current booking</T.PXL>
           )}
         </Col>
       </Row>
