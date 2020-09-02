@@ -21,7 +21,8 @@ export const getUserBookings = async (role, id) => {
       return { internBookings: data, error: null };
     }
   } catch (error) {
-    return message.error(error || 'Something went wrong');
+    message.error(error || 'Something went wrong');
+    return { error };
   }
 };
 
