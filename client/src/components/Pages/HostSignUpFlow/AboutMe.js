@@ -63,6 +63,13 @@ const AboutMe = () => {
 
   const history = useHistory();
 
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
+
   const _validate = async isContinue => {
     const { errors: _errors } = await validate({
       schema: hostSettings.aboutMeSchema(prevData, isContinue),
@@ -567,7 +574,7 @@ const AboutMe = () => {
           <S.IllCareWrapper>
             <Select
               options={types.belongToClass.map(e => ({ label: e, value: e }))}
-              label="Which class of you self-identify as belonging to?"
+              label="Which class do you self-identify as belonging to?"
               helperText={
                 <span>
                   Refer to{' '}

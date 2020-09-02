@@ -85,6 +85,13 @@ const Verifications = props => {
 
   const history = useHistory();
 
+  useEffect(() => {
+    window.scrollTo({
+      left: 0,
+      top: 0,
+    });
+  }, []);
+
   const uploadFile = async (file = {}) => {
     try {
       const generatedName = `${props.id}/${Date.now()}.${file.name}`;
