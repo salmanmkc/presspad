@@ -125,12 +125,12 @@ const Verifications = props => {
       data: { ...state },
     });
     let e = _errors;
-    if (prevData.photoID) {
+    if (prevData.photoID && !state.photoID) {
       e = e
         ? { ...e, photoID: 'identity proof is required' }
         : { photoID: 'identity proof is required' };
     }
-    if (prevData.DBSCheck) {
+    if (prevData.DBSCheck && !state.DBSCheck) {
       e = e
         ? { ...e, DBSCheck: 'DBS file is required' }
         : { DBSCheck: 'DBS file is required' };
