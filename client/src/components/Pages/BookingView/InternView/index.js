@@ -233,21 +233,21 @@ export default class BookingView extends Component {
                   couponDiscount: 0,
                 },
               }));
+              // VALID CODE FOR BOOKING
             } else {
               let remainingPrice;
               let couponDiscount;
+              // if active bursary set reduced booking price as base
               if (bursaryDiscount > 0) {
                 remainingPrice = bookingPrice - bursaryDiscount;
               } else {
+                // keep original price
                 remainingPrice = bookingPrice;
               }
 
-              couponDiscount = (bookingPrice * discountRate) / 100;
+              couponDiscount = (remainingPrice * discountRate) / 100;
 
-              if (remainingPrice < couponDiscount) {
-                couponDiscount = remainingPrice;
-              }
-
+              // check if available amount of coupon is sufficient
               const availableAmount = reservedAmount - usedAmount;
 
               if (availableAmount < couponDiscount) {

@@ -63,7 +63,7 @@ const MakePayment = ({
     }
   }, [handleCouponChange, isNew, usedCoupon.code]);
 
-  let netAmount = fullPrice - couponDiscount - bursaryDiscount;
+  let netAmount = fullPrice - bursaryDiscount - couponDiscount;
 
   useEffect(() => {
     if (netAmount <= 0) {
@@ -180,9 +180,10 @@ const MakePayment = ({
   }
 
   const remainingPrice = getRemainingPrice(installments);
-
   const firstUnpaid = getFirstUnpaidInstallment(installments);
+
   netAmount = remainingPrice - couponDiscount;
+
   return (
     <>
       {remainingPrice > 0 && !paymentDue && !paymentOverdue && (

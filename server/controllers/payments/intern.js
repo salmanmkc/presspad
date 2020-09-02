@@ -62,6 +62,8 @@ const internPayment = async (req, res, next) => {
     let couponId;
     let bursaryApplicationId;
     let updatedInstallments;
+    let remainingPrice;
+
     const isNewInstallments = Array.isArray(paymentInfo) || !paymentInfo._id;
 
     if (!couponInfo.couponCode && !bursaryDiscount && withoutPay) {
@@ -141,13 +143,11 @@ const internPayment = async (req, res, next) => {
       }
 
       // Calculate coupon discount amount
-      couponDiscount = (booking.price * coupon.discountRate) / 100;
+      remainingPrice = booking.price;
       if (bursaryApplicationId) {
-        const remainingPrice = booking.price - bursaryDiscount;
-        if (remainingPrice < couponDiscount) {
-          couponDiscount = remainingPrice;
-        }
+        remainingPrice = booking.price - bursaryDiscount;
       }
+      couponDiscount = (remainingPrice * coupon.discountRate) / 100;
 
       if (!isNewInstallments) {
         couponDiscount = (discountDays * 2000 * coupon.discountRate) / 100;
