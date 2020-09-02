@@ -104,7 +104,12 @@ const MyProfile = props => {
       }
     };
 
-    if (startUpload && state.profileImage.new && !state.profileImage.uploaded) {
+    if (
+      startUpload &&
+      state.profileImage.new &&
+      !state.profileImage.uploaded &&
+      !state.profileImage.deleted
+    ) {
       upload();
     }
   }, [props.id, startUpload, state.profileImage]);
@@ -115,7 +120,7 @@ const MyProfile = props => {
       data: { ...state },
     });
 
-    if (prevData.profileImage) {
+    if (prevData.profileImage && !state.profileImage) {
       return _errors
         ? { ..._errors, profileImage: 'Profile image is required' }
         : { profileImage: 'Profile image is required' };
@@ -164,7 +169,6 @@ const MyProfile = props => {
     setMainError();
     setLastClickOnContinue(isContinue);
     const _errors = await _validate(isContinue);
-
     setErrors(_errors || {});
 
     if (_errors) {
@@ -243,7 +247,11 @@ const MyProfile = props => {
         setFiles={([profileImage]) =>
           setState(_state => ({ ..._state, profileImage }))
         }
-        error={prevData.profileImage && 'Profile image is required'}
+        error={
+          prevData.profileImage &&
+          !state.profileImage &&
+          'Profile image is required'
+        }
       />
 
       <Row>
