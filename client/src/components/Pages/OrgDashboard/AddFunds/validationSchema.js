@@ -5,7 +5,7 @@ const schema = object({
   amount: number()
     .typeError(REQUIRED_FIELD)
     .moreThan(0)
-    .lessThan(10000)
+    .lessThan(100000)
     .required(REQUIRED_FIELD)
     .nullable(),
   name: string()
