@@ -97,24 +97,23 @@ const Verifications = props => {
       return setMainError(e.message);
     }
   };
-
   const _validate = async () => {
     const { errors: _errors } = await validate({
       schema: internSettings.verifications(prevData, state.hasNoInternship),
       data: { ...state },
     });
     let e = _errors;
-    if (prevData.photoID) {
+    if (prevData.photoID && !state.photoID) {
       e = e
         ? { ...e, photoID: 'identity proof is required' }
         : { photoID: 'identity proof is required' };
     }
-    if (prevData.DBSCheck) {
+    if (prevData.DBSCheck && !state.DBSCheck) {
       e = e
         ? { ...e, DBSCheck: 'DBS file is required' }
         : { DBSCheck: 'DBS file is required' };
     }
-    if (prevData.offerLetter) {
+    if (prevData.offerLetter && !state.offerLetter) {
       e = e
         ? { ...e, offerLetter: 'Proof of internship file is required' }
         : { offerLetter: 'Proof of internship file is required' };
@@ -167,9 +166,7 @@ const Verifications = props => {
     let _photoID;
     let _offerLetter;
     const _errors = await _validate();
-
     setErrors(_errors || {});
-
     if (_errors) {
       setMainError('Must fill all required fields');
       return;
