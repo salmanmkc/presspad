@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const validateCancelBooking = payedAmount =>
+const validateCancelBooking = paidAmount =>
   Yup.object().shape({
     cancellationReason: Yup.string()
       .typeError('must be a string')
@@ -22,10 +22,10 @@ const validateCancelBooking = payedAmount =>
       .typeError('must be a valid number')
       .required('Required'),
     sum: Yup.number().test(
-      'Test allocated sum equals payed amount so it equals what has been payed',
-      'Please (re)allocate the amount that has been payed.',
+      'Test allocated sum equals paid amount so it equals what has been paid',
+      'Please (re)allocate the amount that has been paid.',
       function test(value) {
-        return value === payedAmount;
+          return value === paidAmount;
       },
     ),
   });

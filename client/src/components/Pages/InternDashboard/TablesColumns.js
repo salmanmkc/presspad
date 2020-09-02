@@ -74,8 +74,8 @@ export const bookingsColumns = windowWidth => {
   if (windowWidth > 1000) {
     columns.push({
       title: 'Paid so far',
-      dataIndex: 'payedAmount',
-      render: payedAmount => <span>£{formatPrice(payedAmount)}</span>,
+      dataIndex: 'paidAmount',
+      render: paidAmount => <span>£{formatPrice(paidAmount)}</span>,
     });
   }
 

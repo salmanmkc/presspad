@@ -41,7 +41,7 @@ exports.getHostsDeserveBadge = () =>
                       $and: [
                         { $eq: ['$host', '$$host_id'] },
                         {
-                          $eq: [{ $ceil: '$price' }, { $ceil: '$payedAmount' }],
+                          $eq: [{ $ceil: '$price' }, { $ceil: '$paidAmount' }],
                         },
                         { $gte: [new Date(), '$endDate'] },
                       ],

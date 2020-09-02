@@ -20,7 +20,7 @@ const BookingCancellationDetails = ({ details }) => {
     internDetails = {},
     startDate = '',
     endDate = '',
-    payedAmount = '',
+      paidAmount = '',
     price = '',
     coupon = {},
     bursaryApplication = {},
@@ -173,7 +173,7 @@ const BookingCancellationDetails = ({ details }) => {
             </S.Column>
             <S.Column>
               <PXSBold>Paid so far</PXSBold>
-              <PXS>£{formatPrice(payedAmount)}</PXS>
+                          <PXS>£{formatPrice(paidAmount)}</PXS>
             </S.Column>
             <S.Column>
               <PXSBold>Total cost</PXSBold>

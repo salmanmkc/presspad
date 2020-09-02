@@ -51,7 +51,7 @@ const updateCouponTransaction = async (
   await Promise.all([
     Booking.updateOne(
       { _id: mongoose.Types.ObjectId(bookingId) },
-      { $inc: { payedAmount: amount } },
+      { $inc: { paidAmount: amount } },
       { session },
     ),
     User.updateOne(

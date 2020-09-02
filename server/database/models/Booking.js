@@ -55,7 +55,7 @@ const bookingSchema = new Schema(
       type: Number,
       required: true,
     },
-    payedAmount: {
+    paidAmount: {
       type: Number,
       default: 0,
     },

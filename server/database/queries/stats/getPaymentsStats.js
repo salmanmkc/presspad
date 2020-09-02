@@ -32,8 +32,8 @@ const getPaymentsStats = () =>
           },
           {
             $project: {
-              payedAmount: 1,
-              presspadRatio: { $multiply: ['$payedAmount', 0.45] },
+              paidAmount: 1,
+              presspadRatio: { $multiply: ['$paidAmount', 0.45] },
             },
           },
         ],

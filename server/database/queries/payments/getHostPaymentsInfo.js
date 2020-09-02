@@ -12,7 +12,7 @@ const getHostPendingPayments = async id => {
             { $eq: ['$host', id] },
             { $eq: ['$status', bookingStatuses.confirmed] },
             { $eq: ['$status', bookingStatuses.awaitingCancellation] },
-            { $gt: ['$payedAmount', 0] },
+            { $gt: ['$paidAmount', 0] },
             { $eq: ['$moneyGoTo', 'host'] },
           ],
         },
@@ -20,13 +20,13 @@ const getHostPendingPayments = async id => {
     },
     {
       $project: {
-        hostRatioPayedAmount: { $multiply: ['$payedAmount', 0.45] },
+        hostRatiopaidAmount: { $multiply: ['$paidAmount', 0.45] },
       },
     },
   ]);
 
   const pendingPayments = data.reduce(
-    (acc, curr) => acc + curr.hostRatioPayedAmount,
+    (acc, curr) => acc + curr.hostRatiopaidAmount,
     0,
   );
   return pendingPayments;
@@ -58,7 +58,7 @@ const getHostPaymentsInfo = id =>
               $expr: {
                 $and: [
                   { $eq: ['$$host', '$host'] },
-                  { $gt: ['$payedAmount', 0] },
+                  { $gt: ['$paidAmount', 0] },
                   {
                     $or: [
                       { $eq: ['$status', 'completed'] },
@@ -201,7 +201,7 @@ const getHostPaymentsInfo = id =>
         as: 'internsHosted',
       },
     },
-    // look up pending payment (confirmed bookings that have payedamount)
+    // look up pending payment (confirmed bookings that have paidamount)
     {
       $lookup: {
         from: 'bookings',
@@ -214,7 +214,7 @@ const getHostPaymentsInfo = id =>
                   { $eq: ['$$host', '$host'] },
                   { $eq: ['$status', bookingStatuses.confirmed] },
                   { $eq: ['$status', bookingStatuses.awaitingCancellation] },
-                  { $gt: ['$payedAmount', 0] },
+                  { $gt: ['$paidAmount', 0] },
                   { $eq: ['$moneyGoTo', 'host'] },
                 ],
               },
@@ -222,7 +222,7 @@ const getHostPaymentsInfo = id =>
           },
           {
             $project: {
-              hostRatioPayedAmount: { $multiply: ['$payedAmount', 0.45] },
+              hostRatiopaidAmount: { $multiply: ['$paidAmount', 0.45] },
             },
           },
         ],
@@ -236,7 +236,7 @@ const getHostPaymentsInfo = id =>
         withdrawalRequests: 1,
         internsHosted: 1,
         confirmedBookings: 1,
-        pendingPayment: { $sum: '$confirmedBookings.hostRatioPayedAmount' },
+        pendingPayment: { $sum: '$confirmedBookings.hostRatiopaidAmount' },
       },
     },
   ]);

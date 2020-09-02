@@ -20,7 +20,7 @@ const Allocation = ({
   errors,
   setErrors,
 }) => {
-  const { payedAmount = '', coupon = {} } = details;
+    const { paidAmount = '', coupon = {} } = details;
 
   const handleRefundChange = (name, { value }) => {
     // only accept postive numbers
@@ -38,12 +38,12 @@ const Allocation = ({
     const total =
       hostRefund + internRefund + organisationRefund + pressPadRefund;
 
-    const nothingLeft = total * 100 > payedAmount;
-    const maxHostRefund = hostRefund * 100 > 0.45 * payedAmount;
+    const nothingLeft = total * 100 > paidAmount;
+      const maxHostRefund = hostRefund * 100 > 0.45 * paidAmount;
 
     setRefundState({
       ...refundState,
-      sum: nothingLeft ? payedAmount : total * 100,
+        sum: nothingLeft ? paidAmount : total * 100,
     });
 
     // error handling
@@ -51,14 +51,14 @@ const Allocation = ({
       setErrors({
         ...errors,
         refundError: `Can't pay host more than his share (${formatPrice(
-          0.45 * payedAmount,
+            0.45 * paidAmount,
         )})`,
       });
     } else if (nothingLeft) {
       setErrors({
         ...errors,
         refundError: `Re-allocation must not exceed total amount (${formatPrice(
-          payedAmount,
+            paidAmount,
         )})`,
       });
     } else {
@@ -84,7 +84,7 @@ const Allocation = ({
     <>
       <S.Row>
         <PBold>
-          £{formatPrice(payedAmount)} has been paid so far. Please select how
+                  £{formatPrice(paidAmount)} has been paid so far. Please select how
           much to allocate to each user
         </PBold>
         <S.SubRow mt="2rem">
@@ -162,7 +162,7 @@ const Allocation = ({
         </S.SubRow>
       </S.Row>
       <PBold style={{ marginTop: '2rem' }} color="lightBlue">
-        £ {formatPrice(payedAmount - sum)} left to allocate
+              £ {formatPrice(paidAmount - sum)} left to allocate
       </PBold>
       <PXSBold color="red">{errors.refundError}</PXSBold>
     </>

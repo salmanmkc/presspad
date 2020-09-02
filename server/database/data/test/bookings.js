@@ -24,7 +24,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() - 21 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.completed,
       price: 12000, // first two weeks always free
-      payedAmount: 12000,
+      paidAmount: 12000,
       moneyGoTo: 'host',
     },
     // completed
@@ -36,7 +36,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() - 15 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.completed,
       price: 0, // because first two weeks always free
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // pending - awaiting host
@@ -48,7 +48,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 20 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.pending,
       price: 0, // because first two weeks always free
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // accepted & not paid one payment
@@ -60,7 +60,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 50 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.accepted,
       price: 24000,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // accepted & not paid installments applicable
@@ -72,7 +72,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 110 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.accepted,
       price: 92000,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // confirmed (less than two weeks, free)
@@ -84,7 +84,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 126 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 0,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'presspad',
     },
     // confirmed & paid (upfront)
@@ -96,7 +96,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 148 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 10000,
-      payedAmount: 10000,
+      paidAmount: 10000,
       moneyGoTo: 'host',
     },
     // confirmed & paid (first payment)
@@ -109,7 +109,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 210 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 92000,
-      payedAmount: 14000 + 46000,
+      paidAmount: 14000 + 46000,
       moneyGoTo: 'host',
     },
     // confirmed & paid (first payment) no coupon
@@ -122,7 +122,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 214 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 100000,
-      payedAmount: 28000,
+      paidAmount: 28000,
       moneyGoTo: 'host',
     },
 
@@ -135,7 +135,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() - 40 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.cancelled,
       price: 12000,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // rejected
@@ -147,7 +147,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() - 30 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.rejected,
       price: 12000,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // awaitingAdmin and host does accept automatically
@@ -159,7 +159,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.awaitingAdmin,
       price: 44000,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // awaiting admin and host doesn't accept automatically
@@ -171,7 +171,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 80 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.awaitingAdmin,
       price: 44000,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'host',
     },
     // confirmed (less than two weeks, free) -> current booking
@@ -183,7 +183,7 @@ const createAll = async ({ users, listings, couponDiscountRate }) => {
       endDate: Date.now() + 5 * 24 * 60 * 60 * 1000,
       status: bookingStatuses.confirmed,
       price: 0,
-      payedAmount: 0,
+      paidAmount: 0,
       moneyGoTo: 'presspad',
     },
   ];

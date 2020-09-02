@@ -342,7 +342,7 @@ export default class BookingView extends Component {
     let newInstallments = [];
     const {
       price,
-      payedAmount,
+      paidAmount,
       startDate,
       endDate,
       status,
@@ -633,7 +633,7 @@ export default class BookingView extends Component {
           </CancelBookingButton>
         )}
         <BookingDates
-          payedSoFar={payedAmount}
+          paidSoFar={paidAmount}
           price={price}
           startDate={startDate}
           endDate={endDate}

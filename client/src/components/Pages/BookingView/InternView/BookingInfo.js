@@ -18,7 +18,7 @@ const BookingInfo = props => {
   const {
     bookingId,
     price: fullPrice,
-    payedAmount,
+    paidAmount,
     startDate,
     status,
     endDate,
@@ -76,7 +76,7 @@ const BookingInfo = props => {
                     : 'So far you’ve recieved'}
                 </InfoText>
                 <InfoValue mbottom="2.5rem" align="center" light>
-                  £{formatPrice(payedAmount)}
+                                  £{formatPrice(paidAmount)}
                 </InfoValue>
               </>
             ) : null}

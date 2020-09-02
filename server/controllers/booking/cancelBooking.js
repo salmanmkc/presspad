@@ -32,14 +32,14 @@ const cancelBooking = async (req, res, next) => {
     // check if booking is valid and if cancellation before payment
 
     const booking = await getBooking(bookingId);
-    const { status, payedAmount } = booking[0];
+    const { status, paidAmount } = booking[0];
 
     const canCancelDirectly =
       ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(status) &&
-      payedAmount === 0;
+      paidAmount === 0;
 
     const canCancelAfterPayment =
-      payedAmount > 0 && ['accepted', 'confirmed'].includes(status);
+      paidAmount > 0 && ['accepted', 'confirmed'].includes(status);
     // run query to update booking
     if (canCancelDirectly) {
       cancelledBooking = await cancelBookingBeforePaymentQuery({

@@ -26,7 +26,7 @@ describe('Tests for updateCouponTransaction queries', () => {
   });
 
   test('Test updateCouponTransaction', async done => {
-    const [booking] = await Booking.find({ payedAmount: 0 });
+    const [booking] = await Booking.find({ paidAmount: 0 });
 
     const { host: hostId, intern: internId } = booking;
     const [intern] = await User.find({ _id: internId });

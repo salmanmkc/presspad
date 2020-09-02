@@ -20,7 +20,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       user: internUser._id,
       from: internAccount._id,
       to: hostAccount._id,
-      amount: confirmedPaidUpfront.payedAmount,
+      amount: confirmedPaidUpfront.paidAmount,
       type: 'installment',
     },
     // from organsisation to host
@@ -37,7 +37,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       user: internUser._id,
       from: internAccount._id,
       to: hostAccount._id,
-      amount: confirmedPaidFirst.payedAmount,
+      amount: confirmedPaidFirst.paidAmount,
       type: 'installment',
     },
     // confirmedPaidFirstNoCoupon
@@ -45,7 +45,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       user: internUser._id,
       from: internAccount._id,
       to: hostAccount._id,
-      amount: confirmedPaidFirstNoCoupon.payedAmount,
+      amount: confirmedPaidFirstNoCoupon.paidAmount,
       type: 'installment',
     },
     // confirmedPaidFirstNoCoupon
@@ -53,7 +53,7 @@ const createAll = async ({ accounts, users, bookings, couponDiscountRate }) => {
       user: internUser._id,
       from: internAccount._id,
       to: hostAccount._id,
-      amount: completedBooking.payedAmount,
+      amount: completedBooking.paidAmount,
       type: 'installment',
     },
   ];

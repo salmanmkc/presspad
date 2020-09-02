@@ -10,7 +10,7 @@ import {
 } from './BookingDetails.style';
 import { formatPrice } from '../../../helpers';
 
-const BookingInfo = ({ startDate, endDate, price, payedSoFar, intern }) => {
+const BookingInfo = ({ startDate, endDate, price, paidSoFar, intern }) => {
   const startDay = moment(startDate).format('DD');
   const endDay = moment(endDate).format('DD');
   const startMonth = moment(startDate).format('MMM');
@@ -32,10 +32,10 @@ const BookingInfo = ({ startDate, endDate, price, payedSoFar, intern }) => {
           </div>
         </BookingDateWrapper>
         {/* Price Render */}
-        {payedSoFar ? (
+        {paidSoFar ? (
           <>
-            <H7C color="white">Payed so far</H7C>{' '}
-            <H4 color="white">£{formatPrice(payedSoFar)}</H4>
+            <H7C color="white">Paid so far</H7C>{' '}
+                      <H4 color="white">£{formatPrice(paidSoFar)}</H4>
           </>
         ) : (
           <>

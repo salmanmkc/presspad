@@ -60,7 +60,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
 
   const {
     _id: bookingId,
-    payedAmount,
+      paidAmount,
     intern,
     price,
     startDate,
@@ -323,7 +323,7 @@ const HostView = ({ bookingInfo, id: userId, ...props }) => {
       )}
 
       <BookingDates
-        payedSoFar={payedAmount}
+        paidSoFar={paidAmount}
         price={price}
         startDate={startDate}
         endDate={endDate}

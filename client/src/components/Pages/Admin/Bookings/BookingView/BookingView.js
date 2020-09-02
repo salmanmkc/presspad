@@ -25,7 +25,7 @@ const BookingReview = ({
   reviewBooking,
   setReviewBooking,
 }) => {
-  const { payedAmount, _id: bookingId } = details;
+    const { paidAmount, _id: bookingId } = details;
 
   const [cancelBookingState, setCancelBookingState] = useState({
     cancellationReason: '',
@@ -54,7 +54,7 @@ const BookingReview = ({
 
     // check if allocation has started
 
-    validateCancelBooking(payedAmount)
+      validateCancelBooking(paidAmount)
       .validate(data, { abortEarly: false })
       .then(async res => {
         setErrors({});

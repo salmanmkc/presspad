@@ -33,7 +33,7 @@ const CancellationConfirm = ({ ...props }) => {
     price,
     startDate,
     endDate,
-    payedAmount,
+    paidAmount,
     status,
     _id: bookingId,
     intern,
@@ -48,11 +48,11 @@ const CancellationConfirm = ({ ...props }) => {
 
   // decide if booking is valid to be cancelled before or after payment
   const canCancelDirectly =
-    payedAmount === 0 &&
+    paidAmount === 0 &&
     ['accepted', 'confirmed', 'awaiting admin', 'pending'].includes(status);
 
   const canCancelAfterPayment =
-    payedAmount > 0 && ['accepted', 'confirmed'].includes(status);
+    paidAmount > 0 && ['accepted', 'confirmed'].includes(status);
 
   // validates length of message input
   useEffect(() => {
@@ -182,7 +182,7 @@ const CancellationConfirm = ({ ...props }) => {
 
       <BookingDates
         price={price}
-        payedSoFar={payedAmount}
+        paidSoFar={paidAmount}
         startDate={startDate}
         endDate={endDate}
         intern={cancellingUserRole === 'intern'}

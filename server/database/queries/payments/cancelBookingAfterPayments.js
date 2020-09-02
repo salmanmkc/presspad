@@ -62,7 +62,7 @@ const updateCanceledBooking = ({ bookingId, cancellationData, session }) => {
  * @param {string} obj.updatedBooking.intern
  * @param {string} obj.updatedBooking.host
  * @param {string} obj.updatedBooking.coupon
- * @param {string} obj.updatedBooking.payedAmount
+ * @param {string} obj.updatedBooking.paidAmount
  * @param {object} obj.cancellationData
  * @param {number} obj.cancellationData.hostRefund
  * @param {number} obj.cancellationData.internRefund
@@ -83,7 +83,7 @@ const updateAccounts = async ({
     organisationRefund,
     // pressPadRefund,
   } = cancellationData;
-  const { intern, host, coupon, payedAmount } = updatedBooking;
+  const { intern, host, coupon, paidAmount } = updatedBooking;
 
   const { account: hostAccount } = await User.findById(host);
   const { account: presspadAccount } = await User.findById(adminId);
@@ -135,7 +135,7 @@ const updateAccounts = async ({
     );
   }
 
-  const hostShare = 0.45 * payedAmount;
+  const hostShare = 0.45 * paidAmount;
   const deductFromHost = hostShare - hostRefund;
 
   if (deductFromHost > 0) {

@@ -36,7 +36,7 @@ const cancelBookingAfterPayment = async (req, res, next) => {
       session,
     });
 
-    const hostShare = 0.45 * updatedBooking.payedAmount;
+    const hostShare = 0.45 * updatedBooking.paidAmount;
     const deductFromHost = hostShare - req.body.hostRefund;
     if (deductFromHost < 0)
       return next(
