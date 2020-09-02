@@ -102,19 +102,25 @@ const MyListing = props => {
     [props.id],
   );
 
-  const _validate = async () => {
+  const _validate = async isContinue => {
     const { errors: _errors } = await validate({
-      schema: hostSettings.myListing(prevData),
+      schema: hostSettings.myListing(prevData, isContinue),
       data: { ...state },
     });
 
-    if (prevData.profileImage && state.profileImage.deleted) {
+    if (
+      !(
+        state.profileImage &&
+        (state.profileImage.fileName || state.profileImage.name)
+      ) &&
+      ((prevData.profileImage && prevData.profileImage.fileName) || isContinue)
+    ) {
       return _errors
         ? { ..._errors, profileImage: 'Profile image is required' }
         : { profileImage: 'Profile image is required' };
     }
 
-    return _errors;
+    return _errors ? { ..._errors, profileImage: '' } : null;
   };
 
   const onRangeChange = (date, type, index) => {
@@ -324,11 +330,7 @@ const MyListing = props => {
         setFiles={([profileImage]) =>
           setState(_state => ({ ..._state, profileImage }))
         }
-        error={
-          prevData.profileImage &&
-          state.profileImage.deleted &&
-          'Profile image is required'
-        }
+        error={errors.profileImage}
       />
       {/* home images */}
       <Row>
@@ -368,7 +370,7 @@ const MyListing = props => {
             label="Address Line 1"
             placeholder="Address line 1..."
             value={state.address.addressline1}
-            error={errors.address}
+            error={errors.address && errors.address.addressline1}
           />
         </Col>
         <Col w={[4, 6, 5.3]}>
@@ -378,7 +380,7 @@ const MyListing = props => {
             label="Address Line 2"
             placeholder="Address Line 2..."
             value={state.address.addressline2}
-            error={errors.address}
+            error={errors.address && errors.address.addressline2}
           />
         </Col>
       </Row>
@@ -390,7 +392,7 @@ const MyListing = props => {
             label="City"
             placeholder="City..."
             value={state.address.city}
-            error={errors.address}
+            error={errors.address && errors.address.city}
           />
         </Col>
         <Col w={[4, 6, 5.3]} mb={5}>
@@ -400,7 +402,7 @@ const MyListing = props => {
             label="Postcode"
             placeholder="Postcode..."
             value={state.address.postcode}
-            error={errors.address}
+            error={errors.address && errors.address.postcode}
           />
         </Col>
       </Row>

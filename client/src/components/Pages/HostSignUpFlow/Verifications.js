@@ -126,22 +126,41 @@ const Verifications = props => {
     }
   }, [state.workingArea]);
 
-  const _validate = async () => {
+  const _validate = async isContinue => {
     const { errors: _errors } = await validate({
-      schema: hostSettings.verifications(prevData),
+      schema: hostSettings.verifications(prevData, isContinue),
       data: { ...state },
     });
     let e = _errors;
-    if (prevData.photoID && state.photoID.deleted) {
+    if (
+      !(state.photoID && (state.photoID.fileName || state.photoID.name)) &&
+      ((prevData.photoID && prevData.photoID.fileName) || isContinue)
+    ) {
       e = e
         ? { ...e, photoID: 'identity proof is required' }
         : { photoID: 'identity proof is required' };
     }
-    if (prevData.DBSCheck && state.DBSCheck.deleted) {
+    if (
+      !(state.DBSCheck && (state.DBSCheck.fileName || state.DBSCheck.name)) &&
+      ((prevData.DBSCheck && prevData.DBSCheck.fileName) || isContinue)
+    ) {
       e = e
         ? { ...e, DBSCheck: 'DBS file is required' }
         : { DBSCheck: 'DBS file is required' };
     }
+
+    if (
+      !(
+        state.pressCard &&
+        (state.pressCard.fileName || state.pressCard.name)
+      ) &&
+      ((prevData.pressCard && prevData.pressCard.fileName) || isContinue)
+    ) {
+      e = e
+        ? { ...e, pressCard: 'Press card file is required' }
+        : { pressCard: 'Press card file is required' };
+    }
+
     return e;
   };
 
@@ -189,7 +208,7 @@ const Verifications = props => {
     let _photoID;
     let _pressCard;
 
-    const _errors = await _validate();
+    const _errors = await _validate(isContinue);
 
     setErrors(_errors || {});
     setLastClickOnContinue(isContinue);
@@ -287,7 +306,7 @@ const Verifications = props => {
     <div style={{ marginTop: '4rem', paddingBottom: '5rem' }}>
       <Row>
         <Title withBg mb="0">
-          <Col w={[4, 12, 12]}>CREATE LISTING</Col>
+          <Col w={[4, 12, 12]}>GET VERIFIED</Col>
         </Title>
       </Row>
 
@@ -464,7 +483,7 @@ const Verifications = props => {
               setState(_state => ({ ..._state, pressCard }))
             }
             col={12}
-            error={errors.photoID}
+            error={errors.pressCard}
           />
         </Col>
       </Row>
