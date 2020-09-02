@@ -145,7 +145,7 @@ const UploadFile = ({
                 </S.ThumbsContainer>
               </Col>
             )}
-            <Col w={[4, col || 4, col || 4]}>
+            <Col w={[4, col || 6, col || 6]}>
               <S.BoxWrapper
                 {...getRootProps({ className: 'dropzone' })}
                 disabled={disabled}
