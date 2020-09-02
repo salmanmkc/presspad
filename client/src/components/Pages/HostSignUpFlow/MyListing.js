@@ -101,7 +101,7 @@ const MyListing = props => {
       data: { ...state },
     });
 
-    if (prevData.profileImage) {
+    if (prevData.profileImage && !state.profileImage) {
       return _errors
         ? { ..._errors, profileImage: 'Profile image is required' }
         : { profileImage: 'Profile image is required' };
@@ -206,12 +206,10 @@ const MyListing = props => {
       setSaveLoading(false);
     }
   };
-
   const onSubmit = async isContinue => {
     const _errors = await _validate(isContinue);
     setErrors(_errors || {});
     setLastClickOnContinue(isContinue);
-
     if (_errors) {
       setMainError('Must fill all required fields');
       return;
@@ -313,7 +311,11 @@ const MyListing = props => {
         setFiles={([profileImage]) =>
           setState(_state => ({ ..._state, profileImage }))
         }
-        error={prevData.profileImage && 'Profile image is required'}
+        error={
+          prevData.profileImage &&
+          !state.profileImage &&
+          'Profile image is required'
+        }
       />
       {/* home images */}
       <Row>
