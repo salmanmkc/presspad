@@ -116,17 +116,21 @@ const Verifications = props => {
       data: { ...state },
     });
     let e = _errors;
-    if (prevData.photoID) {
+    if (prevData.photoID && !state.photoID) {
       e = e
         ? { ...e, photoID: 'identity proof is required' }
         : { photoID: 'identity proof is required' };
     }
-    if (prevData.DBSCheck) {
+    if (prevData.DBSCheck && !state.DBSCheck) {
       e = e
         ? { ...e, DBSCheck: 'DBS file is required' }
         : { DBSCheck: 'DBS file is required' };
     }
-    if (prevData.offerLetter && !state.hasNoInternship) {
+    if (
+      prevData.offerLetter &&
+      state.offerLetter.deleted &&
+      !state.hasNoInternship
+    ) {
       e = e
         ? { ...e, offerLetter: 'Proof of internship file is required' }
         : { offerLetter: 'Proof of internship file is required' };
@@ -174,13 +178,11 @@ const Verifications = props => {
       setFetchingData(true);
     }
   };
-
   const onSubmit = async isContinue => {
     let _DBSCheck;
     let _photoID;
     let _offerLetter;
     const _errors = await _validate();
-
     setErrors(_errors || {});
 
     if (_errors) {
